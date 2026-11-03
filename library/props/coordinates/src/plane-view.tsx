@@ -1,9 +1,9 @@
 import type { Locale } from "@chalk/content";
+import { useLabel } from "@chalk/draw";
 import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useLayoutEffect, useRef } from "preact/hooks";
-import { usePlaneLabel } from "./place-labels";
 import { Axes, Marks, PlanePart, QUADRANTS, type Quadrant, Scene } from "./plane";
 import { plane } from "./plane";
 import { WORDS, num, word } from "./words";
@@ -570,7 +570,7 @@ function OriginName({ s, x, y }: { s: Parameters<typeof upright>[0]; x: number; 
   // really on it, not merely near (a gap of 0); Riya and a dot waiting to be dragged pass over it.
   // Elsewhere, it keeps clear of those and of every other word (the axes' numbers beside it).
   const onIt = ".cp-counters circle, .cp-counters text, .cp-dot > circle";
-  usePlaneLabel(ref, () => ({
+  useLabel(ref, () => ({
     spots: [
       [x, y, "end"],
       [x, y + 12, "end"],

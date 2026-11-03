@@ -1,12 +1,11 @@
 import type { Locale } from "@chalk/content";
-import { SymbolButton } from "@chalk/draw";
+import { SymbolButton, useLabel } from "@chalk/draw";
 import type { PropView } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useLayoutEffect, useRef } from "preact/hooks";
 import { drawing } from "./layer-view";
 import { Bus, Walker } from "./pictures";
-import { usePlaneLabel } from "./place-labels";
 import { Marks, type Point, Scene } from "./plane";
 import { marksOn, unitOf } from "./plane-view";
 import { walker } from "./walker";
@@ -138,7 +137,7 @@ function WalkerShown({
   // Every place her name can go, nearest first: beside her (each side, at her middle, above and
   // below her feet), then over her head and under her feet.
   const side = size * 0.55;
-  usePlaneLabel(nameRef, () => ({
+  useLabel(nameRef, () => ({
     spots: [
       [
         nameLeft ? -side : side,

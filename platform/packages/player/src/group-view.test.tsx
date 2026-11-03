@@ -170,6 +170,33 @@ describe("frames", () => {
   });
 });
 
+describe("labels from several labellers in one part", () => {
+  // A part with a label for each of its things: every labeller's labels are placed, not the last's.
+  function TwoNames({ view: s }: PropViewProps<typeof dot>): JSX.Element {
+    useFrameLabels([{ id: "first", at: [s.x, s.y], text: `${s.name}1` }]);
+    useFrameLabels([{ id: "second", at: [s.x + 2, s.y], text: `${s.name}2` }]);
+    return <g />;
+  }
+  const two = prop({
+    type: "two",
+    role: PropRole.Explainer,
+    describe: "two labels in one part",
+    children: { paper, p: dot },
+    summary: () => "two",
+    layout: { kind: "frame", provider: "paper", children: ["p"] },
+  });
+  const TwoView = groupView(two, { paper: PaperView, p: TwoNames } as unknown as Parameters<
+    typeof groupView
+  >[1]);
+  it("places each labeller's labels", () => {
+    const html = render(
+      <TwoView view={viewOf(two)} width={300} locale="en" call={() => {}} signal={() => {}} />,
+    );
+    expect(html).toContain(">P1</text>");
+    expect(html).toContain(">P2</text>");
+  });
+});
+
 describe("a part drawing in several places", () => {
   // The dot draws a shadow behind the paper's lines, itself on them, and its name in words below.
   const shadow = ({ view: s }: PropViewProps<typeof dot>) => {

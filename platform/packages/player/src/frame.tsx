@@ -37,7 +37,10 @@ export type FrameLabel = {
   part?: string;
 };
 
-/** By the drawing that gave them (a child, or one of its places), with the child they belong to. */
+/**
+ * By the hook that gave them (`<drawing>\u0000<hook>`: a drawing, a child or one of its places, may
+ * have several labellers), with the child they belong to.
+ */
 type LabelStore = Map<
   string,
   { owner: string; labels: readonly FrameLabel[]; obstacles: Obstacles }
@@ -51,7 +54,7 @@ export type FrameContextValue = {
     move: (at: readonly [number, number]) => void,
     end?: (at: readonly [number, number]) => void,
   ) => void;
-  /** This child's labels and the lines they should keep off (replaces what it gave before). */
+  /** One labeller's labels and the lines they keep off (replaces what that labeller gave before). */
   labels: (
     key: string,
     owner: string,
@@ -81,10 +84,19 @@ export function useFrame(): FrameContextValue | null {
   return useContext(FrameContext);
 }
 
-/** Hands this child's labels to the frame for the one placing pass. */
+let labellers = 0;
+
+/**
+ * Hands these labels to the frame for the one placing pass. Each call of the hook is its own
+ * labeller (a part may have several: a label each); its labels go when it does.
+ */
 export function useFrameLabels(labels: readonly FrameLabel[], obstacles: Obstacles = {}): void {
   const frame = useContext(FrameContext);
-  frame?.labels(frame.key, frame.owner, labels, obstacles);
+  const me = useRef(0);
+  if (me.current === 0) me.current = ++labellers;
+  const key = frame === null ? "" : `${frame.key}\u0000${me.current}`;
+  frame?.labels(key, frame.owner, labels, obstacles);
+  useLayoutEffect(() => () => void frame?.store.delete(key), [frame, key]);
 }
 
 /** Draws one picture for a frame and gives its children the frame's services. */
@@ -215,7 +227,8 @@ export function InFrame({
 function LabelLayer({ present }: { present: readonly string[] }): JSX.Element | null {
   const frame = useContext(FrameContext);
   if (frame === null) return null;
-  for (const key of [...frame.store.keys()]) if (!present.includes(key)) frame.store.delete(key);
+  for (const key of [...frame.store.keys()])
+    if (!present.includes(key.split("\u0000")[0] ?? key)) frame.store.delete(key);
   const all = [...frame.store.values()].flatMap(({ owner, labels }) =>
     labels.map((l) => ({ ...l, owner })),
   );

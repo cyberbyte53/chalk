@@ -1,11 +1,10 @@
 import type { Locale } from "@chalk/content";
-import { SymbolButton } from "@chalk/draw";
+import { SymbolButton, useLabel } from "@chalk/draw";
 import { type PropView, useDrags } from "@chalk/player";
 import { type FramePixels, does, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useRef } from "preact/hooks";
 import { drawing } from "./layer-view";
-import { usePlaneLabel } from "./place-labels";
 import { isInWindow } from "./plane";
 import { plotting } from "./plotting";
 import { WORDS, num, pair, word } from "./words";
@@ -25,7 +24,7 @@ function DotLabel({
   class: cls,
 }: { x: number; y: number; said: string; class?: string }) {
   const ref = useRef<SVGTextElement>(null);
-  usePlaneLabel(ref, () => ({
+  useLabel(ref, () => ({
     spots: [
       [x + 9, y - 9, "start"],
       [x - 9, y - 9, "end"],

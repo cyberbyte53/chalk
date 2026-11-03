@@ -1,9 +1,9 @@
 /**
- * Where a plane's labels go, all together: a pure function of measured boxes (no page, no clock, no
+ * Where a picture's labels go, all together: a pure function of measured boxes (no page, no clock, no
  * `Math.random`), so the same boxes always give the same places. platform/docs/plans/label-placement.md.
  *
  * Each label has spots in its order of preference, each with a cost of its own (what it covers that
- * isn't a label, off the plane, nearer another dot). Two labels' spots clash fully when their inked
+ * isn't a label, off the picture, nearer another's thing). Two labels' spots clash fully when their inked
  * letters overlap, and a quarter (NEAR) when only within a gap of each other: near is less bad than
  * on. A layout's cost is the spots' own costs, its clashes between labels, and each spot's rank,
  * weighted so all ranks together stay under the least clash: untangling a clash is always worth a

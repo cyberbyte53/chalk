@@ -1,22 +1,26 @@
 import { useLayoutEffect } from "preact/hooks";
 import { type Box, type LabelProblem, NEAR, boxesClash, solveLabels } from "./label-solver";
-import type { WordPlace } from "./place-clear";
-import { timedPlacing } from "./place-clear";
 
 /**
- * A plane's labels placed together (platform/docs/plans/label-placement.md): each label says where
- * it may go and what it keeps clear of; once a frame's drawing is done, every label on the plane is
- * measured once, placed by `solveLabels`, and written once.
+ * A picture's labels placed together (platform/docs/plans/label-placement.md,
+ * generic-labels.md): a prop draws its label's words and says where they may go and what they keep
+ * clear of (`useLabel`); once the picture is drawn, every label in it is measured once, placed by
+ * `solveLabels`, and written once. In any SVG: a frame's, a `Stage`'s, a prop's own.
  */
-export type PlaneLabel = {
-  /** Its places, in its order of preference, in its parent's units. */
-  spots: readonly WordPlace[];
-  /** What a place keeps clear of (a selector in the plane's drawing), and how far, px. */
+
+/** A place for a label's words: x, y and its anchor, in the units of the group it is drawn in. */
+export type LabelSpot = readonly [number, number, "start" | "middle" | "end"];
+
+export type LabelSpec = {
+  /** Its places, in its order of preference. */
+  spots: readonly LabelSpot[];
+  /** What a place keeps clear of (a selector in the picture), and how far, px. */
   avoid: (spot: number) => { what: string; gap: number };
   /** How far it keeps from other labels, px. */
   gap: number;
-  /** Its own dot or figure: it may touch it, and (`isNearOwn`) must be nearer it than any other dot. */
+  /** The thing it names (a dot, a figure): it may touch it. */
   own?: Element | null;
+  /** It must be nearer its own thing than any other label's own thing. */
   isNearOwn?: boolean;
   /** Its transform at a place (kept upright on a turned plane). */
   transform?: (x: number, y: number) => string | undefined;
@@ -24,28 +28,43 @@ export type PlaneLabel = {
 
 /**
  * What a place's clash costs, as one placed alone weighed them (a word or dot 10, a line 1, nearer
- * another dot 20, off the plane 1000), with another label as a word: a clash between labels is 1.
+ * another dot 20, off the picture 1000), with another label as a word: a clash between labels is 1.
  */
 const OFF = 100;
 const ON_MARK = 1;
 const ON_LINE = 0.1;
 const NEARER_OTHER = 2;
-/** The dots a pair must be nearest its own of. */
-const DOTS = ".cp-dot > circle, .cp-swap";
 
 type Placer = {
-  labels: Map<SVGTextElement, PlaneLabel>;
+  labels: Map<SVGTextElement, LabelSpec>;
   isDue: boolean;
   /** The last problem solved and its answer: the same boxes again (another drawing of the same board), the same answer. */
   last?: { problem: string; at: number[] };
 };
 const placers = new Map<SVGSVGElement, Placer>();
 
-/** Places this label with the others on its plane, after every drawing of it. */
-export function usePlaneLabel(
-  ref: { current: SVGTextElement | null },
-  label: () => PlaneLabel,
-): void {
+/**
+ * Runs a placing, timed: every placing on the page is summed under one name, which the drawing
+ * tool's label audit reads, and the boxes read meanwhile are counted there.
+ */
+export function timedPlacing(fn: () => void): void {
+  const from = performance.now();
+  const placing = globalThis as { __chalkPlacing?: number };
+  placing.__chalkPlacing = (placing.__chalkPlacing ?? 0) + 1;
+  try {
+    fn();
+  } finally {
+    placing.__chalkPlacing = (placing.__chalkPlacing ?? 1) - 1;
+    performance.measure("chalk:labels", { start: from });
+  }
+}
+
+/**
+ * Places these words with the picture's other labels, after every drawing of it. The words are
+ * the prop's own `<text>`, drawn where it likes (in its own group, with its own look); this moves
+ * them to one of their spots.
+ */
+export function useLabel(ref: { current: SVGTextElement | null }, label: () => LabelSpec): void {
   useLayoutEffect(() => {
     const el = ref.current;
     const svg = el?.ownerSVGElement;
@@ -56,6 +75,8 @@ export function usePlaneLabel(
       placers.set(svg, placer);
     }
     placer.labels.set(el, label());
+    // Placed labels are found by this (the label audit), whichever prop drew them.
+    el.setAttribute("data-label", "");
     due(svg, placer);
     return () => {
       placer.labels.delete(el);
@@ -102,10 +123,10 @@ function place(svg: SVGSVGElement, placer: Placer): void {
   const entries = [...placer.labels].filter(([el]) => el.isConnected);
   const frame = boxOf(svg.getBoundingClientRect());
   const labelEls = new Set<Element>(entries.map(([el]) => el));
-  const dots = [...svg.querySelectorAll(DOTS)].map((d) => ({
-    el: d,
-    box: boxOf(d.getBoundingClientRect()),
-  }));
+  // The things labels name: a label must be nearer its own than any other's.
+  const named = [
+    ...new Set(entries.flatMap(([, l]) => (l.own === undefined || l.own === null ? [] : [l.own]))),
+  ].map((d) => ({ el: d, box: boxOf(d.getBoundingClientRect()) }));
   // Each set of things kept clear of, read once: boxes, and lines as their two ends.
   type Mark = { el: Element; box: Box; ink: Box; line?: [DOMPoint, DOMPoint] };
   const marks = new Map<string, Mark[]>();
@@ -181,7 +202,7 @@ function place(svg: SVGSVGElement, placer: Placer): void {
             const my = (box.t + box.b) / 2;
             const far = (b: Box) => Math.hypot(mx - (b.l + b.r) / 2, my - (b.t + b.b) / 2);
             const toOwn = far(boxOf(ownBox));
-            if (dots.some((d) => !mine(d.el) && far(d.box) < toOwn)) cost += NEARER_OTHER;
+            if (named.some((d) => !mine(d.el) && far(d.box) < toOwn)) cost += NEARER_OTHER;
           }
           return { box, ink, cost };
         }),

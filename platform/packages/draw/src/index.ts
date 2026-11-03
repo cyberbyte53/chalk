@@ -38,6 +38,16 @@ export {
 } from "./stage";
 export { scaleLinear } from "d3-scale";
 export {
+  type Box as LabelBox,
+  type LabelProblem,
+  NEAR,
+  SEEDS,
+  bestOf,
+  boxesClash,
+  solveLabels,
+} from "./label-solver";
+export { type LabelSpec, type LabelSpot, timedPlacing, useLabel } from "./place-labels";
+export {
   type LabelRequest,
   type Obstacles,
   type Placed,
