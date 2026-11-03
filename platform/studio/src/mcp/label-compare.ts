@@ -238,9 +238,8 @@ function compare(names: string[]): void {
   );
   // Only the drawings every run has (a quick run against a whole one).
   const keyOf = (d: Drawing) => `${d.board} ${d.what}`;
-  const shared = read
-    .map(([, ds]) => new Set(ds.map(keyOf)))
-    .reduce((a, b) => new Set([...a].filter((k) => b.has(k))));
+  const sets = read.map(([, ds]) => new Set(ds.map(keyOf)));
+  const shared = new Set([...(sets[0] ?? [])].filter((k) => sets.every((set) => set.has(k))));
   const runs = read.map(([n, ds]) => [n, ds.filter((d) => shared.has(keyOf(d)))] as const);
   const groups: [string, (d: Drawing) => boolean][] = [
     ["every drawing", () => true],
