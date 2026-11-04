@@ -199,6 +199,27 @@ export const mastery = pgTable(
   (t) => [primaryKey({ columns: [t.accountId, t.concept, t.model] })],
 );
 
+/**
+ * Jugnu's note on a learner, one per conversation, written when it ends (platform/docs/plans/
+ * teacher-view.md): what they aren't good at yet and whether they got there. Kept here, where his
+ * turns run, never sent to the phone. The board and its version say what it is about; its
+ * concepts are worked out when it is read.
+ */
+export const jugnuNotes = pgTable(
+  "jugnu_notes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    accountId: uuid("account_id")
+      .notNull()
+      .references(() => accounts.id),
+    board: text("board").notNull(),
+    version: text("version").notNull(),
+    at: timestamp("at", { withTimezone: true }).notNull(),
+    text: text("text").notNull(),
+  },
+  (t) => [index("jugnu_notes_account_at").on(t.accountId, t.at)],
+);
+
 export const schema = {
   schools,
   accounts,
@@ -209,4 +230,5 @@ export const schema = {
   questionVersions,
   attempts,
   mastery,
+  jugnuNotes,
 };

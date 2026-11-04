@@ -13,6 +13,7 @@ import {
   groupCodePath,
   groupLearnerPath,
   groupPath,
+  type LearnerReply,
 } from "@chalk/api";
 import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION, Level } from "@chalk/content";
 import { Band, type Progress } from "@chalk/learning";
@@ -21,10 +22,17 @@ import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { type AppDeps, SIGN_IN_COOKIE, type ServerLog, createApp, isLanOrigin } from "./app";
+import {
+  type AppDeps,
+  JUGNU_QUIET_MS,
+  SIGN_IN_COOKIE,
+  type ServerLog,
+  createApp,
+  isLanOrigin,
+} from "./app";
 import { type Db, MIGRATIONS } from "./db";
 import type { GoogleVerifier } from "./google";
-import { schema } from "./schema";
+import { jugnuNotes, schema } from "./schema";
 import { addQuestionVersions, addSchool } from "./store";
 
 const ORIGIN = "https://chalk.test";
@@ -161,7 +169,7 @@ describe("server", () => {
   beforeEach(async () => {
     logged = { records: [], warnings: [], errors: [] };
     await db.execute(
-      sql`truncate mastery, attempts, question_versions, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
+      sql`truncate jugnu_notes, mastery, attempts, question_versions, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
     );
     schoolCode = await addSchool(db, "Sunrise Public School", counter());
     clock = Date.UTC(2026, 9, 15);
@@ -361,6 +369,61 @@ describe("server", () => {
     ]);
   });
 
+  it("shows a teacher one learner of theirs: wrong tries and Jugnu's latest note, by concept", async () => {
+    const { teacher, learner, group } = await teacherAndLearner();
+    await addQuestionVersions(db, [
+      { board: "book/ch/questions/fam/ask1", version: "v", tests: ["c1"], level: Level.Medium },
+    ]);
+    await learner.json("POST", ApiPath.Join, { code: group.joinCode });
+    await learner.json("POST", ApiPath.Events, {
+      events: [
+        signalOn("w1", 1, "book/ch/questions/fam/ask1", "checked", {
+          status: "wrong",
+          isGraded: true,
+        }),
+      ],
+    });
+    const { learners } = await teacher.json<GroupReply>("GET", groupPath(group.id));
+    const id = learners[0]?.id ?? "";
+    expect(learners[0]?.note).toBeNull();
+    // His notes: an older and a newer one on the question's concept, one on a page of c1.
+    const at = (t: number) => new Date(Date.UTC(2026, 9, 15, t));
+    await db.insert(jugnuNotes).values([
+      { accountId: id, board: "book/ch/questions/fam/ask1", version: "v", at: at(9), text: "old" },
+      { accountId: id, board: "book/ch/questions/fam/ask1", version: "v", at: at(10), text: "new" },
+      { accountId: id, board: "page1", version: "p", at: at(8), text: "on the page" },
+    ]);
+    const view = await teacher.json<LearnerReply>("GET", groupLearnerPath(group.id, id));
+    expect(view.learner.name).toBe("Priya");
+    expect(view.concepts).toEqual([
+      {
+        concept: "c1",
+        wrong: [expect.objectContaining({ board: "book/ch/questions/fam/ask1", family: "fam" })],
+        note: expect.objectContaining({ text: "new" }),
+      },
+    ]);
+    // The group shows each learner's newest note.
+    const again = await teacher.json<GroupReply>("GET", groupPath(group.id));
+    expect(again.learners[0]?.note?.text).toBe("new");
+    // Only their own teacher, and only while they are in the group.
+    const other = new Phone(app);
+    await other.signIn("t2", "Asha");
+    await other.json("POST", ApiPath.Setup, { name: "Asha", schoolCode, role: Role.Teacher });
+    expect(await other.error("GET", groupLearnerPath(group.id, id))).toEqual([
+      404,
+      ApiErrorCode.NotFound,
+    ]);
+    expect(await learner.error("GET", groupLearnerPath(group.id, id))).toEqual([
+      403,
+      ApiErrorCode.WrongRole,
+    ]);
+    await teacher.send("DELETE", groupLearnerPath(group.id, id));
+    expect(await teacher.error("GET", groupLearnerPath(group.id, id))).toEqual([
+      404,
+      ApiErrorCode.NotFound,
+    ]);
+  });
+
   it("only takes changes from the app's own page", async () => {
     const phone = new Phone(app);
     const response = await phone.send(
@@ -421,19 +484,22 @@ describe("server", () => {
   it("asks Jugnu for one signed-in person's turn, on a built board only", async () => {
     const dir = mkdtempSync(join(tmpdir(), "chalk-content-"));
     mkdirSync(join(dir, "book", "chapter"), { recursive: true });
-    writeFileSync(join(dir, "book", "chapter", "ask.json"), '{"kind":"question"}');
+    writeFileSync(join(dir, "book", "chapter", "ask.json"), '{"kind":"question","version":"v1"}');
     const asked: string[] = [];
     const served = make({
       contentDir: dir,
-      jugnu: async (turn) => {
-        asked.push(turn.session);
-        return {
-          says: `heard: ${turn.said}`,
-          glow: null,
-          choices: [],
-          isHandBack: false,
-          model: "m",
-        };
+      jugnu: {
+        turn: async (turn) => {
+          asked.push(turn.session);
+          return {
+            says: `heard: ${turn.said}`,
+            glow: null,
+            choices: [],
+            isHandBack: turn.said === "got it",
+            model: "m",
+          };
+        },
+        end: async (session) => `note for ${session.split(":")[1]}`,
       },
     });
     const turn = { session: "s1", board: "book/chapter/ask", state: {}, did: [], said: "why?" };
@@ -445,9 +511,8 @@ describe("server", () => {
     const learner = new Phone(served);
     await learner.signIn("l1", "Priya");
     await learner.json("POST", ApiPath.Setup, { name: "Priya", schoolCode, role: Role.Learner });
-    expect(await learner.json("POST", ApiPath.JugnuTurn, turn)).toMatchObject({
-      says: "heard: why?",
-    });
+    const reply = await learner.json<Record<string, unknown>>("POST", ApiPath.JugnuTurn, turn);
+    expect(reply).toMatchObject({ says: "heard: why?" });
     // Each account's sessions are its own.
     expect(asked[0]).toMatch(/:s1$/);
     expect(asked[0]).not.toBe("s1");
@@ -456,6 +521,18 @@ describe("server", () => {
         400,
         ApiErrorCode.BadRequest,
       ]);
+    const notes = () => db.select().from(jugnuNotes);
+    // No note while the conversation goes on; one when he hands back.
+    expect(await notes()).toEqual([]);
+    await learner.json("POST", ApiPath.JugnuTurn, { ...turn, said: "got it" });
+    await new Promise((r) => setTimeout(r, 50));
+    expect((await notes()).map((n) => [n.text, n.version])).toEqual([["note for s1", "v1"]]);
+    // A conversation left quiet ends too (checked on the next request, and each minute).
+    await learner.json("POST", ApiPath.JugnuTurn, { ...turn, session: "s2" });
+    clock += JUGNU_QUIET_MS + 1;
+    await learner.json("POST", ApiPath.JugnuTurn, { ...turn, session: "s3" });
+    await new Promise((r) => setTimeout(r, 50));
+    expect((await notes()).map((n) => n.text).sort()).toEqual(["note for s1", "note for s2"]);
     // Without a model set up, he isn't there.
     const none = new Phone(make({ contentDir: dir }));
     await none.signIn("l1", "Priya");

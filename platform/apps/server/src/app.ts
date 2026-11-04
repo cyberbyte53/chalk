@@ -30,6 +30,8 @@ import type { z } from "zod";
 import type { Db } from "./db";
 import { ApiFailure } from "./failure";
 import type { GoogleVerifier } from "./google";
+import { learnerView } from "./learner-view";
+import { saveNote } from "./notes";
 import { type RateLimit, rateLimit } from "./rate-limit";
 import {
   type AccountRow,
@@ -55,6 +57,8 @@ import {
 } from "./store";
 
 export const SIGN_IN_COOKIE = "chalk_sign_in";
+/** A conversation with Jugnu this long without a message has ended. */
+export const JUGNU_QUIET_MS = 15 * 60 * 1000;
 export type AppDeps = {
   db: Db;
   verifyGoogle: GoogleVerifier;
@@ -80,10 +84,14 @@ export type AppDeps = {
   /** Where the server's log lines go; unset: the console (one JSON object per line for records). */
   log?: ServerLog;
   /**
-   * One turn of the committed Jugnu (the studio's liveTurn); unset, he isn't on this server. Its
-   * error "still answering" means the session's last turn hasn't ended.
+   * The committed Jugnu (the studio's live.ts); unset, he isn't on this server. `turn` is one turn
+   * (its error "still answering": the session's last turn hasn't ended); `end` ends a conversation
+   * and gives its note for the teacher (none if he never answered).
    */
-  jugnu?: (turn: JugnuTurnRequest) => Promise<JugnuTurnReply>;
+  jugnu?: {
+    turn: (turn: JugnuTurnRequest) => Promise<JugnuTurnReply>;
+    end: (session: string) => Promise<string | undefined>;
+  };
 };
 
 /** The server's log: records, refusals and failures. */
@@ -316,6 +324,19 @@ export function createApp(deps: AppDeps): Hono<Env> {
     return c.json({ group, learners: await groupLearners(db, group.id, deps.plans ?? []) });
   });
 
+  app.get(
+    `${ApiPath.Groups}/:groupId/learners/:learnerId`,
+    signedIn,
+    as(Role.Teacher),
+    async (c) => {
+      const group = await ownGroup(c);
+      const view = await learnerView(db, group.id, idParam(c, "learnerId"), deps.plans ?? []);
+      if (view === undefined)
+        throw new ApiFailure(404, ApiErrorCode.NotFound, "no such learner here");
+      return c.json(view);
+    },
+  );
+
   app.post(`${ApiPath.Groups}/:groupId/code`, signedIn, as(Role.Teacher), async (c) => {
     const group = await ownGroup(c);
     await newJoinCode(db, group.id, random);
@@ -335,6 +356,30 @@ export function createApp(deps: AppDeps): Hono<Env> {
 
   // Jugnu: one turn, for a signed-in person, at most 60 an hour each (each costs a model call).
   const jugnuLimit = rateLimit(60, 60 * 60 * 1000);
+  // His conversations going on, by session: each ends when he hands back, or after a quiet
+  // while (children just leave); then its note is written, once, from the whole of it, and kept
+  // here for the teacher. It never goes to the phone.
+  const talking = new Map<string, { accountId: string; board: string; at: number }>();
+  const endTalk = async (key: string) => {
+    const talk = talking.get(key);
+    talking.delete(key);
+    if (talk === undefined || deps.jugnu === undefined) return;
+    try {
+      const text = await deps.jugnu.end(key);
+      if (text === undefined) return;
+      const built = JSON.parse(
+        await readFile(joinPath(deps.contentDir ?? "", builtFile(talk.board)), "utf8"),
+      ) as { version?: string };
+      await saveNote(db, { ...talk, version: built.version ?? "", at: now(), text });
+    } catch (error) {
+      log.error("Jugnu's note failed", error);
+    }
+  };
+  /** Ends the conversations quiet for `JUGNU_QUIET_MS` (15 minutes); the server calls it each minute. */
+  const endQuietTalks = async () => {
+    for (const [key, talk] of talking) if (now() - talk.at > JUGNU_QUIET_MS) await endTalk(key);
+  };
+  if (deps.jugnu !== undefined) setInterval(() => void endQuietTalks(), 60_000).unref();
   app.post(ApiPath.JugnuTurn, bodyLimit({ maxSize: 512 * 1024 }), signedIn, isSetUp, async (c) => {
     if (deps.jugnu === undefined)
       throw new ApiFailure(503, ApiErrorCode.Unavailable, "Jugnu isn't on this server");
@@ -348,9 +393,15 @@ export function createApp(deps: AppDeps): Hono<Env> {
     if (!isBoard) throw new ApiFailure(400, ApiErrorCode.BadRequest, "no such board");
     if (!jugnuLimit.take(account, now()))
       throw new ApiFailure(429, ApiErrorCode.TooMany, "Jugnu needs a rest: try again later");
+    void endQuietTalks();
     try {
       // One account's sessions are its own.
-      return c.json(await deps.jugnu({ ...turn, session: `${account}:${turn.session}` }));
+      const key = `${account}:${turn.session}`;
+      const reply = await deps.jugnu.turn({ ...turn, session: key });
+      talking.set(key, { accountId: account, board: turn.board, at: now() });
+      // Handed back: the conversation is over; its note is written (after this reply).
+      if (reply.isHandBack) void endTalk(key);
+      return c.json(reply);
     } catch (error) {
       if (error instanceof Error && error.message.startsWith("Jugnu is still answering"))
         throw new ApiFailure(409, ApiErrorCode.Busy, error.message);

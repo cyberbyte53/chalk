@@ -44,7 +44,10 @@ const app = createApp({
   jugnu:
     process.env.JUGNU_PROVIDER === undefined
       ? undefined
-      : async (turn) => (await import("@chalk/studio/jugnu")).liveTurn(turn as never),
+      : {
+          turn: async (turn) => (await import("@chalk/studio/jugnu")).liveTurn(turn as never),
+          end: async (session) => (await import("@chalk/studio/jugnu")).endConversation(session),
+        },
 });
 
 const server = serve({ fetch: app.fetch, port: config.PORT }, ({ port }) =>

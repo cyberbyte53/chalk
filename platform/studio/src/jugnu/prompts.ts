@@ -10,7 +10,13 @@ import { root } from "./sees";
  * version a seat uses is configuration (`<P>_PROMPT`, "baseline" by default). The code holds none.
  */
 
-export const Seat = { Tutor: "tutor", Student: "student", Judge: "judge" } as const;
+export const Seat = {
+  Tutor: "tutor",
+  Student: "student",
+  Judge: "judge",
+  /** Writes the teacher's note once a conversation ends. */
+  Notes: "notes",
+} as const;
 export type Seat = (typeof Seat)[keyof typeof Seat];
 
 /** A prompt as a run used it: which file, the hash of its words, and its text with slots filled. */
@@ -42,13 +48,23 @@ export function promptNames(seat: Seat): string[] {
     : [];
 }
 
-/** The committed Jugnu (`prompts/jugnu.yaml`): which model, and which tutor prompt. */
-export function committedJugnu(): { provider: string; model: string; prompt: string } {
+/** The committed Jugnu (`prompts/jugnu.yaml`): which model, which tutor prompt, which notes prompt. */
+export function committedJugnu(): {
+  provider: string;
+  model: string;
+  prompt: string;
+  notes: string;
+} {
   const text = readFileSync(join(root, "platform/studio/prompts/jugnu.yaml"), "utf8");
   const get = (key: string) => {
     const v = new RegExp(`^${key}:\\s*(.+)$`, "m").exec(text)?.[1]?.trim();
     if (v === undefined || v === "") throw new Error(`prompts/jugnu.yaml has no ${key}`);
     return v;
   };
-  return { provider: get("provider"), model: get("model"), prompt: get("prompt") };
+  return {
+    provider: get("provider"),
+    model: get("model"),
+    prompt: get("prompt"),
+    notes: get("notes"),
+  };
 }

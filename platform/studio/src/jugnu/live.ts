@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type { RuntimeState } from "@chalk/player";
+import { generateText } from "ai";
 import { type Step, restored } from "./cases";
 import { type JugnuConversation, firstTurn, jugnuTurn, laterTurn, newConversation } from "./jugnu";
 import { modelOf, settingsForChoice } from "./model";
@@ -43,6 +44,10 @@ type Session = {
   steps: Step[];
   isBusy: boolean;
   at: number;
+  /** The conversation as plain lines (what they did and said, what he said): its note is written from it. */
+  talk: string[];
+  /** His working belief after his last turn (for the note's writer to weigh, not to copy). */
+  lastNote: string;
 };
 
 const sessions = new Map<string, Session>();
@@ -61,6 +66,8 @@ export async function liveTurn(t: LiveTurn): Promise<LiveReply> {
     steps: [],
     isBusy: false,
     at: Date.now(),
+    talk: [],
+    lastNote: "",
   };
   if (session.isBusy) throw new Error("Jugnu is still answering the last message");
   session.isBusy = true;
@@ -94,6 +101,10 @@ export async function liveTurn(t: LiveTurn): Promise<LiveReply> {
       studentTurn,
     });
     session.lastSeen = seen(board);
+    for (const s of t.did) session.talk.push(`Child did on the board: ${stepText(s)}`);
+    if (t.said !== "") session.talk.push(`Child: ${t.said}`);
+    session.talk.push(`Jugnu: ${his.says}`);
+    session.lastNote = his.note;
     return {
       says: his.says,
       glow: his.glow,
@@ -105,4 +116,36 @@ export async function liveTurn(t: LiveTurn): Promise<LiveReply> {
     session.isBusy = false;
     board?.dispose();
   }
+}
+
+const stepText = (s: Step): string =>
+  `${s.action} on ${s.prop}${s.args === undefined ? "" : ` ${JSON.stringify(s.args)}`}`;
+
+/**
+ * Ends a conversation (platform/docs/plans/teacher-view.md): its note for the teacher, written once
+ * from the whole of it (what the child isn't good at yet, and whether they got there), by the
+ * committed notes prompt and model. Undefined when he never answered, or it is already ended.
+ */
+export async function endConversation(key: string): Promise<string | undefined> {
+  const session = sessions.get(key);
+  sessions.delete(key);
+  if (session === undefined || !session.talk.some((l) => l.startsWith("Jugnu: "))) return undefined;
+  const committed = committedJugnu();
+  const model = modelOf(
+    settingsForChoice({ provider: committed.provider as never, id: committed.model }),
+  );
+  const r = await generateText({
+    model: model.model,
+    instructions: model.instructions([promptOf(Seat.Notes, committed.notes).text]),
+    messages: [
+      {
+        role: "user",
+        content: `${session.talk.join("\n")}\n\n(Jugnu's own last working note: ${session.lastNote || "none"})`,
+      },
+    ],
+    maxRetries: 1,
+    providerOptions: model.options,
+  });
+  const text = r.text.trim();
+  return text === "" ? undefined : text;
 }

@@ -77,7 +77,7 @@ export const jugnuTurnRequestSchema = z.object({
 });
 export type JugnuTurnRequest = z.infer<typeof jugnuTurnRequestSchema>;
 
-/** Jugnu's reply. */
+/** Jugnu's reply (to the phone: his note is not in it). */
 export type JugnuTurnReply = {
   says: string;
   glow: string | null;
@@ -125,6 +125,10 @@ export const meReplySchema = z.object({
 });
 export type MeReply = z.infer<typeof meReplySchema>;
 
+/** Jugnu's note on a learner (what they aren't good at yet, as he sees it), and where and when. */
+export const learnerNoteSchema = z.object({ text: z.string(), board: z.string(), at: z.number() });
+export type LearnerNote = z.infer<typeof learnerNoteSchema>;
+
 export const groupLearnerSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -136,8 +140,34 @@ export const groupLearnerSchema = z.object({
   progress: progressSchema,
   /** How well they understand each concept with evidence (the server's model). */
   mastery: z.array(masterySchema),
+  /** Jugnu's newest note on them, if he has talked with them. */
+  note: learnerNoteSchema.nullable(),
 });
 export type GroupLearner = z.infer<typeof groupLearnerSchema>;
+
+/** One concept, for the teacher looking at one learner: what they got wrong, and his latest note. */
+export const learnerConceptSchema = z.object({
+  concept: z.string(),
+  /** Their wrong tries at its questions, newest first (a few). */
+  wrong: z.array(
+    z.object({
+      board: z.string(),
+      /** The question's family (its folder: the kind of question). */
+      family: z.string(),
+      chosen: z.string().nullable(),
+      at: z.number(),
+    }),
+  ),
+  note: learnerNoteSchema.nullable(),
+});
+export type LearnerConcept = z.infer<typeof learnerConceptSchema>;
+
+/** A teacher's look at one learner in their group. */
+export const learnerReplySchema = z.object({
+  learner: groupLearnerSchema,
+  concepts: z.array(learnerConceptSchema),
+});
+export type LearnerReply = z.infer<typeof learnerReplySchema>;
 
 export const groupReplySchema = z.object({
   group: teacherGroupSchema,
