@@ -60,6 +60,9 @@ type Dialogue = {
   student: { name: string; believes: string };
   models: { jugnu: string; student: string };
   instructions: { jugnu: string; student: string };
+  /** Which prompt each seat ran: its file's name and the hash of its words. */
+  prompts?: { tutor: { name: string; hash: string }; student: { name: string; hash: string } };
+  error?: string;
   lesson?: string;
   turns: (JugnuTurn | HerTurn)[];
   isRight: boolean;
@@ -266,13 +269,19 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
         <p>
           <b>She believes</b> (hidden from Jugnu): {run.student.believes}
         </p>
+        {run.error !== undefined && <p class="jg-problem">It broke: {run.error}</p>}
         {run.note !== "" && (
           <p>
             <b>This experiment:</b> {run.note}
           </p>
         )}
         <details>
-          <summary>Jugnu's instructions</summary>
+          <summary>
+            Jugnu's instructions
+            {run.prompts === undefined
+              ? ""
+              : ` · tutor/${run.prompts.tutor.name} (${run.prompts.tutor.hash})`}
+          </summary>
           <pre>{run.instructions.jugnu}</pre>
         </details>
         {run.lesson !== undefined && (
@@ -282,7 +291,12 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
           </details>
         )}
         <details>
-          <summary>The child's instructions</summary>
+          <summary>
+            The child's instructions
+            {run.prompts === undefined
+              ? ""
+              : ` · student/${run.prompts.student.name} (${run.prompts.student.hash})`}
+          </summary>
           <pre>{run.instructions.student}</pre>
         </details>
       </div>
@@ -334,7 +348,7 @@ export function JugnuPreview(): JSX.Element {
     setRun(null);
     void fetch(`/dev-jugnu?show=${encodeURIComponent(id)}`)
       .then((r) => r.json() as Promise<Dialogue | { error: string }>)
-      .then((d) => ("error" in d ? setProblem(d.error) : setRun(d)));
+      .then((d) => ("turns" in d ? setRun(d) : setProblem(d.error)));
   }, [id]);
   // A run still going is read again every few seconds, so it is watched as it goes.
   useEffect(() => {
@@ -342,7 +356,7 @@ export function JugnuPreview(): JSX.Element {
     const timer = setTimeout(() => {
       void fetch(`/dev-jugnu?show=${encodeURIComponent(run.id)}`)
         .then((r) => r.json() as Promise<Dialogue | { error: string }>)
-        .then((d) => ("error" in d ? setProblem(d.error) : setRun(d)));
+        .then((d) => ("turns" in d ? setRun(d) : setProblem(d.error)));
     }, 3000);
     return () => clearTimeout(timer);
   }, [run]);
@@ -351,10 +365,14 @@ export function JugnuPreview(): JSX.Element {
     setIsRunning(true);
     setProblem(null);
     try {
-      const q = new URLSearchParams({ talk: caseName, student: studentName, note });
-      const answer = (await (await fetch(`/dev-jugnu?${q}`)).json()) as
-        | Dialogue
-        | { error: string };
+      // The run starts and is kept at once; it then goes on by itself, followed here by its id.
+      const answer = (await (
+        await fetch("/dev-jugnu", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ case: caseName, student: studentName, note }),
+        })
+      ).json()) as { id: string } | { error: string };
       if ("error" in answer) setProblem(answer.error);
       else {
         await load();
@@ -404,7 +422,7 @@ export function JugnuPreview(): JSX.Element {
           onInput={(e) => setNote((e.target as HTMLInputElement).value)}
         />
         <button type="button" onClick={() => void runIt()} disabled={isRunning}>
-          {isRunning ? "Running (about a minute)…" : "Run"}
+          {isRunning ? "Starting…" : "Run"}
         </button>
       </header>
       {problem !== null && <div class="jg-problem">{problem}</div>}

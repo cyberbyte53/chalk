@@ -118,30 +118,29 @@ export async function pipelineEndpoint(
 }
 
 /**
- * /dev-jugnu (jugnu/dialogue.ts): GET the stuck children and every experiment kept;
- * `?show=<experiment>` one of them; `?talk=<case>&student=<child>&note=…` runs a new one (Jugnu and
- * a simulated child, back and forth), keeps it and answers it. The preview's ?dev&jugnu shows them.
+ * /dev-jugnu (jugnu/dialogue.ts): GET the cases and every run kept; `?show=<run>` one of them.
+ * POST `{case, student, note}` starts a run and answers its id at once; the run goes on by itself,
+ * kept after every turn, so the page follows it by its id. The preview's ?dev&jugnu shows them.
  */
 export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): Promise<void> {
-  res.setHeader("content-type", "application/json");
   try {
-    const q = new URL(req.url ?? "/", "http://x").searchParams;
     const dialogue = await import("./jugnu/dialogue");
-    const show = q.get("show");
-    const talk = q.get("talk");
-    if (show !== null) res.end(JSON.stringify(dialogue.readRun(show)));
-    else if (talk !== null)
-      res.end(
-        JSON.stringify(
-          await dialogue.runDialogue(talk, q.get("student") ?? "", q.get("note") ?? ""),
-        ),
-      );
+    if (req.method === "POST") {
+      const b = JSON.parse((await bodyOf(req)) || "{}") as {
+        case?: string;
+        student?: string;
+        note?: string;
+      };
+      send(res, 200, { id: dialogue.startDialogue(b.case ?? "", b.student ?? "", b.note ?? "") });
+      return;
+    }
+    const show = new URL(req.url ?? "/", "http://x").searchParams.get("show");
+    if (show !== null) send(res, 200, dialogue.readRun(show));
     else {
       const { readCases } = await import("./jugnu/cases");
-      res.end(JSON.stringify({ cases: readCases(), runs: dialogue.listRuns() }));
+      send(res, 200, { cases: readCases(), runs: dialogue.listRuns() });
     }
   } catch (error) {
-    res.statusCode = 500;
-    res.end(JSON.stringify({ error: error instanceof Error ? error.message : String(error) }));
+    send(res, 500, { error: error instanceof Error ? error.message : String(error) });
   }
 }

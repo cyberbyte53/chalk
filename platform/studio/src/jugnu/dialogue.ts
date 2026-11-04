@@ -4,13 +4,17 @@ import { Actor } from "@chalk/content";
 import type { BoardRuntime } from "@chalk/player";
 import type { ModelMessage } from "ai";
 import { z } from "zod";
-import { type Request, type ToolSpec, runTurn } from "./agent";
-import { type Case, type Step, played, readCases, restored } from "./cases";
+import { type Request, type ToolSpec, log, runTurn } from "./agent";
+import { type Case, type Step, played, readCases } from "./cases";
+import { type JugnuTry, firstTurn, jugnuTurn, laterTurn, newConversation, partsOf } from "./jugnu";
 import { Provider, modelOf, settingsFrom } from "./model";
-import { changes, checkFound, lessonOf, root, seen } from "./sees";
+import { type Prompt, Seat, promptOf } from "./prompts";
+import { changes, lessonOf, root, seen } from "./sees";
 
 /**
- * Jugnu and a simulated child, back and forth on one real board (platform/docs/plans/jugnu.md).
+ * The sandbox (platform/docs/plans/jugnu-sandbox.md): Jugnu (jugnu.ts, the one production uses) and a
+ * simulated child, back and forth on one real board. This file only drives him: the child's seat,
+ * the run's record, and its storage. (platform/docs/plans/jugnu.md)
  * The child holds one genuine misconception (her `believes`, hidden from Jugnu), acts on her real
  * board as it makes her, and answers his questions in her own words. Jugnu sees only what a phone
  * would show him: her board, what she did, what she says. He probes, one small question at a time,
@@ -32,7 +36,7 @@ export type JugnuTurn = {
   /** Exactly what he was given this turn (beside his instructions and the lesson). */
   given: string;
   thinking: string[];
-  tries: { steps: Step[]; from: "now" | "start"; saw: unknown }[];
+  tries: JugnuTry[];
   /** What he thinks she believes, so far (his note: she never sees it). */
   diagnosis: string;
   /** He hands back: he thinks she has it, and she does the next question alone. */
@@ -71,8 +75,12 @@ export type Dialogue = {
   case: Case;
   student: Student;
   models: { jugnu: string; student: string };
-  /** Both sides' instructions, as they ran. */
+  /** Both sides' instructions, as they ran (their texts, slots filled). */
   instructions: { jugnu: string; student: string };
+  /** Which prompt each seat ran: its file's name and the hash of its words. */
+  prompts?: { tutor: { name: string; hash: string }; student: { name: string; hash: string } };
+  /** It broke: what went wrong (the run keeps what it had). */
+  error?: string;
   /** The lesson as Jugnu was given it. */
   lesson: string;
   turns: (JugnuTurn | HerTurn)[];
@@ -86,43 +94,6 @@ export type Dialogue = {
   /** Input counted apart: new (uncached), read from the cache, written to it. */
   usage: { ms: number; input: number; cacheRead?: number; cacheWrite?: number; output: number };
 };
-
-export const JUGNU = `You are Jugnu, a warm firefly who helps a child stuck on a board of her lesson. You talk with her in turns, like a tutor at her elbow.
-
-- Never explain first. Open by asking how she got her answer. Ask openly, never with choices.
-- When she asks you something, answer it first, in one sentence.
-- Find out why she thinks what she thinks. What her board's check found is a first guess, not her thinking: her own words and her board are the evidence.
-- Don't read her board for her: how she reads it is often the mistake itself. Ask her to say what she sees and what it means; her reading is the evidence.
-- Her board is the truth. Once she has said her reading, and it disagrees with her board, have her look at one against the other, rather than telling her she is wrong.
-- Make it smaller: a simpler case she can do on her board, or answer in words when her board can't show it; build up from there to her question. Read what her board shows after each.
-- Mistakes are of two kinds. About an agreed way (how something is written or named): say plainly that it is the agreed way, once, then let her use it. About an idea: let a small case show it; don't just tell it.
-- Recall the lesson once; after that, only if she asks.
-- If what you did didn't change what she does, do something different. Never say the same thing twice.
-- Never give the answer: not where things end up on her board, nor the steps to get there, for her question or a smaller one.
-- Everything you say about her board must be true. Her board is in your message. If you want to see what some steps would do, you can try them on a copy. Her buttons are in her board's bar, each with the step that presses it; never name one that isn't there.
-- Glow the one part you are talking about.
-- Each message: one question or one thing to do, about 15 to 30 words, in English, warm. A tiny praise when she gets something right ("Yes!"), then move on. End with what she does next, then wait.
-
-To speak to her, call reply: your words to her (you talk to her, as "you"); the one part of her board to light up while you say it (its address, exactly as listed in her board's parts), if any; your note, what you believe about her now (she never sees it; write "not sure yet: …" only while it really is open); and whether you hand back, when you think she has understood and can do the next question alone. Calling reply ends your turn: then you wait for her.`;
-
-export const STUDENT = (
-  believes: string,
-  knows: string,
-  grade: string,
-) => `You are a ${grade} student in India, doing a lesson on your phone. You are stuck, and you are talking with Jugnu, the app's tutor.
-
-What you believe (you don't know it is wrong, and you believe it firmly): ${believes}
-
-That one belief is your only mistake. What else you know: ${knows} Don't invent other confusions, and don't invent where your belief comes from (a book, a teacher): you just believe it.
-
-- Act and answer exactly as someone with that one belief would. Don't guess what the tutor wants.
-- Answer briefly, like a real student your age: a few words, in English.
-- Touch the board only when he asks you to, or when you think you've got it right. When he asks, do exactly what he asks with the act tool, the way your belief tells you, and nothing more. Never say you did something on the board unless you did it with the act tool.
-- Like a real student, when he tells you a rule from your lesson and asks you to do one step by it, you do that step by the rule, even if you're unsure why. But your belief still feels right to you: where you must decide by yourself (a new step, a new question), you go by your belief, until doing things yourself shows you it doesn't fit; then change it, as a real student would.
-- Your buttons are in your board's bar, each with the step that presses it. When you think you've got it right, do it on your board and press its Check (Try again first, if your answer is waiting after a wrong check).
-- You are a real child with real patience: if you have had enough (bored, frustrated, or you feel done), say so in your own words and leave.
-
-Answer as JSON: {"says": "...", "choice": "the choice you picked, or null", "leaves": true only when you leave}.`;
 
 const stepsSchema = z.array(
   z.object({
@@ -146,13 +117,6 @@ const jsonOf = (text: string): Record<string, unknown> => {
 const isRightOf = (runtime: BoardRuntime) =>
   runtime.propNames().some((n) => (runtime.getView(n) as { status?: string }).status === "correct");
 
-/** Each request and tool call as it happens, timed, on stderr (JUGNU_LOG=off to quiet): a run is watched, never waited on. */
-const logStart = Date.now();
-const log = (line: string): void => {
-  if (process.env.JUGNU_LOG !== "off")
-    process.stderr.write(`[${((Date.now() - logStart) / 1000).toFixed(1)} s] ${line}\n`);
-};
-
 /** The conversation so far, as each side reads it. */
 function talk(turns: readonly (JugnuTurn | HerTurn)[], to: "jugnu" | "her"): string {
   return turns
@@ -175,49 +139,8 @@ const gradeOf = (board: string): string => {
 };
 
 /** A board's question as she reads it (its prompt). */
-const promptOf = (board: BoardRuntime): string =>
+const questionOf = (board: BoardRuntime): string =>
   String(partsOf(board).find((p) => p.part.endsWith("/prompt"))?.value ?? "");
-
-/** Every part's address on her board as she sees it: what a glow may name. */
-const partsOf = (board: BoardRuntime): { part: string; value?: unknown }[] =>
-  (seen(board) as { pieces: { parts: { part: string; value?: unknown }[] }[] }).pieces.flatMap(
-    (p) => p.parts,
-  );
-
-/** What Jugnu is given on a turn: her board now, what she did, the talk so far. */
-export const givenToJugnu = (
-  board: BoardRuntime,
-  herSteps: readonly Step[],
-  turns: readonly (JugnuTurn | HerTurn)[],
-): string =>
-  [
-    `Her board, as she sees it now:\n${JSON.stringify(seen(board), null, 1)}`,
-    `What she has done on it, in order: ${JSON.stringify(herSteps)}`,
-    `What her board's check found (she doesn't see it): ${JSON.stringify(checkFound(board))}`,
-    `Your talk so far:\n${talk(turns, "jugnu")}`,
-    "Your turn.",
-  ].join("\n\n");
-
-/**
- * Her turn, as Jugnu reads it in his conversation (his reply's result): what she said, what she did
- * on her board and what it changed, what her check found if she checked, and her board as it now is.
- * Made once and kept: the conversation is only ever appended to.
- */
-export const herTurnForJugnu = (
-  board: BoardRuntime,
-  before: unknown,
-  her: { says: string; did: readonly Step[]; isLeaving?: boolean },
-): string =>
-  [
-    `She says: ${her.says}`,
-    her.did.length === 0
-      ? "She did nothing on her board."
-      : `She did on her board, in order: ${JSON.stringify(her.did)}\nWhat it changed: ${JSON.stringify(changes(before, seen(board)))}`,
-    ...(her.did.some((d) => d.action === "check")
-      ? [`What her board's check found (she doesn't see it): ${JSON.stringify(checkFound(board))}`]
-      : []),
-    `Her board, as she sees it now:\n${JSON.stringify(seen(board), null, 1)}`,
-  ].join("\n\n");
 
 /**
  * What she is given on a turn: her board now, what she did, the talk so far. On a new board (the
@@ -238,85 +161,28 @@ export const givenToHer = (
     ...(isNewBoard ? [] : [ask]),
   ].join("\n\n");
 
-/** Where a copy stands: each part showing a value, by its address; and her bar. */
-const standing = (view: unknown) => {
-  const v = view as { pieces: { parts: { part: string; value?: unknown }[] }[]; bar: unknown };
-  return {
-    parts: Object.fromEntries(
-      v.pieces.flatMap((p) => p.parts.filter((x) => "value" in x).map((x) => [x.part, x.value])),
-    ),
-    bar: v.bar,
-  };
+/** Each seat's prompt version, by configuration (`JUGNU_PROMPT`, `JUGNU_STUDENT_PROMPT`). */
+const promptName = (prefix: string): string => {
+  const name = process.env[`${prefix}_PROMPT`];
+  return name === undefined || name === "" ? "baseline" : name;
 };
 
 /**
- * Jugnu's `try`: stateless. Each call makes a new copy of her board as it is now (or as it starts),
- * plays the steps in order, says where the copy ends up and what changed, and throws it away.
- * Nothing carries over between calls; her board never moves.
+ * Starts a run: it is named and kept at once (its id comes back straight away), and goes on by
+ * itself, kept after every turn, so it is watched by its id.
  */
-export function tryOn(
-  boardPath: string,
-  /** Her board's state, or how to read it when a try is made (one try for a whole conversation). */
-  state: unknown,
-  /** Where tries are recorded, or how to find the current turn's record. */
-  tries: JugnuTurn["tries"] | (() => JugnuTurn["tries"]),
-): ToolSpec {
-  const stateNow = () => (typeof state === "function" ? (state as () => unknown)() : state);
-  const record = () => (typeof tries === "function" ? tries() : tries);
-  return {
-    description:
-      'Tries steps on a copy of her board, never on her board. Each try makes a NEW copy of her board as it is now (or, with from: "start", as the board starts), plays your steps on it in order, tells you where the copy ends up and what changed, then throws the copy away. Nothing carries over between tries: to see further, send all the steps again, in one try. Steps are what a finger does: {prop, action, args}.',
-    input: z.object({ steps: stepsSchema, from: z.enum(["now", "start"]).optional() }),
-    run: async (input) => {
-      const { steps, from } = input as { steps?: Step[]; from?: "now" | "start" };
-      log(`Jugnu tries: ${JSON.stringify(steps)}`);
-      const copy =
-        from === "start"
-          ? await played(boardPath, [])
-          : await restored(boardPath, stateNow() as never);
-      const before = seen(copy);
-      const done: Step[] = [];
-      try {
-        for (const step of (steps ?? []) as Step[]) {
-          await copy.call(step.prop, step.action, step.args ?? {}, Actor.Learner);
-          copy.settle();
-          done.push(step);
-        }
-      } catch (error) {
-        copy.dispose();
-        return `Step ${done.length + 1} can't be done: ${error instanceof Error ? error.message : String(error)}`;
-      }
-      const after = seen(copy);
-      copy.dispose();
-      const saw = {
-        played: `${done.length} step${done.length === 1 ? "" : "s"}, on a new copy of her board ${from === "start" ? "as it starts" : "as it is now"}`,
-        endsAt: standing(after),
-        changed: changes(before, after),
-        questions: (after as { questions: unknown }).questions,
-      };
-      record().push({ steps: done, from: from === "start" ? "start" : "now", saw });
-      return JSON.stringify(saw);
-    },
-  };
+export function startDialogue(caseName: string, studentName: string, note = ""): string {
+  const id = runId(caseName, studentName);
+  void runDialogue(caseName, studentName, note, id).catch(() => {});
+  return id;
 }
-
-/** Jugnu's `reply`: his one message to her; calling it ends his turn. */
-export const REPLY_TOOL: ToolSpec = {
-  description:
-    "Speak to her: your words, the one part of her board to light up while you say them (its address as listed in her board's parts), your note (what you believe about her now; she never sees it), and whether you hand back (she has understood and does the next question alone). This ends your turn.",
-  input: z.object({
-    says: z.string(),
-    glow: z.string().nullable().optional(),
-    note: z.string(),
-    isHandBack: z.boolean().optional(),
-  }),
-};
 
 /** One case, one simulated child: their whole conversation. */
 export async function runDialogue(
   caseName: string,
   studentName: string,
   note = "",
+  id = runId(caseName, studentName),
 ): Promise<Dialogue> {
   const one = readCases().find((c) => c.name === caseName);
   if (one === undefined) throw new Error(`No case ${caseName}`);
@@ -325,8 +191,13 @@ export async function runDialogue(
   process.loadEnvFile(join(root, ".env"));
   const jugnu = modelOf(settingsFrom("JUGNU", DEFAULT_MODEL));
   const child = modelOf(settingsFrom("JUGNU_STUDENT", DEFAULT_MODEL));
+  const tutorPrompt: Prompt = promptOf(Seat.Tutor, promptName("JUGNU"));
+  const studentPrompt: Prompt = promptOf(Seat.Student, promptName("JUGNU_STUDENT"), {
+    grade: gradeOf(one.board),
+    believes: student.believes,
+    knows: student.knows,
+  });
   const started = Date.now();
-  const id = runId(caseName, studentName);
   const usage = { input: 0, cacheRead: 0, cacheWrite: 0, output: 0 };
   const count = (r: Request) => {
     log(
@@ -352,6 +223,32 @@ export async function runDialogue(
       isRight: false,
     },
   ];
+  let isHandedBack = false;
+  let transfer: Dialogue["transfer"] = null;
+  let error: string | undefined;
+  /** The run as it stands, kept (after every turn: a run is watched while it goes, and a cut-off one keeps what it had). */
+  const snapshot = (isFinished: boolean): Dialogue =>
+    saveRun({
+      id,
+      note,
+      case: one,
+      student,
+      models: { jugnu: jugnu.name, student: child.name },
+      instructions: { jugnu: tutorPrompt.text, student: studentPrompt.text },
+      prompts: {
+        tutor: { name: tutorPrompt.name, hash: tutorPrompt.hash },
+        student: { name: studentPrompt.name, hash: studentPrompt.hash },
+      },
+      lesson,
+      turns,
+      isRight: isRightOf(board),
+      transfer,
+      isLeft: turns.some((t) => t.who === "her" && t.isLeaving === true),
+      isFinished,
+      ...(error === undefined ? {} : { error }),
+      usage: { ms: Date.now() - started, ...usage },
+    });
+  snapshot(false);
 
   /** One turn of hers on a board: what she does on it really happens there. */
   const herTurn = async (on: BoardRuntime, steps: Step[], ask?: string, isNewBoard = false) => {
@@ -364,14 +261,14 @@ export async function runDialogue(
         const acts = (input as { steps: Step[] }).steps;
         const before = seen(on);
         try {
-          for (const step of acts as Step[]) {
+          for (const step of acts) {
             await on.call(step.prop, step.action, step.args ?? {}, Actor.Learner);
             on.settle();
             did.push(step);
             steps.push(step);
           }
-        } catch (error) {
-          return `That can't be done: ${error instanceof Error ? error.message : String(error)}`;
+        } catch (e) {
+          return `That can't be done: ${e instanceof Error ? e.message : String(e)}`;
         }
         return JSON.stringify({
           changed: changes(before, seen(on)),
@@ -382,138 +279,91 @@ export async function runDialogue(
     const given = givenToHer(on, steps, turns, ask, isNewBoard);
     const turn = await runTurn({
       model: child,
-      instructions: [STUDENT(student.believes, student.knows, gradeOf(one.board))],
+      instructions: [studentPrompt.text],
       messages: [{ role: "user", content: given }],
       tools: { act },
       endsWith: null,
       onRequest: count,
     });
     const text = turn.ended.kind === "text" ? turn.ended.text : "";
-    const run = { thinking: turn.requests.flatMap((r) => r.thinking), text };
     const h = jsonOf(text);
     const choice = typeof h.choice === "string" && h.choice !== "null" ? h.choice : null;
     return {
       who: "her" as const,
       given,
-      thinking: run.thinking,
+      thinking: turn.requests.flatMap((r) => r.thinking),
       did,
-      says: choice !== null && String(h.says ?? "") === "" ? choice : String(h.says ?? run.text),
+      says: choice !== null && String(h.says ?? "") === "" ? choice : String(h.says ?? text),
       ...(h.leaves === true ? { isLeaving: true } : {}),
     };
   };
 
-  let isHandedBack = false;
-  let transfer: Dialogue["transfer"] = null;
-  /** The run as it stands, kept (after every turn: a run is watched while it goes, and a cut-off one keeps what it had). */
-  const snapshot = (isFinished: boolean): Dialogue =>
-    saveRun({
-      id,
-      note,
-      case: one,
-      student,
-      models: { jugnu: jugnu.name, student: child.name },
-      instructions: {
-        jugnu: JUGNU,
-        student: STUDENT(student.believes, student.knows, gradeOf(one.board)),
-      },
-      lesson,
-      turns,
-      isRight: isRightOf(board),
-      transfer,
-      isLeft: turns.some((t) => t.who === "her" && t.isLeaving === true),
-      isFinished,
-      usage: { ms: Date.now() - started, ...usage },
-    });
-
-  // Jugnu's one conversation: his whole time with her, only ever appended to (jugnu-agent.md).
-  const firstGiven = givenToJugnu(board, herSteps, turns);
-  const messages: ModelMessage[] = [{ role: "user", content: firstGiven }];
-  let given = firstGiven;
-  let tries: JugnuTurn["tries"] = [];
-  const tryTool = tryOn(
-    one.board,
-    () => JSON.parse(JSON.stringify(board.state())),
-    () => tries,
-  );
-  for (let turn = 0; turn < MAX_TURNS && !isHandedBack; turn++) {
-    // ---- Jugnu: tries on copies of her board as it is; he ends by calling reply ----
-    tries = [];
-    const his = await runTurn({
-      model: jugnu,
-      instructions: [JUGNU, `The lesson, as its boards teach it:\n\n${lesson}`],
-      messages,
-      tools: { reply: REPLY_TOOL, try: tryTool },
-      endsWith: "reply",
-      onRequest: count,
-    });
-    const r = (his.ended.kind === "tool" ? his.ended.input : { says: his.ended.text }) as {
-      says?: string;
-      glow?: string | null;
-      note?: string;
-      isHandBack?: boolean;
-    };
-    const glow = typeof r.glow === "string" && r.glow !== "" ? r.glow : null;
-    isHandedBack = r.isHandBack === true;
-    turns.push({
-      who: "jugnu",
-      given,
-      thinking: his.requests.flatMap((q) => q.thinking),
-      tries,
-      diagnosis: String(r.note ?? ""),
-      says: String(r.says ?? ""),
-      choices: [],
-      glow,
-      isGlowOnList: glow === null || partsOf(board).some((p) => p.part === glow),
-      ...(glow !== null && partsOf(board).some((p) => p.part === glow && "value" in p)
-        ? { glowShows: partsOf(board).find((p) => p.part === glow)?.value }
-        : {}),
-      ...(isHandedBack ? { isHandBack: true } : {}),
-      requests: his.requests,
-    });
-    snapshot(false);
-    if (isHandedBack) break;
-
-    // ---- Her: her real board; what she does on it really happens ----
-    const before = seen(board);
-    const her = await herTurn(board, herSteps);
-    turns.push({ ...her, stepsSoFar: [...herSteps], isRight: isRightOf(board) });
-    snapshot(false);
-    if (her.isLeaving === true) break;
-    // Her turn reaches him as his reply's result (or, if he answered in plain words, as a message).
-    given = herTurnForJugnu(board, before, her);
-    if (his.ended.kind === "tool")
-      messages.push({
-        role: "tool",
-        content: [
-          ...his.owed,
-          {
-            type: "tool-result",
-            toolCallId: his.ended.id,
-            toolName: his.ended.name,
-            output: { type: "text", value: given },
-          },
-        ],
+  try {
+    // Jugnu (jugnu.ts): one conversation for the whole time she is stuck.
+    const conversation = newConversation();
+    let studentTurn = firstTurn(board, herSteps, one.asks);
+    for (let turn = 0; turn < MAX_TURNS && !isHandedBack; turn++) {
+      const his = await jugnuTurn({
+        conversation,
+        model: jugnu,
+        prompt: tutorPrompt,
+        lesson,
+        boardPath: one.board,
+        board,
+        studentTurn,
+        onRequest: count,
       });
-    else messages.push({ role: "user", content: given });
-  }
-  // ---- The next question, alone: Jugnu has gone ----
-  if (isHandedBack && one.next !== undefined) {
-    const next = await played(one.next, []);
-    const nextSteps: Step[] = [];
-    const alone = await herTurn(
-      next,
-      nextSteps,
-      `Jugnu has gone. A new board, the next question of your lesson: ${promptOf(next)}. Do it by yourself, as you now think it is done, then press Check.`,
-      true,
-    );
-    transfer = { board: one.next, isRight: isRightOf(next) };
-    turns.push({
-      ...alone,
-      stepsSoFar: [...nextSteps],
-      isRight: transfer.isRight,
-      transfer: { board: one.next },
-    });
-    next.dispose();
+      isHandedBack = his.isHandBack;
+      const glow = his.glow;
+      turns.push({
+        who: "jugnu",
+        given: his.given,
+        thinking: his.thinking,
+        tries: his.tries,
+        diagnosis: his.note,
+        says: his.says,
+        choices: [],
+        glow,
+        isGlowOnList: glow === null || partsOf(board).some((p) => p.part === glow),
+        ...(glow !== null && partsOf(board).some((p) => p.part === glow && "value" in p)
+          ? { glowShows: partsOf(board).find((p) => p.part === glow)?.value }
+          : {}),
+        ...(isHandedBack ? { isHandBack: true } : {}),
+        requests: his.requests,
+      });
+      snapshot(false);
+      if (isHandedBack) break;
+
+      // ---- Her: her real board; what she does on it really happens ----
+      const before = seen(board);
+      const her = await herTurn(board, herSteps);
+      turns.push({ ...her, stepsSoFar: [...herSteps], isRight: isRightOf(board) });
+      snapshot(false);
+      if (her.isLeaving === true) break;
+      studentTurn = laterTurn(board, before, her);
+    }
+    // ---- The next question, alone: Jugnu has gone ----
+    if (isHandedBack && one.next !== undefined) {
+      const next = await played(one.next, []);
+      const nextSteps: Step[] = [];
+      const alone = await herTurn(
+        next,
+        nextSteps,
+        `Jugnu has gone. A new board, the next question of your lesson: ${questionOf(next)}. Do it by yourself, as you now think it is done, then press Check.`,
+        true,
+      );
+      transfer = { board: one.next, isRight: isRightOf(next) };
+      turns.push({
+        ...alone,
+        stepsSoFar: [...nextSteps],
+        isRight: transfer.isRight,
+        transfer: { board: one.next },
+      });
+      next.dispose();
+    }
+  } catch (e) {
+    error = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+    log(`run broke: ${error}`);
   }
   const done = snapshot(true);
   board.dispose();

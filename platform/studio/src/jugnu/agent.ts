@@ -9,6 +9,13 @@ import type { Model } from "./model";
  * The conversation is the AI SDK's message list, only ever appended to.
  */
 
+/** Each request and tool call as it happens, timed, on stderr (JUGNU_LOG=off to quiet): a run is watched, never waited on. */
+const logStart = Date.now();
+export const log = (line: string): void => {
+  if (process.env.JUGNU_LOG !== "off")
+    process.stderr.write(`[${((Date.now() - logStart) / 1000).toFixed(1)} s] ${line}\n`);
+};
+
 /** A tool: what it is for, what it takes, and (unless it ends the turn) what running it says. */
 export type ToolSpec = {
   description: string;
