@@ -3,7 +3,7 @@ import type { Locale } from "@chalk/content";
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
 import { type Chat, type ChatMessage, ChatState } from "./chat";
-import { JugnuFigure, JugnuMood } from "./jugnu-figure";
+import { JugnuMood } from "./jugnu-figure";
 import { t } from "./ui-text";
 
 /**
@@ -40,6 +40,18 @@ function didText(did: Extract<ChatMessage, { from: "student" }>["did"]): string 
   return out.map((o) => (o.times > 1 ? `${o.text} ×${o.times}` : o.text)).join(", ");
 }
 
+/** Jugnu's face for where the chat stands: thinking while he types, proud at his hand-back. */
+export function moodOf(chat: Chat): JugnuMood {
+  if (chat.state === ChatState.Thinking) return JugnuMood.Thinking;
+  if (chat.state === ChatState.HandedBack) return JugnuMood.Proud;
+  return JugnuMood.Curious;
+}
+
+/**
+ * The chat's sheet, under the bar's row (Jugnu's figure, the board's button): his latest message as
+ * plain text, or the student's latest as a bubble with his typing dots after it; his choices; the
+ * reply box. Only the latest exchange; earlier ones a tap away.
+ */
 export function JugnuChat({
   locale,
   chat,
@@ -52,26 +64,26 @@ export function JugnuChat({
   const [typed, setTyped] = useState("");
   if (chat.state === ChatState.Closed) return null;
   const isLive = onSay !== undefined;
+  const last = chat.messages.at(-1);
   const his = [...chat.messages].reverse().find((m) => m.from === "jugnu");
-  const lastTheirs = chat.messages.at(-1)?.from === "student" ? chat.messages.at(-1) : undefined;
-  const earlier = chat.messages.slice(0, his === undefined ? 0 : chat.messages.indexOf(his));
   const isThinking = chat.state === ChatState.Thinking;
+  const earlier = chat.messages.slice(0, Math.max(0, chat.messages.length - 1));
 
   if (isOneLine && his !== undefined && !isThinking)
     return (
-      <div class="jugnu-chat is-one-line">
+      <div class="jugnu-sheet is-one-line">
         <button type="button" class="jugnu-line" onClick={onOpen} disabled={onOpen === undefined}>
-          <JugnuFigure mood={JugnuMood.Hint} size={22} />
-          <span>{his.text}</span>
+          {his.text}
         </button>
-        <button type="button" class="jugnu-done" onClick={onDone} disabled={onDone === undefined}>
+        <button type="button" class="jugnu-pill" onClick={onDone} disabled={onDone === undefined}>
           {t(locale, "jugnuDone")}
         </button>
       </div>
     );
 
   return (
-    <div class={`jugnu-chat${isThinking ? " is-thinking" : ""}`}>
+    <div class="jugnu-sheet">
+      <span class="jugnu-handle" aria-hidden="true" />
       {earlier.length > 0 && (
         <button
           type="button"
@@ -93,37 +105,43 @@ export function JugnuChat({
           ))}
         </ol>
       )}
-      {his !== undefined && (
-        <div class="jugnu-message">
-          <JugnuFigure mood={JugnuMood.Hint} size={32} />
-          <p>{his.text}</p>
-        </div>
-      )}
-      {lastTheirs !== undefined && lastTheirs.from === "student" ? (
+      {last?.from === "student" ? (
         <div class="jugnu-theirs">
-          {lastTheirs.did.length > 0 && (
+          {last.did.length > 0 && (
             <span class="jugnu-did">
-              {t(locale, "jugnuDid")}: {didText(lastTheirs.did)}
+              {t(locale, "jugnuDid")}: {didText(last.did)}
             </span>
           )}
-          {lastTheirs.text !== "" && <p>{lastTheirs.text}</p>}
+          {last.text !== "" && <p>{last.text}</p>}
         </div>
       ) : (
-        his?.choices !== undefined &&
-        chat.state === ChatState.Open && (
-          <div class="jugnu-choices">
-            {his.choices.map((c) => (
-              <button key={c} type="button" disabled={!isLive} onClick={() => onSay?.(c, "choice")}>
-                {c}
-              </button>
-            ))}
-          </div>
-        )
+        his !== undefined && <p class="jugnu-his">{his.text}</p>
       )}
-      {isThinking && <p class="jugnu-thinking">{t(locale, "jugnuThinking")}</p>}
-      {isLive && chat.state === ChatState.Open && (
+      {isThinking && (
+        <output class="jugnu-dots" aria-label={t(locale, "jugnuThinking")}>
+          <i />
+          <i />
+          <i />
+        </output>
+      )}
+      {last?.from === "jugnu" && his?.choices !== undefined && (
+        <div class="jugnu-choices">
+          {his.choices.map((c) => (
+            <button
+              key={c}
+              type="button"
+              class="jugnu-pill"
+              disabled={!isLive}
+              onClick={() => onSay?.(c, "choice")}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
+      {chat.state !== ChatState.HandedBack && (
         <form
-          class="jugnu-reply"
+          class="jugnu-composer"
           onSubmit={(e) => {
             e.preventDefault();
             if (typed.trim() === "") return;
@@ -133,13 +151,23 @@ export function JugnuChat({
         >
           <input
             value={typed}
-            placeholder={t(locale, "jugnuReply")}
+            disabled={!isLive || isThinking}
+            placeholder={t(locale, "jugnuPlaceholder")}
             onInput={(e) => setTyped((e.target as HTMLInputElement).value)}
           />
-          <button type="submit">{t(locale, "jugnuSend")}</button>
-          <button type="button" onClick={onDone}>
-            {t(locale, "jugnuDone")}
-          </button>
+          {isThinking ? (
+            <span class="jugnu-stop" aria-hidden="true" />
+          ) : typed.trim() !== "" ? (
+            <button type="submit" class="jugnu-send" aria-label={t(locale, "jugnuSend")}>
+              ↑
+            </button>
+          ) : (
+            last?.from === "jugnu" && (
+              <button type="button" class="jugnu-pill" onClick={onDone} disabled={!isLive}>
+                {t(locale, "jugnuDone")}
+              </button>
+            )
+          )}
         </form>
       )}
     </div>

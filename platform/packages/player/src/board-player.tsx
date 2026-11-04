@@ -14,7 +14,8 @@ import {
 } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { JugnuChat, type JugnuChatProps } from "./jugnu-chat";
+import { JugnuChat, type JugnuChatProps, moodOf } from "./jugnu-chat";
+import { JugnuFigure } from "./jugnu-figure";
 import { Layout, type LayoutContext } from "./layout";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
@@ -189,9 +190,10 @@ function BoardPlay({
     if (wasPassed) void runtime.call(BOARD, BoardAction.Pass, {}, Actor.App);
   }, [runtime, wasPassed]);
   // What Jugnu points at is kept in sight above the bar (and his chat in it).
+  const pointedProp = pointed?.prop;
   useEffect(() => {
-    if (pointed !== undefined) inSight(pointed.prop);
-  }, [pointed?.prop, pointed?.part, inSight]);
+    if (pointedProp !== undefined) inSight(pointedProp);
+  }, [pointedProp, inSight]);
 
   // What the chrome answers: a question checked (the banner), Continue pressed (the next board).
   useEffect(
@@ -282,8 +284,15 @@ function BoardPlay({
           ref={bar}
           class={`board-footer${banner !== undefined ? ` has-banner is-${banner}` : ""}${chat !== undefined ? " has-chat" : ""}`}
         >
+          {/* With the chat open: his figure at the row's start, the board's button at its end, the
+              chat's sheet under them (and no banner: he is talking about it). */}
+          {chat !== undefined && (
+            <span class="jugnu-avatar">
+              <JugnuFigure mood={moodOf(chat.chat)} size={48} />
+            </span>
+          )}
           {chat !== undefined && <JugnuChat locale={locale} {...chat} />}
-          {policy !== undefined && banner !== undefined && (
+          {chat === undefined && policy !== undefined && banner !== undefined && (
             <div class="board-banner">
               <strong>
                 {banner === AnswerStatus.Correct

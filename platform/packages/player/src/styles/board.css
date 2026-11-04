@@ -322,109 +322,181 @@
   }
 }
 
-/* Jugnu's chat (jugnu-chat.tsx), in the bottom bar: the board stays live above it. One message in
-   front, short; earlier ones a tap away; one line while the student acts on the board. */
-.jugnu-chat {
+/* Jugnu's chat (jugnu-chat.tsx), in the bottom bar: a row (his figure, the board's button) and the
+   chat's sheet under it. Only the latest exchange; the board stays live above. */
+.board-footer.has-chat,
+.board-footer.has-chat.has-banner.is-wrong,
+.board-footer.has-chat.has-banner.is-correct {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 6px;
+  background: transparent;
+  box-shadow: none;
+}
+.board-footer.has-chat > .primary,
+.board-footer.has-chat > .bar-part .primary {
+  width: auto;
+  flex: 0 0 auto;
+  padding-inline: 26px;
+}
+.board-footer.has-chat > .bar-part {
+  flex: 0 0 auto;
+}
+.jugnu-avatar {
+  display: inline-flex;
+  margin-bottom: -18px;
+  z-index: 1;
+}
+.jugnu-sheet {
+  order: 2;
   flex-basis: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 10px 12px;
-  border-radius: 16px;
-  background: var(--jugnu-chat-bg, #fff8e1);
-  color: #2b2b2b;
-  max-height: 40vh;
+  gap: 10px;
+  padding: 10px 14px 12px;
+  border-radius: 22px;
+  background: var(--color-surface-container);
+  color: var(--color-on-surface);
+  max-height: 45vh;
   overflow-y: auto;
 }
-.jugnu-chat.is-one-line {
-  flex-direction: row;
-  align-items: center;
-  padding: 6px 8px;
+.jugnu-handle {
+  align-self: center;
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-on-surface) 25%, transparent);
 }
-.jugnu-line {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  border: 0;
-  background: none;
-  text-align: left;
-  color: inherit;
-  font: inherit;
-}
-.jugnu-line span {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.jugnu-message {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-.jugnu-message p,
-.jugnu-theirs p {
-  margin: 0;
-  line-height: 1.35;
+.jugnu-his {
+  margin: 4px 2px 0;
+  font-size: 17px;
+  line-height: 1.45;
 }
 .jugnu-theirs {
   align-self: flex-end;
-  max-width: 85%;
-  padding: 6px 10px;
-  border-radius: 12px;
-  background: #3f3dd6;
-  color: #fff;
+  max-width: 80%;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--color-on-surface) 12%, var(--color-surface-container));
+}
+.jugnu-theirs p {
+  margin: 0;
+  line-height: 1.4;
 }
 .jugnu-did {
   display: block;
   font-size: 12px;
-  opacity: 0.8;
+  opacity: 0.7;
+}
+.jugnu-dots {
+  display: inline-flex;
+  gap: 4px;
+  padding: 2px 4px;
+}
+.jugnu-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+  animation: jugnu-dot 1.2s infinite ease-in-out;
+}
+.jugnu-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.jugnu-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes jugnu-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 0.9;
+    transform: translateY(-3px);
+  }
 }
 .jugnu-choices {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
-.jugnu-choices button,
-.jugnu-done,
-.jugnu-earlier,
-.jugnu-reply button {
-  border: 1px solid #c9a227;
-  border-radius: 14px;
-  background: #fff;
-  padding: 5px 12px;
+.jugnu-pill {
+  border: 1px solid color-mix(in srgb, var(--color-on-surface) 25%, transparent);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: inherit;
+  padding: 6px 14px;
+  font: inherit;
+}
+.jugnu-composer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 4px 4px 16px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-on-surface) 15%, transparent);
+}
+.jugnu-composer input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 8px 0;
   font: inherit;
   color: inherit;
+  outline: none;
+}
+.jugnu-send {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 18px;
+}
+.jugnu-stop {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-on-surface) 20%, transparent);
+  margin-right: 2px;
+}
+.jugnu-sheet.is-one-line {
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 10px 8px 16px;
+}
+.jugnu-line {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .jugnu-earlier {
   align-self: flex-start;
+  border: 0;
+  background: none;
+  color: inherit;
+  opacity: 0.6;
   font-size: 12px;
-  padding: 2px 8px;
+  padding: 0;
 }
 .jugnu-history {
   margin: 0;
   padding-left: 18px;
   font-size: 13px;
-  opacity: 0.85;
-}
-.jugnu-history .is-theirs {
-  color: #3f3dd6;
-}
-.jugnu-thinking {
-  margin: 0;
-  font-style: italic;
-  opacity: 0.75;
-}
-.jugnu-reply {
-  display: flex;
-  gap: 6px;
-}
-.jugnu-reply input {
-  flex: 1;
-  min-width: 0;
-  border: 1px solid #c9a227;
-  border-radius: 14px;
-  padding: 5px 10px;
-  font: inherit;
+  opacity: 0.8;
 }
