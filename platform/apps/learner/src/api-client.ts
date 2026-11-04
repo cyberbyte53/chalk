@@ -4,6 +4,7 @@ import {
   type EventsReply,
   type GroupReply,
   type JoinedGroup,
+  type LearnerReply,
   type MeReply,
   type Role,
   type TeacherGroup,
@@ -14,6 +15,7 @@ import {
   groupPath,
   groupReplySchema,
   joinedGroupSchema,
+  learnerReplySchema,
   meReplySchema,
   teacherGroupSchema,
 } from "@chalk/api";
@@ -99,6 +101,8 @@ export const api = {
   group: (id: string): Promise<GroupReply> => call("GET", groupPath(id), groupReplySchema),
   newJoinCode: (id: string): Promise<TeacherGroup> =>
     call("POST", groupCodePath(id), teacherGroupSchema),
+  learner: (groupId: string, learnerId: string): Promise<LearnerReply> =>
+    call("GET", groupLearnerPath(groupId, learnerId), learnerReplySchema),
   removeLearner: async (groupId: string, learnerId: string): Promise<void> => {
     await send("DELETE", groupLearnerPath(groupId, learnerId));
   },

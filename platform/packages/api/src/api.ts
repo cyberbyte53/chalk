@@ -137,8 +137,63 @@ export const groupLearnerSchema = z.object({
   progress: progressSchema,
   /** How well they understand each concept with evidence (the server's model). */
   mastery: z.array(masterySchema),
+  /**
+   * Their latest learner update (their last finished set's): when that set finished, and its
+   * first point (null if it found nothing not yet good). Null before their first finished set.
+   */
+  latestUpdate: z.object({ finishedAt: z.number(), firstPoint: z.string().nullable() }).nullable(),
 });
 export type GroupLearner = z.infer<typeof groupLearnerSchema>;
+
+/** Whether, by a conversation's end, the child understood it themselves (Jugnu's judgement). */
+export const GotThere = { Yes: "yes", Partly: "partly", NotYet: "notYet" } as const;
+export type GotThere = (typeof GotThere)[keyof typeof GotThere];
+
+/** A question as the teacher reads it: its name, the concepts it tests (titles), its level. */
+const questionSeenSchema = z.object({
+  board: z.string(),
+  name: z.string(),
+  concepts: z.array(z.string()),
+  level: z.string().nullable(),
+  /** Their tries at it in that set, in order. */
+  tries: z.array(
+    z.object({ isRight: z.boolean(), chosen: z.string().nullable(), helped: z.boolean() }),
+  ),
+});
+export type QuestionSeen = z.infer<typeof questionSeenSchema>;
+
+/** One of Jugnu's reflections on a conversation of theirs: the board, got there, his points. */
+const reflectionSeenSchema = z.object({
+  id: z.string(),
+  board: z.string(),
+  name: z.string(),
+  gotThere: z.nativeEnum(GotThere),
+  points: z.array(z.string()),
+});
+export type ReflectionSeen = z.infer<typeof reflectionSeenSchema>;
+
+/**
+ * A teacher's look at one child (platform/docs/plans/teacher-view.md, step 4): as in the class,
+ * and their latest update, each point with its evidence (the questions and reflections it cites,
+ * as the teacher reads them), and Jugnu's reflections on that set. Judged points only.
+ */
+export const learnerReplySchema = z.object({
+  learner: groupLearnerSchema,
+  update: z
+    .object({
+      finishedAt: z.number(),
+      points: z.array(
+        z.object({
+          text: z.string(),
+          questions: z.array(questionSeenSchema),
+          reflections: z.array(z.string()),
+        }),
+      ),
+      reflections: z.array(reflectionSeenSchema),
+    })
+    .nullable(),
+});
+export type LearnerReply = z.infer<typeof learnerReplySchema>;
 
 export const groupReplySchema = z.object({
   group: teacherGroupSchema,

@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import type { Attempt } from "@chalk/learning";
 import { type SetKeeper, questionFactsFrom } from "@chalk/studio/jugnu-sets";
-import { and, desc, eq, inArray, notExists, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, max, notExists, sql } from "drizzle-orm";
 import type { Db } from "./db";
 import {
   events,
@@ -78,6 +78,13 @@ export function dbSetKeeper(db: Db, contentDir: string | undefined): SetKeeper {
         openings: openings.flatMap((o) => (o.opening === null ? [] : [o.opening])),
       };
     },
+    lastFinishedAt: async (account) => {
+      const [last] = await db
+        .select({ at: max(events.at) })
+        .from(events)
+        .where(and(eq(events.accountId, account), setEvents("finished")));
+      return last?.at === null || last?.at === undefined ? undefined : new Date(last.at).getTime();
+    },
     attempts: async (account) =>
       (await db.select().from(attempts).where(eq(attempts.accountId, account))).map(
         ({ accountId: _, ...a }): Attempt => ({ ...a, at: a.at.getTime() }),
@@ -87,7 +94,8 @@ export function dbSetKeeper(db: Db, contentDir: string | undefined): SetKeeper {
         ? []
         : (
             await db
-              .select({
+              // The latest on each conversation (judging again adds one).
+              .selectDistinctOn([jugnuReflections.conversationId], {
                 id: jugnuReflections.id,
                 board: jugnuConversations.board,
                 points: jugnuReflections.points,
@@ -104,7 +112,8 @@ export function dbSetKeeper(db: Db, contentDir: string | undefined): SetKeeper {
                   inArray(jugnuConversations.opening, [...openings]),
                 ),
               )
-          ).map((r) => ({ ...r })),
+              .orderBy(jugnuReflections.conversationId, desc(jugnuReflections.at))
+          ).map(({ id, board, points, gotThere }) => ({ id, board, points, gotThere })),
     questionFacts: async (boards) =>
       contentDir === undefined
         ? boards.map((board) => ({ board, name: board, concepts: [], level: null }))
@@ -114,7 +123,7 @@ export function dbSetKeeper(db: Db, contentDir: string | undefined): SetKeeper {
         .select({ points: learnerUpdates.points })
         .from(learnerUpdates)
         .where(eq(learnerUpdates.accountId, account))
-        .orderBy(desc(learnerUpdates.at))
+        .orderBy(desc(learnerUpdates.setFinishedAt), desc(learnerUpdates.at))
         .limit(1);
       return last?.points ?? [];
     },
@@ -127,7 +136,7 @@ export function dbSetKeeper(db: Db, contentDir: string | undefined): SetKeeper {
             .values(rows.map((m) => ({ ...m, accountId: account, lastAt: new Date(m.lastAt) })));
       });
     },
-    keepUpdate: async ({ account, set, at, judged }) => {
+    keepUpdate: async ({ account, set, finishedAt, at, judged }) => {
       const promptText = createHash("sha256").update(judged.prompt.text).digest("hex");
       return db.transaction(async (tx) => {
         await tx
@@ -139,6 +148,7 @@ export function dbSetKeeper(db: Db, contentDir: string | undefined): SetKeeper {
           .values({
             accountId: account,
             set,
+            setFinishedAt: new Date(finishedAt),
             at: new Date(at),
             promptName: judged.prompt.name,
             promptHash: judged.prompt.hash,

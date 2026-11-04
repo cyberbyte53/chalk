@@ -145,9 +145,29 @@ messages are enough to replay it; the cursor only makes resuming quick.
   new records), as `work-out` is for computed data; all keyed to the account, removed with it.
 - **Player and app**: the session sent to Jugnu is the board's opening; the `jugnu` event records
   the conversation and turn the server gives back; the lesson player records the set.
-- **Teacher's API and screens**: the child: latest update's points (each with its evidence: the
-  question's family, what they chose), the numbers per concept, then reflections. The class: each
-  child's latest update's first point. Reads only.
+- **Teacher's API and screens** (step 4): reads only, the server's (the preview has no teacher;
+  `/dev-jugnu/held` is its look). A child's state is their latest learner update and the mastery
+  worked out with it; the teacher sees judged points, never a conversation.
+  - **The class** (`GET` group, as now): each child also gains their latest update's first point
+    and when (`latestPoint`, null before their first finished set), shown under their name.
+  - **One child** (`GET groupLearnerPath`, own group only, else not found): the child (as in the
+    class), their latest update (at; each point with its evidence made readable: each cited
+    question's name and concepts and their tries in that set: right or wrong, what they chose,
+    whether Jugnu helped), and his reflections on that set's conversations (the board's name, got
+    there, points). Read through the set keeper (`dbSetKeeper`: `set`, `attempts`,
+    `questionFacts`, `reflectionsAt`), so the update and the screen read the same facts.
+  - **Latest means the last finished set** (not the last judged): `learner_updates` gains the
+    set's `finished` time; the latest is by it (then by when judged). The same rule everywhere: the
+    state before an update, the class, the child; and mastery is always as of their last finished
+    set, so judging an old set again changes nothing they see. Of several reflections on one
+    conversation (judged again), the latest is read.
+  - **Edges**: an update with no points is not no update (its time is sent apart); a removed child
+    is not found; the evidence is read from the attempts as worked out now (filtered to the set's
+    openings), and a cited question or reflection no longer found is left out. The reply's fields
+    are named one by one (never a prompt, a request, a message).
+  - **The child's screen**: "Not good at yet" (the points, each with its evidence below it); the
+    concepts (as now, plus the mastery: how likely, how sure, tries); "From Jugnu's
+    conversations" (the reflections). Nothing yet: says so.
 - **Demo class**: the maker writes raw only (events, Jugnu's conversations from the sandbox's
   dialogue, its messages; times moved to the child's days, together); the loader saves the raw
   and runs layers 1 and 2 through the same functions.
@@ -169,5 +189,7 @@ messages are enough to replay it; the cursor only makes resuming quick.
 3. Sets (`served`, `finished` by the lesson player) and the learner update (mastery moved into
    it). Check: server tests; a real practice set in the preview and through the local server:
    its update's numbers and points, each point's evidence real.
-4. The teacher's API and screens. Check: in the browser.
+4. The teacher's API and screens. Check: server tests (a teacher sees their child's update with
+   its evidence; another teacher's child is not found); a real set played through the local
+   server, then the teacher's screens in the browser.
 5. The demo class through the same path; `judge-again`. Then chalk1.

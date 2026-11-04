@@ -33,6 +33,7 @@ import {
   accounts,
   attempts,
   groups,
+  learnerUpdates,
   mastery,
   members,
   questionVersions,
@@ -286,13 +287,41 @@ export async function groupLearners(
   const ids = rows.map((row) => row.id);
   const progress = await progressOfEach(db, ids, plans);
   const masteries = await masteryOfEach(db, ids);
+  const latest = await latestUpdateOfEach(db, ids);
   return rows.map((row) => ({
     ...row,
     joinedAt: row.joinedAt.getTime(),
     lastActiveAt: row.lastActiveAt === null ? null : new Date(row.lastActiveAt).getTime(),
     progress: progress.get(row.id) ?? {},
     mastery: masteries.get(row.id) ?? [],
+    latestUpdate: latest.get(row.id) ?? null,
   }));
+}
+
+/**
+ * Each learner's latest update (their last finished set's, then the last judged): when that set
+ * finished, and its first point. One query for them all.
+ */
+async function latestUpdateOfEach(
+  db: Db,
+  accountIds: readonly string[],
+): Promise<Map<string, { finishedAt: number; firstPoint: string | null }>> {
+  if (accountIds.length === 0) return new Map();
+  const rows = await db
+    .selectDistinctOn([learnerUpdates.accountId], {
+      accountId: learnerUpdates.accountId,
+      finishedAt: learnerUpdates.setFinishedAt,
+      points: learnerUpdates.points,
+    })
+    .from(learnerUpdates)
+    .where(inArray(learnerUpdates.accountId, [...accountIds]))
+    .orderBy(learnerUpdates.accountId, desc(learnerUpdates.setFinishedAt), desc(learnerUpdates.at));
+  return new Map(
+    rows.map((r) => [
+      r.accountId,
+      { finishedAt: r.finishedAt.getTime(), firstPoint: r.points[0]?.text ?? null },
+    ]),
+  );
 }
 
 // ---- groups ----

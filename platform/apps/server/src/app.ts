@@ -31,6 +31,7 @@ import type { Db } from "./db";
 import { ApiFailure } from "./failure";
 import type { GoogleVerifier } from "./google";
 import { dbKeeper } from "./jugnu-store";
+import { learnerView } from "./learner-view";
 import { type RateLimit, rateLimit } from "./rate-limit";
 import { dbSetKeeper } from "./set-store";
 import {
@@ -300,6 +301,9 @@ export function createApp(deps: AppDeps): Hono<Env> {
 
   // ---- teachers ----
 
+  // Sets and their updates, as kept here (read by the update, and by the teacher's look).
+  const setKeeper = dbSetKeeper(db, deps.contentDir);
+
   app.get(ApiPath.Groups, signedIn, as(Role.Teacher), async (c) =>
     c.json(await teacherGroups(db, c.get("account").id)),
   );
@@ -331,6 +335,26 @@ export function createApp(deps: AppDeps): Hono<Env> {
     return c.json(await teacherGroup(db, c.get("account").id, group.id));
   });
 
+  // One child of the group: their latest update with its evidence, and his reflections on it.
+  app.get(
+    `${ApiPath.Groups}/:groupId/learners/:learnerId`,
+    signedIn,
+    as(Role.Teacher),
+    async (c) => {
+      const group = await ownGroup(c);
+      const view = await learnerView(
+        db,
+        setKeeper,
+        group.id,
+        idParam(c, "learnerId"),
+        deps.plans ?? [],
+      );
+      if (view === undefined)
+        throw new ApiFailure(404, ApiErrorCode.NotFound, "no such learner here");
+      return c.json(view);
+    },
+  );
+
   app.delete(
     `${ApiPath.Groups}/:groupId/learners/:learnerId`,
     signedIn,
@@ -360,7 +384,7 @@ export function createApp(deps: AppDeps): Hono<Env> {
   // A finished set's update (sets.ts): its numbers always; with Jugnu, its conversations ended and
   // reflected on, and its judgement.
   const updates = sets({
-    keeper: dbSetKeeper(db, deps.contentDir),
+    keeper: setKeeper,
     ...(talks === undefined || deps.jugnu === undefined
       ? {}
       : { jugnu: { conversations: talks, judge: deps.jugnu.judge } }),

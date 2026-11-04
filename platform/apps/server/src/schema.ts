@@ -1,3 +1,4 @@
+import { GotThere } from "@chalk/api";
 import type { ChalkEvent, Level, PlayMode } from "@chalk/content";
 import type { Band, MasteryModel } from "@chalk/learning";
 import { sql } from "drizzle-orm";
@@ -298,8 +299,7 @@ export const jugnuMessages = pgTable(
 );
 
 /** Whether, by a conversation's end, the child understood it themselves (his judgement). */
-export const GotThere = { Yes: "yes", Partly: "partly", NotYet: "notYet" } as const;
-export type GotThere = (typeof GotThere)[keyof typeof GotThere];
+export { GotThere };
 
 /**
  * Jugnu's reflection on a conversation once it was over (teacher-view.md, layer 1, judged): what it
@@ -333,7 +333,8 @@ export const jugnuReflections = pgTable(
 /**
  * The learner update, once per finished set (teacher-view.md, step 3, judged): what the set shows
  * the child is still not good at and keeps getting wrong, each point with its evidence (question
- * board ids, reflection ids). History: never overwritten; their state is their latest. Kept with
+ * board ids, reflection ids). History: never overwritten; their state is their latest (by when the
+ * set finished, then when judged: judging an old set again is not their state). Kept with
  * how it was made (the update prompt by name, hash and text; the model; the requests' usage).
  * Its numbers are `mastery`, worked out at the same moment.
  */
@@ -346,6 +347,9 @@ export const learnerUpdates = pgTable(
       .references(() => accounts.id, { onDelete: "cascade" }),
     /** The set's id (its `set` entries' `set`). */
     set: text("set").notNull(),
+    /** When the set finished: the latest update is their last finished set's. */
+    setFinishedAt: timestamp("set_finished_at", { withTimezone: true }).notNull(),
+    /** When it was judged. */
     at: timestamp("at", { withTimezone: true }).notNull(),
     promptName: text("prompt_name").notNull(),
     promptHash: text("prompt_hash").notNull(),
@@ -361,6 +365,7 @@ export const learnerUpdates = pgTable(
   (t) => [
     uniqueIndex("learner_updates_once").on(t.accountId, t.set, t.promptHash),
     index("learner_updates_account_at").on(t.accountId, t.at),
+    index("learner_updates_account_finished").on(t.accountId, t.setFinishedAt),
   ],
 );
 

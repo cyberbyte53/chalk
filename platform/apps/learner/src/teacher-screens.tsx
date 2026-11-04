@@ -1,4 +1,12 @@
-import type { GroupLearner, GroupReply, MeReply, TeacherGroup } from "@chalk/api";
+import {
+  GotThere,
+  type GroupLearner,
+  type GroupReply,
+  type LearnerReply,
+  type MeReply,
+  type QuestionSeen,
+  type TeacherGroup,
+} from "@chalk/api";
 import type { Locale } from "@chalk/content";
 import { Band, type Progress, isConceptDone } from "@chalk/learning";
 import { RichText } from "@chalk/player";
@@ -13,8 +21,9 @@ import { ArtView } from "./course-screens";
 
 /**
  * What a teacher sees, on their phone: their groups, a new group, one group (every learner's
- * concepts as squares, most behind first) and one learner. Everything comes from the learners'
- * own events, worked out the same way as on their phones.
+ * concepts as squares, most behind first, and what their last practice showed) and one learner
+ * (what they aren't good at yet, with its evidence; their concepts; Jugnu's reflections). Progress
+ * comes from the learners' own events; the rest is the server's learner update (judged points).
  */
 
 const conceptsOf = (course: Course): CourseConcept[] =>
@@ -336,6 +345,9 @@ function GroupScreen({
                         ? say(locale, "neverActive")
                         : whenText(learner.lastActiveAt, locale)}
                     </span>
+                    {learner.latestUpdate?.firstPoint != null && (
+                      <span class="learner-point">{learner.latestUpdate.firstPoint}</span>
+                    )}
                   </span>
                   <span class="squares">
                     {concepts.map((concept) => (
@@ -360,20 +372,59 @@ function GroupScreen({
   );
 }
 
+/** A question's name as words: its family ("bus-to-stop/one": "Bus to stop"). */
+const questionText = (name: string) => {
+  const words = (name.split("/")[0] ?? name).replace(/[-_]+/g, " ").trim();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+};
+
+const BAND_WORD = {
+  [Band.Strong]: "bandStrong",
+  [Band.Unsure]: "bandUnsure",
+  [Band.Weak]: "bandWeak",
+} as const;
+
+const GOT_THERE_WORD = {
+  [GotThere.Yes]: "gotThereYes",
+  [GotThere.Partly]: "gotTherePartly",
+  [GotThere.NotYet]: "gotThereNotYet",
+} as const;
+
+/** One cited question: its name, and their tries at it in that set. */
+function Evidence({ question, locale }: { question: QuestionSeen; locale: Locale }): JSX.Element {
+  return (
+    <span class="evidence small">
+      <b>{questionText(question.name)}</b>
+      {question.tries.map((t, i) => (
+        <span key={i} class={t.isRight ? "is-right" : "is-wrong"}>
+          {" · "}
+          {say(locale, t.isRight ? "triedRight" : "triedWrong")}
+          {t.chosen === null ? "" : ` (${say(locale, "theyChose", { chosen: t.chosen })})`}
+          {t.helped ? `, ${say(locale, "withJugnu")}` : ""}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 function LearnerScreen({
   learner,
+  view,
   course,
   locale,
   onRemove,
   onBack,
 }: {
   learner: GroupLearner;
+  /** Their latest update with its evidence (once loaded). */
+  view: LearnerReply | undefined;
   course: Course | undefined;
   locale: Locale;
   onRemove: () => void;
   onBack: () => void;
 }): JSX.Element {
   const concepts = course === undefined ? [] : conceptsOf(course);
+  const update = view?.update;
   const active =
     learner.lastActiveAt === null
       ? say(locale, "neverActive")
@@ -394,35 +445,86 @@ function LearnerScreen({
             })}
           </span>
         </div>
-        <div class="learners">
-          {concepts.map((concept) => {
-            const mine = learner.progress[concept.id];
-            const mark = conceptMark(
-              concept,
-              mine,
-              learner.mastery.find((m) => m.concept === concept.id),
-            );
-            const status =
-              mine?.practice != null
-                ? `${mine.practice.right}/${mine.practice.of}`
-                : mark === ConceptMark.Done
-                  ? say(locale, "learnt")
-                  : mark === ConceptMark.Started
-                    ? say(locale, "pagesOnly")
-                    : say(locale, "notReached");
-            return (
-              <div key={concept.id} class="concept-row">
-                <Square mark={mark} />
-                <span class="learner-who">
-                  <span class="learner-name">
-                    <RichText text={concept.title[locale]} />
+        <section class="teacher-section">
+          <div class="kicker">
+            {say(locale, "notYetGood")}
+            {update != null &&
+              ` · ${say(locale, "afterSet", { when: whenText(update.finishedAt, locale) })}`}
+          </div>
+          {update === undefined ? null : update === null ? (
+            <p class="small">{say(locale, "noUpdateYet")}</p>
+          ) : update.points.length === 0 ? (
+            <p class="small">{say(locale, "allGood")}</p>
+          ) : (
+            <div class="learners">
+              {update.points.map((point, i) => (
+                <div key={i} class="point-row">
+                  <span class="point-text">{point.text}</span>
+                  {point.questions.map((q) => (
+                    <Evidence key={q.board} question={q} locale={locale} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+        <section class="teacher-section">
+          <div class="kicker">{say(locale, "concepts")}</div>
+          <div class="learners">
+            {concepts.map((concept) => {
+              const mine = learner.progress[concept.id];
+              const known = learner.mastery.find((m) => m.concept === concept.id);
+              const mark = conceptMark(concept, mine, known);
+              const status =
+                mine?.practice != null
+                  ? `${mine.practice.right}/${mine.practice.of}`
+                  : mark === ConceptMark.Done
+                    ? say(locale, "learnt")
+                    : mark === ConceptMark.Started
+                      ? say(locale, "pagesOnly")
+                      : say(locale, "notReached");
+              return (
+                <div key={concept.id} class="concept-row">
+                  <Square mark={mark} />
+                  <span class="learner-who">
+                    <span class="learner-name">
+                      <RichText text={concept.title[locale]} />
+                    </span>
+                    <span class="small">{status}</span>
+                    {known !== undefined && (
+                      <span class="small">
+                        {say(locale, "masteryLine", {
+                          p: Math.round(known.estimate * 100),
+                          band: say(locale, BAND_WORD[known.band]),
+                          n: known.tries,
+                        })}
+                      </span>
+                    )}
                   </span>
-                  <span class="small">{status}</span>
-                </span>
-              </div>
-            );
-          })}
-        </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+        {update != null && update.reflections.length > 0 && (
+          <section class="teacher-section">
+            <div class="kicker">{say(locale, "fromJugnu")}</div>
+            <div class="learners">
+              {update.reflections.map((r) => (
+                <div key={r.id} class="point-row">
+                  <span class="evidence small">
+                    <b>{questionText(r.name)}</b> · {say(locale, GOT_THERE_WORD[r.gotThere])}
+                  </span>
+                  {r.points.map((p, i) => (
+                    <span key={i} class="point-text">
+                      {p}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
         <TwoTap
           class="link is-danger"
           label={say(locale, "remove")}
@@ -474,6 +576,23 @@ export function TeacherApp({
   useEffect(() => {
     if (groupId !== undefined && open?.group.id !== groupId) void load(groupId);
   }, [groupId, open?.group.id, load]);
+
+  // One learner open: their latest update with its evidence, fetched for them.
+  const [learnerView, setLearnerView] = useState<LearnerReply | undefined>();
+  const learnerId = screen.kind === "learner" ? screen.learnerId : undefined;
+  useEffect(() => {
+    if (groupId === undefined || learnerId === undefined) return;
+    let isCurrent = true;
+    api
+      .learner(groupId, learnerId)
+      .then((view) => {
+        if (isCurrent) setLearnerView(view);
+      })
+      .catch((error: unknown) => console.warn("Learner view:", error));
+    return () => {
+      isCurrent = false;
+    };
+  }, [groupId, learnerId]);
 
   const backToGroups = () => {
     setOpen(undefined);
@@ -533,7 +652,9 @@ export function TeacherApp({
     return <Redirect onGo={() => setScreen({ kind: "group", id: screen.id })} />;
   return (
     <LearnerScreen
+      key={learner.id}
       learner={learner}
+      view={learnerView?.learner.id === learner.id ? learnerView : undefined}
       course={course}
       locale={locale}
       onRemove={() =>

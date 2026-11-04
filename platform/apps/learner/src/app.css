@@ -755,6 +755,37 @@
   display: flex;
   flex-direction: column;
 }
+.learner-point {
+  margin-top: 2px;
+  font-size: var(--text-note);
+  color: var(--color-wrong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.teacher-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.point-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: var(--color-surface-container);
+}
+.point-text {
+  font-weight: 700;
+  line-height: 1.3;
+}
+.evidence .is-right {
+  color: var(--color-right);
+}
+.evidence .is-wrong {
+  color: var(--color-wrong);
+}
 .learner-name {
   font-weight: 800;
   font-size: var(--text-body);

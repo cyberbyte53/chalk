@@ -59,15 +59,20 @@ export type SetKeeper = {
   /** Sets finished with no update by this update prompt (its hash): to make (or try again). */
   toUpdate: (promptHash: string) => Promise<{ account: string; set: string }[]>;
   set: (account: string, set: string) => Promise<SetRecord | undefined>;
+  /** When the learner's last finished set finished (their numbers are as of it), if any. */
+  lastFinishedAt: (account: string) => Promise<number | undefined>;
   attempts: (account: string) => Promise<Attempt[]>;
+  /** His reflections on the conversations at these openings: the latest on each. */
   reflectionsAt: (account: string, openings: readonly string[]) => Promise<ReflectionFacts[]>;
   questionFacts: (boards: readonly string[]) => Promise<QuestionFacts[]>;
-  /** The learner's latest update's points (the state before), if any. */
+  /** The points of the learner's latest update (their last finished set's; the state before). */
   lastPoints: (account: string) => Promise<UpdatePoint[]>;
   keepMastery: (account: string, rows: Mastery[]) => Promise<void>;
   keepUpdate: (u: {
     account: string;
     set: string;
+    /** When the set finished (an update's place in their history). */
+    finishedAt: number;
     at: number;
     judged: Judged;
   }) => Promise<string>;
@@ -96,15 +101,16 @@ export function sets(o: {
   const make = async (account: string, setId: string) => {
     const set = await o.keeper.set(account, setId);
     if (set === undefined) return;
-    // The numbers: as of the set's end.
-    const upTo = (await o.keeper.attempts(account)).filter((a) => a.at <= set.finishedAt);
-    await o.keeper.keepMastery(account, masteryFrom(upTo));
+    // The numbers: as of their last finished set (this one, unless a later one finished first).
+    const tries = await o.keeper.attempts(account);
+    const last = Math.max(set.finishedAt, (await o.keeper.lastFinishedAt(account)) ?? 0);
+    await o.keeper.keepMastery(account, masteryFrom(tries.filter((a) => a.at <= last)));
     if (o.jugnu === undefined) return;
     // Every reflection of the set's conversations exists before it is judged.
     await o.jugnu.conversations.endAt(account, set.openings);
     // The judgement: the state before, the set, what happened.
     const facts = await o.keeper.questionFacts(set.questions.map((q) => q.board));
-    const inSet = upTo.filter((a) => set.openings.includes(a.opening));
+    const inSet = tries.filter((a) => set.openings.includes(a.opening));
     const judged = await o.jugnu.judge({
       before: await o.keeper.lastPoints(account),
       questions: facts.map((f) => ({
@@ -115,7 +121,13 @@ export function sets(o: {
       })),
       reflections: await o.keeper.reflectionsAt(account, set.openings),
     });
-    await o.keeper.keepUpdate({ account, set: setId, at: o.now(), judged });
+    await o.keeper.keepUpdate({
+      account,
+      set: setId,
+      finishedAt: set.finishedAt,
+      at: o.now(),
+      judged,
+    });
   };
   const update = (account: string, setId: string) => {
     const key = `${account}:${setId}`;
@@ -196,11 +208,17 @@ export function memorySetKeeper(
 ): SetKeeper & {
   events: Map<string, ChalkEvent[]>;
   mastery: Map<string, Mastery[]>;
-  updates: { account: string; set: string; at: number; judged: Judged }[];
+  updates: { account: string; set: string; finishedAt: number; at: number; judged: Judged }[];
 } {
   const events = new Map<string, ChalkEvent[]>();
   const kept = new Map<string, Mastery[]>();
-  const updates: { account: string; set: string; at: number; judged: Judged }[] = [];
+  const updates: {
+    account: string;
+    set: string;
+    finishedAt: number;
+    at: number;
+    judged: Judged;
+  }[] = [];
   const readBuilt = (path: string): unknown =>
     JSON.parse(readFileSync(join(buildDir, `${path}.json`), "utf8"));
   const catalogue = () =>
@@ -247,11 +265,17 @@ export function memorySetKeeper(
         openings: [...openings],
       };
     },
+    lastFinishedAt: async (account) => {
+      const at = (events.get(account) ?? []).flatMap((e) =>
+        e.kind === "set" && e.payload.what === "finished" ? [e.at] : [],
+      );
+      return at.length === 0 ? undefined : Math.max(...at);
+    },
     attempts: async (account) => attemptsFrom(events.get(account) ?? [], catalogue()),
     reflectionsAt: async (account, openings) =>
       [...conversations.held.values()].flatMap((c) =>
         c.place.account === account && openings.includes(c.place.opening)
-          ? c.reflections.map((r) => ({
+          ? c.reflections.slice(-1).map((r) => ({
               id: r.id,
               board: c.place.board,
               points: r.points,
@@ -261,7 +285,9 @@ export function memorySetKeeper(
       ),
     questionFacts: async (boards) => questionFactsFrom(buildDir, boards),
     lastPoints: async (account) =>
-      [...updates].reverse().find((u) => u.account === account)?.judged.points ?? [],
+      updates
+        .filter((u) => u.account === account)
+        .sort((a, b) => b.finishedAt - a.finishedAt || b.at - a.at)[0]?.judged.points ?? [],
     keepMastery: async (account, rows) => {
       kept.set(account, rows);
     },
