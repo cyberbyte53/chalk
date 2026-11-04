@@ -24,6 +24,8 @@ export type BoardRecorder = {
   app: (what: string, details?: Readonly<Record<string, unknown>>, node?: string) => void;
   /** One turn with Jugnu on this board. */
   jugnu: (payload: PayloadOf<"jugnu">) => void;
+  /** The chat with Jugnu, as the student meets it: opened, their words, closed. */
+  chat: (payload: PayloadOf<"chat">) => void;
   /** A pointer went down on the board, or came up: a drag between is one entry. */
   gesture: (isDown: boolean) => void;
   /** Turns recording off and on (Jugnu trying something on the phone's own board). */
@@ -172,6 +174,10 @@ export function recordBoard(
     jugnu: (payload) => {
       if (isClosed) return;
       put({ ...place, actor: Actor.Learner, node: null, kind: "jugnu", payload });
+    },
+    chat: (payload) => {
+      if (isClosed) return;
+      put({ ...place, actor: Actor.Learner, node: null, kind: "chat", payload });
     },
     gesture: (down) => {
       isDown = down;

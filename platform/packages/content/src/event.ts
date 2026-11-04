@@ -90,8 +90,28 @@ export const eventKinds = {
       reply: z.string(),
       steps: z.array(z.object({ kind: z.string() }).passthrough()),
       model: z.string(),
+      /** Short options he offered with his reply, for the student to tap (or type their own). */
+      choices: z.array(z.string()).min(2).max(4).optional(),
+      /** He handed back: he thinks they have it, and they do the next one alone. */
+      isHandBack: z.boolean().optional(),
     })
     .strict(),
+  /**
+   * The chat with Jugnu, as the student meets it: it opened (from Get help, or Ask Jugnu), they
+   * said something (typed, a tapped choice, or Done after acting on the board), it closed (by them,
+   * or by his hand-back). What they did on the board between is its `cause` entries.
+   */
+  chat: z.union([
+    z.object({ what: z.literal("opened"), reason: z.enum(["getHelp", "ask"]) }).strict(),
+    z
+      .object({
+        what: z.literal("said"),
+        text: z.string(),
+        via: z.enum(["typed", "choice", "done"]),
+      })
+      .strict(),
+    z.object({ what: z.literal("closed"), by: z.enum(["student", "handBack"]) }).strict(),
+  ]),
   /** Things around boards: a line's audio failed, the app passed a board itself. */
   app: z.object({ what: z.string().min(1) }).catchall(z.unknown()),
 } as const;

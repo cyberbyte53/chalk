@@ -421,6 +421,9 @@ export async function runDialogue(
     // Jugnu (jugnu.ts): one conversation for the whole time she is stuck.
     const conversation = newConversation();
     let lastSaid = one.asks;
+    // Stuck after a wrong check, they press Get help: the chat opens, asking for them.
+    recorder?.chat({ what: "opened", reason: "getHelp" });
+    recorder?.chat({ what: "said", text: one.asks, via: "typed" });
     let studentTurn = firstTurn(board, herSteps, one.asks);
     for (let turn = 0; turn < MAX_TURNS && !isHandedBack; turn++) {
       const his = await jugnuTurn({
@@ -456,6 +459,7 @@ export async function runDialogue(
         reply: his.says,
         steps: glow === null ? [] : [{ kind: "glow", part: glow }],
         model: jugnu.name,
+        ...(his.isHandBack ? { isHandBack: true } : {}),
       });
       extras[lastSeq()] = {
         jugnu: {
@@ -471,6 +475,7 @@ export async function runDialogue(
             : {}),
         },
       };
+      if (isHandedBack) recorder?.chat({ what: "closed", by: "handBack" });
       snapshot(false);
       if (isHandedBack) break;
 
@@ -479,6 +484,12 @@ export async function runDialogue(
       const her = await herTurn(board, herSteps);
       turns.push({ ...her, stepsSoFar: [...herSteps], isRight: isRightOf(board) });
       lastSaid = her.says;
+      // Their words end their turn (Done, if they only acted on the board).
+      recorder?.chat({
+        what: "said",
+        text: her.says,
+        via: her.says.trim() === "" ? "done" : "typed",
+      });
       extras[lastSeq()] = {
         ...extras[lastSeq()],
         student: {
@@ -488,6 +499,7 @@ export async function runDialogue(
           ...(her.isLeaving === true ? { isLeaving: true } : {}),
         },
       };
+      if (her.isLeaving === true) recorder?.chat({ what: "closed", by: "student" });
       snapshot(false);
       if (her.isLeaving === true) break;
       studentTurn = laterTurn(board, before, her);
@@ -577,21 +589,23 @@ export function listRuns(board?: string): {
   isBoardChanged: boolean;
   turns: number;
 }[] {
-  return runFiles()
-    .filter((f) => board === undefined || f.board === board)
-    .map(({ file }) => JSON.parse(readFileSync(file, "utf8")) as Dialogue)
-    // Runs kept before they were recorded as events are left on disk, not listed.
-    .filter((run) => run.events !== undefined)
-    .sort((a, b) => (a.id < b.id ? 1 : -1))
-    .map((run) => ({
-      id: run.id,
-      board: run.case.board,
-      note: run.note,
-      isRight: run.isRight,
-      isFinished: run.isFinished !== false,
-      isBoardChanged: changedSince(run),
-      turns: run.turns.length,
-    }));
+  return (
+    runFiles()
+      .filter((f) => board === undefined || f.board === board)
+      .map(({ file }) => JSON.parse(readFileSync(file, "utf8")) as Dialogue)
+      // Runs kept before they were recorded as events are left on disk, not listed.
+      .filter((run) => run.events !== undefined)
+      .sort((a, b) => (a.id < b.id ? 1 : -1))
+      .map((run) => ({
+        id: run.id,
+        board: run.case.board,
+        note: run.note,
+        isRight: run.isRight,
+        isFinished: run.isFinished !== false,
+        isBoardChanged: changedSince(run),
+        turns: run.turns.length,
+      }))
+  );
 }
 
 /** One run, as kept, and whether its board has changed since. */
