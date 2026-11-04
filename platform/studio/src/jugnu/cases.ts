@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadBoard } from "@chalk/author";
@@ -31,10 +31,19 @@ export type Case = {
 
 const root = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
 const build = join(root, "build");
-export const CASES = join(
-  root,
-  "authoring/books/class9-maths/coordinate-geometry/jugnu-cases.yaml",
-);
+const books = join(root, "authoring/books");
+
+/** Every chapter's file of cases (`authoring/books/<book>/<chapter>/jugnu-cases.yaml`). */
+export function caseFiles(): string[] {
+  if (!existsSync(books)) return [];
+  return readdirSync(books).flatMap((book) =>
+    statSync(join(books, book)).isDirectory()
+      ? readdirSync(join(books, book))
+          .map((chapter) => join(books, book, chapter, "jugnu-cases.yaml"))
+          .filter((f) => existsSync(f))
+      : [],
+  );
+}
 
 /** A board played as a child did: her steps, each played out on the board's clock. */
 export async function played(board: string, steps: readonly Step[]): Promise<BoardRuntime> {
@@ -100,6 +109,12 @@ export function questionsSeen(runtime: BoardRuntime): string[] {
 }
 
 /** The cases, as written. */
-export function readCases(): Case[] {
-  return parse(readFileSync(CASES, "utf8")) as Case[];
+/** Every case, from every chapter's file; with `board`, only the cases on that board. */
+export function readCases(board?: string): Case[] {
+  const all = caseFiles().flatMap((f) => parse(readFileSync(f, "utf8")) as Case[]);
+  return board === undefined ? all : all.filter((c) => c.board === board);
 }
+
+/** A board's build version (every built item has one): what a run ran on. */
+export const boardVersion = (board: string): string | undefined =>
+  (JSON.parse(readFileSync(join(build, `${board}.json`), "utf8")) as { version?: string }).version;

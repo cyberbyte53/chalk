@@ -63,6 +63,8 @@ type Dialogue = {
   /** Which prompt each seat ran: its file's name and the hash of its words. */
   prompts?: { tutor: { name: string; hash: string }; student: { name: string; hash: string } };
   error?: string;
+  boardVersion?: string;
+  isBoardChanged?: boolean;
   lesson?: string;
   turns: (JugnuTurn | HerTurn)[];
   isRight: boolean;
@@ -72,7 +74,15 @@ type Dialogue = {
   isFinished?: boolean;
   usage: { ms: number; input: number; output: number };
 };
-type Listed = { id: string; note: string; isRight: boolean; turns: number };
+type Listed = {
+  id: string;
+  board: string;
+  note: string;
+  isRight: boolean;
+  isFinished: boolean;
+  isBoardChanged: boolean;
+  turns: number;
+};
 
 const nothing: RecordEvent = () => 0;
 
@@ -270,6 +280,12 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
           <b>She believes</b> (hidden from Jugnu): {run.student.believes}
         </p>
         {run.error !== undefined && <p class="jg-problem">It broke: {run.error}</p>}
+        {run.isBoardChanged === true && (
+          <p class="jg-problem">
+            Its board has been rebuilt since this run: the boards below are drawn as the board is
+            now, so they may not be what the student saw.
+          </p>
+        )}
         {run.note !== "" && (
           <p>
             <b>This experiment:</b> {run.note}
@@ -389,7 +405,8 @@ export function JugnuPreview(): JSX.Element {
         <select value={id} onChange={(e) => setId((e.target as HTMLSelectElement).value)}>
           {runs.map((r) => (
             <option key={r.id} value={r.id}>
-              {r.isRight ? "✓" : "✗"} {r.id}
+              {r.isFinished ? (r.isRight ? "✓" : "✗") : "…"} {r.id}
+              {r.isBoardChanged ? " (board changed since)" : ""}
             </option>
           ))}
         </select>

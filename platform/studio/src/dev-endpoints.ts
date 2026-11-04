@@ -118,7 +118,8 @@ export async function pipelineEndpoint(
 }
 
 /**
- * /dev-jugnu (jugnu/dialogue.ts): GET the cases and every run kept; `?show=<run>` one of them.
+ * /dev-jugnu (jugnu/dialogue.ts): GET the cases and every run kept (`?board=<path>`: one board's);
+ * `?show=<run>` one of them.
  * POST `{case, student, note}` starts a run and answers its id at once; the run goes on by itself,
  * kept after every turn, so the page follows it by its id. The preview's ?dev&jugnu shows them.
  */
@@ -134,11 +135,13 @@ export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): 
       send(res, 200, { id: dialogue.startDialogue(b.case ?? "", b.student ?? "", b.note ?? "") });
       return;
     }
-    const show = new URL(req.url ?? "/", "http://x").searchParams.get("show");
+    const q = new URL(req.url ?? "/", "http://x").searchParams;
+    const show = q.get("show");
+    const board = q.get("board") ?? undefined;
     if (show !== null) send(res, 200, dialogue.readRun(show));
     else {
       const { readCases } = await import("./jugnu/cases");
-      send(res, 200, { cases: readCases(), runs: dialogue.listRuns() });
+      send(res, 200, { cases: readCases(board), runs: dialogue.listRuns(board) });
     }
   } catch (error) {
     send(res, 500, { error: error instanceof Error ? error.message : String(error) });

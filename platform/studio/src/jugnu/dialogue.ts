@@ -1,11 +1,12 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { randomBytes } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { Actor } from "@chalk/content";
 import type { BoardRuntime } from "@chalk/player";
 import type { ModelMessage } from "ai";
 import { z } from "zod";
 import { type Request, type ToolSpec, log, runTurn } from "./agent";
-import { type Case, type Step, played, readCases } from "./cases";
+import { type Case, type Step, boardVersion, played, readCases } from "./cases";
 import { type JugnuTry, firstTurn, jugnuTurn, laterTurn, newConversation, partsOf } from "./jugnu";
 import { Provider, modelOf, settingsFrom } from "./model";
 import { type Prompt, Seat, promptOf } from "./prompts";
@@ -81,6 +82,9 @@ export type Dialogue = {
   prompts?: { tutor: { name: string; hash: string }; student: { name: string; hash: string } };
   /** It broke: what went wrong (the run keeps what it had). */
   error?: string;
+  /** The board's build version it ran on; and, when read back, whether the board has changed since. */
+  boardVersion?: string;
+  isBoardChanged?: boolean;
   /** The lesson as Jugnu was given it. */
   lesson: string;
   turns: (JugnuTurn | HerTurn)[];
@@ -198,6 +202,7 @@ export async function runDialogue(
     knows: student.knows,
   });
   const started = Date.now();
+  const version = boardVersion(one.board);
   const usage = { input: 0, cacheRead: 0, cacheWrite: 0, output: 0 };
   const count = (r: Request) => {
     log(
@@ -234,6 +239,7 @@ export async function runDialogue(
       case: one,
       student,
       models: { jugnu: jugnu.name, student: child.name },
+      ...(version === undefined ? {} : { boardVersion: version }),
       instructions: { jugnu: tutorPrompt.text, student: studentPrompt.text },
       prompts: {
         tutor: { name: tutorPrompt.name, hash: tutorPrompt.hash },
@@ -370,34 +376,73 @@ export async function runDialogue(
   return done;
 }
 
-/** Where every experiment is kept, to be opened again in the preview (?dev&jugnu). */
-export const RUNS = join(root, "platform/studio/node_modules/.cache/jugnu-runs");
+/**
+ * Where runs are kept: `.chalk-runs/<board>/<run>.json`, each under the board it ran on (generated,
+ * not committed; beside `.chalk-seen/`).
+ */
+export const RUNS = join(root, ".chalk-runs");
 
-/** An experiment's name: when it ran, the case and the child. */
+/** A run's name: when it started (to the second) and a short random part (two can start together). */
 export const runId = (caseName: string, studentName: string, at = new Date()): string =>
-  `${at.toISOString().slice(0, 19).replace(/[:T]/g, "-")}-${caseName}-${studentName}`;
+  `${at.toISOString().slice(0, 19).replace(/[:T]/g, "-")}-${randomBytes(2).toString("hex")}-${caseName}-${studentName}`;
 
-/** Keeps an experiment, and gives it back. */
+/** Every run file, with the board it is under. */
+function runFiles(dir = RUNS, board = ""): { file: string; board: string }[] {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir).flatMap((f) => {
+    const at = join(dir, f);
+    if (statSync(at).isDirectory()) return runFiles(at, board === "" ? f : `${board}/${f}`);
+    return f.endsWith(".json") ? [{ file: at, board }] : [];
+  });
+}
+
+/** Keeps a run, under its board, and gives it back. */
 export function saveRun(run: Dialogue): Dialogue {
-  mkdirSync(RUNS, { recursive: true });
-  writeFileSync(join(RUNS, `${run.id}.json`), `${JSON.stringify(run, null, 1)}\n`);
+  const dir = join(RUNS, run.case.board);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, `${run.id}.json`), `${JSON.stringify(run, null, 1)}\n`);
   return run;
 }
 
-/** Every experiment kept, newest first: its name, note and how it ended. */
-export function listRuns(): { id: string; note: string; isRight: boolean; turns: number }[] {
-  if (!existsSync(RUNS)) return [];
-  return readdirSync(RUNS)
-    .filter((f) => f.endsWith(".json"))
-    .sort()
-    .reverse()
-    .map((f) => {
-      const run = JSON.parse(readFileSync(join(RUNS, f), "utf8")) as Dialogue;
-      return { id: run.id, note: run.note, isRight: run.isRight, turns: run.turns.length };
-    });
+/** Whether a run's board has been rebuilt since it ran (its replay would draw it wrongly). */
+const changedSince = (run: Dialogue): boolean => {
+  if (run.boardVersion === undefined) return false;
+  try {
+    return boardVersion(run.case.board) !== run.boardVersion;
+  } catch {
+    return true;
+  }
+};
+
+/** Every run kept, newest first (with `board`, that board's only): its name, board, note and end. */
+export function listRuns(board?: string): {
+  id: string;
+  board: string;
+  note: string;
+  isRight: boolean;
+  isFinished: boolean;
+  isBoardChanged: boolean;
+  turns: number;
+}[] {
+  return runFiles()
+    .filter((f) => board === undefined || f.board === board)
+    .map(({ file }) => JSON.parse(readFileSync(file, "utf8")) as Dialogue)
+    .sort((a, b) => (a.id < b.id ? 1 : -1))
+    .map((run) => ({
+      id: run.id,
+      board: run.case.board,
+      note: run.note,
+      isRight: run.isRight,
+      isFinished: run.isFinished !== false,
+      isBoardChanged: changedSince(run),
+      turns: run.turns.length,
+    }));
 }
 
-/** One experiment, as kept. */
+/** One run, as kept, and whether its board has changed since. */
 export function readRun(id: string): Dialogue {
-  return JSON.parse(readFileSync(join(RUNS, `${id}.json`), "utf8")) as Dialogue;
+  const found = runFiles().find((f) => f.file.endsWith(`/${id}.json`));
+  if (found === undefined) throw new Error(`No run ${id}`);
+  const run = JSON.parse(readFileSync(found.file, "utf8")) as Dialogue;
+  return { ...run, isBoardChanged: changedSince(run) };
 }
