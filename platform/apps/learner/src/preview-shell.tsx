@@ -621,8 +621,10 @@ export function PreviewBoard({
   const isScript = !new URLSearchParams(window.location.search).has("noscript");
   // A prop on its own page: what a lesson controls, beside it (prop-panel.tsx).
   const isProp = shown.path.startsWith(PROPS_ROOT);
-  // A question (questions/<family>/<id>), on its own and not a picture: Jugnu is there for it.
+  // A question (questions/<family>/<id>) plays as in practice. Jugnu is on every board looked at
+  // (not a picture, not one of several, not a prop's own page).
   const isQuestion = !isShot && !isSilent && shown.path.includes("/questions/");
+  const hasJugnu = !isShot && !isSilent && !isProp;
   const onClick = (e: MouseEvent) => {
     if (!e.altKey) return;
     const site = (e.target as HTMLElement).closest<HTMLElement>("[data-source]")?.dataset.source;
@@ -662,7 +664,7 @@ export function PreviewBoard({
             // A question plays as a student meets it in practice, with Jugnu there to talk to:
             // the committed one (prompts/jugnu.yaml), asked of the studio's service.
             mode={isQuestion ? PlayMode.Guided : undefined}
-            askJugnu={isQuestion ? askJugnu : undefined}
+            askJugnu={hasJugnu ? askJugnu : undefined}
             onPass={() => {
               const w = window as Window & { __chalkPassed?: string[] };
               w.__chalkPassed ??= [];

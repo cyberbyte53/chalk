@@ -122,7 +122,10 @@ export async function lessonOf(boardPath: string): Promise<string> {
   const pages: string[] = [];
   for (const ref of chapter.concepts) {
     const concept = builtConceptSchema.parse(readBuilt(ref.path));
-    if (!(question.tests ?? []).includes(concept.id)) continue;
+    // A question: the concepts it tests. A lesson's page: the concept it is in.
+    const isHere =
+      (question.tests ?? []).includes(concept.id) || boardPath.startsWith(`${ref.path}/`);
+    if (!isHere) continue;
     pages.push(`# ${concept.title.en}`);
     for (const page of concept.overview) {
       const witness = JSON.parse(

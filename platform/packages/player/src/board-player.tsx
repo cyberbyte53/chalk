@@ -285,7 +285,9 @@ function BoardPlay({
   }, [runtime, isSettled, isPassed]);
 
   // ---- Jugnu, live: his chat drawn from this opening's events, his turns asked of the server ----
-  const isLive = askJugnu !== undefined && policy?.hasJugnu === true && !isPicture;
+  // Jugnu is on every board but a test's (a board without a mode, as an author sees it, too).
+  const isJugnuHere = policy === undefined || policy.hasJugnu;
+  const isLive = askJugnu !== undefined && isJugnuHere && !isPicture;
   const [, setLiveTick] = useState(0);
   const [liveProblem, setLiveProblem] = useState<string | undefined>();
   const [isOpenAgain, setOpenAgain] = useState(false);
@@ -371,7 +373,7 @@ function BoardPlay({
       ? undefined
       : result;
   // Jugnu is there in this mode, with a chat to show (live, or a run's): is it open?
-  const hasJugnu = policy?.hasJugnu === true && chatShown !== undefined;
+  const hasJugnu = isJugnuHere && chatShown !== undefined;
   const isChatClosed = chatShown === undefined || chatShown.chat.state === ChatState.Closed;
   // When he points, a dot glides from his figure to the part, and its outline shows as it lands.
   const isGliding = useGlide(boardRef, hasJugnu ? pointedKey : undefined);
