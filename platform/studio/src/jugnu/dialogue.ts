@@ -81,6 +81,8 @@ export type Dialogue = {
   transfer: { board: string; isRight: boolean } | null;
   /** She left before getting it. */
   isLeft: boolean;
+  /** Done (false while it is still going, or if it was cut off). */
+  isFinished?: boolean;
   /** Input counted apart: new (uncached), read from the cache, written to it. */
   usage: { ms: number; input: number; cacheRead?: number; cacheWrite?: number; output: number };
 };
@@ -144,10 +146,10 @@ const jsonOf = (text: string): Record<string, unknown> => {
 const isRightOf = (runtime: BoardRuntime) =>
   runtime.propNames().some((n) => (runtime.getView(n) as { status?: string }).status === "correct");
 
-/** With JUGNU_LOG set: each request and tool call as it happens, timed (to see where a run spends its time). */
+/** Each request and tool call as it happens, timed, on stderr (JUGNU_LOG=off to quiet): a run is watched, never waited on. */
 const logStart = Date.now();
 const log = (line: string): void => {
-  if (process.env.JUGNU_LOG !== undefined)
+  if (process.env.JUGNU_LOG !== "off")
     process.stderr.write(`[${((Date.now() - logStart) / 1000).toFixed(1)} s] ${line}\n`);
 };
 
@@ -324,6 +326,7 @@ export async function runDialogue(
   const jugnu = modelOf(settingsFrom("JUGNU", DEFAULT_MODEL));
   const child = modelOf(settingsFrom("JUGNU_STUDENT", DEFAULT_MODEL));
   const started = Date.now();
+  const id = runId(caseName, studentName);
   const usage = { input: 0, cacheRead: 0, cacheWrite: 0, output: 0 };
   const count = (r: Request) => {
     log(
@@ -400,6 +403,28 @@ export async function runDialogue(
   };
 
   let isHandedBack = false;
+  let transfer: Dialogue["transfer"] = null;
+  /** The run as it stands, kept (after every turn: a run is watched while it goes, and a cut-off one keeps what it had). */
+  const snapshot = (isFinished: boolean): Dialogue =>
+    saveRun({
+      id,
+      note,
+      case: one,
+      student,
+      models: { jugnu: jugnu.name, student: child.name },
+      instructions: {
+        jugnu: JUGNU,
+        student: STUDENT(student.believes, student.knows, gradeOf(one.board)),
+      },
+      lesson,
+      turns,
+      isRight: isRightOf(board),
+      transfer,
+      isLeft: turns.some((t) => t.who === "her" && t.isLeaving === true),
+      isFinished,
+      usage: { ms: Date.now() - started, ...usage },
+    });
+
   // Jugnu's one conversation: his whole time with her, only ever appended to (jugnu-agent.md).
   const firstGiven = givenToJugnu(board, herSteps, turns);
   const messages: ModelMessage[] = [{ role: "user", content: firstGiven }];
@@ -445,12 +470,14 @@ export async function runDialogue(
       ...(isHandedBack ? { isHandBack: true } : {}),
       requests: his.requests,
     });
+    snapshot(false);
     if (isHandedBack) break;
 
     // ---- Her: her real board; what she does on it really happens ----
     const before = seen(board);
     const her = await herTurn(board, herSteps);
     turns.push({ ...her, stepsSoFar: [...herSteps], isRight: isRightOf(board) });
+    snapshot(false);
     if (her.isLeaving === true) break;
     // Her turn reaches him as his reply's result (or, if he answered in plain words, as a message).
     given = herTurnForJugnu(board, before, her);
@@ -470,7 +497,6 @@ export async function runDialogue(
     else messages.push({ role: "user", content: given });
   }
   // ---- The next question, alone: Jugnu has gone ----
-  let transfer: Dialogue["transfer"] = null;
   if (isHandedBack && one.next !== undefined) {
     const next = await played(one.next, []);
     const nextSteps: Step[] = [];
@@ -489,25 +515,9 @@ export async function runDialogue(
     });
     next.dispose();
   }
-  const isRight = isRightOf(board);
+  const done = snapshot(true);
   board.dispose();
-  return saveRun({
-    id: runId(caseName, studentName),
-    note,
-    case: one,
-    student,
-    models: { jugnu: jugnu.name, student: child.name },
-    instructions: {
-      jugnu: JUGNU,
-      student: STUDENT(student.believes, student.knows, gradeOf(one.board)),
-    },
-    lesson,
-    turns,
-    isRight,
-    transfer,
-    isLeft: turns.some((t) => t.who === "her" && t.isLeaving === true),
-    usage: { ms: Date.now() - started, ...usage },
-  });
+  return done;
 }
 
 /** Where every experiment is kept, to be opened again in the preview (?dev&jugnu). */

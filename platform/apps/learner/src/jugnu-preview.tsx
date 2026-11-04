@@ -65,6 +65,8 @@ type Dialogue = {
   isRight: boolean;
   transfer?: { board: string; isRight: boolean } | null;
   isLeft?: boolean;
+  /** False while it is still going (it is kept after every turn). */
+  isFinished?: boolean;
   usage: { ms: number; input: number; output: number };
 };
 type Listed = { id: string; note: string; isRight: boolean; turns: number };
@@ -247,7 +249,13 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
           {run.models.student} · {(run.usage.ms / 1000).toFixed(1)} s, {run.usage.input} in,{" "}
           {run.usage.output} out ·{" "}
           <b>
-            {run.isRight ? "her question right" : run.isLeft === true ? "she left" : "not solved"}
+            {run.isFinished === false
+              ? "still going…"
+              : run.isRight
+                ? "her question right"
+                : run.isLeft === true
+                  ? "she left"
+                  : "not solved"}
             {run.transfer == null
               ? ""
               : run.transfer.isRight
@@ -328,6 +336,16 @@ export function JugnuPreview(): JSX.Element {
       .then((r) => r.json() as Promise<Dialogue | { error: string }>)
       .then((d) => ("error" in d ? setProblem(d.error) : setRun(d)));
   }, [id]);
+  // A run still going is read again every few seconds, so it is watched as it goes.
+  useEffect(() => {
+    if (run === null || run.isFinished !== false) return;
+    const timer = setTimeout(() => {
+      void fetch(`/dev-jugnu?show=${encodeURIComponent(run.id)}`)
+        .then((r) => r.json() as Promise<Dialogue | { error: string }>)
+        .then((d) => ("error" in d ? setProblem(d.error) : setRun(d)));
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [run]);
   const students = cases.find((c) => c.name === caseName)?.students ?? [];
   const runIt = async () => {
     setIsRunning(true);

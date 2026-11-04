@@ -12,7 +12,8 @@ type ProviderOptions = NonNullable<Parameters<typeof generateText>[0]["providerO
  *
  * A side's model is set in the environment, by a prefix (JUGNU for Jugnu, JUGNU_STUDENT for the
  * simulated child): `<P>_PROVIDER` (anthropic, deepseek), `<P>_MODEL` (the provider's model id),
- * `<P>_MODEL_SERVER` and `<P>_API_KEY` (optional: the provider's own and its usual key otherwise),
+ * `<P>_MODEL_SERVER` (the API's base address, e.g. an Azure resource's `…/openai/v1`) and `<P>_API_KEY`
+ * (optional: the provider's own and its usual key otherwise),
  * `<P>_THINK` (on, the default, or off).
  */
 
@@ -110,11 +111,10 @@ export function modelOf(s: ModelSettings): Model {
         model: createDeepSeek(connection)(s.id),
         // DeepSeek caches a repeated prefix by itself; its adapter passes its reasoning back.
         options: {
+          // Thinking is DeepSeek's default: on is set by its effort alone (a server hosting it,
+          // such as Azure's, may not take the switch itself); off is the switch.
           deepseek: s.isThinking
-            ? {
-                thinking: { type: "enabled" },
-                reasoningEffort: s.effort === Effort.Low ? "low" : "high",
-              }
+            ? { reasoningEffort: s.effort === Effort.Low ? "low" : "high" }
             : { thinking: { type: "disabled" } },
         },
         instructions: plain,

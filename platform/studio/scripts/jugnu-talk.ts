@@ -30,5 +30,5 @@ for (const t of d.turns) {
   }
 }
 console.log(
-  `${d.isRight ? "Her question right." : d.isLeft ? "She left." : "Not solved."}${d.transfer ? (d.transfer.isRight ? " Next one alone: RIGHT." : " Next one alone: WRONG.") : ""} ${d.models.jugnu} / ${d.models.student}: ${(d.usage.ms / 1000).toFixed(1)} s, ${d.usage.input} in, ${d.usage.output} out`,
+  `${d.isRight ? "Her question right." : d.isLeft ? "She left." : "Not solved."}${d.transfer ? (d.transfer.isRight ? " Next one alone: RIGHT." : " Next one alone: WRONG.") : ""} ${d.models.jugnu} / ${d.models.student}: ${(d.usage.ms / 1000).toFixed(1)} s, input: ${d.usage.input} new + ${d.usage.cacheRead ?? 0} read from cache (${d.usage.cacheWrite ?? 0} written), ${d.usage.output} out`,
 );
