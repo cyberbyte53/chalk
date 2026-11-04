@@ -122,7 +122,6 @@ export const AppText = {
   },
   triedRight: { en: "right", hi: "सही" },
   triedWrong: { en: "wrong", hi: "गलत" },
-  theyChose: { en: "chose {chosen}", hi: "चुना {chosen}" },
   withJugnu: { en: "after talking with Jugnu", hi: "जुगनू से बात के बाद" },
   concepts: { en: "Concepts", hi: "विषय" },
   masteryLine: {

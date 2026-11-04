@@ -14,7 +14,7 @@ export const placeTheDot = family({
     .object({ left: z.number().int().min(1).max(13), bottom: z.number().int().min(1).max(10) })
     .strict(),
   build: ({ left, bottom }) => {
-    const { isPlaced, notebook } = plane;
+    const { isPlaced, placedAt, notebook } = plane;
     const sheet = place(coordinatePlane, notebook());
     // The swapped spot, when it is on the page too.
     const isSwapped = left !== bottom && bottom <= 15 && left <= 12;
@@ -29,6 +29,15 @@ export const placeTheDot = family({
         `बिंदु को बाएँ किनारे से ${left} सेंटीमीटर और नीचे के किनारे से ${bottom} सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
       ),
       isRight: isPlaced("sheet", left, bottom),
+      answer: (read) => {
+        const p = placedAt("sheet")(read);
+        return p === null
+          ? null
+          : t(
+              `${p.x} cm from the left edge, ${p.y} cm above the bottom`,
+              `बाएँ किनारे से ${p.x} cm, नीचे के किनारे से ${p.y} cm ऊपर`,
+            );
+      },
       solve: [tap("sheet.reading", "movePoint", { x: left, y: bottom })],
       notes: isSwapped
         ? [

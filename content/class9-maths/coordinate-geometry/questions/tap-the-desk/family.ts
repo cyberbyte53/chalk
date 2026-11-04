@@ -14,7 +14,7 @@ export const tapTheDesk = family({
     .strict()
     .refine((p) => p.column !== p.row, "the column and the row differ, so the order shows"),
   build: ({ column, row }) => {
-    const { isChosen, classroom } = plane;
+    const { isChosen, chosenAt, classroom } = plane;
     const room = place(coordinatePlane, classroom());
     const ask = check({
       about: "room",
@@ -23,6 +23,12 @@ export const tapTheDesk = family({
         `डेस्क **(${column}, ${row})** दबाओ, फिर जाँचो दबाओ।`,
       ),
       isRight: isChosen("room", column, row),
+      answer: (read) => {
+        const desk = chosenAt("room")(read);
+        return desk === null
+          ? null
+          : t(`desk (${desk.x}, ${desk.y})`, `डेस्क (${desk.x}, ${desk.y})`);
+      },
       solve: [tap("room.places", "chooseTarget", { x: column, y: row })],
       notes: [
         {

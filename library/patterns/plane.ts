@@ -4,6 +4,7 @@ import {
   Direction,
   Marks,
   PlaceKind,
+  type PlanePart,
   Roads,
   Scene,
   type coordinatePlane,
@@ -91,7 +92,7 @@ export const notebook = bareNotebook;
 /** How a scene reads a piece: by its name. */
 type Read = (piece: string) => Readonly<Record<string, unknown>>;
 type PlaneRead = {
-  plane: { named: string | null };
+  plane: { named: PlanePart | null };
   walker: { at: { x: number; y: number } };
   places: { target: { x: number; y: number } | null };
   reading: { point: { x: number; y: number } | null };
@@ -116,7 +117,7 @@ export const isChosen =
 
 /** The part of the plane tapped last is `part` (`"OY′"`, `"III"`, `"O"`). */
 export const isNamed =
-  (plane: string, part: string) =>
+  (plane: string, part: PlanePart) =>
   (read: Read): boolean =>
     planeOf(read, plane).plane.named === part;
 
@@ -127,6 +128,12 @@ export const isPlaced =
     const p = planeOf(read, plane).reading.point;
     return p !== null && p.x === x && p.y === y;
   };
+
+/** Where a check's answer is, read off the plane (for the words its try is recorded as). */
+export const walkerAt = (plane: string) => (read: Read) => planeOf(read, plane).walker.at;
+export const chosenAt = (plane: string) => (read: Read) => planeOf(read, plane).places.target;
+export const namedPart = (plane: string) => (read: Read) => planeOf(read, plane).plane.named;
+export const placedAt = (plane: string) => (read: Read) => planeOf(read, plane).reading.point;
 
 /**
  * The taps that walk Riya from the corner to (x, y): along, then up. Each plays out before the

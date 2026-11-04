@@ -369,9 +369,9 @@ describe("server", () => {
     );
     const events = [
       signalOn("p0", 0, "page1", "continued"),
-      signalOn("p1", 1, "ask1", "checked", { status: "wrong", isGraded: true }),
-      signalOn("p2", 2, "ask1", "checked", { status: "correct", isGraded: true }),
-      signalOn("p3", 3, "ask2", "checked", { status: "correct", isGraded: true }),
+      signalOn("p1", 1, "ask1", "checked", { status: "wrong", isGraded: true, answer: null }),
+      signalOn("p2", 2, "ask1", "checked", { status: "correct", isGraded: true, answer: null }),
+      signalOn("p3", 3, "ask2", "checked", { status: "correct", isGraded: true, answer: null }),
     ];
     expect(await learner.json<EventsReply>("POST", ApiPath.Events, { events })).toMatchObject({
       saved: 4,
@@ -740,7 +740,11 @@ describe("server", () => {
           payload: { set: "set1" },
         } as Partial<ChalkEvent>),
         {
-          ...signalOn("e2", 2, "b1", "checked", { status: "wrong", isGraded: true }),
+          ...signalOn("e2", 2, "b1", "checked", {
+            status: "wrong",
+            isGraded: true,
+            answer: { en: "(3, 2)", hi: "(3, 2)" },
+          }),
           version: "v1",
         },
       ],
@@ -788,8 +792,8 @@ describe("server", () => {
         name: "chapter/ask",
         concepts: [{ id: "c1", title: "c1" }],
         level: "easy",
-        // Wrong before they asked him: not helped.
-        tries: [{ isRight: false, chosen: null, helped: false, nth: 1 }],
+        // Wrong before they asked him: not helped; what they answered, in the English they saw.
+        tries: [{ isRight: false, chosen: "(3, 2)", helped: false, nth: 1 }],
       },
     ]);
     expect(input?.reflections).toEqual([
@@ -812,7 +816,7 @@ describe("server", () => {
               name: "chapter/ask",
               concepts: ["c1"],
               level: "easy",
-              tries: [{ isRight: false, chosen: null, helped: false }],
+              tries: [{ isRight: false, chosen: { en: "(3, 2)", hi: "(3, 2)" }, helped: false }],
             },
           ],
           reflections: [],

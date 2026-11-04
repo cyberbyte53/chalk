@@ -1,5 +1,4 @@
 import { createHash } from "node:crypto";
-import type { Attempt } from "@chalk/learning";
 import { type SetKeeper, questionFactsFrom } from "@chalk/studio/jugnu-sets";
 import { and, desc, eq, inArray, max, notExists, sql } from "drizzle-orm";
 import type { Db } from "./db";
@@ -12,6 +11,7 @@ import {
   mastery,
   texts,
 } from "./schema";
+import { attemptOf } from "./store";
 
 /**
  * The server's keeper of sets and learner updates (studio's sets.ts): a set is read from its
@@ -86,9 +86,7 @@ export function dbSetKeeper(db: Db, contentDir: string | undefined): SetKeeper {
       return last?.at === null || last?.at === undefined ? undefined : new Date(last.at).getTime();
     },
     attempts: async (account) =>
-      (await db.select().from(attempts).where(eq(attempts.accountId, account))).map(
-        ({ accountId: _, ...a }): Attempt => ({ ...a, at: a.at.getTime() }),
-      ),
+      (await db.select().from(attempts).where(eq(attempts.accountId, account))).map(attemptOf),
     reflectionsAt: async (account, openings) =>
       openings.length === 0
         ? []

@@ -24,7 +24,7 @@ export const plotThePoint = family({
     .strict()
     .refine((p) => p.x !== p.y, "x and y not equal, so the swap is another point"),
   build: ({ x, y }) => {
-    const { isPlaced } = plane;
+    const { isPlaced, placedAt } = plane;
     const sheet = place(
       coordinatePlane,
       plane.setup({
@@ -57,6 +57,12 @@ export const plotThePoint = family({
         `बिंदु ${saidHi(x)}, ${saidHi(y)} आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।`,
       ),
       isRight: isPlaced("sheet", x, y),
+      answer: (read) => {
+        const p = placedAt("sheet")(read);
+        return p === null
+          ? null
+          : t(`(${shown(p.x)}, ${shown(p.y)})`, `(${shown(p.x)}, ${shown(p.y)})`);
+      },
       solve: [tap("sheet.reading", "movePoint", { x, y })],
       notes: [
         {

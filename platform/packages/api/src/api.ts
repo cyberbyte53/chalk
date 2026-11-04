@@ -1,3 +1,4 @@
+import { localizedSchema } from "@chalk/content";
 import { masterySchema, progressSchema } from "@chalk/learning";
 import { z } from "zod";
 
@@ -155,9 +156,9 @@ const questionSeenSchema = z.object({
   name: z.string(),
   concepts: z.array(z.string()),
   level: z.string().nullable(),
-  /** Their tries at it in that set, in order. */
+  /** Their tries at it in that set, in order; `chosen`: what they answered, in the words they saw. */
   tries: z.array(
-    z.object({ isRight: z.boolean(), chosen: z.string().nullable(), helped: z.boolean() }),
+    z.object({ isRight: z.boolean(), chosen: localizedSchema.nullable(), helped: z.boolean() }),
   ),
 });
 export type QuestionSeen = z.infer<typeof questionSeenSchema>;

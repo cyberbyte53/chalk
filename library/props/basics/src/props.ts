@@ -56,7 +56,8 @@ const giveFeedback = action({ text: localizedSchema }, { describe: "Show words u
 
 /**
  * "Do it in the prop, then Check": the answer is another piece's state. Whether it is right is a
- * need (`isMet`) the scene gives it; Check records the attempt.
+ * need (`isMet`) the scene gives it, and so is what that state reads as, in the words the learner
+ * sees (`answer`: "(−1, 3)"), or null; Check records the attempt with it.
  */
 export const goal = prop({
   type: "goal",
@@ -73,7 +74,7 @@ export const goal = prop({
     })
     .strict(),
   start: { ...questionStart, about: "unset" },
-  needs: z.object({ isMet: z.boolean() }).strict(),
+  needs: z.object({ isMet: z.boolean(), answer: localizedSchema.nullable() }).strict(),
   facts: { canCheck: (me) => me.status !== AnswerStatus.Correct },
   actions: {
     check: action({}, { from: "screen", describe: "Check the prop's state as the answer" }),
@@ -81,7 +82,7 @@ export const goal = prop({
     giveFeedback,
   },
   signals: {
-    checked: signal({ ...checkedFields, about: z.string().min(1) }),
+    checked: signal({ ...checkedFields, answer: localizedSchema.nullable() }),
     correct: signal(),
     wrong: signal(),
   },
@@ -92,7 +93,7 @@ export const goal = prop({
       const attempts = me.attempts + 1;
       return [
         t.set({ status, attempts, feedback: null }),
-        t.tell.checked({ status, attempts, isGraded: me.isGraded, about: me.about }),
+        t.tell.checked({ status, attempts, isGraded: me.isGraded, answer: me.answer }),
         me.isMet ? t.tell.correct() : t.tell.wrong(),
       ];
     },
@@ -146,7 +147,11 @@ export const choice = prop({
     giveFeedback,
   },
   signals: {
-    checked: signal({ ...checkedFields, optionId: z.string().min(1) }),
+    checked: signal({
+      ...checkedFields,
+      optionId: z.string().min(1),
+      answer: localizedSchema.nullable(),
+    }),
     correct: signal(),
     wrong: signal(),
   },
@@ -162,7 +167,13 @@ export const choice = prop({
       const attempts = me.attempts + 1;
       return [
         t.set({ status, attempts, feedback: isRight ? null : (picked?.feedback ?? null) }),
-        t.tell.checked({ status, attempts, isGraded: me.isGraded, optionId: me.selected }),
+        t.tell.checked({
+          status,
+          attempts,
+          isGraded: me.isGraded,
+          optionId: me.selected,
+          answer: picked?.label ?? null,
+        }),
         isRight ? t.tell.correct() : t.tell.wrong(),
       ];
     },

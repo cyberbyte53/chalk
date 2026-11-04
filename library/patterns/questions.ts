@@ -33,7 +33,8 @@ export type Note = { when: (read: Read) => boolean; say: Localized; reach: reado
 
 /**
  * "Do it in the prop, then Check": the answer is the state of `about`. `isRight` reads the board;
- * `solve` is how a learner gets it right (the witness).
+ * `answer` reads it as the words the learner sees on it ("(−1, 3)"; null for nothing to say),
+ * what their try is recorded as; `solve` is how a learner gets it right (the witness).
  */
 export function check(spec: {
   name?: string;
@@ -42,6 +43,7 @@ export function check(spec: {
   /** What the question says, when it isn't its prompt as shown. */
   says?: Localized;
   isRight: (read: Read) => boolean;
+  answer?: (read: Read) => Localized | null;
   solve: readonly Step[];
   notes?: readonly Note[];
 }): { piece: Placed<typeof goal>; use: SceneUse } {
@@ -58,7 +60,12 @@ export function check(spec: {
   return {
     piece,
     use: {
-      give: { [name]: { isMet: (me: never) => spec.isRight(reader(me)) } },
+      give: {
+        [name]: {
+          isMet: (me: never) => spec.isRight(reader(me)),
+          answer: (me: never) => spec.answer?.(reader(me)) ?? null,
+        },
+      },
       hear: {
         [`${name}.wrong`]: ((
           me: Record<string, Readonly<Record<string, unknown>>>,

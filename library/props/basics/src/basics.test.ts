@@ -43,7 +43,14 @@ describe("choice", () => {
     expect(told).toEqual([
       {
         signal: "checked",
-        payload: { status: AnswerStatus.Wrong, attempts: 1, isGraded: false, optionId: "exact" },
+        payload: {
+          status: AnswerStatus.Wrong,
+          attempts: 1,
+          isGraded: false,
+          optionId: "exact",
+          // What they answered, in the words they saw: the option's label.
+          answer: { en: "1.41 exactly", hi: "ठीक 1.41" },
+        },
       },
       { signal: "wrong", payload: {} },
     ]);
@@ -63,7 +70,7 @@ describe("every basic prop, used the way a lesson uses it", () => {
   it.each([
     ["text", { text: { en: "Hello", hi: "नमस्ते" } }],
     ["choice", { prompt, options, answer: "a" }],
-    ["goal", { prompt, about: "town", isMet: false }],
+    ["goal", { prompt, about: "town", isMet: false, answer: null }],
   ] as const)(
     "%s: every input says what it does, and every learner's action has one",
     (type, given) => {
@@ -75,15 +82,20 @@ describe("every basic prop, used the way a lesson uses it", () => {
 });
 
 describe("goal: the answer is another prop's state", () => {
-  // What a board does for it: gives it whether the other prop is right now.
+  // What a board does for it: gives it whether the other prop is right now, and what it reads as.
   const holder = prop({
     type: "goalHolder",
     describe: "test",
-    variables: z.object({ isRight: z.boolean() }).strict(),
-    start: { isRight: false },
+    variables: z.object({ isRight: z.boolean(), at: z.string().nullable() }).strict(),
+    start: { isRight: false, at: null },
     actions: {},
     children: { goal },
-    give: { goal: { isMet: (me) => me.isRight } },
+    give: {
+      goal: {
+        isMet: (me) => me.isRight,
+        answer: (me) => (me.at === null ? null : { en: `Street ${me.at}`, hi: `गली ${me.at}` }),
+      },
+    },
   });
   const ask = {
     goal: { prompt: { en: "Walk Riya there.", hi: "रिया को वहाँ ले जाओ।" }, about: "town" },
@@ -97,8 +109,17 @@ describe("goal: the answer is another prop's state", () => {
       attempts: 1,
     });
     expect(told.map((e) => e.signal)).toEqual(["checked", "wrong"]);
-    const right = new Board(holder, { isRight: true, ...ask });
+    expect(told[0]?.payload).toMatchObject({ answer: null });
+    const right = new Board(holder, { isRight: true, at: "4", ...ask });
+    const heard = hearing(right);
     right.input("goal", "check", {});
+    // What they answered, as the scene says it reads.
+    expect(heard[0]?.payload).toEqual({
+      status: AnswerStatus.Correct,
+      attempts: 1,
+      isGraded: false,
+      answer: { en: "Street 4", hi: "गली 4" },
+    });
     expect(right.read<typeof holder>().goal).toMatchObject({
       status: AnswerStatus.Correct,
       attempts: 1,

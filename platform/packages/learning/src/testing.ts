@@ -1,4 +1,10 @@
-import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION, type PlayMode } from "@chalk/content";
+import {
+  Actor,
+  type ChalkEvent,
+  EVENT_SCHEMA_VERSION,
+  type Localized,
+  type PlayMode,
+} from "@chalk/content";
 
 /**
  * A learner's record for tests: entries of one app session, numbered in order as the bus would.
@@ -41,13 +47,17 @@ export function session(id: string, start = 1000) {
     check: (
       board: string,
       isRight: boolean,
-      { isGraded = true, node = "q", optionId = "a" } = {},
+      {
+        isGraded = true,
+        node = "q",
+        answer = { en: "(−1, 3)", hi: "(−1, 3)" } as Localized | null,
+      } = {},
     ) =>
       signal(board, node, "checked", {
         status: isRight ? "correct" : "wrong",
         attempts: 1,
         isGraded,
-        optionId,
+        answer,
       }),
     /** One of Jugnu's turns on the board open now: the child asked, so the child's entry. */
     jugnu: (board: string): ChalkEvent =>
