@@ -228,15 +228,20 @@ function BoardPlay({
   const questions = useMemo(() => questionsOf(runtime), [runtime]);
   const body = useRef<HTMLElement>(null);
   const bar = useRef<HTMLElement>(null);
-  // Brings a piece into sight above the bar once it is drawn: no further than it must.
-  const inSight = useCallback((piece: string) => {
-    requestAnimationFrame(() => {
-      const el = body.current?.querySelector<HTMLElement>(`[data-piece="${CSS.escape(piece)}"]`);
-      if (el === null || el === undefined) return;
-      el.style.scrollMarginBottom = `${(bar.current?.offsetHeight ?? 0) + 12}px`;
-      el.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    });
-  }, []);
+  // Brings a piece into sight above the bar once it is drawn: no further than it must. A picture
+  // scrolls nothing (it may sit small on a page of others).
+  const inSight = useCallback(
+    (piece: string) => {
+      if (isPicture) return;
+      requestAnimationFrame(() => {
+        const el = body.current?.querySelector<HTMLElement>(`[data-piece="${CSS.escape(piece)}"]`);
+        if (el === null || el === undefined) return;
+        el.style.scrollMarginBottom = `${(bar.current?.offsetHeight ?? 0) + 12}px`;
+        el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      });
+    },
+    [isPicture],
+  );
   useEffect(() => {
     if (wasPassed) void runtime.call(BOARD, BoardAction.Pass, {}, Actor.App);
   }, [runtime, wasPassed]);

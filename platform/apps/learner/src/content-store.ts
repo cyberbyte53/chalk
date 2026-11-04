@@ -187,7 +187,12 @@ export async function boardOfFile(json: unknown): Promise<Board> {
   return loadBoard(modules, item, (type) => propDefs[type]?.role);
 }
 
-async function fetchJson(ref: Ref): Promise<unknown> {
+/** One board by its built path and version, fetched (and kept by the service worker) on its own. */
+export async function boardAt(ref: Pick<Ref, "path" | "version">): Promise<Board> {
+  return boardOfFile(await fetchJson(ref));
+}
+
+async function fetchJson(ref: Pick<Ref, "path" | "version">): Promise<unknown> {
   let reply: Response;
   try {
     reply = await fetch(contentUrl(ref));

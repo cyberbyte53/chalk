@@ -91,4 +91,8 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Join code** | Six characters (no look-alike letters) a learner types, or opens as `/join/<code>`, to join a group. A new code stops the old one | `groups.join_code`, `makeCode` |
 | **Practice** | A concept's questions after its pages, played as their own lesson (`practice/<concept id>`); its score is each question's first try | `practiceLessonId`, `PracticeScore`, `ResultScreen` |
 | **Progress** | Which concepts a learner has played and practised, worked out from their events and nothing else, the same on phone and server | `progressFrom`, `Progress` (`@chalk/api`) |
+| **Learner update** | What a finished set shows about a child, judged by a model: a few points, each with its kind (needs you, getting there, on track), the mistake in a teacher's words, one next step, and the questions and reflections it rests on | `learner_updates`, `UpdatePoint`, `PointKind` (`@chalk/learning`) |
+| **Needs you** | A child whose latest update has a point that needs the teacher; they leave when a later update no longer has it ("got it on their own", greyed for a day) | `sectionOf`, `needsYouPoint` |
+| **Shared mistake** | The same wrong answer to the same question by two or more children of a section, in a point that isn't on track | `SharedMistake`, `sectionOf` |
+| **Snapshot** | A child's board at one of their tries, drawn small by the real player from what they did on that opening up to the try | `TrySnapshot`, `BoardAt`, `tryCausesPath` |
 | **Concept mark** | How a concept went for one learner, as a square on the teacher's view: strong (practice 70%+ right, or done with no practice), shaky (40%+), weak, started (pages only), none | `ConceptMark`, `conceptMark` |

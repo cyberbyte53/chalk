@@ -9,10 +9,11 @@ import {
   Role,
   SCHOOL_CODE_LENGTH,
   type TeacherGroup,
+  type TryCausesReply,
   devJoinCode,
   makeCode,
 } from "@chalk/api";
-import { Actor, type ChalkEvent, localizedSchema } from "@chalk/content";
+import { Actor, type ChalkEvent } from "@chalk/content";
 import {
   type Attempt,
   type ConceptPlan,
@@ -25,7 +26,8 @@ import {
   masteryFrom,
   progressFrom,
 } from "@chalk/learning";
-import { and, desc, eq, gt, inArray, isNull, max, min, sql } from "drizzle-orm";
+import { and, desc, eq, gt, inArray, isNull, lte, max, min, sql } from "drizzle-orm";
+import { attemptOf, rowOf } from "./attempt-rows";
 import type { Db } from "./db";
 import type { GoogleProfile } from "./google";
 import {
@@ -33,13 +35,13 @@ import {
   accounts,
   attempts,
   groups,
-  learnerUpdates,
   mastery,
   members,
   questionVersions,
   schools,
   signIns,
 } from "./schema";
+import { type FactsOf, updatesSeen } from "./update-view";
 
 /** Every query the routes make. Routes check who may ask; these only read and write. */
 
@@ -269,6 +271,7 @@ export async function groupLearners(
   db: Db,
   groupId: string,
   plans: readonly ConceptPlan[],
+  factsOf: FactsOf,
 ): Promise<GroupLearner[]> {
   const rows = await db
     .select({
@@ -287,7 +290,7 @@ export async function groupLearners(
   const ids = rows.map((row) => row.id);
   const progress = await progressOfEach(db, ids, plans);
   const masteries = await masteryOfEach(db, ids);
-  const latest = await latestUpdateOfEach(db, ids);
+  const latest = await updatesSeen(db, ids, factsOf);
   return rows.map((row) => ({
     ...row,
     joinedAt: row.joinedAt.getTime(),
@@ -296,32 +299,6 @@ export async function groupLearners(
     mastery: masteries.get(row.id) ?? [],
     latestUpdate: latest.get(row.id) ?? null,
   }));
-}
-
-/**
- * Each learner's latest update (their last finished set's, then the last judged): when that set
- * finished, and its first point. One query for them all.
- */
-async function latestUpdateOfEach(
-  db: Db,
-  accountIds: readonly string[],
-): Promise<Map<string, { finishedAt: number; firstPoint: string | null }>> {
-  if (accountIds.length === 0) return new Map();
-  const rows = await db
-    .selectDistinctOn([learnerUpdates.accountId], {
-      accountId: learnerUpdates.accountId,
-      finishedAt: learnerUpdates.setFinishedAt,
-      points: learnerUpdates.points,
-    })
-    .from(learnerUpdates)
-    .where(inArray(learnerUpdates.accountId, [...accountIds]))
-    .orderBy(learnerUpdates.accountId, desc(learnerUpdates.setFinishedAt), desc(learnerUpdates.at));
-  return new Map(
-    rows.map((r) => [
-      r.accountId,
-      { finishedAt: r.finishedAt.getTime(), firstPoint: r.points[0]?.text ?? null },
-    ]),
-  );
 }
 
 // ---- groups ----
@@ -406,6 +383,22 @@ export async function join(db: Db, groupId: string, learnerId: string, now: numb
     });
 }
 
+/** Whether the learner is in the group now. */
+export async function isInGroup(db: Db, groupId: string, learnerId: string): Promise<boolean> {
+  const [row] = await db
+    .select({ id: members.learnerId })
+    .from(members)
+    .where(
+      and(
+        eq(members.groupId, groupId),
+        eq(members.learnerId, learnerId),
+        isNull(members.removedAt),
+      ),
+    )
+    .limit(1);
+  return row !== undefined;
+}
+
 export async function removeLearner(db: Db, groupId: string, learnerId: string, now: number) {
   await db
     .update(members)
@@ -468,21 +461,6 @@ export async function addQuestionVersions(
       .values(versions.slice(i, i + 500).map((v) => ({ ...v, tests: [...v.tests] })))
       .onConflictDoNothing();
 }
-
-/** An attempt as its row holds it: what they answered (words in both languages) as JSON text. */
-const rowOf = (a: Attempt, accountId: string): typeof attempts.$inferInsert => ({
-  ...a,
-  accountId,
-  at: new Date(a.at),
-  chosen: a.chosen === null ? null : JSON.stringify(a.chosen),
-});
-
-/** An attempt from its row. */
-export const attemptOf = ({ accountId: _, ...row }: typeof attempts.$inferSelect): Attempt => ({
-  ...row,
-  at: row.at.getTime(),
-  chosen: row.chosen === null ? null : localizedSchema.parse(JSON.parse(row.chosen)),
-});
 
 /** One learner's attempts and mastery, worked out again from their record, replacing the old. */
 async function workOut(db: Db, accountId: string): Promise<Attempt[]> {
@@ -601,4 +579,43 @@ export async function masteryOfEach(
   for (const { accountId, ...m } of rows)
     byAccount.get(accountId)?.push({ ...m, lastAt: m.lastAt.getTime() });
   return byAccount;
+}
+
+/**
+ * What a learner (and Jugnu) did on one opening of a board, up to a try of theirs (its `at`): the
+ * causes the player replays to draw the board as it was then (platform/docs/plans/teacher-view.md,
+ * snapshots), in the order the phone recorded them. Nothing else: no conversation.
+ */
+export async function tryCauses(
+  db: Db,
+  learnerId: string,
+  opening: string,
+  at: number,
+): Promise<TryCausesReply["causes"]> {
+  const rows = await db
+    .select()
+    .from(events)
+    .where(
+      and(
+        eq(events.accountId, learnerId),
+        eq(events.opening, opening),
+        eq(events.kind, "cause"),
+        inArray(events.actor, [Actor.Learner, Actor.Jugnu]),
+        lte(events.at, new Date(at)),
+      ),
+    )
+    .orderBy(events.session, events.seq);
+  return rows.map((row) => {
+    const payload = row.payload as { action?: unknown; args?: Record<string, unknown> };
+    return {
+      kind: "cause" as const,
+      actor: row.actor,
+      opening,
+      node: row.node,
+      payload: {
+        action: String(payload.action ?? ""),
+        ...(payload.args === undefined ? {} : { args: payload.args }),
+      },
+    };
+  });
 }

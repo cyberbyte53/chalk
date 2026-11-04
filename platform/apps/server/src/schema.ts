@@ -1,6 +1,6 @@
 import { GotThere } from "@chalk/api";
 import type { ChalkEvent, Level, PlayMode } from "@chalk/content";
-import type { Band, MasteryModel } from "@chalk/learning";
+import type { Band, MasteryModel, UpdatePoint } from "@chalk/learning";
 import { sql } from "drizzle-orm";
 import {
   boolean,
@@ -358,9 +358,7 @@ export const learnerUpdates = pgTable(
       .notNull()
       .references(() => texts.hash),
     model: text("model").notNull(),
-    points: jsonb("points")
-      .$type<{ text: string; questions: string[]; reflections: string[] }[]>()
-      .notNull(),
+    points: jsonb("points").$type<UpdatePoint[]>().notNull(),
     requests: jsonb("requests").notNull(),
   },
   (t) => [

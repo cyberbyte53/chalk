@@ -4,6 +4,8 @@ import { AGENT_LOCALE, type ChalkEvent, buildIndexSchema } from "@chalk/content"
 import {
   type Attempt,
   type Mastery,
+  PointKind,
+  type UpdatePoint,
   attemptsFrom,
   catalogueOf,
   masteryFrom,
@@ -31,9 +33,13 @@ export type SetRecord = {
   openings: string[];
 };
 
-/** What a question is, for the judgement: its name, the concepts it tests, its level. */
+/**
+ * What a question is: its built path, its name (the path's last two parts), the concepts it tests,
+ * its level. The judgement is given all but the path.
+ */
 export type QuestionFacts = {
   board: string;
+  path: string;
   name: string;
   concepts: { id: string; title: string }[];
   level: string | null;
@@ -42,12 +48,11 @@ export type QuestionFacts = {
 /** One of his reflections, as the judgement reads it. */
 export type ReflectionFacts = { id: string; board: string; points: string[]; gotThere: string };
 
-/** A point of the update, with what it rests on (question board ids, reflection ids). */
-export type UpdatePoint = { text: string; questions: string[]; reflections: string[] };
+export type { UpdatePoint };
 
 export type UpdateInput = {
   before: UpdatePoint[];
-  questions: (QuestionFacts & {
+  questions: (Omit<QuestionFacts, "path"> & {
     /** `chosen`: what they answered, in the English words they saw, or null. */
     tries: (Pick<Attempt, "isRight" | "helped" | "nth"> & { chosen: string | null })[];
   })[];
@@ -114,7 +119,7 @@ export function sets(o: {
     const inSet = tries.filter((a) => set.openings.includes(a.opening));
     const judged = await o.jugnu.judge({
       before: await o.keeper.lastPoints(account),
-      questions: facts.map((f) => ({
+      questions: facts.map(({ path: _, ...f }) => ({
         ...f,
         tries: inSet
           .filter((a) => a.board === f.board)
@@ -158,15 +163,28 @@ export function sets(o: {
   };
 }
 
-/** Keeps only the evidence the judgement was given (no invented ids). */
+/**
+ * Keeps only the evidence the judgement was given (no invented ids), and only claims it backs: a
+ * point that needs the teacher cites a wrong try, else it is one they are getting past.
+ */
 export const realEvidence = (points: UpdatePoint[], input: UpdateInput): UpdatePoint[] => {
   const boards = new Set(input.questions.map((q) => q.board));
+  const wrongOn = new Set(
+    input.questions.filter((q) => q.tries.some((t) => !t.isRight)).map((q) => q.board),
+  );
   const reflections = new Set(input.reflections.map((r) => r.id));
-  return points.map((p) => ({
-    text: p.text,
-    questions: p.questions.filter((b) => boards.has(b)),
-    reflections: p.reflections.filter((r) => reflections.has(r)),
-  }));
+  return points.map((p) => {
+    const questions = p.questions.filter((b) => boards.has(b));
+    const isBacked = p.kind !== PointKind.NeedsYou || questions.some((b) => wrongOn.has(b));
+    return {
+      text: p.text,
+      kind: isBacked ? p.kind : PointKind.GettingThere,
+      mistake: p.mistake,
+      next: p.next,
+      questions,
+      reflections: p.reflections.filter((r) => reflections.has(r)),
+    };
+  });
 };
 
 /**
@@ -193,6 +211,7 @@ export function questionFactsFrom(buildDir: string, boards: readonly string[]): 
     const item = read(path) ?? {};
     return {
       board,
+      path,
       name: path.split("/").slice(-2).join("/"),
       concepts: ((item.tests as string[] | undefined) ?? []).map((id) => ({
         id,

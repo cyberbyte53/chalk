@@ -1,5 +1,5 @@
 import { localizedSchema } from "@chalk/content";
-import { masterySchema, progressSchema } from "@chalk/learning";
+import { PointKind, masterySchema, progressSchema } from "@chalk/learning";
 import { z } from "zod";
 
 /**
@@ -25,6 +25,13 @@ export const groupPath = (groupId: string): string => `${ApiPath.Groups}/${group
 export const groupCodePath = (groupId: string): string => `${groupPath(groupId)}/code`;
 export const groupLearnerPath = (groupId: string, learnerId: string): string =>
   `${groupPath(groupId)}/learners/${learnerId}`;
+/** What a learner did on one opening of a board, up to a try of theirs (its `at`): to draw it. */
+export const tryCausesPath = (
+  groupId: string,
+  learnerId: string,
+  opening: string,
+  at: number,
+): string => `${groupLearnerPath(groupId, learnerId)}/openings/${opening}?at=${at}`;
 
 /** What someone is in the app, chosen once at setup. */
 export const Role = { Learner: "learner", Teacher: "teacher" } as const;
@@ -127,6 +134,58 @@ export const meReplySchema = z.object({
 });
 export type MeReply = z.infer<typeof meReplySchema>;
 
+/** Whether, by a conversation's end, the child understood it themselves (Jugnu's judgement). */
+export const GotThere = { Yes: "yes", Partly: "partly", NotYet: "notYet" } as const;
+export type GotThere = (typeof GotThere)[keyof typeof GotThere];
+
+/**
+ * A question as the teacher reads it: its name and built path, the concepts it tests (titles), its
+ * level, and their tries at it in that set, in order: where each was made (the opening, the
+ * version, when: what draws it again), right or wrong, what they answered in the words they saw,
+ * whether Jugnu had helped.
+ */
+const questionSeenSchema = z.object({
+  board: z.string(),
+  path: z.string(),
+  name: z.string(),
+  concepts: z.array(z.string()),
+  level: z.string().nullable(),
+  tries: z.array(
+    z.object({
+      opening: z.string(),
+      version: z.string(),
+      at: z.number(),
+      isRight: z.boolean(),
+      chosen: localizedSchema.nullable(),
+      helped: z.boolean(),
+    }),
+  ),
+});
+export type QuestionSeen = z.infer<typeof questionSeenSchema>;
+export type TrySeen = QuestionSeen["tries"][number];
+
+/** A point of a learner update as the teacher reads it: the judged point, its evidence readable. */
+const pointSeenSchema = z.object({
+  text: z.string(),
+  kind: z.nativeEnum(PointKind),
+  mistake: z.string().nullable(),
+  next: z.string().nullable(),
+  questions: z.array(questionSeenSchema),
+});
+export type PointSeen = z.infer<typeof pointSeenSchema>;
+
+/**
+ * A learner's latest update (their last finished set's) as the teacher reads it: when that set
+ * finished, its points, and the point of the update before that needed the teacher, when this one
+ * has none (they got past it on their own: platform/docs/plans/teacher-view.md, "Who needs you").
+ */
+const updateSeenSchema = z.object({
+  finishedAt: z.number(),
+  points: z.array(pointSeenSchema),
+  wasNeedsYou: z.string().nullable(),
+});
+export type UpdateSeen = z.infer<typeof updateSeenSchema>;
+
 export const groupLearnerSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -138,30 +197,10 @@ export const groupLearnerSchema = z.object({
   progress: progressSchema,
   /** How well they understand each concept with evidence (the server's model). */
   mastery: z.array(masterySchema),
-  /**
-   * Their latest learner update (their last finished set's): when that set finished, and its
-   * first point (null if it found nothing not yet good). Null before their first finished set.
-   */
-  latestUpdate: z.object({ finishedAt: z.number(), firstPoint: z.string().nullable() }).nullable(),
+  /** Their latest learner update, with its evidence. Null before their first finished set. */
+  latestUpdate: updateSeenSchema.nullable(),
 });
 export type GroupLearner = z.infer<typeof groupLearnerSchema>;
-
-/** Whether, by a conversation's end, the child understood it themselves (Jugnu's judgement). */
-export const GotThere = { Yes: "yes", Partly: "partly", NotYet: "notYet" } as const;
-export type GotThere = (typeof GotThere)[keyof typeof GotThere];
-
-/** A question as the teacher reads it: its name, the concepts it tests (titles), its level. */
-const questionSeenSchema = z.object({
-  board: z.string(),
-  name: z.string(),
-  concepts: z.array(z.string()),
-  level: z.string().nullable(),
-  /** Their tries at it in that set, in order; `chosen`: what they answered, in the words they saw. */
-  tries: z.array(
-    z.object({ isRight: z.boolean(), chosen: localizedSchema.nullable(), helped: z.boolean() }),
-  ),
-});
-export type QuestionSeen = z.infer<typeof questionSeenSchema>;
 
 /** One of Jugnu's reflections on a conversation of theirs: the board, got there, his points. */
 const reflectionSeenSchema = z.object({
@@ -174,27 +213,31 @@ const reflectionSeenSchema = z.object({
 export type ReflectionSeen = z.infer<typeof reflectionSeenSchema>;
 
 /**
- * A teacher's look at one child (platform/docs/plans/teacher-view.md, step 4): as in the class,
- * and their latest update, each point with its evidence (the questions and reflections it cites,
- * as the teacher reads them), and Jugnu's reflections on that set. Judged points only.
+ * A teacher's look at one child (platform/docs/plans/teacher-view.md): as in the class (their
+ * latest update with its evidence), and Jugnu's reflections on that set. Judged points only.
  */
 export const learnerReplySchema = z.object({
   learner: groupLearnerSchema,
-  update: z
-    .object({
-      finishedAt: z.number(),
-      points: z.array(
-        z.object({
-          text: z.string(),
-          questions: z.array(questionSeenSchema),
-          reflections: z.array(z.string()),
-        }),
-      ),
-      reflections: z.array(reflectionSeenSchema),
-    })
-    .nullable(),
+  reflections: z.array(reflectionSeenSchema),
 });
 export type LearnerReply = z.infer<typeof learnerReplySchema>;
+
+/**
+ * What the learner (and Jugnu) did on one board's opening up to a try (`tryCausesPath`): its
+ * causes, which the player replays to draw the board as it was; nothing else (no conversation).
+ */
+export const tryCausesReplySchema = z.object({
+  causes: z.array(
+    z.object({
+      kind: z.literal("cause"),
+      actor: z.string(),
+      opening: z.string(),
+      node: z.string().nullable(),
+      payload: z.object({ action: z.string(), args: z.record(z.unknown()).optional() }),
+    }),
+  ),
+});
+export type TryCausesReply = z.infer<typeof tryCausesReplySchema>;
 
 export const groupReplySchema = z.object({
   group: teacherGroupSchema,

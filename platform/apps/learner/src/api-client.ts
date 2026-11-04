@@ -8,6 +8,7 @@ import {
   type MeReply,
   type Role,
   type TeacherGroup,
+  type TryCausesReply,
   apiErrorSchema,
   eventsReplySchema,
   groupCodePath,
@@ -18,6 +19,8 @@ import {
   learnerReplySchema,
   meReplySchema,
   teacherGroupSchema,
+  tryCausesPath,
+  tryCausesReplySchema,
 } from "@chalk/api";
 import type { ChalkEvent } from "@chalk/content";
 import { type Progress, progressSchema } from "@chalk/learning";
@@ -103,6 +106,13 @@ export const api = {
     call("POST", groupCodePath(id), teacherGroupSchema),
   learner: (groupId: string, learnerId: string): Promise<LearnerReply> =>
     call("GET", groupLearnerPath(groupId, learnerId), learnerReplySchema),
+  tryCauses: (
+    groupId: string,
+    learnerId: string,
+    opening: string,
+    at: number,
+  ): Promise<TryCausesReply> =>
+    call("GET", tryCausesPath(groupId, learnerId, opening, at), tryCausesReplySchema),
   removeLearner: async (groupId: string, learnerId: string): Promise<void> => {
     await send("DELETE", groupLearnerPath(groupId, learnerId));
   },

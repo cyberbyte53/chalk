@@ -36,3 +36,4 @@ export {
   progressSchema,
 } from "./progress";
 export { SetBy } from "./sets";
+export { PointKind, type UpdatePoint, updatePointSchema } from "./update";

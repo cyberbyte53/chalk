@@ -4,11 +4,10 @@ import {
   type GroupReply,
   type LearnerReply,
   type MeReply,
-  type QuestionSeen,
   type TeacherGroup,
 } from "@chalk/api";
-import type { Locale } from "@chalk/content";
-import { Band, type Progress, isConceptDone } from "@chalk/learning";
+import type { Locale, Localized } from "@chalk/content";
+import { Band, PointKind, type Progress, isConceptDone } from "@chalk/learning";
 import { RichText } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
@@ -18,12 +17,15 @@ import { say } from "./app-text";
 import { ConceptMark, conceptMark } from "./concept-mark";
 import type { Course, CourseConcept } from "./course";
 import { ArtView } from "./course-screens";
+import { type TryOn, needsYouPoint, sectionOf, triesOf } from "./section";
+import { TrySnapshot } from "./try-snapshot";
 
 /**
- * What a teacher sees, on their phone: their groups, a new group, one group (every learner's
- * concepts as squares, most behind first, and what their last practice showed) and one learner
- * (what they aren't good at yet, with its evidence; their concepts; Jugnu's reflections). Progress
- * comes from the learners' own events; the rest is the server's learner update (judged points).
+ * What a teacher sees, on their phone: their groups, a new group, one group (its section home: who
+ * needs them and for what, the mistakes several share, everyone else) and one learner (the claim,
+ * then the proof: their tries as their own boards; what Jugnu noticed). It reads only: the first
+ * version has no actions on what it finds. Progress comes from the learners' own events; the rest
+ * is the server's learner update (judged points).
  */
 
 const conceptsOf = (course: Course): CourseConcept[] =>
@@ -222,6 +224,73 @@ function TwoTap({
   );
 }
 
+/** A question's name as words: its family ("bus-to-stop/one": "Bus to stop"). */
+const questionText = (name: string) => {
+  const words = (name.split("/")[0] ?? name).replace(/[-_]+/g, " ").trim();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+};
+
+/** Their first name: how a teacher says it. */
+const firstName = (name: string): string => name.trim().split(/\s+/)[0] ?? name;
+
+/** "AR" for Aditi Rao. */
+const initials = (name: string): string =>
+  name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w.charAt(0).toUpperCase())
+    .join("");
+
+const BAND_WORD = {
+  [Band.Strong]: "bandStrong",
+  [Band.Unsure]: "bandUnsure",
+  [Band.Weak]: "bandWeak",
+} as const;
+
+const GOT_THERE_WORD = {
+  [GotThere.Yes]: "gotThereYes",
+  [GotThere.Partly]: "gotTherePartly",
+  [GotThere.NotYet]: "gotThereNotYet",
+} as const;
+
+const KIND_WORD = {
+  [PointKind.NeedsYou]: "needsYou",
+  [PointKind.GettingThere]: "gettingThere",
+  [PointKind.OnTrack]: "onTrack",
+} as const;
+
+/** A card's snapshot width, and a try's on a child's page. */
+const CARD_SNAPSHOT = 112;
+const TRY_SNAPSHOT = 136;
+
+/** How sure: "3 of 4 tries wrong · yesterday". */
+function sureText(wrong: number, of: number, at: number, locale: Locale): string {
+  return say(locale, "wrongOf", { wrong, of, when: whenText(at, locale) });
+}
+
+/** A child's chip: their name, to open their page. */
+function Chip({
+  learner,
+  tone,
+  onLearner,
+}: {
+  learner: GroupLearner;
+  tone: string;
+  onLearner: (learner: GroupLearner) => void;
+}): JSX.Element {
+  return (
+    <button type="button" class={`chip is-${tone}`} onClick={() => onLearner(learner)}>
+      {firstName(learner.name)}
+    </button>
+  );
+}
+
+/**
+ * The section home (platform/docs/plans/teacher-view.md): who needs the teacher today and for
+ * what, each with the proof (their own board at their last wrong try) and one next step; the
+ * mistakes several share; everyone else, by name. Today's concept squares are under "More".
+ */
 function GroupScreen({
   reply,
   course,
@@ -242,6 +311,7 @@ function GroupScreen({
   const [shared, setShared] = useState(false);
   const link = `${window.location.origin}/join/${group.joinCode}`;
   const courseTitle = course?.title[locale] ?? "";
+  const section = sectionOf(learners, Date.now());
 
   const share = async () => {
     const text = say(locale, "shareText", { course: courseTitle, link });
@@ -255,167 +325,266 @@ function GroupScreen({
       // they closed the share sheet: nothing to do
     }
   };
-
   const sorted = [...learners].sort(
     (a, b) =>
       doneCount(concepts, a.progress) - doneCount(concepts, b.progress) ||
       (a.lastActiveAt ?? 0) - (b.lastActiveAt ?? 0),
   );
-  const finished = learners.filter(
-    (l) => concepts.length > 0 && doneCount(concepts, l.progress) === concepts.length,
-  ).length;
-  const notStarted = learners.filter((l) => Object.keys(l.progress).length === 0).length;
-  // The concept most of the class is weak on (the learner model's band); none while no one is.
-  let weakest: { concept: CourseConcept; weak: number } | undefined;
-  for (const concept of concepts) {
-    const weak = learners.filter((l) =>
-      l.mastery.some((m) => m.concept === concept.id && m.band === Band.Weak),
-    ).length;
-    if (weak > 0 && (weakest === undefined || weak > weakest.weak)) weakest = { concept, weak };
-  }
 
   return (
     <div class="lesson page is-wide">
       <div class="page-top">
-        <BackButton label="Back" onBack={onBack} />
+        <BackButton label={say(locale, "goBack")} onBack={onBack} />
         <div class="grow" />
         <span class="code-pill">{group.joinCode}</span>
       </div>
       <div class="page-body is-tight">
         <div>
           <div class="kicker">
-            {say(locale, "studentsCount", { n: learners.length })} ·{" "}
-            {say(locale, "madeOn", { date: dateText(group.createdAt, locale) })}
+            <RichText text={courseTitle} /> · {say(locale, "studentsCount", { n: learners.length })}
           </div>
-          <h1 class="page-title">
-            <RichText text={courseTitle} />
-          </h1>
+          <h1 class="page-title">{say(locale, "whoNeedsYou")}</h1>
+          <p class="small">{say(locale, "needsYouRule")}</p>
         </div>
-        <div class="group-actions">
-          <button type="button" class="second is-small" onClick={() => void share()}>
-            {shared ? say(locale, "linkCopied") : say(locale, "shareLink")}
-          </button>
-          <TwoTap
-            class="second is-small"
-            label={say(locale, "newCode")}
-            confirm={say(locale, "newCodeConfirm")}
-            onConfirm={onNewCode}
-          />
-        </div>
-        {learners.length === 0 ? (
-          <p class="lead">{say(locale, "noStudentsYet")}</p>
-        ) : (
-          <>
-            <div class="stats">
-              <div class="stat">
-                <b>{finished}</b>
-                <span class="small">{say(locale, "finished")}</span>
-              </div>
-              <div class="stat">
-                <b>{notStarted}</b>
-                <span class="small">{say(locale, "notStartedYet")}</span>
-              </div>
-              <div class="stat">
-                <b class="is-weak">
-                  {weakest?.concept.glyph ?? (weakest === undefined ? "–" : "!")}
-                </b>
+        {learners.length === 0 && <p class="lead">{say(locale, "noStudentsYet")}</p>}
+        {learners.length > 0 && section.needsYou.length === 0 && (
+          <p class="small">{say(locale, "noOneNeedsYou")}</p>
+        )}
+        <div class="needs-list">
+          {section.needsYou.map(({ learner, point, wrong, of, shown }) => (
+            <button
+              key={learner.id}
+              type="button"
+              class="needs-card"
+              onClick={() => onLearner(learner)}
+            >
+              {shown !== undefined && (
+                <TrySnapshot
+                  groupId={group.id}
+                  learnerId={learner.id}
+                  question={shown.question}
+                  tried={shown.try}
+                  width={CARD_SNAPSHOT}
+                  locale={locale}
+                />
+              )}
+              <span class="needs-words">
+                <span class="learner-name">{learner.name}</span>
+                <span class="needs-claim">{point.text}</span>
                 <span class="small">
-                  {say(locale, "weakest")}
-                  {weakest === undefined ? "" : ": "}
-                  {weakest !== undefined && <RichText text={weakest.concept.title[locale]} />}
+                  {sureText(
+                    wrong,
+                    of,
+                    shown?.try.at ?? learner.latestUpdate?.finishedAt ?? 0,
+                    locale,
+                  )}
+                </span>
+                {point.next !== null && <span class="needs-next">→ {point.next}</span>}
+              </span>
+            </button>
+          ))}
+          {section.alsoNeedsYou.length > 0 && (
+            <div class="chip-group">
+              <span class="small">{say(locale, "alsoNeedsYou")}</span>
+              <div class="chips">
+                {section.alsoNeedsYou.map((l) => (
+                  <Chip key={l.id} learner={l} tone="needs" onLearner={onLearner} />
+                ))}
+              </div>
+            </div>
+          )}
+          {section.gotIt.map(({ learner, was }) => (
+            <button
+              key={learner.id}
+              type="button"
+              class="needs-card is-cleared"
+              onClick={() => onLearner(learner)}
+            >
+              <span class="needs-words">
+                <span class="learner-name">{learner.name}</span>
+                <span class="needs-claim">{say(locale, "gotItOnTheirOwn")}</span>
+                <span class="small">{say(locale, "was", { was })}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {section.mistakes.length > 0 && (
+          <section class="teacher-section">
+            <h2 class="section-head is-shared">{say(locale, "sharedMistakes")}</h2>
+            {section.mistakes.map((m) => (
+              <div key={m.key} class="mistake-card">
+                {m.label !== null && (
+                  <span class="needs-claim">
+                    {say(locale, "looksLike", {
+                      mistake: m.label.charAt(0).toLowerCase() + m.label.slice(1),
+                    })}
+                  </span>
+                )}
+                <span class="small">
+                  {say(locale, "sameAnswer", {
+                    answer: `“${m.answer[locale]}”`,
+                    question: questionText(m.question.name),
+                  })}
+                </span>
+                <span class="faces">
+                  {m.learners.map((l) => (
+                    <button
+                      key={l.id}
+                      type="button"
+                      class="face"
+                      title={l.name}
+                      onClick={() => onLearner(l)}
+                    >
+                      {initials(l.name)}
+                    </button>
+                  ))}
+                  <span class="small">
+                    {say(locale, "childrenCount", { n: m.learners.length })}
+                  </span>
                 </span>
               </div>
-            </div>
-            <div class="legend">
-              <span class="small">{say(locale, "eachSquare")}</span>
-              <span class="small">{say(locale, "mostBehind")} ↓</span>
-            </div>
-            <div class="learners">
-              {sorted.map((learner) => (
-                <button
-                  key={learner.id}
-                  type="button"
-                  class="learner-row"
-                  onClick={() => onLearner(learner)}
-                >
-                  <span class="learner-who">
-                    <span class="learner-name">{learner.name}</span>
-                    <span class="small">
-                      {learner.lastActiveAt === null
-                        ? say(locale, "neverActive")
-                        : whenText(learner.lastActiveAt, locale)}
-                    </span>
-                    {learner.latestUpdate?.firstPoint != null && (
-                      <span class="learner-point">{learner.latestUpdate.firstPoint}</span>
-                    )}
-                  </span>
-                  <span class="squares">
-                    {concepts.map((concept) => (
-                      <Square
-                        key={concept.id}
-                        mark={conceptMark(
-                          concept,
-                          learner.progress[concept.id],
-                          learner.mastery.find((m) => m.concept === concept.id),
-                        )}
-                        label={concept.title[locale]}
-                      />
-                    ))}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </>
+            ))}
+          </section>
         )}
+
+        {section.gettingThere.length + section.onTrack.length + section.notYet.length > 0 && (
+          <section class="teacher-section">
+            <h2 class="section-head is-else">{say(locale, "everyoneElse")}</h2>
+            {(
+              [
+                ["gettingThere", "getting", section.gettingThere],
+                ["onTrack", "on-track", section.onTrack],
+                ["noPracticeYet", "not-yet", section.notYet],
+              ] as const
+            ).map(([word, tone, list]) =>
+              list.length === 0 ? null : (
+                <div key={word} class="chip-group">
+                  <span class="small">{say(locale, word)}</span>
+                  <div class="chips">
+                    {list.map((l) => (
+                      <Chip key={l.id} learner={l} tone={tone} onLearner={onLearner} />
+                    ))}
+                  </div>
+                </div>
+              ),
+            )}
+          </section>
+        )}
+
+        <details class="more">
+          <summary>{say(locale, "more")}</summary>
+          <div class="group-actions">
+            <button type="button" class="second is-small" onClick={() => void share()}>
+              {shared ? say(locale, "linkCopied") : say(locale, "shareLink")}
+            </button>
+            <TwoTap
+              class="second is-small"
+              label={say(locale, "newCode")}
+              confirm={say(locale, "newCodeConfirm")}
+              onConfirm={onNewCode}
+            />
+          </div>
+          <div class="legend">
+            <span class="small">{say(locale, "eachSquare")}</span>
+            <span class="small">{say(locale, "mostBehind")} ↓</span>
+          </div>
+          <div class="learners">
+            {sorted.map((learner) => (
+              <button
+                key={learner.id}
+                type="button"
+                class="learner-row"
+                onClick={() => onLearner(learner)}
+              >
+                <span class="learner-who">
+                  <span class="learner-name">{learner.name}</span>
+                  <span class="small">
+                    {learner.lastActiveAt === null
+                      ? say(locale, "neverActive")
+                      : whenText(learner.lastActiveAt, locale)}
+                  </span>
+                </span>
+                <span class="squares">
+                  {concepts.map((concept) => (
+                    <Square
+                      key={concept.id}
+                      mark={conceptMark(
+                        concept,
+                        learner.progress[concept.id],
+                        learner.mastery.find((m) => m.concept === concept.id),
+                      )}
+                      label={concept.title[locale]}
+                    />
+                  ))}
+                </span>
+              </button>
+            ))}
+          </div>
+        </details>
       </div>
     </div>
   );
 }
 
-/** A question's name as words: its family ("bus-to-stop/one": "Bus to stop"). */
-const questionText = (name: string) => {
-  const words = (name.split("/")[0] ?? name).replace(/[-_]+/g, " ").trim();
-  return words.charAt(0).toUpperCase() + words.slice(1);
-};
-
-const BAND_WORD = {
-  [Band.Strong]: "bandStrong",
-  [Band.Unsure]: "bandUnsure",
-  [Band.Weak]: "bandWeak",
-} as const;
-
-const GOT_THERE_WORD = {
-  [GotThere.Yes]: "gotThereYes",
-  [GotThere.Partly]: "gotTherePartly",
-  [GotThere.NotYet]: "gotThereNotYet",
-} as const;
-
-/**
- * One cited question: its name, and their tries at it in that set, each wrong one with what they
- * answered, in the words they saw ("wrong: (−1, 3) · right").
- */
-function Evidence({ question, locale }: { question: QuestionSeen; locale: Locale }): JSX.Element {
+/** One try, as proof: their board then, what they answered, right or wrong, when, with Jugnu. */
+function TryRow({
+  groupId,
+  learner,
+  on,
+  locale,
+}: {
+  groupId: string;
+  learner: GroupLearner;
+  on: TryOn;
+  locale: Locale;
+}): JSX.Element {
+  const t = on.try;
+  const name = firstName(learner.name);
+  const [asked, setAsked] = useState<Localized | undefined>();
   return (
-    <span class="evidence small">
-      <b>{questionText(question.name)}</b>
-      {question.tries.map((t, i) => (
-        <span key={i} class={t.isRight ? "is-right" : "is-wrong"}>
-          {" · "}
-          {say(locale, t.isRight ? "triedRight" : "triedWrong")}
-          {!t.isRight && t.chosen !== null && (
-            <>
-              {": "}
-              <RichText text={t.chosen[locale]} />
-            </>
-          )}
-          {t.helped ? `, ${say(locale, "withJugnu")}` : ""}
+    <div class="try-row">
+      <TrySnapshot
+        groupId={groupId}
+        learnerId={learner.id}
+        question={on.question}
+        tried={t}
+        width={TRY_SNAPSHOT}
+        locale={locale}
+        onAsked={setAsked}
+      />
+      <span class="try-words">
+        <span class="small try-asked">
+          {asked === undefined ? questionText(on.question.name) : <RichText text={asked[locale]} />}
         </span>
-      ))}
-    </span>
+        {t.chosen === null ? (
+          <span>{say(locale, "noAnswerWords", { name })}</span>
+        ) : (
+          <span>
+            <b>{say(locale, "theyAnswered", { name })}</b> “<RichText text={t.chosen[locale]} />”
+          </span>
+        )}
+        <span class="try-meta">
+          <span class={t.isRight ? "verdict is-right" : "verdict is-wrong"}>
+            {say(locale, t.isRight ? "triedRight" : "triedWrong")}
+          </span>
+          <span class="small">
+            {whenText(t.at, locale)}
+            {t.helped ? ` · ${say(locale, "withJugnu")}` : ""}
+          </span>
+        </span>
+      </span>
+    </div>
   );
 }
 
+/**
+ * A child's page: the claim, then the proof (platform/docs/plans/teacher-view.md): the point that
+ * needs the teacher (else the first not on track), how sure, their tries at the questions it cites
+ * as their own boards, what Jugnu noticed; their other points; "More" keeps their concepts.
+ */
 function LearnerScreen({
+  groupId,
   learner,
   view,
   course,
@@ -423,8 +592,9 @@ function LearnerScreen({
   onRemove,
   onBack,
 }: {
+  groupId: string;
   learner: GroupLearner;
-  /** Their latest update with its evidence (once loaded). */
+  /** Jugnu's reflections on their latest set (once loaded). */
   view: LearnerReply | undefined;
   course: Course | undefined;
   locale: Locale;
@@ -432,7 +602,12 @@ function LearnerScreen({
   onBack: () => void;
 }): JSX.Element {
   const concepts = course === undefined ? [] : conceptsOf(course);
-  const update = view?.update;
+  const update = learner.latestUpdate;
+  const claim = needsYouPoint(learner) ?? update?.points.find((p) => p.kind !== PointKind.OnTrack);
+  const tries = claim === undefined ? [] : triesOf(claim);
+  const wrong = tries.filter((t) => !t.try.isRight).length;
+  const claimConcepts = [...new Set(claim?.questions.flatMap((q) => q.concepts) ?? [])];
+  const others = update?.points.filter((p) => p !== claim) ?? [];
   const active =
     learner.lastActiveAt === null
       ? say(locale, "neverActive")
@@ -440,11 +615,71 @@ function LearnerScreen({
   return (
     <div class="lesson page is-wide">
       <div class="page-top">
-        <BackButton label="Back" onBack={onBack} />
+        <BackButton label={say(locale, "goBack")} onBack={onBack} />
       </div>
       <div class="page-body is-tight">
-        <div>
-          <h1 class="page-title">{learner.name}</h1>
+        <h1 class="page-title">{learner.name}</h1>
+        {update === null ? (
+          <p class="small">{say(locale, "noUpdateYet")}</p>
+        ) : claim === undefined ? (
+          <p class="claim">{say(locale, "onTrackClaim")}</p>
+        ) : (
+          <>
+            <p class="claim">{claim.text}</p>
+            {tries.length > 0 && (
+              <p class="small">
+                {claimConcepts.length === 0
+                  ? say(locale, "fromTriesNoConcept", { wrong, of: tries.length })
+                  : say(locale, "fromTries", {
+                      wrong,
+                      of: tries.length,
+                      concepts: claimConcepts.join(", "),
+                    })}
+              </p>
+            )}
+            {claim.next !== null && <p class="needs-next">→ {claim.next}</p>}
+            <div class="tries">
+              {tries.map((on) => (
+                <TryRow
+                  key={`${on.try.opening}:${on.try.at}`}
+                  groupId={groupId}
+                  learner={learner}
+                  on={on}
+                  locale={locale}
+                />
+              ))}
+            </div>
+          </>
+        )}
+        {view !== undefined && view.reflections.length > 0 && (
+          // His words are long: one line each, opened to read.
+          <section class="noticed">
+            <h2 class="section-head">{say(locale, "jugnuNoticed")}</h2>
+            {view.reflections.map((r) => (
+              <details key={r.id} class="noticed-text">
+                <summary>
+                  {questionText(r.name)} · {say(locale, GOT_THERE_WORD[r.gotThere])}
+                </summary>
+                {r.points.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </details>
+            ))}
+          </section>
+        )}
+        {others.length > 0 && (
+          <section class="teacher-section">
+            <h2 class="section-head">{say(locale, "alsoNoticed")}</h2>
+            {others.map((p, i) => (
+              <div key={i} class="point-row">
+                <span class="small">{say(locale, KIND_WORD[p.kind])}</span>
+                <span class="point-text">{p.text}</span>
+              </div>
+            ))}
+          </section>
+        )}
+        <details class="more">
+          <summary>{say(locale, "more")}</summary>
           <span class="small">
             {say(locale, "joinedOn", { date: dateText(learner.joinedAt, locale) })} · {active} ·{" "}
             {say(locale, "conceptsDone", {
@@ -452,32 +687,6 @@ function LearnerScreen({
               all: concepts.length,
             })}
           </span>
-        </div>
-        <section class="teacher-section">
-          <div class="kicker">
-            {say(locale, "notYetGood")}
-            {update != null &&
-              ` · ${say(locale, "afterSet", { when: whenText(update.finishedAt, locale) })}`}
-          </div>
-          {update === undefined ? null : update === null ? (
-            <p class="small">{say(locale, "noUpdateYet")}</p>
-          ) : update.points.length === 0 ? (
-            <p class="small">{say(locale, "allGood")}</p>
-          ) : (
-            <div class="learners">
-              {update.points.map((point, i) => (
-                <div key={i} class="point-row">
-                  <span class="point-text">{point.text}</span>
-                  {point.questions.map((q) => (
-                    <Evidence key={q.board} question={q} locale={locale} />
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-        <section class="teacher-section">
-          <div class="kicker">{say(locale, "concepts")}</div>
           <div class="learners">
             {concepts.map((concept) => {
               const mine = learner.progress[concept.id];
@@ -513,32 +722,13 @@ function LearnerScreen({
               );
             })}
           </div>
-        </section>
-        {update != null && update.reflections.length > 0 && (
-          <section class="teacher-section">
-            <div class="kicker">{say(locale, "fromJugnu")}</div>
-            <div class="learners">
-              {update.reflections.map((r) => (
-                <div key={r.id} class="point-row">
-                  <span class="evidence small">
-                    <b>{questionText(r.name)}</b> · {say(locale, GOT_THERE_WORD[r.gotThere])}
-                  </span>
-                  {r.points.map((p, i) => (
-                    <span key={i} class="point-text">
-                      {p}
-                    </span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-        <TwoTap
-          class="link is-danger"
-          label={say(locale, "remove")}
-          confirm={say(locale, "removeConfirm")}
-          onConfirm={onRemove}
-        />
+          <TwoTap
+            class="link is-danger"
+            label={say(locale, "remove")}
+            confirm={say(locale, "removeConfirm")}
+            onConfirm={onRemove}
+          />
+        </details>
       </div>
     </div>
   );
@@ -661,6 +851,7 @@ export function TeacherApp({
   return (
     <LearnerScreen
       key={learner.id}
+      groupId={open.group.id}
       learner={learner}
       view={learnerView?.learner.id === learner.id ? learnerView : undefined}
       course={course}

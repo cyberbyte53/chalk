@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { PointKind, updatePointSchema } from "@chalk/learning";
 import type { RuntimeState } from "@chalk/player";
 import type { ModelMessage } from "ai";
 import { z } from "zod";
@@ -16,7 +17,7 @@ import {
 import { type Provider, modelOf, settingsForChoice } from "./model";
 import { type Prompt, Seat, committedJugnu, promptOf } from "./prompts";
 import { lessonOf, root, seen } from "./sees";
-import { type Judged, type UpdateInput, type UpdatePoint, realEvidence } from "./sets";
+import { type Judged, type UpdateInput, realEvidence } from "./sets";
 
 /**
  * Jugnu, live (platform/docs/plans/jugnu-live.md, teacher-view.md): one turn for a student on a
@@ -210,12 +211,15 @@ export async function liveJudge(input: UpdateInput): Promise<Judged> {
     tools: {
       update: {
         description:
-          "What this set shows they are still not good at, and keep getting wrong: each point one short sentence, with the questions (board ids) and reflections (ids) it rests on.",
+          "What this set shows about them, for their teacher: each point one short sentence, how much it needs the teacher (kind), the mistake in a few words (or null), one next step for the teacher (or null), and the questions (board ids) and reflections (ids) it rests on.",
         input: z.object({
           points: z
             .array(
               z.object({
                 text: z.string(),
+                kind: z.nativeEnum(PointKind),
+                mistake: z.string().nullable(),
+                next: z.string().nullable(),
                 questions: z.array(z.string()),
                 reflections: z.array(z.string()),
               }),
@@ -226,11 +230,15 @@ export async function liveJudge(input: UpdateInput): Promise<Judged> {
     },
     endsWith: "update",
   });
-  const points =
-    his.ended.kind === "tool" ? ((his.ended.input as { points?: UpdatePoint[] }).points ?? []) : [];
+  // What the tool was called with, read as points (a malformed one is left out).
+  const said = his.ended.kind === "tool" ? (his.ended.input as { points?: unknown[] }).points : [];
+  const points = (said ?? []).flatMap((p) => {
+    const parsed = updatePointSchema.safeParse(p);
+    return parsed.success ? [parsed.data] : [];
+  });
   return {
     points: realEvidence(
-      points.filter((p) => typeof p.text === "string" && p.text.trim() !== ""),
+      points.filter((p) => p.text.trim() !== ""),
       input,
     ),
     prompt,

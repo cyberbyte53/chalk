@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { type SetKeeper, questionFactsFrom } from "@chalk/studio/jugnu-sets";
 import { and, desc, eq, inArray, max, notExists, sql } from "drizzle-orm";
+import { attemptOf } from "./attempt-rows";
 import type { Db } from "./db";
 import {
   events,
@@ -11,7 +12,6 @@ import {
   mastery,
   texts,
 } from "./schema";
-import { attemptOf } from "./store";
 
 /**
  * The server's keeper of sets and learner updates (studio's sets.ts): a set is read from its
@@ -114,7 +114,7 @@ export function dbSetKeeper(db: Db, contentDir: string | undefined): SetKeeper {
           ).map(({ id, board, points, gotThere }) => ({ id, board, points, gotThere })),
     questionFacts: async (boards) =>
       contentDir === undefined
-        ? boards.map((board) => ({ board, name: board, concepts: [], level: null }))
+        ? boards.map((board) => ({ board, path: board, name: board, concepts: [], level: null }))
         : questionFactsFrom(contentDir, boards),
     lastPoints: async (account) => {
       const [last] = await db

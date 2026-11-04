@@ -148,8 +148,8 @@ messages are enough to replay it; the cursor only makes resuming quick.
 - **Teacher's API and screens** (step 4): reads only, the server's (the preview has no teacher;
   `/dev-jugnu/held` is its look). A child's state is their latest learner update and the mastery
   worked out with it; the teacher sees judged points, never a conversation.
-  - **The class** (`GET` group, as now): each child also gains their latest update's first point
-    and when (`latestPoint`, null before their first finished set), shown under their name.
+  - **The class** (`GET` group): each child also gains their latest update with its evidence
+    (`latestUpdate`, null before their first finished set; see "Who needs you, and for what").
   - **One child** (`GET groupLearnerPath`, own group only, else not found): the child (as in the
     class), their latest update (at; each point with its evidence made readable: each cited
     question's name and concepts and their tries in that set: right or wrong, what they chose,
@@ -165,12 +165,36 @@ messages are enough to replay it; the cursor only makes resuming quick.
     is not found; the evidence is read from the attempts as worked out now (filtered to the set's
     openings), and a cited question or reflection no longer found is left out. The reply's fields
     are named one by one (never a prompt, a request, a message).
-  - **The child's screen**: "Not good at yet" (the points, each with its evidence below it); the
-    concepts (as now, plus the mastery: how likely, how sure, tries); "From Jugnu's
-    conversations" (the reflections). Nothing yet: says so.
+  - **The child's screen**: see "Who needs you, and for what"; the concepts (with the mastery)
+    are under "More". Nothing yet: says so.
 - **Demo class**: the maker writes raw only (events, Jugnu's conversations from the sandbox's
   dialogue, its messages; times moved to the child's days, together); the loader saves the raw
   and runs layers 1 and 2 through the same functions.
+
+## Who needs you, and for what (the screens, step 4's second version)
+
+A teacher opens a section (a group) with one question: who needs me today, and for what. Each
+point of a learner update has a kind (needs you, getting there, on track), the mistake in a few
+words, and one next step, all from the judge (`prompts/update/for-teacher.md`, generic); the
+section home shows the children with a point that needs them (each with how sure, their own board
+at their last wrong try, and the next step), the mistakes several share, and everyone else by
+name; a child's page is the claim, then the proof: their tries as their boards, what Jugnu noticed.
+It reads only: no actions yet.
+
+- **Needs you**: their latest update has a `needsYou` point (one the judge gave a cited wrong try;
+  else it is made `gettingThere`). They leave when a later update no longer has it, shown greyed
+  "got it on their own" for a day after that update's set finished (`wasNeedsYou`: nothing stored).
+  The three latest get a card (most tries wrong first on the same time); the rest are named under
+  them. Every field is a glance long: the point and the next step at most ten words.
+- **Shared mistakes**: the same wrong answer (`chosen`, its English) to the same question by two
+  or more children, in a point not on track; biggest first, at most three, one whose children are
+  all on a bigger card left out; the judge's `mistake` is only its wording. (Not by the board's
+  note: the note a goal says is the lesson's own consequence, which isn't recorded.)
+- **Snapshots**: drawn in the browser by the real player (`BoardAt`, shared with Jugnu's
+  experiments), from the opening's causes up to the try (`GET …/learners/:id/openings/:opening?at=`,
+  causes only, own group only), small, once in view; else the answer's words.
+- **One group query**: the class reply carries each child's latest update with its evidence
+  (`updatesSeen`, a few queries for all); the child's own route adds only Jugnu's reflections.
 
 ## Decisions for the person
 

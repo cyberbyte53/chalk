@@ -12,12 +12,14 @@ import {
   type MeReply,
   Role,
   type TeacherGroup,
+  type TryCausesReply,
   groupCodePath,
   groupLearnerPath,
   groupPath,
+  tryCausesPath,
 } from "@chalk/api";
 import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION, Level } from "@chalk/content";
-import { Band, type Progress } from "@chalk/learning";
+import { Band, PointKind, type Progress } from "@chalk/learning";
 import { type UpdateInput, realEvidence } from "@chalk/studio/jugnu-sets";
 import { PGlite } from "@electric-sql/pglite";
 import { eq, sql } from "drizzle-orm";
@@ -694,7 +696,16 @@ describe("server", () => {
           judged.push(input);
           return {
             points: realEvidence(
-              [{ text: "swaps x and y", questions: ["b1", "made-up"], reflections: ["made-up"] }],
+              [
+                {
+                  text: "Looks like they swap x and y",
+                  kind: PointKind.NeedsYou,
+                  mistake: "swaps the numbers",
+                  next: "Ask which number goes along",
+                  questions: ["b1", "made-up"],
+                  reflections: ["made-up"],
+                },
+              ],
               input,
             ),
             prompt: { seat: "update", name: "u", hash: "uh", text: "the update prompt" },
@@ -718,7 +729,8 @@ describe("server", () => {
     expect(before?.latestUpdate).toBeNull();
     const learnerId = before?.id ?? "";
     expect(
-      (await teacher.json<LearnerReply>("GET", groupLearnerPath(group.id, learnerId))).update,
+      (await teacher.json<LearnerReply>("GET", groupLearnerPath(group.id, learnerId))).learner
+        .latestUpdate,
     ).toBeNull();
     // The set is served; its board opens (naming it); they get it wrong and ask Jugnu.
     await learner.json("POST", ApiPath.Events, {
@@ -739,6 +751,19 @@ describe("server", () => {
           kind: "open",
           payload: { set: "set1" },
         } as Partial<ChalkEvent>),
+        // What they did before checking: a cause (the snapshot replays it), and a chat (never sent).
+        {
+          ...entry("e1b", 1001, {
+            seq: 2,
+            actor: Actor.Learner,
+            opening: "o",
+            board: "b1",
+            node: "pppppppppppppppp",
+            kind: "cause",
+            payload: { action: "movePoint", args: { x: 3, y: 2 } },
+          } as Partial<ChalkEvent>),
+          version: "v1",
+        },
         {
           ...signalOn("e2", 2, "b1", "checked", {
             status: "wrong",
@@ -783,7 +808,14 @@ describe("server", () => {
     expect(updates[0]).toMatchObject({ set: "set1", promptName: "u", model: "m/1" });
     // Its evidence is only what it was given.
     expect(updates[0]?.points).toEqual([
-      { text: "swaps x and y", questions: ["b1"], reflections: [] },
+      {
+        text: "Looks like they swap x and y",
+        kind: PointKind.NeedsYou,
+        mistake: "swaps the numbers",
+        next: "Ask which number goes along",
+        questions: ["b1"],
+        reflections: [],
+      },
     ]);
     const input = judged[0];
     expect(input?.questions).toEqual([
@@ -800,37 +832,65 @@ describe("server", () => {
       expect.objectContaining({ board: "b1", points: ["swaps the numbers"], gotThere: "partly" }),
     ]);
 
-    // Their teacher sees it: in the class, its first point; for the child, each point's evidence
-    // as the teacher reads it, and his reflection on that set.
-    const [inClass] = (await teacher.json<GroupReply>("GET", groupPath(group.id))).learners;
-    expect(inClass?.latestUpdate).toEqual({ finishedAt: 1003, firstPoint: "swaps x and y" });
-    const look = await teacher.json<LearnerReply>("GET", groupLearnerPath(group.id, learnerId));
-    expect(look.update).toEqual({
+    // Their teacher sees it in the class: each point with its evidence as the teacher reads it;
+    // for the child, also his reflection on that set.
+    const seenUpdate = {
       finishedAt: 1003,
       points: [
         {
-          text: "swaps x and y",
+          text: "Looks like they swap x and y",
+          kind: PointKind.NeedsYou,
+          mistake: "swaps the numbers",
+          next: "Ask which number goes along",
           questions: [
             {
               board: "b1",
+              path: "book/chapter/ask",
               name: "chapter/ask",
               concepts: ["c1"],
               level: "easy",
-              tries: [{ isRight: false, chosen: { en: "(3, 2)", hi: "(3, 2)" }, helped: false }],
+              tries: [
+                {
+                  opening: "o",
+                  version: "v1",
+                  at: 1002,
+                  isRight: false,
+                  chosen: { en: "(3, 2)", hi: "(3, 2)" },
+                  helped: false,
+                },
+              ],
             },
           ],
-          reflections: [],
         },
       ],
-      reflections: [
-        expect.objectContaining({
-          board: "b1",
-          name: "chapter/ask",
-          gotThere: "partly",
-          points: ["swaps the numbers"],
-        }),
-      ],
-    });
+      wasNeedsYou: null,
+    };
+    const [inClass] = (await teacher.json<GroupReply>("GET", groupPath(group.id))).learners;
+    expect(inClass?.latestUpdate).toEqual(seenUpdate);
+    const look = await teacher.json<LearnerReply>("GET", groupLearnerPath(group.id, learnerId));
+    expect(look.learner.latestUpdate).toEqual(seenUpdate);
+    expect(look.reflections).toEqual([
+      expect.objectContaining({
+        board: "b1",
+        name: "chapter/ask",
+        gotThere: "partly",
+        points: ["swaps the numbers"],
+      }),
+    ]);
+    // The board as it was at that try: what they did on it up to then, and nothing else.
+    const drawn = await teacher.json<TryCausesReply>(
+      "GET",
+      tryCausesPath(group.id, learnerId, "o", 1002),
+    );
+    expect(drawn.causes).toEqual([
+      {
+        kind: "cause",
+        actor: Actor.Learner,
+        opening: "o",
+        node: "pppppppppppppppp",
+        payload: { action: "movePoint", args: { x: 3, y: 2 } },
+      },
+    ]);
     // Nothing of how it was made reaches the teacher.
     expect(JSON.stringify(look)).not.toMatch(/prompt|requests|the lesson|why\?/);
 
@@ -842,12 +902,21 @@ describe("server", () => {
       set: "older",
       setFinishedAt: new Date(500),
       at: new Date(clock + 60_000),
-      points: [{ text: "an old point", questions: [], reflections: [] }],
+      points: [
+        {
+          text: "an old point",
+          kind: PointKind.GettingThere,
+          mistake: null,
+          next: null,
+          questions: [],
+          reflections: [],
+        },
+      ],
     });
     expect(
       (await teacher.json<GroupReply>("GET", groupPath(group.id))).learners[0]?.latestUpdate
-        ?.firstPoint,
-    ).toBe("swaps x and y");
+        ?.points[0]?.text,
+    ).toBe("Looks like they swap x and y");
 
     // Another teacher's, or a child no longer in the group, is not found.
     const other = new Phone(served);
@@ -857,8 +926,16 @@ describe("server", () => {
       404,
       ApiErrorCode.NotFound,
     ]);
+    expect(await other.error("GET", tryCausesPath(group.id, learnerId, "o", 1002))).toEqual([
+      404,
+      ApiErrorCode.NotFound,
+    ]);
     await teacher.send("DELETE", groupLearnerPath(group.id, learnerId));
     expect(await teacher.error("GET", groupLearnerPath(group.id, learnerId))).toEqual([
+      404,
+      ApiErrorCode.NotFound,
+    ]);
+    expect(await teacher.error("GET", tryCausesPath(group.id, learnerId, "o", 1002))).toEqual([
       404,
       ApiErrorCode.NotFound,
     ]);

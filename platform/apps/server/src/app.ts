@@ -41,6 +41,7 @@ import {
   closeSignIn,
   groupByJoinCode,
   groupLearners,
+  isInGroup,
   join,
   joinedGroups,
   me,
@@ -54,6 +55,7 @@ import {
   setUp,
   teacherGroup,
   teacherGroups,
+  tryCauses,
   upsertGoogleAccount,
 } from "./store";
 
@@ -326,7 +328,10 @@ export function createApp(deps: AppDeps): Hono<Env> {
 
   app.get(`${ApiPath.Groups}/:groupId`, signedIn, as(Role.Teacher), async (c) => {
     const group = await ownGroup(c);
-    return c.json({ group, learners: await groupLearners(db, group.id, deps.plans ?? []) });
+    return c.json({
+      group,
+      learners: await groupLearners(db, group.id, deps.plans ?? [], setKeeper.questionFacts),
+    });
   });
 
   app.post(`${ApiPath.Groups}/:groupId/code`, signedIn, as(Role.Teacher), async (c) => {
@@ -352,6 +357,23 @@ export function createApp(deps: AppDeps): Hono<Env> {
       if (view === undefined)
         throw new ApiFailure(404, ApiErrorCode.NotFound, "no such learner here");
       return c.json(view);
+    },
+  );
+
+  // What one child did on a board's opening, up to a try: the teacher's snapshot of it.
+  app.get(
+    `${ApiPath.Groups}/:groupId/learners/:learnerId/openings/:opening`,
+    signedIn,
+    as(Role.Teacher),
+    async (c) => {
+      const group = await ownGroup(c);
+      const learnerId = idParam(c, "learnerId");
+      const at = Number(c.req.query("at"));
+      if (!Number.isFinite(at))
+        throw new ApiFailure(400, ApiErrorCode.BadRequest, "at: a time (Unix ms) is needed");
+      if (!(await isInGroup(db, group.id, learnerId)))
+        throw new ApiFailure(404, ApiErrorCode.NotFound, "no such learner here");
+      return c.json({ causes: await tryCauses(db, learnerId, c.req.param("opening"), at) });
     },
   );
 

@@ -1,18 +1,8 @@
-import { Actor, type Board, Locale } from "@chalk/content";
-import type { RecordEvent } from "@chalk/events";
-import { propLibrary } from "@chalk/library";
-import {
-  BoardPlayer,
-  type BoardRuntime,
-  BoardSpeedContext,
-  type JugnuChatProps,
-  JugnuFigure,
-  PlayMode,
-  chatOf,
-  replay,
-} from "@chalk/player";
+import type { Board } from "@chalk/content";
+import { JugnuFigure, chatOf } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
+import { BoardAt, type EventEntryLike, type Step } from "./board-at";
 import { shownAt } from "./preview-shell";
 
 /**
@@ -24,7 +14,9 @@ import { shownAt } from "./preview-shell";
  * and exactly what each was given. New experiments run from here too; the model's key stays there.
  */
 
-type Step = { prop: string; action: string; args?: Record<string, unknown> };
+/** The preview's board for a path: from the tree as it is now. */
+const boardOf = async (path: string): Promise<Board> => (await shownAt(path)).board;
+
 type Case = {
   name: string;
   board: string;
@@ -142,8 +134,6 @@ type Listed = {
   turns: number;
 };
 
-const nothing: RecordEvent = () => 0;
-
 /** A glow's name ("sheet/plane/namePart:OX") as the board's: its piece, and the part in it. */
 function pointedOf(glow: string | null): { prop: string; part?: string } | undefined {
   if (glow === null || glow === "") return undefined;
@@ -222,77 +212,6 @@ function momentsOf(events: readonly EventEntryLike[], extras: Record<number, Run
       out.push({ seq, opening, kind: "said", who: "student", label: said.says });
   }
   return out;
-}
-
-/** An event as the page reads it (docs/events.md: the envelope's parts it needs). */
-type EventEntryLike = {
-  kind: string;
-  actor: string;
-  opening: string | null;
-  node: string | null;
-  payload: unknown;
-};
-
-/** A board drawn at a moment: its recorded events played again (replay), then any steps of a try. */
-function BoardFrom({
-  path,
-  events,
-  steps = [],
-  pointed,
-  chat,
-  width,
-}: {
-  path: string;
-  events: readonly EventEntryLike[];
-  steps?: readonly Step[];
-  pointed?: { prop: string; part?: string } | undefined;
-  /** The chat as it stood then, drawn in the board's bar exactly as the student saw it. */
-  chat?: Omit<JugnuChatProps, "locale"> | undefined;
-  width: number;
-}): JSX.Element {
-  const [board, setBoard] = useState<Board | null>(null);
-  const [problem, setProblem] = useState<string | null>(null);
-  useEffect(() => {
-    void shownAt(path).then(
-      (s) => setBoard(s.board),
-      (e: unknown) => setProblem(String(e)),
-    );
-  }, [path]);
-  const causes = events.filter((e) => e.kind === "cause");
-  const play = (runtime: BoardRuntime) => {
-    void (async () => {
-      runtime.settle();
-      await replay(runtime, events as never, path);
-      for (const step of steps) {
-        await runtime.call(step.prop, step.action, step.args ?? {}, Actor.Learner);
-        runtime.settle();
-      }
-    })().catch((e: unknown) => setProblem(String(e)));
-  };
-  if (problem !== null) return <div class="jg-empty">{problem}</div>;
-  if (board === null) return <div class="jg-empty">Drawing…</div>;
-  return (
-    <div class="jg-phone" style={{ width: `${width}px` }}>
-      <div class="lesson">
-        <BoardSpeedContext.Provider value={Number.POSITIVE_INFINITY}>
-          <BoardPlayer
-            // Drawn again only when an act is passed (a reply or a message doesn't move the board).
-            key={`${path}:${causes.length}:${JSON.stringify(steps)}`}
-            board={board}
-            registry={propLibrary}
-            locale={Locale.En}
-            record={nothing}
-            onPass={() => {}}
-            mode={PlayMode.Guided}
-            isSilent
-            onRuntime={play}
-            pointed={pointed}
-            chat={chat}
-          />
-        </BoardSpeedContext.Provider>
-      </div>
-    </div>
-  );
 }
 
 /** One run, read in time (platform/docs/plans/jugnu-timeline.md): little at a glance, the rest when asked. */
@@ -396,10 +315,11 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
       <div class="jg-moment">
         <div class="jg-seen">
           {m !== undefined && (
-            <BoardFrom
+            <BoardAt
               // Another board is another drawing: nothing of the last one carries over.
               key={path}
               path={path}
+              load={boardOf}
               events={upTo}
               pointed={glow === undefined ? undefined : pointedOf(glow)}
               chat={opening === "1" ? { chat, isOneLine: isActing } : undefined}
@@ -436,9 +356,10 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
                 >
                   <summary>Tried on a copy: {short(stepText(t.steps), 80)}</summary>
                   {openTry === i && (
-                    <BoardFrom
+                    <BoardAt
                       key={`${path}:try`}
                       path={path}
+                      load={boardOf}
                       events={t.from === "now" ? upTo.filter((_, k) => k < upTo.length - 1) : []}
                       steps={t.steps}
                       width={260}
