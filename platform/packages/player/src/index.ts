@@ -69,3 +69,4 @@ export { t, UiText, type UiTextKey } from "./ui-text";
 /** How much each change is checked: "light" in the shipped app (see @chalk/prop state.ts). */
 export { OwnHtml, type OwnMarkup, ours } from "./own-markup";
 export type { Heard, HeardSound, HeardWords } from "@chalk/content";
+export { addressesOf, causesOf, replay } from "./replay";

@@ -45,8 +45,15 @@ export function caseFiles(): string[] {
   );
 }
 
-/** A board played as a child did: her steps, each played out on the board's clock. */
-export async function played(board: string, steps: readonly Step[]): Promise<BoardRuntime> {
+/**
+ * A board played as a child did: her steps, each played out on the board's clock. `onMade` is called
+ * with the board before it starts (a recorder attached there hears everything, from its start).
+ */
+export async function played(
+  board: string,
+  steps: readonly Step[],
+  onMade?: (runtime: BoardRuntime) => void,
+): Promise<BoardRuntime> {
   const json = JSON.parse(readFileSync(join(build, `${board}.json`), "utf8"));
   const item = json.kind === "page" ? builtPageSchema.parse(json) : builtQuestionSchema.parse(json);
   const runtime = new BoardRuntime(
@@ -62,6 +69,7 @@ export async function played(board: string, steps: readonly Step[]): Promise<Boa
       },
     },
   );
+  onMade?.(runtime);
   runtime.start();
   runtime.settle();
   for (const step of steps) {
