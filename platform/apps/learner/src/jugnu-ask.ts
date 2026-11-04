@@ -1,3 +1,4 @@
+import { ApiPath } from "@chalk/api";
 import type { JugnuAnswer, JugnuAsk } from "@chalk/player";
 
 /**
@@ -6,12 +7,16 @@ import type { JugnuAnswer, JugnuAsk } from "@chalk/player";
  * development the studio's service answers (/dev-jugnu/turn); on chalk1, the server.
  */
 export async function askJugnu(turn: JugnuAsk): Promise<JugnuAnswer> {
-  const r = await fetch("/dev-jugnu/turn", {
+  const r = await fetch(import.meta.env.DEV ? "/dev-jugnu/turn" : ApiPath.JugnuTurn, {
     method: "POST",
+    credentials: "same-origin",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(turn),
   });
-  const answer = (await r.json()) as JugnuAnswer | { error: string };
-  if (!r.ok || "error" in answer) throw new Error("error" in answer ? answer.error : r.statusText);
+  const answer = (await r.json().catch(() => ({ error: r.statusText }))) as
+    | JugnuAnswer
+    | { error: string; message?: string };
+  if (!r.ok || "error" in answer)
+    throw new Error("error" in answer ? (answer.message ?? answer.error) : r.statusText);
   return answer;
 }

@@ -17,6 +17,7 @@ import { ChapterScreen, CourseScreen, currentConcept } from "./course-screens";
 import { DevShell } from "./dev-shell";
 import { devSession, stopDevSignIn } from "./dev-sign-in";
 import { HomeScreen } from "./home-screen";
+import { askJugnu } from "./jugnu-ask";
 import { JugnuPreview } from "./jugnu-preview";
 import { courses, progressFromRecord } from "./lessons";
 import { ChapterDoneScreen, ResultScreen, ScreenSamples } from "./practice-screens";
@@ -378,6 +379,7 @@ export function App(): JSX.Element {
                 registry={propLibrary}
                 locale={locale}
                 bus={bus}
+                askJugnu={askJugnu}
                 onExit={() => setScreen({ kind: "chapter", ...place })}
                 onComplete={() => {
                   void uploader.current?.flush();

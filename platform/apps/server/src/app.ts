@@ -1,21 +1,25 @@
 import { randomInt } from "node:crypto";
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join as joinPath } from "node:path";
 import {
   ApiErrorCode,
   ApiPath,
   type EventsReply,
+  type JugnuTurnReply,
+  type JugnuTurnRequest,
   Role,
   eventsRequestSchema,
   isJoinCode,
   isSchoolCode,
   joinRequestSchema,
+  jugnuTurnRequestSchema,
   newGroupRequestSchema,
   normalizeCode,
   setupRequestSchema,
   signInGoogleRequestSchema,
 } from "@chalk/api";
-import { type Board, type ChalkEvent, type ItemRef, eventSchema } from "@chalk/content";
+import { type Board, type ChalkEvent, type ItemRef, builtFile, eventSchema } from "@chalk/content";
 import type { ConceptPlan } from "@chalk/learning";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { sql } from "drizzle-orm";
@@ -75,6 +79,11 @@ export type AppDeps = {
   random?: (n: number) => number;
   /** Where the server's log lines go; unset: the console (one JSON object per line for records). */
   log?: ServerLog;
+  /**
+   * One turn of the committed Jugnu (the studio's liveTurn); unset, he isn't on this server. Its
+   * error "still answering" means the session's last turn hasn't ended.
+   */
+  jugnu?: (turn: JugnuTurnRequest) => Promise<JugnuTurnReply>;
 };
 
 /** The server's log: records, refusals and failures. */
@@ -323,6 +332,31 @@ export function createApp(deps: AppDeps): Hono<Env> {
       return c.body(null, 204);
     },
   );
+
+  // Jugnu: one turn, for a signed-in person, at most 60 an hour each (each costs a model call).
+  const jugnuLimit = rateLimit(60, 60 * 60 * 1000);
+  app.post(ApiPath.JugnuTurn, bodyLimit({ maxSize: 512 * 1024 }), signedIn, isSetUp, async (c) => {
+    if (deps.jugnu === undefined)
+      throw new ApiFailure(503, ApiErrorCode.Unavailable, "Jugnu isn't on this server");
+    const turn = parse(jugnuTurnRequestSchema, await readJson(c));
+    const account = c.get("account").id;
+    // Only a built board (its path is a file under the content).
+    const isBoard =
+      deps.contentDir !== undefined &&
+      !turn.board.includes("..") &&
+      existsSync(joinPath(deps.contentDir, builtFile(turn.board)));
+    if (!isBoard) throw new ApiFailure(400, ApiErrorCode.BadRequest, "no such board");
+    if (!jugnuLimit.take(account, now()))
+      throw new ApiFailure(429, ApiErrorCode.TooMany, "Jugnu needs a rest: try again later");
+    try {
+      // One account's sessions are its own.
+      return c.json(await deps.jugnu({ ...turn, session: `${account}:${turn.session}` }));
+    } catch (error) {
+      if (error instanceof Error && error.message.startsWith("Jugnu is still answering"))
+        throw new ApiFailure(409, ApiErrorCode.Busy, error.message);
+      throw error;
+    }
+  });
 
   app.get(ApiPath.Health, async (c) => {
     await db.execute(sql`select 1`);

@@ -16,6 +16,7 @@ export const ApiPath = {
   Groups: "/api/groups",
   Progress: "/api/progress",
   Health: "/api/health",
+  JugnuTurn: "/api/jugnu/turn",
 } as const;
 
 /** One group's routes. */
@@ -59,6 +60,31 @@ export const eventsRequestSchema = z
   .object({ events: z.array(z.unknown()).min(1).max(EVENTS_PER_BATCH) })
   .strict();
 export type EventsRequest = z.infer<typeof eventsRequestSchema>;
+
+/**
+ * One turn of Jugnu (platform/docs/plans/jugnu-live.md): the board (a built item's path), its state
+ * now, what the student did since his last reply (as steps), and what they said.
+ */
+export const jugnuTurnRequestSchema = z.object({
+  session: z.string().min(1).max(100),
+  board: z
+    .string()
+    .max(300)
+    .regex(/^[a-z0-9][a-z0-9/_-]*$/i),
+  state: z.record(z.unknown()),
+  did: z.array(z.record(z.unknown())).max(200),
+  said: z.string().max(2000),
+});
+export type JugnuTurnRequest = z.infer<typeof jugnuTurnRequestSchema>;
+
+/** Jugnu's reply. */
+export type JugnuTurnReply = {
+  says: string;
+  glow: string | null;
+  choices: string[];
+  isHandBack: boolean;
+  model: string;
+};
 
 // ---- replies ----
 
@@ -141,6 +167,10 @@ export const ApiErrorCode = {
   UnknownCourse: "unknownCourse",
   NotFound: "notFound",
   TooMany: "tooMany",
+  /** Jugnu is still answering this session's last message. */
+  Busy: "busy",
+  /** Jugnu isn't on this server (no model set up). */
+  Unavailable: "unavailable",
 } as const;
 export type ApiErrorCode = (typeof ApiErrorCode)[keyof typeof ApiErrorCode];
 

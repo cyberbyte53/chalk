@@ -39,6 +39,12 @@ const app = createApp({
   courseIds: new Set(index.books.map((book) => book.id)),
   staticDir: config.STATIC_DIR,
   contentDir,
+  // The committed Jugnu, when this server has a model set up (JUGNU_PROVIDER); loaded on his
+  // first turn, so the server starts without the boards' code.
+  jugnu:
+    process.env.JUGNU_PROVIDER === undefined
+      ? undefined
+      : async (turn) => (await import("@chalk/studio/jugnu")).liveTurn(turn as never),
 });
 
 const server = serve({ fetch: app.fetch, port: config.PORT }, ({ port }) =>

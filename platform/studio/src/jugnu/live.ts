@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type { RuntimeState } from "@chalk/player";
 import { type Step, restored } from "./cases";
@@ -47,10 +48,12 @@ type Session = {
 const sessions = new Map<string, Session>();
 const lessons = new Map<string, string>();
 const HOUR = 60 * 60 * 1000;
+// The repo's .env, on a laptop; on chalk1 the keys are already in the environment (compose).
+const envFile = join(root, ".env");
+if (existsSync(envFile)) process.loadEnvFile(envFile);
 
 /** One turn of the committed Jugnu for a live student. */
 export async function liveTurn(t: LiveTurn): Promise<LiveReply> {
-  process.loadEnvFile(join(root, ".env"));
   for (const [key, s] of sessions) if (Date.now() - s.at > HOUR) sessions.delete(key);
   const session = sessions.get(t.session) ?? {
     conversation: newConversation(),
@@ -63,8 +66,9 @@ export async function liveTurn(t: LiveTurn): Promise<LiveReply> {
   session.isBusy = true;
   session.at = Date.now();
   sessions.set(t.session, session);
-  const board = await restored(t.board, t.state);
+  let board: Awaited<ReturnType<typeof restored>> | undefined;
   try {
+    board = await restored(t.board, t.state);
     const committed = committedJugnu();
     const model = modelOf(
       settingsForChoice({ provider: committed.provider as never, id: committed.model }),
@@ -99,6 +103,6 @@ export async function liveTurn(t: LiveTurn): Promise<LiveReply> {
     };
   } finally {
     session.isBusy = false;
-    board.dispose();
+    board?.dispose();
   }
 }

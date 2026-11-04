@@ -418,6 +418,53 @@ describe("server", () => {
     expect(list.headers.get("cache-control")).toBe("no-cache");
   });
 
+  it("asks Jugnu for one signed-in person's turn, on a built board only", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "chalk-content-"));
+    mkdirSync(join(dir, "book", "chapter"), { recursive: true });
+    writeFileSync(join(dir, "book", "chapter", "ask.json"), '{"kind":"question"}');
+    const asked: string[] = [];
+    const served = make({
+      contentDir: dir,
+      jugnu: async (turn) => {
+        asked.push(turn.session);
+        return {
+          says: `heard: ${turn.said}`,
+          glow: null,
+          choices: [],
+          isHandBack: false,
+          model: "m",
+        };
+      },
+    });
+    const turn = { session: "s1", board: "book/chapter/ask", state: {}, did: [], said: "why?" };
+    const stranger = new Phone(served);
+    expect(await stranger.error("POST", ApiPath.JugnuTurn, turn)).toEqual([
+      401,
+      ApiErrorCode.NotSignedIn,
+    ]);
+    const learner = new Phone(served);
+    await learner.signIn("l1", "Priya");
+    await learner.json("POST", ApiPath.Setup, { name: "Priya", schoolCode, role: Role.Learner });
+    expect(await learner.json("POST", ApiPath.JugnuTurn, turn)).toMatchObject({
+      says: "heard: why?",
+    });
+    // Each account's sessions are its own.
+    expect(asked[0]).toMatch(/:s1$/);
+    expect(asked[0]).not.toBe("s1");
+    for (const board of ["book/chapter/missing", "../secret", "book/../x"])
+      expect(await learner.error("POST", ApiPath.JugnuTurn, { ...turn, board })).toEqual([
+        400,
+        ApiErrorCode.BadRequest,
+      ]);
+    // Without a model set up, he isn't there.
+    const none = new Phone(make({ contentDir: dir }));
+    await none.signIn("l1", "Priya");
+    expect(await none.error("POST", ApiPath.JugnuTurn, turn)).toEqual([
+      503,
+      ApiErrorCode.Unavailable,
+    ]);
+  });
+
   it("answers health checks", async () => {
     expect(await new Phone(app).json("GET", ApiPath.Health)).toEqual({
       ok: true,

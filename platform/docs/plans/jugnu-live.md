@@ -37,3 +37,19 @@ Hindi replies; voice; the teacher's view of chats.
 2. The preview's question boards play live with the chat. Check: on the laptop and on the phone
    (Wi-Fi), a wrong answer, Get help, a reply, a question typed, a hand-back.
 3. chalk1. Check: the same on the phone over the internet, signed in.
+
+## Step 3, chalk1 (2026-11-04)
+
+- **Server**: `POST /api/jugnu/turn` in `apps/server` (app.ts), behind `signedIn` and `isSetUp`,
+  at most 60 turns an hour per account (`rateLimit`), the same body as the dev endpoint. The
+  session is prefixed by the account id (one account can't continue another's). The turn itself is
+  injected (`AppDeps.jugnu`, from main.ts: `liveTurn` from `@chalk/studio/jugnu`), so the app's
+  tests need no model; unset, the route answers 503.
+- **Studio**: `package.json` exports `./jugnu` (live.ts); live.ts reads the repo's `.env` only if
+  there is one (on the box the keys come from compose's `env_file`).
+- **App**: `askJugnu` posts to `/api/jugnu/turn` when built, `/dev-jugnu/turn` in development;
+  `app.tsx`'s LessonPlayer gets `askJugnu` (lessons and practice, as Play does).
+- **Keys**: the `JUGNU_*` lines from the Mac's `.env` appended to the box's `.env` over ssh, never
+  printed. The image already has the built content and `prompts/`.
+- **Check**: tests and typecheck; `pnpm ship`; `/api/health` names the commit; on the phone, signed
+  in, a lesson: his reply, spoken; the mic (https).
