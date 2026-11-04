@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import type { Keeper } from "@chalk/studio/jugnu-conversations";
 import { and, asc, count, eq, isNull, lt } from "drizzle-orm";
 import type { Db } from "./db";
 import {
@@ -279,4 +280,31 @@ export async function keepReflection(
     if (made === undefined) throw new Error("Couldn't keep the reflection");
     return made.id;
   });
+}
+
+/** The server's keeper of Jugnu's conversations (studio's conversations.ts): this database. */
+export function dbKeeper(db: Db): Keeper {
+  const placeOf = (p: Parameters<Keeper["going"]>[0]): TurnPlace => ({
+    accountId: p.account,
+    opening: p.opening,
+    board: p.board,
+    version: p.version,
+    commit: p.commit,
+  });
+  return {
+    going: async (place) => {
+      const found = await openConversation(db, placeOf(place));
+      return found === undefined ? undefined : { id: found.id, conversation: found.kept as never };
+    },
+    keepTurn: (place, going, done, at) => keepTurn(db, placeOf(place), going, done as never, at),
+    endQuiet: (before, at) => endQuiet(db, before, at),
+    toReflectOn: async (id) => {
+      const found = await conversationById(db, id);
+      if (found === undefined || found.endedAt === null || (await hasReflection(db, id)))
+        return undefined;
+      // His board isn't needed once it is over (a try is answered "it is over").
+      return { conversation: found.kept as never, boardPath: "" };
+    },
+    keepReflection: (id, before, done, at) => keepReflection(db, id, before, done as never, at),
+  };
 }

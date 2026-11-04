@@ -51,14 +51,9 @@ const app = createApp({
       ? undefined
       : {
           quietMs: jugnuSettings.reflectAfterMinutes * 60_000,
-          turn: async (turn, going) => {
-            const { liveTurn } = await import("@chalk/studio/jugnu");
-            return liveTurn(turn as never, going as never);
-          },
-          reflect: async (conversation) => {
-            const { liveReflect } = await import("@chalk/studio/jugnu");
-            return liveReflect(conversation as never, "");
-          },
+          turn: async (turn, going) => (await import("@chalk/studio/jugnu")).liveTurn(turn, going),
+          reflect: async (conversation, boardPath) =>
+            (await import("@chalk/studio/jugnu")).liveReflect(conversation, boardPath),
         },
 });
 

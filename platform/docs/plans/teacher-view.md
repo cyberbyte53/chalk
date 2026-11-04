@@ -67,6 +67,23 @@ Not decided, not built in: how points map to concepts, and how judgements become
 0 to 2 keep what those will need. Not now: Jugnu remembering a child across conversations (it will
 read the same layers).
 
+## One flow; the preview's gap
+
+Jugnu's conversations go by one flow, written once (`studio/src/jugnu/conversations.ts`): a turn
+goes on with the conversation going on at its opening, is taken and kept; a conversation is over
+`reflectAfterMinutes` after his last turn; then he reflects on it, once. Where it runs (chalk1,
+the server on the laptop, the dev service) is only an address. What differs from a child's phone,
+each for a reason, and nothing else:
+
+1. **Where it is kept**: the server keeps it in its database (the raw record, for good); the
+   preview keeps it in memory (testing his behaviour writes nothing; gone with the service).
+   What the preview holds is at `/dev-jugnu/held`.
+2. **Who**: on the server, the signed-in child; in the preview, `preview` (no child).
+3. **The commit**: the server's build; the preview's tree (`+changes` when it has uncommitted ones).
+4. **Sign-in and the hourly limit**: the server's only (the preview is the person's own).
+5. **Not yet one flow, to be: the sandbox** (simulated children) still runs his turns itself and
+   keeps its own runs (`.chalk-runs`); it joins the flow with the demo class (step 5).
+
 ## Working state (not raw)
 
 The server holds no conversation in memory: each turn, the route loads the conversation (its

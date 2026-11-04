@@ -25,7 +25,6 @@ import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { type AppDeps, SIGN_IN_COOKIE, type ServerLog, createApp, isLanOrigin } from "./app";
 import { type Db, MIGRATIONS } from "./db";
 import type { GoogleVerifier } from "./google";
-import type { KeptConversation } from "./jugnu-store";
 import {
   ConversationEnd,
   GotThere,
@@ -437,8 +436,11 @@ describe("server", () => {
       '{"kind":"question","id":"b1","version":"v1"}',
     );
     const QUIET_MS = 5 * 60 * 1000;
-    const given: (KeptConversation | undefined)[] = [];
-    const reflected: KeptConversation[] = [];
+    const given: (
+      | { messages: unknown[]; cursor: unknown; prompt: { text: string } }
+      | undefined
+    )[] = [];
+    const reflected: { messages: unknown[]; cursor: unknown }[] = [];
     const settled = () => new Promise((r) => setTimeout(r, 100));
     const served = make({
       contentDir: dir,
@@ -470,7 +472,7 @@ describe("server", () => {
             added,
             requests: [{ ms: 1 }],
             ms: 5,
-          };
+          } as never;
         },
         reflect: async (conversation) => {
           reflected.push(conversation);
@@ -485,7 +487,7 @@ describe("server", () => {
             ],
             requests: [{ ms: 2 }],
             ms: 3,
-          };
+          } as never;
         },
       },
     });

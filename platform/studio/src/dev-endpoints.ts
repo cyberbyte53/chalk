@@ -1,4 +1,6 @@
+import { readFileSync } from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { join } from "node:path";
 import {
   type Change,
   Role,
@@ -124,28 +126,83 @@ export async function pipelineEndpoint(
  * POST `{case, student, note}` starts a run and answers its id at once; the run goes on by itself,
  * kept after every turn, so the page follows it by its id. The preview's ?dev&jugnu shows them.
  */
-/** Development's keeper of live conversations, by the board's opening (the server's is its database). */
-const devConversations = new Map<string, import("./jugnu/live").LiveConversation>();
-const devBusy = new Set<string>();
+/**
+ * The preview's Jugnu: the one flow (jugnu/conversations.ts), kept in memory. What differs from a
+ * child's phone, and why, is listed in platform/docs/plans/teacher-view.md ("The preview's gap").
+ */
+let previewTalks: import("./jugnu/conversations").Conversations | undefined;
+let previewKept: ReturnType<typeof import("./jugnu/conversations").memoryKeeper> | undefined;
+async function previewJugnu() {
+  if (previewTalks !== undefined && previewKept !== undefined)
+    return { talks: previewTalks, kept: previewKept };
+  const { conversations, memoryKeeper } = await import("./jugnu/conversations");
+  const { liveTurn, liveReflect } = await import("./jugnu/live");
+  const { committedJugnu } = await import("./jugnu/prompts");
+  const kept = memoryKeeper();
+  const quietMs = committedJugnu().reflectAfterMinutes * 60_000;
+  const talks = conversations({
+    keeper: kept,
+    jugnu: { turn: liveTurn, reflect: liveReflect },
+    quietMs,
+    now: Date.now,
+    onError: (message, error) => console.error(message, error),
+  });
+  setInterval(() => void talks.sweep(), Math.max(1000, quietMs / 5)).unref();
+  previewTalks = talks;
+  previewKept = kept;
+  return { talks, kept };
+}
 
 export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): Promise<void> {
   try {
     const dialogue = await import("./jugnu/dialogue");
     // A live student's turn with the committed Jugnu (jugnu/live.ts): the preview's boards.
+    // What the preview's conversations hold (his reflections among them), to look at.
+    if (req.method === "GET" && (req.url ?? "").startsWith("/dev-jugnu/held")) {
+      const { kept } = await previewJugnu();
+      send(
+        res,
+        200,
+        [...kept.held].map(([id, c]) => ({
+          id,
+          board: c.place.boardPath,
+          turns: c.turns,
+          lastTurnAt: c.lastTurnAt,
+          endedAt: c.endedAt,
+          reflections: c.reflections.map((r) => ({
+            at: r.at,
+            points: r.points,
+            gotThere: r.gotThere,
+            prompt: `${r.prompt.name}@${r.prompt.hash}`,
+            model: r.model,
+          })),
+        })),
+      );
+      return;
+    }
     if (req.method === "POST" && (req.url ?? "").startsWith("/dev-jugnu/turn")) {
-      const { liveTurn } = await import("./jugnu/live");
       const turn = JSON.parse(await bodyOf(req)) as import("./jugnu/live").LiveTurn;
-      // In development the conversations are kept here, in memory (the server keeps them for good).
-      if (devBusy.has(turn.session)) throw new Error("Jugnu is still answering the last message");
-      devBusy.add(turn.session);
-      try {
-        const done = await liveTurn(turn, devConversations.get(turn.session));
-        if (done.reply.isHandBack) devConversations.delete(turn.session);
-        else devConversations.set(turn.session, done.conversation);
-        send(res, 200, done.reply);
-      } finally {
-        devBusy.delete(turn.session);
-      }
+      const { talks } = await previewJugnu();
+      const { commitNow, root } = await import("./jugnu/sees");
+      const built = JSON.parse(readFileSync(join(root, "build", `${turn.board}.json`), "utf8")) as {
+        id: string;
+        version: string;
+      };
+      send(
+        res,
+        200,
+        await talks.turn(
+          {
+            account: "preview",
+            opening: turn.session,
+            board: built.id,
+            version: built.version,
+            commit: commitNow(),
+            boardPath: turn.board,
+          },
+          turn,
+        ),
+      );
       return;
     }
     if (req.method === "POST") {

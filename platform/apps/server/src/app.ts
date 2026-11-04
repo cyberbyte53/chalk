@@ -6,8 +6,6 @@ import {
   ApiErrorCode,
   ApiPath,
   type EventsReply,
-  type JugnuTurnReply,
-  type JugnuTurnRequest,
   Role,
   eventsRequestSchema,
   isJoinCode,
@@ -21,6 +19,7 @@ import {
 } from "@chalk/api";
 import { type Board, type ChalkEvent, type ItemRef, builtFile, eventSchema } from "@chalk/content";
 import type { ConceptPlan } from "@chalk/learning";
+import { type Jugnu, StillAnswering, conversations } from "@chalk/studio/jugnu-conversations";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { sql } from "drizzle-orm";
 import { type Context, Hono, type MiddlewareHandler } from "hono";
@@ -30,17 +29,7 @@ import type { z } from "zod";
 import type { Db } from "./db";
 import { ApiFailure } from "./failure";
 import type { GoogleVerifier } from "./google";
-import {
-  type KeptConversation,
-  type ReflectionDone,
-  type TurnDone,
-  conversationById,
-  endQuiet,
-  hasReflection,
-  keepReflection,
-  keepTurn,
-  openConversation,
-} from "./jugnu-store";
+import { dbKeeper } from "./jugnu-store";
 import { type RateLimit, rateLimit } from "./rate-limit";
 import {
   type AccountRow,
@@ -91,22 +80,10 @@ export type AppDeps = {
   /** Where the server's log lines go; unset: the console (one JSON object per line for records). */
   log?: ServerLog;
   /**
-   * The committed Jugnu (the studio's live.ts); unset, he isn't on this server. One turn: given the
-   * conversation going on (none, the first time), his reply and what to keep.
+   * The committed Jugnu (the studio's live.ts: a turn, a reflection), and how long after his last
+   * turn a conversation is over (`jugnu.yaml`'s reflectAfterMinutes); unset, he isn't here.
    */
-  jugnu?: {
-    turn: (
-      turn: JugnuTurnRequest,
-      going: KeptConversation | undefined,
-    ) => Promise<TurnDone & { reply: JugnuTurnReply }>;
-    /** His reflection on a conversation that is over (the committed reflect prompt). */
-    reflect: (conversation: KeptConversation) => Promise<ReflectionDone>;
-    /**
-     * How long after his last turn a conversation is over, then reflected on (`jugnu.yaml`'s
-     * reflectAfterMinutes): the one rule for its end.
-     */
-    quietMs: number;
-  };
+  jugnu?: Jugnu & { quietMs: number };
 };
 
 /** The server's log: records, refusals and failures. */
@@ -357,38 +334,25 @@ export function createApp(deps: AppDeps): Hono<Env> {
   );
 
   // ---- Jugnu: one turn, for a signed-in person, at most 60 an hour each (a model call each) ----
-  // His side of each conversation is kept (jugnu-store.ts): found by the board's opening while it
-  // goes on, each turn appended. It is over a set time after his last turn (`quietMs`: checked
-  // often, and on each turn); then he reflects on it. Nothing of it goes back to the phone but his reply
-  // and its ids.
+  // His conversations go by the one flow (the studio's conversations.ts), kept in this database:
+  // a conversation is over `quietMs` after his last turn, then he reflects on it. Nothing of it
+  // goes back to the phone but his reply and its ids.
   const jugnuLimit = rateLimit(60, 60 * 60 * 1000);
-  // One turn at a time per opening (working state: a turn in flight).
-  const answering = new Set<string>();
-  // Once a conversation is over, he reflects on it (once; its record goes on from where it ended).
-  const reflectOn = async (id: string) => {
-    if (deps.jugnu === undefined) return;
-    try {
-      const found = await conversationById(db, id);
-      if (found === undefined || found.endedAt === null || (await hasReflection(db, id))) return;
-      const done = await deps.jugnu.reflect(found.kept);
-      await keepReflection(db, id, found.kept.messages.length, done, now());
-    } catch (error) {
-      log.error(`Jugnu's reflection on ${id} failed`, error);
-    }
-  };
-  const endQuietOnes = async () => {
-    try {
-      if (deps.jugnu === undefined) return;
-      for (const id of await endQuiet(db, now() - deps.jugnu.quietMs, now())) void reflectOn(id);
-    } catch (error) {
-      log.error("Ending quiet conversations failed", error);
-    }
-  };
+  const talks =
+    deps.jugnu === undefined
+      ? undefined
+      : conversations({
+          keeper: dbKeeper(db),
+          jugnu: deps.jugnu,
+          quietMs: deps.jugnu.quietMs,
+          now,
+          onError: (message, error) => log.error(message, error),
+        });
   // Checked often enough that a conversation is over close to its time (a fifth of it).
-  if (deps.jugnu !== undefined)
-    setInterval(() => void endQuietOnes(), Math.max(1000, deps.jugnu.quietMs / 5)).unref();
+  if (talks !== undefined && deps.jugnu !== undefined)
+    setInterval(() => void talks.sweep(), Math.max(1000, deps.jugnu.quietMs / 5)).unref();
   app.post(ApiPath.JugnuTurn, bodyLimit({ maxSize: 512 * 1024 }), signedIn, isSetUp, async (c) => {
-    if (deps.jugnu === undefined)
+    if (talks === undefined)
       throw new ApiFailure(503, ApiErrorCode.Unavailable, "Jugnu isn't on this server");
     const turn = parse(jugnuTurnRequestSchema, await readJson(c));
     const account = c.get("account").id;
@@ -404,25 +368,20 @@ export function createApp(deps: AppDeps): Hono<Env> {
       throw new ApiFailure(400, ApiErrorCode.BadRequest, "not a board");
     if (!jugnuLimit.take(account, now()))
       throw new ApiFailure(429, ApiErrorCode.TooMany, "Jugnu needs a rest: try again later");
-    const key = `${account}:${turn.session}`;
-    if (answering.has(key))
-      throw new ApiFailure(409, ApiErrorCode.Busy, "Jugnu is still answering the last message");
-    answering.add(key);
     try {
-      await endQuietOnes();
       const place = {
-        accountId: account,
+        account,
         opening: turn.session,
         board: built.id,
         version: built.version,
         commit: deps.commit ?? "unknown",
+        boardPath: turn.board,
       };
-      const going = await openConversation(db, place);
-      const done = await deps.jugnu.turn(turn, going?.kept);
-      const ids = await keepTurn(db, place, going?.id, done, now());
-      return c.json({ ...done.reply, ...ids });
-    } finally {
-      answering.delete(key);
+      return c.json(await talks.turn(place, turn as never));
+    } catch (error) {
+      if (error instanceof StillAnswering)
+        throw new ApiFailure(409, ApiErrorCode.Busy, error.message);
+      throw error;
     }
   });
 
