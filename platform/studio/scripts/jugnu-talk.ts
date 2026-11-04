@@ -24,9 +24,11 @@ for (const t of d.turns) {
       console.log(
         `  [she does] ${t.did.map((s) => `${s.prop}.${s.action}${s.args ? JSON.stringify(s.args) : ""}`).join(" → ")}`,
       );
-    console.log(`HER: ${t.says}${t.isRight ? "   ✓ RIGHT" : ""}\n`);
+    console.log(
+      `${t.transfer ? "HER, ALONE ON THE NEXT QUESTION" : "HER"}: ${t.says}${t.isRight ? "   ✓ RIGHT" : ""}${t.isLeaving ? "   (SHE LEAVES)" : ""}\n`,
+    );
   }
 }
 console.log(
-  `${d.isRight ? "She got it." : "Not solved."} ${d.models.jugnu} / ${d.models.student}: ${(d.usage.ms / 1000).toFixed(1)} s, ${d.usage.input} in, ${d.usage.output} out`,
+  `${d.isRight ? "Her question right." : d.isLeft ? "She left." : "Not solved."}${d.transfer ? (d.transfer.isRight ? " Next one alone: RIGHT." : " Next one alone: WRONG.") : ""} ${d.models.jugnu} / ${d.models.student}: ${(d.usage.ms / 1000).toFixed(1)} s, ${d.usage.input} in, ${d.usage.output} out`,
 );

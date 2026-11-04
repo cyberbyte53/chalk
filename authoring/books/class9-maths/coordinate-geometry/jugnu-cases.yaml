@@ -17,6 +17,12 @@
     - { prop: ask, action: check }
   asks: "Why is it wrong?"
   about: "She took the bus to +3: minus stops are on the other side of the stand, to the left."
+  # Held out: never tuned on; run with the same instructions as the case tuned on (jugnu-agent.md).
+  next: class9-maths/coordinate-geometry/questions/bus-to-stop/84ee6db6
+  students:
+    - name: minus-same-way
+      believes: "A minus sign doesn't change which way you go: stop −3 is 3 stops from the stand, the same way as stop 3, to the right. The minus is just part of how the stop is written; you count the stops and don't read the signs as directions."
+      knows: "The bus starts at the stand, 0, and moves one stop at a time, left or right; you count stops from the stand."
 
 - name: bus-one-short
   board: class9-maths/coordinate-geometry/questions/bus-to-stop/6b9180ad
@@ -160,15 +166,22 @@
     - { prop: ask, action: check }
   asks: "Why is it wrong?"
   about: "She plotted (4, −2) for (−2, 4): go along the x-axis by the first number, then up by the second."
+  # The next question of the same kind, which she does alone once her own is right (dialogue.ts).
+  next: class9-maths/coordinate-geometry/questions/plot-the-point/ee12460d
+  # Each child: her one belief, and what else she knows (never the thing she gets wrong).
   students:
     - name: up-first
       believes: "In a pair like (−2, 4), the first number tells you how far to go up or down, and the second how far to go along."
+      knows: "The x-axis is the flat left-right line and the y-axis the up-down one; O is where they cross; right is plus and left is minus along the x-axis, up is plus and down is minus along the y-axis."
     - name: axes-mixed
       believes: "The first number goes along the x-axis, but the x-axis is the line going up and down; the y-axis is the flat one."
+      knows: "O is where the two lines cross; the first number of a pair goes on the x-axis and the second on the y-axis; along a line, right and up are plus, left and down are minus."
     - name: minus-is-down
       believes: "Order is: first along, then up. But a minus number always means go down, and a plus number means go right or up."
+      knows: "The x-axis is the flat left-right line and the y-axis the up-down one; O is where they cross; the first number of a pair goes along the x-axis, the second up or down."
     - name: just-a-slip
       believes: "You know it well: the first number is along the x-axis (left for minus, right for plus), the second up or down. You dragged the dot carelessly, without reading the pair again."
+      knows: "The x-axis is the flat left-right line and the y-axis the up-down one; O is where they cross."
 
 - name: plot-sign
   board: class9-maths/coordinate-geometry/questions/plot-the-point/54c4e72e

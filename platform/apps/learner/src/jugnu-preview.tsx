@@ -50,6 +50,8 @@ type HerTurn = {
   says: string;
   stepsSoFar: Step[];
   isRight: boolean;
+  isLeaving?: boolean;
+  transfer?: { board: string };
 };
 type Dialogue = {
   id: string;
@@ -58,8 +60,11 @@ type Dialogue = {
   student: { name: string; believes: string };
   models: { jugnu: string; student: string };
   instructions: { jugnu: string; student: string };
+  lesson?: string;
   turns: (JugnuTurn | HerTurn)[];
   isRight: boolean;
+  transfer?: { board: string; isRight: boolean } | null;
+  isLeft?: boolean;
   usage: { ms: number; input: number; output: number };
 };
 type Listed = { id: string; note: string; isRight: boolean; turns: number };
@@ -164,6 +169,12 @@ function Turn({
             ))}
           </div>
         )}
+        {!isJugnu && turn.transfer !== undefined && (
+          <p class="jg-diag">
+            <b>Alone, the next question</b> (Jugnu gone): {turn.isRight ? "right ✓" : "wrong ✗"}
+          </p>
+        )}
+        {!isJugnu && turn.isLeaving === true && <p class="jg-problem">She leaves.</p>}
         {!isJugnu && turn.did.length > 0 && (
           <p class="jg-small">
             <b>She does on her board:</b> {stepText(turn.did)}
@@ -172,7 +183,7 @@ function Turn({
         )}
         {showsBoard && (
           <BoardAt
-            path={one.board}
+            path={!isJugnu && turn.transfer !== undefined ? turn.transfer.board : one.board}
             steps={stepsNow}
             pointed={isJugnu ? pointedOf(turn.glow) : undefined}
             width={300}
@@ -234,7 +245,15 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
         <p>
           <b>{run.case.name}</b> · child <b>{run.student.name}</b> · {run.models.jugnu} /{" "}
           {run.models.student} · {(run.usage.ms / 1000).toFixed(1)} s, {run.usage.input} in,{" "}
-          {run.usage.output} out · <b>{run.isRight ? "she got it" : "not solved"}</b>
+          {run.usage.output} out ·{" "}
+          <b>
+            {run.isRight ? "her question right" : run.isLeft === true ? "she left" : "not solved"}
+            {run.transfer == null
+              ? ""
+              : run.transfer.isRight
+                ? " · the next one alone: right"
+                : " · the next one alone: wrong"}
+          </b>
         </p>
         <p>
           <b>She believes</b> (hidden from Jugnu): {run.student.believes}
@@ -248,6 +267,12 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
           <summary>Jugnu's instructions</summary>
           <pre>{run.instructions.jugnu}</pre>
         </details>
+        {run.lesson !== undefined && (
+          <details>
+            <summary>The lesson, as Jugnu was given it ({run.lesson.length} characters)</summary>
+            <pre>{run.lesson}</pre>
+          </details>
+        )}
         <details>
           <summary>The child's instructions</summary>
           <pre>{run.instructions.student}</pre>
