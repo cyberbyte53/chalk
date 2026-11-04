@@ -31,7 +31,15 @@ import {
   segment,
   stampCodePaths,
 } from "@chalk/player";
-import { type JumpTo, onBoardRunning, toolClock, useWhenChanged } from "@chalk/player";
+import {
+  type JugnuAnswer,
+  type JugnuAsk,
+  type JumpTo,
+  PlayMode,
+  onBoardRunning,
+  toolClock,
+  useWhenChanged,
+} from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ZodTypeAny } from "zod";
@@ -620,6 +628,8 @@ export function PreviewBoard({
   const isScript = !new URLSearchParams(window.location.search).has("noscript");
   // A prop on its own page: what a lesson controls, beside it (prop-panel.tsx).
   const isProp = shown.path.startsWith(PROPS_ROOT);
+  // A question (questions/<family>/<id>), on its own and not a picture: Jugnu is there for it.
+  const isQuestion = !isShot && !isSilent && shown.path.includes("/questions/");
   const onClick = (e: MouseEvent) => {
     if (!e.altKey) return;
     const site = (e.target as HTMLElement).closest<HTMLElement>("[data-source]")?.dataset.source;
@@ -656,6 +666,10 @@ export function PreviewBoard({
             isPicture={isShot}
             isSilent={isSilent || isTimed}
             onRuntime={isProp ? setRuntime : undefined}
+            // A question plays as a student meets it in practice, with Jugnu there to talk to:
+            // the committed one (prompts/jugnu.yaml), asked of the studio's service.
+            mode={isQuestion ? PlayMode.Guided : undefined}
+            askJugnu={isQuestion ? askJugnu : undefined}
             onPass={() => {
               const w = window as Window & { __chalkPassed?: string[] };
               w.__chalkPassed ??= [];
@@ -675,6 +689,18 @@ export function PreviewBoard({
       </div>
     </section>
   );
+}
+
+/** One turn of the committed Jugnu, asked of the studio's service (dev; chalk1's server later). */
+async function askJugnu(turn: JugnuAsk): Promise<JugnuAnswer> {
+  const r = await fetch("/dev-jugnu/turn", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(turn),
+  });
+  const answer = (await r.json()) as JugnuAnswer | { error: string };
+  if (!r.ok || "error" in answer) throw new Error("error" in answer ? answer.error : r.statusText);
+  return answer;
 }
 
 /** The prop on its own page, started again from these fields: its address's `state`, as a tool moves. */

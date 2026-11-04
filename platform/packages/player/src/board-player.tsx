@@ -1,5 +1,5 @@
 /** @jsxImportSource preact */
-import { Actor, AppWhat, type Board, type Locale } from "@chalk/content";
+import { Actor, AppWhat, type Board, type EventEntry, type Locale } from "@chalk/content";
 import { type RecordEvent, makeId } from "@chalk/events";
 import {
   AnswerStatus,
@@ -14,13 +14,15 @@ import {
 } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { ChatState } from "./chat";
+import { ChatState, chatOf } from "./chat";
 import { JugnuChat, type JugnuChatProps, moodOf } from "./jugnu-chat";
 import { JugnuFigure } from "./jugnu-figure";
 import { Layout, type LayoutContext } from "./layout";
 import { type PlayMode, PlayModeContext, modePolicy } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
+import { boardPathOf } from "./recorder";
 import { recordBoard } from "./recorder";
+import { causesOf } from "./replay";
 import type { BoardRuntime } from "./runtime";
 import { useBoardSound } from "./sound/board-sound";
 import { isAudible, playSound } from "./sound/engine";
@@ -71,6 +73,34 @@ export type BoardPlayerProps = {
   pointed?: { prop: string; part?: string | undefined } | undefined;
   /** The chat with Jugnu, drawn in the bottom bar (jugnu-chat.tsx): the board stays live above it. */
   chat?: Omit<JugnuChatProps, "locale"> | undefined;
+  /**
+   * Jugnu, live (platform/docs/plans/jugnu-live.md): one turn of his, asked of the server. Given, a
+   * board played in a mode with him has his chat working: Get help, a tap on him, replies, Done.
+   */
+  askJugnu?: ((turn: JugnuAsk) => Promise<JugnuAnswer>) | undefined;
+};
+
+/** What a live board sends for Jugnu's turn: the board, its state, what the student did and said. */
+export type JugnuAsk = {
+  session: string;
+  board: string;
+  state: unknown;
+  did: { prop: string; action: string; args: Readonly<Record<string, unknown>> }[];
+  said: string;
+};
+/** His reply. */
+export type JugnuAnswer = {
+  says: string;
+  glow: string | null;
+  choices: string[];
+  isHandBack: boolean;
+  model: string;
+};
+
+/** A glow's address ("road/walker/walker") as the board's pointing: its piece, and the part in it. */
+const pointedOf = (glow: string): { prop: string; part?: string } => {
+  const [prop = "", ...rest] = glow.split("/");
+  return rest.length === 0 ? { prop } : { prop, part: rest.join("/") };
 };
 
 /**
@@ -119,6 +149,7 @@ function BoardPlay({
   onRuntime,
   pointed,
   chat,
+  askJugnu,
   isPicture = false,
   isInLesson = false,
   isSilent = false,
@@ -152,8 +183,18 @@ function BoardPlay({
   });
   useWhenChanged([runtime], () => onRuntime?.(runtime));
   // Everything that happens on the board is recorded; it opens before its first signal.
+  // What this opening records, kept here too: the live chat is drawn from it (chatOf).
+  const liveEvents = useRef<EventEntry[]>([]);
   const recorder = useMadeWhenChanged([runtime, record], () => {
-    const made = recordBoard(runtime, record, makeId());
+    liveEvents.current = [];
+    const made = recordBoard(
+      runtime,
+      (entry) => {
+        liveEvents.current.push(entry);
+        return record(entry);
+      },
+      makeId(),
+    );
     made.open({
       locale,
       wasPassed,
@@ -191,8 +232,12 @@ function BoardPlay({
     if (wasPassed) void runtime.call(BOARD, BoardAction.Pass, {}, Actor.App);
   }, [runtime, wasPassed]);
   // What Jugnu points at is kept in sight above the bar (and his chat in it).
-  const pointedProp = pointed?.prop;
-  const pointedKey = pointed === undefined ? undefined : `${pointed.prop}/${pointed.part ?? ""}`;
+  // What Jugnu points at: given (a run's moment), or his live reply's.
+  const [livePointed, setLivePointed] = useState<{ prop: string; part?: string } | undefined>();
+  const shownPointed = pointed ?? livePointed;
+  const pointedProp = shownPointed?.prop;
+  const pointedKey =
+    shownPointed === undefined ? undefined : `${shownPointed.prop}/${shownPointed.part ?? ""}`;
   const boardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (pointedProp !== undefined) inSight(pointedProp);
@@ -239,6 +284,77 @@ function BoardPlay({
     if (isSettled && !isPassed) void runtime.call(BOARD, BoardAction.Pass, {}, Actor.App);
   }, [runtime, isSettled, isPassed]);
 
+  // ---- Jugnu, live: his chat drawn from this opening's events, his turns asked of the server ----
+  const isLive = askJugnu !== undefined && policy?.hasJugnu === true && !isPicture;
+  const [, setLiveTick] = useState(0);
+  const [liveProblem, setLiveProblem] = useState<string | undefined>();
+  const [isOpenAgain, setOpenAgain] = useState(false);
+  const session = useMemo(() => (recorder === undefined ? "" : makeId()), [recorder]);
+  const lastReplyAt = useRef(0);
+  const sinceReply = () => liveEvents.current.slice(lastReplyAt.current);
+  const askHim = async (said: string) => {
+    setLiveTick((n) => n + 1);
+    setLiveProblem(undefined);
+    const did = causesOf(runtime, sinceReply(), boardPathOf(board))
+      .filter((c) => c.actor === Actor.Learner)
+      .map((c) => ({ prop: c.prop, action: c.action, args: c.args }));
+    try {
+      const r = await (askJugnu as (turn: JugnuAsk) => Promise<JugnuAnswer>)({
+        session,
+        board: boardPathOf(board),
+        state: runtime.state(),
+        did,
+        said,
+      });
+      recorder.jugnu({
+        asked: said,
+        reply: r.says,
+        steps: r.glow === null ? [] : [{ kind: "glow", part: r.glow }],
+        model: r.model,
+        ...(r.choices.length >= 2 ? { choices: r.choices.slice(0, 4) } : {}),
+        ...(r.isHandBack ? { isHandBack: true } : {}),
+      });
+      if (r.isHandBack) recorder.chat({ what: "closed", by: "handBack" });
+      lastReplyAt.current = liveEvents.current.length;
+      setLivePointed(r.glow === null ? undefined : pointedOf(r.glow));
+      setOpenAgain(false);
+    } catch {
+      setLiveProblem(t(locale, "jugnuUnreachable"));
+    }
+    setLiveTick((n) => n + 1);
+  };
+  const liveChat = isLive ? chatOf(liveEvents.current) : undefined;
+  const actsSinceReply = sinceReply().filter(
+    (e) => e.kind === "cause" && e.actor === Actor.Learner,
+  ).length;
+  const chatShown: Omit<JugnuChatProps, "locale"> | undefined =
+    chat ??
+    (liveChat === undefined
+      ? undefined
+      : {
+          chat: liveChat,
+          isOneLine:
+            actsSinceReply > 0 && liveChat.messages.at(-1)?.from === "jugnu" && !isOpenAgain,
+          onOpen: () => setOpenAgain(true),
+          onGetHelp: () => {
+            recorder.chat({ what: "opened", reason: "getHelp" });
+            void askHim("Why is it wrong?");
+          },
+          onAsk: () => {
+            recorder.chat({ what: "opened", reason: "ask" });
+            lastReplyAt.current = liveEvents.current.length;
+            setLiveTick((n) => n + 1);
+          },
+          onSay: (text, via) => {
+            recorder.chat({ what: "said", text, via });
+            void askHim(text);
+          },
+          onDone: () => {
+            recorder.chat({ what: "said", text: "", via: "done" });
+            void askHim("");
+          },
+          ...(liveProblem === undefined ? {} : { problem: liveProblem }),
+        });
   const context: LayoutContext = {
     locale,
     registry,
@@ -247,7 +363,7 @@ function BoardPlay({
     // Through the board: said in its turn, never over the line being said.
     onRetryAudio: (name) => void runtime.call(BOARD, "say", { line: name }, Actor.Learner),
     isPicture,
-    pointed,
+    pointed: shownPointed,
   };
 
   const banner =
@@ -255,8 +371,8 @@ function BoardPlay({
       ? undefined
       : result;
   // Jugnu is there in this mode, with a chat to show (live, or a run's): is it open?
-  const hasJugnu = policy?.hasJugnu === true && chat !== undefined;
-  const isChatClosed = chat === undefined || chat.chat.state === ChatState.Closed;
+  const hasJugnu = policy?.hasJugnu === true && chatShown !== undefined;
+  const isChatClosed = chatShown === undefined || chatShown.chat.state === ChatState.Closed;
   // When he points, a dot glides from his figure to the part, and its outline shows as it lands.
   const isGliding = useGlide(boardRef, hasJugnu ? pointedKey : undefined);
 
@@ -296,18 +412,18 @@ function BoardPlay({
           {/* Where Jugnu is there: his figure at the row's start, always (a tap asks him; on a
               wrong answer it is Get help), the board's button at its end, and the chat's sheet
               under them while it is open (no banner then: he is talking about it). */}
-          {hasJugnu && chat !== undefined && (
+          {hasJugnu && chatShown !== undefined && (
             <JugnuButton
               locale={locale}
-              chat={chat}
+              chat={chatShown}
               isGetHelp={isChatClosed && banner === AnswerStatus.Wrong}
             />
           )}
-          {hasJugnu && chat !== undefined && (
+          {hasJugnu && chatShown !== undefined && (
             <JugnuChat
               locale={locale}
-              {...chat}
-              onReplyFocus={() => pointed !== undefined && inSight(pointed.prop)}
+              {...chatShown}
+              onReplyFocus={() => shownPointed !== undefined && inSight(shownPointed.prop)}
             />
           )}
           {!(hasJugnu && !isChatClosed) && policy !== undefined && banner !== undefined && (

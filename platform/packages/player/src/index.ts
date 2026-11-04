@@ -1,4 +1,9 @@
-export { BoardPlayer, type BoardPlayerProps } from "./board-player";
+export {
+  BoardPlayer,
+  type BoardPlayerProps,
+  type JugnuAnswer,
+  type JugnuAsk,
+} from "./board-player";
 export { AnswerFeedback } from "./answer-feedback";
 export { useFitColumns } from "./fit-columns";
 export { useLayoutWhenChanged, useMadeWhenChanged, useWhenChanged } from "./when-changed";

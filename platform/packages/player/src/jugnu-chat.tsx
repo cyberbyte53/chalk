@@ -31,6 +31,8 @@ export type JugnuChatProps = {
   onGetHelp?: () => void;
   /** The bar's figure otherwise: open the chat to ask. */
   onAsk?: () => void;
+  /** He couldn't be reached: said in his place, in the chat. */
+  problem?: string;
 };
 
 /** What the student did on the board, in a few words ("step right ×3, check"). */
@@ -67,6 +69,7 @@ export function JugnuChat({
   onDone,
   onOpen,
   onReplyFocus,
+  problem,
 }: JugnuChatProps): JSX.Element | null {
   const [isEarlierShown, setEarlierShown] = useState(false);
   const [typed, setTyped] = useState("");
@@ -137,7 +140,8 @@ export function JugnuChat({
           </p>
         )
       )}
-      {isThinking && (
+      {problem !== undefined && <p class="jugnu-his is-problem">{problem}</p>}
+      {isThinking && problem === undefined && (
         <output class="jugnu-dots" aria-label={t(locale, "jugnuThinking")}>
           <i />
           <i />
