@@ -120,12 +120,19 @@ export async function pipelineEndpoint(
 /**
  * /dev-jugnu (jugnu/dialogue.ts): GET the cases and every run kept (`?board=<path>`: one board's);
  * `?show=<run>` one of them.
+ * POST `/dev-jugnu/turn` is a live student's turn with the committed Jugnu (jugnu/live.ts).
  * POST `{case, student, note}` starts a run and answers its id at once; the run goes on by itself,
  * kept after every turn, so the page follows it by its id. The preview's ?dev&jugnu shows them.
  */
 export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): Promise<void> {
   try {
     const dialogue = await import("./jugnu/dialogue");
+    // A live student's turn with the committed Jugnu (jugnu/live.ts): the preview's boards.
+    if (req.method === "POST" && (req.url ?? "").startsWith("/dev-jugnu/turn")) {
+      const { liveTurn } = await import("./jugnu/live");
+      send(res, 200, await liveTurn(JSON.parse(await bodyOf(req))));
+      return;
+    }
     if (req.method === "POST") {
       const b = JSON.parse((await bodyOf(req)) || "{}") as {
         case?: string;

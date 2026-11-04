@@ -17,7 +17,7 @@ import {
   settingsForChoice,
   settingsFrom,
 } from "./model";
-import { type Prompt, Seat, promptNames, promptOf } from "./prompts";
+import { type Prompt, Seat, committedJugnu, promptNames, promptOf } from "./prompts";
 import { changes, lessonOf, root, seen } from "./sees";
 
 /**
@@ -210,7 +210,13 @@ const promptName = (prefix: string): string => {
   return name === undefined || name === "" ? "baseline" : name;
 };
 
-/** A run's seats as chosen (a page's choice); a seat not chosen is the environment's. */
+/** The committed Jugnu (prompts/jugnu.yaml) as a seat: what the tutor's seat is when not chosen. */
+export const committedSeat = (): SeatChoice & { prompt: string } => {
+  const c = committedJugnu();
+  return { provider: c.provider as SeatChoice["provider"], id: c.model, prompt: c.prompt };
+};
+
+/** A run's seats as chosen (a page's choice); the tutor's not chosen is the committed Jugnu. */
 export type Seats = {
   tutor?: SeatChoice & { prompt?: string };
   student?: SeatChoice & { prompt?: string };
@@ -219,13 +225,13 @@ export type Seats = {
 /** What a page may choose for each seat, and what it gets when it chooses nothing. */
 export function seatOptions() {
   process.loadEnvFile(join(root, ".env"));
-  const tutor = settingsFrom("JUGNU", DEFAULT_MODEL);
+  const tutor = committedJugnu();
   const student = settingsFrom("JUGNU_STUDENT", DEFAULT_MODEL);
   return {
     models: offeredModels(),
     prompts: { tutor: promptNames(Seat.Tutor), student: promptNames(Seat.Student) },
     defaults: {
-      tutor: { provider: tutor.provider, id: tutor.id, prompt: promptName("JUGNU") },
+      tutor: { provider: tutor.provider, id: tutor.model, prompt: tutor.prompt },
       student: { provider: student.provider, id: student.id, prompt: promptName("JUGNU_STUDENT") },
     },
   };
@@ -273,17 +279,13 @@ export async function runDialogue(
   const student = (one.students ?? []).find((s) => s.name === studentName);
   if (student === undefined) throw new Error(`No student ${studentName} on ${caseName}`);
   process.loadEnvFile(join(root, ".env"));
-  const jugnu = modelOf(
-    seats.tutor === undefined
-      ? settingsFrom("JUGNU", DEFAULT_MODEL)
-      : settingsForChoice(seats.tutor),
-  );
+  const jugnu = modelOf(settingsForChoice(seats.tutor ?? committedSeat()));
   const child = modelOf(
     seats.student === undefined
       ? settingsFrom("JUGNU_STUDENT", DEFAULT_MODEL)
       : settingsForChoice(seats.student),
   );
-  const tutorPrompt: Prompt = promptOf(Seat.Tutor, seats.tutor?.prompt ?? promptName("JUGNU"));
+  const tutorPrompt: Prompt = promptOf(Seat.Tutor, seats.tutor?.prompt ?? committedJugnu().prompt);
   const studentPrompt: Prompt = promptOf(
     Seat.Student,
     seats.student?.prompt ?? promptName("JUGNU_STUDENT"),

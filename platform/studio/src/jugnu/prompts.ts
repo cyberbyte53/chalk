@@ -41,3 +41,14 @@ export function promptNames(seat: Seat): string[] {
         .sort()
     : [];
 }
+
+/** The committed Jugnu (`prompts/jugnu.yaml`): which model, and which tutor prompt. */
+export function committedJugnu(): { provider: string; model: string; prompt: string } {
+  const text = readFileSync(join(root, "platform/studio/prompts/jugnu.yaml"), "utf8");
+  const get = (key: string) => {
+    const v = new RegExp(`^${key}:\\s*(.+)$`, "m").exec(text)?.[1]?.trim();
+    if (v === undefined || v === "") throw new Error(`prompts/jugnu.yaml has no ${key}`);
+    return v;
+  };
+  return { provider: get("provider"), model: get("model"), prompt: get("prompt") };
+}
