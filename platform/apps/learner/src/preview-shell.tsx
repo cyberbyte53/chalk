@@ -1,4 +1,5 @@
 import {
+  Actor,
   type Board,
   Locale,
   type Piece,
@@ -47,7 +48,7 @@ import {
   toggleMuted,
   toggleParam,
 } from "./editor-link";
-import { askJugnu } from "./jugnu-ask";
+import { askJugnuInPreview } from "./jugnu-ask";
 import { courses } from "./lessons";
 import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
@@ -670,7 +671,7 @@ export function PreviewBoard({
             // A question plays as a student meets it in practice, with Jugnu there to talk to:
             // the committed one (prompts/jugnu.yaml), asked of the studio's service.
             mode={isQuestion ? PlayMode.Guided : undefined}
-            askJugnu={hasJugnu ? askJugnu : undefined}
+            askJugnu={hasJugnu ? askJugnuInPreview : undefined}
             onPass={() => {
               const w = window as Window & { __chalkPassed?: string[] };
               w.__chalkPassed ??= [];
@@ -1333,11 +1334,17 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     const heard = window as Window & { __chalkHeard?: () => unknown[] };
     heard.__chalkHeard = () => runningBoards().flatMap((runtime) => runtime.heard());
     // One of a piece's actions, as the lesson would call it (a prop on its own page has no lesson:
-    // the person or a tool stands in). Says what went wrong, or nothing.
+    // the person or a tool stands in), or, `asLearner`, as the child's own tap would (a tool
+    // playing a child). Says what went wrong, or nothing.
     const call = window as Window & {
-      __chalkCall?: (piece: string, action: string, args: unknown) => string | undefined;
+      __chalkCall?: (
+        piece: string,
+        action: string,
+        args: unknown,
+        asLearner?: boolean,
+      ) => string | undefined;
     };
-    call.__chalkCall = (piece, action, args) => {
+    call.__chalkCall = (piece, action, args, asLearner) => {
       const boards = runningBoards();
       if (boards.length !== 1) return `a call acts on one board; ${boards.length} are drawn`;
       const runtime = boards[0] as (typeof boards)[number];
@@ -1352,7 +1359,9 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
       const checked = ("args" in spec ? spec.args : spec.payload)?.safeParse(args);
       if (checked !== undefined && !checked.success)
         return `${action}: ${checked.error.issues.map((i: { path: (string | number)[]; message: string }) => `${i.path.join(".") || "args"}: ${i.message}`).join("; ")}`;
-      void runtime.call(piece, action, args).catch(() => {});
+      void runtime
+        .call(piece, action, args, asLearner === true ? Actor.Learner : Actor.Lesson)
+        .catch(() => {});
       return undefined;
     };
     // Every prop's page (its definition, written out: @chalk/player's prop-pages.ts), for the

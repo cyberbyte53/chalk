@@ -130,14 +130,21 @@ export async function pipelineEndpoint(
  * The preview's Jugnu: the one flow (jugnu/conversations.ts), kept in memory. What differs from a
  * child's phone, and why, is listed in platform/docs/plans/teacher-view.md ("The preview's gap").
  */
-let previewTalks: import("./jugnu/conversations").Conversations | undefined;
-let previewKept: ReturnType<typeof import("./jugnu/conversations").memoryKeeper> | undefined;
+let preview:
+  | {
+      talks: import("./jugnu/conversations").Conversations;
+      kept: ReturnType<typeof import("./jugnu/conversations").memoryKeeper>;
+      updates: import("./jugnu/sets").Sets;
+      setsKept: ReturnType<typeof import("./jugnu/sets").memorySetKeeper>;
+    }
+  | undefined;
 async function previewJugnu() {
-  if (previewTalks !== undefined && previewKept !== undefined)
-    return { talks: previewTalks, kept: previewKept };
+  if (preview !== undefined) return preview;
   const { conversations, memoryKeeper } = await import("./jugnu/conversations");
-  const { liveTurn, liveReflect } = await import("./jugnu/live");
-  const { committedJugnu } = await import("./jugnu/prompts");
+  const { sets, memorySetKeeper } = await import("./jugnu/sets");
+  const { liveTurn, liveReflect, liveJudge } = await import("./jugnu/live");
+  const { committedJugnu, promptOf, Seat } = await import("./jugnu/prompts");
+  const { root } = await import("./jugnu/sees");
   const kept = memoryKeeper();
   const quietMs = committedJugnu().reflectAfterMinutes * 60_000;
   const talks = conversations({
@@ -147,23 +154,56 @@ async function previewJugnu() {
     now: Date.now,
     onError: (message, error) => console.error(message, error),
   });
-  setInterval(() => void talks.sweep(), Math.max(1000, quietMs / 5)).unref();
-  previewTalks = talks;
-  previewKept = kept;
-  return { talks, kept };
+  const setsKept = memorySetKeeper(kept, join(root, "build"));
+  const updates = sets({
+    keeper: setsKept,
+    jugnu: { conversations: talks, judge: liveJudge },
+    promptHash: () => promptOf(Seat.Update, committedJugnu().update).hash,
+    now: Date.now,
+    onError: (message, error) => console.error(message, error),
+  });
+  setInterval(
+    () => void talks.sweep().then(() => updates.sweep()),
+    Math.max(1000, quietMs / 5),
+  ).unref();
+  preview = { talks, kept, updates, setsKept };
+  return preview;
 }
 
 export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): Promise<void> {
   try {
     const dialogue = await import("./jugnu/dialogue");
     // A live student's turn with the committed Jugnu (jugnu/live.ts): the preview's boards.
-    // What the preview's conversations hold (his reflections among them), to look at.
+    // The preview's events (its uploader, as a phone's to the server): kept in memory; a set
+    // finished is updated by the same flow.
+    if (req.method === "POST" && (req.url ?? "").startsWith("/dev-jugnu/events")) {
+      const { events } = JSON.parse(await bodyOf(req)) as {
+        events: import("@chalk/content").ChalkEvent[];
+      };
+      const p = await previewJugnu();
+      const list = p.setsKept.events.get("preview") ?? [];
+      const known = new Set(list.map((e) => e.id));
+      const fresh = events.filter((e) => !known.has(e.id));
+      p.setsKept.events.set("preview", [...list, ...fresh]);
+      for (const e of fresh)
+        if (e.kind === "set" && e.payload.what === "finished")
+          void p.updates.update("preview", e.payload.set);
+      send(res, 200, { saved: fresh.length, rejected: [] });
+      return;
+    }
+    // What the preview holds (his conversations and reflections, the updates), to look at.
     if (req.method === "GET" && (req.url ?? "").startsWith("/dev-jugnu/held")) {
-      const { kept } = await previewJugnu();
-      send(
-        res,
-        200,
-        [...kept.held].map(([id, c]) => ({
+      const { kept, setsKept } = await previewJugnu();
+      send(res, 200, {
+        updates: setsKept.updates.map((u) => ({
+          set: u.set,
+          at: u.at,
+          points: u.judged.points,
+          prompt: `${u.judged.prompt.name}@${u.judged.prompt.hash}`,
+          model: u.judged.model,
+        })),
+        mastery: setsKept.mastery.get("preview") ?? [],
+        conversations: [...kept.held].map(([id, c]) => ({
           id,
           board: c.place.boardPath,
           turns: c.turns,
@@ -177,7 +217,7 @@ export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): 
             model: r.model,
           })),
         })),
-      );
+      });
       return;
     }
     if (req.method === "POST" && (req.url ?? "").startsWith("/dev-jugnu/turn")) {

@@ -1,7 +1,15 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { type Attempt, type Mastery, masteryFrom } from "@chalk/learning";
-import type { Conversations } from "./conversations";
+import { type ChalkEvent, buildIndexSchema } from "@chalk/content";
+import {
+  type Attempt,
+  type Mastery,
+  attemptsFrom,
+  catalogueOf,
+  masteryFrom,
+  questionVersionsOf,
+} from "@chalk/learning";
+import type { Conversations, memoryKeeper } from "./conversations";
 import type { Prompt } from "./prompts";
 
 /**
@@ -175,4 +183,100 @@ export function questionFactsFrom(buildDir: string, boards: readonly string[]): 
       level: typeof item.level === "string" ? item.level : null,
     };
   });
+}
+
+/**
+ * A keeper of sets in memory: the preview's (teacher-view.md, the preview's gap). Its events are
+ * what the preview's uploader sent; its attempts are worked out from them as the server does; its
+ * reflections are the memory conversation keeper's.
+ */
+export function memorySetKeeper(
+  conversations: ReturnType<typeof memoryKeeper>,
+  buildDir: string,
+): SetKeeper & {
+  events: Map<string, ChalkEvent[]>;
+  mastery: Map<string, Mastery[]>;
+  updates: { account: string; set: string; at: number; judged: Judged }[];
+} {
+  const events = new Map<string, ChalkEvent[]>();
+  const kept = new Map<string, Mastery[]>();
+  const updates: { account: string; set: string; at: number; judged: Judged }[] = [];
+  const readBuilt = (path: string): unknown =>
+    JSON.parse(readFileSync(join(buildDir, `${path}.json`), "utf8"));
+  const catalogue = () =>
+    catalogueOf(questionVersionsOf(buildIndexSchema.parse(readBuilt("index")), readBuilt));
+  const setEntries = (account: string, set: string) =>
+    (events.get(account) ?? []).filter(
+      (e) => e.kind === "set" && (e.payload as { set?: string }).set === set,
+    );
+  return {
+    events,
+    mastery: kept,
+    updates,
+    toUpdate: async (promptHash) =>
+      [...events].flatMap(([account, list]) =>
+        list.flatMap((e) =>
+          e.kind === "set" &&
+          e.payload.what === "finished" &&
+          !updates.some(
+            (u) =>
+              u.account === account &&
+              u.set === e.payload.set &&
+              u.judged.prompt.hash === promptHash,
+          )
+            ? [{ account, set: e.payload.set }]
+            : [],
+        ),
+      ),
+    set: async (account, set) => {
+      const entries = setEntries(account, set);
+      const served = entries.find((e) => e.kind === "set" && e.payload.what === "served");
+      const finished = entries.find((e) => e.kind === "set" && e.payload.what === "finished");
+      if (served?.kind !== "set" || served.payload.what !== "served" || finished === undefined)
+        return undefined;
+      const openings = new Set(
+        (events.get(account) ?? []).flatMap((e) =>
+          e.kind === "open" && e.payload.set === set && e.opening !== null ? [e.opening] : [],
+        ),
+      );
+      return {
+        id: set,
+        by: served.payload.by,
+        questions: served.payload.questions,
+        finishedAt: finished.at,
+        openings: [...openings],
+      };
+    },
+    attempts: async (account) => attemptsFrom(events.get(account) ?? [], catalogue()),
+    reflectionsAt: async (account, openings) =>
+      [...conversations.held.values()].flatMap((c) =>
+        c.place.account === account && openings.includes(c.place.opening)
+          ? c.reflections.map((r) => ({
+              id: r.id,
+              board: c.place.board,
+              points: r.points,
+              gotThere: r.gotThere,
+            }))
+          : [],
+      ),
+    questionFacts: async (boards) => questionFactsFrom(buildDir, boards),
+    lastPoints: async (account) =>
+      [...updates].reverse().find((u) => u.account === account)?.judged.points ?? [],
+    keepMastery: async (account, rows) => {
+      kept.set(account, rows);
+    },
+    keepUpdate: async (u) => {
+      if (
+        updates.some(
+          (x) =>
+            x.account === u.account &&
+            x.set === u.set &&
+            x.judged.prompt.hash === u.judged.prompt.hash,
+        )
+      )
+        return "";
+      updates.push(u);
+      return `${u.account}:${u.set}`;
+    },
+  };
 }

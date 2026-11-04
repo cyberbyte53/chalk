@@ -1,4 +1,4 @@
-import { type MeReply, Role, meReplySchema, normalizeCode } from "@chalk/api";
+import { type EventsReply, type MeReply, Role, meReplySchema, normalizeCode } from "@chalk/api";
 import { Actor, type ChalkEvent, Locale } from "@chalk/content";
 import { createEventBus } from "@chalk/events";
 import { type Progress, isConceptDone, mergeProgress, progressSchema } from "@chalk/learning";
@@ -26,7 +26,7 @@ import { isPreviewAddress } from "./preview-address";
 import { PreviewShell } from "./preview-shell";
 import { settings } from "./settings";
 import { TeacherApp } from "./teacher-screens";
-import { type Uploader, deviceStore, startUploader } from "./uploader";
+import { type Uploader, deviceStore, memoryStore, startUploader } from "./uploader";
 
 /** One event channel for the whole run of the app; the uploader is one subscriber. */
 const bus = createEventBus({ commit: settings.commit });
@@ -186,6 +186,34 @@ export function App(): JSX.Element {
   const me = session.kind === "signedIn" ? session.me : undefined;
   const role = me?.account.role ?? null;
   const accountId = me?.account.id;
+
+  // The preview (teacher-view.md, the preview's gap): its events go by the same uploader, to the
+  // dev service's memory instead of the server; a finished set is sent at once (as the app sends
+  // when a lesson completes), so the same flow updates it.
+  useEffect(() => {
+    if (!isDevShell) return;
+    const preview = startUploader({
+      bus,
+      store: memoryStore(),
+      isAutomatic: true,
+      send: async (events) => {
+        const r = await fetch("/dev-jugnu/events", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ events }),
+        });
+        if (!r.ok) throw new Error(r.statusText);
+        return (await r.json()) as EventsReply;
+      },
+    });
+    const off = bus.subscribe((e) => {
+      if (e.kind === "set" && e.payload.what === "finished") void preview.flush();
+    });
+    return () => {
+      off();
+      preview.stop();
+    };
+  }, [isDevShell]);
 
   // Signed in: start uploading events, fetch progress, and act on a join link.
   useEffect(() => {

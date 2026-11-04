@@ -144,7 +144,7 @@ export function memoryKeeper(): Keeper & {
       lastTurnAt: number;
       endedAt: number | null;
       turns: number;
-      reflections: (LiveReflectionDone & { at: number })[];
+      reflections: (LiveReflectionDone & { id: string; at: number })[];
     }
   >;
 } {
@@ -156,7 +156,7 @@ export function memoryKeeper(): Keeper & {
       lastTurnAt: number;
       endedAt: number | null;
       turns: number;
-      reflections: (LiveReflectionDone & { at: number })[];
+      reflections: (LiveReflectionDone & { id: string; at: number })[];
     }
   >();
   let made = 0;
@@ -215,8 +215,10 @@ export function memoryKeeper(): Keeper & {
         : { conversation: c.conversation, boardPath: c.place.boardPath };
     },
     keepReflection: async (id, _before, done, at) => {
-      held.get(id)?.reflections.push({ ...done, at });
-      return `${id}.r`;
+      const c = held.get(id);
+      const made = `${id}.r${(c?.reflections.length ?? 0) + 1}`;
+      c?.reflections.push({ ...done, id: made, at });
+      return made;
     },
   };
 }
