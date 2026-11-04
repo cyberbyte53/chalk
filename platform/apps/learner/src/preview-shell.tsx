@@ -31,15 +31,7 @@ import {
   segment,
   stampCodePaths,
 } from "@chalk/player";
-import {
-  type JugnuAnswer,
-  type JugnuAsk,
-  type JumpTo,
-  PlayMode,
-  onBoardRunning,
-  toolClock,
-  useWhenChanged,
-} from "@chalk/player";
+import { type JumpTo, PlayMode, onBoardRunning, toolClock, useWhenChanged } from "@chalk/player";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { ZodTypeAny } from "zod";
@@ -55,6 +47,7 @@ import {
   toggleMuted,
   toggleParam,
 } from "./editor-link";
+import { askJugnu } from "./jugnu-ask";
 import { courses } from "./lessons";
 import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
@@ -689,18 +682,6 @@ export function PreviewBoard({
       </div>
     </section>
   );
-}
-
-/** One turn of the committed Jugnu, asked of the studio's service (dev; chalk1's server later). */
-async function askJugnu(turn: JugnuAsk): Promise<JugnuAnswer> {
-  const r = await fetch("/dev-jugnu/turn", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(turn),
-  });
-  const answer = (await r.json()) as JugnuAnswer | { error: string };
-  if (!r.ok || "error" in answer) throw new Error("error" in answer ? answer.error : r.statusText);
-  return answer;
 }
 
 /** The prop on its own page, started again from these fields: its address's `state`, as a tool moves. */

@@ -3,7 +3,7 @@ import type { Lesson, Locale } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
 import type { JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { BoardPlayer } from "./board-player";
+import { BoardPlayer, type BoardPlayerProps } from "./board-player";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { PlayMode } from "./play-mode";
 import type { PropRegistry } from "./prop-module";
@@ -31,6 +31,8 @@ export type LessonPlayerProps = {
    * what comes next itself; left out, the player shows "Lesson complete".
    */
   onComplete?: () => void;
+  /** Jugnu, live, on its boards played in a mode with him (board-player.tsx's askJugnu). */
+  askJugnu?: BoardPlayerProps["askJugnu"];
 };
 
 /** Plays a lesson board by board. The same player runs every kind of lesson. */
@@ -44,6 +46,7 @@ export function LessonPlayer({
   onBoard,
   onExit,
   onComplete,
+  askJugnu,
 }: LessonPlayerProps): JSX.Element {
   const [index, setIndex] = useState(startBoard);
   // The furthest board reached: every board before it has been passed.
@@ -118,6 +121,7 @@ export function LessonPlayer({
           onBack={index === 0 ? undefined : back}
           wasPassed={index < furthest}
           mode={mode}
+          askJugnu={askJugnu}
         />
       )}
     </div>

@@ -10,6 +10,7 @@ import type { ChapterContent } from "./content-store";
 import type { Course, CourseChapter } from "./course";
 import { ChapterScreen, currentConcept } from "./course-screens";
 import { toggleMuted, toggleParam } from "./editor-link";
+import { askJugnu } from "./jugnu-ask";
 import { courses, progressFromRecord } from "./lessons";
 import { ChapterDoneScreen, ResultScreen } from "./practice-screens";
 
@@ -133,6 +134,7 @@ export function PlayInApp({
                     key={`${lesson.id}-${locale}-${now.start}`}
                     lesson={lesson}
                     mode={now.part === "pages" ? PlayMode.Lesson : PlayMode.Guided}
+                    askJugnu={askJugnu}
                     registry={propLibrary}
                     locale={locale}
                     bus={bus}
