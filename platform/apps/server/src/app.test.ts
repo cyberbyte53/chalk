@@ -17,6 +17,7 @@ import {
 } from "@chalk/api";
 import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION, Level } from "@chalk/content";
 import { Band, type Progress } from "@chalk/learning";
+import { type UpdateInput, realEvidence } from "@chalk/studio/jugnu-sets";
 import { PGlite } from "@electric-sql/pglite";
 import { eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
@@ -32,6 +33,8 @@ import {
   jugnuMessages,
   jugnuReflections,
   jugnuTurns,
+  learnerUpdates,
+  mastery,
   schema,
   texts,
 } from "./schema";
@@ -119,6 +122,19 @@ function entry(id: string, at: number, more: Partial<ChalkEvent> = {}): ChalkEve
   } as ChalkEvent;
 }
 
+/** A set's entry (the lesson's, on no board). */
+const setEntry = (id: string, seq: number, payload: Record<string, unknown>): ChalkEvent =>
+  entry(id, 1000 + seq, {
+    seq,
+    actor: Actor.Lesson,
+    opening: null,
+    board: null,
+    version: null,
+    node: null,
+    kind: "set",
+    payload,
+  } as Partial<ChalkEvent>);
+
 /** A learner's signal on a board. */
 const signalOn = (
   id: string,
@@ -171,7 +187,7 @@ describe("server", () => {
   beforeEach(async () => {
     logged = { records: [], warnings: [], errors: [] };
     await db.execute(
-      sql`truncate jugnu_reflections, jugnu_messages, jugnu_turns, jugnu_conversations, texts, mastery, attempts, question_versions, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
+      sql`truncate learner_updates, jugnu_reflections, jugnu_messages, jugnu_turns, jugnu_conversations, texts, mastery, attempts, question_versions, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
     );
     schoolCode = await addSchool(db, "Sunrise Public School", counter());
     clock = Date.UTC(2026, 9, 15);
@@ -365,8 +381,26 @@ describe("server", () => {
     await learner.json("POST", ApiPath.Join, { code: group.joinCode });
     const view = await teacher.json<GroupReply>("GET", groupPath(group.id));
     expect(view.learners[0]?.progress).toEqual(progress);
+    // Mastery changes only when a set finishes: none yet, mid-set.
+    expect(view.learners[0]?.mastery).toEqual([]);
+    await learner.json("POST", ApiPath.Events, {
+      events: [
+        setEntry("s0", 9, {
+          what: "served",
+          set: "set1",
+          by: "lesson-practice",
+          questions: [
+            { board: "ask1", version: "v" },
+            { board: "ask2", version: "v" },
+          ],
+        }),
+        setEntry("s1", 10, { what: "finished", set: "set1" }),
+      ],
+    });
+    await new Promise((r) => setTimeout(r, 100));
+    const after = await teacher.json<GroupReply>("GET", groupPath(group.id));
     // Mastery: the first tries only (ask1 wrong, ask2 right), medium: Beta(2, 2).
-    expect(view.learners[0]?.mastery).toEqual([
+    expect(after.learners[0]?.mastery).toEqual([
       expect.objectContaining({ concept: "c1", estimate: 0.5, tries: 2, band: Band.Unsure }),
     ]);
   });
@@ -447,6 +481,14 @@ describe("server", () => {
       commit: "c1",
       jugnu: {
         quietMs: QUIET_MS,
+        judge: async () =>
+          ({
+            points: [],
+            prompt: { seat: "update", name: "u", hash: "uh", text: "u" },
+            model: "m/1",
+            requests: [],
+          }) as never,
+        updatePromptHash: () => "uh",
         turn: async (turn, going) => {
           given.push(going);
           const added = [
@@ -602,6 +644,143 @@ describe("server", () => {
     expect(await none.error("POST", ApiPath.JugnuTurn, turn)).toEqual([
       503,
       ApiErrorCode.Unavailable,
+    ]);
+  });
+
+  it("updates a learner once a set finishes: its conversations reflected on, then judged", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "chalk-content-"));
+    mkdirSync(join(dir, "book", "chapter"), { recursive: true });
+    writeFileSync(
+      join(dir, "book", "chapter", "ask.json"),
+      '{"kind":"question","id":"b1","version":"v1","tests":["c1"],"level":"easy"}',
+    );
+    writeFileSync(join(dir, "ids.json"), '{"b1":"book/chapter/ask"}');
+    await addQuestionVersions(db, [
+      { board: "b1", version: "v1", tests: ["c1"], level: Level.Easy },
+    ]);
+    const judged: UpdateInput[] = [];
+    let isJudgeDown = true;
+    const served = make({
+      contentDir: dir,
+      jugnu: {
+        quietMs: 5 * 60 * 1000,
+        turn: async (turn) =>
+          ({
+            reply: { says: "a question", glow: null, choices: [], isHandBack: false, model: "m/1" },
+            conversation: {
+              model: { provider: "m", id: "1" },
+              prompt: { seat: "tutor", name: "p", hash: "h", text: "the prompt" },
+              lesson: "the lesson",
+              messages: [{ role: "user", content: turn.said }],
+              cursor: {},
+            },
+            added: [{ role: "user", content: turn.said }],
+            requests: [],
+            ms: 1,
+          }) as never,
+        reflect: async () =>
+          ({
+            points: ["swaps the numbers"],
+            gotThere: GotThere.Partly,
+            prompt: { name: "r", hash: "rh", text: "the reflect prompt" },
+            model: "m/1",
+            added: [],
+            requests: [],
+            ms: 1,
+          }) as never,
+        judge: async (input) => {
+          if (isJudgeDown) throw new Error("model unreachable");
+          judged.push(input);
+          return {
+            points: realEvidence(
+              [{ text: "swaps x and y", questions: ["b1", "made-up"], reflections: ["made-up"] }],
+              input,
+            ),
+            prompt: { seat: "update", name: "u", hash: "uh", text: "the update prompt" },
+            model: "m/1",
+            requests: [],
+          } as never;
+        },
+        updatePromptHash: () => "uh",
+      },
+    });
+    const learner = new Phone(served);
+    await learner.signIn("l1", "Priya");
+    await learner.json("POST", ApiPath.Setup, { name: "Priya", schoolCode, role: Role.Learner });
+    // The set is served; its board opens (naming it); they get it wrong and ask Jugnu.
+    await learner.json("POST", ApiPath.Events, {
+      events: [
+        setEntry("e0", 0, {
+          what: "served",
+          set: "set1",
+          by: "lesson-practice",
+          questions: [{ board: "b1", version: "v1" }],
+        }),
+        entry("e1", 1001, {
+          seq: 1,
+          actor: Actor.Learner,
+          opening: "o",
+          board: "b1",
+          version: "v1",
+          node: null,
+          kind: "open",
+          payload: { set: "set1" },
+        } as Partial<ChalkEvent>),
+        {
+          ...signalOn("e2", 2, "b1", "checked", { status: "wrong", isGraded: true }),
+          version: "v1",
+        },
+      ],
+    });
+    const talk = await learner.json<JugnuTurnAnswer>("POST", ApiPath.JugnuTurn, {
+      session: "o",
+      board: "book/chapter/ask",
+      state: {},
+      did: [],
+      said: "why?",
+    });
+    // It finishes, while the conversation still goes on; the judgement fails the first time.
+    const finish = (id: string) =>
+      learner.json("POST", ApiPath.Events, {
+        events: [setEntry(id, 3, { what: "finished", set: "set1" })],
+      });
+    await finish("e3");
+    await new Promise((r) => setTimeout(r, 150));
+    const [ended] = await db
+      .select()
+      .from(jugnuConversations)
+      .where(eq(jugnuConversations.id, talk.conversation));
+    expect(ended?.endedBy).toBe(ConversationEnd.SetFinished);
+    expect(await db.select().from(jugnuReflections)).toHaveLength(1);
+    expect(await db.select().from(learnerUpdates)).toEqual([]);
+    // The numbers are kept even so (they don't wait on a model).
+    expect((await db.select().from(mastery)).map((m) => m.concept)).toEqual(["c1"]);
+
+    // Tried again (the sweep, or the set's finish arriving again), once, with what happened.
+    isJudgeDown = false;
+    await finish("e4");
+    await finish("e4b");
+    await new Promise((r) => setTimeout(r, 150));
+    const updates = await db.select().from(learnerUpdates);
+    expect(updates).toHaveLength(1);
+    expect(updates[0]).toMatchObject({ set: "set1", promptName: "u", model: "m/1" });
+    // Its evidence is only what it was given.
+    expect(updates[0]?.points).toEqual([
+      { text: "swaps x and y", questions: ["b1"], reflections: [] },
+    ]);
+    const input = judged[0];
+    expect(input?.questions).toEqual([
+      {
+        board: "b1",
+        name: "chapter/ask",
+        concepts: [{ id: "c1", title: "c1" }],
+        level: "easy",
+        // Wrong before they asked him: not helped.
+        tries: [{ isRight: false, chosen: null, helped: false, nth: 1 }],
+      },
+    ]);
+    expect(input?.reflections).toEqual([
+      expect.objectContaining({ board: "b1", points: ["swaps the numbers"], gotThere: "partly" }),
     ]);
   });
 

@@ -330,6 +330,40 @@ export const jugnuReflections = pgTable(
   (t) => [index("jugnu_reflections_conversation").on(t.conversationId)],
 );
 
+/**
+ * The learner update, once per finished set (teacher-view.md, step 3, judged): what the set shows
+ * the child is still not good at and keeps getting wrong, each point with its evidence (question
+ * board ids, reflection ids). History: never overwritten; their state is their latest. Kept with
+ * how it was made (the update prompt by name, hash and text; the model; the requests' usage).
+ * Its numbers are `mastery`, worked out at the same moment.
+ */
+export const learnerUpdates = pgTable(
+  "learner_updates",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    accountId: uuid("account_id")
+      .notNull()
+      .references(() => accounts.id, { onDelete: "cascade" }),
+    /** The set's id (its `set` entries' `set`). */
+    set: text("set").notNull(),
+    at: timestamp("at", { withTimezone: true }).notNull(),
+    promptName: text("prompt_name").notNull(),
+    promptHash: text("prompt_hash").notNull(),
+    promptText: text("prompt_text")
+      .notNull()
+      .references(() => texts.hash),
+    model: text("model").notNull(),
+    points: jsonb("points")
+      .$type<{ text: string; questions: string[]; reflections: string[] }[]>()
+      .notNull(),
+    requests: jsonb("requests").notNull(),
+  },
+  (t) => [
+    uniqueIndex("learner_updates_once").on(t.accountId, t.set, t.promptHash),
+    index("learner_updates_account_at").on(t.accountId, t.at),
+  ],
+);
+
 export const schema = {
   schools,
   accounts,
@@ -345,4 +379,5 @@ export const schema = {
   jugnuTurns,
   jugnuMessages,
   jugnuReflections,
+  learnerUpdates,
 };

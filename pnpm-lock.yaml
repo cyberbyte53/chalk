@@ -474,6 +474,9 @@ importers:
       '@chalk/events':
         specifier: workspace:*
         version: link:../packages/events
+      '@chalk/learning':
+        specifier: workspace:*
+        version: link:../packages/learning
       '@chalk/library':
         specifier: workspace:*
         version: link:../../library/registry

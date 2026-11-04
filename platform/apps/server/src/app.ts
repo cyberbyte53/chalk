@@ -20,6 +20,7 @@ import {
 import { type Board, type ChalkEvent, type ItemRef, builtFile, eventSchema } from "@chalk/content";
 import type { ConceptPlan } from "@chalk/learning";
 import { type Jugnu, StillAnswering, conversations } from "@chalk/studio/jugnu-conversations";
+import { type Judged, type UpdateInput, sets } from "@chalk/studio/jugnu-sets";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { sql } from "drizzle-orm";
 import { type Context, Hono, type MiddlewareHandler } from "hono";
@@ -31,6 +32,7 @@ import { ApiFailure } from "./failure";
 import type { GoogleVerifier } from "./google";
 import { dbKeeper } from "./jugnu-store";
 import { type RateLimit, rateLimit } from "./rate-limit";
+import { dbSetKeeper } from "./set-store";
 import {
   type AccountRow,
   SIGN_IN_DAYS,
@@ -83,7 +85,12 @@ export type AppDeps = {
    * The committed Jugnu (the studio's live.ts: a turn, a reflection), and how long after his last
    * turn a conversation is over (`jugnu.yaml`'s reflectAfterMinutes); unset, he isn't here.
    */
-  jugnu?: Jugnu & { quietMs: number };
+  jugnu?: Jugnu & {
+    quietMs: number;
+    /** The learner update's judgement (the studio's liveJudge), and its prompt's hash now. */
+    judge: (input: UpdateInput) => Promise<Judged>;
+    updatePromptHash: () => string;
+  };
 };
 
 /** The server's log: records, refusals and failures. */
@@ -277,10 +284,12 @@ export function createApp(deps: AppDeps): Hono<Env> {
           log.warn(`event refused: ${parsed.error.issues[0]?.message}`);
         }
       });
-      const reply: EventsReply = {
-        saved: await saveEvents(db, c.get("account").id, good),
-        rejected,
-      };
+      const account = c.get("account").id;
+      const reply: EventsReply = { saved: await saveEvents(db, account, good), rejected };
+      // A set finished: its update, once its events are kept (after this reply; once per set).
+      for (const e of good)
+        if (e.kind === "set" && e.payload.what === "finished")
+          void updates.update(account, e.payload.set);
       return c.json(reply);
     },
   );
@@ -348,9 +357,24 @@ export function createApp(deps: AppDeps): Hono<Env> {
           now,
           onError: (message, error) => log.error(message, error),
         });
-  // Checked often enough that a conversation is over close to its time (a fifth of it).
+  // A finished set's update (sets.ts): its numbers always; with Jugnu, its conversations ended and
+  // reflected on, and its judgement.
+  const updates = sets({
+    keeper: dbSetKeeper(db, deps.contentDir),
+    ...(talks === undefined || deps.jugnu === undefined
+      ? {}
+      : { jugnu: { conversations: talks, judge: deps.jugnu.judge } }),
+    promptHash: () => deps.jugnu?.updatePromptHash() ?? "",
+    now,
+    onError: (message, error) => log.error(message, error),
+  });
+  // Checked often enough that a conversation is over close to its time (a fifth of it); an
+  // update not made (a failed one) is tried again.
   if (talks !== undefined && deps.jugnu !== undefined)
-    setInterval(() => void talks.sweep(), Math.max(1000, deps.jugnu.quietMs / 5)).unref();
+    setInterval(
+      () => void talks.sweep().then(() => updates.sweep()),
+      Math.max(1000, deps.jugnu.quietMs / 5),
+    ).unref();
   app.post(ApiPath.JugnuTurn, bodyLimit({ maxSize: 512 * 1024 }), signedIn, isSetUp, async (c) => {
     if (talks === undefined)
       throw new ApiFailure(503, ApiErrorCode.Unavailable, "Jugnu isn't on this server");

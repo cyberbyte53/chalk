@@ -31,6 +31,7 @@ const jugnuSettings =
   process.env.JUGNU_PROVIDER === undefined
     ? undefined
     : (await import("@chalk/studio/jugnu-settings")).committedJugnu();
+const { promptOf: jugnuPrompt } = await import("@chalk/studio/jugnu-settings");
 const app = createApp({
   db,
   verifyGoogle:
@@ -51,6 +52,8 @@ const app = createApp({
       ? undefined
       : {
           quietMs: jugnuSettings.reflectAfterMinutes * 60_000,
+          judge: async (input) => (await import("@chalk/studio/jugnu")).liveJudge(input),
+          updatePromptHash: () => jugnuPrompt("update", jugnuSettings.update).hash,
           turn: async (turn, going) => (await import("@chalk/studio/jugnu")).liveTurn(turn, going),
           reflect: async (conversation, boardPath) =>
             (await import("@chalk/studio/jugnu")).liveReflect(conversation, boardPath),

@@ -7,7 +7,8 @@
     ".": "./src/index.ts",
     "./jugnu": "./src/jugnu/live.ts",
     "./jugnu-settings": "./src/jugnu/prompts.ts",
-    "./jugnu-conversations": "./src/jugnu/conversations.ts"
+    "./jugnu-conversations": "./src/jugnu/conversations.ts",
+    "./jugnu-sets": "./src/jugnu/sets.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo",
@@ -33,6 +34,7 @@
     "@chalk/content": "workspace:*",
     "@chalk/content-source": "workspace:*",
     "@chalk/events": "workspace:*",
+    "@chalk/learning": "workspace:*",
     "@chalk/library": "workspace:*",
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",

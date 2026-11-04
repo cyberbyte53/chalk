@@ -16,6 +16,8 @@ export const Seat = {
   Judge: "judge",
   /** Jugnu, asked at a conversation's end what it showed about the child. */
   Reflect: "reflect",
+  /** The learner update, once a set is finished: what it shows about the child. */
+  Update: "update",
 } as const;
 export type Seat = (typeof Seat)[keyof typeof Seat];
 
@@ -64,6 +66,7 @@ export function committedJugnu(): {
   prompt: string;
   reflect: string;
   reflectAfterMinutes: number;
+  update: string;
 } {
   const text = readFileSync(join(root, "platform/studio/prompts/jugnu.yaml"), "utf8");
   const get = (key: string) => {
@@ -77,5 +80,6 @@ export function committedJugnu(): {
     prompt: get("prompt"),
     reflect: get("reflect"),
     reflectAfterMinutes: minutes(get("reflectAfterMinutes")),
+    update: get("update"),
   };
 }

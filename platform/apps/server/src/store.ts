@@ -14,6 +14,7 @@ import {
 } from "@chalk/api";
 import { Actor, type ChalkEvent } from "@chalk/content";
 import {
+  type Attempt,
   type ConceptPlan,
   type Mastery,
   MasteryModel,
@@ -440,7 +441,7 @@ export async function addQuestionVersions(
 }
 
 /** One learner's attempts and mastery, worked out again from their record, replacing the old. */
-async function workOut(db: Db, accountId: string): Promise<void> {
+async function workOut(db: Db, accountId: string): Promise<Attempt[]> {
   const record = (await db.select().from(events).where(eq(events.accountId, accountId))).map(
     eventOf,
   );
@@ -450,19 +451,27 @@ async function workOut(db: Db, accountId: string): Promise<void> {
       ? []
       : await db.select().from(questionVersions).where(inArray(questionVersions.board, boards));
   const tries = attemptsFrom(record, catalogueOf(versions));
-  const rows = masteryFrom(tries);
   await db.transaction(async (tx) => {
     await tx.delete(attempts).where(eq(attempts.accountId, accountId));
-    await tx.delete(mastery).where(eq(mastery.accountId, accountId));
     for (let i = 0; i < tries.length; i += 500)
       await tx
         .insert(attempts)
         .values(tries.slice(i, i + 500).map((a) => ({ ...a, accountId, at: new Date(a.at) })));
-    if (rows.length > 0)
-      await tx
-        .insert(mastery)
-        .values(rows.map((m) => ({ ...m, accountId, lastAt: new Date(m.lastAt) })));
   });
+  return tries;
+}
+
+/**
+ * Mastery as of a learner's last finished set (the numbers change only when a set finishes:
+ * teacher-view.md, step 3); none before their first.
+ */
+function masteryAsOfLastSet(record: readonly ChalkEvent[], tries: readonly Attempt[]) {
+  const finished = record.filter(
+    (e) => e.kind === "set" && (e.payload as { what?: string }).what === "finished",
+  );
+  if (finished.length === 0) return [];
+  const upTo = Math.max(...finished.map((e) => e.at));
+  return masteryFrom(tries.filter((a) => a.at <= upTo));
 }
 
 /** A stored entry as the phone sent it. */
@@ -471,10 +480,24 @@ function eventOf(row: typeof events.$inferSelect): ChalkEvent {
   return { ...entry, at: row.at.getTime() } as unknown as ChalkEvent;
 }
 
-/** Works out every learner's attempts and mastery again (after the code that does it changed). */
+/**
+ * Works out every learner's attempts again, and their mastery as of their last finished set
+ * (after the code that does it changed).
+ */
 export async function workOutAll(db: Db): Promise<void> {
   const ids = await db.selectDistinct({ id: events.accountId }).from(events);
-  for (const { id } of ids) await workOut(db, id);
+  for (const { id } of ids) {
+    const tries = await workOut(db, id);
+    const record = (await db.select().from(events).where(eq(events.accountId, id))).map(eventOf);
+    const rows = masteryAsOfLastSet(record, tries);
+    await db.transaction(async (tx) => {
+      await tx.delete(mastery).where(eq(mastery.accountId, id));
+      if (rows.length > 0)
+        await tx
+          .insert(mastery)
+          .values(rows.map((m) => ({ ...m, accountId: id, lastAt: new Date(m.lastAt) })));
+    });
+  }
 }
 
 /** Each learner's progress: their passes and attempts, rolled up through the course tree. */

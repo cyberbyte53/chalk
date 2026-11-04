@@ -31,6 +31,10 @@ export type Keeper = {
   ) => Promise<{ conversation: string; turn: string }>;
   /** Ends the conversations with no turn since `before`: their ids. */
   endQuiet: (before: number, at: number) => Promise<string[]>;
+  /** Ends a learner's conversations going on at these openings (their set finished): their ids. */
+  endAt: (account: string, openings: readonly string[], at: number) => Promise<string[]>;
+  /** Conversations over and not yet reflected on (a reflection that failed is tried again). */
+  unreflected: () => Promise<string[]>;
   /** A conversation that is over and not yet reflected on, with what it needs to go on. */
   toReflectOn: (
     id: string,
@@ -56,8 +60,10 @@ export type Conversations = {
     place: Place,
     turn: LiveTurn,
   ) => Promise<LiveTurnDone["reply"] & { conversation: string; turn: string }>;
-  /** Ends the quiet ones and reflects on each (called often, and on each turn). */
+  /** Ends the quiet ones and reflects on each, and on any not yet reflected on (called often). */
   sweep: () => Promise<void>;
+  /** Ends a learner's conversations at these openings and waits for his reflections on them. */
+  endAt: (account: string, openings: readonly string[]) => Promise<void>;
 };
 
 /** Thrown while a turn at the same place is still being answered. */
@@ -87,15 +93,29 @@ export function conversations(o: {
       o.onError(`Jugnu's reflection on ${id} failed`, error);
     }
   };
+  // One reflection at a time per conversation (a sweep and a set's end may both reach it).
+  const reflecting = new Map<string, Promise<void>>();
+  const reflectOnce = (id: string) => {
+    const going = reflecting.get(id);
+    if (going !== undefined) return going;
+    const r = reflectOn(id).finally(() => reflecting.delete(id));
+    reflecting.set(id, r);
+    return r;
+  };
   const sweep = async () => {
     try {
-      for (const id of await o.keeper.endQuiet(o.now() - o.quietMs, o.now())) void reflectOn(id);
+      await o.keeper.endQuiet(o.now() - o.quietMs, o.now());
+      for (const id of await o.keeper.unreflected()) void reflectOnce(id);
     } catch (error) {
       o.onError("Ending quiet conversations failed", error);
     }
   };
   return {
     sweep,
+    endAt: async (account, openings) => {
+      await o.keeper.endAt(account, openings, o.now());
+      await Promise.all((await o.keeper.unreflected()).map(reflectOnce));
+    },
     turn: async (place, turn) => {
       const key = `${place.account}:${place.opening}:${place.board}`;
       if (answering.has(key)) throw new StillAnswering();
@@ -171,6 +191,23 @@ export function memoryKeeper(): Keeper & {
         }
       return ended;
     },
+    endAt: async (account, openings, at) => {
+      const ended: string[] = [];
+      for (const [id, c] of held)
+        if (
+          c.endedAt === null &&
+          c.place.account === account &&
+          openings.includes(c.place.opening)
+        ) {
+          c.endedAt = at;
+          ended.push(id);
+        }
+      return ended;
+    },
+    unreflected: async () =>
+      [...held].flatMap(([id, c]) =>
+        c.endedAt !== null && c.reflections.length === 0 ? [id] : [],
+      ),
     toReflectOn: async (id) => {
       const c = held.get(id);
       return c === undefined || c.endedAt === null || c.reflections.length > 0

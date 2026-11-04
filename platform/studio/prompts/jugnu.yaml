@@ -7,3 +7,4 @@ model: deepseek-flash
 prompt: small-steps
 reflect: baseline
 reflectAfterMinutes: 5
+update: baseline

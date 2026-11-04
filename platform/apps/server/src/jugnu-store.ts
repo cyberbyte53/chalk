@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import type { Keeper } from "@chalk/studio/jugnu-conversations";
-import { and, asc, count, eq, isNull, lt } from "drizzle-orm";
+import { and, asc, count, eq, inArray, isNotNull, isNull, lt, notExists } from "drizzle-orm";
 import type { Db } from "./db";
 import {
   ConversationEnd,
@@ -298,6 +298,38 @@ export function dbKeeper(db: Db): Keeper {
     },
     keepTurn: (place, going, done, at) => keepTurn(db, placeOf(place), going, done as never, at),
     endQuiet: (before, at) => endQuiet(db, before, at),
+    endAt: async (account, openings, at) => {
+      if (openings.length === 0) return [];
+      const ended = await db
+        .update(jugnuConversations)
+        .set({ endedAt: new Date(at), endedBy: ConversationEnd.SetFinished })
+        .where(
+          and(
+            eq(jugnuConversations.accountId, account),
+            inArray(jugnuConversations.opening, [...openings]),
+            isNull(jugnuConversations.endedAt),
+          ),
+        )
+        .returning({ id: jugnuConversations.id });
+      return ended.map((r) => r.id);
+    },
+    unreflected: async () =>
+      (
+        await db
+          .select({ id: jugnuConversations.id })
+          .from(jugnuConversations)
+          .where(
+            and(
+              isNotNull(jugnuConversations.endedAt),
+              notExists(
+                db
+                  .select({ id: jugnuReflections.id })
+                  .from(jugnuReflections)
+                  .where(eq(jugnuReflections.conversationId, jugnuConversations.id)),
+              ),
+            ),
+          )
+      ).map((r) => r.id),
     toReflectOn: async (id) => {
       const found = await conversationById(db, id);
       if (found === undefined || found.endedAt === null || (await hasReflection(db, id)))

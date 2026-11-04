@@ -2,7 +2,8 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type { RuntimeState } from "@chalk/player";
 import type { ModelMessage } from "ai";
-import type { Request } from "./agent";
+import { z } from "zod";
+import { type Request, runTurn } from "./agent";
 import { type Step, restored } from "./cases";
 import {
   type GotThere,
@@ -15,6 +16,7 @@ import {
 import { type Provider, modelOf, settingsForChoice } from "./model";
 import { type Prompt, Seat, committedJugnu, promptOf } from "./prompts";
 import { lessonOf, root, seen } from "./sees";
+import { type Judged, type UpdateInput, type UpdatePoint, realEvidence } from "./sets";
 
 /**
  * Jugnu, live (platform/docs/plans/jugnu-live.md, teacher-view.md): one turn for a student on a
@@ -186,5 +188,53 @@ export async function liveReflect(c: LiveConversation, board: string): Promise<L
     added: conversation.messages.slice(before),
     requests: his.requests,
     ms: Date.now() - began,
+  };
+}
+
+/**
+ * The learner update's judgement (teacher-view.md, step 3): the committed model, by the committed
+ * update prompt, given the state before, the set and what happened; it answers by its `update`
+ * tool. Its evidence is kept only where it names what it was given.
+ */
+export async function liveJudge(input: UpdateInput): Promise<Judged> {
+  const committed = committedJugnu();
+  const model = modelOf(
+    settingsForChoice({ provider: committed.provider as Provider, id: committed.model }),
+  );
+  const prompt = promptOf(Seat.Update, committed.update);
+  const messages: ModelMessage[] = [{ role: "user", content: JSON.stringify(input, null, 1) }];
+  const his = await runTurn({
+    model,
+    instructions: [prompt.text],
+    messages,
+    tools: {
+      update: {
+        description:
+          "What this set shows they are still not good at, and keep getting wrong: each point one short sentence, with the questions (board ids) and reflections (ids) it rests on.",
+        input: z.object({
+          points: z
+            .array(
+              z.object({
+                text: z.string(),
+                questions: z.array(z.string()),
+                reflections: z.array(z.string()),
+              }),
+            )
+            .max(6),
+        }),
+      },
+    },
+    endsWith: "update",
+  });
+  const points =
+    his.ended.kind === "tool" ? ((his.ended.input as { points?: UpdatePoint[] }).points ?? []) : [];
+  return {
+    points: realEvidence(
+      points.filter((p) => typeof p.text === "string" && p.text.trim() !== ""),
+      input,
+    ),
+    prompt,
+    model: model.name,
+    requests: his.requests,
   };
 }
