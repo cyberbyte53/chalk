@@ -2439,3 +2439,9 @@ body.is-selecting .is-pick-target {
     grid-template-columns: 1fr;
   }
 }
+
+.jg-seat {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}

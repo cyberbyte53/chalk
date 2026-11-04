@@ -131,8 +131,11 @@ export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): 
         case?: string;
         student?: string;
         note?: string;
+        seats?: import("./jugnu/dialogue").Seats;
       };
-      send(res, 200, { id: dialogue.startDialogue(b.case ?? "", b.student ?? "", b.note ?? "") });
+      send(res, 200, {
+        id: dialogue.startDialogue(b.case ?? "", b.student ?? "", b.note ?? "", b.seats ?? {}),
+      });
       return;
     }
     const q = new URL(req.url ?? "/", "http://x").searchParams;
@@ -141,7 +144,11 @@ export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): 
     if (show !== null) send(res, 200, dialogue.readRun(show));
     else {
       const { readCases } = await import("./jugnu/cases");
-      send(res, 200, { cases: readCases(board), runs: dialogue.listRuns(board) });
+      send(res, 200, {
+        cases: readCases(board),
+        runs: dialogue.listRuns(board),
+        seats: dialogue.seatOptions(),
+      });
     }
   } catch (error) {
     send(res, 500, { error: error instanceof Error ? error.message : String(error) });

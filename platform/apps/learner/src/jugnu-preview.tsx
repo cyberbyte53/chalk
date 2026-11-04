@@ -74,6 +74,58 @@ type Dialogue = {
   isFinished?: boolean;
   usage: { ms: number; input: number; output: number };
 };
+/** A seat as the page chooses it: which model, which prompt (keys stay on the server). */
+type SeatChoice = { provider: string; id: string; prompt: string };
+type SeatOptions = {
+  models: { provider: string; id: string }[];
+  prompts: { tutor: string[]; student: string[] };
+  defaults: { tutor: SeatChoice; student: SeatChoice };
+};
+
+/** One seat's picker: its model among those the server can run, and its prompt's version. */
+function SeatPicker({
+  label,
+  options,
+  prompts,
+  value,
+  onChange,
+}: {
+  label: string;
+  options: SeatOptions["models"];
+  prompts: string[];
+  value: SeatChoice;
+  onChange: (next: SeatChoice) => void;
+}): JSX.Element {
+  return (
+    <span class="jg-seat">
+      <b>{label}</b>
+      <select
+        value={`${value.provider}/${value.id}`}
+        onChange={(e) => {
+          const [provider = "", ...id] = (e.target as HTMLSelectElement).value.split("/");
+          onChange({ ...value, provider, id: id.join("/") });
+        }}
+      >
+        {options.map((m) => (
+          <option key={`${m.provider}/${m.id}`} value={`${m.provider}/${m.id}`}>
+            {m.provider}/{m.id}
+          </option>
+        ))}
+      </select>
+      <select
+        value={value.prompt}
+        onChange={(e) => onChange({ ...value, prompt: (e.target as HTMLSelectElement).value })}
+      >
+        {prompts.map((p) => (
+          <option key={p} value={p}>
+            prompt: {p}
+          </option>
+        ))}
+      </select>
+    </span>
+  );
+}
+
 type Listed = {
   id: string;
   board: string;
@@ -333,14 +385,22 @@ export function JugnuPreview(): JSX.Element {
   const [caseName, setCaseName] = useState("plot-swapped");
   const [studentName, setStudentName] = useState("up-first");
   const [note, setNote] = useState("");
+  const [seatOptions, setSeatOptions] = useState<SeatOptions | null>(null);
+  const [seats, setSeats] = useState<{ tutor: SeatChoice; student: SeatChoice } | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
   const load = async (): Promise<Listed[]> => {
     const d = (await (await fetch("/dev-jugnu")).json()) as {
       cases?: Case[];
       runs?: Listed[];
+      seats?: SeatOptions;
       error?: string;
     };
+    if (d.seats !== undefined) {
+      const options = d.seats;
+      setSeatOptions(options);
+      setSeats((now) => now ?? options.defaults);
+    }
     if (d.cases === undefined) {
       setProblem(d.error ?? "no cases");
       return [];
@@ -386,7 +446,7 @@ export function JugnuPreview(): JSX.Element {
         await fetch("/dev-jugnu", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ case: caseName, student: studentName, note }),
+          body: JSON.stringify({ case: caseName, student: studentName, note, seats }),
         })
       ).json()) as { id: string } | { error: string };
       if ("error" in answer) setProblem(answer.error);
@@ -433,6 +493,24 @@ export function JugnuPreview(): JSX.Element {
             </option>
           ))}
         </select>
+        {seatOptions !== null && seats !== null && (
+          <>
+            <SeatPicker
+              label="Jugnu"
+              options={seatOptions.models}
+              prompts={seatOptions.prompts.tutor}
+              value={seats.tutor}
+              onChange={(tutor) => setSeats({ ...seats, tutor })}
+            />
+            <SeatPicker
+              label="Student"
+              options={seatOptions.models}
+              prompts={seatOptions.prompts.student}
+              value={seats.student}
+              onChange={(student) => setSeats({ ...seats, student })}
+            />
+          </>
+        )}
         <input
           placeholder="What this experiment changes"
           value={note}

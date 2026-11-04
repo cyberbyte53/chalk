@@ -74,6 +74,72 @@ export function settingsFrom(
   };
 }
 
+/** A seat as a run asks for it, safe to come from a page: which model, and whether it thinks. */
+export type SeatChoice = { provider: Provider; id: string; isThinking?: boolean };
+
+/** The models a page may pick from, per provider (offered only where the server has its key). */
+const OFFERED: Record<Provider, readonly string[]> = {
+  [Provider.Anthropic]: ["claude-haiku-5-5", "claude-sonnet-5-5"],
+  [Provider.DeepSeek]: ["deepseek-flash", "deepseek-v4-pro"],
+};
+
+/** The sides whose settings may name a provider's server and key. */
+const SIDES = ["JUGNU", "JUGNU_STUDENT", "JUGNU_JUDGE"] as const;
+
+/**
+ * Where a provider is reached: the server and key of a side whose settings name that provider, else
+ * the provider's own (its SDK reads ANTHROPIC_API_KEY, DEEPSEEK_API_KEY). Never from a page.
+ */
+function connectionFor(
+  provider: Provider,
+  env: Readonly<Record<string, string | undefined>>,
+): { server?: string; apiKey?: string } {
+  const get = (name: string) => (env[name] === "" ? undefined : env[name]);
+  const side = SIDES.find((p) => get(`${p}_PROVIDER`) === provider && get(`${p}_API_KEY`));
+  if (side !== undefined) {
+    const server = get(`${side}_MODEL_SERVER`);
+    const apiKey = get(`${side}_API_KEY`);
+    return {
+      ...(server === undefined ? {} : { server }),
+      ...(apiKey === undefined ? {} : { apiKey }),
+    };
+  }
+  const apiKey = get(`${provider.toUpperCase()}_API_KEY`);
+  return apiKey === undefined ? {} : { apiKey };
+}
+
+/** The models the server can run now (a provider with a key), each as a page may choose it. */
+export function offeredModels(
+  env: Readonly<Record<string, string | undefined>> = process.env,
+): { provider: Provider; id: string }[] {
+  return Object.values(Provider).flatMap((provider) =>
+    connectionFor(provider, env).apiKey === undefined
+      ? []
+      : OFFERED[provider].map((id) => ({ provider, id })),
+  );
+}
+
+/** A seat's settings from a page's choice: its connection from the server, never the page. */
+export function settingsForChoice(
+  choice: SeatChoice,
+  env: Readonly<Record<string, string | undefined>> = process.env,
+): ModelSettings {
+  if (!isProvider(choice.provider)) throw new Error(`No provider "${String(choice.provider)}"`);
+  if (!offeredModels(env).some((m) => m.provider === choice.provider && m.id === choice.id))
+    throw new Error(
+      `The server can't run ${choice.provider}/${choice.id} (no key, or not offered)`,
+    );
+  const c = connectionFor(choice.provider, env);
+  return {
+    provider: choice.provider,
+    id: choice.id,
+    server: c.server,
+    apiKey: c.apiKey,
+    isThinking: choice.isThinking !== false,
+    effort: Effort.Low,
+  };
+}
+
 /** The model the settings name. */
 export function modelOf(s: ModelSettings): Model {
   const name = `${s.provider}/${s.id}`;

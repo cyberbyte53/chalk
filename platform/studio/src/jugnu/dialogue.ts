@@ -8,8 +8,15 @@ import { z } from "zod";
 import { type Request, type ToolSpec, log, runTurn } from "./agent";
 import { type Case, type Step, boardVersion, played, readCases } from "./cases";
 import { type JugnuTry, firstTurn, jugnuTurn, laterTurn, newConversation, partsOf } from "./jugnu";
-import { Provider, modelOf, settingsFrom } from "./model";
-import { type Prompt, Seat, promptOf } from "./prompts";
+import {
+  Provider,
+  type SeatChoice,
+  modelOf,
+  offeredModels,
+  settingsForChoice,
+  settingsFrom,
+} from "./model";
+import { type Prompt, Seat, promptNames, promptOf } from "./prompts";
 import { changes, lessonOf, root, seen } from "./sees";
 
 /**
@@ -171,13 +178,53 @@ const promptName = (prefix: string): string => {
   return name === undefined || name === "" ? "baseline" : name;
 };
 
+/** A run's seats as chosen (a page's choice); a seat not chosen is the environment's. */
+export type Seats = {
+  tutor?: SeatChoice & { prompt?: string };
+  student?: SeatChoice & { prompt?: string };
+};
+
+/** What a page may choose for each seat, and what it gets when it chooses nothing. */
+export function seatOptions() {
+  process.loadEnvFile(join(root, ".env"));
+  const tutor = settingsFrom("JUGNU", DEFAULT_MODEL);
+  const student = settingsFrom("JUGNU_STUDENT", DEFAULT_MODEL);
+  return {
+    models: offeredModels(),
+    prompts: { tutor: promptNames(Seat.Tutor), student: promptNames(Seat.Student) },
+    defaults: {
+      tutor: { provider: tutor.provider, id: tutor.id, prompt: promptName("JUGNU") },
+      student: { provider: student.provider, id: student.id, prompt: promptName("JUGNU_STUDENT") },
+    },
+  };
+}
+
 /**
  * Starts a run: it is named and kept at once (its id comes back straight away), and goes on by
  * itself, kept after every turn, so it is watched by its id.
  */
-export function startDialogue(caseName: string, studentName: string, note = ""): string {
+export function startDialogue(
+  caseName: string,
+  studentName: string,
+  note = "",
+  seats: Seats = {},
+): string {
+  // What can be refused is refused here, before the run starts: the page then hears why.
+  const one = readCases().find((c) => c.name === caseName);
+  if (one === undefined) throw new Error(`No case ${caseName}`);
+  if (!(one.students ?? []).some((s) => s.name === studentName))
+    throw new Error(`No student ${studentName} on ${caseName}`);
+  process.loadEnvFile(join(root, ".env"));
+  for (const seat of [seats.tutor, seats.student]) if (seat !== undefined) settingsForChoice(seat);
+  if (seats.tutor?.prompt !== undefined && !promptNames(Seat.Tutor).includes(seats.tutor.prompt))
+    throw new Error(`No tutor prompt "${seats.tutor.prompt}"`);
+  if (
+    seats.student?.prompt !== undefined &&
+    !promptNames(Seat.Student).includes(seats.student.prompt)
+  )
+    throw new Error(`No student prompt "${seats.student.prompt}"`);
   const id = runId(caseName, studentName);
-  void runDialogue(caseName, studentName, note, id).catch(() => {});
+  void runDialogue(caseName, studentName, note, id, seats).catch(() => {});
   return id;
 }
 
@@ -187,20 +234,33 @@ export async function runDialogue(
   studentName: string,
   note = "",
   id = runId(caseName, studentName),
+  seats: Seats = {},
 ): Promise<Dialogue> {
   const one = readCases().find((c) => c.name === caseName);
   if (one === undefined) throw new Error(`No case ${caseName}`);
   const student = (one.students ?? []).find((s) => s.name === studentName);
   if (student === undefined) throw new Error(`No student ${studentName} on ${caseName}`);
   process.loadEnvFile(join(root, ".env"));
-  const jugnu = modelOf(settingsFrom("JUGNU", DEFAULT_MODEL));
-  const child = modelOf(settingsFrom("JUGNU_STUDENT", DEFAULT_MODEL));
-  const tutorPrompt: Prompt = promptOf(Seat.Tutor, promptName("JUGNU"));
-  const studentPrompt: Prompt = promptOf(Seat.Student, promptName("JUGNU_STUDENT"), {
-    grade: gradeOf(one.board),
-    believes: student.believes,
-    knows: student.knows,
-  });
+  const jugnu = modelOf(
+    seats.tutor === undefined
+      ? settingsFrom("JUGNU", DEFAULT_MODEL)
+      : settingsForChoice(seats.tutor),
+  );
+  const child = modelOf(
+    seats.student === undefined
+      ? settingsFrom("JUGNU_STUDENT", DEFAULT_MODEL)
+      : settingsForChoice(seats.student),
+  );
+  const tutorPrompt: Prompt = promptOf(Seat.Tutor, seats.tutor?.prompt ?? promptName("JUGNU"));
+  const studentPrompt: Prompt = promptOf(
+    Seat.Student,
+    seats.student?.prompt ?? promptName("JUGNU_STUDENT"),
+    {
+      grade: gradeOf(one.board),
+      believes: student.believes,
+      knows: student.knows,
+    },
+  );
   const started = Date.now();
   const version = boardVersion(one.board);
   const usage = { input: 0, cacheRead: 0, cacheWrite: 0, output: 0 };
