@@ -32,6 +32,8 @@ export type JugnuTry = { steps: Step[]; from: "now" | "start"; saw: unknown };
 export type JugnuReply = {
   says: string;
   glow: string | null;
+  /** Short options offered with his words, for the student to tap. */
+  choices: string[];
   /** What he believes about the student now (never shown to them). */
   note: string;
   /** He thinks they have understood: they do the next question alone. */
@@ -147,10 +149,11 @@ export function tryOn(
 /** His `reply`: his one message to the student; calling it ends his turn. */
 export const REPLY_TOOL: ToolSpec = {
   description:
-    "Speak to her: your words, the one part of her board to light up while you say them (its address as listed in her board's parts), your note (what you believe about her now; she never sees it), and whether you hand back (she has understood and does the next question alone). This ends your turn.",
+    "Speak to her: your words, the one part of her board to light up while you say them (its address as listed in her board's parts), short choices she can tap (two to four, only when a tap fits; she can always type instead), your note (what you believe about her now; she never sees it), and whether you hand back (she has understood and does the next question alone). This ends your turn.",
   input: z.object({
     says: z.string(),
     glow: z.string().nullable().optional(),
+    choices: z.array(z.string()).min(2).max(4).optional(),
     note: z.string(),
     isHandBack: z.boolean().optional(),
   }),
@@ -205,12 +208,14 @@ export async function jugnuTurn(o: {
   const r = (his.ended.kind === "tool" ? his.ended.input : { says: his.ended.text }) as {
     says?: string;
     glow?: string | null;
+    choices?: string[];
     note?: string;
     isHandBack?: boolean;
   };
   return {
     says: String(r.says ?? ""),
     glow: typeof r.glow === "string" && r.glow !== "" ? r.glow : null,
+    choices: Array.isArray(r.choices) ? r.choices.map(String) : [],
     note: String(r.note ?? ""),
     isHandBack: r.isHandBack === true,
     given: o.studentTurn,

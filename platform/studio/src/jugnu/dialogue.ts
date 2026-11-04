@@ -413,6 +413,7 @@ export async function runDialogue(
       thinking: turn.requests.flatMap((r) => r.thinking),
       did,
       says: choice !== null && String(h.says ?? "") === "" ? choice : String(h.says ?? text),
+      ...(choice === null ? {} : { choice }),
       ...(h.leaves === true ? { isLeaving: true } : {}),
     };
   };
@@ -445,7 +446,7 @@ export async function runDialogue(
         tries: his.tries,
         diagnosis: his.note,
         says: his.says,
-        choices: [],
+        choices: his.choices,
         glow,
         isGlowOnList: glow === null || partsOf(board).some((p) => p.part === glow),
         ...(glow !== null && partsOf(board).some((p) => p.part === glow && "value" in p)
@@ -459,6 +460,7 @@ export async function runDialogue(
         reply: his.says,
         steps: glow === null ? [] : [{ kind: "glow", part: glow }],
         model: jugnu.name,
+        ...(his.choices.length >= 2 ? { choices: his.choices.slice(0, 4) } : {}),
         ...(his.isHandBack ? { isHandBack: true } : {}),
       });
       extras[lastSeq()] = {
@@ -484,11 +486,12 @@ export async function runDialogue(
       const her = await herTurn(board, herSteps);
       turns.push({ ...her, stepsSoFar: [...herSteps], isRight: isRightOf(board) });
       lastSaid = her.says;
-      // Their words end their turn (Done, if they only acted on the board).
+      // Their words end their turn: a tapped choice (one he offered), typed words, or Done.
+      const tapped = his.choices.find((c) => c === her.choice);
       recorder?.chat({
         what: "said",
-        text: her.says,
-        via: her.says.trim() === "" ? "done" : "typed",
+        text: tapped ?? her.says,
+        via: tapped !== undefined ? "choice" : her.says.trim() === "" ? "done" : "typed",
       });
       extras[lastSeq()] = {
         ...extras[lastSeq()],
