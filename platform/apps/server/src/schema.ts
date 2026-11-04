@@ -209,9 +209,7 @@ export const texts = pgTable("texts", {
 
 /** How a conversation with Jugnu ended. */
 export const ConversationEnd = {
-  /** He handed back: he thinks they have it. */
-  HandBack: "handBack",
-  /** No message for a while: they left. */
+  /** Five minutes after his last turn (app.ts, JUGNU_QUIET_MS). */
   Quiet: "quiet",
   /** Their practice run finished. */
   SetFinished: "setFinished",
@@ -223,7 +221,8 @@ export type ConversationEnd = (typeof ConversationEnd)[keyof typeof Conversation
  * account; the board's opening, id and version; the build's commit), what ran (the model, the
  * tutor prompt by name and hash, the exact prompt and lesson texts by their hash), when it began
  * and ended and why. Its turns and messages are appended, never changed. `cursor` is working
- * state only (where it stands, to go on from): overwritten each turn, dropped when it ends. Never
+ * state only (where it stands, to go on from): overwritten each turn, dropped once he has
+ * reflected on it (the reflection goes on from it). Never
  * served by any API; removed with the account.
  */
 export const jugnuConversations = pgTable(
@@ -259,7 +258,11 @@ export const jugnuConversations = pgTable(
   ],
 );
 
-/** One turn of Jugnu's (raw): when, how long, and his requests (their usage, finish, timing). */
+/** What a turn of Jugnu's was: a reply to the child, or his reflection once it was over. */
+export const TurnKind = { Reply: "reply", Reflect: "reflect" } as const;
+export type TurnKind = (typeof TurnKind)[keyof typeof TurnKind];
+
+/** One turn of Jugnu's (raw): which kind, when, how long, and his requests (usage, finish, timing). */
 export const jugnuTurns = pgTable(
   "jugnu_turns",
   {
@@ -268,6 +271,7 @@ export const jugnuTurns = pgTable(
       .notNull()
       .references(() => jugnuConversations.id, { onDelete: "cascade" }),
     n: integer("n").notNull(),
+    kind: text("kind").$type<TurnKind>().notNull().default(TurnKind.Reply),
     at: timestamp("at", { withTimezone: true }).notNull(),
     ms: integer("ms").notNull(),
     requests: jsonb("requests").notNull(),
@@ -291,6 +295,39 @@ export const jugnuMessages = pgTable(
   (t) => [primaryKey({ columns: [t.conversationId, t.n] })],
 );
 
+/** Whether, by a conversation's end, the child understood it themselves (his judgement). */
+export const GotThere = { Yes: "yes", Partly: "partly", NotYet: "notYet" } as const;
+export type GotThere = (typeof GotThere)[keyof typeof GotThere];
+
+/**
+ * Jugnu's reflection on a conversation once it was over (teacher-view.md, layer 1, judged): what it
+ * showed the child isn't good at yet, and whether they got there. Kept with what it came from (the
+ * conversation, and the turn that asked it: its messages are in jugnu_messages) and how (the
+ * reflect prompt by name, hash and text; the model). Judging again adds a new one; none is changed.
+ */
+export const jugnuReflections = pgTable(
+  "jugnu_reflections",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    conversationId: uuid("conversation_id")
+      .notNull()
+      .references(() => jugnuConversations.id, { onDelete: "cascade" }),
+    turnId: uuid("turn_id")
+      .notNull()
+      .references(() => jugnuTurns.id, { onDelete: "cascade" }),
+    at: timestamp("at", { withTimezone: true }).notNull(),
+    promptName: text("prompt_name").notNull(),
+    promptHash: text("prompt_hash").notNull(),
+    promptText: text("prompt_text")
+      .notNull()
+      .references(() => texts.hash),
+    model: text("model").notNull(),
+    points: text("points").array().notNull(),
+    gotThere: text("got_there").$type<GotThere>().notNull(),
+  },
+  (t) => [index("jugnu_reflections_conversation").on(t.conversationId)],
+);
+
 export const schema = {
   schools,
   accounts,
@@ -305,4 +342,5 @@ export const schema = {
   jugnuConversations,
   jugnuTurns,
   jugnuMessages,
+  jugnuReflections,
 };

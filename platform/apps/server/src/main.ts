@@ -26,6 +26,11 @@ const read = (path: string): unknown =>
 const plans = conceptPlansOf(index, read);
 // The catalogue keeps every question version ever served: this build's are added, none replaced.
 await addQuestionVersions(db, questionVersionsOf(index, read));
+// The committed Jugnu's settings (prompts/jugnu.yaml), when this server has a model set up.
+const jugnuSettings =
+  process.env.JUGNU_PROVIDER === undefined
+    ? undefined
+    : (await import("@chalk/studio/jugnu-settings")).committedJugnu();
 const app = createApp({
   db,
   verifyGoogle:
@@ -42,12 +47,17 @@ const app = createApp({
   // The committed Jugnu, when this server has a model set up (JUGNU_PROVIDER); loaded on his
   // first turn, so the server starts without the boards' code.
   jugnu:
-    process.env.JUGNU_PROVIDER === undefined
+    jugnuSettings === undefined
       ? undefined
       : {
+          quietMs: jugnuSettings.reflectAfterMinutes * 60_000,
           turn: async (turn, going) => {
             const { liveTurn } = await import("@chalk/studio/jugnu");
             return liveTurn(turn as never, going as never);
+          },
+          reflect: async (conversation) => {
+            const { liveReflect } = await import("@chalk/studio/jugnu");
+            return liveReflect(conversation as never, "");
           },
         },
 });

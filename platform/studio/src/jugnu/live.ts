@@ -4,7 +4,14 @@ import type { RuntimeState } from "@chalk/player";
 import type { ModelMessage } from "ai";
 import type { Request } from "./agent";
 import { type Step, restored } from "./cases";
-import { type JugnuConversation, firstTurn, jugnuTurn, laterTurn } from "./jugnu";
+import {
+  type GotThere,
+  type JugnuConversation,
+  firstTurn,
+  jugnuReflect,
+  jugnuTurn,
+  laterTurn,
+} from "./jugnu";
 import { type Provider, modelOf, settingsForChoice } from "./model";
 import { type Prompt, Seat, committedJugnu, promptOf } from "./prompts";
 import { lessonOf, root, seen } from "./sees";
@@ -136,4 +143,48 @@ export async function liveTurn(t: LiveTurn, given?: LiveConversation): Promise<L
   } finally {
     board.dispose();
   }
+}
+
+export type LiveReflectionDone = {
+  points: string[];
+  gotThere: GotThere;
+  /** The reflect prompt it was asked with, and the model that answered. */
+  prompt: Prompt;
+  model: string;
+  /** The messages the reflect step added to the conversation (for the record). */
+  added: ModelMessage[];
+  requests: Request[];
+  ms: number;
+};
+
+/**
+ * His reflection on a conversation that is over (teacher-view.md, layer 1): the same conversation
+ * (its model, prompt and lesson) asked one more thing, by the committed reflect prompt.
+ */
+export async function liveReflect(c: LiveConversation, board: string): Promise<LiveReflectionDone> {
+  const began = Date.now();
+  const conversation: JugnuConversation = {
+    messages: [...c.messages],
+    awaiting: c.cursor.awaiting,
+  };
+  const before = conversation.messages.length;
+  const model = modelOf(settingsForChoice(c.model));
+  const reflectPrompt = promptOf(Seat.Reflect, committedJugnu().reflect);
+  const his = await jugnuReflect({
+    conversation,
+    model,
+    prompt: c.prompt,
+    lesson: c.lesson,
+    boardPath: board,
+    reflectPrompt,
+  });
+  return {
+    points: his.points,
+    gotThere: his.gotThere,
+    prompt: reflectPrompt,
+    model: model.name,
+    added: conversation.messages.slice(before),
+    requests: his.requests,
+    ms: Date.now() - began,
+  };
 }

@@ -71,12 +71,8 @@
           "name": "accounts_school_id_schools_id_fk",
           "tableFrom": "accounts",
           "tableTo": "schools",
-          "columnsFrom": [
-            "school_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["school_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -86,9 +82,7 @@
         "accounts_google_sub_unique": {
           "name": "accounts_google_sub_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "google_sub"
-          ]
+          "columns": ["google_sub"]
         }
       },
       "policies": {},
@@ -189,12 +183,8 @@
           "name": "attempts_account_id_accounts_id_fk",
           "tableFrom": "attempts",
           "tableTo": "accounts",
-          "columnsFrom": [
-            "account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["account_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -202,12 +192,7 @@
       "compositePrimaryKeys": {
         "attempts_account_id_board_node_nth_pk": {
           "name": "attempts_account_id_board_node_nth_pk",
-          "columns": [
-            "account_id",
-            "board",
-            "node",
-            "nth"
-          ]
+          "columns": ["account_id", "board", "node", "nth"]
         }
       },
       "uniqueConstraints": {},
@@ -381,12 +366,8 @@
           "name": "events_account_id_accounts_id_fk",
           "tableFrom": "events",
           "tableTo": "accounts",
-          "columnsFrom": [
-            "account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["account_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -394,10 +375,7 @@
       "compositePrimaryKeys": {
         "events_account_id_id_pk": {
           "name": "events_account_id_id_pk",
-          "columns": [
-            "account_id",
-            "id"
-          ]
+          "columns": ["account_id", "id"]
         }
       },
       "uniqueConstraints": {},
@@ -464,12 +442,8 @@
           "name": "groups_teacher_id_accounts_id_fk",
           "tableFrom": "groups",
           "tableTo": "accounts",
-          "columnsFrom": [
-            "teacher_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["teacher_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -479,9 +453,7 @@
         "groups_join_code_unique": {
           "name": "groups_join_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "join_code"
-          ]
+          "columns": ["join_code"]
         }
       },
       "policies": {},
@@ -645,12 +617,8 @@
           "name": "jugnu_conversations_account_id_accounts_id_fk",
           "tableFrom": "jugnu_conversations",
           "tableTo": "accounts",
-          "columnsFrom": [
-            "account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["account_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -658,12 +626,8 @@
           "name": "jugnu_conversations_prompt_text_texts_hash_fk",
           "tableFrom": "jugnu_conversations",
           "tableTo": "texts",
-          "columnsFrom": [
-            "prompt_text"
-          ],
-          "columnsTo": [
-            "hash"
-          ],
+          "columnsFrom": ["prompt_text"],
+          "columnsTo": ["hash"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -671,12 +635,8 @@
           "name": "jugnu_conversations_lesson_text_texts_hash_fk",
           "tableFrom": "jugnu_conversations",
           "tableTo": "texts",
-          "columnsFrom": [
-            "lesson_text"
-          ],
-          "columnsTo": [
-            "hash"
-          ],
+          "columnsFrom": ["lesson_text"],
+          "columnsTo": ["hash"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -722,12 +682,8 @@
           "name": "jugnu_messages_conversation_id_jugnu_conversations_id_fk",
           "tableFrom": "jugnu_messages",
           "tableTo": "jugnu_conversations",
-          "columnsFrom": [
-            "conversation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["conversation_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -735,12 +691,8 @@
           "name": "jugnu_messages_turn_id_jugnu_turns_id_fk",
           "tableFrom": "jugnu_messages",
           "tableTo": "jugnu_turns",
-          "columnsFrom": [
-            "turn_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["turn_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -748,10 +700,7 @@
       "compositePrimaryKeys": {
         "jugnu_messages_conversation_id_n_pk": {
           "name": "jugnu_messages_conversation_id_n_pk",
-          "columns": [
-            "conversation_id",
-            "n"
-          ]
+          "columns": ["conversation_id", "n"]
         }
       },
       "uniqueConstraints": {},
@@ -829,12 +778,8 @@
           "name": "jugnu_turns_conversation_id_jugnu_conversations_id_fk",
           "tableFrom": "jugnu_turns",
           "tableTo": "jugnu_conversations",
-          "columnsFrom": [
-            "conversation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["conversation_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -910,12 +855,8 @@
           "name": "mastery_account_id_accounts_id_fk",
           "tableFrom": "mastery",
           "tableTo": "accounts",
-          "columnsFrom": [
-            "account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["account_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -923,11 +864,7 @@
       "compositePrimaryKeys": {
         "mastery_account_id_concept_model_pk": {
           "name": "mastery_account_id_concept_model_pk",
-          "columns": [
-            "account_id",
-            "concept",
-            "model"
-          ]
+          "columns": ["account_id", "concept", "model"]
         }
       },
       "uniqueConstraints": {},
@@ -987,12 +924,8 @@
           "name": "members_group_id_groups_id_fk",
           "tableFrom": "members",
           "tableTo": "groups",
-          "columnsFrom": [
-            "group_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["group_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1000,12 +933,8 @@
           "name": "members_learner_id_accounts_id_fk",
           "tableFrom": "members",
           "tableTo": "accounts",
-          "columnsFrom": [
-            "learner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["learner_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1013,10 +942,7 @@
       "compositePrimaryKeys": {
         "members_group_id_learner_id_pk": {
           "name": "members_group_id_learner_id_pk",
-          "columns": [
-            "group_id",
-            "learner_id"
-          ]
+          "columns": ["group_id", "learner_id"]
         }
       },
       "uniqueConstraints": {},
@@ -1065,10 +991,7 @@
       "compositePrimaryKeys": {
         "question_versions_board_version_pk": {
           "name": "question_versions_board_version_pk",
-          "columns": [
-            "board",
-            "version"
-          ]
+          "columns": ["board", "version"]
         }
       },
       "uniqueConstraints": {},
@@ -1114,9 +1037,7 @@
         "schools_code_unique": {
           "name": "schools_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "code"
-          ]
+          "columns": ["code"]
         }
       },
       "policies": {},
@@ -1175,12 +1096,8 @@
           "name": "sign_ins_account_id_accounts_id_fk",
           "tableFrom": "sign_ins",
           "tableTo": "accounts",
-          "columnsFrom": [
-            "account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["account_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }

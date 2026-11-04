@@ -1,6 +1,9 @@
 # Jugnu, as students get him (platform/docs/plans/jugnu-live.md): the committed version that the
 # preview's boards and chalk1 run. The sandbox tries others against it. Keys and servers stay in
-# .env (by provider); this file names only which model and which prompt.
+# .env (by provider); this file names which model and prompts, and when a conversation is over
+# (reflectAfterMinutes after his last turn: then he reflects on it).
 provider: deepseek
 model: deepseek-flash
 prompt: small-steps
+reflect: baseline
+reflectAfterMinutes: 5

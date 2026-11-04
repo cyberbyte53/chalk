@@ -22,21 +22,16 @@ import { eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import {
-  type AppDeps,
-  JUGNU_QUIET_MS,
-  SIGN_IN_COOKIE,
-  type ServerLog,
-  createApp,
-  isLanOrigin,
-} from "./app";
+import { type AppDeps, SIGN_IN_COOKIE, type ServerLog, createApp, isLanOrigin } from "./app";
 import { type Db, MIGRATIONS } from "./db";
 import type { GoogleVerifier } from "./google";
 import type { KeptConversation } from "./jugnu-store";
 import {
   ConversationEnd,
+  GotThere,
   jugnuConversations,
   jugnuMessages,
+  jugnuReflections,
   jugnuTurns,
   schema,
   texts,
@@ -177,7 +172,7 @@ describe("server", () => {
   beforeEach(async () => {
     logged = { records: [], warnings: [], errors: [] };
     await db.execute(
-      sql`truncate jugnu_messages, jugnu_turns, jugnu_conversations, texts, mastery, attempts, question_versions, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
+      sql`truncate jugnu_reflections, jugnu_messages, jugnu_turns, jugnu_conversations, texts, mastery, attempts, question_versions, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
     );
     schoolCode = await addSchool(db, "Sunrise Public School", counter());
     clock = Date.UTC(2026, 9, 15);
@@ -441,11 +436,15 @@ describe("server", () => {
       join(dir, "book", "chapter", "ask.json"),
       '{"kind":"question","id":"b1","version":"v1"}',
     );
+    const QUIET_MS = 5 * 60 * 1000;
     const given: (KeptConversation | undefined)[] = [];
+    const reflected: KeptConversation[] = [];
+    const settled = () => new Promise((r) => setTimeout(r, 100));
     const served = make({
       contentDir: dir,
       commit: "c1",
       jugnu: {
+        quietMs: QUIET_MS,
         turn: async (turn, going) => {
           given.push(going);
           const added = [
@@ -471,6 +470,21 @@ describe("server", () => {
             added,
             requests: [{ ms: 1 }],
             ms: 5,
+          };
+        },
+        reflect: async (conversation) => {
+          reflected.push(conversation);
+          return {
+            points: ["reads the first number as up"],
+            gotThere: GotThere.Partly,
+            prompt: { name: "r", hash: "rh", text: "the reflect prompt" },
+            model: "m/1",
+            added: [
+              { role: "tool", content: "she has gone" },
+              { role: "assistant", content: "ok" },
+            ],
+            requests: [{ ms: 2 }],
+            ms: 3,
           };
         },
       },
@@ -524,33 +538,61 @@ describe("server", () => {
     expect(messages.map((m) => m.n).sort()).toEqual([0, 1, 2, 3]);
     expect((await db.select().from(jugnuTurns)).map((t) => t.n).sort()).toEqual([0, 1]);
 
-    // He hands back: it ends, once; the opening's next ask starts a new one.
-    await learner.json("POST", ApiPath.JugnuTurn, { ...turn, said: "got it" });
-    const [ended] = await db
-      .select()
-      .from(jugnuConversations)
-      .where(eq(jugnuConversations.id, first.conversation));
-    expect(ended).toMatchObject({ endedBy: ConversationEnd.HandBack, cursor: null });
-    const again = await learner.json<JugnuTurnAnswer>("POST", ApiPath.JugnuTurn, turn);
-    expect(again.conversation).not.toBe(first.conversation);
-    expect(given[3]).toBeUndefined();
+    // Handing back ends nothing: the child may go on, in the same conversation.
+    const handedBack = await learner.json<JugnuTurnAnswer>("POST", ApiPath.JugnuTurn, {
+      ...turn,
+      said: "got it",
+    });
+    expect(handedBack.conversation).toBe(first.conversation);
 
     // Another child at the same opening id has their own.
     const other = new Phone(served);
     await other.signIn("l2", "Asha");
     await other.json("POST", ApiPath.Setup, { name: "Asha", schoolCode, role: Role.Learner });
     const theirs = await other.json<JugnuTurnAnswer>("POST", ApiPath.JugnuTurn, turn);
-    expect(theirs.conversation).not.toBe(again.conversation);
-    expect(given[4]).toBeUndefined();
+    expect(theirs.conversation).not.toBe(first.conversation);
+    expect(given[3]).toBeUndefined();
 
-    // Left quiet, a conversation ends (checked on the next turn, and each minute).
-    clock += JUGNU_QUIET_MS + 1;
+    // Five quiet minutes after his last turn, it is over (checked on any turn, and each minute),
+    // and he reflects on it, once, from where it ended (cursor and all); the reflection and its
+    // turn are kept, and nothing goes on from it now.
+    clock += QUIET_MS + 1;
     await learner.json("POST", ApiPath.JugnuTurn, { ...turn, session: "o2" });
-    const quiet = await db
+    await settled();
+    const [ended] = await db
       .select()
       .from(jugnuConversations)
-      .where(eq(jugnuConversations.id, again.conversation));
-    expect(quiet[0]?.endedBy).toBe(ConversationEnd.Quiet);
+      .where(eq(jugnuConversations.id, first.conversation));
+    expect(ended).toMatchObject({ endedBy: ConversationEnd.Quiet, cursor: null });
+    expect(reflected.find((k) => k.messages.length === 6)?.cursor).toEqual({ turns: 3 });
+    const reflections = await db.select().from(jugnuReflections);
+    expect(reflections.map((r) => r.conversationId).sort()).toEqual(
+      [first.conversation, theirs.conversation].sort(),
+    );
+    expect(reflections.find((r) => r.conversationId === first.conversation)).toMatchObject({
+      points: ["reads the first number as up"],
+      gotThere: GotThere.Partly,
+      promptName: "r",
+      model: "m/1",
+    });
+    const turnsNow = await db
+      .select()
+      .from(jugnuTurns)
+      .where(eq(jugnuTurns.conversationId, first.conversation));
+    expect(turnsNow.map((t) => `${t.n}:${t.kind}`).sort()).toEqual([
+      "0:reply",
+      "1:reply",
+      "2:reply",
+      "3:reflect",
+    ]);
+    const record = await db
+      .select()
+      .from(jugnuMessages)
+      .where(eq(jugnuMessages.conversationId, first.conversation));
+    expect(record.map((m) => m.n).sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
+    // The opening's next ask, after it was over, starts a new conversation.
+    const after = await learner.json<JugnuTurnAnswer>("POST", ApiPath.JugnuTurn, turn);
+    expect(after.conversation).not.toBe(first.conversation);
 
     // Without a model set up, he isn't there.
     const none = new Phone(make({ contentDir: dir }));

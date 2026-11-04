@@ -14,6 +14,8 @@ export const Seat = {
   Tutor: "tutor",
   Student: "student",
   Judge: "judge",
+  /** Jugnu, asked at a conversation's end what it showed about the child. */
+  Reflect: "reflect",
 } as const;
 export type Seat = (typeof Seat)[keyof typeof Seat];
 
@@ -46,11 +48,22 @@ export function promptNames(seat: Seat): string[] {
     : [];
 }
 
-/** The committed Jugnu (`prompts/jugnu.yaml`): which model, and which tutor prompt. */
+const minutes = (v: string): number => {
+  const n = Number(v);
+  if (!Number.isFinite(n) || n <= 0) throw new Error(`prompts/jugnu.yaml: "${v}" isn't minutes`);
+  return n;
+};
+
+/**
+ * The committed Jugnu (`prompts/jugnu.yaml`): which model, which tutor prompt, which reflect prompt,
+ * and how long after his last turn a conversation is over (then he reflects on it).
+ */
 export function committedJugnu(): {
   provider: string;
   model: string;
   prompt: string;
+  reflect: string;
+  reflectAfterMinutes: number;
 } {
   const text = readFileSync(join(root, "platform/studio/prompts/jugnu.yaml"), "utf8");
   const get = (key: string) => {
@@ -62,5 +75,7 @@ export function committedJugnu(): {
     provider: get("provider"),
     model: get("model"),
     prompt: get("prompt"),
+    reflect: get("reflect"),
+    reflectAfterMinutes: minutes(get("reflectAfterMinutes")),
   };
 }

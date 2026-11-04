@@ -32,14 +32,16 @@ import { ApiFailure } from "./failure";
 import type { GoogleVerifier } from "./google";
 import {
   type KeptConversation,
+  type ReflectionDone,
   type TurnDone,
-  endConversation,
+  conversationById,
   endQuiet,
+  hasReflection,
+  keepReflection,
   keepTurn,
   openConversation,
 } from "./jugnu-store";
 import { type RateLimit, rateLimit } from "./rate-limit";
-import { ConversationEnd } from "./schema";
 import {
   type AccountRow,
   SIGN_IN_DAYS,
@@ -64,8 +66,6 @@ import {
 } from "./store";
 
 export const SIGN_IN_COOKIE = "chalk_sign_in";
-/** A conversation with Jugnu this long without a message has ended. */
-export const JUGNU_QUIET_MS = 15 * 60 * 1000;
 export type AppDeps = {
   db: Db;
   verifyGoogle: GoogleVerifier;
@@ -99,6 +99,13 @@ export type AppDeps = {
       turn: JugnuTurnRequest,
       going: KeptConversation | undefined,
     ) => Promise<TurnDone & { reply: JugnuTurnReply }>;
+    /** His reflection on a conversation that is over (the committed reflect prompt). */
+    reflect: (conversation: KeptConversation) => Promise<ReflectionDone>;
+    /**
+     * How long after his last turn a conversation is over, then reflected on (`jugnu.yaml`'s
+     * reflectAfterMinutes): the one rule for its end.
+     */
+    quietMs: number;
   };
 };
 
@@ -351,19 +358,35 @@ export function createApp(deps: AppDeps): Hono<Env> {
 
   // ---- Jugnu: one turn, for a signed-in person, at most 60 an hour each (a model call each) ----
   // His side of each conversation is kept (jugnu-store.ts): found by the board's opening while it
-  // goes on, each turn appended. A conversation ends when he hands back, or after a quiet while
-  // (children just leave). Nothing of it goes back to the phone but his reply and its ids.
+  // goes on, each turn appended. It is over a set time after his last turn (`quietMs`: checked
+  // often, and on each turn); then he reflects on it. Nothing of it goes back to the phone but his reply
+  // and its ids.
   const jugnuLimit = rateLimit(60, 60 * 60 * 1000);
   // One turn at a time per opening (working state: a turn in flight).
   const answering = new Set<string>();
+  // Once a conversation is over, he reflects on it (once; its record goes on from where it ended).
+  const reflectOn = async (id: string) => {
+    if (deps.jugnu === undefined) return;
+    try {
+      const found = await conversationById(db, id);
+      if (found === undefined || found.endedAt === null || (await hasReflection(db, id))) return;
+      const done = await deps.jugnu.reflect(found.kept);
+      await keepReflection(db, id, found.kept.messages.length, done, now());
+    } catch (error) {
+      log.error(`Jugnu's reflection on ${id} failed`, error);
+    }
+  };
   const endQuietOnes = async () => {
     try {
-      await endQuiet(db, now() - JUGNU_QUIET_MS, now());
+      if (deps.jugnu === undefined) return;
+      for (const id of await endQuiet(db, now() - deps.jugnu.quietMs, now())) void reflectOn(id);
     } catch (error) {
       log.error("Ending quiet conversations failed", error);
     }
   };
-  if (deps.jugnu !== undefined) setInterval(() => void endQuietOnes(), 60_000).unref();
+  // Checked often enough that a conversation is over close to its time (a fifth of it).
+  if (deps.jugnu !== undefined)
+    setInterval(() => void endQuietOnes(), Math.max(1000, deps.jugnu.quietMs / 5)).unref();
   app.post(ApiPath.JugnuTurn, bodyLimit({ maxSize: 512 * 1024 }), signedIn, isSetUp, async (c) => {
     if (deps.jugnu === undefined)
       throw new ApiFailure(503, ApiErrorCode.Unavailable, "Jugnu isn't on this server");
@@ -397,8 +420,6 @@ export function createApp(deps: AppDeps): Hono<Env> {
       const going = await openConversation(db, place);
       const done = await deps.jugnu.turn(turn, going?.kept);
       const ids = await keepTurn(db, place, going?.id, done, now());
-      if (done.reply.isHandBack)
-        await endConversation(db, ids.conversation, ConversationEnd.HandBack, now());
       return c.json({ ...done.reply, ...ids });
     } finally {
       answering.delete(key);

@@ -146,6 +146,42 @@ export function tryOn(
   };
 }
 
+/** Whether, by a conversation's end, the child understood it themselves. */
+export const GotThere = { Yes: "yes", Partly: "partly", NotYet: "notYet" } as const;
+export type GotThere = (typeof GotThere)[keyof typeof GotThere];
+
+/**
+ * His `reflect`: what a conversation showed about the child, once it is over (teacher-view.md).
+ * Among his tools from the first turn, so his tools never change within a conversation (a changed
+ * tool list loses the cache); while he teaches, a call is answered "not now".
+ */
+export const REFLECT_TOOL: ToolSpec = {
+  description:
+    "Only when you are asked to, after the conversation is over: what this conversation showed about her. Never while you are talking with her.",
+  input: z.object({
+    points: z.array(z.string()).max(5),
+    gotThere: z.enum([GotThere.Yes, GotThere.Partly, GotThere.NotYet]),
+  }),
+};
+
+/** His tools, the same in every request of a conversation; only what answers them changes. */
+const toolsFor = (o: {
+  boardPath: string;
+  state: unknown;
+  tries: JugnuTry[];
+  isOver: boolean;
+}): Record<string, ToolSpec> => ({
+  reply: o.isOver
+    ? { ...REPLY_TOOL, run: async () => "She has gone: the conversation is over. Call reflect." }
+    : REPLY_TOOL,
+  reflect: o.isOver
+    ? REFLECT_TOOL
+    : { ...REFLECT_TOOL, run: async () => "Not now: only when you are asked, once it is over." },
+  try: o.isOver
+    ? { ...tryOn(o.boardPath, o.state, o.tries), run: async () => "Her board is gone: it is over." }
+    : tryOn(o.boardPath, o.state, o.tries),
+});
+
 /** His `reply`: his one message to the student; calling it ends his turn. */
 export const REPLY_TOOL: ToolSpec = {
   description:
@@ -195,10 +231,12 @@ export async function jugnuTurn(o: {
     model: o.model,
     instructions: [o.prompt.text, `The lesson, as its boards teach it:\n\n${o.lesson}`],
     messages: c.messages,
-    tools: {
-      reply: REPLY_TOOL,
-      try: tryOn(o.boardPath, () => JSON.parse(JSON.stringify(o.board.state())), tries),
-    },
+    tools: toolsFor({
+      boardPath: o.boardPath,
+      state: () => JSON.parse(JSON.stringify(o.board.state())),
+      tries,
+      isOver: false,
+    }),
     endsWith: "reply",
     ...(o.onRequest === undefined ? {} : { onRequest: o.onRequest }),
   });
@@ -221,6 +259,81 @@ export async function jugnuTurn(o: {
     given: o.studentTurn,
     thinking: his.requests.flatMap((q) => q.thinking),
     tries,
+    requests: his.requests,
+  };
+}
+
+/** What a conversation showed about the child, in his words (his `reflect`), and how he got there. */
+export type JugnuReflection = {
+  points: string[];
+  gotThere: GotThere;
+  thinking: string[];
+  requests: Request[];
+};
+
+/**
+ * His reflection, once a conversation is over (teacher-view.md, layer 1): the same conversation
+ * goes on one step (the same instructions and tools, so it reads from the cache): his awaiting
+ * reply is answered that she has left, with the reflect prompt, and he answers by `reflect`.
+ */
+export async function jugnuReflect(o: {
+  conversation: JugnuConversation;
+  model: Model;
+  prompt: Prompt;
+  lesson: string;
+  boardPath: string;
+  reflectPrompt: Prompt;
+  onRequest?: (r: Request) => void;
+}): Promise<JugnuReflection> {
+  const c = o.conversation;
+  if (c.awaiting === null) c.messages.push({ role: "user", content: o.reflectPrompt.text });
+  else
+    c.messages.push({
+      role: "tool",
+      content: [
+        ...c.awaiting.owed,
+        {
+          type: "tool-result",
+          toolCallId: c.awaiting.id,
+          toolName: c.awaiting.name,
+          output: { type: "text", value: o.reflectPrompt.text },
+        },
+      ],
+    });
+  c.awaiting = null;
+  const his = await runTurn({
+    model: o.model,
+    instructions: [o.prompt.text, `The lesson, as its boards teach it:\n\n${o.lesson}`],
+    messages: c.messages,
+    tools: toolsFor({ boardPath: o.boardPath, state: {}, tries: [], isOver: true }),
+    endsWith: "reflect",
+    ...(o.onRequest === undefined ? {} : { onRequest: o.onRequest }),
+  });
+  // His reflect call, kept answered: the conversation's record ends whole.
+  if (his.ended.kind === "tool")
+    c.messages.push({
+      role: "tool",
+      content: [
+        ...his.owed,
+        {
+          type: "tool-result",
+          toolCallId: his.ended.id,
+          toolName: his.ended.name,
+          output: { type: "text", value: "Kept." },
+        },
+      ],
+    });
+  const r = (his.ended.kind === "tool" ? his.ended.input : {}) as {
+    points?: string[];
+    gotThere?: string;
+  };
+  const gotThere = Object.values(GotThere).includes(r.gotThere as GotThere)
+    ? (r.gotThere as GotThere)
+    : GotThere.NotYet;
+  return {
+    points: Array.isArray(r.points) ? r.points.map(String).filter((p) => p.trim() !== "") : [],
+    gotThere,
+    thinking: his.requests.flatMap((q) => q.thinking),
     requests: his.requests,
   };
 }

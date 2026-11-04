@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./jugnu": "./src/jugnu/live.ts"
+    "./jugnu": "./src/jugnu/live.ts",
+    "./jugnu-settings": "./src/jugnu/prompts.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --incremental --tsBuildInfoFile node_modules/.cache/typecheck.tsbuildinfo",

@@ -39,19 +39,21 @@ the readings will change many times.
    - **Jugnu's conversations** (`jugnu_conversations`): id; account; opening; board id, version;
      commit; model; the exact instructions (tutor prompt name and hash; the prompt's and the
      lesson's texts, kept once each by their hash in `texts`); started; and when and why it ended
-     (hand-back, quiet, set finished).
+     (quiet, set finished).
    - **Jugnu's turns** (`jugnu_turns`): id, conversation, n, at, how long, the requests' usage.
    - **Jugnu's messages** (`jugnu_messages`): conversation, n, the turn, the message as the model
      had it (json, as the AI SDK gives it: reasoning parts round-trip). Appended after each turn;
      never changed.
-1. **Per conversation: his reflection** (`jugnu_reflections`). When a conversation ends, the same
-   conversation goes on one step: his open `reply` is answered ("the child has left the chat"),
-   then the reflect prompt asks what this conversation shows about the child, and he answers by
-   his `reflect` tool: points they aren't good at yet (short sentences), and got there (yes /
-   partly / not yet). `reflect` is among his tools from the first turn (an unchanged tool list
-   keeps the cache; his prompt says it is only for when he is asked). Kept: conversation, at,
-   reflect prompt (name, hash), model, points, got there, his words in full, usage. Ending is
-   idempotent (only a conversation not yet ended is ended).
+1. **Per conversation: his reflection** (`jugnu_reflections`). A conversation is over a set time
+   after his last turn (`reflectAfterMinutes` in `jugnu.yaml`, 5 now: the one rule, the person's;
+   within it a provider's cache still holds it; handing back ends nothing, the child may go on).
+   Then the same conversation goes on one step, a turn of its own (kind `reflect`, its messages
+   appended to the record): his open `reply` is answered with the reflect prompt (the child has
+   left), and he answers by his `reflect` tool: points they aren't good at yet (short sentences),
+   and got there (yes / partly / not yet). `reflect` is among his tools from the first turn (the
+   same tools in every request keep the cache; while he teaches, a call is answered "not now").
+   Kept: the conversation and the reflect turn, at, the reflect prompt (name, hash, text), model,
+   points, got there. Ending is once; the cursor stays until he has reflected, then is dropped.
 2. **Per practice run: the learner update** (`learner_updates`). On `practiceFinished`, after its
    events are saved: that child's open conversations are ended first (so every reflection exists),
    then one step reads the run's answers (from its events: right, wrong, helped) and its
@@ -80,7 +82,7 @@ messages are enough to replay it; the cursor only makes resuming quick.
   the reflection; `updateFor(run)` makes the learner update. Prompts: `prompts/reflect/<name>.md`,
   `prompts/update/<name>.md`, named in `jugnu.yaml`, versioned like the tutor's.
 - **Server**: the tables above (one migration, replacing the unshipped 0006); app.ts's Jugnu route
-  saves each turn; the quiet sweep and hand-back end conversations; saveEvents' caller runs the
+  saves each turn; the quiet sweep ends conversations (each minute), then reflects; saveEvents' caller runs the
   update on `practiceFinished`; a `judge-again` command (reflections or updates, a given prompt,
   new records), as `work-out` is for computed data; all keyed to the account, removed with it.
 - **Player and app**: the session sent to Jugnu is the board's opening; the `jugnu` event records
@@ -104,7 +106,8 @@ messages are enough to replay it; the cursor only makes resuming quick.
 
 1. Raw: Jugnu's conversations, turns and messages, their ids in the events; resume. Check:
    server tests; a conversation across a server restart; the events and the server's record join.
-2. Reflections. Check: real conversations (hand-back, quiet); the cache read on the reflect step.
+2. Reflections. Check: a real conversation left quiet, reflected on; the cache read on that step;
+   the sandbox cases with `reflect` among his tools, his teaching unchanged (one variable).
 3. `practiceFinished` and the learner update. Check: a real practice run's update.
 4. The teacher's API and screens. Check: in the browser.
 5. The demo class through the same path; `judge-again`. Then chalk1.
