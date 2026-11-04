@@ -3,4 +3,4 @@
 # .env (by provider); this file names only which model and which prompt.
 provider: deepseek
 model: deepseek-flash
-prompt: with-choices
+prompt: small-steps
