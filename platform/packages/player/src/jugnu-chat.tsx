@@ -4,6 +4,7 @@ import type { JSX } from "preact";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import { type Chat, type ChatMessage, ChatState } from "./chat";
 import { JugnuMood } from "./jugnu-figure";
+import { useSpeech } from "./sound/speech";
 import { t } from "./ui-text";
 
 /**
@@ -34,6 +35,8 @@ export type JugnuChatProps = {
   onClose?: () => void;
   /** He couldn't be reached: said in his place, in the chat. */
   problem?: string;
+  /** The student starts to talk or type: whatever he is saying stops (interruption). */
+  onStudentStarts?: () => void;
 };
 
 /** What the student did on the board, in a few words ("step right ×3, check"). */
@@ -72,8 +75,11 @@ export function JugnuChat({
   onOpen,
   onReplyFocus,
   problem,
+  onStudentStarts,
 }: JugnuChatProps): JSX.Element | null {
   const [typed, setTyped] = useState("");
+  // Talking instead of typing: the words fill the box as they are heard; they send them.
+  const speech = useSpeech(locale, setTyped, setTyped);
   // While they type (the keyboard up), his choices fold away: the board stays seen.
   const [isTyping, setTyping] = useState(false);
   const thread = useRef<HTMLDivElement>(null);
@@ -151,6 +157,7 @@ export function JugnuChat({
           onSubmit={(e) => {
             e.preventDefault();
             if (typed.trim() === "") return;
+            onStudentStarts?.();
             onSay?.(typed.trim(), "typed");
             setTyped("");
           }}
@@ -160,6 +167,7 @@ export function JugnuChat({
             disabled={!isLive || isThinking}
             onFocus={() => {
               setTyping(true);
+              onStudentStarts?.();
               onReplyFocus?.();
             }}
             onBlur={() => setTyping(false)}
@@ -168,9 +176,27 @@ export function JugnuChat({
           />
           {isThinking ? (
             <span class="jugnu-stop" aria-hidden="true" />
-          ) : typed.trim() !== "" ? (
+          ) : typed.trim() !== "" && !speech.isListening ? (
             <button type="submit" class="jugnu-send" aria-label={t(locale, "jugnuSend")}>
               ↑
+            </button>
+          ) : isLive && speech.isAvailable ? (
+            <button
+              type="button"
+              class={`jugnu-mic${speech.isListening ? " is-listening" : ""}`}
+              aria-label={t(locale, speech.isListening ? "jugnuStopListening" : "jugnuTalk")}
+              onClick={() => {
+                if (speech.isListening) speech.stop();
+                else {
+                  onStudentStarts?.();
+                  speech.start();
+                }
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                <rect x="6" y="2" width="6" height="10" rx="3" />
+                <path d="M3.5 9a5.5 5.5 0 0 0 11 0M9 14.5V17" />
+              </svg>
             </button>
           ) : null}
         </form>

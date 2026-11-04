@@ -657,3 +657,32 @@
     scroll-behavior: auto;
   }
 }
+
+/* The reply box's mic (while empty): tap, speak, the words fill the box. */
+.jugnu-mic {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 0;
+  background: color-mix(in srgb, var(--color-on-surface) 10%, transparent);
+  color: inherit;
+  display: inline-grid;
+  place-items: center;
+}
+.jugnu-mic rect,
+.jugnu-mic path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.jugnu-mic.is-listening {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  animation: jugnu-listening 1.2s ease-in-out infinite;
+}
+@keyframes jugnu-listening {
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-primary) 25%, transparent);
+  }
+}

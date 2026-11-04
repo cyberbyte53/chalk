@@ -25,6 +25,7 @@ import { recordBoard } from "./recorder";
 import { causesOf } from "./replay";
 import type { BoardRuntime } from "./runtime";
 import { useBoardSound } from "./sound/board-sound";
+import { isMuted } from "./sound/engine";
 import { isAudible, playSound } from "./sound/engine";
 import { SoundMenu, hasSounds, hearAgainOf } from "./sound/sound-menu";
 import { type ClipStore, type SpokenProp, useVoice } from "./sound/voice";
@@ -318,6 +319,10 @@ function BoardPlay({
       });
       if (r.isHandBack) recorder.chat({ what: "closed", by: "handBack" });
       lastReplyAt.current = liveEvents.current.length;
+      // He says it, through the board's own voice (one line at a time, never over the board's):
+      // not muted, not a silent board.
+      if (!isSilent && !isMuted.voice.peek())
+        void voice.speak({ name: "jugnu", speaker: "jugnu", phrases: { [locale]: [r.says] } });
       setLivePointed(r.glow === null ? undefined : pointedOf(r.glow));
       setOpenAgain(false);
     } catch {
@@ -342,7 +347,9 @@ function BoardPlay({
             recorder.chat({ what: "opened", reason: "getHelp" });
             void askHim("Why is it wrong?");
           },
+          onStudentStarts: () => voice.hush(),
           onClose: () => {
+            voice.hush();
             recorder.chat({ what: "closed", by: "student" });
             setLivePointed(undefined);
             setLiveTick((n) => n + 1);

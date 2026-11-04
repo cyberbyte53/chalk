@@ -7,7 +7,11 @@ type Recognition = {
   lang: string;
   interimResults: boolean;
   continuous: boolean;
-  onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+  onresult:
+    | ((event: {
+        results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal?: boolean }>;
+      }) => void)
+    | null;
   onend: (() => void) | null;
   onerror: ((event: { error: string }) => void) | null;
   start: () => void;
@@ -35,9 +39,20 @@ export type Speech = {
   stop: () => void;
 };
 
-/** Speaking instead of typing: what is heard is handed to `onHeard` once they stop. */
-export function useSpeech(locale: Locale, onHeard: (text: string) => void): Speech {
-  const Class = recognitionClass();
+/**
+ * Speaking instead of typing: what is heard is handed to `onHeard` once they stop, and, given
+ * `onWords`, the words as they come. Only on a secure page (https, or this computer): browsers give
+ * the microphone nowhere else. A refusal or silence ends it, so the mic is ready again.
+ */
+export function useSpeech(
+  locale: Locale,
+  onHeard: (text: string) => void,
+  onWords?: (partial: string) => void,
+): Speech {
+  const Class =
+    typeof window !== "undefined" && window.isSecureContext ? recognitionClass() : undefined;
+  const words = useRef(onWords);
+  words.current = onWords;
   const [isListening, setIsListening] = useState(false);
   const current = useRef<Recognition | undefined>(undefined);
   const heard = useRef(onHeard);
@@ -49,16 +64,23 @@ export function useSpeech(locale: Locale, onHeard: (text: string) => void): Spee
     if (Class === undefined || current.current !== undefined) return;
     const recognition = new Class();
     recognition.lang = LANG[locale];
-    recognition.interimResults = false;
+    recognition.interimResults = words.current !== undefined;
     recognition.continuous = false;
     recognition.onresult = (event) => {
-      const text = Array.from(event.results)
+      const results = Array.from(event.results);
+      const text = results
         .map((result) => result[0]?.transcript ?? "")
         .join(" ")
         .trim();
-      if (text !== "") heard.current(text);
+      if (text === "") return;
+      if (results.every((r) => r.isFinal !== false)) heard.current(text);
+      else words.current?.(text);
     };
-    recognition.onerror = (event) => console.warn("Speech:", event.error);
+    recognition.onerror = (event) => {
+      console.warn("Speech:", event.error);
+      current.current = undefined;
+      setIsListening(false);
+    };
     recognition.onend = () => {
       current.current = undefined;
       setIsListening(false);

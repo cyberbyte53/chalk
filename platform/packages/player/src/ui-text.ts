@@ -26,6 +26,8 @@ export const UiText = {
   jugnuPlaceholder: { en: "Type your question…", hi: "अपना सवाल लिखो…" },
   jugnuThinking: { en: "Jugnu is thinking…", hi: "जुगनू सोच रहा है…" },
   jugnuSend: { en: "Send", hi: "भेजो" },
+  jugnuTalk: { en: "Talk to Jugnu", hi: "जुगनू से बोलो" },
+  jugnuStopListening: { en: "Stop listening", hi: "सुनना बंद करो" },
   jugnuEarlier: { en: "Earlier", hi: "पहले" },
   jugnuReply: { en: "Your answer…", hi: "तुम्हारा जवाब…" },
   jugnuDid: { en: "You did on the board", hi: "तुमने बोर्ड पर किया" },
