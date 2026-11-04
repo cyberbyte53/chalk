@@ -206,7 +206,13 @@ function playPath(params: URLSearchParams): string {
 async function boardsAt(path: string, withQuestions: boolean): Promise<Shown[]> {
   const clean = path.replace(/\.json$/, "").replace(/\/$/, "");
   const parts = clean.split("/");
-  if (parts.length >= 4) return [await shownAt(clean)];
+  if (parts.length >= 4) {
+    // A question family (questions/<family>) is its questions, in order; anything else, one board.
+    const found = (await item(clean)) as { kind?: string; questions?: { path: string }[] };
+    if (found.kind === "family")
+      return Promise.all((found.questions ?? []).map((q) => shownAt(q.path)));
+    return [await shownAt(clean)];
+  }
   const [book, chapter] = parts;
   const concept = builtConceptSchema.parse(await item(clean));
   const pages = await Promise.all(concept.overview.map((ref) => shownAt(ref.path)));

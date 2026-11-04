@@ -342,6 +342,11 @@ function BoardPlay({
             recorder.chat({ what: "opened", reason: "getHelp" });
             void askHim("Why is it wrong?");
           },
+          onClose: () => {
+            recorder.chat({ what: "closed", by: "student" });
+            setLivePointed(undefined);
+            setLiveTick((n) => n + 1);
+          },
           onAsk: () => {
             recorder.chat({ what: "opened", reason: "ask" });
             lastReplyAt.current = liveEvents.current.length;
@@ -418,7 +423,13 @@ function BoardPlay({
             <JugnuButton
               locale={locale}
               chat={chatShown}
-              isGetHelp={isChatClosed && banner === AnswerStatus.Wrong}
+              isOpen={!isChatClosed}
+              // Get help only before they have talked to him here; after, his face reopens the chat.
+              isGetHelp={
+                isChatClosed &&
+                banner === AnswerStatus.Wrong &&
+                chatShown.chat.messages.length === 0
+              }
             />
           )}
           {hasJugnu && chatShown !== undefined && (
@@ -500,18 +511,21 @@ function BoardPlay({
 function JugnuButton({
   locale,
   chat,
+  isOpen,
   isGetHelp,
 }: {
   locale: Locale;
   chat: Omit<JugnuChatProps, "locale">;
+  /** The chat is open: a tap closes it. */
+  isOpen: boolean;
   isGetHelp: boolean;
 }): JSX.Element {
-  const onTap = isGetHelp ? chat.onGetHelp : chat.onAsk;
+  const onTap = isOpen ? chat.onClose : isGetHelp ? chat.onGetHelp : chat.onAsk;
   return (
     <button
       type="button"
       class={`jugnu-avatar${isGetHelp ? " is-get-help" : ""}`}
-      aria-label={t(locale, isGetHelp ? "getHelp" : "askJugnu")}
+      aria-label={t(locale, isOpen ? "closeJugnu" : isGetHelp ? "getHelp" : "askJugnu")}
       aria-disabled={onTap === undefined}
       onClick={() => onTap?.()}
     >

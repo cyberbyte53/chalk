@@ -46,8 +46,10 @@ function screenAt(path: string, content: ChapterContent): Screen {
       const boards = lessons[part]?.boards ?? [];
       const at = boards.findIndex((b) => b.item?.path === path);
       if (at >= 0) return { kind: "lesson", concept, part, start: at };
-      if (part === "pages" && boards.some((b) => b.item?.path.startsWith(`${path}/`)))
-        return { kind: "lesson", concept, part, start: 0 };
+      // A folder (a lesson, a question family): its first board here.
+      const inside = boards.findIndex((b) => b.item?.path.startsWith(`${path}/`));
+      if (inside >= 0)
+        return { kind: "lesson", concept, part, start: part === "pages" ? 0 : inside };
     }
   return { kind: "chapter" };
 }

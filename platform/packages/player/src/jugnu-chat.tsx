@@ -31,6 +31,8 @@ export type JugnuChatProps = {
   onGetHelp?: () => void;
   /** The bar's figure otherwise: open the chat to ask. */
   onAsk?: () => void;
+  /** The bar's figure while the chat is open: close it (the student is done talking). */
+  onClose?: () => void;
   /** He couldn't be reached: said in his place, in the chat. */
   problem?: string;
 };
