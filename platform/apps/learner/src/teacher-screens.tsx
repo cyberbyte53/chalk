@@ -493,7 +493,7 @@ function LearnerScreen({
                     <span class="small">{status}</span>
                     {known !== undefined && (
                       <span class="small">
-                        {say(locale, "masteryLine", {
+                        {say(locale, known.tries === 1 ? "masteryLineOne" : "masteryLine", {
                           p: Math.round(known.estimate * 100),
                           band: say(locale, BAND_WORD[known.band]),
                           n: known.tries,

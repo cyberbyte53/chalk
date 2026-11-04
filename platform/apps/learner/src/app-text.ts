@@ -129,6 +129,10 @@ export const AppText = {
     en: "{p}% likely understood · {band} · {n} tries",
     hi: "{p}% संभावना समझा · {band} · {n} प्रयास",
   },
+  masteryLineOne: {
+    en: "{p}% likely understood · {band} · 1 try",
+    hi: "{p}% संभावना समझा · {band} · 1 प्रयास",
+  },
   bandStrong: { en: "sure", hi: "पक्का" },
   bandUnsure: { en: "not sure yet", hi: "अभी पक्का नहीं" },
   bandWeak: { en: "weak", hi: "कमज़ोर" },
