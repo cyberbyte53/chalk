@@ -468,6 +468,9 @@ importers:
       '@chalk/content-source':
         specifier: workspace:*
         version: link:../content-source
+      '@chalk/events':
+        specifier: workspace:*
+        version: link:../packages/events
       '@chalk/library':
         specifier: workspace:*
         version: link:../../library/registry

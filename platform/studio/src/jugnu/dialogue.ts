@@ -1,8 +1,9 @@
 import { randomBytes } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { Actor } from "@chalk/content";
-import type { BoardRuntime } from "@chalk/player";
+import { Actor, type ChalkEvent, PlayMode } from "@chalk/content";
+import { createEventBus } from "@chalk/events";
+import { type BoardRecorder, type BoardRuntime, recordBoard } from "@chalk/player";
 import type { ModelMessage } from "ai";
 import { z } from "zod";
 import { type Request, type ToolSpec, log, runTurn } from "./agent";
@@ -75,6 +76,33 @@ export type HerTurn = {
   /** The next question, done alone (on its own board): the run's result. */
   transfer?: { board: string };
 };
+/**
+ * What a run knows beyond its events, by the seq of the event it belongs to
+ * (platform/docs/plans/jugnu-timeline.md): Jugnu's side of a `jugnu` event (his thinking, note,
+ * tries, what he was given, his requests), and the student's side of a turn (what they said and
+ * thought, what they were given), at the last event of their turn.
+ */
+export type RunExtra = {
+  jugnu?: {
+    note: string;
+    thinking: string[];
+    given: string;
+    tries: JugnuTry[];
+    requests: Request[];
+    isHandBack: boolean;
+    isGlowOnList: boolean;
+    glowShows?: unknown;
+  };
+  student?: {
+    says: string;
+    thinking: string[];
+    given: string;
+    isLeaving?: boolean;
+    /** Their turn was on the next question, alone. */
+    isAlone?: boolean;
+  };
+};
+
 export type Dialogue = {
   /** Its name in the list of experiments: when, which case, which child. */
   id: string;
@@ -95,6 +123,10 @@ export type Dialogue = {
   /** The lesson as Jugnu was given it. */
   lesson: string;
   turns: (JugnuTurn | HerTurn)[];
+  /** The run as the phone's event channel would record it, in order (docs/events.md). */
+  events?: ChalkEvent[];
+  /** What it knows beyond its events, by an event's seq. */
+  extras?: Record<number, RunExtra>;
   isRight: boolean;
   /** The next question, done alone after hers was right: right or not; null when not reached. */
   transfer: { board: string; isRight: boolean } | null;
@@ -273,8 +305,27 @@ export async function runDialogue(
     usage.cacheWrite += r.usage.cacheWrite ?? 0;
     usage.output += r.usage.output ?? 0;
   };
-  // Her real board: her steps so far, and every act of hers after.
-  const board = await played(one.board, one.steps);
+  // Everything on her boards is recorded as a phone would (docs/events.md), checked by the bus.
+  const events: ChalkEvent[] = [];
+  const extras: Record<number, RunExtra> = {};
+  const bus = createEventBus({ commit: "sandbox", session: id });
+  bus.subscribe((e) => events.push(e));
+  const lastSeq = () => events.length - 1;
+  const opened = (runtime: BoardRuntime, opening: string): BoardRecorder => {
+    const recorder = recordBoard(runtime, bus.record, opening);
+    recorder.open({
+      mode: PlayMode.Guided,
+      locale: "en",
+      hasAudio: false,
+      reason: "jugnu sandbox",
+    });
+    return recorder;
+  };
+  let recorder: BoardRecorder | undefined;
+  // Her real board: her steps so far (recorded from its start), and every act of hers after.
+  const board = await played(one.board, one.steps, (runtime) => {
+    recorder = opened(runtime, "1");
+  });
   const herSteps: Step[] = [...one.steps];
   const lesson = await lessonOf(one.board);
   const turns: (JugnuTurn | HerTurn)[] = [
@@ -307,6 +358,8 @@ export async function runDialogue(
       },
       lesson,
       turns,
+      events,
+      extras,
       isRight: isRightOf(board),
       transfer,
       isLeft: turns.some((t) => t.who === "her" && t.isLeaving === true),
@@ -367,6 +420,7 @@ export async function runDialogue(
   try {
     // Jugnu (jugnu.ts): one conversation for the whole time she is stuck.
     const conversation = newConversation();
+    let lastSaid = one.asks;
     let studentTurn = firstTurn(board, herSteps, one.asks);
     for (let turn = 0; turn < MAX_TURNS && !isHandedBack; turn++) {
       const his = await jugnuTurn({
@@ -397,6 +451,26 @@ export async function runDialogue(
         ...(isHandedBack ? { isHandBack: true } : {}),
         requests: his.requests,
       });
+      recorder?.jugnu({
+        asked: lastSaid,
+        reply: his.says,
+        steps: glow === null ? [] : [{ kind: "glow", part: glow }],
+        model: jugnu.name,
+      });
+      extras[lastSeq()] = {
+        jugnu: {
+          note: his.note,
+          thinking: his.thinking,
+          given: his.given,
+          tries: his.tries,
+          requests: his.requests,
+          isHandBack: his.isHandBack,
+          isGlowOnList: glow === null || partsOf(board).some((p) => p.part === glow),
+          ...(glow !== null && partsOf(board).some((p) => p.part === glow && "value" in p)
+            ? { glowShows: partsOf(board).find((p) => p.part === glow)?.value }
+            : {}),
+        },
+      };
       snapshot(false);
       if (isHandedBack) break;
 
@@ -404,13 +478,26 @@ export async function runDialogue(
       const before = seen(board);
       const her = await herTurn(board, herSteps);
       turns.push({ ...her, stepsSoFar: [...herSteps], isRight: isRightOf(board) });
+      lastSaid = her.says;
+      extras[lastSeq()] = {
+        ...extras[lastSeq()],
+        student: {
+          says: her.says,
+          thinking: her.thinking,
+          given: her.given,
+          ...(her.isLeaving === true ? { isLeaving: true } : {}),
+        },
+      };
       snapshot(false);
       if (her.isLeaving === true) break;
       studentTurn = laterTurn(board, before, her);
     }
     // ---- The next question, alone: Jugnu has gone ----
     if (isHandedBack && one.next !== undefined) {
-      const next = await played(one.next, []);
+      let nextRecorder: BoardRecorder | undefined;
+      const next = await played(one.next, [], (runtime) => {
+        nextRecorder = opened(runtime, "2");
+      });
       const nextSteps: Step[] = [];
       const alone = await herTurn(
         next,
@@ -425,12 +512,18 @@ export async function runDialogue(
         isRight: transfer.isRight,
         transfer: { board: one.next },
       });
+      extras[lastSeq()] = {
+        ...extras[lastSeq()],
+        student: { says: alone.says, thinking: alone.thinking, given: alone.given, isAlone: true },
+      };
+      nextRecorder?.close();
       next.dispose();
     }
   } catch (e) {
     error = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
     log(`run broke: ${error}`);
   }
+  recorder?.close();
   const done = snapshot(true);
   board.dispose();
   return done;

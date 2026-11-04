@@ -29,6 +29,7 @@
     "@chalk/author": "workspace:*",
     "@chalk/content": "workspace:*",
     "@chalk/content-source": "workspace:*",
+    "@chalk/events": "workspace:*",
     "@chalk/library": "workspace:*",
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
