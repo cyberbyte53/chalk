@@ -5,9 +5,10 @@ import {
   BoardPlayer,
   type BoardRuntime,
   BoardSpeedContext,
+  type JugnuChatProps,
   JugnuFigure,
-  JugnuMood,
   PlayMode,
+  chatOf,
   replay,
 } from "@chalk/player";
 import type { JSX } from "preact";
@@ -238,12 +239,15 @@ function BoardFrom({
   events,
   steps = [],
   pointed,
+  chat,
   width,
 }: {
   path: string;
   events: readonly EventEntryLike[];
   steps?: readonly Step[];
   pointed?: { prop: string; part?: string } | undefined;
+  /** The chat as it stood then, drawn in the board's bar exactly as the student saw it. */
+  chat?: Omit<JugnuChatProps, "locale"> | undefined;
   width: number;
 }): JSX.Element {
   const [board, setBoard] = useState<Board | null>(null);
@@ -283,6 +287,7 @@ function BoardFrom({
             isSilent
             onRuntime={play}
             pointed={pointed}
+            chat={chat}
           />
         </BoardSpeedContext.Provider>
       </div>
@@ -341,6 +346,15 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
     jugnuEvent?.payload as { steps?: { kind: string; part?: string }[] } | undefined
   )?.steps?.find((st) => st.kind === "glow")?.part;
   const his = m === undefined ? undefined : extras[m.seq]?.jugnu;
+  // The chat as the student saw it at this moment (worked out from the events alone), and one line
+  // while they were acting on the board after his last message.
+  const chat = chatOf(upTo as never);
+  const isActing = m?.kind === "act" && chat.messages.at(-1)?.from === "jugnu";
+  // His note over the whole run, turn by turn: how his understanding of the student moved.
+  const notes = moments.flatMap((x) => {
+    const note = x.kind === "jugnu" ? extras[x.seq]?.jugnu?.note : undefined;
+    return note === undefined ? [] : [{ seq: x.seq, note }];
+  });
   const theirs = m?.kind === "said" ? extras[m.seq]?.student : undefined;
   return (
     <section class="jg-run">
@@ -388,16 +402,9 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
               path={path}
               events={upTo}
               pointed={glow === undefined ? undefined : pointedOf(glow)}
+              chat={opening === "1" ? { chat, isOneLine: isActing } : undefined}
               width={320}
             />
-          )}
-          {lastLine !== undefined && (
-            <div class={lastLine.kind === "jugnu" ? "jg-sheet" : "jg-ask"}>
-              {lastLine.kind === "jugnu" && <JugnuFigure mood={JugnuMood.Hint} size={36} />}
-              <p>
-                <b>{lastLine.kind === "jugnu" ? "Jugnu" : "Student"}:</b> {lastLine.label}
-              </p>
-            </div>
           )}
         </div>
         <div class="jg-why">
@@ -445,6 +452,16 @@ function Experiment({ run }: { run: Dialogue }): JSX.Element {
               </details>
             </>
           )}
+          <details class="jg-notes" open>
+            <summary>Behind the scenes: his note, turn by turn</summary>
+            <ol>
+              {notes.map((n) => (
+                <li key={n.seq} class={n.seq === lastLine?.seq ? "is-now" : ""}>
+                  {short(n.note, 200)}
+                </li>
+              ))}
+            </ol>
+          </details>
           {theirs !== undefined && (
             <>
               {theirs.thinking.length > 0 && (

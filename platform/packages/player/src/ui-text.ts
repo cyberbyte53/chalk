@@ -24,6 +24,11 @@ export const UiText = {
   jugnu: { en: "Jugnu", hi: "जुगनू" },
   jugnuPlaceholder: { en: "Type your question…", hi: "अपना सवाल लिखो…" },
   jugnuThinking: { en: "Jugnu is thinking…", hi: "जुगनू सोच रहा है…" },
+  jugnuDone: { en: "Done", hi: "हो गया" },
+  jugnuSend: { en: "Send", hi: "भेजो" },
+  jugnuEarlier: { en: "Earlier", hi: "पहले" },
+  jugnuReply: { en: "Your answer…", hi: "तुम्हारा जवाब…" },
+  jugnuDid: { en: "You did on the board", hi: "तुमने बोर्ड पर किया" },
   jugnuUnreachable: {
     en: "Jugnu can't reach his model right now.",
     hi: "जुगनू अभी अपने मॉडल तक नहीं पहुँच पा रहा।",

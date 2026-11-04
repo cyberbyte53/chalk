@@ -71,3 +71,4 @@ export { OwnHtml, type OwnMarkup, ours } from "./own-markup";
 export type { Heard, HeardSound, HeardWords } from "@chalk/content";
 export { addressesOf, causesOf, replay } from "./replay";
 export { type Chat, type ChatMessage, ChatState, chatOf } from "./chat";
+export { JugnuChat, type JugnuChatProps } from "./jugnu-chat";

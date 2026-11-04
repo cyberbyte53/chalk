@@ -37,6 +37,9 @@
   align-items: center;
   gap: 10px;
 }
+.board-footer.has-chat {
+  flex-wrap: wrap;
+}
 .board-footer:empty {
   display: none;
 }
@@ -317,4 +320,111 @@
   .piece-prop.is-pointed {
     animation: none;
   }
+}
+
+/* Jugnu's chat (jugnu-chat.tsx), in the bottom bar: the board stays live above it. One message in
+   front, short; earlier ones a tap away; one line while the student acts on the board. */
+.jugnu-chat {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: var(--jugnu-chat-bg, #fff8e1);
+  color: #2b2b2b;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+.jugnu-chat.is-one-line {
+  flex-direction: row;
+  align-items: center;
+  padding: 6px 8px;
+}
+.jugnu-line {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+.jugnu-line span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.jugnu-message {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.jugnu-message p,
+.jugnu-theirs p {
+  margin: 0;
+  line-height: 1.35;
+}
+.jugnu-theirs {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: #3f3dd6;
+  color: #fff;
+}
+.jugnu-did {
+  display: block;
+  font-size: 12px;
+  opacity: 0.8;
+}
+.jugnu-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.jugnu-choices button,
+.jugnu-done,
+.jugnu-earlier,
+.jugnu-reply button {
+  border: 1px solid #c9a227;
+  border-radius: 14px;
+  background: #fff;
+  padding: 5px 12px;
+  font: inherit;
+  color: inherit;
+}
+.jugnu-earlier {
+  align-self: flex-start;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+.jugnu-history {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+.jugnu-history .is-theirs {
+  color: #3f3dd6;
+}
+.jugnu-thinking {
+  margin: 0;
+  font-style: italic;
+  opacity: 0.75;
+}
+.jugnu-reply {
+  display: flex;
+  gap: 6px;
+}
+.jugnu-reply input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #c9a227;
+  border-radius: 14px;
+  padding: 5px 10px;
+  font: inherit;
 }

@@ -1,6 +1,6 @@
 # Jugnu's chat: what the student sees
 
-Status: proposed (2026-11-04), reviewed once and revised. Builds on jugnu-sandbox.md and jugnu-timeline.md.
+Status: built (2026-11-04): chat events, choices, the chat in the bar, runs seen through it. Builds on jugnu-sandbox.md and jugnu-timeline.md.
 
 ## The need
 
