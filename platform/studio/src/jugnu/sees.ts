@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -14,6 +15,20 @@ import { type Case, type Step, played, readCases, restored } from "./cases";
  */
 
 export const root = dirname(findUp("pnpm-workspace.yaml", dirname(fileURLToPath(import.meta.url))));
+
+/**
+ * The commit the repo is at, as raw records name their build (teacher-view.md: a board is known
+ * by its id, version and commit): "+changes" after it when the tree has uncommitted changes (its
+ * boards may not be that commit's).
+ */
+export function commitNow(): string {
+  const git = (args: string[]) => execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
+  try {
+    return `${git(["rev-parse", "HEAD"])}${git(["status", "--porcelain"]) === "" ? "" : "+changes"}`;
+  } catch {
+    return "unknown";
+  }
+}
 const build = join(root, "build");
 const readBuilt = (path: string): unknown =>
   JSON.parse(readFileSync(join(build, `${path}.json`), "utf8"));

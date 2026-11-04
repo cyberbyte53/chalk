@@ -45,8 +45,10 @@ const app = createApp({
     process.env.JUGNU_PROVIDER === undefined
       ? undefined
       : {
-          turn: async (turn) => (await import("@chalk/studio/jugnu")).liveTurn(turn as never),
-          end: async (session) => (await import("@chalk/studio/jugnu")).endConversation(session),
+          turn: async (turn, going) => {
+            const { liveTurn } = await import("@chalk/studio/jugnu");
+            return liveTurn(turn as never, going as never);
+          },
         },
 });
 

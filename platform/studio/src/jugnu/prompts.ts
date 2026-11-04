@@ -14,8 +14,6 @@ export const Seat = {
   Tutor: "tutor",
   Student: "student",
   Judge: "judge",
-  /** Writes the teacher's note once a conversation ends. */
-  Notes: "notes",
 } as const;
 export type Seat = (typeof Seat)[keyof typeof Seat];
 
@@ -48,12 +46,11 @@ export function promptNames(seat: Seat): string[] {
     : [];
 }
 
-/** The committed Jugnu (`prompts/jugnu.yaml`): which model, which tutor prompt, which notes prompt. */
+/** The committed Jugnu (`prompts/jugnu.yaml`): which model, and which tutor prompt. */
 export function committedJugnu(): {
   provider: string;
   model: string;
   prompt: string;
-  notes: string;
 } {
   const text = readFileSync(join(root, "platform/studio/prompts/jugnu.yaml"), "utf8");
   const get = (key: string) => {
@@ -65,6 +62,5 @@ export function committedJugnu(): {
     provider: get("provider"),
     model: get("model"),
     prompt: get("prompt"),
-    notes: get("notes"),
   };
 }

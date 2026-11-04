@@ -7,18 +7,18 @@ import {
   type EventsReply,
   type GroupReply,
   type JoinedGroup,
+  type JugnuTurnAnswer,
   type MeReply,
   Role,
   type TeacherGroup,
   groupCodePath,
   groupLearnerPath,
   groupPath,
-  type LearnerReply,
 } from "@chalk/api";
 import { Actor, type ChalkEvent, EVENT_SCHEMA_VERSION, Level } from "@chalk/content";
 import { Band, type Progress } from "@chalk/learning";
 import { PGlite } from "@electric-sql/pglite";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -32,7 +32,15 @@ import {
 } from "./app";
 import { type Db, MIGRATIONS } from "./db";
 import type { GoogleVerifier } from "./google";
-import { jugnuNotes, schema } from "./schema";
+import type { KeptConversation } from "./jugnu-store";
+import {
+  ConversationEnd,
+  jugnuConversations,
+  jugnuMessages,
+  jugnuTurns,
+  schema,
+  texts,
+} from "./schema";
 import { addQuestionVersions, addSchool } from "./store";
 
 const ORIGIN = "https://chalk.test";
@@ -169,7 +177,7 @@ describe("server", () => {
   beforeEach(async () => {
     logged = { records: [], warnings: [], errors: [] };
     await db.execute(
-      sql`truncate jugnu_notes, mastery, attempts, question_versions, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
+      sql`truncate jugnu_messages, jugnu_turns, jugnu_conversations, texts, mastery, attempts, question_versions, events, members, groups, sign_ins, accounts, schools restart identity cascade`,
     );
     schoolCode = await addSchool(db, "Sunrise Public School", counter());
     clock = Date.UTC(2026, 9, 15);
@@ -369,61 +377,6 @@ describe("server", () => {
     ]);
   });
 
-  it("shows a teacher one learner of theirs: wrong tries and Jugnu's latest note, by concept", async () => {
-    const { teacher, learner, group } = await teacherAndLearner();
-    await addQuestionVersions(db, [
-      { board: "book/ch/questions/fam/ask1", version: "v", tests: ["c1"], level: Level.Medium },
-    ]);
-    await learner.json("POST", ApiPath.Join, { code: group.joinCode });
-    await learner.json("POST", ApiPath.Events, {
-      events: [
-        signalOn("w1", 1, "book/ch/questions/fam/ask1", "checked", {
-          status: "wrong",
-          isGraded: true,
-        }),
-      ],
-    });
-    const { learners } = await teacher.json<GroupReply>("GET", groupPath(group.id));
-    const id = learners[0]?.id ?? "";
-    expect(learners[0]?.note).toBeNull();
-    // His notes: an older and a newer one on the question's concept, one on a page of c1.
-    const at = (t: number) => new Date(Date.UTC(2026, 9, 15, t));
-    await db.insert(jugnuNotes).values([
-      { accountId: id, board: "book/ch/questions/fam/ask1", version: "v", at: at(9), text: "old" },
-      { accountId: id, board: "book/ch/questions/fam/ask1", version: "v", at: at(10), text: "new" },
-      { accountId: id, board: "page1", version: "p", at: at(8), text: "on the page" },
-    ]);
-    const view = await teacher.json<LearnerReply>("GET", groupLearnerPath(group.id, id));
-    expect(view.learner.name).toBe("Priya");
-    expect(view.concepts).toEqual([
-      {
-        concept: "c1",
-        wrong: [expect.objectContaining({ board: "book/ch/questions/fam/ask1", family: "fam" })],
-        note: expect.objectContaining({ text: "new" }),
-      },
-    ]);
-    // The group shows each learner's newest note.
-    const again = await teacher.json<GroupReply>("GET", groupPath(group.id));
-    expect(again.learners[0]?.note?.text).toBe("new");
-    // Only their own teacher, and only while they are in the group.
-    const other = new Phone(app);
-    await other.signIn("t2", "Asha");
-    await other.json("POST", ApiPath.Setup, { name: "Asha", schoolCode, role: Role.Teacher });
-    expect(await other.error("GET", groupLearnerPath(group.id, id))).toEqual([
-      404,
-      ApiErrorCode.NotFound,
-    ]);
-    expect(await learner.error("GET", groupLearnerPath(group.id, id))).toEqual([
-      403,
-      ApiErrorCode.WrongRole,
-    ]);
-    await teacher.send("DELETE", groupLearnerPath(group.id, id));
-    expect(await teacher.error("GET", groupLearnerPath(group.id, id))).toEqual([
-      404,
-      ApiErrorCode.NotFound,
-    ]);
-  });
-
   it("only takes changes from the app's own page", async () => {
     const phone = new Phone(app);
     const response = await phone.send(
@@ -481,58 +434,124 @@ describe("server", () => {
     expect(list.headers.get("cache-control")).toBe("no-cache");
   });
 
-  it("asks Jugnu for one signed-in person's turn, on a built board only", async () => {
+  it("keeps Jugnu's side of each conversation: found by its opening, appended, ended once", async () => {
     const dir = mkdtempSync(join(tmpdir(), "chalk-content-"));
     mkdirSync(join(dir, "book", "chapter"), { recursive: true });
-    writeFileSync(join(dir, "book", "chapter", "ask.json"), '{"kind":"question","version":"v1"}');
-    const asked: string[] = [];
+    writeFileSync(
+      join(dir, "book", "chapter", "ask.json"),
+      '{"kind":"question","id":"b1","version":"v1"}',
+    );
+    const given: (KeptConversation | undefined)[] = [];
     const served = make({
       contentDir: dir,
+      commit: "c1",
       jugnu: {
-        turn: async (turn) => {
-          asked.push(turn.session);
+        turn: async (turn, going) => {
+          given.push(going);
+          const added = [
+            { role: "user", content: turn.said },
+            { role: "assistant", content: `heard: ${turn.said}` },
+          ];
+          const messages = [...(going?.messages ?? []), ...added];
           return {
-            says: `heard: ${turn.said}`,
-            glow: null,
-            choices: [],
-            isHandBack: turn.said === "got it",
-            model: "m",
+            reply: {
+              says: `heard: ${turn.said}`,
+              glow: null,
+              choices: [],
+              isHandBack: turn.said === "got it",
+              model: "m/1",
+            },
+            conversation: {
+              model: { provider: "m", id: "1" },
+              prompt: { seat: "tutor", name: "p", hash: "h", text: "the prompt" },
+              lesson: "the lesson",
+              messages,
+              cursor: { turns: messages.length / 2 },
+            },
+            added,
+            requests: [{ ms: 1 }],
+            ms: 5,
           };
         },
-        end: async (session) => `note for ${session.split(":")[1]}`,
       },
     });
-    const turn = { session: "s1", board: "book/chapter/ask", state: {}, did: [], said: "why?" };
-    const stranger = new Phone(served);
-    expect(await stranger.error("POST", ApiPath.JugnuTurn, turn)).toEqual([
+    const turn = { session: "o1", board: "book/chapter/ask", state: {}, did: [], said: "why?" };
+    expect(await new Phone(served).error("POST", ApiPath.JugnuTurn, turn)).toEqual([
       401,
       ApiErrorCode.NotSignedIn,
     ]);
     const learner = new Phone(served);
     await learner.signIn("l1", "Priya");
     await learner.json("POST", ApiPath.Setup, { name: "Priya", schoolCode, role: Role.Learner });
-    const reply = await learner.json<Record<string, unknown>>("POST", ApiPath.JugnuTurn, turn);
-    expect(reply).toMatchObject({ says: "heard: why?" });
-    // Each account's sessions are its own.
-    expect(asked[0]).toMatch(/:s1$/);
-    expect(asked[0]).not.toBe("s1");
     for (const board of ["book/chapter/missing", "../secret", "book/../x"])
       expect(await learner.error("POST", ApiPath.JugnuTurn, { ...turn, board })).toEqual([
         400,
         ApiErrorCode.BadRequest,
       ]);
-    const notes = () => db.select().from(jugnuNotes);
-    // No note while the conversation goes on; one when he hands back.
-    expect(await notes()).toEqual([]);
+
+    // The first turn starts a conversation: kept with its place, what ran, its turn and messages.
+    const first = await learner.json<JugnuTurnAnswer>("POST", ApiPath.JugnuTurn, turn);
+    expect(first).toMatchObject({ says: "heard: why?" });
+    expect(given[0]).toBeUndefined();
+    const [kept] = await db.select().from(jugnuConversations);
+    expect(kept).toMatchObject({
+      id: first.conversation,
+      opening: "o1",
+      board: "b1",
+      version: "v1",
+      commit: "c1",
+      provider: "m",
+      model: "1",
+      promptName: "p",
+      promptHash: "h",
+      endedAt: null,
+    });
+    expect((await db.select().from(texts)).map((t) => t.text).sort()).toEqual([
+      "the lesson",
+      "the prompt",
+    ]);
+    // The next turn at the same opening goes on with it: given back whole, appended to.
+    const second = await learner.json<JugnuTurnAnswer>("POST", ApiPath.JugnuTurn, {
+      ...turn,
+      said: "and now?",
+    });
+    expect(second.conversation).toBe(first.conversation);
+    expect(second.turn).not.toBe(first.turn);
+    expect(given[1]?.messages).toHaveLength(2);
+    expect(given[1]?.cursor).toEqual({ turns: 1 });
+    expect(given[1]?.prompt.text).toBe("the prompt");
+    const messages = await db.select().from(jugnuMessages);
+    expect(messages.map((m) => m.n).sort()).toEqual([0, 1, 2, 3]);
+    expect((await db.select().from(jugnuTurns)).map((t) => t.n).sort()).toEqual([0, 1]);
+
+    // He hands back: it ends, once; the opening's next ask starts a new one.
     await learner.json("POST", ApiPath.JugnuTurn, { ...turn, said: "got it" });
-    await new Promise((r) => setTimeout(r, 50));
-    expect((await notes()).map((n) => [n.text, n.version])).toEqual([["note for s1", "v1"]]);
-    // A conversation left quiet ends too (checked on the next request, and each minute).
-    await learner.json("POST", ApiPath.JugnuTurn, { ...turn, session: "s2" });
+    const [ended] = await db
+      .select()
+      .from(jugnuConversations)
+      .where(eq(jugnuConversations.id, first.conversation));
+    expect(ended).toMatchObject({ endedBy: ConversationEnd.HandBack, cursor: null });
+    const again = await learner.json<JugnuTurnAnswer>("POST", ApiPath.JugnuTurn, turn);
+    expect(again.conversation).not.toBe(first.conversation);
+    expect(given[3]).toBeUndefined();
+
+    // Another child at the same opening id has their own.
+    const other = new Phone(served);
+    await other.signIn("l2", "Asha");
+    await other.json("POST", ApiPath.Setup, { name: "Asha", schoolCode, role: Role.Learner });
+    const theirs = await other.json<JugnuTurnAnswer>("POST", ApiPath.JugnuTurn, turn);
+    expect(theirs.conversation).not.toBe(again.conversation);
+    expect(given[4]).toBeUndefined();
+
+    // Left quiet, a conversation ends (checked on the next turn, and each minute).
     clock += JUGNU_QUIET_MS + 1;
-    await learner.json("POST", ApiPath.JugnuTurn, { ...turn, session: "s3" });
-    await new Promise((r) => setTimeout(r, 50));
-    expect((await notes()).map((n) => n.text).sort()).toEqual(["note for s1", "note for s2"]);
+    await learner.json("POST", ApiPath.JugnuTurn, { ...turn, session: "o2" });
+    const quiet = await db
+      .select()
+      .from(jugnuConversations)
+      .where(eq(jugnuConversations.id, again.conversation));
+    expect(quiet[0]?.endedBy).toBe(ConversationEnd.Quiet);
+
     // Without a model set up, he isn't there.
     const none = new Phone(make({ contentDir: dir }));
     await none.signIn("l1", "Priya");

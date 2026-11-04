@@ -124,13 +124,28 @@ export async function pipelineEndpoint(
  * POST `{case, student, note}` starts a run and answers its id at once; the run goes on by itself,
  * kept after every turn, so the page follows it by its id. The preview's ?dev&jugnu shows them.
  */
+/** Development's keeper of live conversations, by the board's opening (the server's is its database). */
+const devConversations = new Map<string, import("./jugnu/live").LiveConversation>();
+const devBusy = new Set<string>();
+
 export async function jugnuEndpoint(req: IncomingMessage, res: ServerResponse): Promise<void> {
   try {
     const dialogue = await import("./jugnu/dialogue");
     // A live student's turn with the committed Jugnu (jugnu/live.ts): the preview's boards.
     if (req.method === "POST" && (req.url ?? "").startsWith("/dev-jugnu/turn")) {
       const { liveTurn } = await import("./jugnu/live");
-      send(res, 200, await liveTurn(JSON.parse(await bodyOf(req))));
+      const turn = JSON.parse(await bodyOf(req)) as import("./jugnu/live").LiveTurn;
+      // In development the conversations are kept here, in memory (the server keeps them for good).
+      if (devBusy.has(turn.session)) throw new Error("Jugnu is still answering the last message");
+      devBusy.add(turn.session);
+      try {
+        const done = await liveTurn(turn, devConversations.get(turn.session));
+        if (done.reply.isHandBack) devConversations.delete(turn.session);
+        else devConversations.set(turn.session, done.conversation);
+        send(res, 200, done.reply);
+      } finally {
+        devBusy.delete(turn.session);
+      }
       return;
     }
     if (req.method === "POST") {

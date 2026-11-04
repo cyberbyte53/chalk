@@ -1,30 +1,31 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type { RuntimeState } from "@chalk/player";
-import { generateText } from "ai";
+import type { ModelMessage } from "ai";
+import type { Request } from "./agent";
 import { type Step, restored } from "./cases";
-import { type JugnuConversation, firstTurn, jugnuTurn, laterTurn, newConversation } from "./jugnu";
-import { modelOf, settingsForChoice } from "./model";
-import { Seat, committedJugnu, promptOf } from "./prompts";
+import { type JugnuConversation, firstTurn, jugnuTurn, laterTurn } from "./jugnu";
+import { type Provider, modelOf, settingsForChoice } from "./model";
+import { type Prompt, Seat, committedJugnu, promptOf } from "./prompts";
 import { lessonOf, root, seen } from "./sees";
 
 /**
- * Jugnu, live (platform/docs/plans/jugnu-live.md): one turn for a student on a real board, as a
- * phone (or the preview) asks it. The browser keeps the board and its events; it sends the board's
- * path, its state now (once settled), what the student did since his last reply (as steps), and what
- * they said. Here: the committed Jugnu (prompts/jugnu.yaml), his conversation kept per session, the
- * board restored from its state, his turn (jugnu.ts) and his reply. The model's key stays here.
- * The dev service serves it now; chalk1's server calls the same function behind sign-in.
+ * Jugnu, live (platform/docs/plans/jugnu-live.md, teacher-view.md): one turn for a student on a
+ * real board. It keeps nothing: it is given the conversation so far (none, the first time) and
+ * gives back the conversation as it now is, and what is new in it, for its keeper (the server's
+ * database; the dev service's memory) to save. A conversation keeps what it started with: its
+ * model, its prompt and its lesson, whatever is committed later. The board is restored from the
+ * state the phone sends. The model's key stays here.
  */
 
 export type LiveTurn = {
-  /** One student's time on one opening of a board. */
+  /** The board's opening: his conversation is this opening's. */
   session: string;
   board: string;
   state: RuntimeState;
   /** What they did on the board since his last reply (or since it opened, the first time). */
   did: Step[];
-  /** What they said: typed, a tapped choice, "" for Done, or Get help's "Why is it wrong?". */
+  /** What they said: typed, a tapped choice, or Get help's "Why is it wrong?". */
   said: string;
 };
 
@@ -36,116 +37,103 @@ export type LiveReply = {
   model: string;
 };
 
-type Session = {
-  conversation: JugnuConversation;
+/** Where a conversation stands, to go on from (working state, not the record: overwritten each turn). */
+export type LiveCursor = {
+  /** His `reply` awaiting its answer, and what else it is owed. */
+  awaiting: JugnuConversation["awaiting"];
   /** The board as the student saw it after his last reply (to tell him what changed). */
   lastSeen: unknown;
-  /** Everything they did so far (the first turn tells him). */
+  /** Everything they did so far. */
   steps: Step[];
-  isBusy: boolean;
-  at: number;
-  /** The conversation as plain lines (what they did and said, what he said): its note is written from it. */
-  talk: string[];
-  /** His working belief after his last turn (for the note's writer to weigh, not to copy). */
-  lastNote: string;
 };
 
-const sessions = new Map<string, Session>();
+/** A conversation with Jugnu: what it runs on, its messages, and where it stands. */
+export type LiveConversation = {
+  model: { provider: Provider; id: string };
+  prompt: Prompt;
+  lesson: string;
+  messages: ModelMessage[];
+  cursor: LiveCursor;
+};
+
+export type LiveTurnDone = {
+  reply: LiveReply;
+  /** The conversation after this turn (to go on from). */
+  conversation: LiveConversation;
+  /** The messages this turn added, in order (for the record). */
+  added: ModelMessage[];
+  /** His requests this turn (their usage and timing, for the record). */
+  requests: Request[];
+  ms: number;
+};
+
 const lessons = new Map<string, string>();
-const HOUR = 60 * 60 * 1000;
 // The repo's .env, on a laptop; on chalk1 the keys are already in the environment (compose).
 const envFile = join(root, ".env");
 if (existsSync(envFile)) process.loadEnvFile(envFile);
 
-/** One turn of the committed Jugnu for a live student. */
-export async function liveTurn(t: LiveTurn): Promise<LiveReply> {
-  for (const [key, s] of sessions) if (Date.now() - s.at > HOUR) sessions.delete(key);
-  const session = sessions.get(t.session) ?? {
-    conversation: newConversation(),
-    lastSeen: undefined,
-    steps: [],
-    isBusy: false,
-    at: Date.now(),
-    talk: [],
-    lastNote: "",
+/** A new conversation on a board: the committed Jugnu's model and prompt, the board's lesson. */
+async function started(board: string): Promise<LiveConversation> {
+  const committed = committedJugnu();
+  let lesson = lessons.get(board);
+  if (lesson === undefined) {
+    lesson = await lessonOf(board);
+    lessons.set(board, lesson);
+  }
+  return {
+    model: { provider: committed.provider as Provider, id: committed.model },
+    prompt: promptOf(Seat.Tutor, committed.prompt),
+    lesson,
+    messages: [],
+    cursor: { awaiting: null, lastSeen: undefined, steps: [] },
   };
-  if (session.isBusy) throw new Error("Jugnu is still answering the last message");
-  session.isBusy = true;
-  session.at = Date.now();
-  sessions.set(t.session, session);
-  let board: Awaited<ReturnType<typeof restored>> | undefined;
+}
+
+/** One turn of Jugnu's, on the conversation given (or a new one). */
+export async function liveTurn(t: LiveTurn, given?: LiveConversation): Promise<LiveTurnDone> {
+  const began = Date.now();
+  const c = given ?? (await started(t.board));
+  // Its own copies: what was given stays as it was.
+  const conversation: JugnuConversation = {
+    messages: [...c.messages],
+    awaiting: c.cursor.awaiting,
+  };
+  const steps = [...c.cursor.steps, ...t.did];
+  const board = await restored(t.board, t.state);
   try {
-    board = await restored(t.board, t.state);
-    const committed = committedJugnu();
-    const model = modelOf(
-      settingsForChoice({ provider: committed.provider as never, id: committed.model }),
-    );
-    const prompt = promptOf(Seat.Tutor, committed.prompt);
-    let lesson = lessons.get(t.board);
-    if (lesson === undefined) {
-      lesson = await lessonOf(t.board);
-      lessons.set(t.board, lesson);
-    }
-    session.steps.push(...t.did);
+    const model = modelOf(settingsForChoice(c.model));
     const studentTurn =
-      session.lastSeen === undefined
-        ? firstTurn(board, session.steps, t.said)
-        : laterTurn(board, session.lastSeen, { says: t.said, did: t.did });
+      c.cursor.lastSeen === undefined
+        ? firstTurn(board, steps, t.said)
+        : laterTurn(board, c.cursor.lastSeen, { says: t.said, did: t.did });
+    const before = conversation.messages.length;
     const his = await jugnuTurn({
-      conversation: session.conversation,
+      conversation,
       model,
-      prompt,
-      lesson,
+      prompt: c.prompt,
+      lesson: c.lesson,
       boardPath: t.board,
       board,
       studentTurn,
     });
-    session.lastSeen = seen(board);
-    for (const s of t.did) session.talk.push(`Child did on the board: ${stepText(s)}`);
-    if (t.said !== "") session.talk.push(`Child: ${t.said}`);
-    session.talk.push(`Jugnu: ${his.says}`);
-    session.lastNote = his.note;
     return {
-      says: his.says,
-      glow: his.glow,
-      choices: his.choices,
-      isHandBack: his.isHandBack,
-      model: model.name,
+      reply: {
+        says: his.says,
+        glow: his.glow,
+        choices: his.choices,
+        isHandBack: his.isHandBack,
+        model: model.name,
+      },
+      conversation: {
+        ...c,
+        messages: conversation.messages,
+        cursor: { awaiting: conversation.awaiting, lastSeen: seen(board), steps },
+      },
+      added: conversation.messages.slice(before),
+      requests: his.requests,
+      ms: Date.now() - began,
     };
   } finally {
-    session.isBusy = false;
-    board?.dispose();
+    board.dispose();
   }
-}
-
-const stepText = (s: Step): string =>
-  `${s.action} on ${s.prop}${s.args === undefined ? "" : ` ${JSON.stringify(s.args)}`}`;
-
-/**
- * Ends a conversation (platform/docs/plans/teacher-view.md): its note for the teacher, written once
- * from the whole of it (what the child isn't good at yet, and whether they got there), by the
- * committed notes prompt and model. Undefined when he never answered, or it is already ended.
- */
-export async function endConversation(key: string): Promise<string | undefined> {
-  const session = sessions.get(key);
-  sessions.delete(key);
-  if (session === undefined || !session.talk.some((l) => l.startsWith("Jugnu: "))) return undefined;
-  const committed = committedJugnu();
-  const model = modelOf(
-    settingsForChoice({ provider: committed.provider as never, id: committed.model }),
-  );
-  const r = await generateText({
-    model: model.model,
-    instructions: model.instructions([promptOf(Seat.Notes, committed.notes).text]),
-    messages: [
-      {
-        role: "user",
-        content: `${session.talk.join("\n")}\n\n(Jugnu's own last working note: ${session.lastNote || "none"})`,
-      },
-    ],
-    maxRetries: 1,
-    providerOptions: model.options,
-  });
-  const text = r.text.trim();
-  return text === "" ? undefined : text;
 }

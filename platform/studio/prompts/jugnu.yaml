@@ -4,4 +4,3 @@
 provider: deepseek
 model: deepseek-flash
 prompt: small-steps
-notes: baseline

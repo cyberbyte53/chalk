@@ -94,6 +94,12 @@ export const eventKinds = {
       choices: z.array(z.string()).min(2).max(4).optional(),
       /** He handed back: he thinks they have it, and they do the next one alone. */
       isHandBack: z.boolean().optional(),
+      /**
+       * The server's record of this turn: its conversation and turn ids (they join this entry to
+       * Jugnu's side of it, kept on the server). Absent where no server keeps him (the sandbox).
+       */
+      conversation: z.string().optional(),
+      turn: z.string().optional(),
     })
     .strict(),
   /**

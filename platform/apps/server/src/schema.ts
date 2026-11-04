@@ -12,6 +12,7 @@ import {
   real,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -199,25 +200,95 @@ export const mastery = pgTable(
   (t) => [primaryKey({ columns: [t.accountId, t.concept, t.model] })],
 );
 
+/** A text kept once, by the SHA-256 of its words: a prompt's or a lesson's, as Jugnu ran with it. */
+export const texts = pgTable("texts", {
+  hash: text("hash").primaryKey(),
+  text: text("text").notNull(),
+  createdAt: createdAt(),
+});
+
+/** How a conversation with Jugnu ended. */
+export const ConversationEnd = {
+  /** He handed back: he thinks they have it. */
+  HandBack: "handBack",
+  /** No message for a while: they left. */
+  Quiet: "quiet",
+  /** Their practice run finished. */
+  SetFinished: "setFinished",
+} as const;
+export type ConversationEnd = (typeof ConversationEnd)[keyof typeof ConversationEnd];
+
 /**
- * Jugnu's note on a learner, one per conversation, written when it ends (platform/docs/plans/
- * teacher-view.md): what they aren't good at yet and whether they got there. Kept here, where his
- * turns run, never sent to the phone. The board and its version say what it is about; its
- * concepts are worked out when it is read.
+ * Jugnu's side of a conversation (platform/docs/plans/teacher-view.md, raw): who and where (the
+ * account; the board's opening, id and version; the build's commit), what ran (the model, the
+ * tutor prompt by name and hash, the exact prompt and lesson texts by their hash), when it began
+ * and ended and why. Its turns and messages are appended, never changed. `cursor` is working
+ * state only (where it stands, to go on from): overwritten each turn, dropped when it ends. Never
+ * served by any API; removed with the account.
  */
-export const jugnuNotes = pgTable(
-  "jugnu_notes",
+export const jugnuConversations = pgTable(
+  "jugnu_conversations",
   {
     id: uuid("id").primaryKey().defaultRandom(),
     accountId: uuid("account_id")
       .notNull()
-      .references(() => accounts.id),
+      .references(() => accounts.id, { onDelete: "cascade" }),
+    opening: text("opening").notNull(),
     board: text("board").notNull(),
     version: text("version").notNull(),
-    at: timestamp("at", { withTimezone: true }).notNull(),
-    text: text("text").notNull(),
+    commit: text("commit").notNull(),
+    provider: text("provider").notNull(),
+    model: text("model").notNull(),
+    promptName: text("prompt_name").notNull(),
+    promptHash: text("prompt_hash").notNull(),
+    promptText: text("prompt_text")
+      .notNull()
+      .references(() => texts.hash),
+    lessonText: text("lesson_text")
+      .notNull()
+      .references(() => texts.hash),
+    startedAt: timestamp("started_at", { withTimezone: true }).notNull(),
+    lastTurnAt: timestamp("last_turn_at", { withTimezone: true }).notNull(),
+    endedAt: timestamp("ended_at", { withTimezone: true }),
+    endedBy: text("ended_by").$type<ConversationEnd>(),
+    cursor: jsonb("cursor"),
   },
-  (t) => [index("jugnu_notes_account_at").on(t.accountId, t.at)],
+  (t) => [
+    index("jugnu_conversations_account_opening").on(t.accountId, t.opening),
+    index("jugnu_conversations_open").on(t.endedAt, t.lastTurnAt),
+  ],
+);
+
+/** One turn of Jugnu's (raw): when, how long, and his requests (their usage, finish, timing). */
+export const jugnuTurns = pgTable(
+  "jugnu_turns",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    conversationId: uuid("conversation_id")
+      .notNull()
+      .references(() => jugnuConversations.id, { onDelete: "cascade" }),
+    n: integer("n").notNull(),
+    at: timestamp("at", { withTimezone: true }).notNull(),
+    ms: integer("ms").notNull(),
+    requests: jsonb("requests").notNull(),
+  },
+  (t) => [uniqueIndex("jugnu_turns_conversation_n").on(t.conversationId, t.n)],
+);
+
+/** Every message of a conversation as the model had it (raw), in order, with the turn that added it. */
+export const jugnuMessages = pgTable(
+  "jugnu_messages",
+  {
+    conversationId: uuid("conversation_id")
+      .notNull()
+      .references(() => jugnuConversations.id, { onDelete: "cascade" }),
+    n: integer("n").notNull(),
+    turnId: uuid("turn_id")
+      .notNull()
+      .references(() => jugnuTurns.id, { onDelete: "cascade" }),
+    message: jsonb("message").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.conversationId, t.n] })],
 );
 
 export const schema = {
@@ -230,5 +301,8 @@ export const schema = {
   questionVersions,
   attempts,
   mastery,
-  jugnuNotes,
+  texts,
+  jugnuConversations,
+  jugnuTurns,
+  jugnuMessages,
 };

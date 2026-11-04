@@ -18,7 +18,7 @@ import {
   settingsFrom,
 } from "./model";
 import { type Prompt, Seat, committedJugnu, promptNames, promptOf } from "./prompts";
-import { changes, lessonOf, root, seen } from "./sees";
+import { changes, commitNow, lessonOf, root, seen } from "./sees";
 
 /**
  * The sandbox (platform/docs/plans/jugnu-sandbox.md): Jugnu (jugnu.ts, the one production uses) and a
@@ -310,7 +310,7 @@ export async function runDialogue(
   // Everything on her boards is recorded as a phone would (docs/events.md), checked by the bus.
   const events: ChalkEvent[] = [];
   const extras: Record<number, RunExtra> = {};
-  const bus = createEventBus({ commit: "sandbox", session: id });
+  const bus = createEventBus({ commit: commitNow(), session: id });
   bus.subscribe((e) => events.push(e));
   const lastSeq = () => events.length - 1;
   const opened = (runtime: BoardRuntime, opening: string): BoardRecorder => {

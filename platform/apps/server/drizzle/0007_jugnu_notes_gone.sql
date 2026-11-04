@@ -1,0 +1,1 @@
+DROP TABLE "jugnu_notes" CASCADE;

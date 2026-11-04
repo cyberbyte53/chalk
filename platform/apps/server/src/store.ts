@@ -27,7 +27,6 @@ import {
 import { and, desc, eq, gt, inArray, isNull, max, min, sql } from "drizzle-orm";
 import type { Db } from "./db";
 import type { GoogleProfile } from "./google";
-import { newestNoteOfEach } from "./notes";
 import {
   events,
   accounts,
@@ -286,14 +285,12 @@ export async function groupLearners(
   const ids = rows.map((row) => row.id);
   const progress = await progressOfEach(db, ids, plans);
   const masteries = await masteryOfEach(db, ids);
-  const notes = await newestNoteOfEach(db, ids);
   return rows.map((row) => ({
     ...row,
     joinedAt: row.joinedAt.getTime(),
     lastActiveAt: row.lastActiveAt === null ? null : new Date(row.lastActiveAt).getTime(),
     progress: progress.get(row.id) ?? {},
     mastery: masteries.get(row.id) ?? [],
-    note: notes.get(row.id) ?? null,
   }));
 }
 

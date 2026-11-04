@@ -50,6 +50,20 @@
       "when": 1793786648364,
       "tag": "0006_jugnu_notes",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793788461042,
+      "tag": "0007_jugnu_notes_gone",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793788461597,
+      "tag": "0008_jugnu_record",
+      "breakpoints": true
     }
   ]
 }

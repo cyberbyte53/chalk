@@ -1,65 +1,110 @@
-# The teacher sees each child
+# What we know about each child
 
-Status: reviewed (2026-11-04); the review's fixes are in.
+Status: proposed (2026-11-04, third version: the person's layers, the principles, the review's
+fixes), for the person.
 
-## From first principles
+## Where it goes
 
-A teacher asks two things: **who needs me**, and **what is this child not good at right now**.
-Three facts answer it, each from where it is made, each its own module:
+What we learn about a child serves the teacher (who needs me, what isn't this child good at yet),
+the child's own path (what next, Jugnu remembering them), us (is Jugnu teaching well, which boards
+confuse), and proof that it works. All are readings of the same facts. So: keep the facts right;
+the readings will change many times.
 
-1. **Results**: what they got right and wrong, by concept. Already there: the phone's events become
-   `attempts` and `mastery` on the server (store.ts). Nothing new is made; the teacher view reads
-   the wrong attempts too (which question, what they chose).
-2. **Jugnu's notes**: one per conversation, written once it ends (he hands back, or it goes quiet
-   for 15 minutes: children just leave), from the whole of it: what the child isn't good at yet,
-   and whether they got there ("Got there: yes / partly / not yet"). A turn's own note is only his
-   working guess, mid-way; the person's call (4 Nov). Made on the server, where his turns run: kept there (`jugnu_notes`: account, board, the
-   concepts it tests, when, the note), never sent to the phone. The child never sees them.
-3. **The teacher view** reads both, per child per concept: mastery, the questions got wrong, his
-   latest note. It writes nothing.
+## Principles
 
-A deeper teacher view later (trends, a summary over many notes, the class's common mistakes) is
-more reading of the same two facts; the facts don't change.
+1. **One raw record of what happened, append-only, never edited.** The phone's events; and
+   Jugnu's side of each conversation (it happens on the server).
+2. **Everything raw joins on the same keys**: the child's account, the board's opening (the
+   events' `opening`), the board's id and version, the build (commit), and for Jugnu, the
+   conversation and the turn: each turn's id is in the phone's `jugnu` event and in the server's
+   record of that turn.
+3. **What the child saw can always be recovered** from three keys every raw record carries: the
+   board's id, its version, and the commit it was built from (the repo at that commit builds it
+   again; the version says it is the same board). Nothing else is copied. So the commit is always
+   a real one: the demo and the sandbox record the commit they ran on, not a word.
+4. **Two kinds of derived data.** *Computed* (attempts, mastery): cheap, the same each time:
+   dropped and worked out again at will (as now). *Judged* (by a model: reflections, learner
+   updates): kept as records with what they came from, which prompt and model, and when; judging
+   again is an explicit command that adds new records, never overwrites.
+5. **The demo is raw data made by simulated children**, marked demo, through the same pipeline.
+6. **A child's data can be removed entirely**: everything keyed to their account goes with it.
+   Raw conversations and judgements never leave the server in any API; the teacher sees judged
+   points only.
 
-## Modules
+## Layers
 
-- **Server, notes** (`apps/server/src/notes.ts`): `saveNote` when a conversation ends (app.ts keeps
-  the conversations going on; `endConversation` in the studio's live.ts writes the note, by the
-  committed notes prompt, `prompts/notes/<name>.md` named in `jugnu.yaml`), `newestNoteOfEach`, and
-  `latestNoteByConcept`.
-- **Server, the learner's view** (new: `GET /api/groups/:group/learners/:learner`, the teacher's
-  own group, the learner a member of it now): per concept, mastery, `wrong: {board, family, chosen,
-  at}[]` (recent first, a few) and `note: {text, at} | null`. The group reply gains only each
-  learner's newest note (words and when), for "who needs me".
-- **App, teacher screens** (teacher-screens.tsx): the child's page, per concept: mastery as now,
-  then "Not yet good at" with his note, and the questions got wrong (by family, and what they
-  chose: a question's own words aren't in the built content yet; later, from the build). The class page: each child's newest note under their row,
-  children with a weak concept first (as now).
-- **Demo class** (two halves, independent):
-  - **Made** on the Mac (`platform/studio`, `pnpm demo-class`): five made-up children, each a mix of
-    the sandbox's cases (`jugnu-cases.yaml`, real wrong states with a misconception): on a case
-    they get it wrong (the case's steps), ask Jugnu, and talk it through (the sandbox's dialogue,
-    the committed Jugnu, a simulated student holding the case's belief); on other questions they
-    get it right (the board's witness play); they go through the lesson's pages (their witness, so
-    the pages count as seen). Each child's sessions are moved to days of their own (the gaps within
-    kept). Their events and Jugnu's notes (each note at its `jugnu` event) go into one file,
-    `demo-class.json`. It makes real model calls (the runs kept as any sandbox run).
-  - **Loaded** by the server (`pnpm --filter @chalk/server load-demo <file> <join code>`): demo
-    accounts (Google id `demo:<name>`), joined to the teacher's group by its code, their events
-    saved as a phone's (saveEvents: attempts and mastery follow), their notes saved. It refuses a
-    file whose boards and versions the server's catalogue doesn't have (else no mastery). Loading
-    again replaces the demo accounts; `load-demo --remove` wipes them (notes, attempts, mastery,
-    events, members, accounts, in that order).
+0. **Raw**
+   - **Events** (the phone's, as now). Gains: the `jugnu` event names its conversation and turn;
+     an `app` event `practiceFinished` when a practice run ends (as its last question passes).
+   - **Jugnu's conversations** (`jugnu_conversations`): id; account; opening; board id, version;
+     commit; model; the exact instructions (tutor prompt name and hash; the prompt's and the
+     lesson's texts, kept once each by their hash in `texts`); started; and when and why it ended
+     (hand-back, quiet, set finished).
+   - **Jugnu's turns** (`jugnu_turns`): id, conversation, n, at, how long, the requests' usage.
+   - **Jugnu's messages** (`jugnu_messages`): conversation, n, the turn, the message as the model
+     had it (json, as the AI SDK gives it: reasoning parts round-trip). Appended after each turn;
+     never changed.
+1. **Per conversation: his reflection** (`jugnu_reflections`). When a conversation ends, the same
+   conversation goes on one step: his open `reply` is answered ("the child has left the chat"),
+   then the reflect prompt asks what this conversation shows about the child, and he answers by
+   his `reflect` tool: points they aren't good at yet (short sentences), and got there (yes /
+   partly / not yet). `reflect` is among his tools from the first turn (an unchanged tool list
+   keeps the cache; his prompt says it is only for when he is asked). Kept: conversation, at,
+   reflect prompt (name, hash), model, points, got there, his words in full, usage. Ending is
+   idempotent (only a conversation not yet ended is ended).
+2. **Per practice run: the learner update** (`learner_updates`). On `practiceFinished`, after its
+   events are saved: that child's open conversations are ended first (so every reflection exists),
+   then one step reads the run's answers (from its events: right, wrong, helped) and its
+   conversations' reflections, and writes points: what is still not good, what they keep getting
+   wrong, each naming its evidence by raw ids (event ids, reflection ids). Kept: account, at, the
+   run (its concept, its first and last event ids), update prompt, model, points with evidence,
+   words, usage. A run left halfway gets none (said, not hidden).
+3. **Numbers**: mastery per concept, a Beta from first tries (as now, from the events).
 
-## Not now
+Not decided, not built in: how points map to concepts, and how judgements become numbers. Layers
+0 to 2 keep what those will need. Not now: Jugnu remembering a child across conversations (it will
+read the same layers).
 
-The full chats for teachers (notes only: the person's decision); a summary across notes; Hindi notes.
+## Working state (not raw)
+
+The server holds no conversation in memory: each turn, the route loads the conversation (its
+messages and cursor) from the database, Jugnu takes one turn, and the route saves what is new. The
+cursor is kept apart from the raw (`jugnu_conversations.resume`: his open call and what it is owed, the board as
+he last saw it, the child's steps so far): overwritten each turn, dropped when it ends. The raw
+messages are enough to replay it; the cursor only makes resuming quick.
+
+## Parts
+
+- **Studio, Jugnu** (jugnu.ts, live.ts): his tools gain `reflect`; a conversation is given and
+  returns its new messages, turn by turn (the server keeps them); `reflectOn(conversation)` makes
+  the reflection; `updateFor(run)` makes the learner update. Prompts: `prompts/reflect/<name>.md`,
+  `prompts/update/<name>.md`, named in `jugnu.yaml`, versioned like the tutor's.
+- **Server**: the tables above (one migration, replacing the unshipped 0006); app.ts's Jugnu route
+  saves each turn; the quiet sweep and hand-back end conversations; saveEvents' caller runs the
+  update on `practiceFinished`; a `judge-again` command (reflections or updates, a given prompt,
+  new records), as `work-out` is for computed data; all keyed to the account, removed with it.
+- **Player and app**: the session sent to Jugnu is the board's opening; the `jugnu` event records
+  the conversation and turn the server gives back; the app records `practiceFinished`.
+- **Teacher's API and screens**: the child: latest update's points (each with its evidence: the
+  question's family, what they chose), the numbers per concept, then reflections. The class: each
+  child's latest update's first point. Reads only.
+- **Demo class**: the maker writes raw only (events, Jugnu's conversations from the sandbox's
+  dialogue, its messages; times moved to the child's days, together); the loader saves the raw
+  and runs layers 1 and 2 through the same functions.
+
+## Decisions for the person
+
+- **Keeping Jugnu's thinking about children**: it is the most useful raw data and the most
+  sensitive. Kept on the server only, removed with the account. How long (a retention period),
+  and consent from parents before real children (India's DPDP Act), are the person's.
+- **`reflect` among his tools from the first turn**: a change to the committed Jugnu (measured on
+  the sandbox cases before it ships: one variable).
 
 ## Built in steps
 
-1. Notes on the server (migration 0006_jugnu_notes), and the teacher's API. Check: server tests (a
-   note on hand-back and on going quiet, none mid-way; the learner view's wrong questions and
-   latest note per concept, only for their own teacher); a real conversation's note. **Done.**
-2. The teacher screens. Check: in the browser, with a dev class.
-3. The demo class, made and loaded locally. Check: as a teacher, the class page and each child's.
-4. chalk1: ship; load the demo into the person's group there.
+1. Raw: Jugnu's conversations, turns and messages, their ids in the events; resume. Check:
+   server tests; a conversation across a server restart; the events and the server's record join.
+2. Reflections. Check: real conversations (hand-back, quiet); the cache read on the reflect step.
+3. `practiceFinished` and the learner update. Check: a real practice run's update.
+4. The teacher's API and screens. Check: in the browser.
+5. The demo class through the same path; `judge-again`. Then chalk1.

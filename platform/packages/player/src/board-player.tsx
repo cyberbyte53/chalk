@@ -83,6 +83,7 @@ export type BoardPlayerProps = {
 
 /** What a live board sends for Jugnu's turn: the board, its state, what the student did and said. */
 export type JugnuAsk = {
+  /** The board's opening (its events' `opening`): his conversation here is this opening's. */
   session: string;
   board: string;
   state: unknown;
@@ -96,6 +97,9 @@ export type JugnuAnswer = {
   choices: string[];
   isHandBack: boolean;
   model: string;
+  /** Where the server keeps this turn (absent where none does). */
+  conversation?: string;
+  turn?: string;
 };
 
 /** A glow's address ("road/walker/walker") as the board's pointing: its piece, and the part in it. */
@@ -292,7 +296,8 @@ function BoardPlay({
   const [, setLiveTick] = useState(0);
   const [liveProblem, setLiveProblem] = useState<string | undefined>();
   const [isOpenAgain, setOpenAgain] = useState(false);
-  const session = useMemo(() => (recorder === undefined ? "" : makeId()), [recorder]);
+  // His conversation belongs to this opening: the server joins it to these events by its id.
+  const session = recorder?.opening ?? "";
   const lastReplyAt = useRef(0);
   const sinceReply = () => liveEvents.current.slice(lastReplyAt.current);
   const askHim = async (said: string) => {
@@ -316,6 +321,8 @@ function BoardPlay({
         model: r.model,
         ...(r.choices.length >= 2 ? { choices: r.choices.slice(0, 4) } : {}),
         ...(r.isHandBack ? { isHandBack: true } : {}),
+        ...(r.conversation === undefined ? {} : { conversation: r.conversation }),
+        ...(r.turn === undefined ? {} : { turn: r.turn }),
       });
       if (r.isHandBack) recorder.chat({ what: "closed", by: "handBack" });
       lastReplyAt.current = liveEvents.current.length;

@@ -18,6 +18,8 @@ export const boardPathOf = (board: Board): string => board.item?.path ?? board.n
 export const boardIdOf = (board: Board): string => board.item?.id ?? idOf(board.name);
 
 export type BoardRecorder = {
+  /** This opening's id (every entry it records carries it): what joins other records to it. */
+  opening: string;
   /** The board opened: how. */
   open: (payload: PayloadOf<"open">) => void;
   /** Something around the board: a line's audio failed, the app passed it. `node`: the piece's address. */
@@ -158,6 +160,7 @@ export function recordBoard(
   const offSignal = runtime.onSignal(onSignal);
 
   return {
+    opening,
     open: (payload) => {
       put({ ...place, actor: Actor.App, node: null, kind: "open", payload });
     },
