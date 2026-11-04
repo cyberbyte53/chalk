@@ -10,16 +10,19 @@ export type ModePolicy = {
   canRetry: boolean;
   /** The banner's word after a wrong answer. */
   wrongWord: "notQuite" | "incorrect" | "letsReview";
+  /** Jugnu is there to help (his figure in the bar; Get help on a wrong answer). */
+  hasJugnu: boolean;
 };
 
 export const modePolicy: Readonly<Record<PlayMode, ModePolicy>> = {
-  [PlayMode.Lesson]: { canRetry: true, wrongWord: "notQuite" },
-  [PlayMode.Guided]: { canRetry: true, wrongWord: "notQuite" },
+  [PlayMode.Lesson]: { canRetry: true, wrongWord: "notQuite", hasJugnu: false },
+  [PlayMode.Guided]: { canRetry: true, wrongWord: "notQuite", hasJugnu: true },
   [PlayMode.SkillCheck]: {
     canRetry: false,
     wrongWord: "incorrect",
+    hasJugnu: false,
   },
-  [PlayMode.Review]: { canRetry: true, wrongWord: "letsReview" },
+  [PlayMode.Review]: { canRetry: true, wrongWord: "letsReview", hasJugnu: true },
 };
 
 /**

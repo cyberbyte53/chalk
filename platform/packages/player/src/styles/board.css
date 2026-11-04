@@ -343,11 +343,6 @@
 .board-footer.has-chat > .bar-part {
   flex: 0 0 auto;
 }
-.jugnu-avatar {
-  display: inline-flex;
-  margin-bottom: -18px;
-  z-index: 1;
-}
 .jugnu-sheet {
   order: 2;
   flex-basis: 100%;
@@ -499,4 +494,99 @@
   padding-left: 18px;
   font-size: 13px;
   opacity: 0.8;
+}
+
+/* His figure in the bar: always there where he is (a tap asks him); Get help on a wrong answer. */
+.board-footer.has-jugnu {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.jugnu-avatar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.jugnu-avatar.is-get-help {
+  padding: 2px 14px 2px 2px;
+  border-radius: 999px;
+  background: var(--color-surface-container);
+  font-weight: 600;
+}
+.board-footer.has-chat .jugnu-avatar {
+  margin-bottom: -18px;
+  z-index: 1;
+}
+/* The pointer's glide: a small dot from his figure to what he points at (board-player.tsx). */
+.board {
+  position: relative;
+}
+.jugnu-glide {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #f0b400;
+  box-shadow: 0 0 12px 4px rgb(240 180 0 / 55%);
+  pointer-events: none;
+  z-index: 20;
+}
+.board.is-gliding .jugnu-point {
+  opacity: 0;
+}
+.jugnu-point {
+  transition: opacity 0.25s ease-out;
+}
+/* A new message arrives. */
+.jugnu-his,
+.jugnu-theirs {
+  animation: jugnu-in 0.28s ease-out both;
+}
+@keyframes jugnu-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.jugnu-expand {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  opacity: 0.6;
+}
+.jugnu-expand path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.jugnu-sheet {
+  position: relative;
+}
+.jugnu-history {
+  max-height: 40vh;
+  overflow-y: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jugnu-his,
+  .jugnu-theirs {
+    animation: none;
+  }
 }

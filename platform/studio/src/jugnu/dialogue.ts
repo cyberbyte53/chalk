@@ -422,9 +422,13 @@ export async function runDialogue(
     // Jugnu (jugnu.ts): one conversation for the whole time she is stuck.
     const conversation = newConversation();
     let lastSaid = one.asks;
-    // Stuck after a wrong check, they press Get help: the chat opens, asking for them.
-    recorder?.chat({ what: "opened", reason: "getHelp" });
-    recorder?.chat({ what: "said", text: one.asks, via: "typed" });
+    // Stuck after a wrong check: Get help (it asks "Why is it wrong?" for them), or they tap
+    // Jugnu and type their own question.
+    if (one.asks === "Why is it wrong?") recorder?.chat({ what: "opened", reason: "getHelp" });
+    else {
+      recorder?.chat({ what: "opened", reason: "ask" });
+      recorder?.chat({ what: "said", text: one.asks, via: "typed" });
+    }
     let studentTurn = firstTurn(board, herSteps, one.asks);
     for (let turn = 0; turn < MAX_TURNS && !isHandedBack; turn++) {
       const his = await jugnuTurn({

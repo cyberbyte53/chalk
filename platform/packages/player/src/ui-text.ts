@@ -18,6 +18,7 @@ export const UiText = {
   backToLessons: { en: "Back to lessons", hi: "पाठों पर वापस" },
   close: { en: "Close lesson", hi: "पाठ बंद करो" },
   askJugnu: { en: "Ask Jugnu", hi: "जुगनू से पूछो" },
+  getHelp: { en: "Get help", hi: "मदद लो" },
   theQuestion: { en: "the question", hi: "सवाल" },
   whatsThis: { en: "What's this?", hi: "यह क्या है?" },
   unpick: { en: "Remove", hi: "हटाओ" },

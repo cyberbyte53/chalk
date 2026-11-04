@@ -86,3 +86,38 @@ locale already in ui-text.ts).
 3. `JugnuChat` in the player's footer, its states. Check: each state drawn from one run.
 4. The run page through the chat, with behind the scenes. Check: the person follows a run as the
    student saw it, and sees why Jugnu said what he said.
+
+## UI/UX, made intuitive (4 Nov; from the person's recorded session with Brilliant's tutor)
+
+Reviewed and revised. The student never works out how to get help, where to look or what to do
+next: each is one obvious tap or glance. Six changes, all in the player (phone and preview alike):
+
+1. **Help offered when needed**: a wrong answer's bar shows Get help beside Try again (in modes where
+   Jugnu is there: guided practice, review; play-mode.ts). Get help opens the chat with "Why is it
+   wrong?" already said for them (a `chat` opened, reason getHelp, then said).
+2. **Jugnu always in one place**: his figure at the bar's start whenever he is there (closed chat
+   too); a tap opens the chat (reason ask). Not in a skill check.
+3. **The pointer guides the eye**: when he glows a part, a small dot glides from his figure to it,
+   then the soft outline appears (layout.tsx's ring); reduced motion: the outline alone.
+4. **Alive**: a new message fades in; his face follows the chat (thinking, speaking, proud).
+5. **History behind an expand icon** in the sheet's corner, not a text link.
+6. **The board stays seen**: while the reply box is focused (the keyboard up), the board's body is
+   drawn smaller, so it stays in view above the sheet.
+
+Live, Get help, a tap on him, and sending call the app (the server's Jugnu: its own plan, later);
+in the preview the same buttons and states are drawn from a run's events, read-only.
+
+Built in one step, checked by screenshots of the same moments before and after: a wrong answer
+(Get help, Try again, his figure), his message with the pointer on its part, the student's reply
+with his typing dots, the history opened.
+
+**Reviewed (4 Nov):** shrinking the board is dropped (scaling it measures the rings twice, relays
+the props out, and moves what a tap lands on; Android's page already shrinks with the keyboard):
+instead, while the reply box is focused, the history and choices fold away and the glowed part is
+kept in sight. The banner hides only while the chat is open, so Get help shows beside "Not quite".
+Get help records only `opened {reason: getHelp}`; the chat shows the student asking "Why is it
+wrong?" from that (one event, nothing to come apart). Modes say whether Jugnu is there
+(`hasJugnu`: guided practice and review). On a wrong answer his figure and "Get help" are one button
+(a 320px row holds it). The glide starts once the part is drawn and measured, after the scroll
+into sight, moving only a transform; reduced motion: the outline alone. Faces: closed neutral, open
+curious, thinking, proud at hand-back. The history scrolls within 40% of the screen.

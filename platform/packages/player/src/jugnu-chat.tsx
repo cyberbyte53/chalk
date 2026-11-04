@@ -25,6 +25,12 @@ export type JugnuChatProps = {
   onDone?: () => void;
   /** The student opens the full chat again from its one line. */
   onOpen?: () => void;
+  /** The reply box took focus (the keyboard is up): what he points at is kept in sight. */
+  onReplyFocus?: () => void;
+  /** The bar's figure, on a wrong answer: Get help (asks "Why is it wrong?" for them). */
+  onGetHelp?: () => void;
+  /** The bar's figure otherwise: open the chat to ask. */
+  onAsk?: () => void;
 };
 
 /** What the student did on the board, in a few words ("step right ×3, check"). */
@@ -42,6 +48,7 @@ function didText(did: Extract<ChatMessage, { from: "student" }>["did"]): string 
 
 /** Jugnu's face for where the chat stands: thinking while he types, proud at his hand-back. */
 export function moodOf(chat: Chat): JugnuMood {
+  if (chat.state === ChatState.Closed) return JugnuMood.Neutral;
   if (chat.state === ChatState.Thinking) return JugnuMood.Thinking;
   if (chat.state === ChatState.HandedBack) return JugnuMood.Proud;
   return JugnuMood.Curious;
@@ -59,9 +66,14 @@ export function JugnuChat({
   onSay,
   onDone,
   onOpen,
+  onReplyFocus,
 }: JugnuChatProps): JSX.Element | null {
   const [isEarlierShown, setEarlierShown] = useState(false);
   const [typed, setTyped] = useState("");
+  // While they type (the keyboard up), the history and choices fold away: the board stays seen.
+  const [isTyping, setTyping] = useState(false);
+  const words = (m: ChatMessage) =>
+    m.from === "student" && m.via === "getHelp" ? t(locale, "whyWrong") : m.text;
   if (chat.state === ChatState.Closed) return null;
   const isLive = onSay !== undefined;
   const last = chat.messages.at(-1);
@@ -87,35 +99,43 @@ export function JugnuChat({
       {earlier.length > 0 && (
         <button
           type="button"
-          class="jugnu-earlier"
+          class={`jugnu-expand${isEarlierShown ? " is-open" : ""}`}
+          aria-label={`${t(locale, "jugnuEarlier")} (${earlier.length})`}
+          aria-expanded={isEarlierShown}
           onClick={() => setEarlierShown(!isEarlierShown)}
         >
-          {t(locale, "jugnuEarlier")} ({earlier.length})
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M9 3h4v4M13 3 8.5 7.5M7 13H3V9M3 13l4.5-4.5" />
+          </svg>
         </button>
       )}
-      {isEarlierShown && (
+      {isEarlierShown && !isTyping && (
         <ol class="jugnu-history">
           {earlier.map((m) => (
             <li key={m.seq} class={m.from === "jugnu" ? "is-his" : "is-theirs"}>
               {m.from === "student" && m.did.length > 0 && (
                 <span class="jugnu-did">{didText(m.did)} · </span>
               )}
-              {m.text}
+              {words(m)}
             </li>
           ))}
         </ol>
       )}
       {last?.from === "student" ? (
-        <div class="jugnu-theirs">
+        <div class="jugnu-theirs" key={`theirs-${last.seq}`}>
           {last.did.length > 0 && (
             <span class="jugnu-did">
               {t(locale, "jugnuDid")}: {didText(last.did)}
             </span>
           )}
-          {last.text !== "" && <p>{last.text}</p>}
+          {words(last) !== "" && <p>{words(last)}</p>}
         </div>
       ) : (
-        his !== undefined && <p class="jugnu-his">{his.text}</p>
+        his !== undefined && (
+          <p class="jugnu-his" key={`his-${his.seq}`}>
+            {his.text}
+          </p>
+        )
       )}
       {isThinking && (
         <output class="jugnu-dots" aria-label={t(locale, "jugnuThinking")}>
@@ -124,7 +144,7 @@ export function JugnuChat({
           <i />
         </output>
       )}
-      {last?.from === "jugnu" && his?.choices !== undefined && (
+      {last?.from === "jugnu" && his?.choices !== undefined && !isTyping && (
         <div class="jugnu-choices">
           {his.choices.map((c) => (
             <button
@@ -152,6 +172,11 @@ export function JugnuChat({
           <input
             value={typed}
             disabled={!isLive || isThinking}
+            onFocus={() => {
+              setTyping(true);
+              onReplyFocus?.();
+            }}
+            onBlur={() => setTyping(false)}
             placeholder={t(locale, "jugnuPlaceholder")}
             onInput={(e) => setTyped((e.target as HTMLInputElement).value)}
           />

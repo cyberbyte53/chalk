@@ -14,6 +14,7 @@ import {
 } from "@chalk/prop";
 import type { JSX } from "preact";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { ChatState } from "./chat";
 import { JugnuChat, type JugnuChatProps, moodOf } from "./jugnu-chat";
 import { JugnuFigure } from "./jugnu-figure";
 import { Layout, type LayoutContext } from "./layout";
@@ -191,6 +192,8 @@ function BoardPlay({
   }, [runtime, wasPassed]);
   // What Jugnu points at is kept in sight above the bar (and his chat in it).
   const pointedProp = pointed?.prop;
+  const pointedKey = pointed === undefined ? undefined : `${pointed.prop}/${pointed.part ?? ""}`;
+  const boardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (pointedProp !== undefined) inSight(pointedProp);
   }, [pointedProp, inSight]);
@@ -251,11 +254,17 @@ function BoardPlay({
     policy === undefined || result === undefined || result === AnswerStatus.Open
       ? undefined
       : result;
+  // Jugnu is there in this mode, with a chat to show (live, or a run's): is it open?
+  const hasJugnu = policy?.hasJugnu === true && chat !== undefined;
+  const isChatClosed = chat === undefined || chat.chat.state === ChatState.Closed;
+  // When he points, a dot glides from his figure to the part, and its outline shows as it lands.
+  const isGliding = useGlide(boardRef, hasJugnu ? pointedKey : undefined);
 
   return (
     <PlayModeContext.Provider value={mode}>
       <div
-        class={`board${banner !== undefined ? ` has-banner is-${banner}` : ""}${isHeld ? " is-held" : ""}`}
+        ref={boardRef}
+        class={`board${banner !== undefined ? ` has-banner is-${banner}` : ""}${isHeld ? " is-held" : ""}${isGliding ? " is-gliding" : ""}`}
       >
         {/* The first touch starts the board, and only that: what it lands on isn't pressed. */}
         {isHeld && (
@@ -282,17 +291,26 @@ function BoardPlay({
         </main>
         <footer
           ref={bar}
-          class={`board-footer${banner !== undefined ? ` has-banner is-${banner}` : ""}${chat !== undefined ? " has-chat" : ""}`}
+          class={`board-footer${banner !== undefined ? ` has-banner is-${banner}` : ""}${hasJugnu ? " has-jugnu" : ""}${hasJugnu && !isChatClosed ? " has-chat" : ""}`}
         >
-          {/* With the chat open: his figure at the row's start, the board's button at its end, the
-              chat's sheet under them (and no banner: he is talking about it). */}
-          {chat !== undefined && (
-            <span class="jugnu-avatar">
-              <JugnuFigure mood={moodOf(chat.chat)} size={48} />
-            </span>
+          {/* Where Jugnu is there: his figure at the row's start, always (a tap asks him; on a
+              wrong answer it is Get help), the board's button at its end, and the chat's sheet
+              under them while it is open (no banner then: he is talking about it). */}
+          {hasJugnu && chat !== undefined && (
+            <JugnuButton
+              locale={locale}
+              chat={chat}
+              isGetHelp={isChatClosed && banner === AnswerStatus.Wrong}
+            />
           )}
-          {chat !== undefined && <JugnuChat locale={locale} {...chat} />}
-          {chat === undefined && policy !== undefined && banner !== undefined && (
+          {hasJugnu && chat !== undefined && (
+            <JugnuChat
+              locale={locale}
+              {...chat}
+              onReplyFocus={() => pointed !== undefined && inSight(pointed.prop)}
+            />
+          )}
+          {!(hasJugnu && !isChatClosed) && policy !== undefined && banner !== undefined && (
             <div class="board-banner">
               <strong>
                 {banner === AnswerStatus.Correct
@@ -355,3 +373,98 @@ function BoardPlay({
 }
 
 /** A quiet board's voice: nothing said. */
+
+/**
+ * Jugnu's figure in the bar: always in one place where he is there. A tap asks him; on a wrong
+ * answer it says Get help (which asks "Why is it wrong?" for them). Read-only (a run's), it is drawn
+ * as it was, not greyed: aria-disabled, nothing on tap.
+ */
+function JugnuButton({
+  locale,
+  chat,
+  isGetHelp,
+}: {
+  locale: Locale;
+  chat: Omit<JugnuChatProps, "locale">;
+  isGetHelp: boolean;
+}): JSX.Element {
+  const onTap = isGetHelp ? chat.onGetHelp : chat.onAsk;
+  return (
+    <button
+      type="button"
+      class={`jugnu-avatar${isGetHelp ? " is-get-help" : ""}`}
+      aria-label={t(locale, isGetHelp ? "getHelp" : "askJugnu")}
+      aria-disabled={onTap === undefined}
+      onClick={() => onTap?.()}
+    >
+      <JugnuFigure mood={moodOf(chat.chat)} size={48} />
+      {isGetHelp && <span>{t(locale, "getHelp")}</span>}
+    </button>
+  );
+}
+
+/**
+ * The pointer's glide: once what he points at is drawn and still (after it is scrolled into sight),
+ * a dot travels from his figure to it, moving only a transform, and the outline shows as it lands.
+ * Reduced motion: the outline alone. True while it glides.
+ */
+function useGlide(board: { current: HTMLDivElement | null }, key: string | undefined): boolean {
+  const [isGliding, setGliding] = useState(false);
+  useEffect(() => {
+    if (key === undefined) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let isGone = false;
+    let frames = 0;
+    let last: DOMRect | undefined;
+    let dot: HTMLElement | undefined;
+    setGliding(true);
+    const step = () => {
+      if (isGone) return;
+      const root = board.current;
+      const to = root?.querySelector(".jugnu-point, .piece-prop.is-pointed");
+      const from = root?.querySelector(".jugnu-avatar");
+      frames += 1;
+      if (root == null || to == null || from == null) {
+        if (frames < 90) requestAnimationFrame(step);
+        else setGliding(false);
+        return;
+      }
+      // Still for a frame (drawn, and done scrolling into sight): then it glides.
+      const at = to.getBoundingClientRect();
+      if (last === undefined || Math.abs(last.top - at.top) + Math.abs(last.left - at.left) > 0.5) {
+        last = at;
+        if (frames < 120) requestAnimationFrame(step);
+        else setGliding(false);
+        return;
+      }
+      const box = root.getBoundingClientRect();
+      const f = from.getBoundingClientRect();
+      const x0 = f.left + f.width / 2 - box.left;
+      const y0 = f.top + f.height / 2 - box.top;
+      const x1 = at.left + at.width / 2 - box.left;
+      const y1 = at.top + Math.min(at.height / 2, 24) - box.top;
+      dot = document.createElement("span");
+      dot.className = "jugnu-glide";
+      root.appendChild(dot);
+      const move = dot.animate(
+        [
+          { transform: `translate(${x0}px, ${y0}px) scale(0.6)`, opacity: 0.4 },
+          { transform: `translate(${x1}px, ${y1}px) scale(1.2)`, opacity: 1, offset: 0.85 },
+          { transform: `translate(${x1}px, ${y1}px) scale(0.2)`, opacity: 0 },
+        ],
+        { duration: 700, easing: "cubic-bezier(0.4, 0, 0.2, 1)" },
+      );
+      move.onfinish = () => {
+        dot?.remove();
+        setGliding(false);
+      };
+    };
+    requestAnimationFrame(step);
+    return () => {
+      isGone = true;
+      dot?.remove();
+      setGliding(false);
+    };
+  }, [board, key]);
+  return isGliding;
+}

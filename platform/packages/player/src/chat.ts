@@ -34,7 +34,8 @@ export type ChatMessage =
       from: "student";
       seq: number;
       text: string;
-      via: "typed" | "choice" | "done";
+      /** getHelp: they pressed Get help, which asks "Why is it wrong?" for them. */
+      via: "typed" | "choice" | "done" | "getHelp";
       /** What they did on the board since their last words, in order (each an action and its args). */
       did: readonly { action: string; args: Readonly<Record<string, unknown>> }[];
     };
@@ -60,8 +61,12 @@ export function chatOf(events: readonly EventEntry[], upTo = Number.POSITIVE_INF
         by?: string;
       };
       if (p.what === "opened") {
-        state = ChatState.Open;
         did = [];
+        // Get help asks for them: their question is the opening (the chat draws its words).
+        if (p.reason === "getHelp") {
+          messages.push({ from: "student", seq, text: "", via: "getHelp", did: [] });
+          state = ChatState.Thinking;
+        } else state = ChatState.Open;
       } else if (p.what === "said") {
         messages.push({
           from: "student",
