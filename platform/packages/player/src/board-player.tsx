@@ -356,10 +356,6 @@ function BoardPlay({
             recorder.chat({ what: "said", text, via });
             void askHim(text);
           },
-          onDone: () => {
-            recorder.chat({ what: "said", text: "", via: "done" });
-            void askHim("");
-          },
           ...(liveProblem === undefined ? {} : { problem: liveProblem }),
         });
   const context: LayoutContext = {

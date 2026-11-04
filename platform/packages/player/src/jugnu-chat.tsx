@@ -10,19 +10,18 @@ import { t } from "./ui-text";
  * The chat with Jugnu as the student meets it (platform/docs/plans/jugnu-chat.md), drawn in the
  * board's bottom bar so the board stays live above it and a glowed part stays in sight. One message
  * in front (his latest, with his choices); earlier ones a tap away. The student answers in words (a
- * tapped choice, or typed) or by the board, then Done. While they act on the board it is one line.
+ * tapped choice, or typed; what they did on the board goes with their words). While they act on the
+ * board it is one line.
  * Live it is given callbacks; without them it is read-only (a run, seen as the student saw it).
  * His note and thinking are never here.
  */
 export type JugnuChatProps = {
   locale: Locale;
   chat: Chat;
-  /** One line (his question and Done), while the student acts on the board. */
+  /** One line (his question), while the student acts on the board: a tap opens the chat. */
   isOneLine?: boolean;
   /** The student says something: typed words or a tapped choice. */
   onSay?: (text: string, via: "typed" | "choice") => void;
-  /** The student acted on the board and hands back. */
-  onDone?: () => void;
   /** The student opens the full chat again from its one line. */
   onOpen?: () => void;
   /** The reply box took focus (the keyboard is up): what he points at is kept in sight. */
@@ -70,7 +69,6 @@ export function JugnuChat({
   chat,
   isOneLine = false,
   onSay,
-  onDone,
   onOpen,
   onReplyFocus,
   problem,
@@ -99,9 +97,6 @@ export function JugnuChat({
       <div class="jugnu-sheet is-one-line">
         <button type="button" class="jugnu-line" onClick={onOpen} disabled={onOpen === undefined}>
           {his.text}
-        </button>
-        <button type="button" class="jugnu-pill" onClick={onDone} disabled={onDone === undefined}>
-          {t(locale, "jugnuDone")}
         </button>
       </div>
     );
@@ -177,13 +172,7 @@ export function JugnuChat({
             <button type="submit" class="jugnu-send" aria-label={t(locale, "jugnuSend")}>
               ↑
             </button>
-          ) : (
-            last?.from === "jugnu" && (
-              <button type="button" class="jugnu-pill" onClick={onDone} disabled={!isLive}>
-                {t(locale, "jugnuDone")}
-              </button>
-            )
-          )}
+          ) : null}
         </form>
       )}
     </div>

@@ -121,3 +121,7 @@ wrong?" from that (one event, nothing to come apart). Modes say whether Jugnu is
 (a 320px row holds it). The glide starts once the part is drawn and measured, after the scroll
 into sight, moving only a transform; reduced motion: the outline alone. Faces: closed neutral, open
 curious, thinking, proud at hand-back. The history scrolls within 40% of the screen.
+
+**Done removed (4 Nov, the person):** the student hands back by typing (what they did on the board
+goes with their words, as a note in the thread); no Done button anywhere. Older runs may hold
+`via: "done"`, still read.

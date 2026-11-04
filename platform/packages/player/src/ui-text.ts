@@ -25,7 +25,6 @@ export const UiText = {
   jugnu: { en: "Jugnu", hi: "जुगनू" },
   jugnuPlaceholder: { en: "Type your question…", hi: "अपना सवाल लिखो…" },
   jugnuThinking: { en: "Jugnu is thinking…", hi: "जुगनू सोच रहा है…" },
-  jugnuDone: { en: "Done", hi: "हो गया" },
   jugnuSend: { en: "Send", hi: "भेजो" },
   jugnuEarlier: { en: "Earlier", hi: "पहले" },
   jugnuReply: { en: "Your answer…", hi: "तुम्हारा जवाब…" },
