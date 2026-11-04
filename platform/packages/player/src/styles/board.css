@@ -590,3 +590,70 @@
     animation: none;
   }
 }
+
+/* The chat as a thread (jugnu-chat.tsx): his bubbles on the left, the student's on the right,
+   newest at the bottom, earlier ones a scroll up. */
+.jugnu-sheet {
+  max-height: 52vh;
+}
+.jugnu-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 34vh;
+  padding: 2px 2px 4px;
+  scroll-behavior: smooth;
+}
+.jugnu-bubble {
+  margin: 0;
+  max-width: 82%;
+  padding: 9px 13px;
+  border-radius: 16px;
+  line-height: 1.4;
+  animation: jugnu-in 0.28s ease-out both;
+}
+.jugnu-bubble.is-his {
+  align-self: flex-start;
+  border-bottom-left-radius: 5px;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  border: 1px solid color-mix(in srgb, var(--color-on-surface) 10%, transparent);
+}
+.jugnu-bubble.is-theirs {
+  align-self: flex-end;
+  border-bottom-right-radius: 5px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.jugnu-bubble.is-problem {
+  font-style: italic;
+  opacity: 0.8;
+}
+.jugnu-turn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.jugnu-note {
+  align-self: center;
+  font-size: 12px;
+  opacity: 0.65;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-on-surface) 7%, transparent);
+}
+.jugnu-bubble.jugnu-dots {
+  display: inline-flex;
+  gap: 4px;
+  padding: 12px 14px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jugnu-bubble {
+    animation: none;
+  }
+  .jugnu-thread {
+    scroll-behavior: auto;
+  }
+}

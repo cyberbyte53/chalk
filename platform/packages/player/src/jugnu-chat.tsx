@@ -1,7 +1,7 @@
 /** @jsxImportSource preact */
 import type { Locale } from "@chalk/content";
 import type { JSX } from "preact";
-import { useState } from "preact/hooks";
+import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import { type Chat, type ChatMessage, ChatState } from "./chat";
 import { JugnuMood } from "./jugnu-figure";
 import { t } from "./ui-text";
@@ -59,9 +59,11 @@ export function moodOf(chat: Chat): JugnuMood {
 }
 
 /**
- * The chat's sheet, under the bar's row (Jugnu's figure, the board's button): his latest message as
- * plain text, or the student's latest as a bubble with his typing dots after it; his choices; the
- * reply box. Only the latest exchange; earlier ones a tap away.
+ * The chat's sheet, under the bar's row (Jugnu's figure, the board's button): the conversation as a
+ * thread of bubbles in time, his on the left and the student's on the right, newest at the bottom
+ * (the sheet opens scrolled there; earlier ones scroll up). What the student did on the board sits
+ * in the thread as a small note before their words. His typing dots are his bubble; his choices sit
+ * under his latest one; the reply box at the bottom. One line while they act on the board.
  */
 export function JugnuChat({
   locale,
@@ -73,18 +75,24 @@ export function JugnuChat({
   onReplyFocus,
   problem,
 }: JugnuChatProps): JSX.Element | null {
-  const [isEarlierShown, setEarlierShown] = useState(false);
   const [typed, setTyped] = useState("");
-  // While they type (the keyboard up), the history and choices fold away: the board stays seen.
+  // While they type (the keyboard up), his choices fold away: the board stays seen.
   const [isTyping, setTyping] = useState(false);
-  const words = (m: ChatMessage) =>
-    m.from === "student" && m.via === "getHelp" ? t(locale, "whyWrong") : m.text;
-  if (chat.state === ChatState.Closed) return null;
+  const thread = useRef<HTMLDivElement>(null);
+  const isClosed = chat.state === ChatState.Closed;
+  const isThinking = chat.state === ChatState.Thinking;
+  // The newest is always in sight: the thread scrolled to its end as it grows.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: each is a way the thread grows
+  useLayoutEffect(() => {
+    const el = thread.current;
+    if (el !== null) el.scrollTop = el.scrollHeight;
+  }, [chat.messages.length, isThinking, problem, isOneLine, isClosed]);
+  if (isClosed) return null;
   const isLive = onSay !== undefined;
   const last = chat.messages.at(-1);
   const his = [...chat.messages].reverse().find((m) => m.from === "jugnu");
-  const isThinking = chat.state === ChatState.Thinking;
-  const earlier = chat.messages.slice(0, Math.max(0, chat.messages.length - 1));
+  const words = (m: ChatMessage) =>
+    m.from === "student" && m.via === "getHelp" ? t(locale, "whyWrong") : m.text;
 
   if (isOneLine && his !== undefined && !isThinking)
     return (
@@ -101,55 +109,32 @@ export function JugnuChat({
   return (
     <div class="jugnu-sheet">
       <span class="jugnu-handle" aria-hidden="true" />
-      {earlier.length > 0 && (
-        <button
-          type="button"
-          class={`jugnu-expand${isEarlierShown ? " is-open" : ""}`}
-          aria-label={`${t(locale, "jugnuEarlier")} (${earlier.length})`}
-          aria-expanded={isEarlierShown}
-          onClick={() => setEarlierShown(!isEarlierShown)}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M9 3h4v4M13 3 8.5 7.5M7 13H3V9M3 13l4.5-4.5" />
-          </svg>
-        </button>
-      )}
-      {isEarlierShown && !isTyping && (
-        <ol class="jugnu-history">
-          {earlier.map((m) => (
-            <li key={m.seq} class={m.from === "jugnu" ? "is-his" : "is-theirs"}>
-              {m.from === "student" && m.did.length > 0 && (
-                <span class="jugnu-did">{didText(m.did)} · </span>
+      <div class="jugnu-thread" ref={thread}>
+        {chat.messages.map((m) =>
+          m.from === "jugnu" ? (
+            <p key={m.seq} class="jugnu-bubble is-his">
+              {m.text}
+            </p>
+          ) : (
+            <div key={m.seq} class="jugnu-turn">
+              {m.did.length > 0 && (
+                <span class="jugnu-note">
+                  {t(locale, "jugnuDid")}: {didText(m.did)}
+                </span>
               )}
-              {words(m)}
-            </li>
-          ))}
-        </ol>
-      )}
-      {last?.from === "student" ? (
-        <div class="jugnu-theirs" key={`theirs-${last.seq}`}>
-          {last.did.length > 0 && (
-            <span class="jugnu-did">
-              {t(locale, "jugnuDid")}: {didText(last.did)}
-            </span>
-          )}
-          {words(last) !== "" && <p>{words(last)}</p>}
-        </div>
-      ) : (
-        his !== undefined && (
-          <p class="jugnu-his" key={`his-${his.seq}`}>
-            {his.text}
-          </p>
-        )
-      )}
-      {problem !== undefined && <p class="jugnu-his is-problem">{problem}</p>}
-      {isThinking && problem === undefined && (
-        <output class="jugnu-dots" aria-label={t(locale, "jugnuThinking")}>
-          <i />
-          <i />
-          <i />
-        </output>
-      )}
+              {words(m) !== "" && <p class="jugnu-bubble is-theirs">{words(m)}</p>}
+            </div>
+          ),
+        )}
+        {problem !== undefined && <p class="jugnu-bubble is-his is-problem">{problem}</p>}
+        {isThinking && problem === undefined && (
+          <output class="jugnu-bubble is-his jugnu-dots" aria-label={t(locale, "jugnuThinking")}>
+            <i />
+            <i />
+            <i />
+          </output>
+        )}
+      </div>
       {last?.from === "jugnu" && his?.choices !== undefined && !isTyping && (
         <div class="jugnu-choices">
           {his.choices.map((c) => (
