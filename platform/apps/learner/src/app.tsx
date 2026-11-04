@@ -2,6 +2,7 @@ import { type MeReply, Role, meReplySchema, normalizeCode } from "@chalk/api";
 import { Actor, type ChalkEvent, Locale } from "@chalk/content";
 import { createEventBus } from "@chalk/events";
 import { type Progress, isConceptDone, mergeProgress, progressSchema } from "@chalk/learning";
+import { SetBy } from "@chalk/learning";
 import { preloadProps, propLibrary } from "@chalk/library";
 import { LessonPlayer, PlayMode } from "@chalk/player";
 import type { JSX } from "preact";
@@ -376,6 +377,7 @@ export function App(): JSX.Element {
                 key={`${lesson.id}-${locale}`}
                 lesson={lesson}
                 mode={screen.part === "pages" ? PlayMode.Lesson : PlayMode.Guided}
+                setBy={screen.part === "practice" ? SetBy.LessonPractice : undefined}
                 registry={propLibrary}
                 locale={locale}
                 bus={bus}

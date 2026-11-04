@@ -1,8 +1,8 @@
 /** @jsxImportSource preact */
-import type { Lesson, Locale } from "@chalk/content";
-import type { EventBus } from "@chalk/events";
+import { Actor, type Lesson, type Locale } from "@chalk/content";
+import { type EventBus, makeId } from "@chalk/events";
 import type { JSX } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { BoardPlayer, type BoardPlayerProps } from "./board-player";
 import { JugnuFigure, JugnuMood } from "./jugnu-figure";
 import { PlayMode } from "./play-mode";
@@ -33,7 +33,16 @@ export type LessonPlayerProps = {
   onComplete?: () => void;
   /** Jugnu, live, on its boards played in a mode with him (board-player.tsx's askJugnu). */
   askJugnu?: BoardPlayerProps["askJugnu"];
+  /**
+   * This lesson is a set of questions given to the child (teacher-view.md), made by this set
+   * constructor ("lesson-practice"): it is recorded as served when it starts from its first board,
+   * and finished when its last is passed. Pages are no set: left out.
+   */
+  setBy?: string;
 };
+
+/** Where a set's entries are: the lesson's, on no board. */
+const SET_PLACE = { actor: Actor.Lesson, opening: null, board: null, version: null, node: null };
 
 /** Plays a lesson board by board. The same player runs every kind of lesson. */
 export function LessonPlayer({
@@ -47,6 +56,7 @@ export function LessonPlayer({
   onExit,
   onComplete,
   askJugnu,
+  setBy,
 }: LessonPlayerProps): JSX.Element {
   const [index, setIndex] = useState(startBoard);
   // The furthest board reached: every board before it has been passed.
@@ -62,9 +72,42 @@ export function LessonPlayer({
   onCompleteRef.current = onComplete;
   const isDone = index >= lesson.boards.length;
 
+  // A set: served once, as it starts from its first board, and only if every board is a built
+  // item (its id and version are what the set names); finished as its last board is passed.
+  const set = useMemo(() => {
+    if (setBy === undefined || startBoard !== 0) return undefined;
+    const questions = lesson.boards.map((b) =>
+      b.item === undefined ? undefined : { board: b.item.id, version: b.item.version },
+    );
+    if (questions.length === 0 || questions.some((q) => q === undefined)) return undefined;
+    return {
+      id: makeId(),
+      by: setBy,
+      questions: questions as { board: string; version: string }[],
+    };
+  }, [lesson, setBy, startBoard]);
+  const busRef = useRef(bus);
+  busRef.current = bus;
   useEffect(() => {
-    if (isDone) onCompleteRef.current?.();
-  }, [isDone]);
+    if (set === undefined) return;
+    busRef.current.record({
+      ...SET_PLACE,
+      kind: "set",
+      payload: { what: "served", set: set.id, by: set.by, questions: set.questions },
+    });
+  }, [set]);
+
+  useEffect(() => {
+    if (!isDone) return;
+    // Finished before onComplete (which sends what was recorded).
+    if (set !== undefined)
+      busRef.current.record({
+        ...SET_PLACE,
+        kind: "set",
+        payload: { what: "finished", set: set.id },
+      });
+    onCompleteRef.current?.();
+  }, [isDone, set]);
 
   const back = () => setIndex(index - 1);
   const exit = onExit;
@@ -112,6 +155,7 @@ export function LessonPlayer({
           registry={registry}
           locale={locale}
           record={bus.record}
+          set={set?.id}
           isInLesson
           onRuntime={setRuntime}
           onPass={() => {

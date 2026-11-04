@@ -40,6 +40,8 @@ function questionsOf(runtime: BoardRuntime): string[] {
 
 export type BoardPlayerProps = {
   board: Board;
+  /** The set it is played in (its `set served` id), named in its `open`. */
+  set?: string;
   registry: PropRegistry;
   locale: Locale;
   /** The app's event channel: the board records what happens on it (recorder.ts). */
@@ -150,6 +152,7 @@ function BoardPlay({
   onPass,
   onBack,
   wasPassed = false,
+  set,
   mode,
   onRuntime,
   pointed,
@@ -205,6 +208,7 @@ function BoardPlay({
       wasPassed,
       hasAudio: audio !== undefined,
       ...(mode !== undefined ? { mode } : {}),
+      ...(set !== undefined ? { set } : {}),
     });
     recorderRef.current = made;
     return made;

@@ -1,6 +1,7 @@
 import type { ChalkEvent, Locale } from "@chalk/content";
 import type { EventBus } from "@chalk/events";
 import { type Progress, isConceptDone } from "@chalk/learning";
+import { SetBy } from "@chalk/learning";
 import { preloadProps, propLibrary } from "@chalk/library";
 import { LessonPlayer, PlayMode } from "@chalk/player";
 import type { JSX } from "preact";
@@ -136,6 +137,7 @@ export function PlayInApp({
                     key={`${lesson.id}-${locale}-${now.start}`}
                     lesson={lesson}
                     mode={now.part === "pages" ? PlayMode.Lesson : PlayMode.Guided}
+                    setBy={now.part === "practice" ? SetBy.LessonPractice : undefined}
                     askJugnu={askJugnu}
                     registry={propLibrary}
                     locale={locale}

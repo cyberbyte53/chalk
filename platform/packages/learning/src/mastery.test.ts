@@ -5,6 +5,7 @@ import { Band, MasteryModel, betaOf, masteryFrom } from "./mastery";
 
 const attempt = (isRight: boolean, more: Partial<Attempt> = {}): Attempt => ({
   board: "q",
+  opening: "o",
   node: "n",
   version: "v",
   at: 1,

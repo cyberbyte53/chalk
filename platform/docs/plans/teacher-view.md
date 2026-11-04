@@ -35,7 +35,7 @@ the readings will change many times.
 
 0. **Raw**
    - **Events** (the phone's, as now). Gains: the `jugnu` event names its conversation and turn;
-     an `app` event `practiceFinished` when a practice run ends (as its last question passes).
+     `set` events (served, finished) by the lesson player (see "Sets and the learner update").
    - **Jugnu's conversations** (`jugnu_conversations`): id; account; opening; board id, version;
      commit; model; the exact instructions (tutor prompt name and hash; the prompt's and the
      lesson's texts, kept once each by their hash in `texts`); started; and when and why it ended
@@ -54,14 +54,10 @@ the readings will change many times.
    same tools in every request keep the cache; while he teaches, a call is answered "not now").
    Kept: the conversation and the reflect turn, at, the reflect prompt (name, hash, text), model,
    points, got there. Ending is once; the cursor stays until he has reflected, then is dropped.
-2. **Per practice run: the learner update** (`learner_updates`). On `practiceFinished`, after its
-   events are saved: that child's open conversations are ended first (so every reflection exists),
-   then one step reads the run's answers (from its events: right, wrong, helped) and its
-   conversations' reflections, and writes points: what is still not good, what they keep getting
-   wrong, each naming its evidence by raw ids (event ids, reflection ids). Kept: account, at, the
-   run (its concept, its first and last event ids), update prompt, model, points with evidence,
-   words, usage. A run left halfway gets none (said, not hidden).
-3. **Numbers**: mastery per concept, a Beta from first tries (as now, from the events).
+2. **Per set: the learner update** (`learner_updates`): when a set the child was given is
+   finished, update(the state before, the set, what happened): see "Sets and the learner update".
+3. **Numbers**: mastery per concept, a Beta from first tries, worked out in each update (no
+   longer on every upload).
 
 Not decided, not built in: how points map to concepts, and how judgements become numbers. Layers
 0 to 2 keep what those will need. Not now: Jugnu remembering a child across conversations (it will
@@ -81,8 +77,53 @@ each for a reason, and nothing else:
 2. **Who**: on the server, the signed-in child; in the preview, `preview` (no child).
 3. **The commit**: the server's build; the preview's tree (`+changes` when it has uncommitted ones).
 4. **Sign-in and the hourly limit**: the server's only (the preview is the person's own).
-5. **Not yet one flow, to be: the sandbox** (simulated children) still runs his turns itself and
+5. **Where events go**: the phone's to the server; the preview's to the dev service's memory (so
+   a set finished in the preview is updated by the same flow).
+6. **Not yet one flow, to be: the sandbox** (simulated children) still runs his turns itself and
    keeps its own runs (`.chalk-runs`); it joins the flow with the demo class (step 5).
+
+## Sets and the learner update (step 3)
+
+The loop (the person's): **learner state → set constructor → a set, served → the child plays it →
+set finished → update(state, the set, what happened) → the new state.** Each part has one job:
+
+- **Questions carry their own facts**, made when they are built: the concepts they test, their
+  level (`tests`, `level`; the server's catalogue keeps them by version). A set may mix concepts,
+  topics, subjects: the update goes through each question's facts, so a mixed set and a one-concept
+  set are the same case.
+- **A set constructor** chooses a set for a learner. Today one, the simplest: `lesson-practice`, a
+  lesson's practice as built (`practiceOf`); its version is the commit (every event carries it).
+  Later, reviews made for each child from their state: the same output.
+- **The set, recorded** (raw, events; a new kind `set`, actor `lesson`, its place fields null;
+  docs/events.md), by the lesson player when it plays a practice (its `set` prop; pages are no
+  set), on phone and preview alike:
+  - `served`, when it starts from its first question: the set's id, who made it
+    (`lesson-practice`), its questions (board id and version) in order.
+  - `finished`, when its last question is passed (before the uploader is flushed).
+  - Each of its boards' `open` names the set: a set's openings, tries (attempts gain `opening`)
+    and conversations join on keys, never on times. "Again" is a new set.
+  A set left halfway has no `finished` and gets no update (said, not hidden).
+- **The update**, once per finished set (unique: account, set, update prompt hash), the flow
+  written once beside the conversations' (`studio/src/jugnu/sets.ts`), given a keeper:
+  1. the set's conversations still going on are ended (`setFinished`) and reflected on, awaited;
+  2. **the numbers** (computed): mastery from their attempts up to the set's `finished`, written to
+     `mastery` (the one place; `work-out` works it out the same way, as of their last finished
+     set). No longer on every upload: the person's call (the teacher sees each child as of their
+     last finished set). Attempts stay worked out on upload (the child's progress uses them).
+  3. **the judgement** (a model call by `prompts/update/<name>.md`, named in `jugnu.yaml`): given
+     the state before (their last update's points), the set (each question's concepts and level)
+     and what happened (each question's tries: right, wrong, chosen, helped; his reflections on its
+     conversations), what is still not good and what they keep getting wrong, each point naming
+     its evidence (question board ids, reflection ids).
+  Kept: `learner_updates` (history, never overwritten): account, the set's id, at, the points with
+  evidence, the update prompt (name, hash, text), the model, usage. A failed step writes nothing;
+  the sweep tries again any finished set with no update, and any ended conversation with no
+  reflection.
+- **Where it runs**: the server, after a `set finished` is saved (and its sweep). The preview: its
+  events go to the dev service's memory (an uploader like the phone's, to memory), which runs the
+  same flow: one more accounted difference (where events are kept).
+
+Not now: a constructor that reads the state (reviews), reasons per question.
 
 ## Working state (not raw)
 
@@ -100,10 +141,10 @@ messages are enough to replay it; the cursor only makes resuming quick.
   `prompts/update/<name>.md`, named in `jugnu.yaml`, versioned like the tutor's.
 - **Server**: the tables above (one migration, replacing the unshipped 0006); app.ts's Jugnu route
   saves each turn; the quiet sweep ends conversations (each minute), then reflects; saveEvents' caller runs the
-  update on `practiceFinished`; a `judge-again` command (reflections or updates, a given prompt,
+  update on a `set finished`; a `judge-again` command (reflections or updates, a given prompt,
   new records), as `work-out` is for computed data; all keyed to the account, removed with it.
 - **Player and app**: the session sent to Jugnu is the board's opening; the `jugnu` event records
-  the conversation and turn the server gives back; the app records `practiceFinished`.
+  the conversation and turn the server gives back; the lesson player records the set.
 - **Teacher's API and screens**: the child: latest update's points (each with its evidence: the
   question's family, what they chose), the numbers per concept, then reflections. The class: each
   child's latest update's first point. Reads only.
@@ -125,6 +166,8 @@ messages are enough to replay it; the cursor only makes resuming quick.
    server tests; a conversation across a server restart; the events and the server's record join.
 2. Reflections. Check: a real conversation left quiet, reflected on; the cache read on that step;
    the sandbox cases with `reflect` among his tools, his teaching unchanged (one variable).
-3. `practiceFinished` and the learner update. Check: a real practice run's update.
+3. Sets (`served`, `finished` by the lesson player) and the learner update (mastery moved into
+   it). Check: server tests; a real practice set in the preview and through the local server:
+   its update's numbers and points, each point's evidence real.
 4. The teacher's API and screens. Check: in the browser.
 5. The demo class through the same path; `judge-again`. Then chalk1.

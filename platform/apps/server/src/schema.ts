@@ -163,6 +163,8 @@ export const attempts = pgTable(
       .notNull()
       .references(() => accounts.id),
     board: text("board").notNull(),
+    /** The board's opening it was made on (joins it to its set and Jugnu's conversation). */
+    opening: text("opening").notNull(),
     node: text("node").notNull(),
     nth: integer("nth").notNull(),
     version: text("version").notNull(),

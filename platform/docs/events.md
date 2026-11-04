@@ -8,12 +8,13 @@ Everything the learner does, with nothing written per board, prop or signal:
 
 | kind | when | payload |
 |---|---|---|
-| `open` | a board opens, or a book, chapter or concept is on screen | how: `mode`, `wasPassed`, `locale`, `hasAudio`; why: `reason` |
+| `open` | a board opens, or a book, chapter or concept is on screen | how: `mode`, `wasPassed`, `locale`, `hasAudio`; why: `reason`; in which set: `set` |
 | `close` | it closes | |
 | `cause` | the learner or Jugnu acts on a board: an action through the door, or a signal a view raised directly | `{ action, args, refused? }` or `{ signal, payload }`; a drag is **one entry per gesture**, its last args with `startAt` and `steps` |
 | `signal` | every signal the board raises | `{ signal, payload, from }`: `from` is the seq of the cause that set it off (null: none did, like `started`) |
-| `jugnu` | one turn with Jugnu | `{ asked, about?, reply, steps, model, choices?, isHandBack? }`; what he does on the board is `cause` entries of his own |
+| `jugnu` | one turn with Jugnu | `{ asked, about?, reply, steps, model, choices?, isHandBack?, conversation?, turn? }`: the last two are the server's ids for this turn (Jugnu's side of it is kept there); what he does on the board is `cause` entries of his own |
 | `chat` | the chat with Jugnu, as the student meets it | `{ what: opened, reason }`, `{ what: said, text, via: typed \| choice \| done }`, `{ what: closed, by }`; typed words are minors' typed text |
+| `set` | a set of questions given to the child (actor `lesson`; no board) | `{ what: served, set, by, questions: [{ board, version }] }` as it starts from its first question; `{ what: finished, set }` as its last is passed. Each of its boards' `open` names it (`set`). A set left halfway has no `finished` |
 | `app` | things around boards | `{ what, … }`: `audioFailed { reason }` |
 
 **Not recorded:**

@@ -10,6 +10,8 @@ import type { Catalogue } from "./catalogue";
  */
 export const attemptSchema = z.object({
   board: z.string(),
+  /** The board's opening it was made on (what joins it to its set, and to Jugnu's conversation). */
+  opening: z.string(),
   /** The question on the board (a board may ask more than one). */
   node: z.string(),
   version: z.string(),
@@ -63,6 +65,7 @@ export function attemptsFrom(events: readonly ChalkEvent[], catalogue: Catalogue
     const found = catalogue(e.board, e.version);
     attempts.push({
       board: e.board,
+      opening: e.opening,
       node: e.node,
       version: e.version ?? "",
       at: e.at,

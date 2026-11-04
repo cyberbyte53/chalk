@@ -48,6 +48,8 @@ export const eventKinds = {
       hasAudio: z.boolean().optional(),
       /** Why the app showed it, as plain context ("practice", "review"). */
       reason: z.string().optional(),
+      /** The set this board is played in (its `set served` entry's id): what joins it to its set. */
+      set: z.string().optional(),
     })
     .strict(),
   close: z.object({}).strict(),
@@ -117,6 +119,24 @@ export const eventKinds = {
       })
       .strict(),
     z.object({ what: z.literal("closed"), by: z.enum(["student", "handBack"]) }).strict(),
+  ]),
+  /**
+   * A set of questions given to the child (platform/docs/plans/teacher-view.md): `served` as it
+   * starts from its first question (its id, who made it, its questions in order), `finished` as
+   * its last is passed. Recorded by the lesson; its place fields are null. A set left halfway has
+   * no `finished`.
+   */
+  set: z.union([
+    z
+      .object({
+        what: z.literal("served"),
+        set: z.string(),
+        /** The set constructor that made it (its version is the entry's commit). */
+        by: z.string(),
+        questions: z.array(z.object({ board: z.string(), version: z.string() }).strict()).min(1),
+      })
+      .strict(),
+    z.object({ what: z.literal("finished"), set: z.string() }).strict(),
   ]),
   /** Things around boards: a line's audio failed, the app passed a board itself. */
   app: z.object({ what: z.string().min(1) }).catchall(z.unknown()),
