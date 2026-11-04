@@ -1,6 +1,6 @@
 # A Jugnu run, read in time
 
-Status: proposed (2026-11-04), reviewed once and revised. Part of jugnu-sandbox.md; comes before its judge (step 4),
+Status: built (2026-11-04): replay, runs recorded as events, the page read in time. Part of jugnu-sandbox.md; comes before its judge (step 4),
 as the judge and code's measures read the same events.
 
 ## The need

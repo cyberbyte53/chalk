@@ -2445,3 +2445,54 @@ body.is-selecting .is-pick-target {
   gap: 4px;
   align-items: center;
 }
+
+.jg-story {
+  margin: 0;
+  font-size: 16px;
+}
+.jg-moment {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 18px;
+}
+.jg-timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 0;
+}
+.jg-mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  background: #8aa4ff;
+}
+.jg-mark.is-jugnu {
+  background: #f0b400;
+}
+.jg-mark.is-board {
+  background: #b9b9b9;
+  border-radius: 3px;
+}
+.jg-mark.is-board.is-right {
+  background: #2fa86b;
+}
+.jg-mark.is-board.is-wrong {
+  background: #d9534f;
+}
+.jg-mark.is-words {
+  width: 22px;
+  border-radius: 7px;
+}
+.jg-mark.is-at {
+  border-color: currentColor;
+  transform: scale(1.25);
+}
+@media (max-width: 720px) {
+  .jg-moment {
+    grid-template-columns: 1fr;
+  }
+}

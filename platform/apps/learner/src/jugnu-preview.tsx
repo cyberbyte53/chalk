@@ -8,6 +8,7 @@ import {
   JugnuFigure,
   JugnuMood,
   PlayMode,
+  replay,
 } from "@chalk/player";
 import type { JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
@@ -29,6 +30,7 @@ type Case = {
   steps: Step[];
   asks: string;
   about: string;
+  next?: string;
   students?: { name: string; believes: string }[];
 };
 type JugnuTurn = {
@@ -67,6 +69,9 @@ type Dialogue = {
   isBoardChanged?: boolean;
   lesson?: string;
   turns: (JugnuTurn | HerTurn)[];
+  /** The run as the phone's event channel would record it (docs/events.md). */
+  events?: EventEntryLike[];
+  extras?: Record<number, RunExtra>;
   isRight: boolean;
   transfer?: { board: string; isRight: boolean } | null;
   isLeft?: boolean;
@@ -145,15 +150,99 @@ function pointedOf(glow: string | null): { prop: string; part?: string } | undef
   return rest.length === 0 ? { prop } : { prop, part: rest.join("/") };
 }
 
-/** A board played to a moment: its steps done on the real player, the clock jumping. */
-function BoardAt({
+const stepText = (steps: readonly Step[]) =>
+  steps
+    .map((x) => `${x.prop}.${x.action}${x.args ? ` ${JSON.stringify(x.args)}` : ""}`)
+    .join(" → ");
+
+/** Long text shortened for a glance; the whole is a tap away. */
+const short = (text: string, most = 160) =>
+  text.length <= most ? text : `${text.slice(0, most).trimEnd()}…`;
+
+/** What a run knows beyond its events, by an event's seq (studio jugnu/dialogue.ts RunExtra). */
+type RunExtra = {
+  jugnu?: {
+    note: string;
+    thinking: string[];
+    given: string;
+    tries: { steps: Step[]; from: "now" | "start"; saw: unknown }[];
+    isHandBack: boolean;
+    isGlowOnList: boolean;
+  };
+  student?: {
+    says: string;
+    thinking: string[];
+    given: string;
+    isLeaving?: boolean;
+    isAlone?: boolean;
+  };
+};
+
+/** A moment on the timeline: an event worth a mark, or the student's words after one. */
+type Moment = {
+  seq: number;
+  opening: string;
+  kind: "act" | "checked" | "jugnu" | "said";
+  /** Who it is from: the colour of its mark. */
+  who: "student" | "jugnu" | "board";
+  label: string;
+  /** For a check: right or not. */
+  isRight?: boolean;
+};
+
+/** The moments of a run, in order: acts, checks, Jugnu's turns, the student's words. */
+function momentsOf(events: readonly EventEntryLike[], extras: Record<number, RunExtra>): Moment[] {
+  const out: Moment[] = [];
+  for (const [seq, e] of events.entries()) {
+    const opening = e.opening ?? "";
+    const p = e.payload as Record<string, unknown>;
+    if (e.kind === "cause" && (e.actor === "learner" || e.actor === "jugnu") && "action" in p)
+      out.push({
+        seq,
+        opening,
+        kind: "act",
+        who: e.actor === "jugnu" ? "jugnu" : "student",
+        label: `${String(p.action)}${Object.keys((p.args as object) ?? {}).length > 0 ? ` ${JSON.stringify(p.args)}` : ""}`,
+      });
+    else if (e.kind === "signal" && p.signal === "checked") {
+      const status = (p.payload as { status?: string } | undefined)?.status;
+      out.push({
+        seq,
+        opening,
+        kind: "checked",
+        who: "board",
+        label: `checked: ${status}`,
+        isRight: status === "correct",
+      });
+    } else if (e.kind === "jugnu")
+      out.push({ seq, opening, kind: "jugnu", who: "jugnu", label: String(p.reply ?? "") });
+    const said = extras[seq]?.student;
+    if (said !== undefined)
+      out.push({ seq, opening, kind: "said", who: "student", label: said.says });
+  }
+  return out;
+}
+
+/** An event as the page reads it (docs/events.md: the envelope's parts it needs). */
+type EventEntryLike = {
+  kind: string;
+  actor: string;
+  opening: string | null;
+  node: string | null;
+  payload: unknown;
+};
+
+/** A board drawn at a moment: its recorded events played again (replay), then any steps of a try. */
+function BoardFrom({
   path,
-  steps,
+  events,
+  steps = [],
   pointed,
   width,
 }: {
   path: string;
-  steps: readonly Step[];
+  events: readonly EventEntryLike[];
+  steps?: readonly Step[];
   pointed?: { prop: string; part?: string } | undefined;
   width: number;
 }): JSX.Element {
@@ -165,14 +254,16 @@ function BoardAt({
       (e: unknown) => setProblem(String(e)),
     );
   }, [path]);
+  const causes = events.filter((e) => e.kind === "cause");
   const play = (runtime: BoardRuntime) => {
     void (async () => {
       runtime.settle();
+      await replay(runtime, events as never, path);
       for (const step of steps) {
         await runtime.call(step.prop, step.action, step.args ?? {}, Actor.Learner);
         runtime.settle();
       }
-    })();
+    })().catch((e: unknown) => setProblem(String(e)));
   };
   if (problem !== null) return <div class="jg-empty">{problem}</div>;
   if (board === null) return <div class="jg-empty">Drawing…</div>;
@@ -181,7 +272,8 @@ function BoardAt({
       <div class="lesson">
         <BoardSpeedContext.Provider value={Number.POSITIVE_INFINITY}>
           <BoardPlayer
-            key={`${path}:${JSON.stringify(steps)}`}
+            // Drawn again only when an act is passed (a reply or a message doesn't move the board).
+            key={`${path}:${causes.length}:${JSON.stringify(steps)}`}
             board={board}
             registry={propLibrary}
             locale={Locale.En}
@@ -198,180 +290,199 @@ function BoardAt({
   );
 }
 
-const stepText = (steps: readonly Step[]) =>
-  steps
-    .map((x) => `${x.prop}.${x.action}${x.args ? ` ${JSON.stringify(x.args)}` : ""}`)
-    .join(" → ");
-
-/** One turn: what she sees on the left, what is behind it on the right. */
-function Turn({
-  one,
-  turn,
-  stepsNow,
-  n,
-}: {
-  one: Case;
-  turn: JugnuTurn | HerTurn;
-  stepsNow: readonly Step[];
-  n: number;
-}): JSX.Element {
-  const isJugnu = turn.who === "jugnu";
-  const showsBoard = isJugnu || turn.did.length > 0;
-  return (
-    <div class="jg-row">
-      <div class="jg-seen">
-        <div class={isJugnu ? "jg-sheet" : "jg-ask"}>
-          {isJugnu && <JugnuFigure mood={JugnuMood.Hint} size={40} />}
-          <p>
-            <b>
-              {n}. {isJugnu ? "Jugnu" : "She"}:
-            </b>{" "}
-            {turn.says}
-          </p>
-        </div>
-        {isJugnu && turn.choices.length > 0 && (
-          <div class="jg-choices">
-            {turn.choices.map((c) => (
-              <span key={c}>{c}</span>
-            ))}
-          </div>
-        )}
-        {!isJugnu && turn.transfer !== undefined && (
-          <p class="jg-diag">
-            <b>Alone, the next question</b> (Jugnu gone): {turn.isRight ? "right ✓" : "wrong ✗"}
-          </p>
-        )}
-        {!isJugnu && turn.isLeaving === true && <p class="jg-problem">She leaves.</p>}
-        {!isJugnu && turn.did.length > 0 && (
-          <p class="jg-small">
-            <b>She does on her board:</b> {stepText(turn.did)}
-            {turn.isRight ? " ✓ right" : ""}
-          </p>
-        )}
-        {showsBoard && (
-          <BoardAt
-            path={!isJugnu && turn.transfer !== undefined ? turn.transfer.board : one.board}
-            steps={stepsNow}
-            pointed={isJugnu ? pointedOf(turn.glow) : undefined}
-            width={300}
-          />
-        )}
-        {isJugnu && (
-          <p class={turn.isGlowOnList === false ? "jg-problem" : "jg-small"}>
-            glows: {turn.glow ?? "nothing"}
-            {turn.isGlowOnList === false ? " (not a part on her board: nothing glows)" : ""}
-          </p>
-        )}
-      </div>
-      <div class="jg-why">
-        {isJugnu && (
-          <p class="jg-diag">
-            <b>His diagnosis:</b> {turn.diagnosis}
-          </p>
-        )}
-        {turn.thinking.map((t, i) => (
-          <p key={i} class="jg-thought">
-            <b>{isJugnu ? "He thinks" : "She thinks"}</b> {t}
-          </p>
-        ))}
-        {isJugnu && turn.tries.length === 0 && <p class="jg-small">He tried nothing on a copy.</p>}
-        {isJugnu &&
-          turn.tries.map((t, i) => (
-            <details key={i} class="jg-try">
-              <summary>
-                Tries on a copy (from {t.from === "now" ? "where she is" : "the start"}):{" "}
-                {stepText(t.steps)}
-              </summary>
-              <BoardAt
-                path={one.board}
-                steps={t.from === "now" ? [...stepsNow, ...t.steps] : t.steps}
-                width={260}
-              />
-              <pre>{JSON.stringify(t.saw, null, 1)}</pre>
-            </details>
-          ))}
-        {turn.given !== "" && (
-          <details>
-            <summary>
-              What {isJugnu ? "he" : "she"} was given ({turn.given.length} characters)
-            </summary>
-            <pre>{turn.given}</pre>
-          </details>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/** One experiment, turn by turn. */
+/** One run, read in time (platform/docs/plans/jugnu-timeline.md): little at a glance, the rest when asked. */
 function Experiment({ run }: { run: Dialogue }): JSX.Element {
-  let steps: readonly Step[] = run.case.steps;
+  const events = run.events ?? [];
+  const extras = run.extras ?? {};
+  const moments = momentsOf(events, extras);
+  const [at, setAt] = useState(Math.max(0, moments.length - 1));
+  const [openTry, setOpenTry] = useState<number | null>(null);
+  // A run still going grows: follow its end unless a moment was chosen.
+  const [isFollowing, setIsFollowing] = useState(true);
+  useEffect(() => {
+    if (isFollowing) setAt(Math.max(0, moments.length - 1));
+  }, [moments.length, isFollowing]);
+  if (run.events === undefined)
+    return (
+      <section class="jg-run">
+        <p class="jg-empty">
+          This run was kept before runs were recorded as events, so it isn't shown here.
+        </p>
+      </section>
+    );
+  const m = moments[Math.min(at, moments.length - 1)];
+  const choose = (i: number) => {
+    setAt(i);
+    setOpenTry(null);
+    setIsFollowing(i === moments.length - 1);
+  };
+  const jugnuTurns = moments.filter((x) => x.kind === "jugnu");
+  const handBackAt = jugnuTurns.findIndex((x) => extras[x.seq]?.jugnu?.isHandBack === true);
+  const ending =
+    run.isFinished === false
+      ? "still going…"
+      : run.error !== undefined
+        ? `it broke: ${run.error}`
+        : run.isRight
+          ? "their question right"
+          : run.isLeft === true
+            ? "the student left"
+            : "not solved";
+  // The board at this moment: its opening's events up to the moment.
+  const opening = m?.opening ?? "1";
+  const path = opening === "2" && run.case.next !== undefined ? run.case.next : run.case.board;
+  const upTo = events.filter((e, seq) => e.opening === opening && seq <= (m?.seq ?? -1));
+  // The line said last (as the student sees it on the board), and Jugnu's glow while he says it.
+  const lastLine = [...moments.slice(0, at + 1)]
+    .reverse()
+    .find((x) => x.kind === "jugnu" || x.kind === "said");
+  const jugnuEvent = lastLine?.kind === "jugnu" ? events[lastLine.seq] : undefined;
+  const glow = (
+    jugnuEvent?.payload as { steps?: { kind: string; part?: string }[] } | undefined
+  )?.steps?.find((st) => st.kind === "glow")?.part;
+  const his = m === undefined ? undefined : extras[m.seq]?.jugnu;
+  const theirs = m?.kind === "said" ? extras[m.seq]?.student : undefined;
   return (
     <section class="jg-run">
-      <div class="jg-about">
-        <p>
-          <b>{run.case.name}</b> · child <b>{run.student.name}</b> · {run.models.jugnu} /{" "}
-          {run.models.student} · {(run.usage.ms / 1000).toFixed(1)} s, {run.usage.input} in,{" "}
-          {run.usage.output} out ·{" "}
-          <b>
-            {run.isFinished === false
-              ? "still going…"
-              : run.isRight
-                ? "her question right"
-                : run.isLeft === true
-                  ? "she left"
-                  : "not solved"}
-            {run.transfer == null
-              ? ""
-              : run.transfer.isRight
-                ? " · the next one alone: right"
-                : " · the next one alone: wrong"}
-          </b>
-        </p>
-        <p>
-          <b>She believes</b> (hidden from Jugnu): {run.student.believes}
-        </p>
-        {run.error !== undefined && <p class="jg-problem">It broke: {run.error}</p>}
-        {run.isBoardChanged === true && (
-          <p class="jg-problem">
-            Its board has been rebuilt since this run: the boards below are drawn as the board is
-            now, so they may not be what the student saw.
-          </p>
-        )}
-        {run.note !== "" && (
-          <p>
-            <b>This experiment:</b> {run.note}
-          </p>
-        )}
-        <details>
-          <summary>
-            Jugnu's instructions
-            {run.prompts === undefined
-              ? ""
-              : ` · tutor/${run.prompts.tutor.name} (${run.prompts.tutor.hash})`}
-          </summary>
-          <pre>{run.instructions.jugnu}</pre>
-        </details>
-        {run.lesson !== undefined && (
-          <details>
-            <summary>The lesson, as Jugnu was given it ({run.lesson.length} characters)</summary>
-            <pre>{run.lesson}</pre>
-          </details>
-        )}
-        <details>
-          <summary>
-            The child's instructions
-            {run.prompts === undefined
-              ? ""
-              : ` · student/${run.prompts.student.name} (${run.prompts.student.hash})`}
-          </summary>
-          <pre>{run.instructions.student}</pre>
-        </details>
+      <p class="jg-story">
+        <b>{ending}</b>
+        {" · "}
+        {handBackAt === -1
+          ? "no hand-back"
+          : `handed back at Jugnu's turn ${handBackAt + 1} of ${jugnuTurns.length}`}
+        {run.transfer == null
+          ? ""
+          : run.transfer.isRight
+            ? " · next one alone: right"
+            : " · next one alone: wrong"}
+        {" · "}
+        {jugnuTurns.length} turns of Jugnu · {(run.usage.ms / 1000).toFixed(0)} s
+      </p>
+      <p class="jg-small">
+        {run.case.name} · student {run.student.name} · Jugnu {run.models.jugnu}
+        {run.prompts ? ` (${run.prompts.tutor.name})` : ""} · student {run.models.student}
+        {run.prompts ? ` (${run.prompts.student.name})` : ""}
+        {run.note !== "" ? ` · ${run.note}` : ""}
+      </p>
+      <div class="jg-timeline">
+        {moments.map((x, i) => (
+          <button
+            key={i}
+            type="button"
+            aria-label={`${x.who}: ${short(x.label, 120)}`}
+            class={`jg-mark is-${x.who}${x.kind === "checked" ? (x.isRight ? " is-right" : " is-wrong") : ""}${x.kind === "jugnu" || x.kind === "said" ? " is-words" : ""}${i === at ? " is-at" : ""}`}
+            title={`${x.who}: ${short(x.label, 120)}`}
+            onClick={() => choose(i)}
+          />
+        ))}
       </div>
-      {run.turns.map((turn, i) => {
-        if (turn.who === "her") steps = turn.stepsSoFar;
-        return <Turn key={i} one={run.case} turn={turn} stepsNow={steps} n={i + 1} />;
-      })}
+      {run.isBoardChanged === true && (
+        <p class="jg-problem">Its board has been rebuilt since: drawn as it is now.</p>
+      )}
+      <div class="jg-moment">
+        <div class="jg-seen">
+          {m !== undefined && (
+            <BoardFrom
+              // Another board is another drawing: nothing of the last one carries over.
+              key={path}
+              path={path}
+              events={upTo}
+              pointed={glow === undefined ? undefined : pointedOf(glow)}
+              width={320}
+            />
+          )}
+          {lastLine !== undefined && (
+            <div class={lastLine.kind === "jugnu" ? "jg-sheet" : "jg-ask"}>
+              {lastLine.kind === "jugnu" && <JugnuFigure mood={JugnuMood.Hint} size={36} />}
+              <p>
+                <b>{lastLine.kind === "jugnu" ? "Jugnu" : "Student"}:</b> {lastLine.label}
+              </p>
+            </div>
+          )}
+        </div>
+        <div class="jg-why">
+          <p class="jg-small">
+            Moment {at + 1} of {moments.length}
+            {m === undefined ? "" : ` · ${m.who}: ${short(m.label, 90)}`}
+            {opening === "2" ? " · the next question, alone" : ""}
+          </p>
+          {his !== undefined && (
+            <>
+              <p class="jg-diag">
+                <b>His note:</b> {short(his.note)}
+              </p>
+              {his.thinking.length > 0 && (
+                <details>
+                  <summary>His thinking</summary>
+                  {his.thinking.map((t, i) => (
+                    <p key={i} class="jg-thought">
+                      {t}
+                    </p>
+                  ))}
+                </details>
+              )}
+              {his.tries.map((t, i) => (
+                <details
+                  key={i}
+                  open={openTry === i}
+                  onToggle={(e) => setOpenTry((e.target as HTMLDetailsElement).open ? i : null)}
+                >
+                  <summary>Tried on a copy: {short(stepText(t.steps), 80)}</summary>
+                  {openTry === i && (
+                    <BoardFrom
+                      key={`${path}:try`}
+                      path={path}
+                      events={t.from === "now" ? upTo.filter((_, k) => k < upTo.length - 1) : []}
+                      steps={t.steps}
+                      width={260}
+                    />
+                  )}
+                </details>
+              ))}
+              <details>
+                <summary>What he was given</summary>
+                <pre>{his.given}</pre>
+              </details>
+            </>
+          )}
+          {theirs !== undefined && (
+            <>
+              {theirs.thinking.length > 0 && (
+                <details>
+                  <summary>Their thinking</summary>
+                  {theirs.thinking.map((t, i) => (
+                    <p key={i} class="jg-thought">
+                      {t}
+                    </p>
+                  ))}
+                </details>
+              )}
+              <details>
+                <summary>What they were given</summary>
+                <pre>{theirs.given}</pre>
+              </details>
+            </>
+          )}
+        </div>
+      </div>
+      <details>
+        <summary>
+          Instructions
+          {run.prompts
+            ? ` · tutor/${run.prompts.tutor.name} (${run.prompts.tutor.hash}) · student/${run.prompts.student.name} (${run.prompts.student.hash})`
+            : ""}
+        </summary>
+        <p class="jg-small">Jugnu's</p>
+        <pre>{run.instructions.jugnu}</pre>
+        <p class="jg-small">The student's (believes, hidden from Jugnu: {run.student.believes})</p>
+        <pre>{run.instructions.student}</pre>
+        {run.lesson !== undefined && (
+          <>
+            <p class="jg-small">The lesson, as Jugnu was given it</p>
+            <pre>{run.lesson}</pre>
+          </>
+        )}
+      </details>
     </section>
   );
 }

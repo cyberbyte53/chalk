@@ -18,8 +18,11 @@ import type { BoardRuntime } from "./runtime";
 type Def = { children?: Readonly<Record<string, Def>> };
 
 /** Every node's address on the board (a piece, its children within), by the id events carry. */
-export function addressesOf(runtime: BoardRuntime): Map<string, string> {
-  const path = boardPathOf(runtime.board);
+export function addressesOf(
+  runtime: BoardRuntime,
+  /** The board's path in the course tree, when the board was loaded without its item. */
+  path = boardPathOf(runtime.board),
+): Map<string, string> {
   const out = new Map<string, string>();
   const walk = (address: string, def: Def | undefined) => {
     out.set(idOf(piecePath(path, address)), address);
@@ -35,8 +38,9 @@ export function addressesOf(runtime: BoardRuntime): Map<string, string> {
 export function causesOf(
   runtime: BoardRuntime,
   events: readonly EventEntry[],
+  path?: string,
 ): { prop: string; action: string; args: Readonly<Record<string, unknown>>; actor: Actor }[] {
-  const addresses = addressesOf(runtime);
+  const addresses = addressesOf(runtime, path);
   return events.flatMap((e) => {
     if (e.kind !== "cause") return [];
     const payload = e.payload as { action?: string; args?: Readonly<Record<string, unknown>> };
@@ -61,8 +65,13 @@ export function causesOf(
 }
 
 /** Plays the causes among events on a board, in order, each settled before the next. */
-export async function replay(runtime: BoardRuntime, events: readonly EventEntry[]): Promise<void> {
-  for (const c of causesOf(runtime, events)) {
+export async function replay(
+  runtime: BoardRuntime,
+  events: readonly EventEntry[],
+  /** The board's path in the course tree (its item's, if it was loaded with one). */
+  path?: string,
+): Promise<void> {
+  for (const c of causesOf(runtime, events, path)) {
     await runtime.call(c.prop, c.action, c.args, c.actor);
     runtime.settle();
   }

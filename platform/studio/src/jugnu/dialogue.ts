@@ -580,6 +580,8 @@ export function listRuns(board?: string): {
   return runFiles()
     .filter((f) => board === undefined || f.board === board)
     .map(({ file }) => JSON.parse(readFileSync(file, "utf8")) as Dialogue)
+    // Runs kept before they were recorded as events are left on disk, not listed.
+    .filter((run) => run.events !== undefined)
     .sort((a, b) => (a.id < b.id ? 1 : -1))
     .map((run) => ({
       id: run.id,
