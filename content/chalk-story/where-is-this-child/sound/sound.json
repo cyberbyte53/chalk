@@ -1,0 +1,458 @@
+{
+  "speakers": {
+    "narrator": {
+      "en": "piper:en_US-lessac-high",
+      "hi": "piper:hi_IN-rohan-medium"
+    }
+  },
+  "clips": [
+    {
+      "file": "cfcf2108b0f62307.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "A quadratic's zeroes are where its graph meets the x axis. Bring them together, and it only touches. Lift it, and it never meets the axis at all.",
+      "seconds": 8.847,
+      "boards": [
+        "3bfa64d08487416f"
+      ]
+    },
+    {
+      "file": "531006097cf70d39.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "And the rest aren't lost any more. They're curious.",
+      "seconds": 2.74,
+      "boards": [
+        "f7bb6c780dcdf95c"
+      ]
+    },
+    {
+      "file": "e8b64a5b2e0a0f0f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Any subject",
+      "seconds": 0.964,
+      "boards": [
+        "3bfa64d08487416f"
+      ]
+    },
+    {
+      "file": "ac0807807a29a24e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Balancing an equation feels like guessing, until you can count the atoms. Every atom on the left ends up on the right.",
+      "seconds": 6.467,
+      "boards": [
+        "915c11a001bfb5b8"
+      ]
+    },
+    {
+      "file": "f43d60f5315ff32e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Biology",
+      "seconds": 0.848,
+      "boards": [
+        "5a3a59c0430c128b"
+      ]
+    },
+    {
+      "file": "dd34aa55838fcd48.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Chemistry",
+      "seconds": 0.883,
+      "boards": [
+        "10d91662c413d999"
+      ]
+    },
+    {
+      "file": "0f883b646cd220bf.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Count the atoms",
+      "seconds": 1.092,
+      "boards": [
+        "915c11a001bfb5b8"
+      ]
+    },
+    {
+      "file": "2d67f5da1d85bc71.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Cross a tall pea plant with a short one, and every child is tall. Cross two of those children, and a short one comes back. The genes show why.",
+      "seconds": 8.696,
+      "boards": [
+        "566358ffc0aab064"
+      ]
+    },
+    {
+      "file": "4593bfe0b6dcaa75.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Far away, it's small and upside down. Closer, it grows. Inside the focus, it flips the right way up: your face in a spoon.",
+      "seconds": 8.278,
+      "boards": [
+        "4988bd28853e932a"
+      ]
+    },
+    {
+      "file": "e6909a9b4d75bdb0.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "I'm a volunteer teacher. Many of my students were falling behind, and I wanted to know why. I found three reasons.",
+      "seconds": 6.618,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "86058d6fcc45a05c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "In a textbook, a concave mirror is a table of six rows to memorise. In Chalk, you move the candle, and watch its image.",
+      "seconds": 7.442,
+      "boards": [
+        "4988bd28853e932a"
+      ]
+    },
+    {
+      "file": "973caf787d0956bb.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Maths",
+      "seconds": 0.709,
+      "boards": [
+        "2be5f8591a460d06",
+        "31f46f2f607f799f",
+        "b3fec5eb2da9e0bb",
+        "964a5fc5fa40ea79",
+        "9367b4bbc051a61c"
+      ]
+    },
+    {
+      "file": "8dcb54f2e3c46559.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Now I can see where each child stands: who needs me, and for what.",
+      "seconds": 4.052,
+      "boards": [
+        "f7bb6c780dcdf95c"
+      ]
+    },
+    {
+      "file": "9e01020211018833.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "One. Textbooks make ideas feel dull.",
+      "seconds": 2.578,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "e5d44feeb92c62a0.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Physics",
+      "seconds": 0.79,
+      "boards": [
+        "608ae9b8d92350c7"
+      ]
+    },
+    {
+      "file": "a57b807bb6d8ba1e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Something to play with",
+      "seconds": 1.173,
+      "boards": [
+        "4988bd28853e932a"
+      ]
+    },
+    {
+      "file": "0330e5b8ef6076ef.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That's why Chalk exists",
+      "seconds": 1.835,
+      "boards": [
+        "f7bb6c780dcdf95c"
+      ]
+    },
+    {
+      "file": "12372af4db8d519e.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "This video is a Chalk lesson.",
+      "seconds": 1.719,
+      "boards": [
+        "f7bb6c780dcdf95c"
+      ]
+    },
+    {
+      "file": "da02ebfccd19a9ab.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Three. Mistakes show up late, and without the why.",
+      "seconds": 2.949,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "ead62177cd5a7a2b.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Two. One teacher can't sit with every child.",
+      "seconds": 2.764,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "f8877b95edad3e7a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Watch the genes",
+      "seconds": 1.103,
+      "boards": [
+        "566358ffc0aab064"
+      ]
+    },
+    {
+      "file": "5f447ddd8accf816.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "Why Chalk exists",
+      "seconds": 1.336,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "af658fb6494b4c90.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "अब मैं देख सकता हूँ कि हर बच्चा कहाँ है: किसे मेरी ज़रूरत है, और किस बात में।",
+      "seconds": 6.189,
+      "boards": [
+        "f7bb6c780dcdf95c"
+      ]
+    },
+    {
+      "file": "84cc7294bdebd05b.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "इसीलिए चॉक बना",
+      "seconds": 1.672,
+      "boards": [
+        "f7bb6c780dcdf95c"
+      ]
+    },
+    {
+      "file": "3efd66a8315e3907.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक लंबे मटर के पौधे को एक बौने से मिलाओ, तो हर संतान लंबी होती है। उनमें से दो संतानों को मिलाओ, तो एक बौना पौधा लौट आता है। जीन दिखाते हैं क्यों।",
+      "seconds": 11.924,
+      "boards": [
+        "566358ffc0aab064"
+      ]
+    },
+    {
+      "file": "c91df86eba87ddbc.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "एक। पाठ्यपुस्तकें विचारों को नीरस बना देती हैं।",
+      "seconds": 4.389,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "fee26c84909539aa.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "और बाकी अब खोए हुए नहीं हैं। वे जिज्ञासु हैं।",
+      "seconds": 4.296,
+      "boards": [
+        "f7bb6c780dcdf95c"
+      ]
+    },
+    {
+      "file": "cddd411f6b47b5a4.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "कोई भी विषय",
+      "seconds": 1.173,
+      "boards": [
+        "3bfa64d08487416f"
+      ]
+    },
+    {
+      "file": "504af9ee9ae17fba.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "खेलने की चीज़",
+      "seconds": 1.51,
+      "boards": [
+        "4988bd28853e932a"
+      ]
+    },
+    {
+      "file": "6dab3be17472044a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "गणित",
+      "seconds": 0.953,
+      "boards": [
+        "2be5f8591a460d06",
+        "31f46f2f607f799f",
+        "b3fec5eb2da9e0bb",
+        "964a5fc5fa40ea79",
+        "9367b4bbc051a61c"
+      ]
+    },
+    {
+      "file": "8fb875dd7613f50d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "चॉक क्यों बना",
+      "seconds": 1.382,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "5f91635f8715ddd0.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "जीन देखो",
+      "seconds": 1.289,
+      "boards": [
+        "566358ffc0aab064"
+      ]
+    },
+    {
+      "file": "514fe53bfeaa5554.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "जीव विज्ञान",
+      "seconds": 1.405,
+      "boards": [
+        "5a3a59c0430c128b"
+      ]
+    },
+    {
+      "file": "9142969625fef1d6.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "तीन। गलतियाँ देर से दिखती हैं, और बिना वजह के।",
+      "seconds": 4.203,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "e62f7e7409c6e0a7.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दूर, वह छोटा और उल्टा है। पास आने पर, वह बड़ा होता है। फ़ोकस के अंदर, वह सीधा हो जाता है: चम्मच में तुम्हारा चेहरा।",
+      "seconds": 10.751,
+      "boards": [
+        "4988bd28853e932a"
+      ]
+    },
+    {
+      "file": "3ee53242781f6914.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "दो। एक शिक्षक हर बच्चे के साथ नहीं बैठ सकता।",
+      "seconds": 3.82,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "610175508b5319f8.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "द्विघात बहुपद के शून्यक वहाँ हैं जहाँ उसका ग्राफ़ एक्स-अक्ष से मिलता है। उन्हें पास लाओ, तो वह बस छूता है। उसे ऊपर उठाओ, तो वह अक्ष से कभी नहीं मिलता।",
+      "seconds": 12.423,
+      "boards": [
+        "3bfa64d08487416f"
+      ]
+    },
+    {
+      "file": "6ef66579cad2a179.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "परमाणु गिनो",
+      "seconds": 1.324,
+      "boards": [
+        "915c11a001bfb5b8"
+      ]
+    },
+    {
+      "file": "115ce8a17d911317.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "पाठ्यपुस्तक में, अवतल दर्पण छह पंक्तियों की एक तालिका है जिसे रटना है। चॉक में, तुम मोमबत्ती खिसकाते हो, और उसका प्रतिबिंब देखते हो।",
+      "seconds": 11.297,
+      "boards": [
+        "4988bd28853e932a"
+      ]
+    },
+    {
+      "file": "370049b75cf862a8.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "भौतिकी",
+      "seconds": 1.045,
+      "boards": [
+        "608ae9b8d92350c7"
+      ]
+    },
+    {
+      "file": "e2b4f54215cac710.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "मैं एक स्वयंसेवक शिक्षक था, और मेरे विद्यार्थी मेरी बात समझ नहीं पा रहे थे। तो मैंने वजह खोजनी चाही। मुझे तीन वजहें मिलीं।",
+      "seconds": 10.275,
+      "boards": [
+        "b21fad562b8b0507"
+      ]
+    },
+    {
+      "file": "afc2f25333455929.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह वीडियो चॉक का एक पाठ है।",
+      "seconds": 2.88,
+      "boards": [
+        "f7bb6c780dcdf95c"
+      ]
+    },
+    {
+      "file": "689e747d6d72e4a7.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "रसायन",
+      "seconds": 1.057,
+      "boards": [
+        "10d91662c413d999"
+      ]
+    },
+    {
+      "file": "3dd3c5ebfc963474.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "समीकरण संतुलित करना अंदाज़ा लगाने जैसा लगता है, जब तक तुम परमाणु गिन न सको। बाईं ओर का हर परमाणु दाईं ओर पहुँचता है।",
+      "seconds": 10.577,
+      "boards": [
+        "915c11a001bfb5b8"
+      ]
+    }
+  ]
+}

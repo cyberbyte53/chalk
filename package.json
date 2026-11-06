@@ -35,7 +35,11 @@
     "@chalk/patterns": "workspace:*",
     "@chalk/prop": "workspace:*",
     "@chalk/prop-basics": "workspace:*",
+    "@chalk/prop-chemistry": "workspace:*",
+    "@chalk/prop-classroom": "workspace:*",
     "@chalk/prop-coordinates": "workspace:*",
+    "@chalk/prop-heredity": "workspace:*",
+    "@chalk/prop-light": "workspace:*",
     "nerdamer": "2.0.0",
     "preact": "10.29.8",
     "zod": "3.25.76"

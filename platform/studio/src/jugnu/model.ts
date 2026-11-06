@@ -79,7 +79,7 @@ export type SeatChoice = { provider: Provider; id: string; isThinking?: boolean 
 
 /** The models a page may pick from, per provider (offered only where the server has its key). */
 const OFFERED: Record<Provider, readonly string[]> = {
-  [Provider.Anthropic]: ["claude-haiku-5-5", "claude-sonnet-5-5"],
+  [Provider.Anthropic]: ["claude-haiku-5-5"],
   [Provider.DeepSeek]: ["deepseek-flash", "deepseek-v4-pro"],
 };
 

@@ -63,6 +63,7 @@ A question answered by getting another prop into the right state, then pressing 
 | `isGraded` | true or false | changed by its own rules |
 | `about` | text | changed by its own rules |
 | `isMet` | true or false | input |
+| `answer` | {orNull: {en: "text", hi: "text"}} | input |
 
 | Action | Takes | |
 |---|---|---|
@@ -72,6 +73,73 @@ A question answered by getting another prop into the right state, then pressing 
 
 Signals: `checked`, `correct`, `wrong`
 
+## `chemistry` — `@chalk/prop-chemistry`
+
+Chemical equations as atoms you can count: balancing keeps every atom.
+
+### `equationBalance` · explainer
+
+`library/props/chemistry/equationBalance` · used in no chapter yet
+
+A chemical equation drawn as its molecules: reactants left of the arrow, products right, each molecule as coloured balls for its atoms, drawn as many times as its coefficient (1 to 6). Under it, each element's atoms are counted on both sides; a row is red while they differ. Only the coefficients change, with + and − under each molecule. It is balanced when every element has as many atoms on both sides (conservation of mass: atoms are neither made nor lost); then the atoms on the left can be moved across to make the molecules on the right.
+
+| Field | Takes | |
+|---|---|---|
+| `reactants` | [{formula: "text", coefficient: "whole number 1 to 6"}] | changed by its own rules |
+| `products` | [{formula: "text", coefficient: "whole number 1 to 6"}] | changed by its own rules |
+| `colors` | ZodRecord | changed by its own rules |
+| `pop` | {orNull: {side: ["reactants", "products"], index: "whole number 0 to 3", was: "whole number 1 to 6"}} | changed by its own rules |
+| `popped` | number 0 to 1 | changed by its own rules |
+| `regrouped` | number 0 to 1 | changed by its own rules |
+
+| Action | Takes | |
+|---|---|---|
+| `step` | {side: ["reactants", "products"], index: "whole number 0 to 3", by: [1, -1]} | learner · One molecule more or fewer of this formula (the learner's + and −): its new copy pops in, or its last pops out |
+| `setCoefficient` | {side: ["reactants", "products"], index: "whole number 0 to 3", coefficient: "whole number 1 to 6"} | Put this coefficient (1 to 6) in front of one formula, its copies popping in or out |
+| `startAgain` | — | learner · Every coefficient back to 1 (the learner's ↺) |
+| `regroup` | — | learner · Once balanced: the atoms on the left fly across, one after another, into the molecules on the right |
+| `ungroup` | — | learner · The atoms fly back into the molecules on the left |
+
+Signals: `counted`, `balanced`, `regrouped`, `ungrouped`
+
+## `classroom` — `@chalk/prop-classroom`
+
+A classroom, drawn in chalk: a teacher at the blackboard and the children she teaches. Imports `@chalk/prop`, `@chalk/player`, `@chalk/draw`, `@chalk/content`, `@chalk/sounds`. Exports `classroomProp` (and `classroomProps`); `./defs` the definitions and sounds alone.
+
+### `classroom` · explainer
+
+`library/props/classroom/classroom` · used in no chapter yet
+
+A classroom seen from the back: a blackboard at the front with the teacher beside it, and rows of children at benches. Each child is following (head up), lost (head dropped, sometimes a '?'), or asking (a hand up, waiting). The teacher chalks lines on the board one at a time; children can lose the thread one by one, raise their hands, be helped one at a time, or all light up, each over a glowing slate of their own.
+
+| Field | Takes | |
+|---|---|---|
+| `count` | whole number 1 to 12 | changed by its own rules |
+| `seed` | whole number 0 to … | changed by its own rules |
+| `lines` | [{en: "text", hi: "text"}] | changed by its own rules |
+| `writing` | number 0 to 1 | changed by its own rules |
+| `wiping` | number 0 to 1 | changed by its own rules |
+| `lost` | number 0 to 12 | changed by its own rules |
+| `asking` | ["whole number 0 to 11"] | changed by its own rules |
+| `rising` | ["whole number 0 to 11"] | changed by its own rules |
+| `raised` | number 0 to 1 | changed by its own rules |
+| `helped` | ["whole number 0 to 11"] | changed by its own rules |
+| `lifting` | {orNull: "whole number 0 to 11"} | changed by its own rules |
+| `lift` | number 0 to 1 | changed by its own rules |
+| `lit` | number 0 to 12 | changed by its own rules |
+
+| Action | Takes | |
+|---|---|---|
+| `loseThem` | {seconds: "number 0 to 30", howMany: {optional: "whole number 1 to 12"}} | Children lose the thread one after another, in the seed's order, over these seconds: heads drop, a few '?' (all of them, or howMany) |
+| `raiseHands` | {who: {optional: ["whole number 0 to 11"]}} | Hands go up (these children, else two the seed picks) and stay up, waiting to be answered |
+| `write` | {line: {en: "text", hi: "text"}, seconds: "number 0 to 30"} | The teacher chalks the next line on the board: she walks up, writes it left to right, and steps back |
+| `wipe` | — | The duster clears the board |
+| `lightUp` | {seconds: "number 0 to 30"} | The after: one by one, every child's head comes up over a slate of their own that glows |
+| `settle` | — | Back to a class all following: no one lost, no hands, no slates |
+| `help` | {child: "whole number 0 to 11"} | learner · Turn to one child: a lost child looks up; a raised hand is answered |
+
+Signals: `lost`, `raised`, `written`, `wiped`, `lit`, `helped`
+
 ## `coordinates` — `@chalk/prop-coordinates`
 
 The plane, located by two perpendicular lines: one prop, `coordinatePlane`, holding parts a board turns on by what it gives them. Built for Class 9 Coordinate Geometry, but it knows only its own world.
@@ -80,7 +148,7 @@ The plane, located by two perpendicular lines: one prop, `coordinatePlane`, hold
 
 `library/props/coordinates/coordinatePlane` · used in no chapter yet
 
-A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.
+A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; the dice game; and a parabola y = a(x − α)(x − β) held by its zeroes, meeting the x-axis twice, once or not at all.
 
 | Field | Takes | |
 |---|---|---|
@@ -159,6 +227,31 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `dice.throwsMade` | whole number 0 to … | changed by dice.its own rules |
 | `dice.goal` | whole number 2 to 20 | changed by dice.its own rules |
 | `dice.winner` | {orNull: "whole number 0 to 1"} | changed by dice.its own rules |
+| `crowd.asked` | {orNull: {x: "number", y: "number"}} | changed by crowd.its own rules |
+| `crowd.mix` | {none: "whole number 0 to …", swapped: "whole number 0 to …", sign: "whole number 0 to …", offByOne: "whole number 0 to …"} | changed by crowd.its own rules |
+| `crowd.seed` | whole number 0 to … | changed by crowd.its own rules |
+| `crowd.shown` | number 0 to 40 | changed by crowd.its own rules |
+| `crowd.together` | number 0 to 1 | changed by crowd.its own rules |
+| `crowd.gatherAt` | {x: "number", y: "number"} | changed by crowd.its own rules |
+| `crowd.gatherName` | {orNull: {en: "text", hi: "text"}} | changed by crowd.its own rules |
+| `crowd.isMarked` | true or false | changed by crowd.its own rules |
+| `crowd.lit` | {orNull: ["none", "swapped", "sign", "offByOne"]} | changed by crowd.its own rules |
+| `crowd.helped` | {orNull: "whole number 0 to 39"} | changed by crowd.its own rules |
+| `crowd.home` | ["whole number 0 to 39"] | changed by crowd.its own rules |
+| `crowd.walkers` | ["whole number 0 to 39"] | changed by crowd.its own rules |
+| `crowd.isFromO` | true or false | changed by crowd.its own rules |
+| `crowd.walked` | number 0 to 1 | changed by crowd.its own rules |
+| `crowd.fromO` | ["whole number 0 to 39"] | changed by crowd.its own rules |
+| `parabola.zeroes` | {orNull: {alpha: "number", beta: "number"}} | changed by parabola.its own rules |
+| `parabola.a` | number -10 to 10 | changed by parabola.its own rules |
+| `parabola.lift` | number -50 to 50 | changed by parabola.its own rules |
+| `parabola.traced` | number 0 to 1 | changed by parabola.its own rules |
+| `parabola.step` | number 0 to … | changed by parabola.its own rules |
+| `parabola.canDrag` | true or false | changed by parabola.its own rules |
+| `parabola.canFlip` | true or false | changed by parabola.its own rules |
+| `parabola.showsValues` | true or false | changed by parabola.its own rules |
+| `parabola.showsSymmetry` | true or false | changed by parabola.its own rules |
+| `parabola.showsExpression` | true or false | changed by parabola.its own rules |
 
 | Action | Takes | |
 |---|---|---|
@@ -201,7 +294,84 @@ A plane located by two perpendicular lines, drawn only as far as the lesson has 
 | `plotting.clearPlotted` | — | Take every dot off, the next dot back at O |
 | `dice.throwDice` | — | learner · Throw both dice for the player whose turn it is; the counter walks along by red, then up by green, skipping a die that would pass the goal (the learner's Throw; timed) |
 | `dice.startAgain` | — | learner · Both counters back to (0, 0), a new game (the learner's ↺) |
+| `crowd.arrive` | — | Everyone comes in, one after another, each to where they put the point |
+| `crowd.gather` | — | Everyone drawn together into one dot, at gatherAt |
+| `crowd.spread` | — | Everyone back to where they put it |
+| `crowd.mark` | — | Each dot shows its mistake |
+| `crowd.light` | {mistake: {orNull: ["none", "swapped", "sign", "offByOne"]}} | Light everyone who made this mistake, the rest faded (null: all lit) |
+| `crowd.help` | {who: {orNull: "whole number 0 to 39"}} | A light beside one person (null: none) |
+| `crowd.walkHome` | {who: {orNull: "whole number 0 to 39"}, isFromO: "true or false"} | One person (or everyone not yet there) walks to the point asked, on the lines |
+| `parabola.moveAlpha` | {x: "number"} | learner · Slide the zero α along the x-axis; the whole curve follows |
+| `parabola.moveBeta` | {x: "number"} | learner · Slide the zero β along the x-axis; the whole curve follows |
+| `parabola.flip` | — | learner · Turn it over: a and k change sign, the zeroes stay |
+| `parabola.trace` | {seconds: "number 0 to 30"} | Draw it from left to right, a point leaving the curve behind it |
+| `parabola.moveZeroes` | {alpha: "number", beta: "number", seconds: "number 0 to 30"} | Slide both zeroes to α and β together; the curve reshapes as they go |
+| `parabola.lift` | {to: "number -50 to 50", seconds: "number 0 to 30"} | Raise or lower the whole curve until it is lifted by `to` (k) |
 
-Signals: `plane.risen`, `plane.crossed`, `plane.named`, `plane.quadrantsNumbered`, `plane.numberTapped`, `plane.turned`, `plane.axesMoved`, `reading.moved`, `reading.enteredQuadrant`, `reading.readingShown`, `places.targetChosen`, `places.lineLit`, `walker.stepped`, `walker.arrived`, `walker.blocked`, `clues.clueGiven`, `clues.pinned`, `plotting.plotted`, `plotting.missed`, `plotting.scaleChosen`, `plotting.allPlotted`, `dice.thrown`, `dice.counterMoved`, `dice.missed`, `dice.sentHome`, `dice.won`
+Signals: `plane.risen`, `plane.crossed`, `plane.named`, `plane.quadrantsNumbered`, `plane.numberTapped`, `plane.turned`, `plane.axesMoved`, `reading.moved`, `reading.enteredQuadrant`, `reading.readingShown`, `places.targetChosen`, `places.lineLit`, `walker.stepped`, `walker.arrived`, `walker.blocked`, `clues.clueGiven`, `clues.pinned`, `plotting.plotted`, `plotting.missed`, `plotting.scaleChosen`, `plotting.allPlotted`, `dice.thrown`, `dice.counterMoved`, `dice.missed`, `dice.sentHome`, `dice.won`, `crowd.arrived`, `crowd.gathered`, `crowd.spread`, `crowd.walked`, `parabola.zeroMoved`, `parabola.flipped`, `parabola.traced`, `parabola.zeroesMoved`, `parabola.lifted`
 
 The group answers (each with another part's actions, which change that part): `places.targetChosen`, `plane.numberTapped`, `plotting.scaleChosen`
+
+## `heredity` — `@chalk/prop-heredity`
+
+Inheritance: Mendel's crosses, each plant carrying two copies of a gene. Imports `@chalk/prop`, `@chalk/player`, `@chalk/draw`, `@chalk/content`, `@chalk/sounds`. Exports `peaCrossProp` (and `heredityProps`); `./defs` the definitions and sounds alone.
+
+### `peaCross` · explainer
+
+`library/props/heredity/peaCross` · used in no chapter yet
+
+Mendel's pea plants and one gene, for height: each plant carries two copies, T (tall, dominant) or t (short, recessive), drawn as two beads at its base; a plant is tall if it has any T. Two parents are crossed: each gives one of its copies to each child, so the four children are the boxes of a Punnett square, and they grow up from the soil one by one. Two children can become the parents of the next generation: TT × tt gives all tall (each with a hidden t); two of those give 3 tall : 1 short.
+
+| Field | Takes | |
+|---|---|---|
+| `parents` | ZodTuple | changed by its own rules |
+| `generation` | whole number 0 to 20 | changed by its own rules |
+| `grown` | number 0 to 4 | changed by its own rules |
+| `chosen` | ["whole number 0 to 3"] | changed by its own rules |
+| `rising` | number 0 to 1 | changed by its own rules |
+| `isGenesShown` | true or false | changed by its own rules |
+
+| Action | Takes | |
+|---|---|---|
+| `cross` | {seconds: "number 0 to 30"} | Cross the two parents: their four children grow up one after another, over `seconds` |
+| `nextGeneration` | {seconds: "number 0 to 30", children: {optional: "ZodTuple"}} | Two children (these, else the two chosen, else the first two) rise to be the parents, and their four children grow over `seconds` |
+| `showGenes` | {isShown: "true or false"} | Draw or hide each plant's two beads |
+| `crossParents` | — | learner · Cross the two parents (the student's Cross) |
+| `choose` | {child: "whole number 0 to 3"} | learner · Pick a grown child as a next parent, or unpick it |
+| `crossChosen` | — | learner · The two picked children become the parents, and are crossed |
+| `startAgain` | — | learner · Back to a pure tall (TT) and a pure short (tt), nothing grown |
+
+Signals: `sprouted`, `crossed`, `risen`
+
+## `light` — `@chalk/prop-light`
+
+Light: reflection and refraction (NCERT Class 10, Ch 9). One prop so far, `sphericalMirror`.
+
+### `sphericalMirror` · explainer
+
+`library/props/light/sphericalMirror` · used in no chapter yet
+
+A concave or convex mirror on its principal axis with P, F and C marked, and a candle (or an upright arrow) standing on the axis in front of it. The image follows from the mirror formula 1/v + 1/u = 1/f (New Cartesian signs: u < 0, f < 0 for concave), m = −v/u: real and inverted in front of the mirror, or virtual and erect behind it (dashed), with two textbook rays from the object's tip reaching it. As the object moves, the image moves, grows, shrinks, flips and jumps behind the mirror: beyond C, at C, between C and F, at F (at infinity), between F and P; a convex mirror's is always virtual, erect, diminished. The student drags the object along the axis.
+
+| Field | Takes | |
+|---|---|---|
+| `kind` | ["concave", "convex"] | changed by its own rules |
+| `focalLength` | number 4 to 40 | changed by its own rules |
+| `u` | number … to 0 | changed by its own rules |
+| `objectHeight` | number 0 to 20 | changed by its own rules |
+| `object` | ["candle", "arrow"] | changed by its own rules |
+| `canMoveObject` | true or false | changed by its own rules |
+| `canSwitchKind` | true or false | changed by its own rules |
+| `showCase` | true or false | changed by its own rules |
+| `showNumbers` | true or false | changed by its own rules |
+
+| Action | Takes | |
+|---|---|---|
+| `moveObject` | {x: "number"} | learner · The student drags the object's foot to x on the axis (x = u, cm; kept in range) |
+| `letGo` | {x: "number"} | learner · The student lets the object go |
+| `setKind` | {kind: ["concave", "convex"]} | learner · Make the mirror concave or convex (the student's switch) |
+| `moveObjectTo` | {u: "number … to 0", seconds: "number 0 to 60"} | The object glides (smoothly) to u cm, kept in range; caseChanged each time the image changes case on the way, moved at the end |
+| `placeObject` | {at: ["beyondC", "atC", "betweenCAndF", "atF", "betweenFAndP"], seconds: "number 0 to 60"} | The object glides to one of the textbook's places (beyond C: 3f, at C, between C and F: 1.5f, at F, between F and P: 0.6f); concave only |
+| `setFocalLength` | {cm: "number 4 to 40"} | Set \|f\| (cm); the object is kept in range |
+
+Signals: `moved`, `caseChanged`, `released`

@@ -22,7 +22,8 @@ export const busToStop = family({
     .strict()
     .refine((p) => p.stop !== 0, "a stop, not the stand"),
   build: ({ stop }) => {
-    const { isAt, walkTo } = plane;
+    const { isAt, walkTo, walkerAt } = plane;
+    const shown = (n: number) => (n < 0 ? `−${-n}` : `${n}`);
     const road = place(coordinatePlane, {
       plane: {
         window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
@@ -56,6 +57,10 @@ export const busToStop = family({
         `बस अड्डे, 0, से चलती है। इसे स्टॉप ${stop < 0 ? `माइनस ${-stop}` : stop} पर ले जाओ, फिर जाँचो दबाओ।`,
       ),
       isRight: isAt("road", stop, 0),
+      answer: (read) => {
+        const { x } = walkerAt("road")(read);
+        return x === 0 ? t("the stand, 0", "अड्डा, 0") : t(`stop ${shown(x)}`, `स्टॉप ${shown(x)}`);
+      },
       solve: walkTo("road", stop, 0),
       notes: [
         {

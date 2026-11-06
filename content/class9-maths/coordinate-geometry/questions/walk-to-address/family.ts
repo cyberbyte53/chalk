@@ -16,7 +16,7 @@ export const walkToAddress = family({
     })
     .strict(),
   build: ({ street, house }) => {
-    const { isAt, walkTo } = plane;
+    const { isAt, walkTo, walkerAt } = plane;
     const town = place(coordinatePlane, plane.town());
     const isSwapped = street !== house && house <= TOWN.streets && street <= TOWN.houses;
     const ask = check({
@@ -26,6 +26,13 @@ export const walkToAddress = family({
         `अमन **गली ${street}, मकान ${house}** पर रहता है। रिया को कोने से वहाँ चलाओ, फिर जाँचो दबाओ।`,
       ),
       isRight: isAt("town", street, house),
+      answer: (read) => {
+        const { x, y } = walkerAt("town")(read);
+        if (x === 0 && y === 0) return t("the corner", "कोना");
+        return y === 0
+          ? t(`the main road, at Street ${x}`, `मुख्य सड़क, गली ${x} पर`)
+          : t(`Street ${x}, House ${y}`, `गली ${x}, मकान ${y}`);
+      },
       solve: walkTo("town", street, house),
       notes: isSwapped
         ? [

@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { type ChalkEvent, buildIndexSchema } from "@chalk/content";
+import { AGENT_LOCALE, type ChalkEvent, buildIndexSchema } from "@chalk/content";
 import {
   type Attempt,
   type Mastery,
@@ -48,7 +48,8 @@ export type UpdatePoint = { text: string; questions: string[]; reflections: stri
 export type UpdateInput = {
   before: UpdatePoint[];
   questions: (QuestionFacts & {
-    tries: Pick<Attempt, "isRight" | "chosen" | "helped" | "nth">[];
+    /** `chosen`: what they answered, in the English words they saw, or null. */
+    tries: (Pick<Attempt, "isRight" | "helped" | "nth"> & { chosen: string | null })[];
   })[];
   reflections: ReflectionFacts[];
 };
@@ -117,7 +118,12 @@ export function sets(o: {
         ...f,
         tries: inSet
           .filter((a) => a.board === f.board)
-          .map(({ isRight, chosen, helped, nth }) => ({ isRight, chosen, helped, nth })),
+          .map(({ isRight, chosen, helped, nth }) => ({
+            isRight,
+            chosen: chosen?.[AGENT_LOCALE] ?? null,
+            helped,
+            nth,
+          })),
       })),
       reflections: await o.keeper.reflectionsAt(account, set.openings),
     });

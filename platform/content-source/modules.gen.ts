@@ -35,4 +35,8 @@ export const modules: ContentModules = {
     import("../../content/class9-maths/coordinate-geometry/questions/tap-the-part/family"),
   "class9-maths/coordinate-geometry/questions/walk-to-address/family.ts": () =>
     import("../../content/class9-maths/coordinate-geometry/questions/walk-to-address/family"),
+  "chalk-story/where-is-this-child/watch-them-learn/overview.ts": () =>
+    import("../../content/chalk-story/where-is-this-child/watch-them-learn/overview"),
+  "chalk-story/where-is-this-child/showcase/overview.ts": () =>
+    import("../../content/chalk-story/where-is-this-child/showcase/overview"),
 };

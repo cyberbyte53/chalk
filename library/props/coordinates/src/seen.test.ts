@@ -115,6 +115,16 @@ const movingAxes = {
   plane: { canMoveAxes: true, showDirections: false, shift: { x: 1, y: 0.5 }, turn: 30 },
   reading: { point: { x: 3, y: 2 }, reading: "pair", decimals: 2, canMovePoint: false },
 };
+/** A parabola held by its zeroes, to drag and flip; and one lifted off the axis. */
+const parabolaGiven = { zeroes: { alpha: -1, beta: 3 }, canFlip: true };
+const parabola = {
+  plane: { window: { xMin: -4, xMax: 6, yMin: -5, yMax: 6 } },
+  parabola: parabolaGiven,
+};
+const lifted = {
+  ...parabola,
+  parabola: { ...parabolaGiven, zeroes: { alpha: 1, beta: 1 }, lift: 2 },
+};
 /** signs-and-quadrants: each quadrant visited shows its signs. */
 const visitedSigns = {
   plane: { quadrantsNamed: 4 },
@@ -152,6 +162,8 @@ describe("coordinatePlane, used the way the boards use it", () => {
       figure,
       movingAxes,
       visitedSigns,
+      parabola,
+      lifted,
     ];
     expect(
       checkProp(

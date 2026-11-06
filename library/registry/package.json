@@ -19,7 +19,11 @@
     "@chalk/player": "workspace:*",
     "@chalk/prop": "workspace:*",
     "@chalk/prop-basics": "workspace:*",
-    "@chalk/prop-coordinates": "workspace:*"
+    "@chalk/prop-chemistry": "workspace:*",
+    "@chalk/prop-classroom": "workspace:*",
+    "@chalk/prop-coordinates": "workspace:*",
+    "@chalk/prop-heredity": "workspace:*",
+    "@chalk/prop-light": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "22.10.2"

@@ -71,12 +71,13 @@ export type QuestionView = {
 
 /**
  * Payload of the `checked` signal: the result, whether it counts (`isGraded`, the question's own),
- * and what was submitted. It is what processors read as evidence (docs/events.md).
+ * and what was answered, in the words the learner saw (`{ en, hi }`: a choice's picked option's
+ * label, a goal's what its scene says it reads as), or null. It is what processors read as
+ * evidence (docs/events.md). A choice also names its option (`optionId`), which its cues match on.
  */
-export type CheckedPayload = { status: AnswerStatus; attempts: number; isGraded: boolean } & (
-  | { optionId: string }
-  /** A multi-choice question: every option picked (an order question: in order). */
-  | { optionIds: string[] }
-  /** A goal question: the learner's answer is the state of the prop named `about`. */
-  | { about: string }
-);
+export type CheckedPayload = {
+  status: AnswerStatus;
+  attempts: number;
+  isGraded: boolean;
+  answer: Readonly<Record<string, string>> | null;
+} & ({ optionId: string } | Record<never, never>);

@@ -533,3 +533,151 @@
 .cp-frame .cp-crossing-point {
   fill: none;
 }
+
+/* ---- a crowd: each person a dot where they put the point ---- */
+.cp-person {
+  fill: var(--color-on-surface);
+  stroke: var(--color-surface);
+  stroke-width: 1.5;
+}
+.cp-person.is-none {
+  fill: var(--color-right);
+}
+.cp-person.is-swapped {
+  fill: var(--color-category-2);
+}
+.cp-person.is-sign {
+  fill: var(--color-category-3);
+}
+.cp-person.is-off {
+  fill: var(--color-category-4);
+}
+.cp-frame .cp-crowd-name {
+  font: 800 var(--text-body) var(--font-display);
+  fill: var(--color-on-surface);
+}
+.cp-firefly-glow {
+  fill: color-mix(in srgb, var(--color-secondary) 35%, transparent);
+  animation: cp-glow 1.2s ease-in-out infinite alternate;
+}
+.cp-firefly-body {
+  fill: var(--color-secondary);
+}
+@keyframes cp-glow {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.cp-crowd-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+.cp-crowd-kind::before {
+  content: "●";
+  margin-right: 4px;
+}
+.cp-crowd-kind.is-none::before {
+  color: var(--color-right);
+}
+.cp-crowd-kind.is-swapped::before {
+  color: var(--color-category-2);
+}
+.cp-crowd-kind.is-sign::before {
+  color: var(--color-category-3);
+}
+.cp-crowd-kind.is-off::before {
+  color: var(--color-category-4);
+}
+.cp-crowd-kind.is-faded {
+  opacity: 0.35;
+}
+.cp-person-trail {
+  fill: none;
+  stroke: var(--color-on-surface);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  opacity: 0.3;
+}
+.cp-person-trail.is-none {
+  stroke: var(--color-right);
+}
+.cp-person-trail.is-swapped {
+  stroke: var(--color-category-2);
+}
+.cp-person-trail.is-sign {
+  stroke: var(--color-category-3);
+}
+.cp-person-trail.is-off {
+  stroke: var(--color-category-4);
+}
+
+/* ---- a parabola: the curve, its tracing point, its zeroes ---- */
+.cp-parabola-curve {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cp-parabola-value {
+  fill: var(--color-primary);
+  stroke: var(--color-surface);
+  stroke-width: 1.5;
+}
+.cp-parabola-symmetry {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+}
+.cp-parabola-head {
+  fill: var(--color-secondary);
+  stroke: var(--color-surface);
+  stroke-width: 2;
+}
+.cp-parabola-glow {
+  fill: color-mix(in srgb, var(--color-secondary) 30%, transparent);
+}
+.cp-parabola-vertex {
+  fill: var(--color-surface);
+  stroke: var(--color-primary);
+  stroke-width: 2.5;
+}
+.cp-parabola-zero {
+  fill: var(--color-secondary);
+  stroke: var(--color-surface);
+  stroke-width: 2;
+}
+.cp-parabola-zero.is-handle {
+  cursor: grab;
+  stroke-width: 3;
+}
+.cp-parabola-zero.is-handle:focus {
+  outline: none;
+}
+.cp-parabola-zero.is-handle:focus-visible {
+  stroke: var(--color-on-surface);
+  stroke-width: 3;
+}
+.cp-frame .cp-parabola-zero-name {
+  font: 800 var(--text-body) var(--font-display);
+  fill: var(--color-secondary);
+  pointer-events: none;
+}
+.cp-parabola-words {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cp-parabola-expression {
+  font: 700 var(--text-title) / var(--text-title-leading) var(--font-display);
+}
+.cp-parabola-side {
+  white-space: nowrap;
+}
+.cp-parabola-count {
+  color: var(--color-on-surface-variant);
+}

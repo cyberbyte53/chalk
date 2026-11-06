@@ -3,8 +3,10 @@ import { prop } from "@chalk/prop";
 import { z } from "zod";
 import { areCluesOn } from "./clues";
 import { clues } from "./clues";
+import { crowd, isCrowdOn } from "./crowd";
 import { isDiceOn } from "./dice";
 import { dice } from "./dice";
+import { isParabolaOn, parabola } from "./parabola";
 import { Choosing, arePlacesOn } from "./places";
 import { places } from "./places";
 import { plane } from "./plane";
@@ -28,8 +30,8 @@ export const coordinatePlane = prop({
   type: "coordinatePlane",
   role: PropRole.Explainer,
   describe:
-    "A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.",
-  children: { plane, reading, places, walker, clues, plotting, dice },
+    "A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; the dice game; and a parabola y = a(x − α)(x − β) held by its zeroes, meeting the x-axis twice, once or not at all.",
+  children: { plane, reading, places, walker, clues, plotting, dice, crowd, parabola },
   // Whether the board is open for play (its point made), for the parts whose play opens then.
   needs: z.object({ isOpen: z.boolean() }).strict(),
   facts: {
@@ -56,7 +58,8 @@ export const coordinatePlane = prop({
       !(arePlacesOn(me.places) && me.places.choosing !== Choosing.Never) &&
       !isPlottingOn(me.plotting) &&
       !areCluesOn(me.clues) &&
-      !isDiceOn(me.dice),
+      !isDiceOn(me.dice) &&
+      !isParabolaOn(me.parabola),
     canTapNumbers: (me) => arePlacesOn(me.places),
     lit: (me) => me.places.lit,
     // The clues': the unit a page's ruler reads in, and a tap is theirs once nothing is left to plot.
@@ -81,21 +84,23 @@ export const coordinatePlane = prop({
     clues: (me) => areCluesOn(me.clues),
     plotting: (me) => isPlottingOn(me.plotting),
     dice: (me) => isDiceOn(me.dice),
+    crowd: (me) => isCrowdOn(me.crowd),
+    parabola: (me) => isParabolaOn(me.parabola),
   },
   summary: (me) =>
     `the coordinate plane from ${me.window.xMin} to ${me.window.xMax} across and ${me.window.yMin} to ${me.window.yMax} up`,
   layout: {
     kind: "frame",
     provider: "plane",
-    children: ["reading", "places", "walker", "clues", "plotting", "dice"],
+    children: ["reading", "places", "walker", "clues", "plotting", "dice", "crowd", "parabola"],
     order: {
       above: ["places", "clues", "plotting"],
       back: ["plane", "walker", "clues"],
-      on: ["plane", "clues", "plotting", "places", "walker"],
+      on: ["plane", "clues", "plotting", "places", "walker", "parabola"],
       // The plane's named points over Riya, so the mark she has just made stays in view.
-      front: ["plane", "plotting", "clues", "dice", "reading"],
-      below: ["plane", "reading", "walker", "plotting", "dice"],
-      controls: ["walker", "places", "plane", "reading", "clues", "plotting", "dice"],
+      front: ["plane", "plotting", "clues", "dice", "reading", "crowd", "parabola"],
+      below: ["plane", "reading", "walker", "plotting", "dice", "crowd", "parabola"],
+      controls: ["walker", "places", "plane", "reading", "clues", "plotting", "dice", "parabola"],
     },
   },
 });

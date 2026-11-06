@@ -1,0 +1,214 @@
+/* @chalk/prop-chemistry: drawn only with the look's tokens and the content's --tone (an element's colour). */
+
+.eb {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-body);
+  color: var(--color-on-surface);
+}
+
+/* The equation, as written. */
+.eb-equation {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--text-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+.eb-term {
+  white-space: nowrap;
+}
+.eb-op {
+  margin: 0 0.3em;
+  color: var(--color-on-surface-variant);
+  font-weight: 600;
+}
+.eb-coefficient {
+  display: inline-block;
+  color: var(--color-primary);
+  margin-right: 0.04em;
+}
+.eb-coefficient.is-new {
+  animation: eb-bump 0.55s ease-out;
+}
+@keyframes eb-bump {
+  0% {
+    transform: scale(0.4);
+  }
+  55% {
+    transform: scale(1.45);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.eb-formula sub {
+  font-size: 0.62em;
+  vertical-align: -0.28em;
+  line-height: 0;
+}
+
+.eb-verdict {
+  align-self: center;
+  margin: 0;
+  padding: 1px 12px;
+  border-radius: 999px;
+  font-size: var(--text-caption);
+  font-weight: 700;
+  background: var(--color-wrong-container);
+  color: var(--color-wrong);
+}
+.eb-verdict.is-balanced {
+  background: var(--color-right-container);
+  color: var(--color-right);
+}
+
+/* The picture. */
+.eb-side {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--color-on-surface-variant);
+}
+.eb-arrow line,
+.eb-arrow path {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.eb-plus {
+  font-size: 18px;
+  font-weight: 700;
+  fill: var(--color-on-surface-variant);
+}
+.eb-ball {
+  fill: var(--tone, var(--color-surface-press));
+  stroke: color-mix(in srgb, var(--tone, var(--color-surface-press)) 55%, var(--color-on-surface));
+  stroke-width: 1.2px;
+}
+.eb-shine {
+  fill: var(--color-surface);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.eb-symbol {
+  font-family: var(--font-body);
+  font-weight: 700;
+  fill: var(--color-on-surface);
+  pointer-events: none;
+}
+.eb-symbol.is-light {
+  fill: var(--color-surface);
+}
+/* While the atoms fly, where each molecule was (and will be) is only an outline. */
+.eb-atom.is-ghost .eb-ball {
+  fill: color-mix(in srgb, var(--tone, var(--color-surface-press)) 12%, var(--color-surface));
+  stroke: color-mix(
+    in srgb,
+    var(--tone, var(--color-surface-press)) 45%,
+    var(--color-on-surface-variant)
+  );
+  stroke-dasharray: 3 2.5;
+  stroke-width: 1px;
+}
+
+/* Each molecule's − and +, under its column. */
+.eb-steppers {
+  position: relative;
+  height: 40px;
+}
+.eb-stepper {
+  position: absolute;
+  top: 0;
+  display: flex;
+  gap: 3px;
+  transform: translateX(-50%);
+}
+.eb-stepper .draw-button {
+  width: 30px;
+  height: 34px;
+  min-width: 0;
+  padding: 0;
+  border-radius: var(--shape-radius-s);
+}
+
+/* The atoms counted. */
+.eb-tally {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.eb-row {
+  display: grid;
+  grid-template-columns: 1fr 52px 1fr;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: var(--shape-radius-s);
+  font-size: var(--text-note);
+}
+.eb-row.is-off {
+  background: var(--color-wrong-container);
+}
+.eb-row.is-off b {
+  color: var(--color-wrong);
+}
+.eb-row.is-equal {
+  background: var(--color-right-container);
+}
+.eb-row.is-equal b {
+  color: var(--color-right);
+}
+.eb-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.eb-count.is-left {
+  justify-content: flex-end;
+}
+.eb-count b {
+  min-width: 1.2em;
+  text-align: center;
+  font-size: var(--text-body);
+}
+.eb-element {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 700;
+}
+.eb-sign {
+  color: var(--color-on-surface-variant);
+  font-weight: 600;
+}
+.eb-dots {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  max-width: 7.5em;
+}
+.eb-count.is-left .eb-dots {
+  justify-content: flex-end;
+}
+.eb-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--tone, var(--color-surface-press));
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--tone, var(--color-surface-press)) 55%, var(--color-on-surface));
+}
+
+.eb-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2px;
+}

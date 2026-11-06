@@ -1,4 +1,4 @@
-import { Actor, type ChalkEvent, Level, PlayMode, isKind } from "@chalk/content";
+import { Actor, type ChalkEvent, Level, PlayMode, isKind, localizedSchema } from "@chalk/content";
 import { z } from "zod";
 import type { Catalogue } from "./catalogue";
 
@@ -22,8 +22,8 @@ export const attemptSchema = z.object({
   isGraded: z.boolean(),
   /** Their tries at this question so far, over every opening: 1 is the first ever. */
   nth: z.number().int().min(1),
-  /** What they chose: an option, several in order, or (a goal) the prop holding the answer. */
-  chosen: z.string().nullable(),
+  /** What they answered, in the words they saw ("(−1, 3)", an option's label), or null. */
+  chosen: localizedSchema.nullable(),
   /** From the catalogue; empty and null for a question it doesn't know (a page's). */
   tests: z.array(z.string()),
   level: z.nativeEnum(Level).nullable(),
@@ -72,7 +72,7 @@ export function attemptsFrom(events: readonly ChalkEvent[], catalogue: Catalogue
       isRight: p.status === "correct",
       isGraded: p.isGraded === true,
       nth,
-      chosen: chosenOf(p),
+      chosen: localizedSchema.nullable().parse(p.answer),
       tests: found?.tests ?? [],
       level: found?.level ?? null,
       mode: modeOf.get(e.opening) ?? null,
@@ -80,11 +80,4 @@ export function attemptsFrom(events: readonly ChalkEvent[], catalogue: Catalogue
     });
   }
   return attempts;
-}
-
-function chosenOf(p: Record<string, unknown>): string | null {
-  if (typeof p.optionId === "string") return p.optionId;
-  if (Array.isArray(p.optionIds)) return p.optionIds.join(",");
-  if (typeof p.about === "string") return p.about;
-  return null;
 }

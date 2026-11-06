@@ -1,0 +1,385 @@
+/* @chalk/prop-classroom: a classroom drawn in chalk on a slate, with the look's tokens only.
+   Its own colours are mixes of the look's: a blackboard green from --color-right and the dark
+   surface, wood and skin and the slate's glow from --color-secondary, chalk from the light ink. */
+
+.cl {
+  --cl-wall: color-mix(in srgb, var(--color-right) 20%, var(--color-inverse-surface));
+  --cl-floor: color-mix(in srgb, var(--color-right) 12%, var(--color-inverse-surface));
+  --cl-board: color-mix(in srgb, var(--color-right) 46%, var(--color-inverse-surface));
+  --cl-wood: color-mix(in srgb, var(--color-secondary) 46%, var(--color-inverse-surface));
+  --cl-chalk: var(--color-on-inverse-surface);
+  --cl-chalk-soft: color-mix(in srgb, var(--color-on-inverse-surface) 92%, transparent);
+  --cl-chalk-faint: color-mix(in srgb, var(--color-on-inverse-surface) 30%, transparent);
+  --cl-yellow: color-mix(in srgb, var(--color-secondary) 60%, var(--color-on-inverse-surface));
+  --cl-glow: color-mix(in srgb, var(--color-secondary) 45%, var(--color-on-inverse-surface));
+  --cl-skin: color-mix(
+    in srgb,
+    var(--color-secondary) 40%,
+    color-mix(in srgb, var(--color-wrong) 32%, var(--color-on-inverse-surface))
+  );
+  --cl-hair: color-mix(in srgb, var(--color-inverse-surface) 74%, var(--color-secondary));
+  display: block;
+}
+
+.cl-room {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--shape-radius-m);
+  user-select: none;
+}
+
+/* The room. */
+.cl-wall {
+  fill: var(--cl-wall);
+}
+.cl-floor {
+  fill: var(--cl-floor);
+}
+.cl-floor-line {
+  stroke: var(--cl-chalk-faint);
+  stroke-width: 1.5px;
+}
+.cl-floor-line.is-faint {
+  stroke-dasharray: 2 7;
+}
+.cl-smudge {
+  display: none;
+}
+.cl-board-smudge {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-on-inverse-surface) 5%, transparent);
+  stroke-width: 26px;
+  stroke-linecap: round;
+}
+.cl-board-smudge {
+  stroke: color-mix(in srgb, var(--color-on-inverse-surface) 4%, transparent);
+  stroke-width: 18px;
+}
+
+/* The blackboard, its frame and ledge. */
+.cl-frame {
+  fill: var(--cl-wood);
+  stroke: color-mix(in srgb, var(--cl-wood) 60%, var(--color-on-inverse-surface));
+  stroke-width: 1.2px;
+}
+.cl-board {
+  fill: var(--cl-board);
+  stroke: color-mix(in srgb, var(--color-inverse-surface) 40%, transparent);
+  stroke-width: 2px;
+}
+.cl-stick {
+  stroke: var(--cl-chalk);
+  stroke-width: 2.6px;
+  stroke-linecap: round;
+}
+.cl-stick.is-yellow {
+  stroke: var(--cl-yellow);
+}
+.cl-duster {
+  fill: var(--cl-wood);
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 1.3px;
+}
+.cl-duster-felt {
+  fill: color-mix(in srgb, var(--color-on-inverse-surface) 55%, var(--cl-board));
+}
+.cl-smear {
+  fill: color-mix(in srgb, var(--color-on-inverse-surface) 7%, transparent);
+}
+
+/* The chalk writing. */
+.cl-chalk-text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  fill: color-mix(in srgb, var(--color-on-inverse-surface) 92%, transparent);
+  letter-spacing: 0.01em;
+}
+
+/* People: chalk outlines over soft chalk fills. */
+.cl-skin,
+.cl-face {
+  fill: var(--cl-skin);
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 1.3px;
+}
+.cl-hair {
+  fill: var(--cl-hair);
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 1.3px;
+}
+.cl-hair-lines {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-on-inverse-surface) 30%, transparent);
+  stroke-width: 1px;
+  stroke-linecap: round;
+}
+.cl-plait {
+  fill: none;
+  stroke: var(--cl-hair);
+  stroke-width: 5.5px;
+  stroke-linecap: round;
+}
+.cl-plait.is-tail {
+  stroke-width: 6.5px;
+}
+.cl-ribbon {
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 0.8px;
+}
+.cl-ribbon.is-0 {
+  fill: color-mix(in srgb, var(--color-wrong) 70%, var(--color-on-inverse-surface));
+}
+.cl-ribbon.is-1 {
+  fill: var(--cl-chalk);
+}
+.cl-ribbon.is-2 {
+  fill: color-mix(in srgb, var(--color-primary) 45%, var(--color-on-inverse-surface));
+}
+
+/* Shirts in coloured chalk, each child a little different. */
+.cl-shirt {
+  stroke: var(--cl-chalk);
+  stroke-width: 1.4px;
+  stroke-linejoin: round;
+}
+.cl-shirt.is-0 {
+  fill: color-mix(in srgb, var(--color-on-inverse-surface) 82%, var(--cl-board));
+}
+.cl-shirt.is-1 {
+  fill: color-mix(in srgb, var(--color-primary) 38%, var(--color-on-inverse-surface));
+}
+.cl-shirt.is-2 {
+  fill: color-mix(in srgb, var(--color-category-4) 55%, var(--color-on-inverse-surface));
+}
+.cl-shirt.is-3 {
+  fill: color-mix(in srgb, var(--color-secondary) 50%, var(--color-on-inverse-surface));
+}
+.cl-shirt.is-4 {
+  fill: color-mix(in srgb, var(--color-category-3) 42%, var(--color-on-inverse-surface));
+}
+.cl-shirt.is-5 {
+  fill: color-mix(in srgb, var(--color-wrong) 34%, var(--color-on-inverse-surface));
+}
+.cl-fold {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-inverse-surface) 32%, transparent);
+  stroke-width: 1px;
+  stroke-linecap: round;
+}
+.cl-sleeve {
+  stroke: color-mix(in srgb, var(--color-on-inverse-surface) 85%, var(--cl-board));
+  stroke-width: 8px;
+  stroke-linecap: round;
+}
+.cl-forearm {
+  fill: none;
+  stroke: var(--cl-skin);
+  stroke-width: 4.5px;
+  stroke-linecap: round;
+}
+.cl-fingers {
+  fill: none;
+  stroke: var(--cl-skin);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+
+/* The teacher: a young man in a light blue shirt, sleeves rolled, and dark trousers. */
+.cl-teacher-shirt {
+  fill: color-mix(in srgb, var(--color-primary) 30%, var(--color-on-inverse-surface));
+  stroke: var(--cl-chalk);
+  stroke-width: 1.4px;
+  stroke-linejoin: round;
+}
+.cl-shirt-seam,
+.cl-collar {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-primary) 45%, var(--color-inverse-surface));
+  stroke-width: 1px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cl-collar {
+  stroke: var(--cl-chalk);
+  stroke-width: 1.3px;
+}
+.cl-button {
+  fill: var(--cl-chalk);
+}
+.cl-belt {
+  stroke: var(--cl-wood);
+  stroke-width: 2.6px;
+}
+.cl-trousers {
+  fill: color-mix(in srgb, var(--color-primary) 22%, var(--color-inverse-surface));
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 1.2px;
+  stroke-linejoin: round;
+}
+.cl-shoe {
+  fill: var(--cl-hair);
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 1.3px;
+}
+.cl-cuff {
+  fill: color-mix(in srgb, var(--color-primary) 30%, var(--color-on-inverse-surface));
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 0.8px;
+}
+.cl-teacher-sleeve {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-primary) 30%, var(--color-on-inverse-surface));
+  stroke-width: 6px;
+  stroke-linecap: round;
+}
+.cl-eye {
+  fill: var(--color-inverse-surface);
+}
+.cl-smile {
+  fill: none;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 1px;
+  stroke-linecap: round;
+}
+
+/* Benches and desks, in wood-coloured chalk. */
+.cl-desk,
+.cl-bench {
+  fill: color-mix(in srgb, var(--cl-wood) 80%, var(--color-on-inverse-surface));
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 1.3px;
+}
+.cl-bench {
+  fill: var(--cl-wood);
+}
+.cl-desk-leg {
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 1.5px;
+}
+
+/* A child who has lost the thread: a "?" bobbing over them (decoration only). */
+.cl-question {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+  fill: var(--cl-yellow);
+  transform-box: fill-box;
+  animation: cl-bob 1.8s ease-in-out infinite alternate;
+}
+@keyframes cl-bob {
+  from {
+    transform: translateY(1.5px) rotate(-6deg);
+  }
+  to {
+    transform: translateY(-3px) rotate(6deg);
+  }
+}
+
+/* The after: a slate of their own, glowing, and its light on them. */
+.cl-glow-in {
+  stop-color: var(--cl-glow);
+  stop-opacity: 0.95;
+}
+.cl-glow-mid {
+  stop-color: var(--color-secondary);
+  stop-opacity: 0.38;
+}
+.cl-glow-out {
+  stop-color: var(--color-secondary);
+  stop-opacity: 0;
+}
+.cl-slate {
+  fill: var(--cl-glow);
+  stroke: var(--cl-chalk);
+  stroke-width: 1.2px;
+}
+.cl-slate-lines {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-secondary) 70%, var(--color-inverse-surface));
+  stroke-width: 1.2px;
+  stroke-linecap: round;
+}
+.cl-rim {
+  fill: none;
+  stroke: var(--cl-glow);
+  stroke-width: 2.4px;
+  stroke-linecap: round;
+}
+
+/* Tapping a child. */
+.cl-hit {
+  fill: transparent;
+}
+.cl-pupil.is-helpable {
+  cursor: pointer;
+  outline: none;
+}
+
+/* His legs, bending as he crouches. */
+.cl-leg {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-primary) 22%, var(--color-inverse-surface));
+  stroke-width: 8px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Curiosity: a "!" over a raised hand, with chalk rays. */
+.cl-bang {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+  fill: var(--cl-glow);
+  paint-order: stroke;
+  stroke: var(--cl-wall);
+  stroke-width: 3px;
+}
+.cl-spark-rays {
+  fill: none;
+  stroke: var(--cl-glow);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+
+/* Where each child stands: words in chalk over them, or a tick. */
+.cl-tag text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11.5px;
+  paint-order: stroke;
+  stroke: var(--cl-wall);
+  stroke-width: 3.5px;
+  stroke-linejoin: round;
+}
+.cl-tag.is-needs-help text,
+.cl-tag.is-needs-help .cl-tag-dot {
+  fill: color-mix(in srgb, var(--color-secondary) 85%, var(--color-wrong));
+}
+.cl-tag.is-curious text,
+.cl-tag.is-curious .cl-tag-dot {
+  fill: var(--cl-glow);
+}
+.cl-tag-tick circle {
+  fill: color-mix(in srgb, var(--color-category-4) 55%, var(--cl-wall));
+  stroke: var(--cl-chalk-soft);
+  stroke-width: 1.3px;
+}
+.cl-tag-tick path {
+  fill: none;
+  stroke: var(--cl-chalk);
+  stroke-width: 1.8px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Clean outlines: strokes join round and keep their width however the picture is scaled. */
+.cl-drawing * {
+  stroke-linejoin: round;
+}
+.cl-board-dust {
+  opacity: 0.16;
+  pointer-events: none;
+}
+.cl-dust-colour {
+  flood-color: var(--color-on-inverse-surface);
+}

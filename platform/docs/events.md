@@ -22,7 +22,7 @@ Everything the learner does, with nothing written per board, prop or signal:
 - A prop's own steps over time (a tick, a tween, the race calling its own `arrive`).
 - What Jugnu tries while he thinks on the phone's own board (development).
 
-**Signals carry the evidence.** A question's `checked` says what it was judged on (`status`, `attempts`, `isGraded`, the option or the node it is about). Processors read signal payloads, which the prop declares, never raw action args.
+**Signals carry the evidence.** A question's `checked` says what it was judged on (`status`, `attempts`, `isGraded`, and `answer`: what was answered, in the words the learner saw, or null; a choice also its `optionId`). Processors read signal payloads, which the prop declares, never raw action args.
 
 ## The shape
 

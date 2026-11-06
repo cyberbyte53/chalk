@@ -20,7 +20,9 @@ import { WORDS, pair, word } from "./words";
 
 import { cluesDrawing } from "./clues-view";
 import { coordinatePlane } from "./coordinate-plane";
+import { crowdDrawing } from "./crowd-view";
 import { diceDrawing } from "./dice-view";
+import { parabolaDrawing } from "./parabola-view";
 import { placesDrawing } from "./places-view";
 import { plottingDrawing } from "./plotting-view";
 import { readingDrawing } from "./reading-view";
@@ -293,6 +295,8 @@ export const CoordinatePlaneView = groupView(
     clues: cluesDrawing,
     plotting: plottingDrawing,
     dice: diceDrawing,
+    crowd: crowdDrawing,
+    parabola: parabolaDrawing,
   },
   { look: () => "cp-frame" },
 );

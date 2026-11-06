@@ -4,7 +4,16 @@ import { sounds } from "./defs";
 import { CoordinatePlaneView } from "./view";
 
 export { type Clue, type Still, stillPossible } from "./clues";
+export { Mistake, peopleOf } from "./crowd";
 export { throwOf } from "./dice";
+export {
+  type Zeroes,
+  coefficientsOf,
+  expandedOf,
+  factoredOf,
+  realZeroesOf,
+  vertexOf,
+} from "./parabola";
 export { Choosing, PlaceKind, type Place } from "./places";
 export {
   Axes,

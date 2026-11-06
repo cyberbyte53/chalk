@@ -1,0 +1,282 @@
+/* @chalk/prop-light: its own styles, with the look's tokens only. */
+
+/* ---- sphericalMirror: a candle before a mirror on a dark bench ---- */
+.lt-mirror-prop {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lt-bench {
+  display: block;
+  overflow: hidden;
+  border-radius: 14px;
+  user-select: none;
+}
+.lt-bench-bg {
+  fill: var(--color-inverse-surface);
+}
+.lt-axis {
+  stroke: color-mix(in srgb, var(--color-on-inverse-surface) 38%, transparent);
+  stroke-width: 1.2px;
+}
+.lt-point circle {
+  fill: var(--color-on-inverse-surface);
+}
+.lt-point text {
+  font-family: var(--font-display);
+  font-size: var(--text-note);
+  font-weight: 700;
+  fill: var(--color-on-inverse-surface);
+  paint-order: stroke;
+  stroke: var(--color-inverse-surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+/* The mirror: a silvered face, its back hatched. */
+.lt-mirror-face {
+  fill: none;
+  stroke: var(--color-on-inverse-surface);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.lt-mirror-shine {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-primary-container) 40%, transparent);
+  stroke-width: 9px;
+  stroke-linecap: round;
+}
+.lt-mirror-hatch {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-on-inverse-surface) 45%, transparent);
+  stroke-width: 1.2px;
+}
+
+/* Rays: candlelight, quieter than the candle and its image (they explain; the image is the point). */
+.lt-rays {
+  opacity: 0.72;
+}
+.lt-ray-line {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: 1.3px;
+  stroke-linecap: round;
+}
+.lt-ray-glow {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-secondary) 12%, transparent);
+  stroke-width: 5px;
+  stroke-linecap: round;
+}
+.lt-ray .kit-arrowhead {
+  fill: var(--color-secondary);
+}
+.lt-ray.is-dashed .lt-ray-line {
+  stroke-width: 1.2px;
+  stroke-dasharray: 5 4;
+  stroke-linecap: butt;
+  opacity: 0.8;
+}
+
+/* The candle (and the arrow). Strokes keep their width however an image is scaled. */
+.lt-candle *,
+.lt-arrow * {
+  vector-effect: non-scaling-stroke;
+}
+.lt-wax {
+  fill: color-mix(in srgb, var(--color-on-inverse-surface) 88%, var(--color-secondary));
+}
+.lt-wax-top {
+  fill: var(--color-on-inverse-surface);
+}
+.lt-wick {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.5px;
+}
+.lt-flame {
+  fill: var(--color-secondary);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: lt-flicker 0.7s ease-in-out infinite alternate;
+}
+.lt-flame-core {
+  fill: color-mix(in srgb, var(--color-secondary-container) 85%, var(--color-on-inverse-surface));
+}
+.lt-halo {
+  fill: color-mix(in srgb, var(--color-secondary) 30%, transparent);
+  filter: blur(4px);
+}
+.lt-arrow line {
+  stroke: var(--color-on-inverse-surface);
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.lt-arrow .kit-arrowhead {
+  fill: var(--color-on-inverse-surface);
+}
+@keyframes lt-flicker {
+  from {
+    transform: scale(1, 1);
+  }
+  to {
+    transform: scale(0.9, 1.08);
+  }
+}
+
+/* The image: the same candle, in candlelight. Real: solid amber, a little see-through, glowing;
+   virtual: a dashed outline with a faint fill. */
+.lt-image.is-real {
+  opacity: 0.92;
+}
+.lt-image.is-real .lt-wax {
+  fill: color-mix(in srgb, var(--color-secondary) 55%, var(--color-on-inverse-surface));
+  stroke: var(--color-secondary);
+  stroke-width: 1.5px;
+}
+.lt-image.is-real .lt-wax-top {
+  fill: color-mix(in srgb, var(--color-secondary) 30%, var(--color-on-inverse-surface));
+}
+.lt-image.is-real .lt-halo {
+  fill: color-mix(in srgb, var(--color-secondary) 45%, transparent);
+}
+.lt-image.is-virtual .lt-wax,
+.lt-image.is-virtual .lt-flame {
+  fill: color-mix(in srgb, var(--color-secondary) 18%, transparent);
+  stroke: var(--color-secondary);
+  stroke-width: 1.5px;
+  stroke-dasharray: 5 3;
+}
+.lt-image.is-virtual .lt-flame-core,
+.lt-image.is-virtual .lt-wax-top,
+.lt-image.is-virtual .lt-wick {
+  fill: none;
+  stroke: none;
+}
+.lt-image.is-virtual .lt-halo {
+  display: none;
+}
+.lt-image .lt-arrow line {
+  stroke: var(--color-secondary);
+}
+.lt-image .lt-arrow .kit-arrowhead {
+  fill: var(--color-secondary);
+}
+.lt-image.is-virtual .lt-arrow line {
+  stroke-dasharray: 6 4;
+}
+
+/* The object: grabbed along the axis. */
+.lt-object {
+  outline: none;
+}
+.lt-object.is-movable {
+  cursor: grab;
+}
+.lt-grab {
+  fill: transparent;
+}
+.lt-grip circle {
+  fill: var(--color-primary);
+  stroke: var(--color-on-inverse-surface);
+  stroke-width: 1.5px;
+}
+.lt-grip path {
+  fill: color-mix(in srgb, var(--color-on-inverse-surface) 70%, transparent);
+}
+.lt-object:focus-visible .lt-grip circle {
+  stroke-width: 3px;
+}
+
+/* Under the picture: the case, in the textbook's words. */
+.lt-case {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface-container);
+  animation: lt-case-in 0.35s ease-out;
+}
+.lt-case p {
+  margin: 0;
+}
+.lt-case-place {
+  font-family: var(--font-display);
+  font-size: var(--text-body);
+  line-height: var(--text-body-leading);
+  font-weight: 700;
+  color: var(--color-on-surface);
+}
+.lt-case-image {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: var(--text-note);
+  line-height: var(--text-note-leading);
+  color: var(--color-on-surface-variant);
+}
+.lt-case-where {
+  margin-right: 2px;
+}
+.lt-chip {
+  padding: 0 9px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: var(--color-on-secondary-container);
+  background: var(--color-secondary-container);
+}
+.lt-chip.is-real {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+.lt-chip.is-virtual {
+  color: var(--color-primary);
+  background: var(--color-primary-container);
+}
+@keyframes lt-case-in {
+  from {
+    opacity: 0.3;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.lt-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 0 4px;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--text-caption-leading);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-on-surface-variant);
+}
+
+/* The concave / convex switch. */
+.lt-switch {
+  display: flex;
+  gap: 8px;
+}
+.lt-switch-button {
+  flex: 1;
+  min-height: 44px;
+  border: 2px solid var(--color-outline-variant);
+  border-radius: var(--shape-radius-s);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-display);
+  font-size: var(--text-note);
+  font-weight: 700;
+  cursor: pointer;
+}
+.lt-switch-button.is-on {
+  border-color: var(--color-primary);
+  background: var(--color-primary-container);
+  color: var(--color-primary);
+}

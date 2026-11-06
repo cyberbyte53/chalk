@@ -40,11 +40,12 @@ question.ts). The phone sends nothing about the question itself: the catalogue h
 | `status` | `AnswerStatus` (correct, wrong) | there |
 | `attempts` | 1 for the first check on this opening, then 2, 3… | there |
 | `isGraded` | a bank question (counts) or a page's (doesn't) | there |
-| the choice | `optionId`, `optionIds`, or `about` (a goal) | there; a goal has no value yet |
+| the choice | `answer`: what was answered, in the words the learner saw (`{ en, hi }`), or null; a choice also its `optionId` | there |
 
-A goal's answer lives in the prop it is `about` (a dot's point), which the role can't see. Until
-that prop declares an answer value the role copies in, a goal's attempt has no choice; nothing
-else waits on it.
+A try's `chosen` is that `answer`, never an id: a choice's picked option's label; a goal's is what
+its scene says the prop it is `about` reads as now (`check()`'s `answer`, given to the goal like
+`isMet`: "(−1, 3)", "Street 4, House 2"), or null when the scene says nothing. The teacher sees it
+in their language; the learner update's judge reads the English.
 
 **The catalogue:** `question_versions`, (board, version) → `tests`, `level`. The server reads
 `build/` at boot, as it does now, and inserts every built question's row if it isn't there

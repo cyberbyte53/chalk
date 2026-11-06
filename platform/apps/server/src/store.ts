@@ -12,7 +12,7 @@ import {
   devJoinCode,
   makeCode,
 } from "@chalk/api";
-import { Actor, type ChalkEvent } from "@chalk/content";
+import { Actor, type ChalkEvent, localizedSchema } from "@chalk/content";
 import {
   type Attempt,
   type ConceptPlan,
@@ -469,6 +469,21 @@ export async function addQuestionVersions(
       .onConflictDoNothing();
 }
 
+/** An attempt as its row holds it: what they answered (words in both languages) as JSON text. */
+const rowOf = (a: Attempt, accountId: string): typeof attempts.$inferInsert => ({
+  ...a,
+  accountId,
+  at: new Date(a.at),
+  chosen: a.chosen === null ? null : JSON.stringify(a.chosen),
+});
+
+/** An attempt from its row. */
+export const attemptOf = ({ accountId: _, ...row }: typeof attempts.$inferSelect): Attempt => ({
+  ...row,
+  at: row.at.getTime(),
+  chosen: row.chosen === null ? null : localizedSchema.parse(JSON.parse(row.chosen)),
+});
+
 /** One learner's attempts and mastery, worked out again from their record, replacing the old. */
 async function workOut(db: Db, accountId: string): Promise<Attempt[]> {
   const record = (await db.select().from(events).where(eq(events.accountId, accountId))).map(
@@ -483,9 +498,7 @@ async function workOut(db: Db, accountId: string): Promise<Attempt[]> {
   await db.transaction(async (tx) => {
     await tx.delete(attempts).where(eq(attempts.accountId, accountId));
     for (let i = 0; i < tries.length; i += 500)
-      await tx
-        .insert(attempts)
-        .values(tries.slice(i, i + 500).map((a) => ({ ...a, accountId, at: new Date(a.at) })));
+      await tx.insert(attempts).values(tries.slice(i, i + 500).map((a) => rowOf(a, accountId)));
   });
   return tries;
 }
@@ -560,9 +573,7 @@ export async function progressOfEach(
             : [],
         ),
       );
-      const tries = tryRows
-        .filter((r) => r.accountId === id)
-        .map(({ accountId: _, ...a }) => ({ ...a, at: a.at.getTime() }));
+      const tries = tryRows.filter((r) => r.accountId === id).map(attemptOf);
       return [id, progressFrom(passes, tries, plans)];
     }),
   );

@@ -2,7 +2,11 @@ import { type PropPack, lazyRegistry } from "@chalk/player";
 import type { AnyProp } from "@chalk/prop";
 import { basicProps } from "@chalk/prop-basics";
 import { defs as basicsDefs } from "@chalk/prop-basics/defs";
+import { defs as chemistryDefs, sounds as chemistrySounds } from "@chalk/prop-chemistry/defs";
+import { defs as classroomDefs, sounds as classroomSounds } from "@chalk/prop-classroom/defs";
 import { defs as coordinatesDefs, sounds as coordinatesSounds } from "@chalk/prop-coordinates/defs";
+import { defs as heredityDefs, sounds as hereditySounds } from "@chalk/prop-heredity/defs";
+import { defs as lightDefs, sounds as lightSounds } from "@chalk/prop-light/defs";
 
 /**
  * Every prop package, by what the app needs when: its definitions up front (small; boards and
@@ -16,6 +20,30 @@ const packs: readonly (PropPack & { name: string })[] = [
     defs: coordinatesDefs,
     sounds: coordinatesSounds,
     load: () => import("@chalk/prop-coordinates"),
+  },
+  {
+    name: "light",
+    defs: lightDefs,
+    sounds: lightSounds,
+    load: () => import("@chalk/prop-light"),
+  },
+  {
+    name: "chemistry",
+    defs: chemistryDefs,
+    sounds: chemistrySounds,
+    load: () => import("@chalk/prop-chemistry"),
+  },
+  {
+    name: "heredity",
+    defs: heredityDefs,
+    sounds: hereditySounds,
+    load: () => import("@chalk/prop-heredity"),
+  },
+  {
+    name: "classroom",
+    defs: classroomDefs,
+    sounds: classroomSounds,
+    load: () => import("@chalk/prop-classroom"),
   },
 ];
 

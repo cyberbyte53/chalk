@@ -172,6 +172,7 @@ export const attempts = pgTable(
     at: timestamp("at", { withTimezone: true }).notNull(),
     isRight: boolean("is_right").notNull(),
     isGraded: boolean("is_graded").notNull(),
+    /** What they answered, in the words they saw: `{ en, hi }` as JSON text, or null. */
     chosen: text("chosen"),
     tests: text("tests").array().notNull(),
     level: text("level").$type<Level>(),

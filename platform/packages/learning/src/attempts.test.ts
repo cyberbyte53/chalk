@@ -40,13 +40,23 @@ describe("attempts", () => {
         s.open("q2"),
         s.check("q2", true),
         s.open("p"),
-        s.check("p", true, { isGraded: false }),
+        s.check("p", true, { isGraded: false, answer: null }),
       ],
       catalogue,
     );
-    expect(q1).toMatchObject({ tests: ["c1"], level: Level.Hard, chosen: "a" });
+    expect(q1).toMatchObject({ tests: ["c1"], level: Level.Hard });
     expect(q2).toMatchObject({ tests: ["c2"], level: Level.Easy });
     expect(page).toMatchObject({ tests: [], level: null, isGraded: false });
+  });
+
+  it("records what they answered in the words they saw, or nothing when the question has none", () => {
+    const s = session("a");
+    const [said, unsaid] = attemptsFrom(
+      [s.open("q1"), s.check("q1", false), s.check("q1", false, { answer: null })],
+      catalogue,
+    );
+    expect(said?.chosen).toEqual({ en: "(−1, 3)", hi: "(−1, 3)" });
+    expect(unsaid?.chosen).toBeNull();
   });
 
   it("two questions on one board are two questions", () => {

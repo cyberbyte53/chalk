@@ -3,3 +3,7 @@
 @import "@chalk/draw/styles.css";
 @import "@chalk/prop-basics/styles.css";
 @import "@chalk/prop-coordinates/styles.css";
+@import "@chalk/prop-light/styles.css";
+@import "@chalk/prop-chemistry/styles.css";
+@import "@chalk/prop-heredity/styles.css";
+@import "@chalk/prop-classroom/styles.css";

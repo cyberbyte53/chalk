@@ -22,6 +22,19 @@ const PARTS = {
   [PlanePart.IV]: [t("**quadrant IV**", "**चौथे चतुर्थांश (IV)**"), t("quadrant four", "चौथे चतुर्थांश")],
 } as const;
 
+/** What each part is called as an answer: the part a learner tapped. */
+const NAMES = {
+  [PlanePart.O]: t("O", "O"),
+  [PlanePart.OX]: t("OX", "OX"),
+  [PlanePart.OXDash]: t("OX′", "OX′"),
+  [PlanePart.OY]: t("OY", "OY"),
+  [PlanePart.OYDash]: t("OY′", "OY′"),
+  [PlanePart.I]: t("quadrant I", "पहला चतुर्थांश (I)"),
+  [PlanePart.II]: t("quadrant II", "दूसरा चतुर्थांश (II)"),
+  [PlanePart.III]: t("quadrant III", "तीसरा चतुर्थांश (III)"),
+  [PlanePart.IV]: t("quadrant IV", "चौथा चतुर्थांश (IV)"),
+} as const;
+
 /** The wrong tap a student makes for a part, and why, where there is one to name. */
 const MISTAKES: Partial<Record<PlanePart, { part: PlanePart; say: ReturnType<typeof t> }>> = {
   [PlanePart.OXDash]: {
@@ -78,7 +91,7 @@ export const tapThePart = family({
     // O is printed on the picture: asking for it would ask the student to read a label.
     .refine((p) => p.part !== PlanePart.O, "the origin is labelled O on the picture"),
   build: ({ part }) => {
-    const { isNamed, setup } = plane;
+    const { isNamed, namedPart, setup } = plane;
     const sheet = place(
       coordinatePlane,
       setup({
@@ -102,6 +115,10 @@ export const tapThePart = family({
       prompt: t(`Tap ${shown.en}, then press Check.`, `${shown.hi} को दबाओ, फिर जाँचो दबाओ।`),
       says: t(`Tap ${said.en}, then press Check.`, `${said.hi} को दबाओ, फिर जाँचो दबाओ।`),
       isRight: isNamed("sheet", part),
+      answer: (read) => {
+        const named = namedPart("sheet")(read);
+        return named === null ? null : NAMES[named];
+      },
       solve: [tap("sheet.plane", "namePart", { part })],
       notes:
         mistake === undefined

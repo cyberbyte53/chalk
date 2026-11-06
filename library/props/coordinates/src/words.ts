@@ -25,6 +25,21 @@ export const WORDS = {
   down: { en: "Down", hi: "नीचे" },
   left: { en: "Left", hi: "बाएँ" },
   right: { en: "Right", hi: "दाएँ" },
+  /** What each colour of a crowd is: where they put the point asked for. */
+  crowdRight: { en: "right", hi: "सही" },
+  crowdSwapped: { en: "numbers swapped", hi: "संख्याएँ उलटी" },
+  crowdSign: { en: "a sign wrong", hi: "चिह्न गलत" },
+  crowdOff: { en: "one block off", hi: "एक खाना हटकर" },
+  /** A parabola's buttons and its zeroes, under the plane. */
+  flip: { en: "Turn it over", hi: "उलटो" },
+  zeroes: { en: "Zeroes", hi: "शून्यक" },
+  oneZero: { en: "One zero", hi: "एक शून्यक" },
+  touches: { en: "it touches the x-axis", hi: "यह x-अक्ष को छूता है" },
+  noZeroes: {
+    en: "No zeroes (it doesn't meet the x-axis)",
+    hi: "कोई शून्यक नहीं (x-अक्ष से नहीं मिलता)",
+  },
+  and: { en: "and", hi: "और" },
 } satisfies Record<string, Localized>;
 
 export const word = (w: Localized, locale: Locale): string => w[locale];

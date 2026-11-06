@@ -390,7 +390,10 @@ const GOT_THERE_WORD = {
   [GotThere.NotYet]: "gotThereNotYet",
 } as const;
 
-/** One cited question: its name, and their tries at it in that set. */
+/**
+ * One cited question: its name, and their tries at it in that set, each wrong one with what they
+ * answered, in the words they saw ("wrong: (−1, 3) · right").
+ */
 function Evidence({ question, locale }: { question: QuestionSeen; locale: Locale }): JSX.Element {
   return (
     <span class="evidence small">
@@ -399,7 +402,12 @@ function Evidence({ question, locale }: { question: QuestionSeen; locale: Locale
         <span key={i} class={t.isRight ? "is-right" : "is-wrong"}>
           {" · "}
           {say(locale, t.isRight ? "triedRight" : "triedWrong")}
-          {t.chosen === null ? "" : ` (${say(locale, "theyChose", { chosen: t.chosen })})`}
+          {!t.isRight && t.chosen !== null && (
+            <>
+              {": "}
+              <RichText text={t.chosen[locale]} />
+            </>
+          )}
           {t.helped ? `, ${say(locale, "withJugnu")}` : ""}
         </span>
       ))}
