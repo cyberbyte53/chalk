@@ -1,3 +1,7 @@
+---
+approved: 9865c4e7a250
+---
+
 # Coordinate Geometry (class 9 maths, chapter 3)
 
 For class 9, NCERT Mathematics, Chapter 3 (2020-21); English and Hindi, every string. Each board's
