@@ -41,7 +41,16 @@ explain it.
 ## How the person judges
 
 Cut over add. "Why is this here?" "Does it follow naturally?" (a need comes out of the story, not the
-title). Parallel cases alike: if one axis gets a step, so does the other. Plain, calm, short.
+title). A prop should feel direct: tap where you mean, drag from where it starts. Parallel cases alike: if
+one axis gets a step, so does the other. Plain, calm, short.
+
+## Lessons to copy
+
+Their idea, not their subject:
+- `class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house`: the need for a second
+  number is felt before it is named; the prop does the teaching.
+- `class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper`: each clue narrows what is
+  possible, shown, until one answer is left.
 
 ## Working with the person
 
@@ -54,8 +63,6 @@ Exact values code reads. A book's or chapter's `guide.md` may set any of them ag
 by key. (Draft: the code still reads `authoring/voices.json` until this is wired in.)
 
 ```yaml
-languages: [en, hi]
-hindi_address: तुम
 voices:
   narrator: { en: piper:en_US-lessac-high, hi: piper:hi_IN-rohan-medium }
   riya: { en: piper:en_US-amy-medium, hi: piper:hi_IN-priyamvada-medium }
@@ -66,5 +73,5 @@ voices:
 
 - Examples for each principle, from several subjects: `guide/examples.md`
 - Writing Hindi: `guide/hi.md`
-- How a chapter is made: the skills; `platform/docs/plans/authoring.md`
+- How a chapter is made: the skills; `platform/docs/authoring-pipeline.md`
 - Layout, one name per thing, give-aways: machine checks, not this guide

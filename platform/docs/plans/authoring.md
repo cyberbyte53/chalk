@@ -1,6 +1,6 @@
 # Authoring: how a chapter is made
 
-Status: plan, agreed with the person step by step; reviewed four times, each review's changes folded in.
+Status: plan, agreed with the person step by step; reviewed five times, each review's changes folded in.
 Nothing built. Replaces `platform/docs/authoring-pipeline.md` once built.
 
 ## Why
@@ -67,30 +67,21 @@ level: Chalk-wide (`authoring/guide.md`), per book and per chapter (each optiona
 differs: "this chapter's narrator is Aman", "this chapter is silent on purpose"). The nearest level wins.
 
 Each `guide.md` holds:
-- **Settings**, a ```yaml block under its "Settings" heading (any markdown preview shows it; front
-  matter didn't render in the editor): exact values code reads (the languages, the Hindi address, each
-  speaker's voice per language). **Merged key by key; the nearest level's value wins.** The build
-  depends on the merged values only, never on the file, so editing the prose rebuilds nothing.
-  `authoring/voices.json` becomes the top guide's `voices:`.
-- **Instructions**, the prose below it: the principles; how the person judges (cut over add; "why is this
-  here?"; how a prop should feel; symmetry; questions in the lesson's own tools); a few before/after
-  examples from his threads; two or three lessons to copy. For details it links into `guide/` beside it:
-  `guide/hi.md` (how we write Hindi: tone and register; how numbers and letters are said is code, the
-  language's number words), and whatever else it needs, added only when needed. A lower guide adds, and
-  where it changes something says so ("unlike the book, …"); the reviewer checks it keeps the principles.
-
-```yaml
----                                                   # authoring/guide.md
-languages: [en, hi]
-hindi_address: तुम
-voices:
-  narrator: { en: piper:en_US-lessac-high, hi: piper:hi_IN-rohan-medium }
-  riya:     { en: piper:en_US-amy-medium,  hi: piper:hi_IN-priyamvada-medium }
-  aman:     { en: piper:en_US-ryan-high,   hi: piper:hi_IN-pratham-medium }
----
-# How we make lessons
-…
-```
+- **Settings**, a ```yaml block under its "## Settings" heading (any markdown preview shows it): exact
+  values code reads. Today only `voices` (each speaker's voice per language; `authoring/voices.json` becomes
+  the top guide's), checked against the voice code's schema (every speaker has every language). The first
+  yaml fence under "## Settings" is the settings; no heading, no settings. **Merged key by key, nearest
+  level wins; maps merge deeply** (a chapter setting only `voices.narrator.hi` changes only that), lists are
+  replaced whole. The build reads the merged values: each chapter's merged settings, serialised, are part of
+  its cache key, and `guide.md` files are not, so editing the prose rebuilds nothing; the dev watcher watches
+  the guides too. (Languages stay a code enum; the Hindi address is prose in `guide/hi.md`.)
+- **Instructions**, the prose: the principles; how the person judges (cut over add; "why is this here?";
+  how a prop should feel: direct, honest; parallel cases alike; questions in the lesson's own tools); two or
+  three lessons to copy; how to work with him. For details it links into `guide/` beside it: `examples.md`
+  (situations per principle, from several subjects), `hi.md` (how we write Hindi: tone and register; how
+  numbers and letters are said is code), and whatever else it needs, added only when needed. A lower guide
+  adds, and where it changes something says so ("unlike the book, …"); the reviewer checks it keeps the
+  principles.
 
 **The principles** (drafted in `authoring/guide.md`, from the audit of chapter 1): explain before you use;
 make them need it first; cut what isn't needed; let them do it, and let the prop tell the truth; test what
@@ -102,7 +93,8 @@ came from) and the instructions in order (top, book, chapter). Every skill's fir
 
 ## Chapter files
 
-**`plan.md`**, one to two pages: the **goal** (what a student can do after the chapter); the
+**`plan.md`**, one to two pages (its approval stamp stays `approved: <commit>` at its top, as planning files
+have today): the **goal** (what a student can do after the chapter); the
 **objectives**, each citing outline ids; the **story's arc** and the characters it uses; the **lessons**
 (by their slugs), each with its goal, objectives, what the student does and its card's art; the chapter's
 **tile** art; the **props** (reuse / extend / new, each sketched, with why); the **question families** and
@@ -136,9 +128,11 @@ folder in `content/` that its `build.yaml` doesn't list fails (today it is silen
 - The person may comment on the plan, any board, any piece or any prop, at any stage.
 - **When an agent is stuck or at a real decision, it asks the person with a tool, `ask`**, never in prose:
   `ask({ question, options: [{ label, why }], at })`, two to four options in order of recommendation (the
-  first is the agent's pick), pinned where it applies (`at`: a board, a piece, the plan). It becomes a
-  thread on his turn; the editor shows the options as buttons and a box to type his own answer; his answer
-  is the thread's reply and moves the work on. Everything said to him is concise.
+  first is the agent's pick), pinned where it applies (`at`: a board, a piece, a quote in the plan, or the
+  whole plan). Either agent may ask. It is a thread with an `options` field, always on the person's turn;
+  the editor's comment panel shows the options as buttons and a box to type his own answer; his answer (the
+  label he picked, or his words) is the thread's reply and moves the work on. Everything said to him is
+  concise.
 - A change after the plan's yes starts as a comment; the agent updates `plan.md` and follows its ids into
   `boards.md`; the person closes the comment and re-stamps the plan with one click (the tree shows what
   changed since; the stamp is committed alone, as today). Nothing below the plan is approved, so nothing
@@ -152,13 +146,14 @@ folder in `content/` that its `build.yaml` doesn't list fails (today it is silen
 
 ## Commands
 
-What has a fixed shape and real work is done by a command (one path everywhere, e.g.
+Two commands do work (`new chapter`, `attach`); `pnpm guide` only reads. The editor's own "add source"
+button goes (the command replaces it). What has a fixed shape and real work is done by a command (one path everywhere, e.g.
 `class9-maths/coordinate-geometry`); the rest an agent writes, copying a sibling (a new lesson or family is
 two or three files). Skeletons for `plan.md` and `boards.md` live in the plan skill.
 
 | Command | Does |
 |---|---|
-| `pnpm new chapter <book>/<chapter> --source <NCERT name or path>` | both chapter folders; `source/en/` with the chapter's PDF (named, e.g. class 9 maths chapter 3, it is taken from the whole book in `authoring/sources/` or fetched from NCERT by its file name, `iemh103.pdf`; a path for anything else) and its text page by page (`pdftotext`; it checks the tool is installed and says how if not); `plan.md` and `boards.md` from their skeletons; the chapter registered in its book |
+| `pnpm new chapter <book>/<chapter> --source <NCERT name or path>` | the chapter's `authoring/` folder; `source/en/` with the chapter's PDF (named, e.g. class 9 maths chapter 3, it is taken from the whole book in `authoring/sources/` or fetched from NCERT by its file name, `iemh103.pdf`; a path for anything else) and its text page by page (`pdftotext`; it checks the tool is installed and says how if not); `plan.md` and `boards.md` from their skeletons. Its `content/` folder and its listing in the book come with its first lesson (an empty chapter never ships) |
 | `pnpm attach <book>/<chapter> <language> [--source …]` | `source/<language>/` with that language's PDF (fetched for an NCERT chapter), its text (OCR where the PDF's text is broken, after the Hindi spike), and the outline aligned to English (the same ids, words empty for the agent to fill from the book) |
 | `pnpm guide <path>` | the merged settings and instructions for a book or chapter, each from its level |
 
@@ -179,11 +174,15 @@ Everything is made and reviewed in English; a language is added the same way eac
 
 Threads (`comments.yaml`, written only by `platform/studio/src/comments.ts`) already pin a comment to its
 spot with what it looked like, the commit, whose turn it is, and what a fix changed and reached. Changes:
-a reviewer's finding carries a **weight**, must or consider (a question for the person is already a thread
-on his turn); **whoever opened a thread closes it**: a fixed thread goes back to whoever opened it (today
-it always goes to the person, `comments.ts` `turnAfter`), and the reviewer gains a close move; AGENTS.md's
-"only the person closes" changes. The person's open comments are the hand-over of a sitting; the review
-hand-overs go.
+- **Weight**, a const-object enum, required on a reviewer's finding: must (the builder fixes it) or consider
+  (the builder decides, and says what it did in its reply).
+- **Whoever opened a thread closes it:** a ready thread goes back to its opener's role (person, reviewer or
+  fixer; today a turn is only person or agent); the fixer and the reviewer each close their own threads; the
+  person can still close any.
+- **`ask`**: an `options` field, and the person's turn (above).
+- The review hand-overs go (`authoring/reviews/`, the "apply review <id>" flow and its code in
+  `editor/src/reviews.ts`, keeping that file's loader of all threads, which the editor's comments use); the
+  person's open comments are the hand-over of a sitting.
 
 ## What stays, what goes
 
@@ -202,24 +201,24 @@ hand-overs go.
 
 ## Order
 
-Each step built and proved on its own, and committed.
+Each step built and proved on its own, and committed. **Each step also fixes every instruction and doc it
+makes wrong** (AGENTS.md, the skills, platform/docs), so agents are never pointed at something gone.
 
 1. **The guide's instructions:** the top `guide.md`, `guide/examples.md`, `guide/hi.md` (drafted with the
-   person); the old constitution and exemplars removed.
-2. **The guide's settings:** its settings block with the voices from `voices.json`, the merge, `pnpm guide`;
-   the voice code and the build read the merged settings. Proved: every clip and board the same.
-3. **Threads:** weight, opener closes, the review hand-overs removed; the `ask` tool and its buttons in
-   the editor.
-4. **`plan.md` and `boards.md`** and their checks; chapter 1's four planning files rewritten into them (the
-   person is told first, and approves `plan.md` once).
+   person); the old constitution and exemplars removed; AGENTS.md and the skills pointed at the guide.
+2. **The guide's settings:** `voices` from `voices.json` into the top guide, the merge, `pnpm guide`; the
+   voice code and the build read the merged settings (the cache key and the watcher as above). Proved: every
+   clip and board the same.
+3. **Threads:** weight, opener closes, the `ask` tool and its buttons, the review hand-overs removed.
+4. **`plan.md` and `boards.md`**, their checks, and the editor's tree and Approve for them (`pipeline.ts`'s
+   files, `source/` moved to `source/en/` with its three readers); chapter 1's four planning files rewritten
+   into them (the person is told first, and approves `plan.md` once).
 5. **Commands:** `pnpm new chapter`, `pnpm attach`, the unlisted-folder check; proved on a throwaway chapter.
-6. **The editor and pipeline:** the tree's entries, Approve on `plan.md` only.
-7. **Skills and AGENTS.md:** four skills reading `pnpm guide`; AGENTS.md's steps, runs and closing rule;
-   the clean-up of `authoring/`.
-8. **Hindi grounded** for chapter 1 (the PDF spike first), and the term check on today's lines.
-9. **Checks:** the mechanical ones the audit found (one name per thing; a prompt that gives away its
+6. **Skills:** four, reading `pnpm guide`; the clean-up of `authoring/` (runs, retros, archive).
+7. **Hindi grounded** for chapter 1 (the PDF spike first), and the term check on today's lines.
+8. **Checks:** the mechanical ones the audit found (one name per thing; a prompt that gives away its
    answer; right answers spread across options; a label or control text not introduced earlier).
-10. **Chapter 1 re-reviewed;** then the next chapter made this way.
+9. **Chapter 1 re-reviewed;** then the next chapter made this way.
 
 After, when needed: the languages mechanism (`languages.md`: English written, each language a table)
 before a third language; approval by what students get (`kept-by-what-students-get.md`) once boards are

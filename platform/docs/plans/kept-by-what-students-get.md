@@ -1,6 +1,6 @@
 # An approval follows what the student gets
 
-Status: build plan, reviewed once (its changes folded in). Section 4 of `next.md`; replaces `adding-pieces.md` steps 6-7.
+Status: build plan, reviewed once (its changes folded in). Deferred in `authoring.md` (after, when needed); replaces `adding-pieces.md` steps 6-7.
 
 ## Today
 
@@ -40,7 +40,7 @@ What a student gets also includes, so `gets` hashes them too:
   (Continue, the board's own view), at each step;
 - **every script line whole**: when it's said and by whom (`moment`, `cue`, `speaker`), not only its
   words; and what is heard at each step (`runtime.heard()`);
-- **the voice**: each speaker's cast entry (`authoring/voices.json`) and the clip of each line
+- **the voice**: each speaker's merged voice (the guides' `voices` setting) and the clip of each line
   (`sound.json`), so a new voice or provider is a change;
 - **sounds**: what each step plays (heard), so a prop's sound cues are in it;
 - **`wait` steps** are played as the build plays them.
