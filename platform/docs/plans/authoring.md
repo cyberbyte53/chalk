@@ -19,17 +19,17 @@ Status: plan, reshaped with the person and reviewed twice (changes folded in). N
 
 ## Taste: one main file per level, a map to focused files
 
-Like a publisher's house style and per-book style sheet, a series bible, and a translator's style guide
-per language (all three solve this problem), and like `AGENTS.md`: one short main file per level is where
+Like a publisher's house style and per-book style sheet, and a translator's style guide per language (both
+solve this problem), and like `AGENTS.md`: one short main file per level is where
 every agent starts; it holds the principles, the taste and a few before/after examples, and maps each job
 to the focused file it needs, opened only when the task needs it.
 
 ```
 authoring/
   taste.md        principles (about five, marked always), taste, examples; and a map:
-                    voices and cast → cast.yaml; the story world → story.md; Hindi → hi.md; …
-  cast.yaml       who's who, and each one's voice per language (code reads it; from voices.json)
-  story.md        the series bible: the world, the characters, a continuity log every chapter adds to
+                    the cast → cast.yaml; Hindi → hi.md; …
+  cast.yaml       each character: name, how they look and speak, their voice per language (code reads it;
+                  from voices.json). They cross chapters and books; nothing else about the story does
   hi.md           how we write and speak Hindi (तुम or आप, how letters and numbers are said, tone)
   books/<book>/taste.md      only what differs from the top; its own map if it has its own files
 ```
@@ -104,7 +104,8 @@ any piece of one, or a prop, at any stage; it is handled like any other thread.
   the ids into `boards.md`, rebuilds what they touch; the person closes the comment and re-stamps the plan
   with one click, the tree showing what changed since his yes. Nothing below the plan is ever approved, so
   nothing cascades. Sources never move.
-- **Story in the plan:** its arc, the cast and each lesson's part in it; each board's beat is in `boards.md`.
+- **The story is the flow of the boards:** `plan.md` has its arc and each lesson's part; `boards.md` each
+  board's beat. Continuity (a stall stays where it was) is checked there, by the reviewer.
 - **When the person corrects something that could recur**, the agent proposes one taste line then and
   there, at the right layer (book or Chalk); the person says yes or no.
 - **A new book's first chapter** carries a "book" section in its plan (cast, look, cover), which becomes
@@ -150,7 +151,7 @@ hand-over of a sitting is the person's open comments: `authoring/reviews/`, run 
 | `pipeline` and the tree | the chapter's state: plan yes? boards left? open threads, whose turn? done? |
 | 6 skills | 4: plan (1), build (2), apply-comments (3), and the reviewer's |
 | the editor's tree (`pipeline.ts` `FILES`, `READS`; `planning.ts` `isApprovable`) | three entries: the outline (machine), `plan.md` (approved), `boards.md` (not); Approve shown from the server's `isApproved` |
-| `authoring/taste/`, `voices.json` | `taste.md` (map) + `cast.yaml`, `story.md`, `hi.md`; each guide goes with its stage's skill; `checks.md` becomes code |
+| `authoring/taste/`, `voices.json` | `taste.md` (map) + `cast.yaml`, `hi.md`; each guide goes with its stage's skill; `checks.md` becomes code |
 
 ## Chapter 1 moves over
 
@@ -167,7 +168,7 @@ threads: which should a principle have prevented?
 3. Hindi grounded: `source/hi/` for chapter 1 (a spike first: Hindi NCERT PDFs often extract as broken
    text and may need OCR), its aligned outline and terms, the term check over today's `t(en, hi)` lines.
 4. The languages mechanism (`languages.md`): English written, each language a table.
-5. The top `taste.md` (from the audit), `cast.yaml`, `story.md`, `hi.md`; the book's `taste.md`.
+5. The top `taste.md` (from the audit), `cast.yaml`, `hi.md`; the book's `taste.md`.
 6. Approval by what students get (`kept-by-what-students-get.md`).
 7. Chapter 1 re-reviewed; then the next chapter made this way.
 
