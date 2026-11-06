@@ -43,6 +43,7 @@ authoring/                                HOW IT IS MADE
   books/<book>/
     guide.md, guide/                        only what differs for this book
     <chapter>/                              the same path as in content/
+      guide.md                                only if this chapter makes lessons differently
       source/en/                              FACTS, extracted once, never edited by hand: book.pdf, its
                                               text page by page, outline.yaml (every section, figure,
                                               example, exercise: id, page, words); a figure's image
@@ -61,20 +62,21 @@ restart), and the review hand-overs (`authoring/reviews/` and their code: `edito
 
 ## The guide: instructions in prose, settings that cascade
 
-Two levels: Chalk-wide (`authoring/guide.md`) and per book (`authoring/books/<book>/guide.md`, only what
-differs). A chapter's own departures are written in its `plan.md`.
+**"How" is always `guide.md`; "what" is `plan.md`.** The guide has the same name and rules at every
+level: Chalk-wide (`authoring/guide.md`), per book and per chapter (each optional, holding only what
+differs: "this chapter's narrator is Aman", "this chapter is silent on purpose"). The nearest level wins.
 
 Each `guide.md` holds:
 - **Settings**, a small block at its top: exact values code reads (the languages, the Hindi address, each
-  speaker's voice per language). **Merged key by key; the book's value wins over the top's.** The build
+  speaker's voice per language). **Merged key by key; the nearest level's value wins.** The build
   depends on the merged values only, never on the file, so editing the prose rebuilds nothing.
   `authoring/voices.json` becomes the top guide's `voices:`.
 - **Instructions**, the prose below it: the principles; how the person judges (cut over add; "why is this
   here?"; how a prop should feel; symmetry; questions in the lesson's own tools); a few before/after
   examples from his threads; two or three lessons to copy. For details it links into `guide/` beside it:
   `guide/hi.md` (how we write Hindi: tone and register; how numbers and letters are said is code, the
-  language's number words), and whatever else it needs, added only when needed. A book's guide adds, and
-  where it changes something says so ("unlike the top, …"); the reviewer checks it keeps the principles.
+  language's number words), and whatever else it needs, added only when needed. A lower guide adds, and
+  where it changes something says so ("unlike the book, …"); the reviewer checks it keeps the principles.
 
 ```yaml
 ---                                                   # authoring/guide.md
@@ -93,8 +95,8 @@ voices:
 nothing gives it away; every piece earns its place (when in doubt, cut); show it, and let them do it with
 an honest prop; questions test what the boards taught, in their tools.
 
-**`pnpm guide <path>`** prints, for a book or chapter, the merged settings (each value with where it came
-from) and the instructions in order (top, then the book). Every skill's first step reads it.
+**`pnpm guide <path>`** prints, for a book or chapter, the merged settings (each value with the level it
+came from) and the instructions in order (top, book, chapter). Every skill's first step reads it.
 
 ## Chapter files
 
@@ -102,7 +104,7 @@ from) and the instructions in order (top, then the book). Every skill's first st
 **objectives**, each citing outline ids; the **story's arc** and the characters it uses; the **lessons**
 (by their slugs), each with its goal, objectives, what the student does and its card's art; the chapter's
 **tile** art; the **props** (reuse / extend / new, each sketched, with why); the **question families** and
-what each tests; where it departs from the book's guide, and why.
+what each tests. (How it is made differently, if at all, is the chapter's `guide.md`.)
 
 **`boards.md`**: per lesson, per board and per question family (`questions/<family>`): its purpose, its
 beat in the story, needs, the objectives and outline ids it serves, the props it uses. **Status is worked
@@ -139,7 +141,7 @@ folder in `content/` that its `build.yaml` doesn't list fails (today it is silen
 - A new book's first chapter carries a "book" section in its plan; on the yes it becomes the book's
   `guide.md`.
 - **When the person corrects something that could recur:** a check if a machine can catch it; otherwise one
-  line in a `guide.md` (the book's or the top's); the person says yes or no.
+  line in a `guide.md` (the chapter's, the book's or the top's); the person says yes or no.
 
 ## Commands
 
@@ -151,7 +153,7 @@ two or three files). Skeletons for `plan.md` and `boards.md` live in the plan sk
 |---|---|
 | `pnpm new chapter <book>/<chapter> --source <NCERT name or path>` | both chapter folders; `source/en/` with the chapter's PDF (named, e.g. class 9 maths chapter 3, it is taken from the whole book in `authoring/sources/` or fetched from NCERT by its file name, `iemh103.pdf`; a path for anything else) and its text page by page (`pdftotext`; it checks the tool is installed and says how if not); `plan.md` and `boards.md` from their skeletons; the chapter registered in its book |
 | `pnpm attach <book>/<chapter> <language> [--source …]` | `source/<language>/` with that language's PDF (fetched for an NCERT chapter), its text (OCR where the PDF's text is broken, after the Hindi spike), and the outline aligned to English (the same ids, words empty for the agent to fill from the book) |
-| `pnpm guide <path>` | the merged settings and instructions for a book or chapter |
+| `pnpm guide <path>` | the merged settings and instructions for a book or chapter, each from its level |
 
 ## A language, attached
 
