@@ -5,6 +5,7 @@ import * as vscode from "vscode";
 import { ANSWER_COMMAND, FileComments } from "./file-comments";
 import { panelHtml } from "./panel-html";
 import {
+  type PlanningChapter,
   type PlanningFile,
   planningFileOf,
   readAll,
@@ -330,6 +331,7 @@ type Node = {
     | "planfile"
     | "lesson"
     | "questions"
+    | "lessons"
     | "family"
     | "content"
     | "props"
@@ -454,11 +456,25 @@ function propsIn(catalogue: string): Node[] {
 class ChalkTree implements vscode.TreeDataProvider<Element> {
   private readonly changed = new vscode.EventEmitter<void>();
   readonly onDidChangeTreeData = this.changed.event;
+  /** Each chapter's state, read once per refresh (the server's read takes about a second). */
+  private chapters = new Map<string, Promise<PlanningChapter>>();
   constructor(private readonly threads: ThreadsTree) {
+    // A thread changed: the counts redraw, from the chapters already read.
     threads.onDidChangeTreeData(() => this.changed.fire());
   }
   refresh(): void {
+    this.chapters.clear();
     this.changed.fire();
+  }
+  chapter(book: string, chapter: string): Promise<PlanningChapter> {
+    const key = `${book}/${chapter}`;
+    let read = this.chapters.get(key);
+    if (read === undefined) {
+      read = readOne(base, book, chapter);
+      read.catch(() => this.chapters.delete(key));
+      this.chapters.set(key, read);
+    }
+    return read;
   }
 
   getTreeItem(element: Element): vscode.TreeItem {
@@ -508,6 +524,15 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       node.kind === "planfile" ||
       node.kind === "family" ||
       node.kind === "guide";
+    if (node.kind === "lessons") {
+      // The chapter's lessons, open: what the person uses most.
+      const item = new vscode.TreeItem("Lessons", vscode.TreeItemCollapsibleState.Expanded);
+      item.iconPath = new vscode.ThemeIcon("play-circle");
+      item.description = node.description;
+      item.tooltip = rel(node.file);
+      item.contextValue = "lessons";
+      return item;
+    }
     if (node.kind === "guidedir") {
       const item = new vscode.TreeItem(node.label, vscode.TreeItemCollapsibleState.Collapsed);
       item.iconPath = vscode.ThemeIcon.Folder;
@@ -670,7 +695,7 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       if (!(await ensureServer())) return guides;
       const [book = "", chapter = ""] = node.path.split("/");
       try {
-        const c = await readOne(base, book, chapter);
+        const c = await this.chapter(book, chapter);
         // The outline is the machine's: never shown; when it fails, plan.md says the agent fixes it.
         const names: Record<string, string> = { "plan.md": "Plan", "boards.md": "Boards" };
         const shown = c.files.filter((f) => !f.file.startsWith("source/"));
@@ -729,11 +754,11 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
         ),
       ];
     }
-    if (node.kind === "chapter") {
+    if (node.kind === "chapter" || node.kind === "lessons") {
       const chapter = readJson<{ concepts: Ref[] }>(join(build, `${node.path}.json`));
       // Which lessons wait on a self-review (a lesson changed since a reviewer last looked).
       const [book = "", name = ""] = node.path.split("/");
-      const lessons = await readOne(base, book, name)
+      const lessons = await this.chapter(book, name)
         .then((c) => c.lessons ?? [])
         .catch(() => []);
       // The chapter's question bank: a family per folder under questions/.
@@ -750,9 +775,25 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
                 description: `${families.length} ${families.length === 1 ? "family" : "families"}`,
               },
             ];
+      const concepts = chapter?.concepts ?? [];
+      if (node.kind === "chapter")
+        return [
+          making(node.path, title(readJson(join(build, `${node.path}.json`)), name)),
+          ...(concepts.length === 0
+            ? []
+            : [
+                {
+                  label: "Lessons",
+                  path: node.path,
+                  kind: "lessons",
+                  file: join(root, "content", node.path),
+                  description: `${concepts.length}`,
+                } satisfies Node,
+              ]),
+          ...questions,
+        ];
       return [
-        making(node.path, title(readJson(join(build, `${node.path}.json`)), name)),
-        ...(chapter?.concepts ?? []).map((ref): Node => {
+        ...concepts.map((ref): Node => {
           const slug = ref.path;
           const state = lessons.find((l) => slug.endsWith(`/${l.slug}`));
           return {
@@ -763,7 +804,6 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
             ...(state?.isToSelfReview === true ? { toReview: state.why ?? "" } : {}),
           };
         }),
-        ...questions,
       ];
     }
     if (node.kind === "questions") {
@@ -1018,14 +1058,20 @@ export function activate(context: vscode.ExtensionContext): void {
   const watcher = vscode.workspace.createFileSystemWatcher(
     new vscode.RelativePattern(
       folder,
-      "{build/index.json,library/catalogue.md,authoring/comments.yaml,authoring/guide.md,authoring/guide/**,authoring/books/**,authoring/props/*/comments.yaml}",
+      // Only what the tree shows: a run note or a source an agent writes redraws nothing.
+      "{build/index.json,library/catalogue.md,authoring/**/comments.yaml,authoring/**/reviewed.yaml,authoring/**/guide.md,authoring/**/guide/**,authoring/books/*/*/plan.md,authoring/books/*/*/boards.md,authoring/books/*/*/source/*/outline.yaml}",
     ),
   );
   // A thread changed (a reply in the preview, an agent's answer): the tree's counts follow.
+  // A burst of writes (a build, an agent's edits) is one refresh, half a second after the last.
+  let pending: NodeJS.Timeout | undefined;
   const refresh = () => {
-    tree.refresh();
-    void threads.refresh();
-    void refreshProblems();
+    clearTimeout(pending);
+    pending = setTimeout(() => {
+      tree.refresh();
+      void threads.refresh();
+      void refreshProblems();
+    }, 500);
   };
   void ensureServer().then(() => refreshProblems());
   watcher.onDidChange(refresh);
