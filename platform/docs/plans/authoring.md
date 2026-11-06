@@ -72,10 +72,10 @@ their code); changing one changes only what is made after.
 | Command | Makes |
 |---|---|
 | `pnpm new book <book>` | `content/<book>/` (`build.yaml`, a cover `art.tsx` stub), `authoring/books/<book>/taste.md` (its settings block and headings), the book registered in `content/build.yaml` |
-| `pnpm new chapter <book> <chapter> --source <pdf>` | both chapter folders; `source/en/` with the PDF, its text page by page and page images; `plan.md` and `boards.md` with their sections; `comments.yaml`; the chapter registered in its book. The agent then writes the outline from the text |
+| `pnpm new chapter <book> <chapter> --source <pdf or NCERT name>` | both chapter folders; `source/en/` with the PDF (named, e.g. class 9 maths chapter 3, it is fetched from NCERT by its fixed file name, `iemh103.pdf`, or taken from the whole book in `authoring/books-pdf/`; a path for anything else), its text page by page and page images; `plan.md` and `boards.md` with their sections; `comments.yaml`; the chapter registered in its book. The agent then writes the outline from the text |
 | `pnpm new lesson <chapter> <lesson>` | `content/…/<lesson>/` (`build.yaml`, an `overview.ts` skeleton, an `art.tsx` card stub), registered in the chapter |
 | `pnpm new family <chapter> <family>` | `questions/<family>/` with `family.ts` and `params.yaml` skeletons |
-| `pnpm attach <chapter> <language> --source <pdf>` | `source/<language>/` with the PDF, its text, and the outline's skeleton aligned to English (the same ids, its words empty for the agent to fill from the book) |
+| `pnpm attach <chapter> <language> [--source <pdf>]` | `source/<language>/` with the PDF (fetched from NCERT for an NCERT chapter, its language's own file name; a path otherwise), its text, and the outline's skeleton aligned to English (the same ids, its words empty for the agent to fill from the book) |
 | `pnpm taste <path>` | the effective taste anywhere (below) |
 
 The skills then say "run this, then fill that", and every chapter has the same shape the checks, the
