@@ -67,7 +67,8 @@ level: Chalk-wide (`authoring/guide.md`), per book and per chapter (each optiona
 differs: "this chapter's narrator is Aman", "this chapter is silent on purpose"). The nearest level wins.
 
 Each `guide.md` holds:
-- **Settings**, a small block at its top: exact values code reads (the languages, the Hindi address, each
+- **Settings**, a ```yaml block under its "Settings" heading (any markdown preview shows it; front
+  matter didn't render in the editor): exact values code reads (the languages, the Hindi address, each
   speaker's voice per language). **Merged key by key; the nearest level's value wins.** The build
   depends on the merged values only, never on the file, so editing the prose rebuilds nothing.
   `authoring/voices.json` becomes the top guide's `voices:`.
@@ -91,9 +92,10 @@ voices:
 …
 ```
 
-**The principles**, from the audit: nothing unexplained; each step is needed before it is given, and
-nothing gives it away; every piece earns its place (when in doubt, cut); show it, and let them do it with
-an honest prop; questions test what the boards taught, in their tools.
+**The principles** (drafted in `authoring/guide.md`, from the audit of chapter 1): explain before you use;
+make them need it first; cut what isn't needed; let them do it, and let the prop tell the truth; test what
+the lesson taught, the way it taught it (each wrong answer's note names the mistake); keep the world
+consistent. Examples, plain situations from several subjects, in `guide/examples.md`.
 
 **`pnpm guide <path>`** prints, for a book or chapter, the merged settings (each value with the level it
 came from) and the instructions in order (top, book, chapter). Every skill's first step reads it.
@@ -132,10 +134,11 @@ folder in `content/` that its `build.yaml` doesn't list fails (today it is silen
 ```
 
 - The person may comment on the plan, any board, any piece or any prop, at any stage.
-- **When an agent is stuck or at a real decision, it asks the person**, as coding agents do: one question,
-  two to four concrete options with the recommended one first, room for his own answer. A question is a
-  thread on his turn, pinned where it applies, its options shown as buttons in the editor beside a text box;
-  his answer moves the work on. Everything said to him is concise: one sentence where one does.
+- **When an agent is stuck or at a real decision, it asks the person with a tool, `ask`**, never in prose:
+  `ask({ question, options: [{ label, why }], at })`, two to four options in order of recommendation (the
+  first is the agent's pick), pinned where it applies (`at`: a board, a piece, the plan). It becomes a
+  thread on his turn; the editor shows the options as buttons and a box to type his own answer; his answer
+  is the thread's reply and moves the work on. Everything said to him is concise.
 - A change after the plan's yes starts as a comment; the agent updates `plan.md` and follows its ids into
   `boards.md`; the person closes the comment and re-stamps the plan with one click (the tree shows what
   changed since; the stamp is committed alone, as today). Nothing below the plan is approved, so nothing
@@ -201,11 +204,12 @@ hand-overs go.
 
 Each step built and proved on its own, and committed.
 
-1. **The guide's instructions:** the top `guide.md` prose (from the audit, the old constitution and
-   exemplars), `guide/hi.md`; the person reads them.
+1. **The guide's instructions:** the top `guide.md`, `guide/examples.md`, `guide/hi.md` (drafted with the
+   person); the old constitution and exemplars removed.
 2. **The guide's settings:** its settings block with the voices from `voices.json`, the merge, `pnpm guide`;
    the voice code and the build read the merged settings. Proved: every clip and board the same.
-3. **Threads:** weight, opener closes, the review hand-overs removed.
+3. **Threads:** weight, opener closes, the review hand-overs removed; the `ask` tool and its buttons in
+   the editor.
 4. **`plan.md` and `boards.md`** and their checks; chapter 1's four planning files rewritten into them (the
    person is told first, and approves `plan.md` once).
 5. **Commands:** `pnpm new chapter`, `pnpm attach`, the unlisted-folder check; proved on a throwaway chapter.
