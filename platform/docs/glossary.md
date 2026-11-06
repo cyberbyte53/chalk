@@ -76,6 +76,8 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Commit** | The git commit the app and server were built from: in `build/index.json`, the app, `/api/health` and every event | `CHALK_COMMIT` |
 | **Version** | A hash of an item's own content and what it is made from (a board: its code and its props' versions; a container: its children's) | `versionOf` |
 | **Source** | Where a built item came from: path, file, row | `Source` |
+| **Book item** | One of a chapter's book's own blocks (a section, a paragraph, a figure, a table, an example, an activity, an exercise, a question) in that language's exact words, in `authoring/books/<book>/<chapter>/source/<lang>/items.yaml`. Its id is its position (`2.3`: section 2's third block); its `number` is the book's own ("Fig. 3.11"), what languages are matched by ([plans/sources.md](plans/sources.md)) | `Item`, `ItemKind`, `pnpm source` (`platform/studio/src/source/`) |
+| **Book term** | A word or phrase the book defines, in its spelling, with the book item it is defined in (`terms.yaml`) | `Term` |
 | **Build** | Everything the manifests reach, checked: the course's shape as JSON in `build/`, each page and question naming the module that makes its board (chapters ship as code) | `pnpm build-content`, `pnpm preview`, `pnpm publish-content` |
 | **Player** | Plays lessons and boards; one player for everything | `@chalk/player` |
 | **Runtime** | One board, live, on the student's screen: the board model's `Board`, its clock moved each frame, the voice, the recorder | `BoardRuntime` (`@chalk/player`) |

@@ -1,0 +1,627 @@
+# The book's own blocks, in reading order, in its exact words (platform/docs/plans/sources.md).
+# Written by reading each page; ids are the machine's (pnpm source numbers them).
+- id: "0.1"
+  kind: text
+  page: 1
+  text: >-
+    What’s the good of Mercator’s North Poles and Equators, Tropics, Zones and Meridian Lines?’ So
+    the Bellman would cry; and crew would reply ‘They are merely conventional signs!’ LEWIS CARROLL,
+    The Hunting of the Snark
+- id: "1"
+  kind: section
+  page: 1
+  number: "3.1"
+  text: Introduction
+- id: "1.1"
+  kind: text
+  page: 1
+  text: >-
+    You have already studied how to locate a point on a number line. You also know how to describe
+    the position of a point on the line. There are many other situations, in which to find a point
+    we are required to describe its position with reference to more than one line. For example,
+    consider the following situations:
+- id: "1.2"
+  kind: text
+  page: 1
+  text: >-
+    I. In Fig. 3.1, there is a main road running in the East-West direction and streets with
+    numbering from West to East. Also, on each street, house numbers are marked. To look for a
+    friend’s house here, is it enough to know only one reference point? For instance, if we only
+    know that she lives on Street 2, will we be able to find her house easily? Not as easily as when
+    we know two pieces of information about it, namely, the number of the street on which it is
+    situated, and the house number. If we want to reach the house which is situated in the 2nd
+    street and has the number 5, first of all we would identify the 2nd street and then the house
+    numbered 5 on it. In Fig. 3.1, H shows the location of the house. Similarly, P shows the
+    location of the house corresponding to Street number 7 and House number 4.
+- id: "1.3"
+  kind: figure
+  page: 1
+  number: Fig. 3.1
+  text: W, E, Street 1, Street 2, Street 3, Street 4, Street 5, Street 6, Street 7, Street 8, H, P
+  crop: [266, 432, 442, 600]
+- id: "1.4"
+  kind: text
+  page: 2
+  text: >-
+    II. Suppose you put a dot on a sheet of paper [Fig.3.2 (a)]. If we ask you to tell us the
+    position of the dot on the paper, how will you do this? Perhaps you will try in some such
+    manner: “The dot is in the upper half of the paper”, or “It is near the left edge of the paper”,
+    or “It is very near the left hand upper corner of the sheet”. Do any of these statements fix the
+    position of the dot precisely? No! But, if you say “The dot is nearly 5 cm away from the left
+    edge of the paper”, it helps to give some idea but still does not fix the position of the dot. A
+    little thought might enable you to say that the dot is also at a distance of 9 cm above the
+    bottom line. We now know exactly where the dot is!
+- id: "1.5"
+  kind: figure
+  page: 2
+  number: Fig. 3.2
+  text: (a), (b), 5cm, 9cm
+  crop: [144, 226, 356, 362]
+- id: "1.6"
+  kind: text
+  page: 2
+  text: >-
+    For this purpose, we fixed the position of the dot by specifying its distances from two fixed
+    lines, the left edge of the paper and the bottom line of the paper [Fig.3.2 (b)]. In other
+    words, we need two independent informations for finding the position of the dot.
+- id: "1.7"
+  kind: text
+  page: 2
+  text: Now, perform the following classroom activity known as ‘Seating Plan’.
+- id: "1.8"
+  kind: activity
+  page: 2
+  number: Activity 1
+  text: >-
+    (Seating Plan) : Draw a plan of the seating in your classroom, pushing all the desks together.
+    Represent each desk by a square. In each square, write the name of the student occupying the
+    desk, which the square represents. Position of each student in the classroom is described
+    precisely by using two independent informations: (i) the column in which she or he sits, (ii)
+    the row in which she or he sits. If you are sitting on the desk lying in the 5th column and 3rd
+    row (represented by the shaded square in Fig. 3.3), your position could be written as (5, 3),
+    first writing the column number, and then the row number. Is this the same as (3, 5)? Write down
+    the names and positions of other students in your class. For example, if Sonia is sitting in the
+    4th column and 1st row, write S(4,1). The teacher’s desk is not part of your seating plan. We
+    are treating the teacher just as an observer.
+- id: "1.9"
+  kind: figure
+  page: 3
+  number: Fig. 3.3
+  text: >-
+    Rows, 1, 2, 3, 4, 5, 6, 7, Columns, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, S, T, T shows teacher’s desk,
+    S shows Sonia’s desk
+  crop: [97, 112, 412, 276]
+- id: "1.10"
+  kind: text
+  page: 3
+  text: >-
+    In the discussion above, you observe that position of any object lying in a plane can be
+    represented with the help of two perpendicular lines. In case of ‘dot’, we require distance of
+    the dot from bottom line as well as from left edge of the paper. In case of seating plan, we
+    require the number of the column and that of the row. This simple idea has far reaching
+    consequences, and has given rise to a very important branch of Mathematics known as Coordinate
+    Geometry. In this chapter, we aim to introduce some basic concepts of coordinate geometry. You
+    will study more about these in your higher classes. This study was initially developed by the
+    French philosopher and mathematician René Déscartes.
+- id: "1.11"
+  kind: text
+  page: 3
+  text: >-
+    René Déscartes, the great French mathematician of the seventeenth century, liked to lie in bed
+    and think! One day, when resting in bed, he solved the problem of describing the position of a
+    point in a plane. His method was a development of the older idea of latitude and longitude. In
+    honour of Déscartes, the system used for describing the position of a point in a plane is also
+    known as the Cartesian system.
+- id: "1.12"
+  kind: figure
+  page: 3
+  number: Fig. 3.4
+  text: René Déscartes (1596 -1650)
+  crop: [314, 428, 434, 548]
+- id: "1.13"
+  kind: exercise
+  page: 3
+  number: EXERCISE 3.1
+  text: ""
+- id: "1.13.1"
+  kind: question
+  page: 3
+  number: Q1
+  text: How will you describe the position of a table lamp on your study table to another person?
+- id: "1.13.2"
+  kind: question
+  page: 3
+  number: Q2
+  text: >-
+    (Street Plan) : A city has two main roads which cross each other at the centre of the city.
+    These two roads are along the North-South direction and East-West direction. All the other
+    streets of the city run parallel to these roads and are 200 m apart. There are 5 streets in each
+    direction. Using 1cm = 200 m, draw a model of the city on your notebook. Represent the
+    roads/streets by single lines. There are many cross- streets in your model. A particular
+    cross-street is made by two streets, one running in the North - South direction and another in
+    the East - West direction. Each cross street is referred to in the following manner : If the 2nd
+    street running in the North - South direction and 5th in the East - West direction meet at some
+    crossing, then we will call this cross-street (2, 5). Using this convention, find: (i) how many
+    cross - streets can be referred to as (4, 3). (ii) how many cross - streets can be referred to
+    as (3, 4).
+  answer: (i) one; (ii) one; and they are different crossings
+- id: "2"
+  kind: section
+  page: 4
+  number: "3.2"
+  text: Cartesian System
+- id: "2.1"
+  kind: text
+  page: 4
+  text: >-
+    You have studied the number line in the chapter on ‘Number System’. On the number line,
+    distances from a fixed point are marked in equal units positively in one direction and
+    negatively in the other. The point from which the distances are marked is called the origin. We
+    use the number line to represent the numbers by marking points on a line at equal distances. If
+    one unit distance represents the number ‘1’, then 3 units distance represents the number ‘3’,
+    ‘0’ being at the origin. The point in the positive direction at a distance r from the origin
+    represents the number r. The point in the negative direction at a distance r from the origin
+    represents the number −r. Locations of different numbers on the number line are shown in Fig.
+    3.5.
+- id: "2.2"
+  kind: figure
+  page: 4
+  number: Fig. 3.5
+  text: One unit distance, One unit distance, Origin, −5, −4, −3, −2, −1, 0, 1, 2, 3, 4, 5
+  crop: [110, 412, 393, 478]
+- id: "2.3"
+  kind: text
+  page: 4
+  text: >-
+    Descartes invented the idea of placing two such lines perpendicular to each other on a plane,
+    and locating points on the plane by referring them to these lines. The perpendicular lines may
+    be in any direction such as in Fig.3.6. But, when we choose these two lines to locate a point in
+    a plane in this chapter, one line will be horizontal and the other will be vertical, as in Fig.
+    3.6(c).
+- id: "2.4"
+  kind: figure
+  page: 4
+  number: Fig. 3.6
+  text: (a), (b), (c)
+  crop: [120, 545, 380, 643]
+- id: "2.5"
+  kind: text
+  page: 5
+  text: >-
+    These lines are actually obtained as follows : Take two number lines, calling them X′X and Y′Y.
+    Place X′X horizontal [as in Fig. 3.7(a)] and write the numbers on it just as written on the
+    number line. We do the same thing with Y′Y except that Y′Y is vertical, not horizontal [Fig.
+    3.7(b)].
+- id: "2.6"
+  kind: figure
+  page: 5
+  number: Fig. 3.7
+  text: >-
+    X′, X, Origin, −5, −4, −3, −2, −1, 0, 1, 2, 3, 4, 5, (a), Y, Y′, Origin, 4, 3, 2, 1, 0, −1, −2,
+    −3, −4, (b)
+  crop: [77, 112, 440, 390]
+- id: "2.7"
+  kind: text
+  page: 5
+  text: >-
+    Combine both the lines in such a way that the two lines cross each other at their zeroes, or
+    origins (Fig. 3.8). The horizontal line X′X is called the x - axis and the vertical line YY′ is
+    called the y - axis. The point where X′X and Y′Y cross is called the origin, and is denoted by
+    O. Since the positive numbers lie on the directions OX and OY, OX and OY are called the positive
+    directions of the x - axis and the y - axis, respectively. Similarly, OX′ and OY′ are called the
+    negative directions of the x - axis and the y - axis, respectively.
+- id: "2.8"
+  kind: figure
+  page: 5
+  number: Fig. 3.8
+  text: >-
+    X′, X, Y, Y′, O, Positive x -axis, Negative x -axis, Positive y -axis, Negative y -axis, −6, −5,
+    −4, −3, −2, −1, 1, 2, 3, 4, 5, 6
+  crop: [217, 422, 440, 625]
+- id: "2.9"
+  kind: text
+  page: 6
+  text: >-
+    You observe that the axes (plural of the word ‘axis’) divide the plane into four parts. These
+    four parts are called the quadrants (one fourth part), numbered I, II, III and IV anticlockwise
+    from OX (see Fig.3.9). So, the plane consists of the axes and these quadrants. We call the
+    plane, the Cartesian plane, or the coordinate plane, or the xy-plane. The axes are called the
+    coordinate axes.
+- id: "2.10"
+  kind: figure
+  page: 6
+  number: Fig. 3.9
+  text: Quadrant II, Quadrant I, Quadrant III, Quadrant IV, X′, X, Y, Y′, O
+  crop: [295, 112, 435, 250]
+- id: "2.11"
+  kind: text
+  page: 6
+  text: >-
+    Now, let us see why this system is so basic to mathematics, and how it is useful. Consider the
+    following diagram where the axes are drawn on graph paper. Let us see the distances of the
+    points P and Q from the axes. For this, we draw perpendiculars PM on the x - axis and PN on the
+    y - axis. Similarly, we draw perpendiculars QR and QS as shown in Fig. 3.10.
+- id: "2.12"
+  kind: figure
+  page: 6
+  number: Fig.3.10
+  text: X′, X, Y, Y′, O, P, Q, M, N, R, S
+  crop: [144, 361, 358, 526]
+- id: "2.13"
+  kind: text
+  page: 6
+  text: >-
+    You find that (i) The perpendicular distance of the point P from the y - axis measured along the
+    positive direction of the x - axis is PN = OM = 4 units. (ii) The perpendicular distance of the
+    point P from the x - axis measured along the positive direction of the y - axis is PM = ON = 3
+    units. (iii) The perpendicular distance of the point Q from the y - axis measured along the
+    negative direction of the x - axis is OR = SQ = 6 units. (iv) The perpendicular distance of the
+    point Q from the x - axis measured along the negative direction of the y - axis is OS = RQ = 2
+    units.
+- id: "2.14"
+  kind: text
+  page: 7
+  text: Now, using these distances, how can we describe the points so that there is no confusion?
+- id: "2.15"
+  kind: text
+  page: 7
+  text: >-
+    We write the coordinates of a point, using the following conventions: (i) The x - coordinate of
+    a point is its perpendicular distance from the y - axis measured along the x -axis (positive
+    along the positive direction of the x - axis and negative along the negative direction of the x
+    - axis). For the point P, it is + 4 and for Q, it is − 6. The x - coordinate is also called the
+    abscissa. (ii) The y - coordinate of a point is its perpendicular distance from the x - axis
+    measured along the y - axis (positive along the positive direction of the y - axis and negative
+    along the negative direction of the y - axis). For the point P, it is + 3 and for Q, it is −2.
+    The y - coordinate is also called the ordinate. (iii) In stating the coordinates of a point in
+    the coordinate plane, the x - coordinate comes first, and then the y - coordinate. We place the
+    coordinates in brackets.
+- id: "2.16"
+  kind: text
+  page: 7
+  text: Hence, the coordinates of P are (4, 3) and the coordinates of Q are (− 6, − 2).
+- id: "2.17"
+  kind: text
+  page: 7
+  text: >-
+    Note that the coordinates describe a point in the plane uniquely. (3, 4) is not the same as (4,
+    3).
+- id: "2.18"
+  kind: example
+  page: 7
+  number: Example 1
+  text: >-
+    See Fig. 3.11 and complete the following statements: (i) The abscissa and the ordinate of the
+    point B are ___ and ___, respectively. Hence, the coordinates of B are (__, __). (ii) The
+    x-coordinate and the y-coordinate of the point M are ___ and ___, respectively. Hence, the
+    coordinates of M are (__, __). (iii) The x-coordinate and the y-coordinate of the point L are
+    ___ and ___, respectively. Hence, the coordinates of L are (__, __). (iv) The x-coordinate and
+    the y-coordinate of the point S are ___ and ___, respectively. Hence, the coordinates of S are
+    (__, __).
+- id: "2.19"
+  kind: figure
+  page: 8
+  number: Fig. 3.11
+  text: >-
+    X′, X, Y, Y′, O, M, B, L, S, −5, −4, −3, −2, −1, 1, 2, 3, 4, −1, −2, −3, −4, 1, 2, 3, 4
+  crop: [100, 114, 400, 374]
+- id: "2.20"
+  kind: text
+  page: 8
+  text: >-
+    Solution : (i) Since the distance of the point B from the y - axis is 4 units, the x -
+    coordinate or abscissa of the point B is 4. The distance of the point B from the x - axis is 3
+    units; therefore, the y - coordinate, i.e., the ordinate, of the point B is 3. Hence, the
+    coordinates of the point B are (4, 3).
+- id: "2.21"
+  kind: text
+  page: 8
+  text: >-
+    As in (i) above : (ii) The x - coordinate and the y - coordinate of the point M are −3 and 4,
+    respectively. Hence, the coordinates of the point M are (−3, 4). (iii) The x - coordinate and
+    the y - coordinate of the point L are −5 and − 4, respectively. Hence, the coordinates of the
+    point L are (−5, − 4). (iv) The x - coordinate and the y- coordinate of the point S are 3 and −
+    4, respectively. Hence, the coordinates of the point S are (3, − 4).
+- id: "2.22"
+  kind: example
+  page: 9
+  number: Example 2
+  text: Write the coordinates of the points marked on the axes in Fig. 3.12.
+- id: "2.23"
+  kind: text
+  page: 9
+  text: >-
+    Solution : You can see that : (i) The point A is at a distance of + 4 units from the y - axis
+    and at a distance zero from the x - axis. Therefore, the x - coordinate of A is 4 and the y -
+    coordinate is 0. Hence, the coordinates of A are (4, 0). (ii) The coordinates of B are (0, 3).
+    Why? (iii) The coordinates of C are (− 5, 0). Why? (iv) The coordinates of D are (0, − 4). Why?
+    (v) The coordinates of E are (⅔, 0). Why?
+- id: "2.24"
+  kind: figure
+  page: 9
+  number: Fig. 3.12
+  text: X′, X, Y, Y′, O, A, B, C, D, E, ⅔
+  crop: [254, 125, 440, 290]
+- id: "2.25"
+  kind: text
+  page: 9
+  text: >-
+    Since every point on the x - axis has no distance (zero distance) from the x - axis, therefore,
+    the y - coordinate of every point lying on the x - axis is always zero. Thus, the coordinates of
+    any point on the x - axis are of the form (x, 0), where x is the distance of the point from the
+    y - axis. Similarly, the coordinates of any point on the y - axis are of the form (0, y), where
+    y is the distance of the point from the x - axis. Why?
+- id: "2.26"
+  kind: text
+  page: 9
+  text: >-
+    What are the coordinates of the origin O? It has zero distance from both the axes so that its
+    abscissa and ordinate are both zero. Therefore, the coordinates of the origin are (0, 0).
+- id: "2.27"
+  kind: text
+  page: 9
+  text: >-
+    In the examples above, you may have observed the following relationship between the signs of the
+    coordinates of a point and the quadrant of a point in which it lies. (i) If a point is in the
+    1st quadrant, then the point will be in the form (+, +), since the 1st quadrant is enclosed by
+    the positive x - axis and the positive y - axis. (ii) If a point is in the 2nd quadrant, then
+    the point will be in the form (−, +), since the 2nd quadrant is enclosed by the negative x -
+    axis and the positive y - axis. (iii) If a point is in the 3rd quadrant, then the point will be
+    in the form (−, −), since the 3rd quadrant is enclosed by the negative x - axis and the negative
+    y - axis. (iv) If a point is in the 4th quadrant, then the point will be in the form (+, −),
+    since the 4th quadrant is enclosed by the positive x - axis and the negative y - axis (see Fig.
+    3.13).
+- id: "2.28"
+  kind: figure
+  page: 10
+  number: Fig. 3.13
+  text: >-
+    X′, X, Y, Y′, O, II, (−, +), I, (+, +), III, (−, −), IV, (+, −), −5, −4, −3, −2, −1, 1, 2, 3, 4,
+    5
+  crop: [115, 112, 390, 388]
+- id: "2.29"
+  kind: text
+  page: 10
+  text: >-
+    Remark : The system we have discussed above for describing a point in a plane is only a
+    convention, which is accepted all over the world. The system could also have been, for example,
+    the ordinate first, and the abscissa second. However, the whole world sticks to the system we
+    have described to avoid any confusion.
+- id: "2.30"
+  kind: exercise
+  page: 10
+  number: EXERCISE 3.2
+  text: ""
+- id: "2.30.1"
+  kind: question
+  page: 10
+  number: Q1
+  text: >-
+    Write the answer of each of the following questions: (i) What is the name of horizontal and the
+    vertical lines drawn to determine the position of any point in the Cartesian plane? (ii) What is
+    the name of each part of the plane formed by these two lines? (iii) Write the name of the point
+    where these two lines intersect.
+  answer: (i) the x-axis and the y-axis; (ii) a quadrant; (iii) the origin
+- id: "2.30.2"
+  kind: question
+  page: 10
+  number: Q2
+  text: >-
+    See Fig.3.14, and write the following: (i) The coordinates of B. (ii) The coordinates of C.
+    (iii) The point identified by the coordinates (−3, −5). (iv) The point identified by the
+    coordinates (2, − 4). (v) The abscissa of the point D. (vi) The ordinate of the point H. (vii)
+    The coordinates of the point L. (viii) The coordinates of the point M.
+  answer: (i) (−5, 2); (ii) (5, −5); (iii) E; (iv) G; (v) 6; (vi) −3; (vii) (0, 5); (viii) (−3, 0)
+- id: "2.31"
+  kind: figure
+  page: 11
+  number: Fig. 3.14
+  text: X′, X, Y, Y′, O, B, C, D, E, G, H, L, M
+  crop: [110, 197, 398, 503]
+- id: "3"
+  kind: section
+  page: 11
+  number: "3.3"
+  text: Plotting a Point in the Plane if its Coordinates are Given
+- id: "3.1"
+  kind: text
+  page: 11
+  text: >-
+    Uptil now we have drawn the points for you, and asked you to give their coordinates. Now we will
+    show you how we place these points in the plane if we know its coordinates. We call this process
+    “plotting the point”.
+- id: "3.2"
+  kind: text
+  page: 11
+  text: >-
+    Let the coordinates of a point be (3, 5). We want to plot this point in the coordinate plane. We
+    draw the coordinate axes, and choose our units such that one centimetre represents one unit on
+    both the axes. The coordinates of the point (3, 5) tell us that the distance of this point from
+    the y - axis along the positive x - axis is 3 units and the distance of the point from the x -
+    axis along the positive y - axis is 5 units. Starting from the origin O, we count 3 units on the
+    positive x - axis and mark the corresponding point as A. Now, starting from A, we move in the
+    positive direction of the y - axis and count 5 units and mark the corresponding point as P (see
+    Fig.3.15). You see that the distance of P from the y - axis is 3 units and from the x - axis is
+    5 units. Hence, P is the position of the point. Note that P lies in the 1st quadrant, since both
+    the coordinates of P are positive. Similarly, you can plot the point Q (5, − 4) in the
+    coordinate plane. The distance of Q from the x - axis is 4 units along the negative y - axis, so
+    that its y - coordinate is − 4 (see Fig.3.15). The point Q lies in the 4th quadrant. Why?
+- id: "3.3"
+  kind: figure
+  page: 12
+  number: Fig. 3.15
+  text: X′, X, Y, Y′, O, A, B, P (3, 5), Q (5, − 4)
+  crop: [115, 252, 388, 523]
+- id: "3.4"
+  kind: example
+  page: 12
+  number: Example 3
+  text: >-
+    Locate the points (5, 0), (0, 5), (2, 5), (5, 2), (−3, 5), (−3, −5), (5, −3) and (6, 1) in the
+    Cartesian plane.
+- id: "3.5"
+  kind: text
+  page: 12
+  text: >-
+    Solution : Taking 1cm = 1unit, we draw the x - axis and the y - axis. The positions of the
+    points are shown by dots in Fig.3.16.
+- id: "3.6"
+  kind: figure
+  page: 13
+  number: Fig. 3.16
+  text: X′, X, Y, Y′, O, (− 3, 5), (0, 5), (2, 5), (5, 2), (6, 1), (5, 0), (5, −3), (− 3, − 5)
+  crop: [115, 124, 430, 398]
+- id: "3.7"
+  kind: text
+  page: 13
+  text: >-
+    Note : In the example above, you see that (5, 0) and (0, 5) are not at the same position.
+    Similarly, (5, 2) and (2, 5) are at different positions. Also, (−3, 5) and (5, −3) are at
+    different positions. By taking several such examples, you will find that, if x ≠ y, then the
+    position of (x, y) in the Cartesian plane is different from the position of (y, x). So, if we
+    interchange the coordinates x and y, the position of (y, x) will differ from the position of (x,
+    y). This means that the order of x and y is important in (x, y). Therefore, (x, y) is called an
+    ordered pair. The ordered pair (x, y) ≠ ordered pair (y, x), if x ≠ y. Also (x, y) = (y, x), if
+    x = y.
+- id: "3.8"
+  kind: example
+  page: 13
+  number: Example 4
+  text: >-
+    Plot the following ordered pairs (x, y) of numbers as points in the Cartesian plane. Use the
+    scale 1cm = 1 unit on the axes.
+- id: "3.9"
+  kind: table
+  page: 13
+  text: x, − 3, 0, − 1, 4, 2; y, 7, −3.5, − 3, 4, − 3
+  crop: [131, 579, 392, 642]
+- id: "3.10"
+  kind: text
+  page: 14
+  text: >-
+    Solution : The pairs of numbers given in the table can be represented by the points (− 3, 7),
+    (0, −3.5), (− 1, − 3), (4, 4) and (2, − 3). The locations of the points are shown by dots in
+    Fig.3.17.
+- id: "3.11"
+  kind: figure
+  page: 14
+  number: Fig. 3.17
+  text: X′, X, Y, Y′, O, (−3, 7), (4, 4), (−1, −3), (0, −3.5), (2, −3)
+  crop: [115, 157, 388, 450]
+- id: "3.12"
+  kind: activity
+  page: 14
+  number: Activity 2
+  text: >-
+    A game for two persons (Requirements: two counters or coins, graph paper, two dice of different
+    colours, say red and green): Place each counter at (0, 0). Each player throws two dice
+    simultaneously. When the first player does so, suppose the red die shows 3 and the green one
+    shows 1. So, she moves her counter to (3, 1). Similarly, if the second player throws 2 on the
+    red and 4 on the green, she moves her counter to (2, 4). On the second throw, if the first
+    player throws 1 on the red and 4 on the green, she moves her counter from (3, 1) to (3 + 1, 1 +
+    4), that is, adding 1 to the x - coordinate and 4 to the y - coordinate of (3, 1). The purpose
+    of the game is to arrive first at (10, 10) without overshooting, i.e., neither the abscissa nor
+    the ordinate can be greater than 10. Also, a counter should not coincide with the position held
+    by another counter. For example, if the first player’s counter moves on to a point already
+    occupied by the counter of the second player, then the second player’s counter goes to (0, 0).
+    If a move is not possible without overshooting, the player misses that turn. You can extend this
+    game to play with more friends.
+- id: "3.13"
+  kind: text
+  page: 15
+  text: >-
+    Remark : Plotting of points in the Cartesian plane can be compared to some extent with drawing
+    of graphs in different situations such as Time-Distance Graph, Side-Perimeter Graph, etc which
+    you have come across in earlier classes. In such situations, we may call the axes, t-axis,
+    d-axis, s-axis or p-axis, etc. in place of the x and y axes.
+- id: "3.14"
+  kind: exercise
+  page: 15
+  number: EXERCISE 3.3
+  text: ""
+- id: "3.14.1"
+  kind: question
+  page: 15
+  number: Q1
+  text: >-
+    In which quadrant or on which axis do each of the points (− 2, 4), (3, − 1), (− 1, 0), (1, 2)
+    and (− 3, − 5) lie? Verify your answer by locating them on the Cartesian plane.
+  answer: (−2, 4) II; (3, −1) IV; (−1, 0) on the negative x-axis; (1, 2) I; (−3, −5) III
+- id: "3.14.2"
+  kind: question
+  page: 15
+  number: Q2
+  text: >-
+    Plot the points (x, y) given in the following table on the plane, choosing suitable units of
+    distance on the axes.
+- id: "3.15"
+  kind: table
+  page: 15
+  text: x, − 2, −1, 0, 1, 3; y, 8, 7, − 1.25, 3, − 1
+  crop: [131, 301, 391, 352]
+- id: "4"
+  kind: section
+  page: 15
+  number: "3.4"
+  text: Summary
+- id: "4.1"
+  kind: text
+  page: 15
+  text: "In this chapter, you have studied the following points :"
+- id: "4.2"
+  kind: text
+  page: 15
+  text: >-
+    1. To locate the position of an object or a point in a plane, we require two perpendicular
+    lines. One of them is horizontal, and the other is vertical.
+- id: "4.3"
+  kind: text
+  page: 15
+  text: >-
+    2. The plane is called the Cartesian, or coordinate plane and the lines are called the
+    coordinate axes.
+- id: "4.4"
+  kind: text
+  page: 15
+  text: 3. The horizontal line is called the x -axis, and the vertical line is called the y - axis.
+- id: "4.5"
+  kind: text
+  page: 15
+  text: 4. The coordinate axes divide the plane into four parts called quadrants.
+- id: "4.6"
+  kind: text
+  page: 15
+  text: 5. The point of intersection of the axes is called the origin.
+- id: "4.7"
+  kind: text
+  page: 15
+  text: >-
+    6. The distance of a point from the y - axis is called its x-coordinate, or abscissa, and the
+    distance of the point from the x-axis is called its y-coordinate, or ordinate.
+- id: "4.8"
+  kind: text
+  page: 15
+  text: >-
+    7. If the abscissa of a point is x and the ordinate is y, then (x, y) are called the coordinates
+    of the point.
+- id: "4.9"
+  kind: text
+  page: 15
+  text: >-
+    8. The coordinates of a point on the x-axis are of the form (x, 0) and that of the point on the
+    y-axis are (0, y).
+- id: "4.10"
+  kind: text
+  page: 15
+  text: 9. The coordinates of the origin are (0, 0).
+- id: "4.11"
+  kind: text
+  page: 15
+  text: >-
+    10. The coordinates of a point are of the form (+ , +) in the first quadrant, (−, +) in the
+    second quadrant, (−, −) in the third quadrant and (+, −) in the fourth quadrant, where + denotes
+    a positive real number and − denotes a negative real number.
+- id: "4.12"
+  kind: text
+  page: 15
+  text: 11. If x ≠ y, then (x, y) ≠ (y, x), and (x, y) = (y, x), if x = y.

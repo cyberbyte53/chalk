@@ -69,6 +69,8 @@ const steps: [string, () => Promise<boolean>][] = [
   ],
   // After the content build: a lesson's self-review reads its boards' records from it. Not stamped:
   // what it reports depends on git history, which a stamp doesn't see.
+  // Each language's extract of a chapter's book; reads the PDFs' text layers (poppler).
+  ["sources", stamped("sources", ["src/sources-cli.ts"])],
   ["pipeline", () => run("pipeline", tsx, [...tsconfig, "src/pipeline-cli.ts"], studio)],
   // After the content build, which records every board's pieces.
   ["threads", () => run("threads", tsx, [...tsconfig, "src/threads-cli.ts"], studio)],

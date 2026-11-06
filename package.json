@@ -26,6 +26,7 @@
     "catalogue": "pnpm --filter @chalk/studio catalogue",
     "said-compare": "pnpm --filter @chalk/studio --silent said-compare",
     "guide": "pnpm --filter @chalk/studio --silent guide",
+    "source": "pnpm --filter @chalk/studio --silent source",
     "snapshot": "pnpm --filter @chalk/studio --silent snapshot",
     "sound": "pnpm --filter @chalk/studio --silent sound",
     "tool-times": "pnpm --filter @chalk/studio tool-times"

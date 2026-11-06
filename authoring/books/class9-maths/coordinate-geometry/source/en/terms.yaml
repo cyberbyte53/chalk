@@ -1,0 +1,41 @@
+# What the book defines, in its spelling, each by the item it is defined in (platform/docs/plans/sources.md).
+# This book sets most of its terms in italics (origin, positive and negative directions in bold; x - axis,
+# y - axis and ordered pair in neither): each is here because the sentence defines it.
+- term: Coordinate Geometry
+  item: "1.10"
+- term: Cartesian system
+  item: "1.11"
+- term: origin
+  item: "2.1"
+- term: x - axis
+  item: "2.7"
+- term: y - axis
+  item: "2.7"
+- term: origin
+  item: "2.7"
+- term: positive directions
+  item: "2.7"
+- term: negative directions
+  item: "2.7"
+- term: quadrants
+  item: "2.9"
+- term: Cartesian plane
+  item: "2.9"
+- term: coordinate plane
+  item: "2.9"
+- term: xy-plane
+  item: "2.9"
+- term: coordinate axes
+  item: "2.9"
+- term: x - coordinate
+  item: "2.15"
+- term: abscissa
+  item: "2.15"
+- term: y - coordinate
+  item: "2.15"
+- term: ordinate
+  item: "2.15"
+- term: plotting the point
+  item: "3.1"
+- term: ordered pair
+  item: "3.7"
