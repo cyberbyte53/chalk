@@ -334,7 +334,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Where the chapters stand",
         description:
-          "Every chapter's planning files (the outline, plan.md, boards.md) and lessons: each file's state (plan.md: draft, approved, changed since approved), its failing checks, what is to be checked again, why the plan's approval can't be given yet, which lessons wait on a self-review, and how many of each lesson's boards and families are built and reviewed. `at` keeps to one book or chapter (\"authoring/books/class9-maths/coordinate-geometry\").",
+          "Every chapter's planning files (plan.md, boards.md) and lessons: each file's state (plan.md: draft, approved, changed since approved), its failing checks, what is to be checked again, why the plan's approval can't be given yet, which lessons wait on a self-review, and how many of each lesson's boards and families are built and reviewed. `at` keeps to one book or chapter (\"authoring/books/class9-maths/coordinate-geometry\").",
         inputSchema: {
           at: z
             .string()

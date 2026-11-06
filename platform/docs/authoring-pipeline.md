@@ -19,11 +19,11 @@ Only what is built lives in `content/` and `library/`. What is written about the
 
 ```text
 authoring/books/<book>/<chapter>/
-  source/en/        1  the English book: its PDF, its text, outline.yaml (machine-checked)
+  source/en/        1  the English book: its PDF, items.yaml (its words, item by item), terms, figures
   plan.md           2  the intent, approved by the person: goal, objectives, skipped, story, lessons,
                        chapter art, props (reuse / extend / new), question families
   boards.md         2  the detail, never approved: each board and question family, what it is for,
-                       its beat, needs, objectives and outline ids, props
+                       its beat, needs, objectives and the items it cites, props; the items skipped
   runs/                one note per pipeline run
   comments.yaml        threads on the chapter's boards and on the files above        (built)
 authoring/props/<package>/comments.yaml   threads on the package's props            (built)
@@ -82,7 +82,7 @@ A prop that only draws inside another's frame (`drawsOn`) is shown as needing on
 
 | # | Step | Question | Output | Gate |
 |---|---|---|---|---|
-| 1 | Source | What exactly does the source contain? | `source/en/outline.yaml` | machine |
+| 1 | Source | What exactly does the source contain? | `source/en/items.yaml` | machine |
 | 2 | Plan | What can a student do at the end, and how will the chapter get them there? | `plan.md`, `boards.md` | machine, then person (`plan.md`) |
 | 3 | Props | What exactly is each new or changed prop the plan names? | definitions | machine, then person (a thread per prop) |
 | 4 | Build props | Does each prop work at every screen? | views, run bodies, tests | machine, then person |
@@ -94,16 +94,9 @@ Nothing is built until `plan.md` is approved. Only the person approves.
 
 ### 1. Source
 
-`outline.yaml` lists everything in the source with a stable id later files cite:
+`pnpm source` extracts the book into `source/en/` ([plans/sources.md](plans/sources.md)): `items.yaml`, every block in the book's exact words, each with a positional id (`2.13`) that `boards.md` cites.
 
-```yaml
-- { id: s3.2, kind: section, title: Cartesian System }
-- { id: fig3.10, kind: figure, page: 4, says: "P is 4 units from the y-axis and 3 from the x-axis" }
-- { id: def-abscissa, kind: definition, text: "The x-coordinate of a point is…" }
-- { id: ex3.2-q2, kind: exercise }
-```
-
-**Gate (machine):** the figures, examples, activities and exercises match a scan of the text (`source/en/*.txt`). Every citation anywhere later must be an id here.
+**Gate (machine, `pnpm check`'s sources step):** every item is found in the book's text layer, every number the book prints is an item's, the terms are real and every figure has its picture.
 
 ### 2. Plan
 
@@ -114,10 +107,10 @@ Nothing is built until `plan.md` is approved. Only the person approves.
 A student can say where any point in a plane is with two numbers in an agreed order, …
 
 ## Objectives
-- **o6** Find a point's abscissa and ordinate as its signed distances from the axes. (s3.2-distances, def-abscissa)
+- **o6** Find a point's abscissa and ordinate as its signed distances from the axes.
 
 ## Skipped
-- **activity2** The dice game: the treasure trail (o13) takes its place.
+- Activity 2, the dice game: the treasure trail (o13) takes its place.
 
 ## Story
 The arc, and the characters it uses.
@@ -138,19 +131,21 @@ The tile's idea.
 
 A lesson's slug is its folder and its name in `build.yaml`; a family's is its folder under `questions/`. A prop's verdict is **reuse**, **extend** or **new**; where words or a picture do better, the plan says so in a sentence. `ready: true` in the front matter (written by the agent when the last lesson is built and reviewed, its words unchanged so the approval holds) says the chapter is ready for the person.
 
-**`boards.md`**: per lesson `## <slug>`, then each board `### <board-id>  (o6; fig3.10)` and each question family `### questions/<family>  (o7; ex3.2-q2)` under the lesson it tests:
+`plan.md` has no ids: the person reads it, so its `Skipped` names items as the book does.
+
+**`boards.md`**: per lesson `## <slug>`, then each board `### <board-id>  (o6; 2.12)` and each question family `### questions/<family>  (o7; 2.30.2)` under the lesson it tests, then `## Skipped`, each item left out by its id, with why (`- **3.12** the treasure trail takes its place.`):
 
 ```markdown
-### distances-from-axes  (o6; s3.2-distances, fig3.10)
+### distances-from-axes  (o6; 2.11, 2.12, 2.13)
 Purpose: a point's distance from the y-axis is measured along the x-axis, …
 Beat: Riya walks from O to P and to Q.
 Needs: graph-paper axes with P and Q; the perpendiculars from each point to both axes, …
 Props: coordinatePlane (reading a point; walker)
 ```
 
-Needs are words, never prop names. Board ids are the ids used in `content/`. **`boards.md` is the only place that says which objectives and outline ids a board serves**; boards don't repeat it. Nothing in it is approved, and no status is written in it: each board is **planned**, **built** (in the build) or **reviewed** (passed by a reviewer as built now, `reviewed.ts`), worked out each time. (**Waiting**, on a new prop whose showing thread the person hasn't closed, isn't worked out yet: a thread doesn't say which prop it shows.)
+Needs are words, never prop names. Board ids are the ids used in `content/`. **`boards.md` is the only place that says which objectives and items a board serves**; boards don't repeat it. Nothing in it is approved, and no status is written in it: each board is **planned**, **built** (in the build) or **reviewed** (passed by a reviewer as built now, `reviewed.ts`), worked out each time. (**Waiting**, on a new prop whose showing thread the person hasn't closed, isn't worked out yet: a thread doesn't say which prop it shows.)
 
-**Gate (machine, `pipeline.ts`):** `plan.md` has its sections and a goal; every objective cites outline ids that exist; every outline item is covered by an objective or skipped with a reason; lessons and families cite objectives that exist; every prop has a verdict. In `boards.md`: every board and family is under a lesson of the plan, serves an objective, cites only objectives and outline ids that exist, and says its purpose and needs; every family is the plan's, and every family of the plan has its entry; every objective is served by a board or family. The build: `build.yaml`'s concepts are the plan's lessons, in its order (some while they are built; all once the plan says `ready: true`, with the chapter's `art.tsx`), each with its `art.tsx`. **Then person:** approves `plan.md`.
+**Gate (machine, `pipeline.ts`):** `plan.md` has its sections and a goal, and no item ids; lessons and families cite objectives that exist; every prop has a verdict. In `boards.md`: every board and family is under a lesson of the plan, serves an objective, cites only objectives and items that exist, and says its purpose and needs; every item is cited or skipped with a reason (a section or an exercise counts when any item in it is); every family is the plan's, and every family of the plan has its entry; every objective is served by a board or family. The build: `build.yaml`'s concepts are the plan's lessons, in its order (some while they are built; all once the plan says `ready: true`, with the chapter's `art.tsx`), each with its `art.tsx`. **Then person:** approves `plan.md`.
 
 ### 3. Props
 
@@ -176,9 +171,9 @@ Any change to a prop's fields, actions or signals, at any step after 3 and from 
 
 ## Approval and staleness
 
-`plan.md` alone is approved: `approved: <commit>` in its front matter, written by the dev server when the person approves it in the editor, once its checks and the outline's hold, no thread on it is open, and it is committed. A prop's approval is its thread. When the approved plan changes, it is **changed** (approve it again); when the outline changes after it was approved, it is **to check again**. Nothing below the plan is approved, so nothing cascades: `boards.md` follows the plan's ids and is checked by the machine. An agent about to edit an approved `plan.md` says first that it will need approving again, and never writes an `approved:` line.
+`plan.md` alone is approved: `approved: <commit>` in its front matter, written by the dev server when the person approves it in the editor, once its checks and the source's hold, no thread on it is open, and it is committed. A prop's approval is its thread. When the approved plan changes, it is **changed** (approve it again); when `source/en/items.yaml` changes after it was approved, it is **to check again**. Nothing below the plan is approved, so nothing cascades: `boards.md` follows the plan and is checked by the machine. An agent about to edit an approved `plan.md` says first that it will need approving again, and never writes an `approved:` line.
 
-`pnpm check`'s pipeline step fails where the outline's or `boards.md`'s checks fail, or an approved plan's; a draft plan's failing checks only stand in the way of its approval.
+`pnpm check`'s pipeline step fails where `boards.md`'s checks fail, or an approved plan's (its sources step, where the source's do); a draft plan's failing checks only stand in the way of its approval.
 
 **An approval is committed alone.** The commit that brings an `approved:` line changes nothing else in the file, so history says exactly which text was approved. The person's approval, not yet committed, goes in a commit of its own before any edit to that file. `pnpm check`'s pipeline step fails otherwise (`stampProblems`). (Id-level diffing, marking only what cites a changed id, is added later only if this proves too noisy.) Coming into an existing chapter works the same way.
 
@@ -200,7 +195,7 @@ Any change to a prop's fields, actions or signals, at any step after 3 and from 
 
 | Skill | Steps |
 |---|---|
-| `plan-chapter` | 1–2: the outline, `plan.md`, `boards.md` |
+| `plan-chapter` | 1–2: the source, `plan.md`, `boards.md` |
 | `build-props` | 3–4: definitions, then the build |
 | `build-lesson` | 5 |
 | `self-review`, `apply-comments`, `wrap-up` | as today; `apply-comments` adds before → after, re-points threads, and routes prop changes through the definition first |
@@ -212,7 +207,7 @@ Any change to a prop's fields, actions or signals, at any step after 3 and from 
 3. ~~`content/<book>/<chapter>/{plan.md, runs/, source/}` move to `authoring/books/<book>/<chapter>/`.~~ Done.
 4. ~~An agent splits each existing `plan.md`~~ (dropped: class 9 is remade from its source instead): Mission → `brief.md`, Lessons → `flow.md` (needs written from what boards do), Props → `props.md` (the match), Open questions → threads. `objectives.md` from the plan's objectives, else drafted. Built chapters are approved as they stand.
 5. Each prop's `describe` is checked to open with what it is for (a few open with only what it shows: "A factor tree.", "Two sticks, a and b.").
-6. `outline.yaml` generated for each chapter with a source.
+6. ~~`outline.yaml` generated for each chapter with a source~~: replaced by `items.yaml` ([plans/sources.md](plans/sources.md)).
 7. ~~`coordinatePlane` run through field use~~: removed with class 9 Coordinate Geometry, its old threads and reviews, to remake the chapter from its source through the pipeline.
 8. ~~The brief, objectives, flow and props match become `plan.md` and `boards.md`; `source/` becomes `source/en/`~~ ([plans/authoring.md](plans/authoring.md), step 4). Done for class 9 Coordinate Geometry.
 

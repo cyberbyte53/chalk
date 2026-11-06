@@ -5,12 +5,14 @@ import { full } from "@chalk/content/words";
 import type { PartSnapshot } from "@chalk/prop";
 import type { Reach } from "../content/build";
 import { buildInputsKey } from "../content/inputs";
-import { SOURCE_DIR } from "../pipeline";
+import { ITEMS_FILE } from "../pipeline";
 import { useText, usesOf } from "../prop-text";
 import { FactsCache } from "../reach/facts";
 import { type Shown, keepShown } from "../reach/shown";
 import type { ChapterScript, ScriptEntry } from "../sound/voice/make";
 import type { Said } from "../sound/voice/said";
+import { readYaml } from "../source/extract";
+import { itemsSchema } from "../source/schema";
 import {
   type Drawn,
   type Heard,
@@ -333,7 +335,7 @@ export function scriptText(root: string, board: string): string[] {
 
 /**
  * What a board is for, from its chapter's boards.md (its Purpose, Beat, Needs and Props) and the
- * source passages its heading cites (source/en/outline.yaml), so it is held to them without opening them.
+ * book's items its heading cites (source/en/items.yaml), so it is held to them without opening them.
  */
 function reasonsText(root: string, board: string): string[] {
   const [book, chapter, , id] = board.replace(/^content\//, "").split("/");
@@ -350,22 +352,14 @@ function reasonsText(root: string, board: string): string[] {
     if (l.startsWith("#")) break;
     if (l.trim() !== "") body.push(`  ${l.trim()}`);
   }
-  // The source ids its heading cites (after the objectives' "o9;"), with what each says.
-  const cited = (heading.match(/\(([^)]*)\)/)?.[1] ?? "")
-    .split(/[;,]/)
-    .map((x) => x.trim())
-    .filter((x) => x !== "" && !/^o\d+$/.test(x));
-  const outlineFile = join(dir, SOURCE_DIR, "outline.yaml");
-  const source: string[] = [];
-  if (existsSync(outlineFile) && cited.length > 0) {
-    const lines = readFileSync(outlineFile, "utf8").split("\n");
-    for (const c of cited) {
-      const line = lines.find((l) => l.includes(`id: ${c},`) || l.includes(`id: ${c} }`));
-      const words =
-        line?.match(/(?:says|text): "([^"]*)"/)?.[1] ?? line?.match(/title: ([^,}]*)/)?.[1];
-      if (words !== undefined) source.push(`  ${c}: ${words.trim()}`);
-    }
-  }
+  // The items its heading cites (after the objectives' "o9;"), in the book's words.
+  const cited = new Set(
+    (heading.match(/\(([^)]*)\)/)?.[1] ?? "").split(/[;,]/).map((x) => x.trim()),
+  );
+  const items = readYaml(join(dir, ITEMS_FILE), itemsSchema).value ?? [];
+  const source = items
+    .filter((i) => cited.has(i.id))
+    .map((i) => `  ${i.id}: ${[i.number, i.text].filter(Boolean).join(" ")}`);
   return [
     `for (boards.md): ${heading.replace(/^### /, "")}`,
     ...body,

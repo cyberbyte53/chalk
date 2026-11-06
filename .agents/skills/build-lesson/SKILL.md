@@ -9,7 +9,7 @@ Arguments: the chapter (`content/<book>/<chapter>`) and the lesson's slug from i
 
 ## Read first
 
-`authoring/guide.md` (and the lessons to copy it names: open them); `authoring/taste/guides/pages.md` and `guides/questions.md`; `platform/docs/writing-content.md`; the lesson in `plan.md` (its goal, objectives, what the student does, its card; the story; the props), its boards and question families in `boards.md` (each one's id, what it serves, its beat, what it needs and the props it uses), and the source passages they cite (`source/en/`).
+`authoring/guide.md` (and the lessons to copy it names: open them); `authoring/taste/guides/pages.md` and `guides/questions.md`; `platform/docs/writing-content.md`; the lesson in `plan.md` (its goal, objectives, what the student does, its card; the story; the props), its boards and question families in `boards.md` (each one's id, what it serves, its beat, what it needs and the props it uses), and the book's items they cite (`authoring/books/<book>/<chapter>/source/en/items.yaml`, its pictures in `figures/`).
 
 ## Pre-conditions
 

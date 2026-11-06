@@ -695,12 +695,11 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       const [book = "", chapter = ""] = node.path.split("/");
       try {
         const c = await this.chapter(book, chapter);
-        // The outline is the machine's: never shown; when it fails, plan.md says the agent fixes it.
+        // The source is the machine's: never shown; when it fails, plan.md says the agent fixes it.
         const names: Record<string, string> = { "plan.md": "Plan", "boards.md": "Boards" };
-        const shown = c.files.filter((f) => !f.file.startsWith("source/"));
         return [
           ...guides,
-          ...shown.map(
+          ...c.files.map(
             (f): Node => ({
               label: names[f.file] ?? f.file,
               path: `${node.path}/${f.file}`,
@@ -1055,7 +1054,7 @@ export function activate(context: vscode.ExtensionContext): void {
     new vscode.RelativePattern(
       folder,
       // Only what the tree shows: a run note or a source an agent writes redraws nothing.
-      "{build/index.json,library/catalogue.md,authoring/**/comments.yaml,authoring/**/reviewed.yaml,authoring/**/guide.md,authoring/**/guide/**,authoring/books/*/*/plan.md,authoring/books/*/*/boards.md,authoring/books/*/*/source/*/outline.yaml}",
+      "{build/index.json,library/catalogue.md,authoring/**/comments.yaml,authoring/**/reviewed.yaml,authoring/**/guide.md,authoring/**/guide/**,authoring/books/*/*/plan.md,authoring/books/*/*/boards.md,authoring/books/*/*/source/*/items.yaml}",
     ),
   );
   // A thread changed (a reply in the preview, an agent's answer): the tree's counts follow.

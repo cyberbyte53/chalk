@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 
 /**
  * A chapter's planning files in the editor (platform/docs/authoring-pipeline.md): their state in the
- * Chalk tree (the outline, plan.md, boards.md), their failing checks as problems on their lines,
+ * Chalk tree (plan.md, boards.md), their failing checks as problems on their lines,
  * and the person's actions on them: approve plan.md (and take it back), comment on selected words.
  * Their state is worked out by the dev server (platform/studio/src/pipeline.ts, through
  * /dev-pipeline); approvals and comments are written by it. Nothing is worked out or written here.
@@ -14,13 +14,13 @@ import * as vscode from "vscode";
 export type PlanningFile = {
   step: string;
   file: string;
-  /** Whether the person approves it (plan.md); the outline and boards.md are the machine's. */
+  /** Whether the person approves it (plan.md); boards.md is the machine's. */
   isApprovable: boolean;
   status: "missing" | "draft" | "approved" | "changed";
   approvedAt?: string;
   /** Its failing checks, each with the id it is about when there is one. */
   problems: { text: string; about?: string }[];
-  notes: string[];
+  /** Approved, but a file it is written from changed since: which. */
   recheck: string[];
   /** Waiting on your approval, but it can't be given yet: why. */
   blocked?: string;
@@ -47,7 +47,7 @@ export function stateWords(f: PlanningFile): string {
   return f.status === "approved" ? `approved ${f.approvedAt ?? ""}`.trim() : "to approve";
 }
 
-/** Everything a planning file's tooltip says: its checks, what to check again, its notes. */
+/** Everything a planning file's tooltip says: its checks, and what to check again. */
 export function stateDetail(f: PlanningFile): string {
   return [
     ...(f.blocked !== undefined ? [`Can't approve yet: ${f.blocked}`] : []),
@@ -55,7 +55,6 @@ export function stateDetail(f: PlanningFile): string {
     ...(f.recheck.length > 0
       ? [`To check again: ${f.recheck.join(", ")} changed since it was approved.`]
       : []),
-    ...f.notes,
   ].join("\n");
 }
 
@@ -98,7 +97,7 @@ export function planningFileOf(
 
 /**
  * The failing checks as problems on the files: each on the line that names the id it is about (an
- * objective, a board, an outline item), else on the first line.
+ * objective, a board, an item), else on the first line.
  */
 export function showProblems(
   root: string,

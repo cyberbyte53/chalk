@@ -4,8 +4,7 @@ import { checkExtract, extractsIn } from "./source/extract";
 
 /**
  * `pnpm check`'s sources step: every language's extract of a chapter's book (source/<lang>/ with a
- * book.yaml) passes its checks (platform/studio/src/source/checks.ts). Beside the outline's checks
- * in the pipeline step, until the outline goes (platform/docs/plans/sources.md, step 2).
+ * book.yaml) passes its checks (platform/studio/src/source/checks.ts).
  */
 const root = join(findUp("pnpm-workspace.yaml", import.meta.dirname), "..");
 let failed = 0;

@@ -1,43 +1,54 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Role, Status, YOU, applyChange } from "./comments";
 import { recordOf } from "./content/board-record";
 import {
   Step,
   approve,
-  checkOutline,
+  idsIn,
   nextStep,
   readBoards,
   readChapter,
   readChapters,
   readLessons,
   readPlan,
+  readSkips,
   stampProblems,
   takeBack,
+  uncovered,
 } from "./pipeline";
 import { passUnder } from "./reviewed";
+import { type Item, ItemKind } from "./source/schema";
 
-const OUTLINE = `- { id: fig3.1, kind: figure }
-- { id: fig3.2, kind: figure }
-- { id: example1, kind: example }
+// The extract's own checks read the book's PDF (source/checks.test.ts tests them): here they say
+// what each test needs.
+const extract = vi.hoisted(() => ({ problems: [] as string[] }));
+vi.mock("./source/extract", async (actual) => ({
+  ...(await actual<typeof import("./source/extract")>()),
+  checkExtract: () => ({ problems: extract.problems, items: [], terms: [], pages: [] }),
+}));
+
+const ITEMS = `- { id: "1", kind: section, page: 1, number: "3.1", text: Introduction }
+- { id: "1.1", kind: figure, page: 1, number: Fig. 3.1, text: P }
+- { id: "1.2", kind: figure, page: 1, number: Fig. 3.2, text: P turned }
+- { id: "1.3", kind: example, page: 1, number: Example 1, text: Read P. }
 `;
-const TEXT = "See Fig. 3.1 and Fig.3.2. Example 1: plot it.";
 const PLAN = `# A chapter
 
 ## Goal
 Read a point's coordinates.
 
 ## Objectives
-- **o1** Read a point's coordinates. (fig3.1, example1)
+- **o1** Read a point's coordinates.
 
 ## Skipped
-- **fig3.2** the same picture as fig3.1, turned.
+- Fig. 3.2: the same picture as Fig. 3.1, turned.
 
 ## Story
-Riya reads a map.
+Riya reads a map, and walks to (1, 2).
 
 ## Lessons
 ### coordinates  (o1)
@@ -55,23 +66,26 @@ A dot on a grid.
 const BOARDS = `# Boards
 
 ## coordinates
-### reading  (o1; fig3.1)
+### reading  (o1; 1.1)
 Purpose: read P.
 Beat: Riya finds the well.
 Needs: a point on a plane, its distances to the axes.
 Props: coordinatePlane
 
-### questions/read-it  (o1; example1)
+### questions/read-it  (o1; 1.3)
 Purpose: read a marked point.
 Needs: a point with its coordinates hidden.
+
+## Skipped
+- **1.2** the same picture as 1.1, turned.
 `;
 
 function chapter(): string {
   const root = mkdtempSync(join(tmpdir(), "pipeline-"));
   const dir = join(root, "authoring", "books", "b", "c");
   mkdirSync(join(dir, "source", "en"), { recursive: true });
-  writeFileSync(join(dir, "source", "en", "outline.yaml"), OUTLINE);
-  writeFileSync(join(dir, "source", "en", "text.txt"), TEXT);
+  writeFileSync(join(dir, "source", "en", "book.yaml"), "title: A chapter\n");
+  writeFileSync(join(dir, "source", "en", "items.yaml"), ITEMS);
   writeFileSync(join(dir, "plan.md"), PLAN);
   writeFileSync(join(dir, "boards.md"), BOARDS);
   const git = (...args: string[]) =>
@@ -120,17 +134,10 @@ const build = (root: string, lessons: readonly string[], art = true) => {
 };
 
 describe("reading plan.md and boards.md", () => {
-  it("reads the plan's sections: objectives with what they cite, skipped, lessons, families, props", () => {
+  it("reads the plan's sections: objectives, lessons, families, props", () => {
     const plan = readPlan(PLAN);
     expect(plan.goal).toBe("Read a point's coordinates.");
-    expect(plan.objectives).toEqual([
-      {
-        id: "o1",
-        text: "Read a point's coordinates. (fig3.1, example1)",
-        cites: ["fig3.1", "example1"],
-      },
-    ]);
-    expect(plan.skipped.map((s) => s.id)).toEqual(["fig3.2"]);
+    expect(plan.objectives).toEqual([{ id: "o1", text: "Read a point's coordinates.", cites: [] }]);
     expect(plan.lessons).toEqual([{ slug: "coordinates", cites: ["o1"] }]);
     expect(plan.families.map((f) => [f.id, f.cites])).toEqual([["read-it", ["o1"]]]);
     expect(plan.props.map((p) => p.id)).toEqual(["reuse"]);
@@ -138,68 +145,103 @@ describe("reading plan.md and boards.md", () => {
     expect(readPlan("## Goal\nx\n").missing).toContain("Objectives");
   });
 
-  it("reads each board and family with its lesson, what it cites, its purpose and needs", () => {
+  it("reads each board and family with its lesson, what it cites, its purpose and needs; the skips", () => {
     expect(readBoards(BOARDS)).toEqual([
       {
         lesson: "coordinates",
         id: "reading",
-        cites: ["o1", "fig3.1"],
+        cites: ["o1", "1.1"],
         purpose: "read P.",
         needs: "a point on a plane, its distances to the axes.",
       },
       {
         lesson: "coordinates",
         id: "questions/read-it",
-        cites: ["o1", "example1"],
+        cites: ["o1", "1.3"],
         purpose: "read a marked point.",
         needs: "a point with its coordinates hidden.",
       },
     ]);
+    expect(readSkips(BOARDS)).toEqual([
+      { id: "1.2", text: "the same picture as 1.1, turned.", cites: [] },
+    ]);
   });
 
-  it("checks the outline against the text: every figure, example, activity and exercise", () => {
-    expect(checkOutline([{ id: "fig3.1", kind: "figure" }], [TEXT])).toEqual([
-      "the text has fig3.2; the outline doesn't",
-      "the text has example1; the outline doesn't",
-    ]);
+  it("finds the item ids plan.md names: a list item's bold id, a citation ending a line or heading", () => {
+    const ids = new Set(["1", "1.2", "2.4"]);
+    const body = [
+      "- **o1** Read (1, 2) aloud. (1.2)",
+      "- **1** the section",
+      "### a-lesson  (o1, 2.4)",
+      "Riya walks to (1, 2), then home.",
+      "- Example 1, the first: (1, 2) and (2, 4) are two points.",
+    ].join("\n");
+    expect(idsIn(body, ids)).toEqual(["1.2", "1", "2.4"]);
+  });
+
+  it("counts a section or an exercise covered when any item in it is", () => {
+    const items = ["2", "2.30", "2.30.1", "2.30.2", "3"].map(
+      (id): Item => ({ id, kind: ItemKind.Text, page: 1, text: "" }),
+    );
+    expect(uncovered(items, new Set(["2.30.1"]))).toEqual(["2.30.2", "3"]);
   });
 });
 
 describe("a chapter's checks", () => {
-  it("hold when every citation exists, every outline item is covered and every objective served", () => {
+  it("hold when every citation exists, every item is cited or skipped and every objective served", () => {
     const root = chapter();
     const c = readChapter(root, "b", "c");
     expect(c.files.flatMap((f) => f.problems)).toEqual([]);
     expect(c.files.map((f) => [f.file, f.status, f.isApprovable])).toEqual([
-      ["source/en/outline.yaml", "approved", false],
       ["plan.md", "draft", true],
       ["boards.md", "approved", false],
     ]);
     expect(nextStep(c)?.step).toBe(Step.Plan);
   });
 
-  it("fail where an outline item is neither covered nor skipped, or skipped without a reason", () => {
+  it("fail where an item is neither cited nor skipped, or skipped without a reason", () => {
     const root = chapter();
-    edit(root, "plan.md", "- **fig3.2** the same picture as fig3.1, turned.", "");
-    expect(texts(root, Step.Plan)).toEqual([
-      'no objective covers fig3.2, and it isn\'t skipped ("## Skipped": "- **<id>** why")',
+    edit(root, "boards.md", "- **1.2** the same picture as 1.1, turned.", "");
+    expect(texts(root, Step.Boards)).toEqual([
+      'no board or family cites 1.2, and it isn\'t skipped ("## Skipped": "- **<id>** why")',
     ]);
-    edit(root, "plan.md", "## Skipped\n", "## Skipped\n- **fig3.2**\n- **fig9.9** gone\n");
+    edit(
+      root,
+      "boards.md",
+      "## Skipped\n",
+      "## Skipped\n- **1.2**\n- **9.9** gone\n- **1.1** shown\n",
+    );
+    expect(texts(root, Step.Boards)).toEqual([
+      "1.2 is skipped without a reason",
+      "9.9 is skipped, but isn't an item of source/en/items.yaml",
+      "1.1 is skipped, but a board cites it",
+    ]);
+  });
+
+  it("fail where plan.md names an item by its id", () => {
+    const root = chapter();
+    edit(
+      root,
+      "plan.md",
+      "- **o1** Read a point's coordinates.",
+      "- **o1** Read a point's coordinates. (1.1, 1.3)",
+    );
+    edit(root, "plan.md", "- Fig. 3.2:", "- **1.2**");
     expect(texts(root, Step.Plan)).toEqual([
-      "fig3.2 is skipped without a reason",
-      "fig9.9 is skipped, but isn't in the outline",
+      "plan.md has no ids: 1.1 is an item's (name it as the book does; boards.md cites it)",
+      "plan.md has no ids: 1.3 is an item's (name it as the book does; boards.md cites it)",
+      "plan.md has no ids: 1.2 is an item's (name it as the book does; boards.md cites it)",
     ]);
   });
 
   it("fail where the plan cites what isn't there, misses a section or gives a prop no verdict", () => {
     const root = chapter();
-    edit(root, "plan.md", "- **o1** Read", "- **o2** Plot one. (fig9.9)\n- **o1** Read");
+    edit(root, "plan.md", "- **o1** Read", "- **o2** Plot one.\n- **o1** Read");
     edit(root, "plan.md", "### coordinates  (o1)", "### coordinates  (o1, o7)");
     edit(root, "plan.md", "- **reuse**", "- **configure**");
     edit(root, "plan.md", "## Chapter art\nA dot on a grid.\n", "");
     expect(texts(root, Step.Plan)).toEqual([
       'plan.md has no "## Chapter art"',
-      "o2 cites fig9.9, not in the outline",
       "lesson coordinates cites o7: not an objective",
       "\"configure\" isn't a prop's verdict: one of reuse, extend, new",
     ]);
@@ -217,7 +259,7 @@ describe("a chapter's checks", () => {
     );
     expect(texts(root, Step.Boards)).toEqual([
       "plotting serves no objective",
-      "plotting cites o9: not an objective or in the outline",
+      "plotting cites o9: not an objective or an item of source/en/items.yaml",
       "plotting says nothing it needs (Needs:)",
       "questions/plot-it is under elsewhere: not a lesson in plan.md",
       "questions/plot-it isn't a question family in plan.md",
@@ -227,8 +269,11 @@ describe("a chapter's checks", () => {
 
   it("fail where a family of the plan has no entry in boards.md", () => {
     const root = chapter();
-    edit(root, "boards.md", /### questions\/read-it[\s\S]*$/, "");
-    expect(texts(root, Step.Boards)).toEqual(["questions/read-it is in plan.md, not in boards.md"]);
+    edit(root, "boards.md", /### questions\/read-it[\s\S]*?(?=## Skipped)/, "");
+    expect(texts(root, Step.Boards)).toEqual([
+      "questions/read-it is in plan.md, not in boards.md",
+      'no board or family cites 1.3, and it isn\'t skipped ("## Skipped": "- **<id>** why")',
+    ]);
   });
 
   it("hold while build.yaml has a part of the plan's lessons in order, each with its art", () => {
@@ -280,7 +325,6 @@ describe("approving the plan", () => {
   it("approves only plan.md, only what is committed, and records the commit", () => {
     const root = chapter();
     expect(() => approve(root, "b", "c", Step.Boards)).toThrow(/checked by the machine/);
-    expect(() => approve(root, "b", "c", Step.Outline)).toThrow(/checked by the machine/);
     const at = approve(root, "b", "c", Step.Plan);
     expect(readFileSync(file(root, "plan.md"), "utf8")).toMatch(
       new RegExp(`^---\napproved: ${at}\n---\n`),
@@ -292,32 +336,35 @@ describe("approving the plan", () => {
     expect(() => approve(root, "b", "c", Step.Plan)).toThrow(/not committed/);
   });
 
-  it("doesn't approve the plan while its checks fail, or the outline's do", () => {
+  it("doesn't approve the plan while its checks fail, or the source's do", () => {
     const root = chapter();
-    edit(root, "plan.md", "(fig3.1, example1)", "(fig9.9)");
-    commit(root, "a bad cite");
+    edit(root, "plan.md", "coordinates.\n", "coordinates. (1.1)\n");
+    commit(root, "an id in plan.md");
     expect(() => approve(root, "b", "c", Step.Plan)).toThrow(/plan.md's checks fail/);
-    const bad = chapter();
-    writeFileSync(
-      file(bad, "source/en/outline.yaml"),
-      `${OUTLINE}- { id: fig3.9, kind: figure }\n`,
+    const misread = chapter();
+    extract.problems = ["1.1: not found on page 1"];
+    expect(() => approve(misread, "b", "c", Step.Plan)).toThrow(
+      "the agent fixes source/en first (1.1: not found on page 1)",
     );
-    commit(bad, "an outline the text doesn't have");
-    expect(() => approve(bad, "b", "c", Step.Plan)).toThrow(
-      /the agent fixes source\/en\/outline.yaml first/,
+    extract.problems = [];
+    const none = chapter();
+    rmSync(file(none, "source/en/book.yaml"));
+    commit(none, "no extract");
+    expect(() => approve(none, "b", "c", Step.Plan)).toThrow(
+      /the agent fixes source\/en first \(not extracted yet/,
     );
   });
 
   it("a draft plan's failing checks don't fail the check; an approved plan's do", async () => {
     const { pipelineLines } = await import("./pipeline");
     const root = chapter();
-    edit(root, "plan.md", "- **fig3.2** the same picture as fig3.1, turned.", "");
+    edit(root, "plan.md", "coordinates.\n", "coordinates. (1.1)\n");
     expect(pipelineLines([readChapter(root, "b", "c")]).failed).toBe(0);
-    commit(root, "skip removed");
+    commit(root, "an id in plan.md");
     const ok = chapter();
     approve(ok, "b", "c", Step.Plan);
     commit(ok, "plan approved");
-    edit(ok, "plan.md", "- **fig3.2** the same picture as fig3.1, turned.", "");
+    edit(ok, "plan.md", "coordinates.\n", "coordinates. (1.1)\n");
     expect(pipelineLines([readChapter(ok, "b", "c")]).failed).toBe(1);
   });
 
@@ -345,16 +392,13 @@ describe("approving the plan", () => {
     expect(() => approve(root, "b", "c", Step.Plan)).not.toThrow();
   });
 
-  it("an approved plan whose outline changed since is to be checked again", () => {
+  it("an approved plan whose source items changed since is to be checked again", () => {
     const root = chapter();
     approve(root, "b", "c", Step.Plan);
     commit(root, "plan approved");
     expect(state(root, Step.Plan)).toMatchObject({ status: "approved", recheck: [] });
-    writeFileSync(
-      file(root, "source/en/outline.yaml"),
-      OUTLINE.replace("kind: example", "kind: example, page: 2"),
-    );
-    expect(state(root, Step.Plan)?.recheck).toEqual([Step.Outline]);
+    writeFileSync(file(root, "source/en/items.yaml"), ITEMS.replace("Read P.", "Read P and Q."));
+    expect(state(root, Step.Plan)?.recheck).toEqual(["source/en/items.yaml"]);
   });
 });
 
@@ -438,7 +482,7 @@ describe("an approval's commit", () => {
     takeBack(root, "b", "c", Step.Plan);
     commit(root, "taken back");
     approve(root, "b", "c", Step.Plan);
-    edit(root, "plan.md", "Riya reads a map.", "Riya reads a map, then walks.");
+    edit(root, "plan.md", "Riya reads a map,", "Riya reads a big map,");
     commit(root, "plan approved, and its story changed");
     expect(stampProblems(root, chapters())).toEqual([
       expect.stringMatching(

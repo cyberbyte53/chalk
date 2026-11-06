@@ -12,7 +12,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 
 - **How we make lessons is `authoring/guide.md`.** Read it always (its principles, how the person judges, lessons to copy; examples in `authoring/guide/`). Then read only the guide for your step in `authoring/taste/guides/` (`plan.md`, `pages.md`, `questions.md` or `props.md`). `authoring/taste/checks.md` is enforced by the build, and `authoring/taste/reviewer.md` is for reviewers.
 - **The steps are skills** in `.agents/skills/` (`.claude/skills` points there). In order:
-  1. `plan-chapter`: `source/en/outline.yaml`, then `plan.md` (the intent, the one file the person approves, in the editor's Chalk tree) and `boards.md` (each board and question family in detail, never approved) ([platform/docs/authoring-pipeline.md](platform/docs/authoring-pipeline.md)).
+  1. `plan-chapter`: `plan.md` (the intent, the one file the person approves, in the editor's Chalk tree) and `boards.md` (each board and question family in detail, never approved) ([platform/docs/authoring-pipeline.md](platform/docs/authoring-pipeline.md)).
   2. `build-props`: the props `plan.md` names, each new or changed prop's definition first, then its build.
   3. `build-lesson`: the first lesson alone, then the rest.
   4. `self-review`, run by a fresh agent.
