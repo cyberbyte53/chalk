@@ -94,7 +94,11 @@ pages whose image changed.
   `unmatched` with why.
 - **Terms are real:** each term's words are in the item it names.
 - **Figures exist** for every figure and table.
-- **Cites hold:** `plan.md` and `boards.md` cite English items that exist. When `items.yaml` changes after
+- **`plan.md` has no ids:** the person reads it, so it is plain words (its "Skipped" list names items as
+  the book does: "Activity 2, the dice game"). Every citation is in `boards.md`: each board and question
+  family cites the items it uses, and each skipped item is listed there with its id and why.
+- **Coverage:** every English item is cited in `boards.md` or skipped there with why.
+- **Cites hold:** `boards.md` cites English items that exist. When `items.yaml` changes after
   `plan.md` was approved, `plan.md` is to check again (as today when the source changes).
 - **The lessons use the book's terms:** a lesson line whose English has a term but whose other language
   doesn't have that term's counterpart is a problem on its line ("must"); the counterpart spelt another
@@ -104,9 +108,10 @@ pages whose image changed.
 ## Chapter 1
 
 1. English re-extracted with `pnpm source` (the same PDF; answers from today's outline checked against the
-   book's answers pages). `plan.md`, `boards.md` and the 9 threads that cite old ids re-cited to the new
-   ones: a reading pass (the old ids were summaries that merged or split paragraphs), the old→new list
-   shown to the person; `plan.md` approved again.
+   book's answers pages). `boards.md` and the 9 threads that cite old ids re-cited to the new ones (a
+   reading pass by the agent: the old ids were summaries that merged or split paragraphs; the person
+   isn't shown it); `plan.md` loses its id brackets, its Skipped list in the book's words, and is approved
+   again.
 2. Hindi: NCERT's own 2021-22 Hindi chapter 3 (the Wayback Machine's copy of 18 Oct 2021; address and
    sha256 in `book.yaml`), extracted and matched.
 3. The terms check on the lessons; each difference a thread on its board.
