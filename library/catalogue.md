@@ -63,6 +63,7 @@ A question answered by getting another prop into the right state, then pressing 
 | `isGraded` | true or false | changed by its own rules |
 | `about` | text | changed by its own rules |
 | `isMet` | true or false | input |
+| `answer` | {orNull: {en: "text", hi: "text"}} | input |
 
 | Action | Takes | |
 |---|---|---|
