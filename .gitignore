@@ -24,3 +24,6 @@ studio/src/content/.fixtures/
 
 # Each person's own Claude Code settings.
 .claude/settings.local.json
+
+# Agents' working copies (each may hold its own .env): never committed.
+.claude/worktrees/
