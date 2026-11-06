@@ -15,6 +15,7 @@
     "content": "tsx --tsconfig ../../tsconfig.base.json --import ./src/content/record-imports.ts src/content/cli.ts",
     "boundaries": "tsx --tsconfig ../../tsconfig.base.json src/boundaries-cli.ts",
     "catalogue": "tsx --tsconfig ../../tsconfig.base.json src/catalogue-cli.ts",
+    "said-compare": "tsx --tsconfig ../../tsconfig.base.json src/said-compare-cli.ts",
     "snapshot": "tsx --tsconfig ../../tsconfig.base.json --import ./src/content/record-imports.ts src/snapshot-cli.ts",
     "sound": "tsx --tsconfig ../../tsconfig.base.json src/sound/cli.ts",
     "check": "tsx --tsconfig ../../tsconfig.base.json src/check/all.ts",
