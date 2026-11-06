@@ -22,7 +22,7 @@ You run `pnpm build-content` (or `pnpm preview`, which builds on every save).
 2. **Name:** each page and question gets an id from where it lives (and a question's params). Events name a board by it and a piece by its address; nobody hands ids out.
 3. **Version:** each item's version is a hash of what made it, its code included, so every event says which version the learner saw.
 4. **Ship as code:** `build/` holds the course's shape and, per page or question, which module makes its board. The app makes each board from that same module.
-5. **Audio:** every line a board says is voiced once per language, in the voice set for its speaker in `authoring/voices.json` ([sound.md](./sound.md)). What's shown and what's said can differ: a line's spoken words are written with it when its screen words aren't how it is said ("→" is "the right arrow"). The voice only ever gets plain words. Clips are named by what was said, so only new or edited lines are voiced again.
+5. **Audio:** every line a board says is voiced once per language, in the voice set for its speaker in the guides' `voices` setting (`authoring/guide.md`) ([sound.md](./sound.md)). What's shown and what's said can differ: a line's spoken words are written with it when its screen words aren't how it is said ("→" is "the right arrow"). The voice only ever gets plain words. Clips are named by what was said, so only new or edited lines are voiced again.
 6. *(later)* **Bundle:** chapters packaged and uploaded to a CDN.
 
 ## 3. The learner opens the app

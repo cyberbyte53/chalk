@@ -3,7 +3,7 @@ import { z } from "zod";
 import type { TtsProvider } from "./providers/provider";
 
 /**
- * Who speaks, in which voice (authoring/voices.json): each character of the cast, per language, a
+ * Who speaks, in which voice (the guides' `voices` setting, authoring/guide.md): each character, per language, a
  * voice named with its provider ("piper:hi_IN-rohan-medium"). Lessons name characters (a line's
  * `speaker`), never voices: changing a voice, or a provider, is a change here only, and different
  * languages may use different providers.
@@ -33,14 +33,14 @@ export function voiceFor(
   const ref = cast[who]?.[locale];
   if (ref === undefined)
     throw new Error(
-      `voices.json has no "${who}" in its cast (it has ${Object.keys(cast).join(", ")})`,
+      `the guides' voices have no "${who}" (they have ${Object.keys(cast).join(", ")})`,
     );
   const at = ref.indexOf(":");
   const name = ref.slice(0, at);
   const provider = providers[name];
   if (provider === undefined)
     throw new Error(
-      `voices.json: "${who}" speaks with "${name}", which isn't a voice provider (there are ${Object.keys(providers).join(", ")})`,
+      `the guides' voices: "${who}" speaks with "${name}", which isn't a voice provider (there are ${Object.keys(providers).join(", ")})`,
     );
   return { provider, voice: ref.slice(at + 1), ref };
 }

@@ -101,7 +101,7 @@ The app's own sounds ship with the app and are kept for offline with it; a chapt
 
 ## Not done yet
 
-- Settings with overrides (app → book → chapter): voices have one level today (`authoring/voices.json`); sounds need none until a book wants its own.
+- Settings with overrides (Chalk → book → chapter): voices are the guides' `voices` setting, the nearest `guide.md` winning (`pnpm guide <path>`); sounds need none until a book wants its own.
 
 ## Not now
 

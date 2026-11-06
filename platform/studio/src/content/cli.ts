@@ -184,7 +184,7 @@ async function build(commit: string): Promise<BuildResult> {
     modules: propModules,
     commit,
     cache: { dir: cacheDir, root, propDirs },
-    voices: join(root, "authoring", "voices.json"),
+    guides: join(root, "authoring"),
   });
   report(result);
   return result;
@@ -227,7 +227,17 @@ function watchAndRebuild(): void {
       rebuild();
     }, 200);
   });
-  console.log(`watching ${contentDir} …`);
+  // The guides set who voices whom: a saved guide.md rebuilds too (the cache keeps every chapter whose
+  // voices didn't change).
+  watch(join(root, "authoring"), { recursive: true }, (_event, file) => {
+    if (file === null || !file.endsWith("guide.md")) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      console.log(`\n↻ ${file} changed`);
+      rebuild();
+    }, 200);
+  });
+  console.log(`watching ${contentDir} and the guides …`);
 }
 
 /**

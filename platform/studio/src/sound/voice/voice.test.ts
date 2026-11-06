@@ -127,7 +127,7 @@ describe("the cast", () => {
     expect(voiceFor(cast, providers, undefined, "en")).toMatchObject({ voice: "narrator" });
   });
   it("says who is missing, and which providers there are", () => {
-    expect(() => voiceFor(cast, providers, "riya", "en")).toThrow(/no "riya" in its cast/);
+    expect(() => voiceFor(cast, providers, "riya", "en")).toThrow(/voices have no "riya"/);
     expect(() =>
       voiceFor({ narrator: { en: "cloud:x", hi: "cloud:x" } }, providers, undefined, "en"),
     ).toThrow(/"cloud", which isn't a voice provider/);

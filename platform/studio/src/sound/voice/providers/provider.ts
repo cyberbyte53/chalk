@@ -1,6 +1,6 @@
 /** A text-to-speech provider. Publish uses one to turn every spoken line into an audio file. */
 export type TtsProvider = {
-  /** Short name used in voices.json and on the command line. */
+  /** Short name used in the guides' voices setting and on the command line. */
   id: string;
   /** File extension of the audio it makes. */
   extension: string;

@@ -160,10 +160,14 @@ const realBooks = new Set<string>();
  * cast, each build would start Piper and record real speech for clips thrown away after the test.
  */
 const toneVoices = (dir: string) => {
-  const file = join(dir, "voices.json");
-  const voice = { en: "tone:test", hi: "tone:test" };
-  writeFileSync(file, JSON.stringify({ cast: { narrator: voice, riya: voice, aman: voice } }));
-  return file;
+  const authoring = `${dir}-authoring`;
+  mkdirSync(authoring, { recursive: true });
+  const voice = "{ en: 'tone:test', hi: 'tone:test' }";
+  writeFileSync(
+    join(authoring, "guide.md"),
+    `# Test\n\n## Settings\n\n\`\`\`yaml\nvoices:\n  narrator: ${voice}\n  riya: ${voice}\n  aman: ${voice}\n\`\`\`\n`,
+  );
+  return authoring;
 };
 
 const build = (dir: string, commit = "test") =>
@@ -172,9 +176,7 @@ const build = (dir: string, commit = "test") =>
     modules: propModules,
     commit,
     modulesFile: join(dir, MODULES_FILE),
-    voices: realBooks.has(dir)
-      ? join(contentDir, "..", "authoring", "voices.json")
-      : toneVoices(dir),
+    guides: realBooks.has(dir) ? join(contentDir, "..", "authoring") : toneVoices(dir),
   });
 const messages = (result: Awaited<ReturnType<typeof build>>) =>
   result.problems.map((p) => `${p.where}: ${p.message}`).join("\n");

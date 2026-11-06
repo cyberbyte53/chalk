@@ -65,6 +65,7 @@ import { PropRole, segment } from "@chalk/prop";
 import type { AnyProp } from "@chalk/prop";
 import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
+import { type GuideSettings, guideAt } from "../guide";
 import type { Problem } from "../problem";
 import { SOUND_LIST, castSchema, voiceChapter, providers as voiceProviders } from "../sound/voice";
 import { unspeakable } from "../sound/voice/said";
@@ -204,8 +205,8 @@ type Context = {
   boards: Map<string, Board>;
   /** Module file (absolute) → the hash of its code, and each file's hash, computed once. */
   codeHashes: Map<string, string>;
-  /** Who voices whom (authoring/voices.json): where it is, when the build is given one. */
-  voices: string | undefined;
+  /** The authoring folder, whose guides (guide.md) set who voices whom; none: no voices. */
+  guides: string | undefined;
   /** Files imported while building (content paths, relative), for a chapter's dependency list. */
   imported: string[];
   cache: ChapterCache | undefined;
@@ -1023,14 +1024,19 @@ async function voiceOf(c: Context, chapterPath: string, isWhole: boolean): Promi
     }));
   // A chapter whose boards say nothing has nothing to voice.
   if (boards.every((b) => b.lines.length === 0)) return;
-  if (c.voices === undefined || !existsSync(c.voices)) {
-    report(c, where, "its boards say lines, but no voices are set (authoring/voices.json)");
+  const voices = voicesFor(c, chapterPath);
+  if (voices === undefined) {
+    report(
+      c,
+      where,
+      "its boards say lines, but no guide sets voices (authoring/guide.md, ## Settings)",
+    );
     return;
   }
   const soundDir = join(c.contentDir, chapterPath, SOUND_DIR);
   mkdirSync(soundDir, { recursive: true });
   try {
-    const { cast } = castSchema.parse(JSON.parse(readFileSync(c.voices, "utf8")));
+    const { cast } = castSchema.parse({ cast: voices });
     const voiced = await voiceChapter({
       soundDir,
       boards,
@@ -1176,8 +1182,19 @@ function entryFile(cache: ChapterCache, chapterPath: string): string {
 /** Bump when what an entry records changes: every older entry is then rebuilt. */
 const CACHE_FORMAT = "4";
 
-function keyOf(c: Context, deps: readonly string[]): string {
-  return fingerprint(deps, [CACHE_FORMAT, process.version, c.contentDir]);
+function keyOf(c: Context, chapterPath: string, deps: readonly string[]): string {
+  // The guides count only by the voices they set: editing their prose rebuilds nothing.
+  return fingerprint(deps, [
+    CACHE_FORMAT,
+    process.version,
+    c.contentDir,
+    JSON.stringify(voicesFor(c, chapterPath) ?? null),
+  ]);
+}
+
+/** Who voices whom in a chapter: its guides' settings, merged (the nearest level wins). */
+function voicesFor(c: Context, chapterPath: string): GuideSettings["voices"] {
+  return c.guides === undefined ? undefined : guideAt(c.guides, chapterPath).settings.voices;
 }
 
 function sharedContentFiles(c: Context): string[] {
@@ -1203,12 +1220,11 @@ async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | und
     ...filesUnder(chapterDir).filter(
       (f) => !relative(chapterDir, f).startsWith(`${SOUND_DIR}${sep}`),
     ),
-    ...(c.voices === undefined ? [] : [c.voices]),
   ];
   // The folder's own files are listed afresh: a file added or removed changes the key.
   if (
     entry !== undefined &&
-    keyOf(c, [...entry.deps, ...chapterFiles]) === entry.key &&
+    keyOf(c, chapterPath, [...entry.deps, ...chapterFiles]) === entry.key &&
     isSoundComplete(c, chapterPath, entry)
   ) {
     for (const [path, json] of entry.files) c.files.set(path, json);
@@ -1254,7 +1270,7 @@ async function cachedChapter(c: Context, chapterPath: string): Promise<Ref | und
     ...propFiles,
   ].filter((f) => !f.startsWith(`${join(c.contentDir, chapterPath)}/`));
   const fresh: ChapterEntry = {
-    key: keyOf(c, [...deps, ...chapterFiles]),
+    key: keyOf(c, chapterPath, [...deps, ...chapterFiles]),
     deps: [...new Set(deps)],
     ref,
     files,
@@ -1346,10 +1362,10 @@ export async function buildContent(options: {
   modulesFile?: string;
   /** Where built chapters are kept between runs (with what they read); no cache when absent. */
   cache?: { dir: string; root: string; propDirs: Readonly<Record<string, string>> };
-  /** Who voices whom (authoring/voices.json); without it, a chapter that says lines is a problem. */
-  voices?: string;
+  /** The authoring folder: its guides set who voices whom; without them, a chapter that says lines is a problem. */
+  guides?: string;
 }): Promise<BuildResult> {
-  const { cache, modulesFile, modules, voices: _, ...rest } = options;
+  const { cache, modulesFile, modules, guides: _, ...rest } = options;
   const c: Context = {
     ...rest,
     modules,
@@ -1370,7 +1386,7 @@ export async function buildContent(options: {
     reach: { boards: {}, modules: {} },
     boards: new Map(),
     codeHashes: new Map(),
-    voices: options.voices,
+    guides: options.guides,
   };
   const graph: GraphFile = existsSync(join(c.contentDir, ContentFile.Graph))
     ? (readYaml(c, ContentFile.Graph, graphFileSchema) ?? { edges: [] })

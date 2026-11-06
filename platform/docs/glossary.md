@@ -44,7 +44,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Item id, address** | What events name: a board by its built item's id (a hash of where it lives in content/), a node on it by its address (`<item id>#<address>`) | `ItemRef`, `nodeMachineId`, `boardKey` |
 | **Speak** | A line's spoken words, written with it when its screen words aren't how it is said ("√2" → "the square root of 2"); without it, the screen words are said (bold marks dropped) | `speak`, `spokenText` |
 | **Script** | Every line a board says, in order, with who says it: what the voice is made from, and what the preview and review show | `scriptOf`, `ScriptLine` |
-| **Cast** | Who speaks in which voice: each character (the narrator, Riya, Aman), per language, a voice named with its provider (`piper:hi_IN-rohan-medium`) | `authoring/voices.json`, `voiceFor` |
+| **Cast** | Who speaks in which voice: each character (the narrator, Riya, Aman), per language, a voice named with its provider (`piper:hi_IN-rohan-medium`) | the guides' `voices` setting (`authoring/guide.md`), `voiceFor` |
 | **Clip** | Audio the engine plays: **voiced** (a phrase of a line, made from its words by a speaker's voice, kept in its chapter's `sound/`, named by voice and words) or **chosen** (a sound from the library) | `sound.json`, `voiceChapter` |
 | **Speakable** | What a voice may be given: letters, digits, spaces, ordinary punctuation. Anything else is refused when audio is made | `unspeakable` |
 | **Voice provider** | What turns words into a clip, on this machine or a service: Piper now (a cloud or AI voice the same way: one file) | `TtsProvider`, `sound/voice/providers/` |

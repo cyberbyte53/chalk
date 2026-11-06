@@ -1,8 +1,8 @@
 # Piper voice (on this machine)
 
-The voice the content build voices chapters with (`authoring/voices.json` names Piper voices), using [Piper](https://github.com/OHF-Voice/piper1-gpl) (rhasspy): small neural voices that run on a laptop's CPU, many times faster than real time. Lines are made once and kept (named by their words), so only new or edited lines are spoken again.
+The voice the content build voices chapters with (the guides' `voices` setting (`authoring/guide.md`) names Piper voices), using [Piper](https://github.com/OHF-Voice/piper1-gpl) (rhasspy): small neural voices that run on a laptop's CPU, many times faster than real time. Lines are made once and kept (named by their words), so only new or edited lines are spoken again.
 
-Which voice speaks each language is in `authoring/voices.json` under `piper`, by voice file name.
+Which voice speaks each language is in the guides' `voices` setting (`authoring/guide.md`) under `piper`, by voice file name.
 
 ## One-time setup (Mac)
 

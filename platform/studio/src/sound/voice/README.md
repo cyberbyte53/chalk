@@ -13,7 +13,7 @@ Every line a board shows is also said aloud. This module makes the clips; the pl
 | Step | File | What it does | Swap it by |
 |---|---|---|---|
 | Collect | the content build (`content/build.ts`) | every board of the chapter, as built, read for its script (`scriptOf` in `@chalk/player`): each line, its piece, its speaker | — |
-| Cast | `cast.ts` | who says it → which voice: `authoring/voices.json`, per character and language, `provider:voice` | editing the cast |
+| Cast | `cast.ts` | who says it → which voice: the guides' `voices` setting (`authoring/guide.md`), per character and language, `provider:voice` | editing the cast |
 | Speak | `providers/` | words + voice → a clip file. Piper (on this machine), a test tone | adding a file here and a line in `index.ts` |
 | Keep | `clips.ts` | each clip named by its words and voice, so it is made once; its length measured | — |
 

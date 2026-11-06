@@ -59,8 +59,9 @@ in prose. Comments are pinned where they apply; whoever opened one closes it.
 
 ## Settings
 
-Exact values code reads. A book's or chapter's `guide.md` may set any of them again; the nearest wins, key
-by key. (Draft: the code still reads `authoring/voices.json` until this is wired in.)
+Exact values code reads (`pnpm guide <book>/<chapter>` shows what applies, and from where). A book's or
+chapter's `guide.md` may set any of them again: the nearest wins, key by key. `voices`: who speaks in
+which voice, per language (a line that names no one is the narrator's).
 
 ```yaml
 voices:

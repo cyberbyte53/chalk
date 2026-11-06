@@ -15,7 +15,7 @@ let worker: Worker | undefined;
 
 /**
  * Piper (rhasspy, MIT), on this machine: small neural voices that speak many times faster than real
- * time on a laptop's CPU. Each "voice" in voices.json is a voice file's name in voice-piper/voices/
+ * time on a laptop's CPU. Each "voice" in the guides' voices setting is a voice file's name in voice-piper/voices/
  * ("hi_IN-priyamvada-medium").
  */
 export const piperProvider: TtsProvider = {
