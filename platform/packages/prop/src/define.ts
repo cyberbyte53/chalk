@@ -407,7 +407,7 @@ export function prop<
   }
   // A frame's layout: its provider gives a frame, and its order names only parts drawn in it.
   const layout = spec.layout;
-  if (layout?.kind === "frame") {
+  if (layout !== undefined) {
     if (spec.children?.[layout.provider]?.frame === undefined)
       throw new Error(`${spec.type}: ${layout.provider} provides no frame`);
     const drawn = new Set([layout.provider, ...layout.children, ...(layout.below ?? [])]);

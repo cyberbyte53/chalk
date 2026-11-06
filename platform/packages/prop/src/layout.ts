@@ -1,6 +1,6 @@
 /**
- * How a prop made of parts lays them out (platform/docs/board-model.md): in a column or row, or
- * round a frame's picture (one part provides the frame; the others draw in it, above, below or
+ * How a prop made of parts lays them out (platform/docs/board-model.md): round a frame's
+ * picture (one part provides the frame; the others draw in it, above, below or
  * among the controls), and which parts are showing now.
  */
 
@@ -21,20 +21,18 @@ export type Place = (typeof Place)[keyof typeof Place];
 /** The places inside the picture, back to front. */
 export const IN_PICTURE: readonly Place[] = [Place.Back, Place.On, Place.Front];
 
-export type GroupLayoutSpec<N extends string = string> =
-  | { kind: "column" | "row"; children: readonly N[] }
-  | {
-      kind: "frame";
-      provider: N;
-      children: readonly N[];
-      backdrop?: N;
-      below?: readonly N[];
-      /**
-       * Who draws first in each place, when it isn't the provider, then `children`, then `below`
-       * (`{ front: ["plotting", "clues"] }`): each list names every child drawing there.
-       */
-      order?: { readonly [P in Place]?: readonly N[] };
-    };
+/** How a prop made of parts lays them out: round a frame one of them provides (the plane's). */
+export type GroupLayoutSpec<N extends string = string> = {
+  provider: N;
+  children: readonly N[];
+  backdrop?: N;
+  below?: readonly N[];
+  /**
+   * Who draws first in each place, when it isn't the provider, then `children`, then `below`
+   * (`{ front: ["plotting", "clues"] }`): each list names every child drawing there.
+   */
+  order?: { readonly [P in Place]?: readonly N[] };
+};
 
 const SHOWN = Symbol("shown");
 

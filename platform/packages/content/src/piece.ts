@@ -2,23 +2,13 @@ import type { Size } from "@chalk/prop";
 import { z } from "zod";
 import { type Localized, localizedSchema } from "./localized";
 
+/** A board is a column of pieces, top to bottom, with a space at its foot. */
 export const PieceKind = {
   Column: "column",
-  Row: "row",
-  Overlay: "overlay",
   Space: "space",
   Prop: "prop",
 } as const;
 export type PieceKind = (typeof PieceKind)[keyof typeof PieceKind];
-
-export const Pin = {
-  TopLeft: "topLeft",
-  TopRight: "topRight",
-  BottomLeft: "bottomLeft",
-  BottomRight: "bottomRight",
-  Center: "center",
-} as const;
-export type Pin = (typeof Pin)[keyof typeof Pin];
 
 /** Names appear in rules (`line.marker`), so they are identifiers: camelCase, no spaces or dashes. */
 export const NAME_PATTERN = /^[a-z][A-Za-z0-9]*$/;
@@ -44,14 +34,6 @@ export type Piece =
       isHidden?: boolean;
       gap?: number;
       children: Piece[];
-    }
-  | { kind: "row"; name: string; isHidden?: boolean; gap?: number; children: Piece[] }
-  | {
-      kind: "overlay";
-      name: string;
-      isHidden?: boolean;
-      children: Piece[];
-      pins?: Record<string, Pin>;
     }
   | { kind: "space"; name: string; isHidden?: boolean }
   | {
@@ -80,19 +62,6 @@ export const pieceSchema: z.ZodType<Piece, z.ZodTypeDef, unknown> = z.lazy(() =>
       kind: z.literal(PieceKind.Column),
       gap: z.number().optional(),
       children: z.array(pieceSchema),
-    }),
-    z.object({
-      ...base,
-      kind: z.literal(PieceKind.Row),
-      gap: z.number().optional(),
-      children: z.array(pieceSchema),
-    }),
-    z.object({
-      ...base,
-      kind: z.literal(PieceKind.Overlay),
-      children: z.array(pieceSchema).min(1),
-      /** Child name → where it is pinned on top of the first child. */
-      pins: z.record(z.string(), z.nativeEnum(Pin)).optional(),
     }),
     z.object({ ...base, kind: z.literal(PieceKind.Space) }),
     z.object({

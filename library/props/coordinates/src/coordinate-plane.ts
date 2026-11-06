@@ -111,5 +111,5 @@ export const coordinatePlane = prop({
   show: Object.fromEntries(NAMES.map((n) => [n, (me: object) => isOn(me, n)])),
   summary: (me) =>
     `the coordinate plane from ${me.window.xMin} to ${me.window.xMax} across and ${me.window.yMin} to ${me.window.yMax} up`,
-  layout: { kind: "frame", provider: "plane", children: NAMES, order },
+  layout: { provider: "plane", children: NAMES, order },
 });

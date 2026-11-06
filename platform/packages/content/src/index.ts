@@ -87,7 +87,6 @@ export {
 export {
   NAME_PATTERN,
   nameSchema,
-  Pin,
   PieceKind,
   pieceSchema,
   type Piece,

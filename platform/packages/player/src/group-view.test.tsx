@@ -98,7 +98,7 @@ const twoPoints = prop({
   children: { paper, p: dot, q: dot, count: counter },
   give: { count: { n: (me) => me.p.x + me.q.x } },
   summary: () => "two points",
-  layout: { kind: "frame", provider: "paper", children: ["p", "q"], below: ["count"] },
+  layout: { provider: "paper", children: ["p", "q"], below: ["count"] },
 });
 /** The prop placed with these fields, part by part, as the board reads it. */
 const viewOf = (def: Parameters<typeof propModule>[0], given: Record<string, unknown> = {}) =>
@@ -183,7 +183,6 @@ describe("a part drawing in several places", () => {
     children: { paper, p: dot, q: dot },
     summary: () => "layered",
     layout: {
-      kind: "frame",
       provider: "paper",
       children: ["p", "q"],
       order: { on: ["paper", "q", "p"] },
@@ -245,7 +244,6 @@ describe("a part drawing in several places", () => {
       children: { paper, p: dot, q: dot },
       summary: () => "",
       layout: {
-        kind: "frame",
         provider: "paper",
         children: ["p", "q"],
         order: { on: ["paper", "p"] },
@@ -265,7 +263,7 @@ describe("a part drawing in several places", () => {
         children: { paper, p: dot, count: counter },
         give: { count: { n: () => 0 } },
         summary: () => "",
-        layout: { kind: "frame", provider: "paper", children: ["p"], order: { on: ["count"] } },
+        layout: { provider: "paper", children: ["p"], order: { on: ["count"] } },
       }),
     ).toThrow(/order.on names "count"/);
   });
