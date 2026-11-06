@@ -1,6 +1,6 @@
 # Guide: writing overview pages
 
-Read by `build-lesson` when writing `overview.ts`. Look at the exemplars before writing.
+Read by `build-lesson` when writing `overview.ts`. Look at the lessons to copy in `authoring/guide.md` before writing.
 
 **Shape of a lesson.** First page is titled with the idea's name and opens from where the last lesson left off, with the characters. Then pick one of two orders and say which in the plan:
 - **Discover → state** (the idea is intuitive to find; division lemma): one short story page poses the question *before* the prop, the student plays and finds it, the story wraps up; the formal statement with its why on the next page.

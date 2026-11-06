@@ -10,7 +10,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 
 ## Content work
 
-- **The taste is `authoring/taste/`.** Read `constitution.md` always. Then read only the guide for your step (`guides/plan.md`, `pages.md`, `questions.md` or `props.md`) and the exemplars. `checks.md` is enforced by the build, and `reviewer.md` is for reviewers.
+- **How we make lessons is `authoring/guide.md`.** Read it always (its principles, how the person judges, lessons to copy; examples in `authoring/guide/`). Then read only the guide for your step in `authoring/taste/guides/` (`plan.md`, `pages.md`, `questions.md` or `props.md`). `authoring/taste/checks.md` is enforced by the build, and `authoring/taste/reviewer.md` is for reviewers.
 - **The steps are skills** in `.agents/skills/` (`.claude/skills` points there). In order:
   1. `plan-chapter`: `brief.md`, `source/outline.yaml`, `objectives.md`, `flow.md`, one at a time, each approved by the person in the editor (the Chalk tree) ([platform/docs/authoring-pipeline.md](platform/docs/authoring-pipeline.md)).
   2. `build-props`: the props match (`props.md`, approved by the person), each new or changed prop's definition first, then its build.

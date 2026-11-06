@@ -9,7 +9,7 @@ Props come first: lessons are written against their actions and fields. A prop's
 
 ## Read first
 
-`authoring/taste/constitution.md`, `authoring/taste/guides/props.md`, `platform/docs/making-a-prop.md`, and one prop from `authoring/taste/exemplars.md`.
+`authoring/guide.md`, `authoring/taste/guides/props.md`, `platform/docs/making-a-prop.md`, and one prop in `library/props/` as it is built (`coordinates`: its parts and their entries).
 
 ## Pre-conditions
 

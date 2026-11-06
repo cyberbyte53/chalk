@@ -1,6 +1,6 @@
 # Reviewer rubric
 
-Read only by the fresh-context reviewer (`self-review`, run by an agent that did not build the lesson). It gets: this file, the constitution, the rendered boards, the source pages. Not the builder's notes. Read as a student of that class on a phone, then as the teacher who'll be asked about it.
+Read only by the fresh-context reviewer (`self-review`, run by an agent that did not build the lesson). It gets: this file, `authoring/guide.md` (the principles), the rendered boards, the source pages. Not the builder's notes. Read as a student of that class on a phone, then as the teacher who'll be asked about it.
 
 Output per finding: board, piece, which principle, what a student would do wrong, suggested fix. Then a verdict: ready for the person / needs another pass. Don't list what's fine.
 

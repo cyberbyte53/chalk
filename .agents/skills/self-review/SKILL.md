@@ -9,7 +9,7 @@ The person's review is the expensive part; this pass catches everything a fresh 
 
 ## Read first
 
-`authoring/taste/reviewer.md` (the rubric) and `authoring/taste/constitution.md`. Not the builder's run notes.
+`authoring/taste/reviewer.md` (the rubric) and `authoring/guide.md`. Not the builder's run notes.
 
 ## Steps
 

@@ -15,6 +15,6 @@
 | [drawing.md](./drawing.md) | Drawing with `@chalk/draw`; the d3 list |
 | [making-art.md](./making-art.md) | A book's, chapter's or lesson's picture |
 
-What a lesson should be (the story, the teaching rules, questions, writing, props) is [authoring/taste/](../../authoring/taste/README.md): the taste in layers (constitution, stage guides, exemplars, checks, reviewer rubric), next to the books it governs. Comments on content: [comments.md](comments.md).
+What a lesson should be is [authoring/guide.md](../../authoring/guide.md): the principles, how the person judges, lessons to copy, with examples in `authoring/guide/`; each step's own guide, the reviewer's rubric and the checks are in [authoring/taste/](../../authoring/taste/README.md) until they move into their skills. Comments on content: [comments.md](comments.md).
 
 Product thinking (hypothesis, system design, research) lives in the Chalk project docs, not here.

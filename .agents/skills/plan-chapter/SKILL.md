@@ -16,7 +16,7 @@ A chapter is planned in files that each answer one question and end at a gate (`
 
 ## Read first
 
-1. `authoring/taste/constitution.md`, then `authoring/taste/guides/plan.md`.
+1. `authoring/guide.md`, then `authoring/taste/guides/plan.md`.
 2. The other chapters of the same book in `authoring/books/<book>/`: characters, places and timeline continue across chapters.
 3. The whole source: the chapter's `source/`, every page. Read activities, examples, boxes and exercises too.
 4. Where the chapter stands: the Chalk tree in the editor, or `cd platform/studio && npx tsx --tsconfig ../../tsconfig.base.json src/pipeline-cli.ts`. Start at the first file that is missing, failing its checks, or to be checked again.
