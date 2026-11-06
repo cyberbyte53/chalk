@@ -778,7 +778,7 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       if (node.kind === "chapter")
         return [
           making(node.path, title(readJson(join(build, `${node.path}.json`)), name)),
-          ...(concepts.length === 0
+          ...(concepts.length === 0 && questions.length === 0
             ? []
             : [
                 {
@@ -789,7 +789,6 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
                   description: `${concepts.length}`,
                 } satisfies Node,
               ]),
-          ...questions,
         ];
       return [
         ...concepts.map((ref): Node => {
@@ -803,6 +802,8 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
             ...(state?.isToSelfReview === true ? { toReview: state.why ?? "" } : {}),
           };
         }),
+        // The question bank last, in the same view as the lessons it tests.
+        ...questions,
       ];
     }
     if (node.kind === "questions") {
