@@ -21,37 +21,78 @@ Status: plan, agreed with the person step by step and reviewed three times. Noth
   Cheap: an agent's writing and re-checking. Ours alone: boards play the same every time, so a machine
   checks what works before anyone looks.
 
-## Files
+## Two trees, the same paths
+
+`content/` is what ships (code the app runs, built and voiced); `authoring/` is how it is made (books,
+sources, plans, taste, comments), never shipped and never read by the build. They mirror each other: a
+chapter is `class9-maths/coordinate-geometry` in both, so its two halves are always found together (the
+editor's tree joins them by path). Rules: the same path in both; `content/` never reads `authoring/` (the
+boundaries check enforces it); `authoring/` holds no code.
 
 ```
-authoring/
-  taste.md               where every agent starts: the principles, the person's taste, a few before/after
-                         examples from his threads, two or three lessons to copy; for details, it links
-                         into taste/
-  taste/                 what taste.md links to, added only when needed:
-    hi.md                  how we write Hindi: tone and register (तुम, not आप; plain words). How numbers and
-                           letters are said is code (the language's number words), not prose
-    voices.json            who speaks in which voice, per language (moved from authoring/; the voice code's
-                           path updated)
+content/                                  WHAT SHIPS
+  <book>/          build.yaml, art.tsx (its cover)
+    <chapter>/     build.yaml, art.tsx (its tile), sound/
+      <lesson>/    build.yaml, art.tsx (its card), overview.ts
+      questions/<family>/  family.ts, params.yaml
 
+authoring/                                HOW IT IS MADE
+  taste.md, taste/                          Chalk-wide taste (below); taste/hi.md, taste/sounds.json, …
+  books-pdf/                                whole NCERT books as downloaded (today's authoring/sources/)
+  props/<package>/comments.yaml             comments on a prop (props are shared by every book)
   books/<book>/
-    taste.md             only what differs from the top (its tone, look, languages, its cover's idea)
-    taste/               only if this book has detail files of its own
-    <chapter>/
-      source/            FACTS, extracted once, never edited by hand
-        en/                book.pdf, outline.yaml (every section, figure, example, exercise: id, page, words),
-                           page images (a figure is cropped only when a board needs it)
-        hi/, bn/, …        attached by the same extraction: book.pdf, outline.yaml (the same ids, this book's
-                           own words), terms.yaml (each key term with its word forms and page)
-      plan.md            INTENT, English: the one file the person approves
-      boards.md          DETAIL, English: the agent's design, never gated
-      jugnu-cases.yaml   Jugnu's stuck children, played (the person approves it, as today)
-      comments.yaml      threads
-      reviewed.yaml      the reviewer's pass per board
+    taste.md, taste/                        only what differs for this book (taste/ only if needed)
+    <chapter>/                              the same path as in content/
+      taste.md                                only if the chapter differs
+      source/en/                              FACTS, extracted once, never edited by hand: book.pdf,
+                                              outline.yaml (every section, figure, example, exercise: id,
+                                              page, words), page images (a figure cropped only when needed)
+      source/hi/, bn/, …                      attached by the same extraction: book.pdf, outline.yaml
+                                              (the same ids, this book's words), terms.yaml (each key term
+                                              with its word forms and page)
+      plan.md                                 INTENT, English: the one file the person approves
+      boards.md                               DETAIL, English: the agent's design, never gated
+      jugnu-cases.yaml, comments.yaml, reviewed.yaml
+      <lesson>/taste.md                       rare: a lesson that differs
 ```
 
-Lessons, families (`family.ts`, `params.yaml`), `art.tsx` and `build.yaml` stay in `content/`; the plan
-holds only their ideas. `runs/`, `authoring/reviews/` and `authoring/retros/` go.
+Clean-up: `authoring/reviews/`, `authoring/retros/` and each chapter's `runs/` go (threads replace them);
+`authoring/archive/` goes (old comments from before the restart); `authoring/sounds/votes.json` (the
+person's verdicts on sounds, by ear) is taste: `authoring/taste/sounds.json`; `authoring/sources/` becomes
+`authoring/books-pdf/`, so "source" means only a chapter's extracted facts.
+
+## Taste: settings that cascade, prose read in order
+
+Each level's `taste.md` holds two kinds of thing, each inherited the way that fits it (as Hugo's front
+matter `cascade`, `.editorconfig`, `tsconfig`'s `extends` and `CLAUDE.md` do):
+
+- **Settings**, in its front matter: exact values (languages, Hindi address, each character's voice per
+  language, the look). **Merged key by key; the nearest level wins**; a lower file sets only what it
+  changes. The voice code and the language list read the merged result (`authoring/voices.json` becomes
+  the top file's `voices:`).
+- **Guidance**, its markdown: principles, taste, a few before/after examples from the person's threads,
+  two or three lessons to copy; for details it links into its `taste/` folder (`taste/hi.md`: how we
+  write Hindi, tone and register; how numbers and letters are said is code, the language's number words).
+  **Read top to bottom; a lower level adds, and on a real conflict the nearer wins and says so** ("unlike
+  the book, …").
+- **Principles marked `always`** at the top can't be changed below: the loader refuses a lower file that
+  tries.
+
+```yaml
+# authoring/taste.md                          # authoring/books/class9-maths/taste.md
+---                                           ---
+languages: [en, hi]                           voices:
+hindi_address: तुम                               narrator: { hi: piper:hi_IN-other }
+voices:                                       ---
+  narrator: { en: piper:en_US-lessac-high, hi: piper:hi_IN-rohan-medium }
+  riya:     { en: piper:en_US-amy-medium,  hi: piper:hi_IN-priyamvada-medium }
+---
+```
+
+**One loader** (`platform/studio`, about a page): given a book, chapter or lesson, it walks down from the
+top and returns the effective settings (each value labelled with the level it came from) and the guidance
+(each level's prose, in order, labelled). **`pnpm taste <path>`** prints both; every skill's first step is
+to read it for where it works, so no agent hunts for files or misses a level.
 
 **The principles** (top of `taste.md`, kept by every level below): nothing unexplained; each step is
 needed before it is given, and nothing gives it away; every piece earns its place (when in doubt, cut);
@@ -106,7 +147,7 @@ Everything is made and reviewed in English; a language is added the same way eac
 2. the same extraction as English: its outline aligned item by item (same ids, its own words), its terms
    with their word forms and pages;
 3. each English line translated with what grounds it: its board and lesson, the passages of this book that
-   board cites, the terms, `taste/hi.md`;
+   board cites, the terms, the language's guidance (`taste/hi.md`);
 4. machine checks: a mapped term in a line has its mapped term in the translation; a line marked as quoting
    an outline id matches that id's words; every English item has its aligned item, or a reason;
 5. reviewed by someone who reads the language.
@@ -126,20 +167,21 @@ the person closes" changes). The person's open comments are the hand-over of a s
 | brief, objectives, flow, props.md, each approved | `plan.md` (approved) + `boards.md` |
 | `source/` | `source/en/`, its checks extended to the plan and boards |
 | threads, reviews, run notes, retros | threads (weight, opener closes) |
-| `reviewed.yaml` | stays; gains what students get (hashing only each speaker's voice) |
+| `reviewed.yaml` | stays; gains what students get (hashing each speaker's effective voice) |
 | `show`, preview, prop panel, comments on boards and on a file's words, `changes`, `affected` | stay |
 | `pipeline` and the tree | the chapter's state: plan approved? boards left? open threads, whose turn? done? |
 | 6 skills | 4: plan, build, apply-comments, the reviewer |
-| constitution, exemplars | `taste.md` (its details in `taste/`) |
+| constitution, exemplars | the top `taste.md` (its details in `taste/`) |
 | guides, `reviewer.md` | into their skills (the reviewer's into its skill and agent file) |
 | `checks.md` | the checks it lists are built, step by step (below); the file goes |
-| `voices.json` | `taste/voices.json`, unchanged inside |
+| `voices.json` | the top `taste.md`'s `voices:` setting, read through the loader |
 
 ## Order
 
 Each step built and proved on its own, and committed.
 
-1. **Taste:** `taste.md` from the audit, `taste/hi.md`, `voices.json` moved into `taste/`; the person reads them.
+1. **Taste:** the loader and `pnpm taste`; the top `taste.md` (from the audit, with `voices.json` as its
+   `voices:`), `taste/hi.md`, `taste/sounds.json`; the clean-up of `authoring/`; the person reads the taste.
 2. **Threads:** weight, opener closes.
 3. **`plan.md` and `boards.md`** and their checks; chapter 1's four planning files rewritten into them (the
    person is told first, and approves `plan.md` once).
