@@ -9,7 +9,7 @@ There is no hand-over: the person comments on boards, pieces, props and planning
 
 You read and write threads only with the tools: `comments` to read, `comment` to write, `ask` to ask (the `chalk` server writes as a fixer). Never edit the comments.yaml files. The writer refuses what a fixer may not do (reopen, close someone else's thread, withdraw or delete someone else's) and says why: tell the person rather than working around it.
 
-A thread on a prop (`library/props/…`) is about that prop wherever it is used, not one board: a change to its fields, actions or signals is its definition and a thread first (the build-props skill, § 2), then code, checking every place `affected` lists. A thread on a planning file is fixed in that file; what it reaches is said by the pipeline step (files to be checked again).
+A thread on a prop (`library/props/…`) is about that prop wherever it is used, not one board: a change to its fields, actions or signals is its definition and a thread first (the build-props skill, § 2), then code, checking every place `affected` lists. A thread on a planning file is fixed in that file: on `plan.md`, say first that the change will need the person's approval again, then follow its ids into `boards.md`; the pipeline step says what no longer holds.
 
 ## Steps
 

@@ -40,7 +40,7 @@ They are versioned with the content they are about. **One writer** (`platform/st
 ```
 
 - **`by`, `role`**: who started it: the person (a comment), a reviewer (a finding), a fixer (a question, a decision, a proposal; or, `from: chat`, the person's words filed in their name).
-- **`board`**: the board, by its build path. Its address is `content/<board>` (with `#<target>` for what on it): open it at `?dev&at=content/<board>`, or `show` it. Absent for a thread on a planning file (then `source` points at the file and line, `authoring/books/<book>/<chapter>/flow.md:12`, and `quote` has the exact words).
+- **`board`**: the board, by its build path. Its address is `content/<board>` (with `#<target>` for what on it): open it at `?dev&at=content/<board>`, or `show` it. Absent for a thread on a planning file (then `source` points at the file and line, `authoring/books/<book>/<chapter>/plan.md:12`, and `quote` has the exact words).
 - **`target`**: what was picked on the board, by address: the piece's name, then the groups and the part, joined by `/` (`which/option`). Absent for the whole board. If the board changes and the address no longer finds anything, the preview shows the thread as detached.
 - **`prop`**: the prop's type, for a thread on a prop (see below).
 - **`source`**: the file and line the piece was written at, from `build/sources.json`.
@@ -63,7 +63,7 @@ They are versioned with the content they are about. **One writer** (`platform/st
 
 **Whose turn it is** is kept on the thread (`turn`), and every view reads that one field (`waitsOn` in comments.ts; the dev server gives it out as `waitsOn`). Every write sets it (`turnAfter`): **ready goes back to whoever opened the thread** (the person checks his comment's fix, a reviewer its finding's, a fixer its own proposal's), to close it or send it back; planned is the fixer's; the person's words and a reviewer's are the fixer's to answer; a fixer's words without a move (a question, a reason, what it decided on a consider) are the reviewer's on a reviewer's finding, else the person's. An `ask` is always the person's. The writer may say it instead (`turn`). A thread written before turns were kept gets its turn worked out once, when read. Nothing is ever hidden by turn: the editor's Threads list opens with **Your turn**, then **Agents' turn**; a board's threads show the live ones beside it and fold the settled ones into one line; a thread on a planning file also shows in the file, on the words it is about (VS Code's comments): reply or close it there, or start one with ⌥⌘/ on selected words or the + in the margin.
 
-Approving a planning file needs every thread on it closed or withdrawn.
+Approving `plan.md` needs every thread on it closed or withdrawn.
 
 ## Who may do what
 
@@ -123,7 +123,7 @@ When an agent is stuck or at a real decision, it asks the person with the `ask` 
 
 - **`comments`** reads. `at` (threads at or under an address: a chapter, a board, a prop, or a planning file or folder, `authoring/books/…`) and `unanswered` (what waits on the caller's role) filter. The threads still open (open, planned, ready) come in full, each saying whose turn it is, a finding's weight, an ask's options and the one he picked; settled ones (closed, withdrawn) are counted, read with `closed: true`, and `id` reads any one thread in full. An answer grows with the work open, not with history (lesson 1's: 129 KB before, 18 KB now).
 - **`ask`** starts an agent's question to the person, with its options (above).
-- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, a prop wherever it is used, `library/props/<package>/<type>`, or a planning file, `authoring/books/<book>/<chapter>/flow.md`, with `quote`: the exact words), and `from`, `turn`: start a thread (a reviewer's, with its `weight`); a fixer's `plan` writes its plan on it at once. With `id` and `at`: re-point that thread, its place being gone (the text says where it went and why). Messages come back whole, never cut. Starting a thread where one was settled (the same board and target, or prop and target), the answer names it with its last words, at most three: what was decided comes up when the point may be raised again. Agents never see file paths; the writer finds the file from the id or the address.
+- **`comment`** writes, one or many at once. With `id`: write on that thread, maybe with a `status` move. With `at` (an address: a board or something on it, `content/…#piece/part`, a prop wherever it is used, `library/props/<package>/<type>`, or a planning file, `authoring/books/<book>/<chapter>/plan.md`, with `quote`: the exact words), and `from`, `turn`: start a thread (a reviewer's, with its `weight`); a fixer's `plan` writes its plan on it at once. With `id` and `at`: re-point that thread, its place being gone (the text says where it went and why). Messages come back whole, never cut. Starting a thread where one was settled (the same board and target, or prop and target), the answer names it with its last words, at most three: what was decided comes up when the point may be raised again. Agents never see file paths; the writer finds the file from the id or the address.
 
 ## A thread whose place is gone
 
@@ -131,7 +131,7 @@ A board renamed, a piece merged, a prop removed, a planning file's words rewritt
 
 ## Threads on planning files
 
-The planning files (`brief.md`, `objectives.md`, `flow.md`, `props.md`: [authoring-pipeline.md](authoring-pipeline.md)) take threads like the plan did: on the exact words (`quote`), with the line they were at (`source: authoring/books/<book>/<chapter>/flow.md:12`), filed in the chapter's comments.yaml. In the editor, select the words and run "Chalk: Comment on the selected words"; an agent with `comment`. An agent's question at a gate is such a thread, on the words it is about: answered where everything else is, never left in a section someone forgot to empty.
+The planning files (`plan.md`, `boards.md`, the outline: [authoring-pipeline.md](authoring-pipeline.md)) take threads: on the exact words (`quote`), with the line they were at (`source: authoring/books/<book>/<chapter>/plan.md:12`), filed in the chapter's comments.yaml. In the editor, select the words and run "Chalk: Comment on the selected words"; an agent with `comment`. An agent's question at a gate is such a thread, on the words it is about: answered where everything else is, never left in a section someone forgot to empty.
 
 ## Threads on a prop
 

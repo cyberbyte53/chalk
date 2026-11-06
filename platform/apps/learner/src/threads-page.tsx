@@ -50,11 +50,11 @@ function standing(threads: readonly Thread[]): string {
 
 const placeOf = (t: Thread): string =>
   t.board === undefined
-    ? // A planning file: its name in the chapter (outline.yaml, flow.md).
+    ? // A planning file: its name in the chapter (outline.yaml, plan.md).
       (t.source ?? "plan")
         .replace(/:\d.*$/, "")
         .replace(/^authoring\/books\/[^/]+\/[^/]+\//, "")
-        .replace(/^source\//, "")
+        .replace(/^source\/([a-z]{2}\/)?/, "")
     : `${t.board.split("/").at(-1)}${t.target ? ` · ${t.target}` : ""}${t.prop ? ` · prop ${t.prop}` : ""}`;
 
 /** Which threads are folded, kept across visits (a convenience only). */

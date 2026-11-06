@@ -333,7 +333,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       {
         title: "Where the chapters stand",
         description:
-          "Every chapter's planning files and lessons: each file's state (draft, approved, changed since approved), its failing checks, what is to be checked again, why an approval can't be given yet, and which lessons wait on a self-review. `at` keeps to one book or chapter (\"authoring/books/class9-maths/coordinate-geometry\").",
+          "Every chapter's planning files (the outline, plan.md, boards.md) and lessons: each file's state (plan.md: draft, approved, changed since approved), its failing checks, what is to be checked again, why the plan's approval can't be given yet, which lessons wait on a self-review, and how many of each lesson's boards and families are built and reviewed. `at` keeps to one book or chapter (\"authoring/books/class9-maths/coordinate-geometry\").",
         inputSchema: {
           at: z
             .string()
@@ -1096,7 +1096,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             .string()
             .optional()
             .describe(
-              'An address: threads at or under it ("content/class10-maths/real-numbers", "library/props/basics/choice"), or a planning file or folder ("authoring/books/class9-maths/coordinate-geometry/flow.md").',
+              'An address: threads at or under it ("content/class10-maths/real-numbers", "library/props/basics/choice"), or a planning file or folder ("authoring/books/class9-maths/coordinate-geometry/plan.md").',
             ),
           unanswered: z
             .boolean()
@@ -1222,7 +1222,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         .string()
         .optional()
         .describe(
-          'Where, by address. A board or something on it ("content/…/<board>#piece/part"), a prop wherever it is used ("library/props/<package>/<type>", or #part), or a planning file ("authoring/books/<book>/<chapter>/flow.md", with quote). With id: re-point that thread here, its place being gone (the text says where it went and why).',
+          'Where, by address. A board or something on it ("content/…/<board>#piece/part"), a prop wherever it is used ("library/props/<package>/<type>", or #part), or a planning file ("authoring/books/<book>/<chapter>/plan.md", with quote). With id: re-point that thread here, its place being gone (the text says where it went and why).',
         ),
       quote: z
         .string()

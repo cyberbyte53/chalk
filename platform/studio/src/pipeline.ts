@@ -3,46 +3,60 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { readComments, waitsOn } from "./comments";
-import { changesUnder } from "./reviewed";
+import { type BoardChange, changesUnder } from "./reviewed";
 
 /**
  * A chapter's planning files (platform/docs/authoring-pipeline.md), in authoring/books/<book>/<chapter>/:
- * the brief, the source's outline, the objectives, the flow and the props match. Each answers one
- * question and ends at a gate: the machine's (what is read and cited holds together) and, for all
- * but the outline, the person's (`approved: <commit>` in its front matter, written only when they
- * approve). Nothing else is stored: whether a file changed since it was approved, and what an
- * earlier file's change sends back to recheck, are worked out from git each time.
+ * the source's outline (`source/en/outline.yaml`, the machine's), `plan.md` (the intent, the one
+ * file the person approves: `approved: <commit>` in its front matter, written only when he does)
+ * and `boards.md` (the agent's detail, never approved). Each is checked by the machine: what is
+ * read and cited holds together, and the build follows the plan. Nothing else is stored: whether
+ * the plan changed since it was approved, and whether what it is written from changed since, are
+ * worked out from git each time; each board's state (built, reviewed) from the build.
  */
 
 export const Step = {
-  Brief: "brief",
   Outline: "outline",
-  Objectives: "objectives",
-  Flow: "flow",
-  Props: "props",
+  Plan: "plan",
+  Boards: "boards",
 } as const;
 export type Step = (typeof Step)[keyof typeof Step];
 
-/** The files, in pipeline order. The outline's gate is the machine's only. */
-export const FILES: readonly { step: Step; file: string; isApproved: boolean }[] = [
-  { step: Step.Brief, file: "brief.md", isApproved: true },
-  { step: Step.Outline, file: "source/outline.yaml", isApproved: false },
-  { step: Step.Objectives, file: "objectives.md", isApproved: true },
-  { step: Step.Flow, file: "flow.md", isApproved: true },
-  { step: Step.Props, file: "props.md", isApproved: true },
+/** The files, in order. Only the plan is approved by the person; the rest are the machine's. */
+export const FILES: readonly { step: Step; file: string; isApprovable: boolean }[] = [
+  { step: Step.Outline, file: "source/en/outline.yaml", isApprovable: false },
+  { step: Step.Plan, file: "plan.md", isApprovable: true },
+  { step: Step.Boards, file: "boards.md", isApprovable: false },
 ];
+
+/** Where a chapter's source is: the English book, its text and its outline. */
+export const SOURCE_DIR = join("source", "en");
 
 /**
  * What each file is written from: an approved file whose sources changed since it was approved is
  * to be checked again.
  */
 const READS: Readonly<Record<Step, readonly Step[]>> = {
-  [Step.Brief]: [],
   [Step.Outline]: [],
-  [Step.Objectives]: [Step.Brief, Step.Outline],
-  [Step.Flow]: [Step.Brief, Step.Objectives],
-  [Step.Props]: [Step.Brief, Step.Objectives, Step.Flow],
+  [Step.Plan]: [Step.Outline],
+  [Step.Boards]: [],
 };
+
+/** What a prop in the plan is: used as it is, given something new, or made. */
+export const Verdict = { Reuse: "reuse", Extend: "extend", New: "new" } as const;
+export type Verdict = (typeof Verdict)[keyof typeof Verdict];
+const VERDICTS: readonly string[] = Object.values(Verdict);
+
+/** The sections plan.md has, each a `## ` heading. `Skipped` is optional. */
+export const PLAN_SECTIONS = [
+  "Goal",
+  "Objectives",
+  "Story",
+  "Lessons",
+  "Chapter art",
+  "Props",
+  "Question families",
+] as const;
 
 // ---- Reading the files ----
 
@@ -56,11 +70,6 @@ export function splitFront(text: string): { front: Record<string, string>; body:
     if (kv?.[1] !== undefined) front[kv[1]] = (kv[2] ?? "").trim();
   }
   return { front, body: text.slice(m[0].length) };
-}
-
-/** The brief: who the chapter is for and what is in or out, in the person's words. */
-export function readBrief(body: string): { problems: string[] } {
-  return { problems: body.trim() === "" ? ["the brief is empty"] : [] };
 }
 
 export type OutlineItem = { id: string; kind: string } & Record<string, unknown>;
@@ -106,70 +115,147 @@ const citesOf = (line: string): string[] => {
         .filter((x) => /^[\w.-]+$/.test(x));
 };
 
-export type Objective = { id: string; text: string; cites: string[] };
-
-/** `- **o5** what a student can do. (def-abscissa, fig3.10)` */
-export function readObjectives(body: string): Objective[] {
-  const out: Objective[] = [];
+/** A markdown body's `## ` sections, by heading in lower case: the lines under each. */
+export function sectionsOf(body: string): Map<string, string[]> {
+  const out = new Map<string, string[]>();
+  let at: string[] | undefined;
   for (const line of body.split("\n")) {
-    const m = /^\s*-\s+\*\*(\w+)\*\*\s+(.*)$/.exec(line);
+    const h = /^##\s+(.+?)\s*$/.exec(line);
+    if (h?.[1] !== undefined) {
+      at = [];
+      out.set(h[1].toLowerCase(), at);
+    } else at?.push(line);
+  }
+  return out;
+}
+
+/** An item of a list: `- **<id>** its words. (what it cites)`. */
+export type Item = { id: string; text: string; cites: string[] };
+
+/** The list items in some lines: `- **o5** what a student can do. (def-abscissa, fig3.10)`. */
+export function readItems(lines: readonly string[]): Item[] {
+  const out: Item[] = [];
+  for (const line of lines) {
+    const m = /^\s*-\s+\*\*([\w.-]+)\*\*:?\s*(.*)$/.exec(line);
     if (m?.[1] !== undefined) out.push({ id: m[1], text: m[2] ?? "", cites: citesOf(m[2] ?? "") });
   }
   return out;
 }
 
-export type FlowBoard = { lesson: string; id: string; cites: string[]; needs?: string };
+/** A lesson in the plan: `### <slug>  (o1, o2)`, its slug as in build.yaml. */
+export type PlanLesson = { slug: string; cites: string[] };
 
-/** `## <lesson>`, then `### <board>  (o5, o9; fig3.15)` with `Purpose:` and `Needs:` lines. */
-export function readFlow(body: string): FlowBoard[] {
-  const out: FlowBoard[] = [];
+export type Plan = {
+  goal: string;
+  objectives: Item[];
+  /** Outline items left out on purpose, each with why: `## Skipped`, `- **activity2** why.` */
+  skipped: Item[];
+  lessons: PlanLesson[];
+  /** The question families, by their folder under questions/, each citing objectives. */
+  families: Item[];
+  /** The props, each `- **reuse|extend|new** <prop>: …`. */
+  props: Item[];
+  /** Sections plan.md must have and hasn't. */
+  missing: string[];
+};
+
+/** plan.md's body, by its sections (PLAN_SECTIONS). */
+export function readPlan(body: string): Plan {
+  const sections = sectionsOf(body);
+  const lines = (name: string) => sections.get(name.toLowerCase()) ?? [];
+  const lessons: PlanLesson[] = [];
+  for (const line of lines("Lessons")) {
+    const l = /^###\s+([\w-]+)\s*(.*)$/.exec(line);
+    if (l?.[1] !== undefined) lessons.push({ slug: l[1], cites: citesOf(l[2] ?? "") });
+  }
+  return {
+    goal: lines("Goal").join(" ").trim(),
+    objectives: readItems(lines("Objectives")),
+    skipped: readItems(lines("Skipped")),
+    lessons,
+    families: readItems(lines("Question families")),
+    props: readItems(lines("Props")),
+    missing: PLAN_SECTIONS.filter((s) => !sections.has(s.toLowerCase())),
+  };
+}
+
+/**
+ * A board, or a question family (`questions/<family>`), in boards.md: the lesson it is in (its
+ * `## ` heading), what its own heading cites (objectives; outline ids), and its lines.
+ */
+export type BoardPlan = {
+  lesson: string;
+  id: string;
+  cites: string[];
+  purpose?: string;
+  needs?: string;
+};
+
+/** `## <lesson>`, then `### <board>  (o5, o9; fig3.15)` with `Purpose:`, `Beat:`, `Needs:`, `Props:`. */
+export function readBoards(body: string): BoardPlan[] {
+  const out: BoardPlan[] = [];
   let lesson = "";
   for (const line of body.split("\n")) {
     const l = /^##\s+([\w-]+)\s*$/.exec(line);
     if (l?.[1] !== undefined) lesson = l[1];
-    const b = /^###\s+([\w-]+)\s*(.*)$/.exec(line);
+    const b = /^###\s+([\w/-]+)\s*(.*)$/.exec(line);
     if (b?.[1] !== undefined) out.push({ lesson, id: b[1], cites: citesOf(b[2] ?? "") });
-    const n = /^Needs:\s*(.*)$/.exec(line);
     const last = out.at(-1);
-    if (n !== null && last !== undefined) last.needs = n[1] ?? "";
+    const field = /^(Purpose|Needs):\s*(.*)$/.exec(line);
+    if (field !== null && last !== undefined) {
+      if (field[1] === "Purpose") last.purpose = field[2] ?? "";
+      else last.needs = field[2] ?? "";
+    }
   }
   return out;
 }
 
-export const VERDICTS = ["reuse", "configure", "extend", "new", "no prop"] as const;
-export type MatchRow = { need: string; boards: string[]; verdict: string };
+/** A family's entry in boards.md is `questions/<family>`. */
+export const FAMILY_PREFIX = "questions/";
 
-/** The props match: a table with Need, Boards and Verdict columns (more are fine). */
-export function readMatch(body: string): { rows: MatchRow[]; problems: string[] } {
-  const lines = body.split("\n").filter((l) => /^\s*\|/.test(l));
-  const cells = (l: string) =>
-    l
-      .trim()
-      .replace(/^\||\|$/g, "")
-      .split("|")
-      .map((c) => c.trim());
-  const head = lines[0] === undefined ? [] : cells(lines[0]).map((c) => c.toLowerCase());
-  const col = (name: string) => head.findIndex((h) => h === name);
-  const [need, boards, verdict] = [col("need"), col("boards"), col("verdict")];
-  if (need === -1 || boards === -1 || verdict === -1)
-    return { rows: [], problems: ["no table with Need, Boards and Verdict columns"] };
-  const rows = lines.slice(2).map((l) => {
-    const c = cells(l);
-    return {
-      need: c[need] ?? "",
-      boards: (c[boards] ?? "")
-        .split(",")
-        .map((b) => b.replace(/[`*]/g, "").trim())
-        .filter(Boolean),
-      verdict: (c[verdict] ?? "").replace(/[`*]/g, "").trim().toLowerCase(),
-    };
-  });
-  const problems = rows
-    .filter((r) => !VERDICTS.some((v) => r.verdict.startsWith(v)))
-    .map(
-      (r) => `"${r.need}": its verdict is one of ${VERDICTS.join(", ")} (it says "${r.verdict}")`,
-    );
-  return { rows, problems };
+/**
+ * The build against the plan: build.yaml's concepts are the plan's lessons, in its order (a part
+ * while they are built; all of them once the chapter is ready), each with its art.tsx (its card);
+ * a ready chapter has its own art.tsx (its tile) too.
+ */
+export function checkBuild(
+  root: string,
+  book: string,
+  chapter: string,
+  lessons: readonly string[],
+  isReady: boolean,
+): string[] {
+  const dir = join(root, "content", book, chapter);
+  const built = conceptsOf(root, book, chapter);
+  const problems: string[] = [];
+  let last = -1;
+  for (const slug of built) {
+    const at = lessons.indexOf(slug);
+    if (at === -1) problems.push(`build.yaml has ${slug}: not a lesson in plan.md`);
+    else if (at < last) problems.push(`build.yaml has ${slug} out of the plan's order`);
+    else last = at;
+    if (!existsSync(join(dir, slug, "art.tsx"))) problems.push(`${slug} has no art.tsx (its card)`);
+  }
+  if (isReady) {
+    const left = lessons.filter((l) => !built.includes(l));
+    if (left.length > 0)
+      problems.push(`the chapter is ready, but build.yaml doesn't have ${left.join(", ")}`);
+    if (!existsSync(join(dir, "art.tsx")))
+      problems.push("the chapter is ready, but has no art.tsx (its tile)");
+  }
+  return problems;
+}
+
+/** The concepts (lessons) a chapter's build.yaml lists, in order; none when it has none. */
+function conceptsOf(root: string, book: string, chapter: string): string[] {
+  const manifest = join(root, "content", book, chapter, "build.yaml");
+  if (!existsSync(manifest)) return [];
+  try {
+    const raw = parseYaml(readFileSync(manifest, "utf8")) as { concepts?: unknown };
+    return Array.isArray(raw.concepts) ? raw.concepts.map(String) : [];
+  } catch {
+    return [];
+  }
 }
 
 // ---- A chapter's files, their gates, and what they reach ----
@@ -180,12 +266,14 @@ export type Problem = { text: string; about?: string };
 export type FileState = {
   step: Step;
   file: string;
+  /** Whether the person approves it (plan.md); the others are the machine's alone. */
+  isApprovable: boolean;
   /** missing; draft (not approved); approved; changed (since it was approved). */
   status: "missing" | "draft" | "approved" | "changed";
   approvedAt?: string;
   /** Where its gate fails: the machine's checks of what it reads and cites, each with the id it is about. */
   problems: Problem[];
-  /** Facts the gate lists, for the person to decide on (what nothing cites). */
+  /** Facts the gate lists, for the person to decide on (what no board cites). */
   notes: string[];
   /** Approved, but a file it is written from changed since: which. */
   recheck: Step[];
@@ -194,11 +282,28 @@ export type FileState = {
 };
 
 /**
- * A built lesson, and whether a reviewer has looked at it since it last changed: a lesson whose
- * folder changed (in a commit, or not yet committed) after the last self-review run note naming it
- * (`runs/*-self-review.md`, committed) is to be self-reviewed before the person sees it.
+ * A built lesson, and whether a reviewer has looked at it since it last changed: a lesson with a
+ * board new or changed since it was passed (reviewed.ts) is to be self-reviewed before the person
+ * sees it.
  */
 export type LessonState = { slug: string; isToSelfReview: boolean; why?: string };
+
+/** Where a board (or question family) of boards.md stands, worked out from the build, never written. */
+export const BoardStatus = {
+  /** In boards.md, not built. */
+  Planned: "planned",
+  /** In the build. */
+  Built: "built",
+  /** In the build, and passed by a reviewer as it is built now (`changesUnder`). */
+  Reviewed: "reviewed",
+} as const;
+export type BoardStatus = (typeof BoardStatus)[keyof typeof BoardStatus];
+
+/**
+ * A board's (or family's) state. "Waiting" (on a new prop whose showing thread the person hasn't
+ * closed) isn't worked out yet: a thread doesn't say which prop it shows.
+ */
+export type BoardState = { lesson: string; id: string; status: BoardStatus };
 
 export type Chapter = {
   book: string;
@@ -206,28 +311,58 @@ export type Chapter = {
   dir: string;
   files: FileState[];
   lessons: LessonState[];
+  /** Each board and family in boards.md, in its order, and where it stands. */
+  boards: BoardState[];
 };
 
 /** Each lesson the chapter builds, and whether it waits on a self-review (see `LessonState`). */
-export function readLessons(root: string, book: string, chapter: string): LessonState[] {
-  const manifest = join(root, "content", book, chapter, "build.yaml");
-  if (!existsSync(manifest)) return [];
-  let slugs: string[] = [];
-  try {
-    const raw = parseYaml(readFileSync(manifest, "utf8")) as { concepts?: unknown };
-    slugs = Array.isArray(raw.concepts) ? raw.concepts.map(String) : [];
-  } catch {
-    return [];
-  }
+export function readLessons(
+  root: string,
+  book: string,
+  chapter: string,
+  changes?: readonly BoardChange[],
+): LessonState[] {
+  const slugs = conceptsOf(root, book, chapter);
+  if (slugs.length === 0) return [];
+  const all = changes ?? changesUnder(root, `${book}/${chapter}`);
   // A lesson waits on a self-review while any of its boards is new or changed since it was passed
   // (reviewed.ts: the board as built now, against its record when passed).
   return slugs.map((slug) => {
-    const pending = changesUnder(root, `${book}/${chapter}/${slug}`).filter(
-      (c) => c.status === "new" || c.status === "changed" || c.status === "gone",
+    const pending = all.filter(
+      (c) =>
+        c.board.startsWith(`${book}/${chapter}/${slug}/`) &&
+        (c.status === "new" || c.status === "changed" || c.status === "gone"),
     );
     if (pending.length === 0) return { slug, isToSelfReview: false };
     const names = pending.map((c) => `${c.board.split("/").at(-1)} (${c.status})`).join(", ");
     return { slug, isToSelfReview: true, why: names };
+  });
+}
+
+/**
+ * Where each board and family of boards.md stands, from the build: a lesson's board is built as
+ * `<book>/<chapter>/<lesson>/<board>`; a family as its questions under `<book>/<chapter>/questions/<family>/`.
+ */
+export function boardStates(
+  book: string,
+  chapter: string,
+  boards: readonly BoardPlan[],
+  changes: readonly BoardChange[],
+): BoardState[] {
+  return boards.map(({ lesson, id }) => {
+    const key = id.startsWith(FAMILY_PREFIX)
+      ? `${book}/${chapter}/${id}`
+      : `${book}/${chapter}/${lesson}/${id}`;
+    const mine = changes.filter(
+      (c) => c.status !== "gone" && (c.board === key || c.board.startsWith(`${key}/`)),
+    );
+    const status =
+      mine.length === 0
+        ? BoardStatus.Planned
+        : mine.every((c) => c.status === "unchanged")
+          ? BoardStatus.Reviewed
+          : BoardStatus.Built;
+    return { lesson, id, status };
   });
 }
 
@@ -300,23 +435,21 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
     }
   })();
   const outlineIds = new Set(outline.map((i) => i.id));
-  const objectives = readObjectives(splitFront(texts.objectives ?? "").body);
-  const objectiveIds = new Set(objectives.map((o) => o.id));
-  const flow = readFlow(splitFront(texts.flow ?? "").body);
-  const boardIds = new Set(flow.map((b) => b.id));
+  const planText = splitFront(texts.plan ?? "");
+  const plan = readPlan(planText.body);
+  const isReady = planText.front.ready === "true";
+  const objectiveIds = new Set(plan.objectives.map((o) => o.id));
+  const lessonSlugs = plan.lessons.map((l) => l.slug);
+  const familyIds = new Set(plan.families.map((f) => `${FAMILY_PREFIX}${f.id}`));
+  const boards = readBoards(splitFront(texts.boards ?? "").body);
 
   const gate: Record<Step, { problems: Problem[]; notes: string[] }> = {
-    brief: {
-      problems: readBrief(splitFront(texts.brief ?? "").body).problems.map((text) => ({ text })),
-      notes: [],
-    },
     outline: { problems: [], notes: [] },
-    objectives: { problems: [], notes: [] },
-    flow: { problems: [], notes: [] },
-    props: { problems: [], notes: [] },
+    plan: { problems: [], notes: [] },
+    boards: { problems: [], notes: [] },
   };
   if (texts.outline !== undefined) {
-    const sourceDir = join(abs, "source");
+    const sourceDir = join(abs, SOURCE_DIR);
     const txts = existsSync(sourceDir)
       ? readdirSync(sourceDir)
           .filter((n) => n.endsWith(".txt"))
@@ -324,70 +457,123 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
       : [];
     gate.outline.problems.push(...checkOutline(outline, txts).map((text) => ({ text })));
     if (txts.length === 0)
-      gate.outline.notes.push("no text in source/ to check the outline against");
-  }
-  for (const o of objectives) {
-    if (o.cites.length === 0)
-      gate.objectives.problems.push({ text: `${o.id} cites nothing in the outline`, about: o.id });
-    for (const c of o.cites)
-      if (!outlineIds.has(c))
-        gate.objectives.problems.push({
-          text: `${o.id} cites ${c}, not in the outline`,
-          about: o.id,
-        });
-  }
-  const citedByObjectives = new Set(objectives.flatMap((o) => o.cites));
-  const uncited = outline.filter((i) => !citedByObjectives.has(i.id)).map((i) => i.id);
-  if (texts.objectives !== undefined && uncited.length > 0)
-    gate.objectives.notes.push(`no objective cites: ${uncited.join(", ")}`);
-  const seenBoards = new Set<string>();
-  for (const b of flow) {
-    if (seenBoards.has(b.id))
-      gate.flow.problems.push({ text: `board ${b.id} is listed twice`, about: b.id });
-    seenBoards.add(b.id);
-    if (!b.cites.some((c) => objectiveIds.has(c)))
-      gate.flow.problems.push({ text: `board ${b.id} serves no objective`, about: b.id });
-    for (const c of b.cites)
-      if (!objectiveIds.has(c) && !outlineIds.has(c))
-        gate.flow.problems.push({
-          text: `board ${b.id} cites ${c}: not an objective or in the outline`,
-          about: b.id,
-        });
-    if (b.needs === undefined || b.needs.trim() === "")
-      gate.flow.problems.push({
-        text: `board ${b.id} says nothing it needs (Needs:)`,
-        about: b.id,
-      });
-  }
-  if (texts.flow !== undefined) {
-    const served = new Set(flow.flatMap((b) => b.cites));
-    for (const o of objectives)
-      if (!served.has(o.id)) gate.flow.problems.push({ text: `no board serves ${o.id}` });
-    const shown = outline
-      .filter((i) => ["figure", "example", "activity"].includes(i.kind) && !served.has(i.id))
-      .map((i) => i.id);
-    if (shown.length > 0) gate.flow.notes.push(`no board cites: ${shown.join(", ")}`);
-  }
-  if (texts.props !== undefined) {
-    const match = readMatch(splitFront(texts.props).body);
-    gate.props.problems.push(...match.problems.map((text) => ({ text })));
-    const matched = new Set(match.rows.flatMap((r) => r.boards));
-    for (const b of flow)
-      if (!matched.has(b.id))
-        gate.props.problems.push({ text: `board ${b.id}'s need has no verdict` });
-    for (const b of matched)
-      if (!boardIds.has(b))
-        gate.props.problems.push({ text: `${b} is not a board in the flow`, about: b });
+      gate.outline.notes.push(`no text in ${SOURCE_DIR}/ to check the outline against`);
   }
 
-  const files: FileState[] = FILES.map(({ step, file, isApproved }) => {
+  // plan.md: its sections; every objective cites the outline; every outline item is covered by an
+  // objective or skipped, with why; lessons and families cite objectives it has; props have a verdict.
+  if (texts.plan !== undefined) {
+    const p = gate.plan.problems;
+    for (const s of plan.missing) p.push({ text: `plan.md has no "## ${s}"` });
+    if (!plan.missing.includes("Goal") && plan.goal === "") p.push({ text: "the goal is empty" });
+    const seen = new Set<string>();
+    for (const o of plan.objectives) {
+      if (seen.has(o.id)) p.push({ text: `${o.id} is listed twice`, about: o.id });
+      seen.add(o.id);
+      if (o.cites.length === 0)
+        p.push({ text: `${o.id} cites nothing in the outline`, about: o.id });
+      for (const c of o.cites)
+        if (!outlineIds.has(c))
+          p.push({ text: `${o.id} cites ${c}, not in the outline`, about: o.id });
+    }
+    const covered = new Set(plan.objectives.flatMap((o) => o.cites));
+    for (const s of plan.skipped) {
+      if (!outlineIds.has(s.id))
+        p.push({ text: `${s.id} is skipped, but isn't in the outline`, about: s.id });
+      else if (covered.has(s.id))
+        p.push({ text: `${s.id} is skipped, but an objective covers it`, about: s.id });
+      if (s.text.trim() === "")
+        p.push({ text: `${s.id} is skipped without a reason`, about: s.id });
+    }
+    const skipped = new Set(plan.skipped.map((s) => s.id));
+    const left = outline.filter((i) => !covered.has(i.id) && !skipped.has(i.id)).map((i) => i.id);
+    if (left.length > 0)
+      p.push({
+        text: `no objective covers ${left.join(", ")}, and it isn't skipped ("## Skipped": "- **<id>** why")`,
+      });
+    const lessonsSeen = new Set<string>();
+    for (const l of plan.lessons) {
+      if (lessonsSeen.has(l.slug))
+        p.push({ text: `lesson ${l.slug} is listed twice`, about: l.slug });
+      lessonsSeen.add(l.slug);
+      if (!l.cites.some((c) => objectiveIds.has(c)))
+        p.push({ text: `lesson ${l.slug} serves no objective`, about: l.slug });
+      for (const c of l.cites)
+        if (!objectiveIds.has(c))
+          p.push({ text: `lesson ${l.slug} cites ${c}: not an objective`, about: l.slug });
+    }
+    for (const f of plan.families) {
+      if (!f.cites.some((c) => objectiveIds.has(c)))
+        p.push({ text: `family ${f.id} tests no objective`, about: f.id });
+      for (const c of f.cites)
+        if (!objectiveIds.has(c))
+          p.push({ text: `family ${f.id} cites ${c}: not an objective`, about: f.id });
+    }
+    for (const r of plan.props)
+      if (!VERDICTS.includes(r.id))
+        p.push({
+          text: `"${r.id}" isn't a prop's verdict: one of ${VERDICTS.join(", ")}`,
+          about: r.id,
+        });
+  }
+
+  // boards.md: each board and family is in a lesson of the plan and serves its objectives; every
+  // objective is served; the families are the plan's; and the build follows the plan.
+  if (texts.boards !== undefined) {
+    const p = gate.boards.problems;
+    const seen = new Set<string>();
+    for (const b of boards) {
+      if (seen.has(b.id)) p.push({ text: `${b.id} is listed twice`, about: b.id });
+      seen.add(b.id);
+      if (!lessonSlugs.includes(b.lesson))
+        p.push({
+          text: `${b.id} is under ${b.lesson === "" ? "no lesson" : b.lesson}: not a lesson in plan.md`,
+          about: b.id,
+        });
+      if (b.id.startsWith(FAMILY_PREFIX) && !familyIds.has(b.id))
+        p.push({ text: `${b.id} isn't a question family in plan.md`, about: b.id });
+      if (!b.cites.some((c) => objectiveIds.has(c)))
+        p.push({ text: `${b.id} serves no objective`, about: b.id });
+      for (const c of b.cites)
+        if (!objectiveIds.has(c) && !outlineIds.has(c))
+          p.push({ text: `${b.id} cites ${c}: not an objective or in the outline`, about: b.id });
+      if (b.purpose === undefined || b.purpose.trim() === "")
+        p.push({ text: `${b.id} says nothing of what it is for (Purpose:)`, about: b.id });
+      if (b.needs === undefined || b.needs.trim() === "")
+        p.push({ text: `${b.id} says nothing it needs (Needs:)`, about: b.id });
+    }
+    for (const f of familyIds)
+      if (!seen.has(f)) p.push({ text: `${f} is in plan.md, not in boards.md` });
+    const served = new Set(boards.flatMap((b) => b.cites));
+    for (const o of plan.objectives)
+      if (!served.has(o.id)) p.push({ text: `no board or family serves ${o.id}` });
+    const skipped = new Set(plan.skipped.map((s) => s.id));
+    const shown = outline
+      .filter(
+        (i) =>
+          ["figure", "example", "activity"].includes(i.kind) &&
+          !served.has(i.id) &&
+          !skipped.has(i.id),
+      )
+      .map((i) => i.id);
+    if (shown.length > 0) gate.boards.notes.push(`no board cites: ${shown.join(", ")}`);
+    p.push(...checkBuild(root, book, chapter, lessonSlugs, isReady).map((text) => ({ text })));
+  }
+
+  const files: FileState[] = FILES.map(({ step, file, isApprovable }) => {
     const text = texts[step];
     const rel = join(dir, file);
     if (text === undefined)
-      return { step, file, status: "missing", problems: [], notes: [], recheck: [] };
-    const approvedAt = isApproved ? splitFront(text).front.approved : undefined;
-    const base = { step, file, problems: gate[step].problems, notes: gate[step].notes };
-    if (!isApproved) return { ...base, status: "approved", recheck: [] };
+      return { step, file, isApprovable, status: "missing", problems: [], notes: [], recheck: [] };
+    const approvedAt = isApprovable ? splitFront(text).front.approved : undefined;
+    const base = {
+      step,
+      file,
+      isApprovable,
+      problems: gate[step].problems,
+      notes: gate[step].notes,
+    };
+    if (!isApprovable) return { ...base, status: "approved", recheck: [] };
     if (approvedAt === undefined || approvedAt === "")
       return { ...base, status: "draft", recheck: [] };
     const then = atCommit(root, approvedAt, rel);
@@ -401,13 +587,22 @@ export function readChapter(root: string, book: string, chapter: string): Chapte
     });
     return { ...base, status: isChanged ? "changed" : "approved", approvedAt, recheck };
   });
-  const whole: Chapter = { book, chapter, dir, files, lessons: readLessons(root, book, chapter) };
+  // One reading of the build for the lessons and the boards: what changed since each was passed.
+  const changes = existsSync(join(root, "content", book, chapter, "build.yaml"))
+    ? changesUnder(root, `${book}/${chapter}`)
+    : [];
+  const whole: Chapter = {
+    book,
+    chapter,
+    dir,
+    files,
+    lessons: readLessons(root, book, chapter, changes),
+    boards: boardStates(book, chapter, boards, changes),
+  };
   // What stands in the way of each approval the person is asked for: the same rule approve() keeps.
   for (const f of files) {
     const isAsked =
-      FILES.find((x) => x.step === f.step)?.isApproved === true &&
-      f.status !== "missing" &&
-      (f.status !== "approved" || f.recheck.length > 0);
+      f.isApprovable && f.status !== "missing" && (f.status !== "approved" || f.recheck.length > 0);
     if (!isAsked) continue;
     const why = approvalBlocker(root, whole, f.step);
     if (why !== undefined) f.blocked = why;
@@ -445,9 +640,8 @@ export function nextStep(c: Chapter): FileState | undefined {
 export function approvalBlocker(root: string, c: Chapter, step: Step): string | undefined {
   const at = c.files.findIndex((f) => f.step === step);
   const f = c.files[at];
-  const spec = FILES[at];
-  if (f === undefined || spec === undefined) return `no step ${step}`;
-  if (!spec.isApproved) return `${f.file} is checked by the machine, not approved`;
+  if (f === undefined) return `no step ${step}`;
+  if (!f.isApprovable) return `${f.file} is checked by the machine, not approved`;
   if (f.status === "missing") return `${f.file} isn't written yet`;
   for (const before of c.files.slice(0, at))
     if (before.status !== "approved" || before.recheck.length > 0 || before.problems.length > 0)
@@ -496,7 +690,7 @@ export function approve(root: string, book: string, chapter: string, step: Step)
 /** The person takes an approval back: the file's `approved:` line removed, nothing else. */
 export function takeBack(root: string, book: string, chapter: string, step: Step): void {
   const spec = FILES.find((f) => f.step === step);
-  if (spec === undefined || !spec.isApproved) throw new Error(`nothing to take back: ${step}`);
+  if (spec === undefined || !spec.isApprovable) throw new Error(`nothing to take back: ${step}`);
   const file = join(root, "authoring", "books", book, chapter, spec.file);
   if (!existsSync(file)) throw new Error(`no ${spec.file}`);
   const { front, body } = splitFront(readFileSync(file, "utf8"));
@@ -510,8 +704,9 @@ export function takeBack(root: string, book: string, chapter: string, step: Step
 
 /**
  * Where every chapter stands, in lines: each planning file's state, its failing checks, what to
- * check again and what blocks its approval, and each lesson's self-review. The pipeline CLI prints
- * it; the chalk MCP's `pipeline` tool returns it. `failed`: approved files whose checks fail.
+ * check again and what blocks its approval; each lesson's self-review and its boards' and
+ * families' states. The pipeline CLI prints it; the chalk MCP's `pipeline` tool returns it.
+ * `failed`: files whose checks fail and that hold (the machine's files, an approved plan).
  */
 export function pipelineLines(chapters: readonly Chapter[]): { lines: string[]; failed: number } {
   const lines: string[] = [];
@@ -520,10 +715,15 @@ export function pipelineLines(chapters: readonly Chapter[]): { lines: string[]; 
     lines.push(`  ${c.dir}`);
     for (const f of c.files) {
       if (f.status === "missing") continue;
-      const spec = FILES.find((x) => x.step === f.step);
-      const isHeld = f.status !== "draft" || spec?.isApproved === false;
+      // A draft plan's failing checks are the work in progress: they block its approval, not the check.
+      const isHeld = f.status !== "draft" || !f.isApprovable;
       const mark = f.problems.length > 0 ? (isHeld ? "✗" : "·") : "✓";
-      lines.push(`    ${mark} ${f.file}: ${f.status}${f.approvedAt ? ` at ${f.approvedAt}` : ""}`);
+      const said = f.isApprovable
+        ? `: ${f.status}${f.approvedAt ? ` at ${f.approvedAt}` : ""}`
+        : f.problems.length > 0
+          ? ""
+          : ": checks hold";
+      lines.push(`    ${mark} ${f.file}${said}`);
       for (const p of f.problems) lines.push(`        ${p.text}`);
       for (const n of f.notes) lines.push(`        note: ${n}`);
       if (f.recheck.length > 0)
@@ -532,12 +732,34 @@ export function pipelineLines(chapters: readonly Chapter[]): { lines: string[]; 
       if (isHeld && f.problems.length > 0) failed += 1;
     }
     // Not a failure (lessons change while they're built); a lesson isn't shown to the person like this.
-    for (const l of c.lessons ?? [])
+    const boards = c.boards ?? [];
+    const counted = (of: readonly BoardState[], what: string) => {
+      const n = (s: BoardStatus) =>
+        of.filter(
+          (b) => b.status === s || (s === BoardStatus.Built && b.status === BoardStatus.Reviewed),
+        ).length;
+      return `${of.length} ${of.length === 1 ? what.replace(/ies$/, "y").replace(/s$/, "") : what}: ${n(BoardStatus.Built)} built, ${n(BoardStatus.Reviewed)} reviewed`;
+    };
+    const slugs = [
+      ...new Set([...boards.map((b) => b.lesson), ...(c.lessons ?? []).map((l) => l.slug)]),
+    ];
+    for (const slug of slugs) {
+      const l = (c.lessons ?? []).find((x) => x.slug === slug);
+      const mine = boards.filter((b) => b.lesson === slug && !b.id.startsWith(FAMILY_PREFIX));
+      const families = boards.filter((b) => b.lesson === slug && b.id.startsWith(FAMILY_PREFIX));
+      const counts = [
+        ...(mine.length > 0 ? [counted(mine, "boards")] : []),
+        ...(families.length > 0 ? [counted(families, "families")] : []),
+      ].join("; ");
+      const tail = counts === "" ? "" : ` · ${counts}`;
       lines.push(
-        l.isToSelfReview
-          ? `    · ${l.slug}: to self-review (${l.why})`
-          : `    ✓ ${l.slug}: self-reviewed`,
+        l === undefined
+          ? `    · ${slug}: not built yet${tail}`
+          : l.isToSelfReview
+            ? `    · ${slug}: to self-review (${l.why})${tail}`
+            : `    ✓ ${slug}: self-reviewed${tail}`,
       );
+    }
   }
   if (chapters.length === 0) lines.push("  no chapter has planning files yet");
   return { lines, failed };

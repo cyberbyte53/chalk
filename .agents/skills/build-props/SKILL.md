@@ -1,6 +1,6 @@
 ---
 name: build-props
-description: Match a chapter's needs to props and build or extend the props it needs, before any lesson is written - the props match (props.md), each new or changed prop's definition first, then its view. Use after flow.md is approved, or when a review asks for a prop change. Follows platform/docs/making-a-prop.md and leaves pnpm check green.
+description: Build or extend the props a chapter's plan names, before any lesson is written - each new or changed prop's definition first, then its view. Use after plan.md is approved, or when a review asks for a prop change. Follows platform/docs/making-a-prop.md and leaves pnpm check green.
 ---
 
 # Match and build the props
@@ -13,13 +13,11 @@ Props come first: lessons are written against their actions and fields. A prop's
 
 ## Pre-conditions
 
-`flow.md` is approved and holds (the Chalk tree, or the pipeline step). Otherwise stop and say so.
+The chapter's `plan.md` is approved and holds (the Chalk tree, or the pipeline step). Otherwise stop and say so.
 
-## 1. The match: `props.md`
+## 1. What the plan asks for
 
-1. **Find what exists.** `show` `library/props/` (a line per prop: address, role, what it is for, how many boards use it), then the address of each that might fit: everything about it, every board that uses it, and what no board uses or only one does.
-2. **Every need in `flow.md`, grouped, gets one verdict** in a table with `Need`, `Boards` (board ids, comma-separated), `Verdict` and `Why` columns: **reuse** (as it is), **configure** (fields it has), **extend** (a new field or action), **new**, or **no prop** (words or a picture do it better). "One prop or three" is decided here: a prop isn't stretched to a need it wasn't made for because it is close.
-3. The pipeline step holds when every board's need has a verdict. Questions go on `props.md` with `ask` (`quote`, options with your pick first). Commit, append `runs/<YYYY-MM-DD-HHMM>-props.md`, and stop for the person's approval in the editor (the Chalk tree).
+The plan's `## Props` gives each prop a verdict (**reuse**, **extend** or **new**) with a sketch and why, and `boards.md` gives each board's `Needs:` and `Props:`. "One prop or three" was decided there, with the person. Before building, `show` `library/props/` and the address of each prop the plan names: everything about it, every board that uses it, and what no board uses or only one does. A need the plan's props can't meet, or a prop stretched to a need it wasn't made for, is a change to `plan.md` first (it needs approving again): say so, with `ask` on its words.
 
 ## 2. The design: each extend or new, its definition first
 

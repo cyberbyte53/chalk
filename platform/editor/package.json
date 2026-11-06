@@ -2,7 +2,7 @@
   "name": "chalk-editor",
   "displayName": "Chalk",
   "description": "See Chalk content as boards beside its code: the book, chapter and lesson screens, every board as a phone draws it, pick a piece to ask the agent or leave a comment.",
-  "version": "0.6.17",
+  "version": "0.6.18",
   "publisher": "chalk",
   "private": true,
   "license": "UNLICENSED",
@@ -79,18 +79,13 @@
       },
       {
         "command": "chalk.planning.approve",
-        "title": "Chalk: Approve this planning file",
+        "title": "Chalk: Approve the plan",
         "icon": "$(pass)"
       },
       {
         "command": "chalk.planning.takeBack",
         "title": "Chalk: Take back the approval",
         "icon": "$(discard)"
-      },
-      {
-        "command": "chalk.addSource",
-        "title": "Chalk: Add a chapter's source",
-        "icon": "$(new-file)"
       },
       {
         "command": "chalk.fileComment.reply",
@@ -135,7 +130,7 @@
         },
         {
           "command": "chalk.planning.approve",
-          "when": "resourcePath =~ /[\\\\/]authoring[\\\\/]books[\\\\/][^\\\\/]+[\\\\/][^\\\\/]+[\\\\/](brief|objectives|flow|props)\\.md$/",
+          "when": "resourcePath =~ /[\\\\/]authoring[\\\\/]books[\\\\/][^\\\\/]+[\\\\/][^\\\\/]+[\\\\/]plan\\.md$/",
           "group": "navigation"
         }
       ],
@@ -154,11 +149,6 @@
         },
         {
           "command": "chalk.activity",
-          "when": "view == chalk.tree",
-          "group": "navigation"
-        },
-        {
-          "command": "chalk.addSource",
           "when": "view == chalk.tree",
           "group": "navigation"
         }
@@ -284,7 +274,7 @@
       "editor/context": [
         {
           "command": "chalk.planning.approve",
-          "when": "resourcePath =~ /[\\\\/]authoring[\\\\/]books[\\\\/][^\\\\/]+[\\\\/][^\\\\/]+[\\\\/](brief|objectives|flow|props)\\.md$/",
+          "when": "resourcePath =~ /[\\\\/]authoring[\\\\/]books[\\\\/][^\\\\/]+[\\\\/][^\\\\/]+[\\\\/]plan\\.md$/",
           "group": "chalk@2"
         }
       ],

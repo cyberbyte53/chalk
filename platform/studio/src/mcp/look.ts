@@ -5,6 +5,7 @@ import { full } from "@chalk/content/words";
 import type { PartSnapshot } from "@chalk/prop";
 import type { Reach } from "../content/build";
 import { buildInputsKey } from "../content/inputs";
+import { SOURCE_DIR } from "../pipeline";
 import { useText, usesOf } from "../prop-text";
 import { FactsCache } from "../reach/facts";
 import { type Shown, keepShown } from "../reach/shown";
@@ -331,16 +332,16 @@ export function scriptText(root: string, board: string): string[] {
 }
 
 /**
- * What a board is for, from its chapter's plan (flow.md: its Purpose and Needs) and the source
- * passages its heading cites (source/outline.yaml), so it is held to them without opening them.
+ * What a board is for, from its chapter's boards.md (its Purpose, Beat, Needs and Props) and the
+ * source passages its heading cites (source/en/outline.yaml), so it is held to them without opening them.
  */
 function reasonsText(root: string, board: string): string[] {
   const [book, chapter, , id] = board.replace(/^content\//, "").split("/");
   if (book === undefined || chapter === undefined || id === undefined) return [];
   const dir = join(root, "authoring", "books", book, chapter);
-  const flowFile = join(dir, "flow.md");
-  if (!existsSync(flowFile)) return [];
-  const flow = readFileSync(flowFile, "utf8").split("\n");
+  const boardsFile = join(dir, "boards.md");
+  if (!existsSync(boardsFile)) return [];
+  const flow = readFileSync(boardsFile, "utf8").split("\n");
   const at = flow.findIndex((l) => new RegExp(`^### ${id}\\b`).test(l));
   if (at < 0) return [];
   const heading = flow[at] ?? "";
@@ -354,7 +355,7 @@ function reasonsText(root: string, board: string): string[] {
     .split(/[;,]/)
     .map((x) => x.trim())
     .filter((x) => x !== "" && !/^o\d+$/.test(x));
-  const outlineFile = join(dir, "source", "outline.yaml");
+  const outlineFile = join(dir, SOURCE_DIR, "outline.yaml");
   const source: string[] = [];
   if (existsSync(outlineFile) && cited.length > 0) {
     const lines = readFileSync(outlineFile, "utf8").split("\n");
@@ -366,7 +367,7 @@ function reasonsText(root: string, board: string): string[] {
     }
   }
   return [
-    `for (flow.md): ${heading.replace(/^### /, "")}`,
+    `for (boards.md): ${heading.replace(/^### /, "")}`,
     ...body,
     ...(source.length === 0 ? [] : ["source:", ...source]),
   ];

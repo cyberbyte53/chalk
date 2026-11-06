@@ -6,8 +6,6 @@ import { ANSWER_COMMAND, FileComments } from "./file-comments";
 import { panelHtml } from "./panel-html";
 import {
   type PlanningFile,
-  addSource,
-  isApprovable,
   planningFileOf,
   readAll,
   readOne,
@@ -504,7 +502,7 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
               ? "pass-filled"
               : "circle-large-outline",
       );
-      item.contextValue = `planfile-${f.status}${isApprovable(f) ? "-approvable" : ""}`;
+      item.contextValue = `planfile-${f.status}${f.isApprovable ? "-approvable" : ""}`;
       if (f.status !== "missing")
         item.command = {
           command: "vscode.open",
@@ -670,7 +668,7 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       try {
         const c = await readOne(base, book, chapter);
         return c.files.map((f, i) => ({
-          label: `${i + 1}. ${f.file.replace(/^source\//, "")}`,
+          label: `${i + 1}. ${f.file.replace(/^source\/[a-z]{2}\//, "")}`,
           path: `${node.path}/${f.file}`,
           kind: "planfile",
           file: join(root, c.dir, f.file),
@@ -866,10 +864,6 @@ export function activate(context: vscode.ExtensionContext): void {
       fileComments.close(t),
     ),
     threads.onDidChangeTreeData(() => void fileComments.show(threads.allThreads)),
-    vscode.commands.registerCommand("chalk.addSource", async () => {
-      await addSource(root);
-      tree.refresh();
-    }),
     problems,
     chalkView(),
     ...threadCommands(fileComments),

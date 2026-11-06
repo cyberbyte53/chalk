@@ -1,19 +1,21 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
-import { basename, join, relative, sep } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { join, relative, sep } from "node:path";
 import * as vscode from "vscode";
 
 /**
  * A chapter's planning files in the editor (platform/docs/authoring-pipeline.md): their state in the
- * Chalk tree, their failing checks as problems on their lines, and the person's actions on them:
- * approve (and take it back), comment on selected words, add a source. Their state is worked out by
- * the dev server (platform/studio/src/pipeline.ts, through /dev-pipeline); approvals and comments
- * are written by it. Nothing is worked out or written here.
+ * Chalk tree (the outline, plan.md, boards.md), their failing checks as problems on their lines,
+ * and the person's actions on them: approve plan.md (and take it back), comment on selected words.
+ * Their state is worked out by the dev server (platform/studio/src/pipeline.ts, through
+ * /dev-pipeline); approvals and comments are written by it. Nothing is worked out or written here.
  */
 
 /** One planning file's state, as the dev server reads it. */
 export type PlanningFile = {
   step: string;
   file: string;
+  /** Whether the person approves it (plan.md); the outline and boards.md are the machine's. */
+  isApprovable: boolean;
   status: "missing" | "draft" | "approved" | "changed";
   approvedAt?: string;
   /** Its failing checks, each with the id it is about when there is one. */
@@ -34,16 +36,13 @@ export type PlanningChapter = {
   lessons?: PlanningLesson[];
 };
 
-/** The outline is the machine's alone; the rest the person approves. */
-export const isApprovable = (f: PlanningFile): boolean => !f.file.startsWith("source/");
-
 /** A planning file's state in words, for the tree. */
 export function stateWords(f: PlanningFile): string {
   if (f.status === "missing") return "not written";
   if (f.problems.length > 0) return "checks fail";
   if (f.blocked !== undefined) return "can't approve yet";
   if (f.recheck.length > 0) return "to check again";
-  if (!isApprovable(f)) return "checks hold";
+  if (!f.isApprovable) return "checks hold";
   if (f.status === "changed") return "changed since approved";
   return f.status === "approved" ? `approved ${f.approvedAt ?? ""}`.trim() : "to approve";
 }
@@ -158,40 +157,4 @@ export async function setApproval(
     void vscode.window.showErrorMessage(`Chalk: ${(e as Error).message}`);
     return false;
   }
-}
-
-/** A new chapter's source: a file copied into authoring/books/<book>/<chapter>/source/. */
-export async function addSource(root: string): Promise<void> {
-  const picked = await vscode.window.showOpenDialog({
-    canSelectMany: true,
-    openLabel: "Add as the chapter's source",
-  });
-  if (picked === undefined || picked.length === 0) return;
-  const slug = (s: string) =>
-    s
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  const book = slug(
-    (await vscode.window.showInputBox({
-      title: "Book",
-      placeHolder: "class9-maths",
-      ignoreFocusOut: true,
-    })) ?? "",
-  );
-  if (book === "") return;
-  const chapter = slug(
-    (await vscode.window.showInputBox({
-      title: "Chapter",
-      placeHolder: "coordinate-geometry",
-      ignoreFocusOut: true,
-    })) ?? "",
-  );
-  if (chapter === "") return;
-  const dir = join(root, "authoring", "books", book, chapter, "source");
-  mkdirSync(dir, { recursive: true });
-  for (const uri of picked) copyFileSync(uri.fsPath, join(dir, basename(uri.fsPath)));
-  void vscode.window.showInformationMessage(
-    `Chalk: added to authoring/books/${book}/${chapter}/source. Next: ask your agent to run plan-chapter on it.`,
-  );
 }

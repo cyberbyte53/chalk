@@ -1,6 +1,6 @@
 # Authoring pipeline
 
-Status: **built**. Planning happens in the editor (the Chalk extension); the agent runs the skills in its chat. Class 9 Coordinate Geometry will be remade through the pipeline from its source, so its old `plan.md` isn't split. Replaces the one-file `plan.md` with steps that each answer one question, write one file and end at a gate.
+Status: **built**, and being changed by [plans/authoring.md](plans/authoring.md) (step 4 done: `plan.md` and `boards.md` replace the brief, objectives, flow and props match). Planning happens in the editor (the Chalk extension); the agent runs the skills in its chat.
 
 ## Why
 
@@ -19,18 +19,18 @@ Only what is built lives in `content/` and `library/`. What is written about the
 
 ```text
 authoring/books/<book>/<chapter>/
-  brief.md          1  scope (who, languages, what is in or out)
-  source/           2  the source as handed over (or a pointer into authoring/sources/), plus outline.yaml
-  objectives.md     3  what a student can do at the end
-  flow.md           4  lessons and boards in order, each with its objectives, figures and need
-  props.md          5  each need matched to a prop; the prop changes it asks for
+  source/en/        1  the English book: its PDF, its text, outline.yaml (machine-checked)
+  plan.md           2  the intent, approved by the person: goal, objectives, skipped, story, lessons,
+                       chapter art, props (reuse / extend / new), question families
+  boards.md         2  the detail, never approved: each board and question family, what it is for,
+                       its beat, needs, objectives and outline ids, props
   runs/                one note per pipeline run
   comments.yaml        threads on the chapter's boards and on the files above        (built)
 authoring/props/<package>/comments.yaml   threads on the package's props            (built)
-library/props/<package>/src/   5–6  each prop's definition (its contract), then its view and run bodies
+library/props/<package>/src/   3–4  each prop's definition (its contract), then its view and run bodies
 library/catalogue.md              generated: every prop's page                       (built)
 content/<book>/<chapter>/
-  build.yaml, <lesson>/overview.ts, questions/     7  what is built
+  build.yaml, <lesson>/overview.ts, questions/     5  what is built
 ```
 
 ## Addresses (built)
@@ -82,36 +82,17 @@ A prop that only draws inside another's frame (`drawsOn`) is shown as needing on
 
 | # | Step | Question | Output | Gate |
 |---|---|---|---|---|
-| 1 | Brief | Who is it for, and what is in or out? | `brief.md` | person |
-| 2 | Source | What exactly does the source contain? | `source/outline.yaml` | machine |
-| 3 | Objectives | What can a student do at the end? | `objectives.md` | machine, then person |
-| 4 | Flow | In what order, and which board drives each objective home? | `flow.md` | machine, then person |
-| 5 | Props | Which prop meets each need, and what exactly is each new or changed prop? | `props.md`, definitions | machine, then person |
-| 6 | Build props | Does each prop work at every screen? | views, run bodies, tests | machine, then person |
-| 7 | Boards | The words, with the props placed | `content/…` | machine, then agent |
-| 8 | Review | Is it right for students? | threads, in rounds | person closes |
-| 9 | Wrap-up | What should the next chapter inherit? | taste lines, checks, catalogue | person approves each line |
+| 1 | Source | What exactly does the source contain? | `source/en/outline.yaml` | machine |
+| 2 | Plan | What can a student do at the end, and how will the chapter get them there? | `plan.md`, `boards.md` | machine, then person (`plan.md`) |
+| 3 | Props | What exactly is each new or changed prop the plan names? | definitions | machine, then person (a thread per prop) |
+| 4 | Build props | Does each prop work at every screen? | views, run bodies, tests | machine, then person |
+| 5 | Boards | The words, with the props placed | `content/…` | machine, then agent |
+| 6 | Review | Is it right for students? | threads, in rounds | person closes |
+| 7 | Wrap-up | What should the next chapter inherit? | taste lines, checks, catalogue | person approves each line |
 
-A step starts only when the one before it is approved. Only the person approves.
+Nothing is built until `plan.md` is approved. Only the person approves.
 
-### 1. Brief
-
-Short, in the person's words, written by the agent from the conversation:
-
-```markdown
----
-approved: 1a2b3c4
----
-- For: class 9; taught live on a projector, then self-study on phones
-- Languages: English and Hindi, every string
-- Story: none
-- Questions: none in this pass
-- Must keep: every NCERT example and figure
-```
-
-It shapes the objectives and flow. Screens are not the chapter's: every check that draws boards or props (`show`, layout, steps) runs at the platform's check screens (360×640 phone, 640 column, 640×720 projector).
-
-### 2. Source
+### 1. Source
 
 `outline.yaml` lists everything in the source with a stable id later files cite:
 
@@ -122,66 +103,82 @@ It shapes the objectives and flow. Screens are not the chapter's: every check th
 - { id: ex3.2-q2, kind: exercise }
 ```
 
-**Gate (machine):** counts of figures, examples, activities and exercises match a scan of the text. Every citation anywhere later must be an id here.
+**Gate (machine):** the figures, examples, activities and exercises match a scan of the text (`source/en/*.txt`). Every citation anywhere later must be an id here.
 
-### 3. Objectives
+### 2. Plan
 
-```markdown
-- **o5** Define the abscissa and ordinate as signed distances from the axes. (def-abscissa, def-ordinate, fig3.10)
-- **o8** Tell a point's quadrant from the signs of its coordinates, and say why. (fig3.13)
-```
-
-Something a student can *do*, citing source ids. **Gate (machine):** every source item no objective cites is listed, so leaving something out is a decision. **Then person:** the most important gate; everything below traces back to it.
-
-### 4. Flow
+**`plan.md`**, English, one to two pages: the one file the person approves (`approved: <commit>` in its front matter). Its `## ` sections:
 
 ```markdown
-## coordinates-of-a-point
-### two-ways  (o5, o9; fig3.15)
-Purpose: going x then y and going y then x reach the same point.
-Needs: tap any point; two walkers leave O, one along x first, one along y first, and meet.
+## Goal
+A student can say where any point in a plane is with two numbers in an agreed order, …
+
+## Objectives
+- **o6** Find a point's abscissa and ordinate as its signed distances from the axes. (s3.2-distances, def-abscissa)
+
+## Skipped
+- **activity2** The dice game: the treasure trail (o13) takes its place.
+
+## Story
+The arc, and the characters it uses.
+
+## Lessons
+### coordinates-of-a-point  (o6, o7)
+Goal: … Does: what the student does. Card: its card's art.
+
+## Chapter art
+The tile's idea.
+
+## Props
+- **new** `coordinatePlane`: a sketch. Why: …
+
+## Question families
+- **read-a-point** what it tests. (o6, o7)
 ```
 
-Needs are words, never prop names. Board ids are the ids used in `content/` later. **`flow.md` is the only place that says which objectives and figures a board serves**; boards don't repeat it. **Gate (machine):** every objective has a board; every board cites an objective; every figure the brief must keep has a board. **Then person.**
+A lesson's slug is its folder and its name in `build.yaml`; a family's is its folder under `questions/`. A prop's verdict is **reuse**, **extend** or **new**; where words or a picture do better, the plan says so in a sentence. `ready: true` in the front matter (written by the agent when the last lesson is built and reviewed, its words unchanged so the approval holds) says the chapter is ready for the person.
 
-### 5. Props
+**`boards.md`**: per lesson `## <slug>`, then each board `### <board-id>  (o6; fig3.10)` and each question family `### questions/<family>  (o7; ex3.2-q2)` under the lesson it tests:
 
-**The match, in the chapter's `props.md`.** Every need from `flow.md`, grouped, each with one verdict, found by looking at `library/props/` and at the candidates' addresses: **reuse**, **configure** (fields it already has), **extend**, **new**, or **no prop** (words or a picture do it better). For each extend or new: the change it asks for and the boards that need it. This is where "one prop or three" is decided, on purpose.
+```markdown
+### distances-from-axes  (o6; s3.2-distances, fig3.10)
+Purpose: a point's distance from the y-axis is measured along the x-axis, …
+Beat: Riya walks from O to P and to Q.
+Needs: graph-paper axes with P and Q; the perpendiculars from each point to both axes, …
+Props: coordinatePlane (reading a point; walker)
+```
 
-**The design, in the prop's definition.** For each extend or new, before any view: the definition is written or changed (state, actions with arguments and `changes`, signals, a `describe` opening with what it is for, invariant), with run bodies and the view left for step 6. For an extension, `affected` lists every board it reaches and the thread says why nothing there changes.
+Needs are words, never prop names. Board ids are the ids used in `content/`. **`boards.md` is the only place that says which objectives and outline ids a board serves**; boards don't repeat it. Nothing in it is approved, and no status is written in it: each board is **planned**, **built** (in the build) or **reviewed** (passed by a reviewer as built now, `reviewed.ts`), worked out each time. (**Waiting**, on a new prop whose showing thread the person hasn't closed, isn't worked out yet: a thread doesn't say which prop it shows.)
 
-**Gate (machine):** the definition type-checks and its generated page builds. **Then person:** the match, and one thread per new or changed prop, carrying its generated page before and after.
+**Gate (machine, `pipeline.ts`):** `plan.md` has its sections and a goal; every objective cites outline ids that exist; every outline item is covered by an objective or skipped with a reason; lessons and families cite objectives that exist; every prop has a verdict. In `boards.md`: every board and family is under a lesson of the plan, serves an objective, cites only objectives and outline ids that exist, and says its purpose and needs; every family is the plan's, and every family of the plan has its entry; every objective is served by a board or family. The build: `build.yaml`'s concepts are the plan's lessons, in its order (some while they are built; all once the plan says `ready: true`, with the chapter's `art.tsx`), each with its `art.tsx`. **Then person:** approves `plan.md`.
 
-### 6. Build props
+### 3. Props
+
+**The design, in the prop's definition.** For each extend or new the plan names, before any view: the definition is written or changed (state, actions with arguments and `changes`, signals, a `describe` opening with what it is for, invariant), with run bodies and the view left for step 4. For an extension, `affected` lists every board it reaches and the thread says why nothing there changes.
+
+**Gate (machine):** the definition type-checks and its generated page builds. **Then person:** one thread per new or changed prop, carrying its generated page before and after.
+
+### 4. Build props
 
 Run bodies and the view, to the definition ([making-a-prop.md](making-a-prop.md)). **Gate (machine):** tests, `checkProp`, `show` the prop's address at the check screens, with `steps` over its actions (the learner's gestures and `call`s) with frames to show nothing jumps. **Then person:** opens `?dev&at=library/props/<package>/<type>`, plays with it and its panel, and comments on it there, before any lesson uses it.
 
-### 7. Boards
+### 5. Boards
 
 Today's `build-lesson`. **Gate (machine):** build, layout, both languages, the check screens, and **field use** for each prop the chapter uses (its page's list: what no board uses and what only one does), across all content. **Then agent:** a fresh `self-review`.
 
-### 8 and 9. Review and wrap-up
+### 6 and 7. Review and wrap-up
 
 As today ([comments.md](comments.md); `apply-comments`, `wrap-up`), with the thread changes below.
 
 ## Prop changes always go through the definition first
 
-Any change to a prop's fields, actions or signals, at any step after 5 and from any chapter (a review round asking for a walker, a board that wants a scene), is first a definition change with its thread, approved by the person, as in step 5. Then the view and run bodies. No prop grows one request at a time without a thread showing it.
+Any change to a prop's fields, actions or signals, at any step after 3 and from any chapter (a review round asking for a walker, a board that wants a scene), is first a definition change with its thread, approved by the person, as in step 3. Then the view and run bodies. No prop grows one request at a time without a thread showing it.
 
 ## Approval and staleness
 
-`brief.md`, `objectives.md`, `flow.md` and `props.md` have `status: draft | approved` in front matter; `approved` records the commit. A prop's approval is its thread. When an approved file changes, it goes back to `draft`, and the check lists what it reaches as **to recheck**:
+`plan.md` alone is approved: `approved: <commit>` in its front matter, written by the dev server when the person approves it in the editor, once its checks and the outline's hold, no thread on it is open, and it is committed. A prop's approval is its thread. When the approved plan changes, it is **changed** (approve it again); when the outline changes after it was approved, it is **to check again**. Nothing below the plan is approved, so nothing cascades: `boards.md` follows the plan's ids and is checked by the machine. An agent about to edit an approved `plan.md` says first that it will need approving again, and never writes an `approved:` line.
 
-| Changed | To recheck |
-|---|---|
-| brief | objectives, flow, props |
-| outline | objectives |
-| objectives | flow, props |
-| flow | props |
-| props (the match) | the boards it names |
-| a prop's definition | every board, in any chapter, that `affected` lists |
-
-The agent rechecks each and either changes it or says why it still holds; the person approves again. An agent that is about to edit an approved file says first that it will need approving again (and what after it), and never writes an `approved:` line.
+`pnpm check`'s pipeline step fails where the outline's or `boards.md`'s checks fail, or an approved plan's; a draft plan's failing checks only stand in the way of its approval.
 
 **An approval is committed alone.** The commit that brings an `approved:` line changes nothing else in the file, so history says exactly which text was approved. The person's approval, not yet committed, goes in a commit of its own before any edit to that file. `pnpm check`'s pipeline step fails otherwise (`stampProblems`). (Id-level diffing, marking only what cites a changed id, is added later only if this proves too noisy.) Coming into an existing chapter works the same way.
 
@@ -201,11 +198,11 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 
 ## Skills
 
-| Today | Proposed |
+| Skill | Steps |
 |---|---|
-| `plan-chapter` | `plan-chapter`: steps 1–4, one gate at a time |
-| `build-props` | `build-props`: steps 5–6 (match via `show` the library, definitions, build) |
-| `build-lesson` | `build-lesson`: step 7 |
+| `plan-chapter` | 1–2: the outline, `plan.md`, `boards.md` |
+| `build-props` | 3–4: definitions, then the build |
+| `build-lesson` | 5 |
 | `self-review`, `apply-comments`, `wrap-up` | as today; `apply-comments` adds before → after, re-points threads, and routes prop changes through the definition first |
 
 ## Moving over
@@ -217,6 +214,7 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 5. Each prop's `describe` is checked to open with what it is for (a few open with only what it shows: "A factor tree.", "Two sticks, a and b.").
 6. `outline.yaml` generated for each chapter with a source.
 7. ~~`coordinatePlane` run through field use~~: removed with class 9 Coordinate Geometry, its old threads and reviews, to remake the chapter from its source through the pipeline.
+8. ~~The brief, objectives, flow and props match become `plan.md` and `boards.md`; `source/` becomes `source/en/`~~ ([plans/authoring.md](plans/authoring.md), step 4). Done for class 9 Coordinate Geometry.
 
 ## Build order
 

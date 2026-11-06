@@ -12,8 +12,8 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 
 - **How we make lessons is `authoring/guide.md`.** Read it always (its principles, how the person judges, lessons to copy; examples in `authoring/guide/`). Then read only the guide for your step in `authoring/taste/guides/` (`plan.md`, `pages.md`, `questions.md` or `props.md`). `authoring/taste/checks.md` is enforced by the build, and `authoring/taste/reviewer.md` is for reviewers.
 - **The steps are skills** in `.agents/skills/` (`.claude/skills` points there). In order:
-  1. `plan-chapter`: `brief.md`, `source/outline.yaml`, `objectives.md`, `flow.md`, one at a time, each approved by the person in the editor (the Chalk tree) ([platform/docs/authoring-pipeline.md](platform/docs/authoring-pipeline.md)).
-  2. `build-props`: the props match (`props.md`, approved by the person), each new or changed prop's definition first, then its build.
+  1. `plan-chapter`: `source/en/outline.yaml`, then `plan.md` (the intent, the one file the person approves, in the editor's Chalk tree) and `boards.md` (each board and question family in detail, never approved) ([platform/docs/authoring-pipeline.md](platform/docs/authoring-pipeline.md)).
+  2. `build-props`: the props `plan.md` names, each new or changed prop's definition first, then its build.
   3. `build-lesson`: the first lesson alone, then the rest.
   4. `self-review`, run by a fresh agent.
   5. The person's review.
@@ -32,7 +32,7 @@ platform/   the fixed code: packages (the core), apps, studio tooling, deploy, e
 - **The person's comments:** nothing is handed over; his open comments are the hand-over. When he asks you to apply or handle them, use `apply-comments`: the threads on your turn, one plan agreed in chat, a plan line and an answer on every thread, commit after his yes.
 - **Asking the person:** when you're stuck or at a real decision, use `ask` on the thing it is about, never a question in prose.
 - **Threads** are about the work, not part of it, so they live under `authoring/`: `authoring/books/<book>/<chapter>/comments.yaml`, or `authoring/props/<package>/comments.yaml` for one on a prop, written only through the one writer ([platform/docs/comments.md](platform/docs/comments.md)). Never edit them by hand. Whoever opened a thread closes it (a fixer or a reviewer only its own, once back on its turn); the person may close any. A reviewer's finding has a weight: must, or consider (you decide, and say what you did).
-- Approving a planning file is the person's gate (the editor's Chalk tree, through the dev server, writes `approved: <commit>`). Never approve one yourself.
+- Approving a chapter's `plan.md` is the person's gate (the editor's Chalk tree, through the dev server, writes `approved: <commit>`). Never approve it yourself.
 - **Commit only what the person has seen and is happy with.** Finish, show it, wait for their yes, then commit.
 
 ## Code work
