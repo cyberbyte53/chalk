@@ -1,7 +1,7 @@
 import { localizedSchema } from "@chalk/content";
 import { PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
-import { always, piece } from "./piece";
+import { always, part } from "./part";
 import {
   type PlaneCore,
   type PlaneWindow,
@@ -187,7 +187,7 @@ export const clues = prop({
 });
 
 /** On the coordinate plane: clues to a hidden point. While on, a tap on the plane is theirs. */
-export const cluesPiece = piece({
+export const cluesPart = part({
   prop: clues,
   isOn: areCluesOn,
   takesTaps: always,

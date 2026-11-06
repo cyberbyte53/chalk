@@ -1,6 +1,6 @@
 import { type Out, PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
-import { piece } from "./piece";
+import { part } from "./part";
 import {
   type PlaneCore,
   PlanePart,
@@ -184,7 +184,7 @@ function putAt(
 }
 
 /** On the coordinate plane: a point to read, in front of the lines, its words below. */
-export const readingPiece = piece({
+export const readingPart = part({
   prop: reading,
   isOn: isReadingOn,
   turns: { front: 50, below: 20, controls: 40 },

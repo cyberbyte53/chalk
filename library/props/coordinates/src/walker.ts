@@ -1,7 +1,7 @@
 import { localizedSchema } from "@chalk/content";
 import { type Out, PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
-import { piece } from "./piece";
+import { part } from "./part";
 import {
   Axes,
   Marks,
@@ -232,7 +232,7 @@ function glide(target: Point | null, to: Point, trail: Point[], t: WalkerTools, 
 }
 
 /** On the coordinate plane: Riya, behind the plane's marks, her buttons first. */
-export const walkerPiece = piece({
+export const walkerPart = part({
   prop: walker,
   isOn: isWalkerOn,
   turns: { back: 20, on: 50, below: 30, controls: 10 },

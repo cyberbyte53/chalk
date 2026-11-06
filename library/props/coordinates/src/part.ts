@@ -1,12 +1,12 @@
 import type { AnyProp, Place } from "@chalk/prop";
 
 /**
- * One piece on the coordinate plane, as the plane holds it: everything the plane needs to know of
- * it, in one place. A new piece is its own files and one of these, added to the plane's list
- * (coordinate-plane.ts); nothing already there changes. Every piece starts off: a board that never
+ * One part on the coordinate plane, as the plane holds it: everything the plane needs to know of
+ * it, in one place. A new part is its own files and one of these, added to the plane's list
+ * (coordinate-plane.ts); nothing already there changes. Every part starts off: a board that never
  * gives it anything never shows it.
  */
-export type Piece<D extends AnyProp = AnyProp, S = never> = {
+export type Part<D extends AnyProp = AnyProp, S = never> = {
   readonly prop: D;
   /** Whether it has anything to show now. Its start is off. */
   readonly isOn: (s: S) => boolean;
@@ -22,7 +22,7 @@ export type Piece<D extends AnyProp = AnyProp, S = never> = {
   readonly says: string;
 };
 
-export const piece = <D extends AnyProp, S>(p: Piece<D, S>): Piece<D, S> => p;
+export const part = <D extends AnyProp, S>(p: Part<D, S>): Part<D, S> => p;
 
-/** Always: for a piece that, while on, always takes the plane's taps. */
+/** Always: for a part that, while on, always takes the plane's taps. */
 export const always = () => true;

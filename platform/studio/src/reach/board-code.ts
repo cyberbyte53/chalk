@@ -42,8 +42,8 @@ export function boardCode(
     const home = homes.get(type);
     // A prop whose code can't be found: the board's code isn't known.
     if (home === undefined) return undefined;
-    const pieces = piecesOf(graph, home);
-    // The pieces this board uses of each prop of this type: named in its setup, fed or called.
+    const parts = partsOf(graph, home);
+    // The parts this board uses of each prop of this type: named in its setup, fed or called.
     const used = new Set(
       Object.values(reach.pieces)
         .filter((p) => p.type === type)
@@ -55,23 +55,23 @@ export function boardCode(
         ]),
     );
     const isUnused = (file: string) => {
-      const piece = pieceOf(file, home, pieces);
-      return piece !== undefined && !used.has(piece);
+      const part = partOf(file, home, parts);
+      return part !== undefined && !used.has(part);
     };
     for (const entry of packageEntries(graph.root, home)) {
       if (entry.endsWith(".ts") || entry.endsWith(".tsx")) {
         for (const n of graph.allExports(entry))
           if (!isUnused(n.slice(0, n.indexOf("#")))) roots.add(n);
       } else if (graph.sealed.has(entry)) {
-        // A stylesheet that only gathers others: the plane's own and the used pieces'.
+        // A stylesheet that only gathers others: the plane's own and the used parts'.
         for (const sheet of importsOf(graph.root, entry))
           if (!isUnused(sheet)) roots.add(`${sheet}#`);
       } else roots.add(`${entry}#`);
     }
-    // Each piece it uses, whole: its entry, drawing, sound and stylesheet.
-    for (const piece of pieces) {
-      if (!used.has(piece)) continue;
-      for (const file of piecesFiles(graph, home, piece)) {
+    // Each part it uses, whole: its entry, drawing, sound and stylesheet.
+    for (const part of parts) {
+      if (!used.has(part)) continue;
+      for (const file of partFiles(graph, home, part)) {
         roots.add(`${file}#`);
         for (const name of Object.keys(graph.facts.get(file)?.decls ?? {}))
           roots.add(`${file}#${name}`);
@@ -116,15 +116,15 @@ function everyBoardStyles(root: string): string[] {
 }
 
 /**
- * A prop made of pieces (the coordinate plane): their names, read from the list of them, the file
- * named by its package.json `chalk.pieces` (`src/pieces.ts`): each piece is the file a line of it
+ * A prop made of parts (the coordinate plane): their names, read from the list of them, the file
+ * named by its package.json `chalk.parts` (`src/parts.ts`): each part is the file a line of it
  * imports (`./walker`). None for a prop without one.
  */
-function piecesOf(graph: CodeGraph, home: string): Set<string> {
+function partsOf(graph: CodeGraph, home: string): Set<string> {
   const file = join(graph.root, home, "package.json");
   if (!existsSync(file)) return new Set();
-  const list = (JSON.parse(readFileSync(file, "utf8")) as { chalk?: { pieces?: string } }).chalk
-    ?.pieces;
+  const list = (JSON.parse(readFileSync(file, "utf8")) as { chalk?: { parts?: string } }).chalk
+    ?.parts;
   if (list === undefined) return new Set();
   const facts = graph.facts.get(join(home, list));
   return new Set(
@@ -134,18 +134,18 @@ function piecesOf(graph: CodeGraph, home: string): Set<string> {
   );
 }
 
-/** The piece a file of a package belongs to, by its name (`walker.ts`, `walker-view.tsx`, `walker-sound.ts`, `walker.css`). */
-function pieceOf(file: string, home: string, pieces: ReadonlySet<string>): string | undefined {
-  if (pieces.size === 0 || !file.startsWith(`${home}/src/`)) return undefined;
+/** The part a file of a package belongs to, by its name (`walker.ts`, `walker-view.tsx`, `walker-sound.ts`, `walker.css`). */
+function partOf(file: string, home: string, parts: ReadonlySet<string>): string | undefined {
+  if (parts.size === 0 || !file.startsWith(`${home}/src/`)) return undefined;
   const base = basename(file)
     .replace(/\.[a-z]+$/, "")
     .replace(/-(view|sound)$/, "");
-  return pieces.has(base) ? base : undefined;
+  return parts.has(base) ? base : undefined;
 }
 
-/** A piece's own files that exist. */
-function piecesFiles(graph: CodeGraph, home: string, piece: string): string[] {
-  return [`${piece}.ts`, `${piece}-view.tsx`, `${piece}-sound.ts`, `${piece}.css`]
+/** A part's own files that exist. */
+function partFiles(graph: CodeGraph, home: string, part: string): string[] {
+  return [`${part}.ts`, `${part}-view.tsx`, `${part}-sound.ts`, `${part}.css`]
     .map((f) => join(home, "src", f))
     .filter((f) => existsSync(join(graph.root, f)));
 }

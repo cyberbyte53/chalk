@@ -1,5 +1,5 @@
 import { appear } from "@chalk/sounds";
-import type { PieceSound } from "./piece-sound";
+import type { PartSound } from "./part-sound";
 
 /** The plane: something appearing as a street rises. */
-export const planeSound: PieceSound = { cues: { risen: appear } };
+export const planeSound: PartSound = { cues: { risen: appear } };

@@ -276,7 +276,7 @@ export const planeDrawing = drawing(plane, {
 });
 
 /**
- * The coordinate plane: the plane and every piece on it, each drawn in its places.
+ * The coordinate plane: the plane and every part on it, each drawn in its places.
  */
 export const CoordinatePlaneView = groupView(
   coordinatePlane,

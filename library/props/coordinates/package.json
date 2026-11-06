@@ -24,9 +24,9 @@
     "preact-render-to-string": "6.5.13"
   },
   "chalk": {
-    "pieces": "src/pieces.ts",
+    "parts": "src/parts.ts",
     "registries": [
-      "src/pieces.ts",
+      "src/parts.ts",
       "src/drawings.ts",
       "src/sounds.ts",
       "src/index.ts",

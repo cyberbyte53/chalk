@@ -1,6 +1,6 @@
 import { type Out, PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
-import { always, piece } from "./piece";
+import { always, part } from "./part";
 import { type PlaneCore, fromPlane, isInWindow } from "./plane";
 
 /** A pair to plot, from a table or a list. */
@@ -162,7 +162,7 @@ function dotAt(
 }
 
 /** On the coordinate plane: pairs to plot. While on, a tap on the plane is theirs. */
-export const plottingPiece = piece({
+export const plottingPart = part({
   prop: plotting,
   isOn: isPlottingOn,
   takesTaps: always,

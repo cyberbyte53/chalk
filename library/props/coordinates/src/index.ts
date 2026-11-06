@@ -1,5 +1,5 @@
 // What the package offers, re-exported and nothing else: left out of a board's code fingerprint
-// (package.json `chalk.registries`); each name counts where it is written. A piece adds its line.
+// (package.json `chalk.registries`); each name counts where it is written. A part adds its line.
 export { type Clue, type Still, stillPossible } from "./clues";
 export { coordinatePlane } from "./coordinate-plane";
 export { throwOf } from "./dice";

@@ -1,22 +1,22 @@
 import { type AnyProp, Place, PropRole, givenOf, prop } from "@chalk/prop";
 import { z } from "zod";
-import type { Piece } from "./piece";
-import { PIECES } from "./pieces";
+import type { Part } from "./part";
+import { PARTS } from "./parts";
 import { Choosing, TARGET_NAME } from "./places";
 import { plane } from "./plane";
 
-// The pieces (pieces.ts). Nothing in this file names a piece except where the plane answers that
-// piece in particular (its facts and `hear` below).
-type Pieces = typeof PIECES;
-type PieceName = keyof Pieces & string;
-const NAMES = Object.keys(PIECES) as PieceName[];
-// The pieces' entries, read without their own types: what every piece has in common.
-const ENTRIES = PIECES as unknown as Readonly<Record<PieceName, Piece<AnyProp, unknown>>>;
+// The parts (parts.ts). Nothing in this file names a part except where the plane answers that
+// part in particular (its facts and `hear` below).
+type Parts = typeof PARTS;
+type PartName = keyof Parts & string;
+const NAMES = Object.keys(PARTS) as PartName[];
+// The parts' entries, read without their own types: what every part has in common.
+const ENTRIES = PARTS as unknown as Readonly<Record<PartName, Part<AnyProp, unknown>>>;
 
-/** The plane's own turns round its picture; the pieces' are in their entries. */
-const PLANE_TURNS: Piece["turns"] = { back: 10, on: 10, front: 10, below: 10, controls: 30 };
+/** The plane's own turns round its picture; the parts' are in their entries. */
+const PLANE_TURNS: Part["turns"] = { back: 10, on: 10, front: 10, below: 10, controls: 30 };
 
-/** Who draws in each place, by turn: the plane and every piece with a turn there. */
+/** Who draws in each place, by turn: the plane and every part with a turn there. */
 const order = Object.fromEntries(
   Object.values(Place).map((place) => [
     place,
@@ -30,32 +30,32 @@ const order = Object.fromEntries(
       .sort((a, b) => a[1] - b[1])
       .map(([n]) => n),
   ]),
-) as { [P in Place]: ("plane" | PieceName)[] };
+) as { [P in Place]: ("plane" | PartName)[] };
 
-/** Each piece's prop, by its name: the plane's children besides the plane. */
-const propsOf = <P extends Readonly<Record<string, Piece<AnyProp, never>>>>(p: P) =>
+/** Each part's prop, by its name: the plane's children besides the plane. */
+const propsOf = <P extends Readonly<Record<string, Part<AnyProp, never>>>>(p: P) =>
   Object.fromEntries(Object.entries(p).map(([n, e]) => [n, e.prop])) as {
     [K in keyof P]: P[K]["prop"];
   };
 
-/** A piece's state, as the plane reads it. */
-const stateOf = (me: object, n: PieceName) => (me as Record<PieceName, unknown>)[n];
+/** A part's state, as the plane reads it. */
+const stateOf = (me: object, n: PartName) => (me as Record<PartName, unknown>)[n];
 /**
- * Whether a board uses a piece: its setup names it (`{ walker: {…} }`, `{ dice: {} }`). A piece a
+ * Whether a board uses a part: its setup names it (`{ walker: {…} }`, `{ dice: {} }`). A part a
  * board doesn't use is never drawn, never answered and never read here, so nothing of its code
- * reaches that board (platform/docs/plans/adding-pieces.md).
+ * reaches that board (platform/docs/plans/adding-parts.md).
  */
-const uses = (me: object, n: PieceName) => givenOf(me).has(n);
-/** A piece is on when the board uses it and it has something to show. */
-const isOn = (me: object, n: PieceName) => uses(me, n) && ENTRIES[n].isOn(stateOf(me, n));
+const uses = (me: object, n: PartName) => givenOf(me).has(n);
+/** A part is on when the board uses it and it has something to show. */
+const isOn = (me: object, n: PartName) => uses(me, n) && ENTRIES[n].isOn(stateOf(me, n));
 
 /**
- * The coordinate plane: the plane and the pieces a board puts on it (PIECES). Each piece knows
+ * The coordinate plane: the plane and the parts a board puts on it (PARTS). Each part knows
  * nothing of the others; this is where they meet:
  *
- * - its facts are what the pieces need, under the names they need them by (the plane's window and
- *   streets, the places' target), so each piece is given them by name, read live;
- * - what one piece does that another answers is heard here: another house sends Riya back.
+ * - its facts are what the parts need, under the names they need them by (the plane's window and
+ *   streets, the places' target), so each part is given them by name, read live;
+ * - what one part does that another answers is heard here: another house sends Riya back.
  */
 export const coordinatePlane = prop({
   type: "coordinatePlane",
@@ -63,11 +63,11 @@ export const coordinatePlane = prop({
   describe: `A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: ${NAMES.map(
     (n, i) => `${i === NAMES.length - 1 ? "and " : ""}${ENTRIES[n].says}`,
   ).join("; ")}.`,
-  children: { plane, ...propsOf(PIECES) },
-  // Whether the board is open for play (its point made), for the pieces whose play opens then.
+  children: { plane, ...propsOf(PARTS) },
+  // Whether the board is open for play (its point made), for the parts whose play opens then.
   needs: z.object({ isOpen: z.boolean() }).strict(),
   facts: {
-    // The plane's, for every piece that draws or decides by them.
+    // The plane's, for every part that draws or decides by them.
     window: (me) => me.plane.window,
     upLines: (me) => me.plane.upLines,
     rising: (me) => me.plane.rising,
@@ -84,7 +84,7 @@ export const coordinatePlane = prop({
     target: (me) => (uses(me, "places") ? me.places.target : null),
     targetName: (me) => (uses(me, "places") ? me.places.targetName : TARGET_NAME),
     canChooseTarget: (me) => isOn(me, "places") && me.places.canChoose,
-    // The plane's: no piece on it that takes a tap, so a tap names its parts.
+    // The plane's: no part on it that takes a tap, so a tap names its parts.
     isAlone: (me) =>
       !NAMES.some((n) => isOn(me, n) && (ENTRIES[n].takesTaps?.(stateOf(me, n)) ?? false)),
     // Its numbers light the places.

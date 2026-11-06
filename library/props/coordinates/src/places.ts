@@ -1,7 +1,7 @@
 import { localizedSchema } from "@chalk/content";
 import { PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
-import { piece } from "./piece";
+import { part } from "./part";
 import { Axes } from "./plane";
 import {
   type Line,
@@ -177,7 +177,7 @@ export const places = prop({
  * On the coordinate plane: places to choose. A tap on the empty plane is theirs, unless no one can
  * choose them (a town drawn behind the axes).
  */
-export const placesPiece = piece<typeof places, Pick<PlacesState, "places" | "choosing">>({
+export const placesPart = part<typeof places, Pick<PlacesState, "places" | "choosing">>({
   prop: places,
   isOn: arePlacesOn,
   takesTaps: (s: Pick<PlacesState, "choosing">) => s.choosing !== Choosing.Never,

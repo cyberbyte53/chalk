@@ -1,7 +1,7 @@
 import { localizedSchema } from "@chalk/content";
 import { type Out, PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
-import { always, piece } from "./piece";
+import { always, part } from "./part";
 import { type Point, pointSchema } from "./plane";
 
 export const throwSchema = z
@@ -170,7 +170,7 @@ export const dice = prop({
 });
 
 /** On the coordinate plane: the dice game. While on, a tap on the plane is its. */
-export const dicePiece = piece({
+export const dicePart = part({
   prop: dice,
   isOn: isDiceOn,
   takesTaps: always,
