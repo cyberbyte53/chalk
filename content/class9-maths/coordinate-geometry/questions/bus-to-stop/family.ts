@@ -64,8 +64,8 @@ export const busToStop = family({
         {
           when: isAt("road", -stop, 0),
           say: t(
-            `That's stop ${-stop < 0 ? `−${stop}` : -stop}: the right distance, on the wrong side. The sign says which side of 0.`,
-            `यह स्टॉप ${-stop < 0 ? `−${stop}` : -stop} है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।`,
+            `That's stop ${-stop < 0 ? `[[−${stop}|minus ${stop}]]` : -stop}: the right distance, on the wrong side. The sign says which side of 0.`,
+            `यह स्टॉप ${-stop < 0 ? `[[−${stop}|माइनस ${stop}]]` : -stop} है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।`,
           ),
           reach: walkTo("road", -stop, 0),
         },

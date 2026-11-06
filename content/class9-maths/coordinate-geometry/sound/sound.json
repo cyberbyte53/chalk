@@ -2120,6 +2120,276 @@
       ]
     },
     {
+      "file": "046f26f819e9d77c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That desk is (3, 5): column 3, row 5. The column comes first.",
+      "seconds": 5.12,
+      "boards": [
+        "fecc205c4ee8d3a1"
+      ]
+    },
+    {
+      "file": "af1bbc2072a773af.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That desk is (4, 7): column 4, row 7. The column comes first.",
+      "seconds": 4.795,
+      "boards": [
+        "c6a8c004e684dd66"
+      ]
+    },
+    {
+      "file": "ac74702976e4142b.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That desk is (5, 1): column 5, row 1. The column comes first.",
+      "seconds": 4.819,
+      "boards": [
+        "195f39f05d66a514"
+      ]
+    },
+    {
+      "file": "a76aceb4f2d95bd7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That desk is (6, 2): column 6, row 2. The column comes first.",
+      "seconds": 5.12,
+      "boards": [
+        "c041ea5fb07ba9df"
+      ]
+    },
+    {
+      "file": "2db8558baf72f821.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is at the point 0, minus 1: the numbers are the wrong way round. The first, minus 1, is along the x-axis; the second, 0, is up or down. Drag it again.",
+      "seconds": 11.32,
+      "boards": [
+        "d9e13de81f611d11"
+      ]
+    },
+    {
+      "file": "a7a2108ad179b6a7.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is at the point 1, 4.5: the numbers are the wrong way round. The first, 4.5, is along the x-axis; the second, 1, is up or down. Drag it again.",
+      "seconds": 11.622,
+      "boards": [
+        "a26c0d271517fe31"
+      ]
+    },
+    {
+      "file": "0e453ca9d91f4c03.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is at the point 2, 1: the numbers are the wrong way round. The first, 1, is along the x-axis; the second, 2, is up or down. Drag it again.",
+      "seconds": 10.333,
+      "boards": [
+        "6d56115880768dc7"
+      ]
+    },
+    {
+      "file": "04b6cdd168bb1245.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is at the point 4, minus 2: the numbers are the wrong way round. The first, minus 2, is along the x-axis; the second, 4, is up or down. Drag it again.",
+      "seconds": 10.705,
+      "boards": [
+        "c08e49e9b7407ce6"
+      ]
+    },
+    {
+      "file": "8510db73f92bd7fe.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is at the point minus 1, 3: the numbers are the wrong way round. The first, 3, is along the x-axis; the second, minus 1, is up or down. Drag it again.",
+      "seconds": 10.833,
+      "boards": [
+        "0350f92b374e9911"
+      ]
+    },
+    {
+      "file": "06da23309107d69f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is at the point minus 3, minus 1.5: the numbers are the wrong way round. The first, minus 1.5, is along the x-axis; the second, minus 3, is up or down. Drag it again.",
+      "seconds": 13.526,
+      "boards": [
+        "6d4dc8cc7ba676a2"
+      ]
+    },
+    {
+      "file": "b043ba8084a190b6.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is at the point minus 3.5, 2: the numbers are the wrong way round. The first, 2, is along the x-axis; the second, minus 3.5, is up or down. Drag it again.",
+      "seconds": 11.796,
+      "boards": [
+        "b54d44a31c4394c6"
+      ]
+    },
+    {
+      "file": "b4907a8ed505364c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is at the point minus 5, minus 3: the numbers are the wrong way round. The first, minus 3, is along the x-axis; the second, minus 5, is up or down. Drag it again.",
+      "seconds": 11.889,
+      "boards": [
+        "3b5834a680c76e5a"
+      ]
+    },
+    {
+      "file": "f35c5684cb44279c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the x-axis: y equals 1 is up. Drag it again.",
+      "seconds": 4.958,
+      "boards": [
+        "a26c0d271517fe31"
+      ]
+    },
+    {
+      "file": "677e1870ecc09496.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the x-axis: y equals 2 is up. Drag it again.",
+      "seconds": 5.353,
+      "boards": [
+        "6d56115880768dc7"
+      ]
+    },
+    {
+      "file": "52f29c832c8799c5.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the x-axis: y equals 4 is up. Drag it again.",
+      "seconds": 5.179,
+      "boards": [
+        "c08e49e9b7407ce6"
+      ]
+    },
+    {
+      "file": "4b4717bb5a69889f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the x-axis: y equals minus 1 is down. Drag it again.",
+      "seconds": 5.736,
+      "boards": [
+        "0350f92b374e9911"
+      ]
+    },
+    {
+      "file": "1c7517808afe43c1.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the x-axis: y equals minus 3 is down. Drag it again.",
+      "seconds": 5.91,
+      "boards": [
+        "6d4dc8cc7ba676a2"
+      ]
+    },
+    {
+      "file": "783b03f308850c8a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the x-axis: y equals minus 3.5 is down. Drag it again.",
+      "seconds": 6.27,
+      "boards": [
+        "b54d44a31c4394c6"
+      ]
+    },
+    {
+      "file": "a0f6e8a529ff55f4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the x-axis: y equals minus 5 is down. Drag it again.",
+      "seconds": 5.724,
+      "boards": [
+        "3b5834a680c76e5a"
+      ]
+    },
+    {
+      "file": "9f060b3c6573b43f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the y-axis: x equals 1 is to the right. Drag it again.",
+      "seconds": 5.48,
+      "boards": [
+        "6d56115880768dc7"
+      ]
+    },
+    {
+      "file": "7599f971bd8f5f70.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the y-axis: x equals 2 is to the right. Drag it again.",
+      "seconds": 5.713,
+      "boards": [
+        "b54d44a31c4394c6"
+      ]
+    },
+    {
+      "file": "db0fe58a5d92f386.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the y-axis: x equals 3 is to the right. Drag it again.",
+      "seconds": 5.492,
+      "boards": [
+        "0350f92b374e9911"
+      ]
+    },
+    {
+      "file": "0bb86c68fcbbd3fe.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the y-axis: x equals 4.5 is to the right. Drag it again.",
+      "seconds": 6.038,
+      "boards": [
+        "a26c0d271517fe31"
+      ]
+    },
+    {
+      "file": "8aa019f282354349.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the y-axis: x equals minus 1 is to the left. Drag it again.",
+      "seconds": 5.655,
+      "boards": [
+        "d9e13de81f611d11"
+      ]
+    },
+    {
+      "file": "196bd02daf519fec.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the y-axis: x equals minus 1.5 is to the left. Drag it again.",
+      "seconds": 6.479,
+      "boards": [
+        "6d4dc8cc7ba676a2"
+      ]
+    },
+    {
+      "file": "e530558ca4a9c9d3.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the y-axis: x equals minus 2 is to the left. Drag it again.",
+      "seconds": 5.991,
+      "boards": [
+        "c08e49e9b7407ce6"
+      ]
+    },
+    {
+      "file": "cb33e3239bbc50e4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That dot is on the wrong side of the y-axis: x equals minus 3 is to the left. Drag it again.",
+      "seconds": 6.084,
+      "boards": [
+        "3b5834a680c76e5a"
+      ]
+    },
+    {
       "file": "070881bf8191b664.m4a",
       "voice": "piper:en_US-lessac-high",
       "locale": "en",
@@ -2137,6 +2407,46 @@
       "seconds": 3.46,
       "boards": [
         "91567912326f38a0"
+      ]
+    },
+    {
+      "file": "01ab4133ae794c9c.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is OX: the positive numbers lie along it. O X dash is the other half, where minus 1, minus 2, minus 3, and so on are.",
+      "seconds": 8.603,
+      "boards": [
+        "f127ab93d9a35841"
+      ]
+    },
+    {
+      "file": "a3d1a19c61d94e4f.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is OY: the positive numbers lie along it. O Y dash is the other half, where minus 1, minus 2, minus 3, and so on are.",
+      "seconds": 8.255,
+      "boards": [
+        "a691116babc78d8c"
+      ]
+    },
+    {
+      "file": "813527590b25e522.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is quadrant II: you counted clockwise. The quadrants are numbered anticlockwise from OX: I, II, III, then IV below OX.",
+      "seconds": 10.531,
+      "boards": [
+        "6dc51a0094f4a256"
+      ]
+    },
+    {
+      "file": "45916bc9ed18f49d.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That is quadrant IV: you counted clockwise. The quadrants are numbered anticlockwise from OX: I, then II above O X dash.",
+      "seconds": 8.522,
+      "boards": [
+        "f898ee7816aa6357"
       ]
     },
     {
@@ -2484,6 +2794,116 @@
       "seconds": 6.038,
       "boards": [
         "12c800faec90e03b"
+      ]
+    },
+    {
+      "file": "6a712bf278d2fe0a.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That spot is 10 cm from the left edge and 4 cm above the bottom: the two distances are swapped.",
+      "seconds": 5.713,
+      "boards": [
+        "801d7070b0415239"
+      ]
+    },
+    {
+      "file": "aa04240e1874d7ff.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That spot is 3 cm from the left edge and 7 cm above the bottom: the two distances are swapped.",
+      "seconds": 6.34,
+      "boards": [
+        "02d86b486018d145"
+      ]
+    },
+    {
+      "file": "ec8e5c135d71ae3d.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That spot is 5 cm from the left edge and 11 cm above the bottom: the two distances are swapped.",
+      "seconds": 5.875,
+      "boards": [
+        "1ea9bfd661703d74"
+      ]
+    },
+    {
+      "file": "e7b68eb70a18fafb.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That spot is 8 cm from the left edge and 2 cm above the bottom: the two distances are swapped.",
+      "seconds": 5.852,
+      "boards": [
+        "acc46a4d35b8ad85"
+      ]
+    },
+    {
+      "file": "4cc588ef99a814aa.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That's stop 3: the right distance, on the wrong side. The sign says which side of 0.",
+      "seconds": 5.353,
+      "boards": [
+        "1c304bf6275160a6"
+      ]
+    },
+    {
+      "file": "beaa030f7de95dc2.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That's stop 5: the right distance, on the wrong side. The sign says which side of 0.",
+      "seconds": 5.562,
+      "boards": [
+        "fddd2ab14f3949a4"
+      ]
+    },
+    {
+      "file": "7706533777995362.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That's stop minus 2: the right distance, on the wrong side. The sign says which side of 0.",
+      "seconds": 5.875,
+      "boards": [
+        "e98d14c4e8baff27"
+      ]
+    },
+    {
+      "file": "44fe0e74e5bafc45.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That's stop minus 4: the right distance, on the wrong side. The sign says which side of 0.",
+      "seconds": 5.864,
+      "boards": [
+        "e186106cfc7390e4"
+      ]
+    },
+    {
+      "file": "ef9ccf9fb9acbafc.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That's Street 4, House 1. The street comes first: how far along the main road.",
+      "seconds": 5.144,
+      "boards": [
+        "938b659f519ee6e0"
+      ]
+    },
+    {
+      "file": "b578f623680b5351.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That's Street 4, House 2. The street comes first: how far along the main road.",
+      "seconds": 5.062,
+      "boards": [
+        "e5cdfece9d3c1db8"
+      ]
+    },
+    {
+      "file": "efc35f6cb4fea5d4.m4a",
+      "voice": "piper:en_US-lessac-high",
+      "locale": "en",
+      "words": "That's Street 5, House 3. The street comes first: how far along the main road.",
+      "seconds": 5.341,
+      "boards": [
+        "b58ce7185e2a6080"
       ]
     },
     {
@@ -5684,6 +6104,36 @@
       ]
     },
     {
+      "file": "fb7ede4e6eb998bc.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह गली 4, मकान 1 है। गली पहले आती है: मुख्य सड़क पर कितनी दूर।",
+      "seconds": 6.374,
+      "boards": [
+        "938b659f519ee6e0"
+      ]
+    },
+    {
+      "file": "98bdf9651d101f3c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह गली 4, मकान 2 है। गली पहले आती है: मुख्य सड़क पर कितनी दूर।",
+      "seconds": 6.212,
+      "boards": [
+        "e5cdfece9d3c1db8"
+      ]
+    },
+    {
+      "file": "12fe65f0d3643c69.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह गली 5, मकान 3 है। गली पहले आती है: मुख्य सड़क पर कितनी दूर।",
+      "seconds": 6.467,
+      "boards": [
+        "b58ce7185e2a6080"
+      ]
+    },
+    {
       "file": "087e5831a58ae079.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -5934,6 +6384,46 @@
       ]
     },
     {
+      "file": "4e9d982645f99a10.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह स्टॉप 3 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।",
+      "seconds": 7.187,
+      "boards": [
+        "1c304bf6275160a6"
+      ]
+    },
+    {
+      "file": "bbf811899f3435d0.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह स्टॉप 5 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।",
+      "seconds": 7.338,
+      "boards": [
+        "fddd2ab14f3949a4"
+      ]
+    },
+    {
+      "file": "f1a90428ceb70518.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह स्टॉप माइनस 2 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।",
+      "seconds": 7.292,
+      "boards": [
+        "e98d14c4e8baff27"
+      ]
+    },
+    {
+      "file": "e45eac992b56c366.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "यह स्टॉप माइनस 4 है: दूरी ठीक, पर ओर गलत। चिह्न बताता है कि 0 के किस ओर।",
+      "seconds": 7.71,
+      "boards": [
+        "e186106cfc7390e4"
+      ]
+    },
+    {
       "file": "dbc9b4da7a82e68c.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -6114,6 +6604,126 @@
       ]
     },
     {
+      "file": "0807819c7228cb53.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह OX है: धनात्मक संख्याएँ उस पर हैं। O X डैश दूसरा आधा भाग है, जहाँ माइनस 1, माइनस 2, माइनस 3, और आगे हैं।",
+      "seconds": 10.833,
+      "boards": [
+        "f127ab93d9a35841"
+      ]
+    },
+    {
+      "file": "6788ff2d5ffb2dce.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह OY है: धनात्मक संख्याएँ उस पर हैं। O Y डैश दूसरा आधा भाग है, जहाँ माइनस 1, माइनस 2, माइनस 3, और आगे हैं।",
+      "seconds": 11.518,
+      "boards": [
+        "a691116babc78d8c"
+      ]
+    },
+    {
+      "file": "6cc235a7ce6596dc.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह चौथा चतुर्थांश (IV) है: तुमने घड़ी की दिशा में गिना। चतुर्थांश OX से वामावर्त गिने जाते हैं: पहला (I), फिर O X डैश के ऊपर दूसरा (II)।",
+      "seconds": 12.203,
+      "boards": [
+        "f898ee7816aa6357"
+      ]
+    },
+    {
+      "file": "0f6de1e2f8933694.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह जगह बाएँ किनारे से 10 cm और नीचे के किनारे से 4 cm ऊपर है: दोनों दूरियाँ उलट गईं।",
+      "seconds": 7.373,
+      "boards": [
+        "801d7070b0415239"
+      ]
+    },
+    {
+      "file": "e9eb034965511611.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह जगह बाएँ किनारे से 3 cm और नीचे के किनारे से 7 cm ऊपर है: दोनों दूरियाँ उलट गईं।",
+      "seconds": 6.943,
+      "boards": [
+        "02d86b486018d145"
+      ]
+    },
+    {
+      "file": "08ce905de6c180d4.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह जगह बाएँ किनारे से 5 cm और नीचे के किनारे से 11 cm ऊपर है: दोनों दूरियाँ उलट गईं।",
+      "seconds": 8.046,
+      "boards": [
+        "1ea9bfd661703d74"
+      ]
+    },
+    {
+      "file": "b5610c4c8668219a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह जगह बाएँ किनारे से 8 cm और नीचे के किनारे से 2 cm ऊपर है: दोनों दूरियाँ उलट गईं।",
+      "seconds": 6.932,
+      "boards": [
+        "acc46a4d35b8ad85"
+      ]
+    },
+    {
+      "file": "f39b403e9ba3aa4a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह डेस्क (3, 5) है: स्तंभ 3, पंक्ति 5। स्तंभ पहले आता है।",
+      "seconds": 6.293,
+      "boards": [
+        "fecc205c4ee8d3a1"
+      ]
+    },
+    {
+      "file": "5507dce19c99551c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह डेस्क (4, 7) है: स्तंभ 4, पंक्ति 7। स्तंभ पहले आता है।",
+      "seconds": 5.945,
+      "boards": [
+        "c6a8c004e684dd66"
+      ]
+    },
+    {
+      "file": "f8d93bd357634192.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह डेस्क (5, 1) है: स्तंभ 5, पंक्ति 1। स्तंभ पहले आता है।",
+      "seconds": 6.223,
+      "boards": [
+        "195f39f05d66a514"
+      ]
+    },
+    {
+      "file": "b19cc563d82e3daf.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह डेस्क (6, 2) है: स्तंभ 6, पंक्ति 2। स्तंभ पहले आता है।",
+      "seconds": 6.003,
+      "boards": [
+        "c041ea5fb07ba9df"
+      ]
+    },
+    {
+      "file": "7789c9484b02f24d.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह दूसरा चतुर्थांश (II) है: तुमने घड़ी की दिशा में गिना। चतुर्थांश OX से वामावर्त गिने जाते हैं: पहला, दूसरा, तीसरा, फिर OX के नीचे चौथा (IV)।",
+      "seconds": 13.189,
+      "boards": [
+        "6dc51a0094f4a256"
+      ]
+    },
+    {
       "file": "d1212fae97dfebb0.m4a",
       "voice": "piper:hi_IN-rohan-medium",
       "locale": "hi",
@@ -6131,6 +6741,46 @@
       "seconds": 3.751,
       "boards": [
         "48bad3ab7f797be8"
+      ]
+    },
+    {
+      "file": "c1857c30d2dbd02c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु 0, माइनस 1 पर है: संख्याएँ उलट गईं। पहली, माइनस 1, x-अक्ष के साथ है; दूसरी, 0, ऊपर या नीचे। उसे फिर से खींचो।",
+      "seconds": 13.34,
+      "boards": [
+        "d9e13de81f611d11"
+      ]
+    },
+    {
+      "file": "c4d8c44ca714eb30.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु 1, 4.5 पर है: संख्याएँ उलट गईं। पहली, 4.5, x-अक्ष के साथ है; दूसरी, 1, ऊपर या नीचे। उसे फिर से खींचो।",
+      "seconds": 14.002,
+      "boards": [
+        "a26c0d271517fe31"
+      ]
+    },
+    {
+      "file": "36f7f00a69beb4ea.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु 2, 1 पर है: संख्याएँ उलट गईं। पहली, 1, x-अक्ष के साथ है; दूसरी, 2, ऊपर या नीचे। उसे फिर से खींचो।",
+      "seconds": 11.46,
+      "boards": [
+        "6d56115880768dc7"
+      ]
+    },
+    {
+      "file": "c13eecf989d92321.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु 4, माइनस 2 पर है: संख्याएँ उलट गईं। पहली, माइनस 2, x-अक्ष के साथ है; दूसरी, 4, ऊपर या नीचे। उसे फिर से खींचो।",
+      "seconds": 12.667,
+      "boards": [
+        "c08e49e9b7407ce6"
       ]
     },
     {
@@ -6161,6 +6811,156 @@
       "seconds": 6.49,
       "boards": [
         "53312b4f1e05c57f"
+      ]
+    },
+    {
+      "file": "ff83ddc84d4ef6c3.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु x-अक्ष की ग़लत ओर है: वाई बराबर 1 ऊपर है। उसे फिर से खींचो।",
+      "seconds": 6.63,
+      "boards": [
+        "a26c0d271517fe31"
+      ]
+    },
+    {
+      "file": "553bbab1698f012e.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु x-अक्ष की ग़लत ओर है: वाई बराबर 2 ऊपर है। उसे फिर से खींचो।",
+      "seconds": 6.351,
+      "boards": [
+        "6d56115880768dc7"
+      ]
+    },
+    {
+      "file": "63d58bee6249e581.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु x-अक्ष की ग़लत ओर है: वाई बराबर 4 ऊपर है। उसे फिर से खींचो।",
+      "seconds": 6.56,
+      "boards": [
+        "c08e49e9b7407ce6"
+      ]
+    },
+    {
+      "file": "fc02e8bf23bad0ab.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु x-अक्ष की ग़लत ओर है: वाई बराबर माइनस 1 नीचे है। उसे फिर से खींचो।",
+      "seconds": 6.92,
+      "boards": [
+        "0350f92b374e9911"
+      ]
+    },
+    {
+      "file": "287c59cdc1d2e19a.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु x-अक्ष की ग़लत ओर है: वाई बराबर माइनस 3 नीचे है। उसे फिर से खींचो।",
+      "seconds": 6.607,
+      "boards": [
+        "6d4dc8cc7ba676a2"
+      ]
+    },
+    {
+      "file": "06a435f6b81ef0d7.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु x-अक्ष की ग़लत ओर है: वाई बराबर माइनस 3.5 नीचे है। उसे फिर से खींचो।",
+      "seconds": 7.477,
+      "boards": [
+        "b54d44a31c4394c6"
+      ]
+    },
+    {
+      "file": "64da567a72f0556c.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु x-अक्ष की ग़लत ओर है: वाई बराबर माइनस 5 नीचे है। उसे फिर से खींचो।",
+      "seconds": 6.839,
+      "boards": [
+        "3b5834a680c76e5a"
+      ]
+    },
+    {
+      "file": "f7e501b12bec9256.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु y-अक्ष की ग़लत ओर है: एक्स बराबर 1 दाईं ओर है। उसे फिर से खींचो।",
+      "seconds": 6.49,
+      "boards": [
+        "6d56115880768dc7"
+      ]
+    },
+    {
+      "file": "474685613332e394.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु y-अक्ष की ग़लत ओर है: एक्स बराबर 2 दाईं ओर है। उसे फिर से खींचो।",
+      "seconds": 6.409,
+      "boards": [
+        "b54d44a31c4394c6"
+      ]
+    },
+    {
+      "file": "70cc64fbc463b542.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु y-अक्ष की ग़लत ओर है: एक्स बराबर 3 दाईं ओर है। उसे फिर से खींचो।",
+      "seconds": 6.595,
+      "boards": [
+        "0350f92b374e9911"
+      ]
+    },
+    {
+      "file": "c97788d37fb7da4f.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु y-अक्ष की ग़लत ओर है: एक्स बराबर 4.5 दाईं ओर है। उसे फिर से खींचो।",
+      "seconds": 7.663,
+      "boards": [
+        "a26c0d271517fe31"
+      ]
+    },
+    {
+      "file": "823ab79d4d20b384.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु y-अक्ष की ग़लत ओर है: एक्स बराबर माइनस 1 बाईं ओर है। उसे फिर से खींचो।",
+      "seconds": 6.746,
+      "boards": [
+        "d9e13de81f611d11"
+      ]
+    },
+    {
+      "file": "8118a4cf38f275e2.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु y-अक्ष की ग़लत ओर है: एक्स बराबर माइनस 1.5 बाईं ओर है। उसे फिर से खींचो।",
+      "seconds": 7.86,
+      "boards": [
+        "6d4dc8cc7ba676a2"
+      ]
+    },
+    {
+      "file": "7cad5a9f7245799f.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु y-अक्ष की ग़लत ओर है: एक्स बराबर माइनस 2 बाईं ओर है। उसे फिर से खींचो।",
+      "seconds": 6.885,
+      "boards": [
+        "c08e49e9b7407ce6"
+      ]
+    },
+    {
+      "file": "cd4219bace920315.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु y-अक्ष की ग़लत ओर है: एक्स बराबर माइनस 3 बाईं ओर है। उसे फिर से खींचो।",
+      "seconds": 6.665,
+      "boards": [
+        "3b5834a680c76e5a"
       ]
     },
     {
@@ -6224,6 +7024,46 @@
       "seconds": 7.373,
       "boards": [
         "12c800faec90e03b"
+      ]
+    },
+    {
+      "file": "3f27c85973b7c952.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु माइनस 1, 3 पर है: संख्याएँ उलट गईं। पहली, 3, x-अक्ष के साथ है; दूसरी, माइनस 1, ऊपर या नीचे। उसे फिर से खींचो।",
+      "seconds": 12.725,
+      "boards": [
+        "0350f92b374e9911"
+      ]
+    },
+    {
+      "file": "9e1fb2105312824f.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु माइनस 3, माइनस 1.5 पर है: संख्याएँ उलट गईं। पहली, माइनस 1.5, x-अक्ष के साथ है; दूसरी, माइनस 3, ऊपर या नीचे। उसे फिर से खींचो।",
+      "seconds": 15.314,
+      "boards": [
+        "6d4dc8cc7ba676a2"
+      ]
+    },
+    {
+      "file": "36a150890958eaa9.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु माइनस 3.5, 2 पर है: संख्याएँ उलट गईं। पहली, 2, x-अक्ष के साथ है; दूसरी, माइनस 3.5, ऊपर या नीचे। उसे फिर से खींचो।",
+      "seconds": 14.664,
+      "boards": [
+        "b54d44a31c4394c6"
+      ]
+    },
+    {
+      "file": "197e1f091403babb.m4a",
+      "voice": "piper:hi_IN-rohan-medium",
+      "locale": "hi",
+      "words": "वह बिंदु माइनस 5, माइनस 3 पर है: संख्याएँ उलट गईं। पहली, माइनस 3, x-अक्ष के साथ है; दूसरी, माइनस 5, ऊपर या नीचे। उसे फिर से खींचो।",
+      "seconds": 14.072,
+      "boards": [
+        "3b5834a680c76e5a"
       ]
     },
     {

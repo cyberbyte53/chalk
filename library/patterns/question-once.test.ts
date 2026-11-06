@@ -1,6 +1,6 @@
 import { hidden, scene, t, tap } from "@chalk/author";
 import { describe, expect, it } from "vitest";
-import { choice } from "./questions";
+import { check, choice } from "./questions";
 
 /**
  * A question is placed once, in a board's pieces: its key is its name, and it brings its witness
@@ -34,5 +34,19 @@ describe("a question written once", () => {
     const answer = [tap("side", "select", { option: "left" }), tap("side", "check")];
     const built = scene({ pieces: { side: side() }, witness: answer }).build("own");
     expect(built.witness).toHaveLength(2);
+  });
+
+  it("a check's note is a line of the board's: shown and said from the same words", () => {
+    const note = t("The column comes first.", "स्तंभ पहले आता है।");
+    const ask = check({
+      about: "room",
+      prompt: t("Tap the desk.", "डेस्क दबाओ।"),
+      isRight: () => false,
+      solve: [],
+      notes: [{ when: () => true, say: note, reach: [] }],
+    });
+    const built = scene({ pieces: { ask } }).build("note");
+    expect(built.board.model.lines["ask-note1"]).toMatchObject({ says: note });
+    expect(built.noteChecks[0]?.feedback).toEqual(note);
   });
 });

@@ -37,36 +37,36 @@ const MISTAKES: Partial<Record<PlanePart, { part: PlanePart; say: ReturnType<typ
   [PlanePart.OXDash]: {
     part: PlanePart.OX,
     say: t(
-      "That is OX: the positive numbers lie along it. OX′ is the other half, where −1, −2, −3, … are.",
-      "वह OX है: धनात्मक संख्याएँ उस पर हैं। OX′ दूसरा आधा भाग है, जहाँ −1, −2, −3, … हैं।",
+      "That is OX: the positive numbers lie along it. [[OX′|O X dash]] is the other half, where [[−1, −2, −3, …|minus 1, minus 2, minus 3, and so on]] are.",
+      "वह OX है: धनात्मक संख्याएँ उस पर हैं। [[OX′|O X डैश]] दूसरा आधा भाग है, जहाँ [[−1, −2, −3, …|माइनस 1, माइनस 2, माइनस 3, और आगे]] हैं।",
     ),
   },
   [PlanePart.OX]: {
     part: PlanePart.OXDash,
     say: t(
-      "That is OX′: the negative numbers lie along it. OX is the other half, where 1, 2, 3, … are.",
-      "वह OX′ है: ऋणात्मक संख्याएँ उस पर हैं। OX दूसरा आधा भाग है, जहाँ 1, 2, 3, … हैं।",
+      "That is [[OX′|O X dash]]: the negative numbers lie along it. OX is the other half, where 1, 2, 3, … are.",
+      "वह [[OX′|O X डैश]] है: ऋणात्मक संख्याएँ उस पर हैं। OX दूसरा आधा भाग है, जहाँ 1, 2, 3, … हैं।",
     ),
   },
   [PlanePart.OYDash]: {
     part: PlanePart.OY,
     say: t(
-      "That is OY: the positive numbers lie along it. OY′ is the other half, where −1, −2, −3, … are.",
-      "वह OY है: धनात्मक संख्याएँ उस पर हैं। OY′ दूसरा आधा भाग है, जहाँ −1, −2, −3, … हैं।",
+      "That is OY: the positive numbers lie along it. [[OY′|O Y dash]] is the other half, where [[−1, −2, −3, …|minus 1, minus 2, minus 3, and so on]] are.",
+      "वह OY है: धनात्मक संख्याएँ उस पर हैं। [[OY′|O Y डैश]] दूसरा आधा भाग है, जहाँ [[−1, −2, −3, …|माइनस 1, माइनस 2, माइनस 3, और आगे]] हैं।",
     ),
   },
   [PlanePart.OY]: {
     part: PlanePart.OYDash,
     say: t(
-      "That is OY′: the negative numbers lie along it. OY is the other half, where 1, 2, 3, … are.",
-      "वह OY′ है: ऋणात्मक संख्याएँ उस पर हैं। OY दूसरा आधा भाग है, जहाँ 1, 2, 3, … हैं।",
+      "That is [[OY′|O Y dash]]: the negative numbers lie along it. OY is the other half, where 1, 2, 3, … are.",
+      "वह [[OY′|O Y डैश]] है: ऋणात्मक संख्याएँ उस पर हैं। OY दूसरा आधा भाग है, जहाँ 1, 2, 3, … हैं।",
     ),
   },
   [PlanePart.II]: {
     part: PlanePart.IV,
     say: t(
-      "That is quadrant IV: you counted clockwise. The quadrants are numbered anticlockwise from OX: I, then II above OX′.",
-      "वह चौथा चतुर्थांश (IV) है: तुमने घड़ी की दिशा में गिना। चतुर्थांश OX से वामावर्त गिने जाते हैं: पहला (I), फिर OX′ के ऊपर दूसरा (II)।",
+      "That is quadrant IV: you counted clockwise. The quadrants are numbered anticlockwise from OX: I, then II above [[OX′|O X dash]].",
+      "वह चौथा चतुर्थांश (IV) है: तुमने घड़ी की दिशा में गिना। चतुर्थांश OX से वामावर्त गिने जाते हैं: पहला (I), फिर [[OX′|O X डैश]] के ऊपर दूसरा (II)।",
     ),
   },
   [PlanePart.IV]: {

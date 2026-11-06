@@ -28,8 +28,8 @@ and before real learners.
 - [x] **A question written once** on a board; the answer taps boards repeat by hand go
   (`question-once.md`).
 - [x] **Speech marks**: `[[shown|said]]`, `says` only for rephrasing (`said-once.md`).
-- [ ] **One way for wrong-answer notes**: a question holds its notes and says them; check notes become
-  spoken (new clips, en and hi) (`simpler-boards.md`, item 3).
+- [x] **One way for wrong-answer notes**: a check's note is said as a choice's is (`notes-once.md`):
+  42 notes newly spoken, 84 clips.
 
 ## 4. Approval follows what the student gets
 

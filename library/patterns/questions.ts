@@ -51,7 +51,13 @@ export function check(spec: {
   const reader = (me: Readonly<Record<string, Readonly<Record<string, unknown>>>>) =>
     ((piece: string) => me[piece] ?? {}) as Read;
   const notes = spec.notes ?? [];
-  type T = { to: Record<string, { giveFeedback: (p: { text: Localized }) => unknown }> };
+  type T = {
+    to: Record<string, { giveFeedback: (p: { text: Localized }) => unknown }>;
+    self: { say: (p: { line: string }) => unknown };
+  };
+  // Each note is a line of the board's, said by the rule that shows it: a check's note is heard, as a
+  // choice's is, in the student's own step after the wrong sound (platform/docs/plans/notes-once.md).
+  const lineOf = (name: string, i: number) => `${name}-note${i + 1}`;
   return {
     ...piece,
     named: (name) => ({
@@ -63,14 +69,23 @@ export function check(spec: {
             answer: (me: never) => spec.answer?.(reader(me)) ?? null,
           },
         },
+        cues: Object.fromEntries(
+          notes.map((n, i) => [lineOf(name, i), cue(n.say, { about: name })]),
+        ),
         hear: {
           [`${name}.wrong`]: ((
             me: Record<string, Readonly<Record<string, unknown>>>,
             _: unknown,
             t: T,
           ) => {
-            const note = notes.find((n) => n.when(reader(me)));
-            return note !== undefined && t.to[name]?.giveFeedback({ text: note.say });
+            const i = notes.findIndex((n) => n.when(reader(me)));
+            const note = notes[i];
+            return (
+              note !== undefined && [
+                t.to[name]?.giveFeedback({ text: note.say }),
+                t.self.say({ line: lineOf(name, i) }),
+              ]
+            );
           }) as never,
         },
         witness: [...spec.solve, tap(name, "check")],
