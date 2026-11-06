@@ -46,3 +46,18 @@ export function withShown(view: object, shown: Readonly<Record<string, boolean>>
 export function shownOf(view: object): Readonly<Record<string, boolean>> | undefined {
   return (view as Record<symbol, Record<string, boolean>>)[SHOWN];
 }
+
+const GIVEN = Symbol("given");
+
+/** The children its placement gave anything (`{ walker: {} }` counts), noted on a view. */
+export function withGiven(view: object, given: ReadonlySet<string>): void {
+  Object.defineProperty(view, GIVEN, { value: given });
+}
+
+/**
+ * The children a prop's placement named: what a board uses of a prop made of pieces (the
+ * coordinate plane's walker, places…). Empty for a view read without one.
+ */
+export function givenOf(view: object): ReadonlySet<string> {
+  return (view as Record<symbol, ReadonlySet<string> | undefined>)[GIVEN] ?? new Set();
+}

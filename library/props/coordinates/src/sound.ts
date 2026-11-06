@@ -1,20 +1,22 @@
 import type { SoundView } from "@chalk/player";
-import { appear, blocked, step, win } from "@chalk/sounds";
+import type { PieceSound } from "./piece-sound";
+import { planeSound } from "./plane-sound";
+import { SOUNDS } from "./sounds";
 
 /**
  * How the coordinate plane sounds (platform/docs/sound.md), beside how it looks, from the sound
- * library: a step as the walker or a counter moves, a bump when it can't, something appearing as a
- * line rises or a point lands, a fanfare when the game is won. Its model knows nothing of sound.
+ * library: the plane's own sounds and each piece's (sounds.ts), each signal named under its piece
+ * ("walker.stepped"). Its model knows nothing of sound.
  */
+const all: Readonly<Record<string, PieceSound>> = { plane: planeSound, ...SOUNDS };
+
 export const coordinatePlaneSound: SoundView = {
-  cues: {
-    "walker.stepped": step,
-    "walker.blocked": blocked,
-    "plane.risen": appear,
-    "plotting.plotted": appear,
-    "dice.counterMoved": step,
-    "dice.won": win,
-  },
-  // A win is said: the words after it wait for it. The rest is the sound of things moving.
-  inTurn: ["dice.won"],
+  cues: Object.fromEntries(
+    Object.entries(all).flatMap(([piece, s]) =>
+      Object.entries(s.cues).map(([signal, cue]) => [`${piece}.${signal}`, cue]),
+    ),
+  ),
+  inTurn: Object.entries(all).flatMap(([piece, s]) =>
+    (s.inTurn ?? []).map((signal) => `${piece}.${signal}`),
+  ),
 };

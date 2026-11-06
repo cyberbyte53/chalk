@@ -1,39 +1,73 @@
-import { PropRole } from "@chalk/prop";
-import { prop } from "@chalk/prop";
+import { type AnyProp, Place, PropRole, givenOf, prop } from "@chalk/prop";
 import { z } from "zod";
-import { areCluesOn } from "./clues";
-import { clues } from "./clues";
-import { isDiceOn } from "./dice";
-import { dice } from "./dice";
-import { Choosing, arePlacesOn } from "./places";
-import { places } from "./places";
+import type { Piece } from "./piece";
+import { PIECES } from "./pieces";
+import { Choosing, TARGET_NAME } from "./places";
 import { plane } from "./plane";
-import { isPlottingOn } from "./plotting";
-import { plotting } from "./plotting";
-import { isReadingOn } from "./reading";
-import { reading } from "./reading";
-import { isWalkerOn } from "./walker";
-import { walker } from "./walker";
+
+// The pieces (pieces.ts). Nothing in this file names a piece except where the plane answers that
+// piece in particular (its facts and `hear` below).
+type Pieces = typeof PIECES;
+type PieceName = keyof Pieces & string;
+const NAMES = Object.keys(PIECES) as PieceName[];
+// The pieces' entries, read without their own types: what every piece has in common.
+const ENTRIES = PIECES as unknown as Readonly<Record<PieceName, Piece<AnyProp, unknown>>>;
+
+/** The plane's own turns round its picture; the pieces' are in their entries. */
+const PLANE_TURNS: Piece["turns"] = { back: 10, on: 10, front: 10, below: 10, controls: 30 };
+
+/** Who draws in each place, by turn: the plane and every piece with a turn there. */
+const order = Object.fromEntries(
+  Object.values(Place).map((place) => [
+    place,
+    [
+      ...(PLANE_TURNS[place] === undefined ? [] : [["plane", PLANE_TURNS[place]] as const]),
+      ...NAMES.flatMap((n) => {
+        const turn = ENTRIES[n].turns[place];
+        return turn === undefined ? [] : [[n, turn] as const];
+      }),
+    ]
+      .sort((a, b) => a[1] - b[1])
+      .map(([n]) => n),
+  ]),
+) as { [P in Place]: ("plane" | PieceName)[] };
+
+/** Each piece's prop, by its name: the plane's children besides the plane. */
+const propsOf = <P extends Readonly<Record<string, Piece<AnyProp, never>>>>(p: P) =>
+  Object.fromEntries(Object.entries(p).map(([n, e]) => [n, e.prop])) as {
+    [K in keyof P]: P[K]["prop"];
+  };
+
+/** A piece's state, as the plane reads it. */
+const stateOf = (me: object, n: PieceName) => (me as Record<PieceName, unknown>)[n];
+/**
+ * Whether a board uses a piece: its setup names it (`{ walker: {…} }`, `{ dice: {} }`). A piece a
+ * board doesn't use is never drawn, never answered and never read here, so nothing of its code
+ * reaches that board (platform/docs/plans/adding-pieces.md).
+ */
+const uses = (me: object, n: PieceName) => givenOf(me).has(n);
+/** A piece is on when the board uses it and it has something to show. */
+const isOn = (me: object, n: PieceName) => uses(me, n) && ENTRIES[n].isOn(stateOf(me, n));
 
 /**
- * The coordinate plane: the plane and the parts a board puts on it (places, a
- * walker, clues, a point to read, pairs to plot, the dice game). Each part knows nothing of the
- * others; this is where they meet:
+ * The coordinate plane: the plane and the pieces a board puts on it (PIECES). Each piece knows
+ * nothing of the others; this is where they meet:
  *
- * - its facts are what the parts need, under the names they need them by (the plane's window and
- *   streets, the places' target), so each part is given them by name, read live;
- * - what one part does that another answers is heard here: another house sends Riya back.
+ * - its facts are what the pieces need, under the names they need them by (the plane's window and
+ *   streets, the places' target), so each piece is given them by name, read live;
+ * - what one piece does that another answers is heard here: another house sends Riya back.
  */
 export const coordinatePlane = prop({
   type: "coordinatePlane",
   role: PropRole.Explainer,
-  describe:
-    "A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: places (houses, desks, crossings, stalls) with a target to find; a walker who goes along the first line, then up or down the second, on the lines only, so two numbers in order reach one place; clues that narrow where a hidden point can be; a point read off the axes as its abscissa, ordinate and (x, y); pairs to plot at a chosen scale; and the dice game.",
-  children: { plane, reading, places, walker, clues, plotting, dice },
-  // Whether the board is open for play (its point made), for the parts whose play opens then.
+  describe: `A plane located by two perpendicular lines, drawn only as far as the lesson has defined it: a town's main road and a street counted from 1, a sheet's edges, or the x- and y-axes as number lines crossing at O, with their directions and quadrants. On it: ${NAMES.map(
+    (n, i) => `${i === NAMES.length - 1 ? "and " : ""}${ENTRIES[n].says}`,
+  ).join("; ")}.`,
+  children: { plane, ...propsOf(PIECES) },
+  // Whether the board is open for play (its point made), for the pieces whose play opens then.
   needs: z.object({ isOpen: z.boolean() }).strict(),
   facts: {
-    // The plane's, for every part that draws or decides by them.
+    // The plane's, for every piece that draws or decides by them.
     window: (me) => me.plane.window,
     upLines: (me) => me.plane.upLines,
     rising: (me) => me.plane.rising,
@@ -46,56 +80,36 @@ export const coordinatePlane = prop({
     // The frame a point is read in: where the axes cross on the sheet, and how far they are turned.
     shift: (me) => me.plane.shift,
     turn: (me) => me.plane.turn,
-    // Where Riya is headed: the places'.
-    target: (me) => me.places.target,
-    targetName: (me) => me.places.targetName,
-    canChooseTarget: (me) => arePlacesOn(me.places) && me.places.canChoose,
-    // The plane's: nothing else on it, so a tap names its parts; its numbers light the places.
-    // Places no one can choose (a town drawn behind the axes) leave the taps to the plane.
+    // Where Riya is headed: the places', if the board has places.
+    target: (me) => (uses(me, "places") ? me.places.target : null),
+    targetName: (me) => (uses(me, "places") ? me.places.targetName : TARGET_NAME),
+    canChooseTarget: (me) => isOn(me, "places") && me.places.canChoose,
+    // The plane's: no piece on it that takes a tap, so a tap names its parts.
     isAlone: (me) =>
-      !(arePlacesOn(me.places) && me.places.choosing !== Choosing.Never) &&
-      !isPlottingOn(me.plotting) &&
-      !areCluesOn(me.clues) &&
-      !isDiceOn(me.dice),
-    canTapNumbers: (me) => arePlacesOn(me.places),
-    lit: (me) => me.places.lit,
+      !NAMES.some((n) => isOn(me, n) && (ENTRIES[n].takesTaps?.(stateOf(me, n)) ?? false)),
+    // Its numbers light the places.
+    canTapNumbers: (me) => isOn(me, "places"),
+    lit: (me) => (uses(me, "places") ? me.places.lit : null),
     // The clues': the unit a page's ruler reads in, and a tap is theirs once nothing is left to plot.
-    unit: (me) => me.reading.unit,
+    unit: (me) => (uses(me, "reading") ? me.reading.unit : ""),
     isPlaneFree: (me) =>
-      !isPlottingOn(me.plotting) || me.plotting.plotted.length >= me.plotting.toPlot.length,
+      !isOn(me, "plotting") || me.plotting.plotted.length >= me.plotting.toPlot.length,
   },
   hear: {
     // In free play (a house chosen once the board is open), another house is a new walk, from her
     // start. (The first is only marked: she may be on her way to it.) Where a tap only marks a place
     // (a stall opened where she stands), she stays.
     "places.targetChosen": (me, p, t) =>
-      p.isAnother && me.places.choosing === Choosing.OnceOpen && t.to.walker.backToStart(),
-    "plane.numberTapped": (_, p, t) =>
-      t.to.places.lightLine({ axis: p.axis, value: p.value, isTap: true }),
+      p.isAnother &&
+      me.places.choosing === Choosing.OnceOpen &&
+      uses(me, "walker") &&
+      t.to.walker.backToStart(),
+    "plane.numberTapped": (me, p, t) =>
+      uses(me, "places") && t.to.places.lightLine({ axis: p.axis, value: p.value, isTap: true }),
     "plotting.scaleChosen": (_, p, t) => t.to.plane.setScale({ every: p.every }),
   },
-  show: {
-    reading: (me) => isReadingOn(me.reading),
-    places: (me) => arePlacesOn(me.places),
-    walker: (me) => isWalkerOn(me.walker),
-    clues: (me) => areCluesOn(me.clues),
-    plotting: (me) => isPlottingOn(me.plotting),
-    dice: (me) => isDiceOn(me.dice),
-  },
+  show: Object.fromEntries(NAMES.map((n) => [n, (me: object) => isOn(me, n)])),
   summary: (me) =>
     `the coordinate plane from ${me.window.xMin} to ${me.window.xMax} across and ${me.window.yMin} to ${me.window.yMax} up`,
-  layout: {
-    kind: "frame",
-    provider: "plane",
-    children: ["reading", "places", "walker", "clues", "plotting", "dice"],
-    order: {
-      above: ["places", "clues", "plotting"],
-      back: ["plane", "walker", "clues"],
-      on: ["plane", "clues", "plotting", "places", "walker"],
-      // The plane's named points over Riya, so the mark she has just made stays in view.
-      front: ["plane", "plotting", "clues", "dice", "reading"],
-      below: ["plane", "reading", "walker", "plotting", "dice"],
-      controls: ["walker", "places", "plane", "reading", "clues", "plotting", "dice"],
-    },
-  },
+  layout: { kind: "frame", provider: "plane", children: NAMES, order },
 });

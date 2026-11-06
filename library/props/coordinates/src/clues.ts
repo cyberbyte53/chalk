@@ -1,6 +1,7 @@
 import { localizedSchema } from "@chalk/content";
 import { PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
+import { always, piece } from "./piece";
 import {
   type PlaneCore,
   type PlaneWindow,
@@ -183,4 +184,13 @@ export const clues = prop({
     s.given.some((g) => g >= s.clueChoices.length)
       ? "a clue given is not among the choices"
       : undefined,
+});
+
+/** On the coordinate plane: clues to a hidden point. While on, a tap on the plane is theirs. */
+export const cluesPiece = piece({
+  prop: clues,
+  isOn: areCluesOn,
+  takesTaps: always,
+  turns: { above: 20, back: 30, on: 20, front: 30, controls: 50 },
+  says: "clues that narrow where a hidden point can be",
 });

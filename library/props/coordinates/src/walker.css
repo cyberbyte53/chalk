@@ -1,0 +1,82 @@
+/* ---- Riya's walk ---- */
+/* Riya and her route are to see: a tap goes through to the stall or house she stands on. */
+.cp-walk {
+  pointer-events: none;
+}
+.cp-walk-start {
+  fill: var(--color-primary);
+}
+.cp-route {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+  opacity: 0.6;
+}
+.cp-route-done {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cp-bus-body {
+  fill: var(--color-primary);
+}
+.cp-bus-window {
+  fill: var(--color-surface);
+}
+.cp-bus-wheel {
+  fill: var(--color-on-surface);
+  stroke: var(--color-surface);
+  stroke-width: 1.5;
+}
+.cp-walker-body {
+  fill: var(--color-primary);
+}
+.cp-walker-head {
+  fill: color-mix(in srgb, var(--color-category-1) 50%, var(--color-surface));
+  stroke: var(--color-primary);
+  stroke-width: 1.5;
+}
+.cp-frame .cp-walker-name {
+  font: 700 var(--text-caption) var(--font-body);
+  fill: var(--color-primary);
+}
+
+/* Riya's arrows: a cross, with ↺ beside it. */
+.cp-pad {
+  display: grid;
+  /* The last column may shrink: on a small phone ↺'s words wrap rather than run off the page. */
+  grid-template-columns: repeat(3, auto) minmax(0, 1fr);
+  grid-template-areas:
+    ". up . back"
+    "left . right back"
+    ". down . back";
+  gap: 4px;
+  align-items: center;
+  justify-items: center;
+}
+.cp-pad-up {
+  grid-area: up;
+}
+.cp-pad-down {
+  grid-area: down;
+}
+.cp-pad-left {
+  grid-area: left;
+}
+.cp-pad-right {
+  grid-area: right;
+}
+.cp-pad-back {
+  grid-area: back;
+  justify-self: start;
+  margin-left: 12px;
+  min-width: 0;
+  max-width: calc(100% - 12px);
+}
+.cp-pad-back button {
+  max-width: 100%;
+  white-space: normal;
+}

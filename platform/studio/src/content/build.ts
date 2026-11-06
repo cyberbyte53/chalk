@@ -142,6 +142,8 @@ export type BoardReach = {
       type?: string;
       stack: readonly string[];
       given?: readonly string[];
+      /** The prop's children its placement names (`{ walker: {} }` counts): the parts it uses. */
+      parts?: readonly string[];
       binds?: readonly string[];
       calls?: readonly string[];
     }
@@ -261,12 +263,17 @@ function reachOf(
     if (piece.name === "") continue;
     const prop = placed.get(piece.name);
     const given = givenFields(prop === undefined ? undefined : defs[prop.prop], prop?.with ?? {});
+    const children = prop === undefined ? undefined : defs[prop.prop]?.children;
+    const parts = Object.keys(prop?.with ?? {})
+      .filter((name) => children?.[name] !== undefined)
+      .sort();
     const binds = [...(fed.get(piece.name) ?? [])].sort();
     const calls = [...(called.get(piece.name) ?? [])].sort();
     pieces[piece.name] = {
       ...(prop === undefined ? {} : { type: prop.prop }),
       stack: stackOf(piece),
       ...(given.length > 0 ? { given } : {}),
+      ...(parts.length > 0 ? { parts } : {}),
       ...(binds.length > 0 ? { binds } : {}),
       ...(calls.length > 0 ? { calls } : {}),
     };

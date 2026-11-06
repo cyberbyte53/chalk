@@ -18,6 +18,12 @@ export class CodeGraph {
   readonly facts = new Map<string, Facts>();
   /** Workspace package name → its folder (from the root). */
   private readonly packages = new Map<string, { dir: string; exports: Record<string, string> }>();
+  /**
+   * Files that only list (a package's `chalk.registries`: the coordinate plane's pieces, drawings,
+   * sounds, re-exports): sealed, so what uses them doesn't reach through them. A board counts the
+   * listed things it uses itself (board-code.ts), so a new line leaves the rest as they were.
+   */
+  readonly sealed = new Set<string>();
 
   constructor(
     readonly root: string,
@@ -66,6 +72,7 @@ export class CodeGraph {
       const n = todo.pop() as string;
       if (seen.has(n)) continue;
       seen.add(n);
+      if (this.isSealed(n)) continue;
       const file = n.slice(0, n.indexOf("#"));
       if (!seen.has(`${file}#`)) todo.push(`${file}#`);
       for (const u of this.uses.get(n) ?? []) if (!seen.has(u)) todo.push(u);
@@ -73,11 +80,17 @@ export class CodeGraph {
     return seen;
   }
 
+  /** Whether a node is in a file that only lists (`sealed`). */
+  isSealed(n: string): boolean {
+    return this.sealed.has(n.slice(0, n.indexOf("#")));
+  }
+
   /**
    * A node's fingerprint now: a declaration's or a file's own statements' (facts.ts), or for a file
    * that isn't code (a stylesheet), its whole text. Undefined: no such node.
    */
   fingerprintOf(node: string): string | undefined {
+    if (this.isSealed(node)) return "sealed";
     const [file = "", name = ""] = node.split("#");
     return fingerprintIn(this.facts.get(file), name, join(this.root, file));
   }
@@ -98,6 +111,7 @@ export class CodeGraph {
 
   /** What a node depends on directly: what it uses, and its file's own statements. */
   private directOf(n: string): string[] {
+    if (this.isSealed(n)) return [];
     const file = n.slice(0, n.indexOf("#"));
     const out = [...(this.uses.get(n) ?? [])];
     if (n !== `${file}#`) out.push(`${file}#`);
@@ -337,7 +351,21 @@ export const graphSources = (root: string): string[] => sourcesUnder(root, GRAPH
 
 export function codeGraph(root: string, files: readonly string[] = graphSources(root)): CodeGraph {
   const cache = new FactsCache(join(root, "node_modules", ".cache", "chalk-reach", "facts.json"));
-  return new CodeGraph(root, files, cache);
+  const graph = new CodeGraph(root, files, cache);
+  for (const file of registries(root)) graph.sealed.add(file);
+  return graph;
+}
+
+/** Every prop package's lists (`chalk.registries` in its package.json), from the repo root. */
+export function registries(root: string): string[] {
+  const props = join(root, "library", "props");
+  if (!existsSync(props)) return [];
+  return readdirSync(props).flatMap((name) => {
+    const file = join(props, name, "package.json");
+    if (!existsSync(file)) return [];
+    const json = JSON.parse(readFileSync(file, "utf8")) as { chalk?: { registries?: string[] } };
+    return (json.chalk?.registries ?? []).map((r) => relative(root, join(props, name, r)));
+  });
 }
 
 /** A node's fingerprint in a file's facts, or its whole text when it isn't code. */

@@ -8,7 +8,14 @@ The plane, located by two perpendicular lines: one prop, `coordinatePlane`, hold
 
 ## The coordinate plane (`coordinate-plane.ts`)
 
-It holds the parts and joins them: its facts are the plane's window, lines and marks, where Riya is headed (the places' target), whether the plane is alone, and each part needs those by name. It hears `places.targetChosen` (another house is a new walk: Riya goes back to the corner). A part is on when a board gives it something to show (places, a start, clues, pairs, counters).
+It holds the parts and joins them: its facts are the plane's window, lines and marks, where Riya is headed (the places' target), whether the plane is alone, and each part needs those by name. It hears `places.targetChosen` (another house is a new walk: Riya goes back to the corner). A board uses a part when its setup names it (`{ walker: {…} }`, or `{ dice: {} }`); a part it doesn't use is never drawn, answered or read. A used part is on when it has something to show (places, a start, clues, pairs, counters).
+
+**Adding a part** leaves every board that doesn't use it as it was, and its approval stands (platform/docs/plans/adding-pieces.md):
+
+1. Its own files: `<name>.ts` (its prop and its entry, `<name>Piece`: when it's on, whether it takes the plane's taps, its turn in each place it draws, a phrase for the plane's description), `<name>-view.tsx` (`<name>Drawing`), and if it needs them `<name>-sound.ts` (`<name>Sound`) and `<name>.css` (its own classes only).
+2. One line in each list: `pieces.ts`, `drawings.ts`, `sounds.ts` if it sounds, `styles.css` if it has styles, `index.ts` for what it offers lessons.
+
+The lists are only lists: a board's code fingerprint leaves them out and counts the files of the parts it uses. `pieces.test.ts` keeps each line naming its own part's entry, and every part starting off. Editing a part reaches only the boards that use it; editing `coordinate-plane.ts`, `plane.ts` or the shared drawing reaches every board.
 
 ## Its parts
 

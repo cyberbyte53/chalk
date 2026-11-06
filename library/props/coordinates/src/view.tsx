@@ -18,13 +18,8 @@ import {
 } from "./plane-view";
 import { WORDS, pair, word } from "./words";
 
-import { cluesDrawing } from "./clues-view";
 import { coordinatePlane } from "./coordinate-plane";
-import { diceDrawing } from "./dice-view";
-import { placesDrawing } from "./places-view";
-import { plottingDrawing } from "./plotting-view";
-import { readingDrawing } from "./reading-view";
-import { walkerDrawing } from "./walker-view";
+import { DRAWINGS } from "./drawings";
 
 /**
  * The lines turned about the horizontal line's zero (a pair at right angles, any way round), and
@@ -281,18 +276,10 @@ export const planeDrawing = drawing(plane, {
 });
 
 /**
- * The coordinate plane: the plane and every part on it, each drawn in its places.
+ * The coordinate plane: the plane and every piece on it, each drawn in its places.
  */
 export const CoordinatePlaneView = groupView(
   coordinatePlane,
-  {
-    plane: planeDrawing,
-    reading: readingDrawing,
-    places: placesDrawing,
-    walker: walkerDrawing,
-    clues: cluesDrawing,
-    plotting: plottingDrawing,
-    dice: diceDrawing,
-  },
+  { plane: planeDrawing, ...DRAWINGS },
   { look: () => "cp-frame" },
 );

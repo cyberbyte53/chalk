@@ -1,6 +1,7 @@
 import { localizedSchema } from "@chalk/content";
 import { PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
+import { piece } from "./piece";
 import { Axes } from "./plane";
 import {
   type Line,
@@ -67,6 +68,9 @@ export const arePlacesOn = (s: Pick<PlacesState, "places">) => s.places.length >
 
 const MAX_PLACES = 120;
 
+/** Where Riya is headed when a board names no place: the first lesson's. */
+export const TARGET_NAME = { en: "Aman's house", hi: "अमन का घर" };
+
 /**
  * The places: houses along streets, desks in rows, crossings, stalls. Tapping
  * one makes it the target; showing one number alone lights every place that has it. It draws by the
@@ -99,7 +103,7 @@ export const places = prop({
     placeKind: PlaceKind.House,
     places: [],
     target: null,
-    targetName: { en: "Aman's house", hi: "अमन का घर" },
+    targetName: TARGET_NAME,
     choosing: Choosing.Always,
     lit: null,
     isLitByTap: false,
@@ -167,4 +171,16 @@ export const places = prop({
     s.target !== null && !s.places.some((p) => p.x === s.target?.x && p.y === s.target?.y)
       ? `the target (${s.target.x}, ${s.target.y}) is not one of the places`
       : undefined,
+});
+
+/**
+ * On the coordinate plane: places to choose. A tap on the empty plane is theirs, unless no one can
+ * choose them (a town drawn behind the axes).
+ */
+export const placesPiece = piece<typeof places, Pick<PlacesState, "places" | "choosing">>({
+  prop: places,
+  isOn: arePlacesOn,
+  takesTaps: (s: Pick<PlacesState, "choosing">) => s.choosing !== Choosing.Never,
+  turns: { above: 10, on: 40, controls: 20 },
+  says: "places (houses, desks, crossings, stalls) with a target to find",
 });

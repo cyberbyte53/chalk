@@ -1,5 +1,6 @@
 import { type Out, PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
+import { piece } from "./piece";
 import {
   type PlaneCore,
   PlanePart,
@@ -181,3 +182,11 @@ function putAt(
     ...(isNew && quadrant !== null ? [t.tell.enteredQuadrant({ quadrant })] : []),
   ];
 }
+
+/** On the coordinate plane: a point to read, in front of the lines, its words below. */
+export const readingPiece = piece({
+  prop: reading,
+  isOn: isReadingOn,
+  turns: { front: 50, below: 20, controls: 40 },
+  says: "a point read off the axes as its abscissa, ordinate and (x, y)",
+});
