@@ -1,6 +1,6 @@
 # Guide: planning a chapter
 
-Read by `plan-chapter` and `build-props` (for **Props**). Output: `source/en/outline.yaml`, then `plan.md` (approved by the person) and `boards.md` (the detail, never approved). Nothing is built until `plan.md` is approved.
+Read by `plan-chapter` and `build-props` (for **Props**). Output: `plan.md` (approved by the person) and `boards.md` (the detail, never approved), in `authoring/books/<book>/<chapter>/`. Nothing is built until `plan.md` is approved.
 
 **Read the whole source first** — objectives, examples, activities, in-text questions, exercises, and any section a later syllabus removed.
 
@@ -10,8 +10,8 @@ Read by `plan-chapter` and `build-props` (for **Props**). Output: `source/en/out
 
 **Props** (the plan's `Props`: reuse, extend or new, each sketched, with why). `show` `library/props/` first (or read `library/catalogue.md`). Propose the fewest props that carry the chapter; for each, the mechanism it shows that text can't and the step the student does. Extending an existing prop beats a new one.
 
-**Per lesson in `boards.md`:** its slug as its heading, then its boards and question families: each with the objectives it serves and the source it covers (figures, examples, exercises), what it is for, its beat in the story, and what the student sees or does (in words, not prop names). New terms: 3–4 at most per lesson.
+**Per lesson in `boards.md`:** its slug as its heading, then its boards and question families: each with the objectives it serves and the book's items it covers (`source/en/items.yaml`), what it is for, its beat in the story, and what the student sees or does (in words, not prop names). New terms: 3–4 at most per lesson.
 
-**Leaving something out** of the source is a decision: `plan.md`'s `Skipped`, with why.
+**Leaving something out** of the source is a decision: `plan.md`'s `Skipped`, in the book's words, and `boards.md`'s, by id, each with why.
 
 **Questions for the person.** The decisions only they can make, each an `ask` on the words it is about, with your recommendation first. Few, and real.
