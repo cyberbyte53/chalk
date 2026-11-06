@@ -6,7 +6,7 @@ Status: plan, agreed with the person and reviewed (6 Nov 2026). Replaces the sou
 
 **In short.** Each language's book is extracted on its own, the same way: the book's exact words, item by
 item, its figures cropped, its terms as it defines them, every reading checked by the machine against the
-book's own text. Languages are matched only by what both books number (sections, figures, tables,
+book's own text. Ids are ours, positional (`2.4`: section 2's fourth block); languages are matched only by what both books number (sections, figures, tables,
 examples, exercises, questions). The plan cites the English items; a lesson's words in any language are
 checked against that language's terms.
 
@@ -44,18 +44,22 @@ authoring/books/<book>/<chapter>/source/
     …the same…
 ```
 
-**An item** is one of the book's own blocks: `{ id, kind, page, text }`, where `text` is the book's exact
+**An item** is one of the book's own blocks: `{ id, kind, page, number?, text }`, where `text` is the book's exact
 words (maths written as in the lessons: `(x, y)`, `−3`, `½`; a figure's or table's text is its caption
 and labels), plus `answer` on a question (from the answers pages) and `crop` on a figure or table.
 
 **Kinds**, a const enum, only what the book itself marks: section, text, figure, table, example, activity,
 exercise, question. A figure's parts (a), (b), (c) are one figure.
 
-**Ids are positions in that language's book**, made by the machine: a section by its number (`3.2`,
-`9.2.1`); an unnumbered block by its section and place (`3.2p1`, `3.2p2`); what the book numbers by its
-number (`fig3.11`, `table3.1`, `example2`, `activity1`, `ex3.2`, `ex3.2q1`); an unnumbered table, box or
-"Questions" panel by its section and place too (`3.2p5`). Science books' end-of-chapter exercises are
-`exercises` and `exercisesq1` …
+**Ids are ours, purely positional, one scheme for every book and language**, made by the machine: the
+chapter's sections in order are `1`, `2`, …; a section's blocks in order are `1.1`, `1.2`, …; a subsection
+nests a level (`2.3`, its blocks `2.3.1`, …). Every kind is numbered the same way; nothing depends on how
+the book numbers things.
+
+**The book's own number is a fact about the item**, as printed: `number: "Fig. 3.11"`, `"आकृति 3.11"`,
+`"Example 2"`, `"Exercise 3.2"`, `"Q1"` (a question's, under its exercise). It is checked against the page
+like the rest of its words, and it is what languages are matched by (the publisher keeps it the same
+across languages): its kind and digits (`figure 3.11`), not its words.
 
 **Terms** are what the book defines: a bold word or phrase followed by its English in brackets in the
 Hindi book (**मूल-बिन्दु (origin)**); in the English book, a bold term in a sentence that defines it. Each
@@ -63,7 +67,8 @@ term records the item it is defined in. Bold is read from the font (the Hindi bo
 The spelling where a term is defined is the book's spelling.
 
 **Unmatched:** in a language other than English, `book.yaml` lists each numbered thing found in one book
-and not the other, with why (`fig3.6: "the Hindi book draws (a)-(c) as three figures"`).
+and not the other, by its number, with why (`"figure 3.6": "the Hindi book draws (a)-(c) as three
+figures"`).
 
 ## The command
 
@@ -82,9 +87,11 @@ pages whose image changed.
 
 - **The reading agrees with the book:** every item's text is found in its page's text layer, comparing
   letters only (spaces, hyphens, dashes and minus signs, line breaks and stacked fractions ignored).
-- **Nothing numbered is missed:** every number the pages print after the language's own words (Fig./
+- **Nothing numbered is missed:** every number the pages print after the language's own words, and each
+  is an item's `number` (Fig./
   आकृति, Table/सारणी, Example/उदाहरण, Activity/क्रियाकलाप, Exercise/प्रश्नावली) has its item, in order.
-- **Languages match:** every numbered id of one language is in the other, or in `unmatched` with why.
+- **Languages match:** every number of one language (its kind and digits) is in the other, or in
+  `unmatched` with why.
 - **Terms are real:** each term's words are in the item it names.
 - **Figures exist** for every figure and table.
 - **Cites hold:** `plan.md` and `boards.md` cite English items that exist. When `items.yaml` changes after
