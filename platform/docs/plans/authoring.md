@@ -26,13 +26,17 @@ Status: plan, agreed with the person step by step and reviewed three times. Noth
 ```
 authoring/
   taste.md               where every agent starts: the principles, the person's taste, a few before/after
-                         examples from his threads, two or three lessons to copy, and a map of the rest
-  hi.md                  how we write Hindi: tone and register (तुम, not आप; plain words). How numbers and
-                         letters are said is code (the language's number words), not prose
-  voices.json            who speaks in which voice, per language: unchanged (the voice code reads it)
+                         examples from his threads, two or three lessons to copy; for details, it links
+                         into taste/
+  taste/                 what taste.md links to, added only when needed:
+    hi.md                  how we write Hindi: tone and register (तुम, not आप; plain words). How numbers and
+                           letters are said is code (the language's number words), not prose
+    voices.json            who speaks in which voice, per language (moved from authoring/; the voice code's
+                           path updated)
 
   books/<book>/
     taste.md             only what differs from the top (its tone, look, languages, its cover's idea)
+    taste/               only if this book has detail files of its own
     <chapter>/
       source/            FACTS, extracted once, never edited by hand
         en/                book.pdf, outline.yaml (every section, figure, example, exercise: id, page, words),
@@ -102,7 +106,7 @@ Everything is made and reviewed in English; a language is added the same way eac
 2. the same extraction as English: its outline aligned item by item (same ids, its own words), its terms
    with their word forms and pages;
 3. each English line translated with what grounds it: its board and lesson, the passages of this book that
-   board cites, the terms, `hi.md`;
+   board cites, the terms, `taste/hi.md`;
 4. machine checks: a mapped term in a line has its mapped term in the translation; a line marked as quoting
    an outline id matches that id's words; every English item has its aligned item, or a reason;
 5. reviewed by someone who reads the language.
@@ -122,20 +126,20 @@ the person closes" changes). The person's open comments are the hand-over of a s
 | brief, objectives, flow, props.md, each approved | `plan.md` (approved) + `boards.md` |
 | `source/` | `source/en/`, its checks extended to the plan and boards |
 | threads, reviews, run notes, retros | threads (weight, opener closes) |
-| `reviewed.yaml` | stays; gains what students get (hashing only the voice of each speaker) |
+| `reviewed.yaml` | stays; gains what students get (hashing only each speaker's voice) |
 | `show`, preview, prop panel, comments on boards and on a file's words, `changes`, `affected` | stay |
 | `pipeline` and the tree | the chapter's state: plan approved? boards left? open threads, whose turn? done? |
 | 6 skills | 4: plan, build, apply-comments, the reviewer |
-| constitution, exemplars | `taste.md` |
+| constitution, exemplars | `taste.md` (its details in `taste/`) |
 | guides, `reviewer.md` | into their skills (the reviewer's into its skill and agent file) |
 | `checks.md` | the checks it lists are built, step by step (below); the file goes |
-| `voices.json` | unchanged |
+| `voices.json` | `taste/voices.json`, unchanged inside |
 
 ## Order
 
 Each step built and proved on its own, and committed.
 
-1. **Taste:** `taste.md` from the audit, `hi.md`; the person reads them.
+1. **Taste:** `taste.md` from the audit, `taste/hi.md`, `voices.json` moved into `taste/`; the person reads them.
 2. **Threads:** weight, opener closes.
 3. **`plan.md` and `boards.md`** and their checks; chapter 1's four planning files rewritten into them (the
    person is told first, and approves `plan.md` once).
