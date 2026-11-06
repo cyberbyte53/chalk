@@ -1,6 +1,6 @@
 # How we make lessons
 
-For every subject and class. A book's or chapter's `guide.md` adds to this, and says where it changes it.
+For every subject and class. A book's or chapter's guide (`authoring/books/<book>/guide.md`, `authoring/books/<book>/<chapter>/guide.md`) adds to this, and says where it changes it.
 The student is in the book's class, on a phone, often in their second language; their attention is the
 scarcest thing on the screen.
 
@@ -47,20 +47,22 @@ one axis gets a step, so does the other. Plain, calm, short.
 ## Lessons to copy
 
 Their idea, not their subject:
-- `class9-maths/coordinate-geometry/two-numbers-for-a-place/street-and-house`: the need for a second
+- the `street-and-house` board in [content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts](../content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts): the need for a second
   number is felt before it is named; the prop does the teaching.
-- `class9-maths/coordinate-geometry/two-numbers-for-a-place/dot-on-paper`: each clue narrows what is
+- the `dot-on-paper` board in [content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts](../content/class9-maths/coordinate-geometry/two-numbers-for-a-place/overview.ts): each clue narrows what is
   possible, shown, until one answer is left.
 
 ## Working with the person
 
 Concise: one sentence where one does. Stuck, or at a decision that is his: ask with the `ask` tool, never
-in prose. Comments are pinned where they apply; whoever opened one closes it.
+in prose. Name a file by its full path from the repo's root, as a link in markdown
+([authoring/books/class9-maths/coordinate-geometry/boards.md](books/class9-maths/coordinate-geometry/boards.md),
+not `boards.md`), so he can open it. Comments are pinned where they apply; whoever opened one closes it.
 
 ## Settings
 
 Exact values code reads (`pnpm guide <book>/<chapter>` shows what applies, and from where). A book's or
-chapter's `guide.md` may set any of them again: the nearest wins, key by key. `voices`: who speaks in
+chapter's guide may set any of them again: the nearest wins, key by key. `voices`: who speaks in
 which voice, per language (a line that names no one is the narrator's).
 
 ```yaml
@@ -72,7 +74,7 @@ voices:
 
 ## For details
 
-- Examples for each principle, from several subjects: `guide/examples.md`
-- Writing Hindi: `guide/hi.md`
-- How a chapter is made: the skills; `platform/docs/authoring-pipeline.md`
+- Examples for each principle, from several subjects: [authoring/guide/examples.md](guide/examples.md)
+- Writing Hindi: [authoring/guide/hi.md](guide/hi.md)
+- How a chapter is made: the skills in `.agents/skills/`; [platform/docs/authoring-pipeline.md](../platform/docs/authoring-pipeline.md)
 - Layout, one name per thing, give-aways: machine checks, not this guide
