@@ -1,7 +1,7 @@
 # Coordinate Geometry (class 9 maths, chapter 3)
 
 For class 9, NCERT Mathematics, Chapter 3 (2020-21); English and Hindi, every string. Each board's
-detail is in `boards.md`.
+detail is in [authoring/books/class9-maths/coordinate-geometry/boards.md](boards.md).
 
 ## Goal
 
