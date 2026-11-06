@@ -35,17 +35,18 @@ function useRings(
   picks: readonly { part?: string | undefined }[],
 ): Rings {
   const [rings, setRings] = useState<Rings>({ pointed: undefined, picks: [] });
-  const key = JSON.stringify([part, picks.map((p) => p.part ?? null)]);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `key` stands for `part` and `picks`
+  // What is pointed at, as one value: the rings are measured again only when it changes.
+  const key = JSON.stringify([part ?? null, picks.map((p) => p.part ?? null)]);
   useLayoutEffect(() => {
+    const [pointedAt, pickedAt] = JSON.parse(key) as [string | null, (string | null)[]];
     const element = box.current;
-    const ringOf = (at: string | undefined) => (at === undefined ? undefined : tagged(element, at));
+    const ringOf = (at: string | null) => (at === null ? undefined : tagged(element, at));
     const measure = () => {
-      const next = { pointed: ringOf(part), picks: picks.map((p) => ringOf(p.part)) };
+      const next = { pointed: ringOf(pointedAt), picks: pickedAt.map(ringOf) };
       setRings((was) => (JSON.stringify(was) === JSON.stringify(next) ? was : next));
     };
     measure();
-    if (element === null || (part === undefined && picks.length === 0)) return;
+    if (element === null || (pointedAt === null && pickedAt.length === 0)) return;
     const changes = new MutationObserver(measure);
     changes.observe(element, { childList: true, subtree: true, attributes: true });
     const sizes = new ResizeObserver(measure);
@@ -54,7 +55,7 @@ function useRings(
       changes.disconnect();
       sizes.disconnect();
     };
-  }, [key]);
+  }, [key, box]);
   return rings;
 }
 

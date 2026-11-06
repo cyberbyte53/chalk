@@ -85,12 +85,13 @@ export function JugnuChat({
   const thread = useRef<HTMLDivElement>(null);
   const isClosed = chat.state === ChatState.Closed;
   const isThinking = chat.state === ChatState.Thinking;
-  // The newest is always in sight: the thread scrolled to its end as it grows.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: each is a way the thread grows
+  // The newest is always in sight: the thread scrolled to its end as it grows (a message, Jugnu
+  // thinking, a problem, the thread opening out or closing).
+  const grown = JSON.stringify([chat.messages.length, isThinking, problem, isOneLine, isClosed]);
   useLayoutEffect(() => {
     const el = thread.current;
-    if (el !== null) el.scrollTop = el.scrollHeight;
-  }, [chat.messages.length, isThinking, problem, isOneLine, isClosed]);
+    if (el !== null && grown !== "") el.scrollTop = el.scrollHeight;
+  }, [grown]);
   if (isClosed) return null;
   const isLive = onSay !== undefined;
   const last = chat.messages.at(-1);

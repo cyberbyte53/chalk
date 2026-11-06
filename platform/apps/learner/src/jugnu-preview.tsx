@@ -1,7 +1,7 @@
 import type { Board } from "@chalk/content";
 import { JugnuFigure, chatOf } from "@chalk/player";
 import type { JSX } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import { BoardAt, type EventEntryLike, type Step } from "./board-at";
 import { shownAt } from "./preview-shell";
 
@@ -438,7 +438,7 @@ export function JugnuPreview(): JSX.Element {
   const [seats, setSeats] = useState<{ tutor: SeatChoice; student: SeatChoice } | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
-  const load = async (): Promise<Listed[]> => {
+  const load = useCallback(async (): Promise<Listed[]> => {
     const d = (await (await fetch("/dev-jugnu")).json()) as {
       cases?: Case[];
       runs?: Listed[];
@@ -457,14 +457,13 @@ export function JugnuPreview(): JSX.Element {
     setCases(d.cases);
     setRuns(d.runs ?? []);
     return d.runs ?? [];
-  };
+  }, []);
   // The list once; the newest experiment opens when the page names none it knows.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: once, on opening the page
   useEffect(() => {
     void load().then((listed) =>
       setId((now) => (listed.some((r) => r.id === now) ? now : (listed[0]?.id ?? now))),
     );
-  }, []);
+  }, [load]);
   useEffect(() => {
     if (id === "") return;
     const url = new URL(window.location.href);

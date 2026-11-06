@@ -12,7 +12,7 @@ and before real learners.
 ## 1. Ground: the check runs to the end, the proof is a tool
 
 - [x] `pnpm snapshot`: the before/after board snapshot, a real tool (it proved the plane work).
-- [ ] The 3 lint suppressions that stop `pnpm check` early (jugnu-preview.tsx, jugnu-chat.tsx, layout.tsx).
+- [x] The 3 lint suppressions that stop `pnpm check` early (jugnu-preview.tsx, jugnu-chat.tsx, layout.tsx).
 - [ ] Wipe the local database (tries now record the answer); restart Studio on the new code.
 
 ## 2. One word per meaning (glossary)
