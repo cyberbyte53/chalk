@@ -4,7 +4,7 @@ const INK = "var(--color-on-surface-variant)";
 const FAINT = "var(--color-outline-variant)";
 const ACCENT = "var(--color-primary)";
 
-/** Saying where: one number is a place on a line; along, then up, reaches a house. */
+/** Locating a point: one number is a place on a line; along, then up, reaches a house. */
 export const art = defineArt(ArtFrame.Card, ({ width, height }) => {
   const road = 118;
   const step = 34;

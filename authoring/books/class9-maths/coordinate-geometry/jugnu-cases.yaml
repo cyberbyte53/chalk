@@ -6,7 +6,7 @@
 # The person approves these, and the five points a good reply meets: true about the board, about
 # her actual mistake, in the lesson's terms, a nudge she then does herself, short.
 
-# ---- Saying where (two-numbers-for-a-place) ----
+# ---- Locating a point (two-numbers-for-a-place) ----
 
 - name: bus-wrong-side
   board: class9-maths/coordinate-geometry/questions/bus-to-stop/167a62d9
@@ -81,7 +81,7 @@
   asks: "A hint"
   about: "One distance leaves the lamp anywhere on a line: it takes two, from two edges at right angles (as the dot on the page)."
 
-# ---- The Cartesian plane ----
+# ---- The Cartesian system ----
 
 - name: quadrant-wrong-part
   board: class9-maths/coordinate-geometry/questions/tap-the-part/790ad375
@@ -157,7 +157,7 @@
   asks: "यह गलत क्यों है?"
   about: "She chose (2, −5) for B at (−5, 2): x comes first, and its signs follow the sides of the axes. (In Hindi.)"
 
-# ---- Plotting points ----
+# ---- Plotting a point in the plane ----
 
 - name: plot-swapped
   board: class9-maths/coordinate-geometry/questions/plot-the-point/333b027e

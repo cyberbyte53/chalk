@@ -13,7 +13,7 @@ const PAIRS: readonly (readonly [number, number])[] = [
   [5, 1],
 ];
 
-/** Plotting points: dots set on the plane from their pairs. */
+/** Plotting a point in the plane: dots set on the plane from their pairs. */
 export const art = defineArt(ArtFrame.Card, ({ width, height }) => {
   const unit = 20;
   const cx = width / 2;

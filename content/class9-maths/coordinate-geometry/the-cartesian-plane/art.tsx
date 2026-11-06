@@ -4,7 +4,7 @@ const INK = "var(--color-on-surface-variant)";
 const FAINT = "var(--color-outline-variant)";
 const ACCENT = "var(--color-primary)";
 
-/** The Cartesian plane: two number lines crossing at O, making four quadrants. */
+/** The Cartesian system: two number lines crossing at O, making four quadrants. */
 export const art = defineArt(ArtFrame.Card, ({ width, height }) => {
   const cx = width / 2;
   const cy = height / 2;
