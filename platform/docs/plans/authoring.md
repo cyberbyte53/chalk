@@ -77,6 +77,9 @@ one for one, each with its `art.tsx`.
             a comment closes it → the person's yes on the chapter = done
 ```
 
+The plan is the person's gate, not the only place he speaks: he may pin a comment on the plan, any board,
+any piece of one, or a prop, at any stage; it is handled like any other thread.
+
 - **A change after the plan's yes** starts as a comment on the plan: the agent updates `plan.md`, follows
   the ids into `boards.md`, rebuilds what they touch; the person closes the comment and re-stamps the plan
   with one click, the tree showing what changed since his yes. Nothing below the plan is ever approved, so
