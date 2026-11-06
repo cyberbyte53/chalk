@@ -16,8 +16,7 @@ const { setup, town, notebook, classroom, walkTo } = plane;
 
 /** A bus on a straight road: the number line they know, its own short story. */
 const side = choice({
-  prompt: t("The bus is at −2. Where is it?", "बस −2 पर है। वह कहाँ है?"),
-  says: t("The bus is at minus 2. Where is it?", "बस माइनस 2 पर है। वह कहाँ है?"),
+  prompt: t("The bus is at [[−2|minus 2]]. Where is it?", "बस [[−2|माइनस 2]] पर है। वह कहाँ है?"),
   options: [
     { id: "left", label: t("2 stops from the stand, to the left", "अड्डे से 2 स्टॉप, बाईं ओर") },
     {
@@ -32,12 +31,8 @@ const side = choice({
       id: "minus",
       label: t("−2 stops from the stand", "अड्डे से −2 स्टॉप"),
       feedback: t(
-        "It is 2 stops away; the − only says which way, left.",
-        "वह 2 स्टॉप दूर है; − केवल दिशा बताता है, बाईं ओर।",
-      ),
-      feedbackSays: t(
-        "It is 2 stops away; the minus only says which way, left.",
-        "वह 2 स्टॉप दूर है; माइनस केवल दिशा बताता है, बाईं ओर।",
+        "It is 2 stops away; the [[−|minus]] only says which way, left.",
+        "वह 2 स्टॉप दूर है; [[−|माइनस]] केवल दिशा बताता है, बाईं ओर।",
       ),
     },
   ],
@@ -51,27 +46,15 @@ const busStops = page(
       title: words.title(t("A bus on a straight road", "सीधी सड़क पर एक बस")),
       road: words.body(
         t(
-          "A bus runs on a straight road. Its stand is at **0**. The stops to the right are 1, 2, 3, …, and the stops to the left are −1, −2, −3, … **The road is a number line.**",
-          "एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, … हैं, और बाईं ओर के −1, −2, −3, …। **सड़क एक संख्या रेखा है।**",
+          "A bus runs on a straight road. Its stand is at **0**. The stops to the right are 1, 2, 3, [[…|and so on]], and the stops to the left are [[−1, −2, −3, …|minus 1, minus 2, minus 3, and so on.]] **The road is a number line.**",
+          "एक बस सीधी सड़क पर चलती है। उसका अड्डा **0** पर है। दाईं ओर के स्टॉप 1, 2, 3, [[…|और आगे]] हैं, और बाईं ओर के [[−1, −2, −3, …|माइनस 1, माइनस 2, माइनस 3, और आगे]]। **सड़क एक संख्या रेखा है।**",
         ),
-        {
-          says: t(
-            "A bus runs on a straight road. Its stand is at 0. The stops to the right are 1, 2, 3, and so on, and the stops to the left are minus 1, minus 2, minus 3, and so on. The road is a number line.",
-            "एक बस सीधी सड़क पर चलती है। उसका अड्डा 0 पर है। दाईं ओर के स्टॉप 1, 2, 3, और आगे हैं, और बाईं ओर के माइनस 1, माइनस 2, माइनस 3, और आगे। सड़क एक संख्या रेखा है।",
-          ),
-        },
       ),
       move: words.body(
         t(
-          "Move the bus one stop at a time with ← and →. Take it to stop **3**.",
-          "बस को ← और → से एक-एक स्टॉप चलाओ। इसे स्टॉप **3** पर ले जाओ।",
+          "Move the bus one stop at a time with [[← and →|the left and right arrows]]. Take it to stop **3**.",
+          "बस को [[← और →|बाएँ और दाएँ तीर]] से एक-एक स्टॉप चलाओ। इसे स्टॉप **3** पर ले जाओ।",
         ),
-        {
-          says: t(
-            "Move the bus one stop at a time with the left and right arrows. Take it to stop 3.",
-            "बस को बाएँ और दाएँ तीर से एक-एक स्टॉप चलाओ। इसे स्टॉप 3 पर ले जाओ।",
-          ),
-        },
       ),
       line: place(coordinatePlane, {
         plane: {
@@ -100,15 +83,9 @@ const busStops = page(
       atThree: hidden(
         words.body(
           t(
-            "The bus is at **3**: three stops from the stand, to the right. Now take it to **−2**.",
-            "बस **3** पर है: अड्डे से तीन स्टॉप, दाईं ओर। अब इसे **−2** पर ले जाओ।",
+            "The bus is at **3**: three stops from the stand, to the right. Now take it to **[[−2|minus 2]]**.",
+            "बस **3** पर है: अड्डे से तीन स्टॉप, दाईं ओर। अब इसे **[[−2|माइनस 2]]** पर ले जाओ।",
           ),
-          {
-            says: t(
-              "The bus is at 3: three stops from the stand, to the right. Now take it to minus 2.",
-              "बस 3 पर है: अड्डे से तीन स्टॉप, दाईं ओर। अब इसे माइनस 2 पर ले जाओ।",
-            ),
-          },
         ),
       ),
       side: hidden(side),
@@ -147,15 +124,9 @@ const streetAndHouse = page(
       ),
       road: words.body(
         t(
-          "Their town has a main road, and the streets leave it numbered 1, 2, 3, … from Riya's corner: like a number line. Move her along it with →.",
-          "उनके शहर में एक मुख्य सड़क है, और गलियाँ उससे रिया के कोने से 1, 2, 3, … गिनकर निकलती हैं: एक संख्या रेखा जैसी। उसे → से उस पर चलाओ।",
+          "Their town has a main road, and the streets leave it numbered 1, 2, 3, [[…|and so on,]] from Riya's corner: like a number line. Move her along it with [[→|the right arrow]].",
+          "उनके शहर में एक मुख्य सड़क है, और गलियाँ उससे रिया के कोने से 1, 2, 3, [[…|और आगे]] गिनकर निकलती हैं: एक संख्या रेखा जैसी। उसे [[→|दाएँ तीर]] से उस पर चलाओ।",
         ),
-        {
-          says: t(
-            "Their town has a main road, and the streets leave it numbered 1, 2, 3, and so on, from Riya's corner: like a number line. Move her along it with the right arrow.",
-            "उनके शहर में एक मुख्य सड़क है, और गलियाँ उससे रिया के कोने से 1, 2, 3, और आगे गिनकर निकलती हैं: एक संख्या रेखा जैसी। उसे दाएँ तीर से उस पर चलाओ।",
-          ),
-        },
       ),
       town: place(
         coordinatePlane,
@@ -234,15 +205,9 @@ const dotOnPaper = page(
       title: words.title(t("A dot on a page", "पन्ने पर एक बिंदु")),
       ask: words.body(
         t(
-          "Here is a dot on a page of your notebook, and each small square is 1 cm across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
-          "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 cm चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
+          "Here is a dot on a page of your notebook, and each small square is 1 [[cm|centimetre]] across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
+          "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 [[cm|सेंटीमीटर]] चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
         ),
-        {
-          says: t(
-            "Here is a dot on a page of your notebook, and each small square is 1 centimetre across. How would you say exactly where the dot is? Try these, one at a time, and watch where it could still be.",
-            "यह तुम्हारी कॉपी के पन्ने पर एक बिंदु है, और हर छोटा खाना 1 सेंटीमीटर चौड़ा है। तुम ठीक-ठीक कैसे बताओगे कि बिंदु कहाँ है? ये एक-एक करके आज़माओ, और देखो कि वह अब भी कहाँ हो सकता है।",
-          ),
-        },
       ),
       sheet: place(
         coordinatePlane,
@@ -288,30 +253,17 @@ const dotOnPaper = page(
       line: hidden(
         words.body(
           t(
-            "Closer, but every spot on that line is 5 cm from the left edge.",
-            "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 cm पर है।",
+            "Closer, but every spot on that line is 5 [[cm|centimetres]] from the left edge.",
+            "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 [[cm|सेंटीमीटर]] पर है।",
           ),
-          {
-            says: t(
-              "Closer, but every spot on that line is 5 centimetres from the left edge.",
-              "पास आ गए, पर उस रेखा की हर जगह बाएँ किनारे से 5 सेंटीमीटर पर है।",
-            ),
-          },
         ),
       ),
       fixed: hidden(
         words.definition(
           t(
-            "**Two distances fixed the dot:** 5 cm from the left edge and 9 cm above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
-            "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 cm और नीचे के किनारे से 9 cm ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
+            "**Two distances fixed the dot:** 5 [[cm|centimetres]] from the left edge and 9 [[cm|centimetres]] above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
+            "**दो दूरियों ने बिंदु तय कर दिया:** बाएँ किनारे से 5 [[cm|सेंटीमीटर]] और नीचे के किनारे से 9 [[cm|सेंटीमीटर]] ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
           ),
-          null,
-          {
-            says: t(
-              "Two distances fixed the dot: 5 centimetres from the left edge and 9 centimetres above the bottom. Only one point is at both distances: where the two lines cross. Each distance is measured from a fixed line: the left edge and the bottom.",
-              "दो दूरियों ने बिंदु तय कर दिया: बाएँ किनारे से 5 सेंटीमीटर और नीचे के किनारे से 9 सेंटीमीटर ऊपर। दोनों दूरियों पर केवल एक बिंदु है: जहाँ दोनों रेखाएँ कटती हैं। हर दूरी एक तय रेखा से नापी गई: बायाँ किनारा और नीचे का किनारा।",
-            ),
-          },
         ),
       ),
       yours: hidden(
@@ -480,15 +432,9 @@ const twoLines = page(
       ),
       theDot: words.body(
         t(
-          "**The dot:** 5 cm across from the left edge, then 9 cm up from the bottom.",
-          "**बिंदु:** बाएँ किनारे से 5 cm आड़े, फिर नीचे के किनारे से 9 cm ऊपर।",
+          "**The dot:** 5 [[cm|centimetres]] across from the left edge, then 9 [[cm|centimetres]] up from the bottom.",
+          "**बिंदु:** बाएँ किनारे से 5 [[cm|सेंटीमीटर]] आड़े, फिर नीचे के किनारे से 9 [[cm|सेंटीमीटर]] ऊपर।",
         ),
-        {
-          says: t(
-            "The dot: 5 centimetres across from the left edge, then 9 centimetres up from the bottom.",
-            "बिंदु: बाएँ किनारे से 5 सेंटीमीटर आड़े, फिर नीचे के किनारे से 9 सेंटीमीटर ऊपर।",
-          ),
-        },
       ),
       spot: place(
         coordinatePlane,
@@ -560,15 +506,9 @@ const twoLines = page(
       ),
       descartes: words.body(
         t(
-          "This idea is the start of **coordinate geometry**. It grew from **René Descartes** (1596–1650), a French mathematician who liked to think lying in bed. He worked out how to describe the position of a point in a plane, building on the older idea of latitude and longitude. In his honour, the system of giving a point's position this way is called the **Cartesian system**.",
-          "यही विचार **निर्देशांक ज्यामिति** की शुरुआत है। यह **रेने देकार्त** (1596–1650) से आया, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को **कार्तीय पद्धति** कहते हैं।",
+          "This idea is the start of **coordinate geometry**. It grew from **René Descartes**[[ (1596–1650),|, who lived from 1596 to 1650,]] a French mathematician who liked to think lying in bed. He worked out how to describe the position of a point in a plane, building on the older idea of latitude and longitude. In his honour, the system of giving a point's position this way is called the **Cartesian system**.",
+          "यही विचार **निर्देशांक ज्यामिति** की शुरुआत है। यह **रेने देकार्त** [[(1596–1650) से आया,|से आया, जो 1596 से 1650 तक रहे,]] एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को **कार्तीय पद्धति** कहते हैं।",
         ),
-        {
-          says: t(
-            "This idea is the start of coordinate geometry. It grew from René Descartes, who lived from 1596 to 1650, a French mathematician who liked to think lying in bed. He worked out how to describe the position of a point in a plane, building on the older idea of latitude and longitude. In his honour, the system of giving a point's position this way is called the Cartesian system.",
-            "यही विचार निर्देशांक ज्यामिति की शुरुआत है। यह रेने देकार्त से आया, जो 1596 से 1650 तक रहे, एक फ़्रांसीसी गणितज्ञ जिन्हें लेटे-लेटे सोचना पसंद था। उन्होंने तल में किसी बिंदु का स्थान बताने का तरीका निकाला, अक्षांश और देशांतर के पुराने विचार को आगे बढ़ाकर। उनके सम्मान में, बिंदु का स्थान इस तरह बताने की पद्धति को कार्तीय पद्धति कहते हैं।",
-          ),
-        },
       ),
     },
   }),

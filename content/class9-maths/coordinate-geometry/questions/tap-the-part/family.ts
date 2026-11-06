@@ -5,21 +5,18 @@ import { Marks, PlanePart, coordinatePlane } from "@chalk/prop-coordinates";
 import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
-/** What each part is called in a prompt: its name only, as shown and as said. */
+/** What each part is called in a prompt: its name only. */
 const PARTS = {
-  [PlanePart.O]: [t("**O**", "**O**"), t("O", "O")],
-  [PlanePart.OX]: [t("**OX**", "**OX**"), t("O X", "O X")],
-  [PlanePart.OXDash]: [t("**OX′**", "**OX′**"), t("O X dash", "O X डैश")],
-  [PlanePart.OY]: [t("**OY**", "**OY**"), t("O Y", "O Y")],
-  [PlanePart.OYDash]: [t("**OY′**", "**OY′**"), t("O Y dash", "O Y डैश")],
+  [PlanePart.O]: t("**O**", "**O**"),
+  [PlanePart.OX]: t("**[[OX|O X]]**", "**[[OX|O X]]**"),
+  [PlanePart.OXDash]: t("**[[OX′|O X dash]]**", "**[[OX′|O X डैश]]**"),
+  [PlanePart.OY]: t("**[[OY|O Y]]**", "**[[OY|O Y]]**"),
+  [PlanePart.OYDash]: t("**[[OY′|O Y dash]]**", "**[[OY′|O Y डैश]]**"),
   // In Devanagari a Roman I reads as a danda (।): the ordinal comes first.
-  [PlanePart.I]: [t("**quadrant I**", "**पहले चतुर्थांश (I)**"), t("quadrant one", "पहले चतुर्थांश")],
-  [PlanePart.II]: [t("**quadrant II**", "**दूसरे चतुर्थांश (II)**"), t("quadrant two", "दूसरे चतुर्थांश")],
-  [PlanePart.III]: [
-    t("**quadrant III**", "**तीसरे चतुर्थांश (III)**"),
-    t("quadrant three", "तीसरे चतुर्थांश"),
-  ],
-  [PlanePart.IV]: [t("**quadrant IV**", "**चौथे चतुर्थांश (IV)**"), t("quadrant four", "चौथे चतुर्थांश")],
+  [PlanePart.I]: t("**quadrant [[I|one]]**", "**पहले [[चतुर्थांश (I)|चतुर्थांश]]**"),
+  [PlanePart.II]: t("**quadrant [[II|two]]**", "**दूसरे [[चतुर्थांश (II)|चतुर्थांश]]**"),
+  [PlanePart.III]: t("**quadrant [[III|three]]**", "**तीसरे [[चतुर्थांश (III)|चतुर्थांश]]**"),
+  [PlanePart.IV]: t("**quadrant [[IV|four]]**", "**चौथे [[चतुर्थांश (IV)|चतुर्थांश]]**"),
 } as const;
 
 /** What each part is called as an answer: the part a learner tapped. */
@@ -108,12 +105,11 @@ export const tapThePart = family({
         },
       }),
     );
-    const [shown, said] = PARTS[part];
+    const name = PARTS[part];
     const mistake = MISTAKES[part];
     const ask = check({
       about: "sheet",
-      prompt: t(`Tap ${shown.en}, then press Check.`, `${shown.hi} को दबाओ, फिर जाँचो दबाओ।`),
-      says: t(`Tap ${said.en}, then press Check.`, `${said.hi} को दबाओ, फिर जाँचो दबाओ।`),
+      prompt: t(`Tap ${name.en}, then press Check.`, `${name.hi} को दबाओ, फिर जाँचो दबाओ।`),
       isRight: isNamed("sheet", part),
       answer: (read) => {
         const named = namedPart("sheet")(read);

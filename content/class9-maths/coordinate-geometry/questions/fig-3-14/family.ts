@@ -21,12 +21,22 @@ type Point = { x: number; y: number };
 
 const shown = (n: number) => (n < 0 ? `−${-n}` : `${n}`);
 const pairOf = (p: Point) => `(${shown(p.x)}, ${shown(p.y)})`;
-const said = (n: number, minus: string) => (n < 0 ? `${minus} ${-n}` : `${n}`);
-const saidPair = (p: Point, minus: string) => `${said(p.x, minus)}, ${said(p.y, minus)}`;
+const spoken = (n: number, minus: string) => (n < 0 ? `${minus} ${-n}` : `${n}`);
 const same = (s: string): Localized => t(s, s);
 
-/** A wrong option and its note: the slip it is, said for the point asked about. */
-type Wrong = { label: string; feedback: Localized; feedbackSays: Localized };
+/** A pair in a line, as a mark: shown (−3, 5), said in a language's words after `as` ("the point"). */
+const pairMark = (p: Point, minus: string, as: string) =>
+  `[[${pairOf(p)}|${as} ${spoken(p.x, minus)}, ${spoken(p.y, minus)}]]`;
+/** An axis letter in a Hindi line: written x, said एक्स. */
+const hiLetter = (v: "x" | "y") => (v === "x" ? "[[x|एक्स]]" : "[[y|वाई]]");
+/** "x = −3" in a sentence, as a mark: said "x is minus 3", in Hindi "एक्स माइनस 3 है". */
+const isEn = (v: "x" | "y", n: number) =>
+  `[[${v}\u00a0=\u00a0${shown(n)}|${v} is ${spoken(n, "minus")}]]`;
+const isHi = (v: "x" | "y", n: number) =>
+  `[[${v}\u00a0=\u00a0${shown(n)}|${v === "x" ? "एक्स" : "वाई"} ${spoken(n, "माइनस")} है]]`;
+
+/** A wrong option and its note: the slip it is, for the point asked about. */
+type Wrong = { label: string; feedback: Localized };
 
 /** The pair written y first. */
 function swapped(name: Name): Wrong {
@@ -36,12 +46,8 @@ function swapped(name: Name): Wrong {
   return {
     label: pairOf(q),
     feedback: t(
-      `That is y first. ${name} is ${Math.abs(p.x)} units ${side[0]} of the y-axis, so x\u00a0=\u00a0${shown(p.x)}, written first.`,
-      `यह y पहले है। ${name}, y-अक्ष से ${Math.abs(p.x)} इकाई ${side[1]} ओर है, इसलिए x\u00a0=\u00a0${shown(p.x)}, जो पहले लिखा जाता है।`,
-    ),
-    feedbackSays: t(
-      `That is y first. ${name} is ${Math.abs(p.x)} units ${side[0]} of the y-axis, so x is ${said(p.x, "minus")}, written first.`,
-      `यह वाई पहले है। ${name}, वाई-अक्ष से ${Math.abs(p.x)} इकाई ${side[1]} ओर है, इसलिए एक्स ${said(p.x, "माइनस")} है, जो पहले लिखा जाता है।`,
+      `That is y first. ${name} is ${Math.abs(p.x)} units ${side[0]} of the y-axis, so ${isEn("x", p.x)}, written first.`,
+      `यह ${hiLetter("y")} पहले है। ${name}, ${hiLetter("y")}-अक्ष से ${Math.abs(p.x)} इकाई ${side[1]} ओर है, इसलिए ${isHi("x", p.x)}, जो पहले लिखा जाता है।`,
     ),
   };
 }
@@ -53,22 +59,17 @@ function flipped(name: Name, axis: "x" | "y"): Wrong {
   const [where, whereHi] =
     axis === "x"
       ? p.x < 0
-        ? ["left of the y-axis", "y-अक्ष के बाईं ओर"]
-        : ["right of the y-axis", "y-अक्ष के दाईं ओर"]
+        ? ["left of the y-axis", `${hiLetter("y")}-अक्ष के बाईं ओर`]
+        : ["right of the y-axis", `${hiLetter("y")}-अक्ष के दाईं ओर`]
       : p.y < 0
-        ? ["below the x-axis", "x-अक्ष के नीचे"]
-        : ["above the x-axis", "x-अक्ष के ऊपर"];
+        ? ["below the x-axis", `${hiLetter("x")}-अक्ष के नीचे`]
+        : ["above the x-axis", `${hiLetter("x")}-अक्ष के ऊपर`];
   const sign = (axis === "x" ? p.x : p.y) < 0 ? ["negative", "ऋणात्मक"] : ["positive", "धनात्मक"];
-  const pair = pairOf(q);
   return {
-    label: pair,
+    label: pairOf(q),
     feedback: t(
-      `${pair} is on the other side. ${name} is ${where}, so its ${axis}-coordinate is ${sign[0]}.`,
-      `${pair} दूसरी ओर है। ${name}, ${whereHi} है, इसलिए उसका ${axis}-निर्देशांक ${sign[1]} है।`,
-    ),
-    feedbackSays: t(
-      `The point ${saidPair(q, "minus")} is on the other side. ${name} is ${where}, so its ${axis}-coordinate is ${sign[0]}.`,
-      `बिंदु ${saidPair(q, "माइनस")} दूसरी ओर है। ${name}, ${whereHi.replace("y-अक्ष", "वाई-अक्ष").replace("x-अक्ष", "एक्स-अक्ष")} है, इसलिए उसका ${axis === "x" ? "एक्स" : "वाई"}-निर्देशांक ${sign[1]} है।`,
+      `${pairMark(q, "minus", "The point")} is on the other side. ${name} is ${where}, so its ${axis}-coordinate is ${sign[0]}.`,
+      `${pairMark(q, "माइनस", "बिंदु")} दूसरी ओर है। ${name}, ${whereHi} है, इसलिए उसका ${hiLetter(axis)}-निर्देशांक ${sign[1]} है।`,
     ),
   };
 }
@@ -78,20 +79,15 @@ function another(name: Name): Wrong {
   const p = POINTS[name];
   return {
     label: name,
-    feedback: t(`${name} is ${pairOf(p)}.`, `${name} है ${pairOf(p)}।`),
-    feedbackSays: t(
-      `${name} is the point ${saidPair(p, "minus")}.`,
-      `${name} है बिंदु ${saidPair(p, "माइनस")}।`,
+    feedback: t(
+      `${name} is ${pairMark(p, "minus", "the point")}.`,
+      `${name} है ${pairMark(p, "माइनस", "बिंदु")}।`,
     ),
   };
 }
 
 /** A note for a number option of a one-coordinate part. */
-const note = (label: string, en: string, hi: string, enSays = en, hiSays = hi): Wrong => ({
-  label,
-  feedback: t(en, hi),
-  feedbackSays: t(enSays, hiSays),
-});
+const note = (label: string, en: string, hi: string): Wrong => ({ label, feedback: t(en, hi) });
 
 /**
  * Each part of Ex 3.2 Q2, in the book's words: its answer, then three real slips, each with its
@@ -100,7 +96,7 @@ const note = (label: string, en: string, hi: string, enSays = en, hiSays = hi): 
  */
 const PARTS: Record<
   "b" | "c" | "e" | "g" | "d" | "h" | "l" | "m",
-  { prompt: Localized; says?: Localized; answer: string; wrong: Wrong[] }
+  { prompt: Localized; answer: string; wrong: Wrong[] }
 > = {
   b: {
     prompt: t("See the figure. What are the coordinates of B?", "आकृति देखिए। B के निर्देशांक क्या हैं?"),
@@ -114,24 +110,16 @@ const PARTS: Record<
   },
   e: {
     prompt: t(
-      "See the figure. Which point is identified by (−3, −5)?",
-      "आकृति देखिए। (−3, −5) से कौन-सा बिंदु पहचाना जाता है?",
-    ),
-    says: t(
-      "See the figure. Which point is identified by minus 3, minus 5?",
-      "आकृति देखिए। माइनस 3, माइनस 5 से कौन-सा बिंदु पहचाना जाता है?",
+      "See the figure. Which point is identified by [[(−3, −5)|minus 3, minus 5]]?",
+      "आकृति देखिए। [[(−3, −5)|माइनस 3, माइनस 5]] से कौन-सा बिंदु पहचाना जाता है?",
     ),
     answer: "E",
     wrong: [another("H"), another("M"), another("C")],
   },
   g: {
     prompt: t(
-      "See the figure. Which point is identified by (2, −4)?",
-      "आकृति देखिए। (2, −4) से कौन-सा बिंदु पहचाना जाता है?",
-    ),
-    says: t(
-      "See the figure. Which point is identified by 2, minus 4?",
-      "आकृति देखिए। 2, माइनस 4 से कौन-सा बिंदु पहचाना जाता है?",
+      "See the figure. Which point is identified by [[(2, −4)|2, minus 4]]?",
+      "आकृति देखिए। [[(2, −4)|2, माइनस 4]] से कौन-सा बिंदु पहचाना जाता है?",
     ),
     answer: "G",
     wrong: [another("C"), another("D"), another("H")],
@@ -163,10 +151,8 @@ const PARTS: Record<
     wrong: [
       note(
         "−5",
-        "−5 is H's abscissa: its distance from the y-axis. The ordinate is its distance from the x-axis.",
-        "−5, H का भुज है: y-अक्ष से उसकी दूरी। कोटि, x-अक्ष से उसकी दूरी है।",
-        "Minus 5 is H's abscissa: its distance from the y-axis. The ordinate is its distance from the x-axis.",
-        "माइनस 5, H का भुज है: वाई-अक्ष से उसकी दूरी। कोटि, एक्स-अक्ष से उसकी दूरी है।",
+        "[[−5|Minus 5]] is H's abscissa: its distance from the y-axis. The ordinate is its distance from the x-axis.",
+        "[[−5|माइनस 5]], H का भुज है: [[y|वाई]]-अक्ष से उसकी दूरी। कोटि, [[x|एक्स]]-अक्ष से उसकी दूरी है।",
       ),
       note(
         "3",
@@ -186,10 +172,8 @@ const PARTS: Record<
     wrong: [
       note(
         "(5, 0)",
-        "That is y first. L is on the y-axis, 0 units from it, so x\u00a0=\u00a00, written first.",
-        "यह y पहले है। L, y-अक्ष पर है, उससे 0 इकाई दूर, इसलिए x\u00a0=\u00a00, जो पहले लिखा जाता है।",
-        "That is y first. L is on the y-axis, 0 units from it, so x is 0, written first.",
-        "यह वाई पहले है। L, वाई-अक्ष पर है, उससे 0 इकाई दूर, इसलिए एक्स 0 है, जो पहले लिखा जाता है।",
+        `That is y first. L is on the y-axis, 0 units from it, so ${isEn("x", 0)}, written first.`,
+        `यह ${hiLetter("y")} पहले है। L, ${hiLetter("y")}-अक्ष पर है, उससे 0 इकाई दूर, इसलिए ${isHi("x", 0)}, जो पहले लिखा जाता है।`,
       ),
       flipped("L", "y"),
       note(
@@ -205,10 +189,8 @@ const PARTS: Record<
     wrong: [
       note(
         "(0, −3)",
-        "That is y first. M is on the x-axis, 0 units from it, so y\u00a0=\u00a00, written second.",
-        "यह y पहले है। M, x-अक्ष पर है, उससे 0 इकाई दूर, इसलिए y\u00a0=\u00a00, जो दूसरा लिखा जाता है।",
-        "That is y first. M is on the x-axis, 0 units from it, so y is 0, written second.",
-        "यह वाई पहले है। M, एक्स-अक्ष पर है, उससे 0 इकाई दूर, इसलिए वाई 0 है, जो दूसरा लिखा जाता है।",
+        `That is y first. M is on the x-axis, 0 units from it, so ${isEn("y", 0)}, written second.`,
+        `यह ${hiLetter("y")} पहले है। M, ${hiLetter("x")}-अक्ष पर है, उससे 0 इकाई दूर, इसलिए ${isHi("y", 0)}, जो दूसरा लिखा जाता है।`,
       ),
       flipped("M", "x"),
       note(
@@ -249,14 +231,12 @@ export const fig314 = family({
     );
     const question = choice({
       prompt: ask.prompt,
-      ...(ask.says === undefined ? {} : { says: ask.says }),
       options: [
         { id: "right", label: same(ask.answer) },
         ...ask.wrong.map((w, i) => ({
           id: `slip${i}`,
           label: same(w.label),
           feedback: w.feedback,
-          feedbackSays: w.feedbackSays,
         })),
       ],
       answer: "right",

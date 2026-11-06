@@ -6,8 +6,14 @@ import { z } from "zod";
 import { Concept } from "../../concepts.gen";
 
 const shown = (n: number) => (n < 0 ? `−${-n}` : `${n}`);
-const said = (n: number) => (n < 0 ? `minus ${-n}` : `${n}`);
-const saidHi = (n: number) => (n < 0 ? `माइनस ${-n}` : `${n}`);
+
+/** A pair as a mark: shown (−2.5, 3), said as "the point minus 2.5, 3" in a language's words. */
+const pointMark = (point: string, minus: string) => (x: number, y: number) => {
+  const said = [x, y].map((n) => (n < 0 ? `${minus} ${-n}` : `${n}`)).join(", ");
+  return `[[(${shown(x)}, ${shown(y)})|${point} ${said}]]`;
+};
+const pointEn = pointMark("the point", "minus");
+const pointHi = pointMark("बिंदु", "माइनस");
 
 /**
  * A pair to plot by dragging a dot there, halves between the marks included. The notes are the slips: the two
@@ -45,16 +51,11 @@ export const plotThePoint = family({
         },
       }),
     );
-    const pair = `(${shown(x)}, ${shown(y)})`;
     const ask = check({
       about: "sheet",
       prompt: t(
-        `Plot **${pair}**: drag the dot there, then press Check.`,
-        `**${pair}** आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।`,
-      ),
-      says: t(
-        `Plot the point ${said(x)}, ${said(y)}: drag the dot there, then press Check.`,
-        `बिंदु ${saidHi(x)}, ${saidHi(y)} आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।`,
+        `Plot **${pointEn(x, y)}**: drag the dot there, then press Check.`,
+        `**${pointHi(x, y)}** आलेखित करो: बिंदु को वहाँ खींचो, फिर जाँचो दबाओ।`,
       ),
       isRight: isPlaced("sheet", x, y),
       answer: (read) => {

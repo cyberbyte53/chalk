@@ -24,6 +24,8 @@ export const busToStop = family({
   build: ({ stop }) => {
     const { isAt, walkTo, walkerAt } = plane;
     const shown = (n: number) => (n < 0 ? `−${-n}` : `${n}`);
+    /** A stop as a mark: shown −3, said "minus 3" in a language's words. */
+    const stopMark = (n: number, minus: string) => (n < 0 ? `[[−${-n}|${minus} ${-n}]]` : `${n}`);
     const road = place(coordinatePlane, {
       plane: {
         window: { xMin: -6, xMax: 6, yMin: 0, yMax: 0.5 },
@@ -49,12 +51,8 @@ export const busToStop = family({
     const ask = check({
       about: "road",
       prompt: t(
-        `The bus starts at the stand, 0. Take it to stop **${stop < 0 ? `−${-stop}` : stop}**, then press Check.`,
-        `बस अड्डे, 0, से चलती है। इसे स्टॉप **${stop < 0 ? `−${-stop}` : stop}** पर ले जाओ, फिर जाँचो दबाओ।`,
-      ),
-      says: t(
-        `The bus starts at the stand, 0. Take it to stop ${stop < 0 ? `minus ${-stop}` : stop}, then press Check.`,
-        `बस अड्डे, 0, से चलती है। इसे स्टॉप ${stop < 0 ? `माइनस ${-stop}` : stop} पर ले जाओ, फिर जाँचो दबाओ।`,
+        `The bus starts at the stand, 0. Take it to stop **${stopMark(stop, "minus")}**, then press Check.`,
+        `बस अड्डे, 0, से चलती है। इसे स्टॉप **${stopMark(stop, "माइनस")}** पर ले जाओ, फिर जाँचो दबाओ।`,
       ),
       isRight: isAt("road", stop, 0),
       answer: (read) => {

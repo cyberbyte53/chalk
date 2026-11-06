@@ -21,12 +21,8 @@ export const placeTheDot = family({
     const ask = check({
       about: "sheet",
       prompt: t(
-        `Put the dot **${left} cm from the left edge** and **${bottom} cm above the bottom**. Each small square is 1 cm. Drag it there, then press Check.`,
-        `बिंदु को **बाएँ किनारे से ${left} cm** और **नीचे के किनारे से ${bottom} cm ऊपर** रखो। हर छोटा खाना 1 cm है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
-      ),
-      says: t(
-        `Put the dot ${left} centimetres from the left edge and ${bottom} centimetres above the bottom. Each small square is 1 centimetre. Drag it there, then press Check.`,
-        `बिंदु को बाएँ किनारे से ${left} सेंटीमीटर और नीचे के किनारे से ${bottom} सेंटीमीटर ऊपर रखो। हर छोटा खाना 1 सेंटीमीटर है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
+        `Put the dot **${left} [[cm|centimetres]] from the left edge** and **${bottom} [[cm|centimetres]] above the bottom**. Each small square is 1 [[cm|centimetre]]. Drag it there, then press Check.`,
+        `बिंदु को **बाएँ किनारे से ${left} [[cm|सेंटीमीटर]]** और **नीचे के किनारे से ${bottom} [[cm|सेंटीमीटर]] ऊपर** रखो। हर छोटा खाना 1 [[cm|सेंटीमीटर]] है। उसे वहाँ खींचो, फिर जाँचो दबाओ।`,
       ),
       isRight: isPlaced("sheet", left, bottom),
       answer: (read) => {

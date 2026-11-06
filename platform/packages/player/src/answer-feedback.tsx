@@ -1,5 +1,5 @@
 /** @jsxImportSource preact */
-import type { Locale } from "@chalk/content";
+import { type Locale, shownOf } from "@chalk/content";
 import { AnswerStatus, shows } from "@chalk/prop";
 import type { JSX } from "preact";
 import { usePlayMode } from "./play-mode";
@@ -27,7 +27,7 @@ export function AnswerFeedback({
   return (
     <output
       class={isCorrect ? "feedback is-correct" : "feedback is-wrong"}
-      {...shows("result", { status, note: feedback?.[locale] ?? null })}
+      {...shows("result", { status, note: shownOf(feedback?.[locale] ?? "") || null })}
     >
       <strong>{t(locale, isCorrect ? "correct" : "notQuite")}</strong>
       {feedback !== null && (

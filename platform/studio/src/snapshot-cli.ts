@@ -7,7 +7,14 @@
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import { loadBoard } from "@chalk/author";
-import { Actor, LOCALES, type Locale, builtPageSchema, builtQuestionSchema } from "@chalk/content";
+import {
+  Actor,
+  LOCALES,
+  type Locale,
+  builtPageSchema,
+  builtQuestionSchema,
+  shownOf,
+} from "@chalk/content";
 import { modules } from "@chalk/content-source/modules";
 import { propModules } from "@chalk/library/modules";
 import { BoardRuntime } from "@chalk/player";
@@ -28,6 +35,16 @@ const filesUnder = (dir: string): string[] =>
         return statSync(p).isDirectory() ? filesUnder(p) : p.endsWith(".json") ? [p] : [];
       })
     : [];
+
+/** A value with every string in it as shown. */
+const asShown = (value: unknown): unknown =>
+  typeof value === "string"
+    ? shownOf(value)
+    : Array.isArray(value)
+      ? value.map(asShown)
+      : value !== null && typeof value === "object"
+        ? Object.fromEntries(Object.entries(value).map(([k, v]) => [k, asShown(v)]))
+        : value;
 
 /** One board played through `steps` in a language; undefined for a file that isn't a board. */
 async function play(
@@ -67,7 +84,9 @@ async function play(
                   signal: () => undefined,
                 }),
               );
-        return [name, { hidden: runtime.isHidden(name), view, markup }];
+        // A piece's state with its text as shown (speech marks resolved): what the student meets.
+        // How a line is said is compared by `pnpm said-compare`.
+        return [name, { hidden: runtime.isHidden(name), view: asShown(view), markup }];
       }),
     );
   runtime.start();

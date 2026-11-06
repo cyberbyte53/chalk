@@ -42,15 +42,9 @@ const numberLine = page(
       ),
       recap: words.body(
         t(
-          "A number line has a fixed point, the **origin**, marked 0. Equal units are marked from it: 1, 2, 3, … on one side, the positive side, and −1, −2, −3, … on the other, the negative side.",
-          "संख्या रेखा पर एक निश्चित बिंदु होता है, **मूल बिंदु**, जिस पर 0 लिखा होता है। उससे बराबर इकाइयाँ लगाई जाती हैं: एक ओर, धनात्मक ओर, 1, 2, 3, … और दूसरी ओर, ऋणात्मक ओर, −1, −2, −3, …।",
+          "A number line has a fixed point, the **origin**, marked 0. Equal units are marked from it: 1, 2, 3, [[…|and so on,]] on one side, the positive side, and [[−1, −2, −3, …|minus 1, minus 2, minus 3, and so on,]] on the other, the negative side.",
+          "संख्या रेखा पर एक निश्चित बिंदु होता है, **मूल बिंदु**, जिस पर 0 लिखा होता है। उससे बराबर इकाइयाँ लगाई जाती हैं: एक ओर, धनात्मक ओर, 1, 2, 3, [[…|और आगे,]] और दूसरी ओर, ऋणात्मक ओर, [[−1, −2, −3, …|माइनस 1, माइनस 2, माइनस 3, और आगे]]।",
         ),
-        {
-          says: t(
-            "A number line has a fixed point, the origin, marked 0. Equal units are marked from it: 1, 2, 3, and so on, on one side, the positive side, and minus 1, minus 2, minus 3, and so on, on the other, the negative side.",
-            "संख्या रेखा पर एक निश्चित बिंदु होता है, मूल बिंदु, जिस पर 0 लिखा होता है। उससे बराबर इकाइयाँ लगाई जाती हैं: एक ओर, धनात्मक ओर, 1, 2, 3, और आगे, और दूसरी ओर, ऋणात्मक ओर, माइनस 1, माइनस 2, माइनस 3, और आगे।",
-          ),
-        },
       ),
       line: place(
         coordinatePlane,
@@ -70,29 +64,16 @@ const numberLine = page(
       ),
       ask: words.body(
         t(
-          "The point is at 2: **2 units from 0**, on the positive side. Drag it to **−3**.",
-          "बिंदु 2 पर है: **0 से 2 इकाई**, धनात्मक ओर। उसे **−3** पर खींचो।",
+          "The point is at 2: **2 units from 0**, on the positive side. Drag it to **[[−3|minus 3]]**.",
+          "बिंदु 2 पर है: **0 से 2 इकाई**, धनात्मक ओर। उसे **[[−3|माइनस 3]]** पर खींचो।",
         ),
-        {
-          says: t(
-            "The point is at 2: 2 units from 0, on the positive side. Drag it to minus 3.",
-            "बिंदु 2 पर है: 0 से 2 इकाई, धनात्मक ओर। उसे माइनस 3 पर खींचो।",
-          ),
-        },
       ),
       rule: hidden(
         words.definition(
           t(
-            "**−3 is 3 units from 0, on the negative side.** So a point at distance $r$ from 0 is the number $r$ on the positive side, and $-r$ on the negative side: the sign says which side.",
-            "**−3, 0 से 3 इकाई दूर है, ऋणात्मक ओर।** इसलिए 0 से $r$ दूरी पर एक बिंदु धनात्मक ओर संख्या $r$ है, और ऋणात्मक ओर $-r$: चिह्न बताता है कि किस ओर।",
+            "**[[−3|Minus 3]] is 3 units from 0, on the negative side.** So a point at distance [[$r$|r]] from 0 is the number [[$r$|r]] on the positive side, and [[$-r$|minus r]] on the negative side: the sign says which side.",
+            "**[[−3|माइनस 3]], 0 से 3 इकाई दूर है, ऋणात्मक ओर।** इसलिए 0 से [[$r$|आर]] दूरी पर एक बिंदु धनात्मक ओर संख्या [[$r$|आर]] है, और ऋणात्मक ओर [[$-r$|माइनस आर]]: चिह्न बताता है कि किस ओर।",
           ),
-          null,
-          {
-            says: t(
-              "Minus 3 is 3 units from 0, on the negative side. So a point at distance r from 0 is the number r on the positive side, and minus r on the negative side: the sign says which side.",
-              "माइनस 3, 0 से 3 इकाई दूर है, ऋणात्मक ओर। इसलिए 0 से आर दूरी पर एक बिंदु धनात्मक ओर संख्या आर है, और ऋणात्मक ओर माइनस आर: चिह्न बताता है कि किस ओर।",
-            ),
-          },
         ),
       ),
     },
@@ -217,44 +198,25 @@ const townGrows = page(
       signs: hidden(
         words.body(
           t(
-            "Each road is a number line now. Her corner is **0 on both**, and the street through it is Street 0. Going west, the streets are −1, −2, −3; going south, the houses are −1, −2, −3. **The minus sign says which way:** west along the main road, south down a street.",
-            "अब हर सड़क एक संख्या रेखा है। उसका कोना **दोनों पर 0** है, और उससे होकर जाने वाली गली, गली 0 है। पश्चिम की ओर गलियाँ −1, −2, −3 हैं; दक्षिण की ओर मकान −1, −2, −3 हैं। **माइनस का चिह्न बताता है कि किस ओर:** मुख्य सड़क पर पश्चिम, गली में दक्षिण।",
+            "Each road is a number line now. Her corner is **0 on both**, and the street through it is Street 0. Going west, the streets are [[−1, −2, −3|minus 1, minus 2, minus 3]]; going south, the houses are [[−1, −2, −3|minus 1, minus 2, minus 3]]. **The minus sign says which way:** west along the main road, south down a street.",
+            "अब हर सड़क एक संख्या रेखा है। उसका कोना **दोनों पर 0** है, और उससे होकर जाने वाली गली, गली 0 है। पश्चिम की ओर गलियाँ [[−1, −2, −3|माइनस 1, माइनस 2, माइनस 3]] हैं; दक्षिण की ओर मकान [[−1, −2, −3|माइनस 1, माइनस 2, माइनस 3]] हैं। **माइनस का चिह्न बताता है कि किस ओर:** मुख्य सड़क पर पश्चिम, गली में दक्षिण।",
           ),
-          {
-            says: t(
-              "Each road is a number line now. Her corner is 0 on both, and the street through it is Street 0. Going west, the streets are minus 1, minus 2, minus 3; going south, the houses are minus 1, minus 2, minus 3. The minus sign says which way: west along the main road, south down a street.",
-              "अब हर सड़क एक संख्या रेखा है। उसका कोना दोनों पर 0 है, और उससे होकर जाने वाली गली, गली 0 है। पश्चिम की ओर गलियाँ माइनस 1, माइनस 2, माइनस 3 हैं; दक्षिण की ओर मकान माइनस 1, माइनस 2, माइनस 3 हैं। माइनस का चिह्न बताता है कि किस ओर: मुख्य सड़क पर पश्चिम, गली में दक्षिण।",
-            ),
-          },
         ),
       ),
       aunt: hidden(
         words.body(
           t(
-            "For their stall at the fair, Aman's aunt is lending them a table. She lives in the new part of town, at **Street −2, House −3**. Walk Riya there to fetch it.",
-            "मेले में उनके स्टॉल के लिए अमन की मौसी उन्हें एक मेज़ दे रही हैं। वे शहर के नए हिस्से में, **गली −2, मकान −3** पर रहती हैं। उसे लाने के लिए रिया को वहाँ ले चलो।",
+            "For their stall at the fair, Aman's aunt is lending them a table. She lives in the new part of town, at **Street [[−2|minus 2]], House [[−3|minus 3]]**. Walk Riya there to fetch it.",
+            "मेले में उनके स्टॉल के लिए अमन की मौसी उन्हें एक मेज़ दे रही हैं। वे शहर के नए हिस्से में, **गली [[−2|माइनस 2]], मकान [[−3|माइनस 3]]** पर रहती हैं। उसे लाने के लिए रिया को वहाँ ले चलो।",
           ),
-          {
-            says: t(
-              "For their stall at the fair, Aman's aunt is lending them a table. She lives in the new part of town, at Street minus 2, House minus 3. Walk Riya there to fetch it.",
-              "मेले में उनके स्टॉल के लिए अमन की मौसी उन्हें एक मेज़ दे रही हैं। वे शहर के नए हिस्से में, गली माइनस 2, मकान माइनस 3 पर रहती हैं। उसे लाने के लिए रिया को वहाँ ले चलो।",
-            ),
-          },
         ),
       ),
       there: hidden(
         words.definition(
           t(
-            "**Street −2, House −3: 2 streets west along the main road, then 3 houses south.** Each number says how far from her corner; its sign says which way.",
-            "**गली −2, मकान −3: मुख्य सड़क पर 2 गली पश्चिम, फिर 3 मकान दक्षिण।** हर संख्या बताती है कि उसके कोने से कितनी दूर; उसका चिह्न बताता है कि किस ओर।",
+            "**Street [[−2|minus 2]], House [[−3|minus 3]]: 2 streets west along the main road, then 3 houses south.** Each number says how far from her corner; its sign says which way.",
+            "**गली [[−2|माइनस 2]], मकान [[−3|माइनस 3]]: मुख्य सड़क पर 2 गली पश्चिम, फिर 3 मकान दक्षिण।** हर संख्या बताती है कि उसके कोने से कितनी दूर; उसका चिह्न बताता है कि किस ओर।",
           ),
-          null,
-          {
-            says: t(
-              "Street minus 2, House minus 3: 2 streets west along the main road, then 3 houses south. Each number says how far from her corner; its sign says which way.",
-              "गली माइनस 2, मकान माइनस 3: मुख्य सड़क पर 2 गली पश्चिम, फिर 3 मकान दक्षिण। हर संख्या बताती है कि उसके कोने से कितनी दूर; उसका चिह्न बताता है कि किस ओर।",
-            ),
-          },
         ),
       ),
       anyHouse: hidden(
@@ -314,15 +276,9 @@ const twoNumberLines = page(
       ),
       lines: words.body(
         t(
-          "Here are two number lines: **X′X** across and **Y′Y** up. Their zeroes are apart. Bring them together so the lines cross at their zeroes.",
-          "ये दो संख्या रेखाएँ हैं: **X′X** आड़ी और **Y′Y** खड़ी। इनके शून्य अलग-अलग हैं। इन्हें पास लाओ ताकि रेखाएँ अपने शून्यों पर एक-दूसरे को काटें।",
+          "Here are two number lines: **[[X′X|X dash X]]** across and **[[Y′Y|Y dash Y]]** up. Their zeroes are apart. Bring them together so the lines cross at their zeroes.",
+          "ये दो संख्या रेखाएँ हैं: **[[X′X|X डैश X]]** आड़ी और **[[Y′Y|Y डैश Y]]** खड़ी। इनके शून्य अलग-अलग हैं। इन्हें पास लाओ ताकि रेखाएँ अपने शून्यों पर एक-दूसरे को काटें।",
         ),
-        {
-          says: t(
-            "Here are two number lines: X dash X across and Y dash Y up. Their zeroes are apart. Bring them together so the lines cross at their zeroes.",
-            "ये दो संख्या रेखाएँ हैं: X डैश X आड़ी और Y डैश Y खड़ी। इनके शून्य अलग-अलग हैं। इन्हें पास लाओ ताकि रेखाएँ अपने शून्यों पर एक-दूसरे को काटें।",
-          ),
-        },
       ),
       sheet: place(
         coordinatePlane,
@@ -349,30 +305,17 @@ const twoNumberLines = page(
       axes: hidden(
         words.definition(
           t(
-            "**The horizontal line X′X is the x-axis, and the vertical line Y′Y is the y-axis. The point where they cross is the origin, O.**",
-            "**क्षैतिज रेखा X′X, x-अक्ष है, और ऊर्ध्वाधर रेखा Y′Y, y-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।**",
+            "**The horizontal line [[X′X|X dash X]] is the x-axis, and the vertical line [[Y′Y|Y dash Y]] is the y-axis. The point where they cross is the origin, O.**",
+            "**क्षैतिज रेखा [[X′X|X डैश X]], [[x|एक्स]]-अक्ष है, और ऊर्ध्वाधर रेखा [[Y′Y|Y डैश Y]], [[y|वाई]]-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।**",
           ),
-          null,
-          {
-            says: t(
-              "The horizontal line X dash X is the x-axis, and the vertical line Y dash Y is the y-axis. The point where they cross is the origin, O.",
-              "क्षैतिज रेखा X डैश X, एक्स-अक्ष है, और ऊर्ध्वाधर रेखा Y डैश Y, वाई-अक्ष है। जिस बिंदु पर ये काटती हैं, वह मूल बिंदु O है।",
-            ),
-          },
         ),
       ),
       town: hidden(
         words.body(
           t(
             "In Riya's town, the x-axis is the main road and the y-axis is the street through her corner. **O is the corner she started from**, 0 on both.",
-            "रिया के शहर में, x-अक्ष मुख्य सड़क है और y-अक्ष उसके कोने से गुज़रती गली। **O वही कोना है जहाँ से वह चली थी**, दोनों पर 0।",
+            "रिया के शहर में, [[x|एक्स]]-अक्ष मुख्य सड़क है और [[y|वाई]]-अक्ष उसके कोने से गुज़रती गली। **O वही कोना है जहाँ से वह चली थी**, दोनों पर 0।",
           ),
-          {
-            says: t(
-              "In Riya's town, the x-axis is the main road and the y-axis is the street through her corner. O is the corner she started from, 0 on both.",
-              "रिया के शहर में, एक्स-अक्ष मुख्य सड़क है और वाई-अक्ष उसके कोने से गुज़रती गली। O वही कोना है जहाँ से वह चली थी, दोनों पर 0।",
-            ),
-          },
         ),
       ),
     },
@@ -399,16 +342,9 @@ const axesAndDirections = page(
       title: words.title(t("Positive and negative directions", "धनात्मक और ऋणात्मक दिशाएँ")),
       directions: words.definition(
         t(
-          "**OX and OY are the positive directions** of the x-axis and the y-axis: the positive numbers lie along them. **OX′ and OY′ are the negative directions:** the negative numbers lie along them.",
-          "**OX और OY, x-अक्ष और y-अक्ष की धनात्मक दिशाएँ हैं:** धनात्मक संख्याएँ इन पर होती हैं। **OX′ और OY′ ऋणात्मक दिशाएँ हैं:** ऋणात्मक संख्याएँ इन पर होती हैं।",
+          "**[[OX|O X]] and [[OY|O Y]] are the positive directions** of the x-axis and the y-axis: the positive numbers lie along them. **[[OX′|O X dash]] and [[OY′|O Y dash]] are the negative directions:** the negative numbers lie along them.",
+          "**[[OX|O X]] और [[OY|O Y]], [[x|एक्स]]-अक्ष और [[y|वाई]]-अक्ष की धनात्मक दिशाएँ हैं:** धनात्मक संख्याएँ इन पर होती हैं। **[[OX′|O X डैश]] और [[OY′|O Y डैश]] ऋणात्मक दिशाएँ हैं:** ऋणात्मक संख्याएँ इन पर होती हैं।",
         ),
-        null,
-        {
-          says: t(
-            "O X and O Y are the positive directions of the x-axis and the y-axis: the positive numbers lie along them. O X dash and O Y dash are the negative directions: the negative numbers lie along them.",
-            "O X और O Y, एक्स-अक्ष और वाई-अक्ष की धनात्मक दिशाएँ हैं: धनात्मक संख्याएँ इन पर होती हैं। O X डैश और O Y डैश ऋणात्मक दिशाएँ हैं: ऋणात्मक संख्याएँ इन पर होती हैं।",
-          ),
-        },
       ),
       sheet: place(
         coordinatePlane,
@@ -442,15 +378,9 @@ const quadrants = page(
       title: words.title(t("Four quadrants", "चार चतुर्थांश")),
       parts: words.body(
         t(
-          "The axes divide the plane into four parts. Each is called a **quadrant**: one fourth part. They are numbered I, II, III and IV, going **anticlockwise** from OX. Press **Number the quadrants**.",
-          "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को **चतुर्थांश** कहते हैं: एक चौथाई भाग। इन्हें OX से **वामावर्त** (घड़ी की सुइयों की उलटी दिशा में) चलते हुए पहला (I), दूसरा (II), तीसरा (III) और चौथा (IV) गिना जाता है। **चतुर्थांशों को गिनो** दबाओ।",
+          "The axes divide the plane into four parts. Each is called a **quadrant**: one fourth part. They are numbered [[I, II, III and IV|one, two, three and four]], going **anticlockwise** from [[OX|O X]]. Press **Number the quadrants**.",
+          "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को **चतुर्थांश** कहते हैं: एक चौथाई भाग। इन्हें [[OX|O X]] से **वामावर्त**[[ (घड़ी की सुइयों की उलटी दिशा में)|, यानी घड़ी की सुइयों की उलटी दिशा में,]] चलते हुए [[पहला (I)|पहला]], [[दूसरा (II)|दूसरा]], [[तीसरा (III)|तीसरा]] और [[चौथा (IV)|चौथा]] गिना जाता है। **चतुर्थांशों को गिनो** दबाओ।",
         ),
-        {
-          says: t(
-            "The axes divide the plane into four parts. Each is called a quadrant: one fourth part. They are numbered one, two, three and four, going anticlockwise from O X. Press Number the quadrants.",
-            "अक्ष तल को चार भागों में बाँटते हैं। हर भाग को चतुर्थांश कहते हैं: एक चौथाई भाग। इन्हें O X से वामावर्त, यानी घड़ी की सुइयों की उलटी दिशा में, चलते हुए पहला, दूसरा, तीसरा और चौथा गिना जाता है। चतुर्थांशों को गिनो दबाओ।",
-          ),
-        },
       ),
       sheet: place(
         coordinatePlane,
@@ -480,44 +410,25 @@ const quadrants = page(
       town: hidden(
         words.body(
           t(
-            "In Riya's town, the quadrants are its four parts around her corner. Aman's house, A, at Street 4, House 5, is in quadrant I; his aunt's, B, at Street −2, House −3, is in quadrant III. **Tap a quadrant** to see its name.",
-            "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, A, गली 4, मकान 5 पर, पहले चतुर्थांश (I) में है; उसकी मौसी का, B, गली −2, मकान −3 पर, तीसरे चतुर्थांश (III) में। उसका नाम देखने के लिए **किसी चतुर्थांश को दबाओ**।",
+            "In Riya's town, the quadrants are its four parts around her corner. Aman's house, A, at Street 4, House 5, is in quadrant [[I|one]]; his aunt's, B, at Street [[−2|minus 2]], House [[−3|minus 3]], is in quadrant [[III|three]]. **Tap a quadrant** to see its name.",
+            "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, A, गली 4, मकान 5 पर, पहले [[चतुर्थांश (I)|चतुर्थांश]] में है; उसकी मौसी का, B, गली [[−2|माइनस 2]], मकान [[−3|माइनस 3]] पर, तीसरे [[चतुर्थांश (III)|चतुर्थांश]] में। उसका नाम देखने के लिए **किसी चतुर्थांश को दबाओ**।",
           ),
-          {
-            says: t(
-              "In Riya's town, the quadrants are its four parts around her corner. Aman's house, A, at Street 4, House 5, is in quadrant one; his aunt's, B, at Street minus 2, House minus 3, is in quadrant three. Tap a quadrant to see its name.",
-              "रिया के शहर में, चतुर्थांश उसके कोने के चारों ओर शहर के चार भाग हैं। अमन का घर, A, गली 4, मकान 5 पर, पहले चतुर्थांश में है; उसकी मौसी का, B, गली माइनस 2, मकान माइनस 3 पर, तीसरे चतुर्थांश में। उसका नाम देखने के लिए किसी चतुर्थांश को दबाओ।",
-            ),
-          },
         ),
       ),
       plane: hidden(
         words.definition(
           t(
-            "**The plane, with its axes and its quadrants, is called the Cartesian plane, or the coordinate plane, or the xy-plane. The axes are called the coordinate axes.**",
-            "**अपने अक्षों और चतुर्थांशों के साथ इस तल को कार्तीय तल, या निर्देशांक तल, या xy-तल कहते हैं। अक्षों को निर्देशांक अक्ष कहते हैं।**",
+            "**The plane, with its axes and its quadrants, is called the Cartesian plane, or the coordinate plane, or the [[xy-plane|x y plane]]. The axes are called the coordinate axes.**",
+            "**अपने अक्षों और चतुर्थांशों के साथ इस तल को कार्तीय तल, या निर्देशांक तल, या [[xy-तल|एक्स वाई तल]] कहते हैं। अक्षों को निर्देशांक अक्ष कहते हैं।**",
           ),
-          null,
-          {
-            says: t(
-              "The plane, with its axes and its quadrants, is called the Cartesian plane, or the coordinate plane, or the x y plane. The axes are called the coordinate axes.",
-              "अपने अक्षों और चतुर्थांशों के साथ इस तल को कार्तीय तल, या निर्देशांक तल, या एक्स वाई तल कहते हैं। अक्षों को निर्देशांक अक्ष कहते हैं।",
-            ),
-          },
         ),
       ),
       summary: hidden(
         words.body(
           t(
             "**In short:** a point in a plane is located with two perpendicular lines, the coordinate axes. The **x-axis** is horizontal and the **y-axis** is vertical. They cross at the **origin**, O, and divide the **Cartesian plane** into four **quadrants**.",
-            "**संक्षेप में:** तल में एक बिंदु का स्थान दो लंब रेखाओं, निर्देशांक अक्षों, से बताया जाता है। **x-अक्ष** क्षैतिज है और **y-अक्ष** ऊर्ध्वाधर। ये **मूल बिंदु** O पर काटते हैं, और **कार्तीय तल** को चार **चतुर्थांशों** में बाँटते हैं।",
+            "**संक्षेप में:** तल में एक बिंदु का स्थान दो लंब रेखाओं, निर्देशांक अक्षों, से बताया जाता है। **[[x|एक्स]]-अक्ष** क्षैतिज है और **[[y|वाई]]-अक्ष** ऊर्ध्वाधर। ये **मूल बिंदु** O पर काटते हैं, और **कार्तीय तल** को चार **चतुर्थांशों** में बाँटते हैं।",
           ),
-          {
-            says: t(
-              "In short: a point in a plane is located with two perpendicular lines, the coordinate axes. The x-axis is horizontal and the y-axis is vertical. They cross at the origin, O, and divide the Cartesian plane into four quadrants.",
-              "संक्षेप में: तल में एक बिंदु का स्थान दो लंब रेखाओं, निर्देशांक अक्षों, से बताया जाता है। एक्स-अक्ष क्षैतिज है और वाई-अक्ष ऊर्ध्वाधर। ये मूल बिंदु O पर काटते हैं, और कार्तीय तल को चार चतुर्थांशों में बाँटते हैं।",
-            ),
-          },
         ),
       ),
     },

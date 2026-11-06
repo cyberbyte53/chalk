@@ -1,4 +1,5 @@
 import { hidden, page, place, scene, t, tap } from "@chalk/author";
+import type { Localized } from "@chalk/content";
 import { choice, plane, words } from "@chalk/patterns";
 import {
   Choosing,
@@ -42,12 +43,27 @@ const point = (name: string, x: number, y: number, hasDropLines = true) => ({
   tone: Tone.Main,
 });
 
-/** A number as the book writes it, and as said: "−3", "minus 3". */
+/** A number as the book writes it, and in a language's words: "−3", "minus 3". */
 const shown = (n: number) => (n < 0 ? `−${-n}` : `${n}`);
-const said = (n: number, minus: string) => (n < 0 ? `${minus} ${-n}` : `${n}`);
+const spoken = (n: number, minus: string) => (n < 0 ? `${minus} ${-n}` : `${n}`);
 
-/** A wrong option: its pair, and its note in both languages and as said. */
-type Slip = { pair: string; en: string; hi: string; enSays: string; hiSays: string };
+/** An axis letter in a Hindi line: written x, said एक्स. */
+const hiLetter = (v: "x" | "y") => (v === "x" ? "[[x|एक्स]]" : "[[y|वाई]]");
+
+/** A pair as a mark: shown (−3, 5), said "minus 3, 5" in a language's words. */
+const pairMark = (minus: string) => (x: number, y: number) =>
+  `[[(${shown(x)}, ${shown(y)})|${spoken(x, minus)}, ${spoken(y, minus)}]]`;
+const pairEn = pairMark("minus");
+const pairHi = pairMark("माइनस");
+
+/** "x = −3" in a sentence, as a mark: said "x is minus 3", in Hindi "एक्स माइनस 3 है". */
+const isEn = (v: "x" | "y", n: number) =>
+  `[[${v}\u00a0=\u00a0${shown(n)}|${v} is ${spoken(n, "minus")}]]`;
+const isHi = (v: "x" | "y", n: number) =>
+  `[[${v}\u00a0=\u00a0${shown(n)}|${v === "x" ? "एक्स" : "वाई"} ${spoken(n, "माइनस")} है]]`;
+
+/** A wrong option: its pair, and its note. */
+type Slip = { pair: string; note: Localized };
 
 /**
  * The slips reading a point off a figure: its pair written y first, and each sign the wrong way.
@@ -61,24 +77,24 @@ function slipsOf(name: string, x: number, y: number): Slip[] {
   return [
     {
       pair: pairOf(y, x),
-      en: `That is y first. ${name} is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x\u00a0=\u00a0${shown(x)}, written first.`,
-      hi: `यह y पहले है। ${name}, y-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए x\u00a0=\u00a0${shown(x)}, जो पहले लिखा जाता है।`,
-      enSays: `That is y first. ${name} is ${Math.abs(x)} units ${lr[0]} of the y-axis, so x is ${said(x, "minus")}, written first.`,
-      hiSays: `यह वाई पहले है। ${name}, वाई-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए एक्स ${said(x, "माइनस")} है, जो पहले लिखा जाता है।`,
+      note: t(
+        `That is y first. ${name} is ${Math.abs(x)} units ${lr[0]} of the y-axis, so ${isEn("x", x)}, written first.`,
+        `यह ${hiLetter("y")} पहले है। ${name}, ${hiLetter("y")}-अक्ष से ${Math.abs(x)} इकाई ${lr[1]} ओर है, इसलिए ${isHi("x", x)}, जो पहले लिखा जाता है।`,
+      ),
     },
     {
       pair: pairOf(-x, y),
-      en: `That point is on the other side of the y-axis. ${name} is ${lr[0]} of it, so its x-coordinate is ${sign(x)[0]}.`,
-      hi: `वह बिंदु y-अक्ष की दूसरी ओर है। ${name} उसके ${lr[1]} ओर है, इसलिए उसका x-निर्देशांक ${sign(x)[1]} है।`,
-      enSays: `That point is on the other side of the y-axis. ${name} is ${lr[0]} of it, so its x-coordinate is ${sign(x)[0]}.`,
-      hiSays: `वह बिंदु वाई-अक्ष की दूसरी ओर है। ${name} उसके ${lr[1]} ओर है, इसलिए उसका एक्स-निर्देशांक ${sign(x)[1]} है।`,
+      note: t(
+        `That point is on the other side of the y-axis. ${name} is ${lr[0]} of it, so its x-coordinate is ${sign(x)[0]}.`,
+        `वह बिंदु ${hiLetter("y")}-अक्ष की दूसरी ओर है। ${name} उसके ${lr[1]} ओर है, इसलिए उसका ${hiLetter("x")}-निर्देशांक ${sign(x)[1]} है।`,
+      ),
     },
     {
       pair: pairOf(x, -y),
-      en: `That point is on the other side of the x-axis. ${name} is ${ud[0]} it, so its y-coordinate is ${sign(y)[0]}.`,
-      hi: `वह बिंदु x-अक्ष की दूसरी ओर है। ${name} उसके ${ud[1]} है, इसलिए उसका y-निर्देशांक ${sign(y)[1]} है।`,
-      enSays: `That point is on the other side of the x-axis. ${name} is ${ud[0]} it, so its y-coordinate is ${sign(y)[0]}.`,
-      hiSays: `वह बिंदु एक्स-अक्ष की दूसरी ओर है। ${name} उसके ${ud[1]} है, इसलिए उसका वाई-निर्देशांक ${sign(y)[1]} है।`,
+      note: t(
+        `That point is on the other side of the x-axis. ${name} is ${ud[0]} it, so its y-coordinate is ${sign(y)[0]}.`,
+        `वह बिंदु ${hiLetter("x")}-अक्ष की दूसरी ओर है। ${name} उसके ${ud[1]} है, इसलिए उसका ${hiLetter("y")}-निर्देशांक ${sign(y)[1]} है।`,
+      ),
     },
   ];
 }
@@ -92,8 +108,7 @@ function pairQuestion(name: string, right: string, slips: readonly Slip[]) {
       ...slips.map((w, i) => ({
         id: `slip${i}`,
         label: t(w.pair, w.pair),
-        feedback: t(w.en, w.hi),
-        feedbackSays: t(w.enSays, w.hiSays),
+        feedback: w.note,
       })),
     ],
     answer: "right",
@@ -137,16 +152,9 @@ const distancesFromAxes = page(
       atP: hidden(
         words.definition(
           t(
-            "**P is 4 units from the y-axis, measured along the x-axis, in the positive direction OX. It is 3 units from the x-axis, measured along the y-axis, in the positive direction OY.** Riya walked them: 4 along and 3 up, whichever way she went, the distances are the same.",
-            "**P, y-अक्ष से 4 इकाई दूर है, जो x-अक्ष के साथ धनात्मक दिशा OX में मापी जाती है। वह x-अक्ष से 3 इकाई दूर है, जो y-अक्ष के साथ धनात्मक दिशा OY में मापी जाती है।** रिया ने यही चला: 4 आगे और 3 ऊपर, वह किसी भी क्रम में चली हो, दूरियाँ वही हैं।",
+            "**P is 4 units from the y-axis, measured along the x-axis, in the positive direction [[OX|O X]]. It is 3 units from the x-axis, measured along the y-axis, in the positive direction [[OY|O Y]].** Riya walked them: 4 along and 3 up, whichever way she went, the distances are the same.",
+            "**P, [[y|वाई]]-अक्ष से 4 इकाई दूर है, जो [[x|एक्स]]-अक्ष के साथ धनात्मक दिशा [[OX|O X]] में मापी जाती है। वह [[x|एक्स]]-अक्ष से 3 इकाई दूर है, जो [[y|वाई]]-अक्ष के साथ धनात्मक दिशा [[OY|O Y]] में मापी जाती है।** रिया ने यही चला: 4 आगे और 3 ऊपर, वह किसी भी क्रम में चली हो, दूरियाँ वही हैं।",
           ),
-          null,
-          {
-            says: t(
-              "P is 4 units from the y-axis, measured along the x-axis, in the positive direction O X. It is 3 units from the x-axis, measured along the y-axis, in the positive direction O Y. Riya walked them: 4 along and 3 up, whichever way she went, the distances are the same.",
-              "P, वाई-अक्ष से 4 इकाई दूर है, जो एक्स-अक्ष के साथ धनात्मक दिशा O X में मापी जाती है। वह एक्स-अक्ष से 3 इकाई दूर है, जो वाई-अक्ष के साथ धनात्मक दिशा O Y में मापी जाती है। रिया ने यही चला: 4 आगे और 3 ऊपर, वह किसी भी क्रम में चली हो, दूरियाँ वही हैं।",
-            ),
-          },
         ),
       ),
       toQ: hidden(
@@ -157,16 +165,9 @@ const distancesFromAxes = page(
       atQ: hidden(
         words.definition(
           t(
-            "**Q is 6 units from the y-axis, measured along the negative direction OX′, and 2 units from the x-axis, measured along the negative direction OY′.** Her walk: 6 to the left and 2 down, in either order.",
-            "**Q, y-अक्ष से 6 इकाई दूर है, जो ऋणात्मक दिशा OX′ में मापी जाती है, और x-अक्ष से 2 इकाई दूर, जो ऋणात्मक दिशा OY′ में मापी जाती है।** उसकी चाल: 6 बाईं ओर और 2 नीचे, किसी भी क्रम में।",
+            "**Q is 6 units from the y-axis, measured along the negative direction [[OX′|O X dash]], and 2 units from the x-axis, measured along the negative direction [[OY′|O Y dash]].** Her walk: 6 to the left and 2 down, in either order.",
+            "**Q, [[y|वाई]]-अक्ष से 6 इकाई दूर है, जो ऋणात्मक दिशा [[OX′|O X डैश]] में मापी जाती है, और [[x|एक्स]]-अक्ष से 2 इकाई दूर, जो ऋणात्मक दिशा [[OY′|O Y डैश]] में मापी जाती है।** उसकी चाल: 6 बाईं ओर और 2 नीचे, किसी भी क्रम में।",
           ),
-          null,
-          {
-            says: t(
-              "Q is 6 units from the y-axis, measured along the negative direction O X dash, and 2 units from the x-axis, measured along the negative direction O Y dash. Her walk: 6 to the left and 2 down, in either order.",
-              "Q, वाई-अक्ष से 6 इकाई दूर है, जो ऋणात्मक दिशा O X डैश में मापी जाती है, और एक्स-अक्ष से 2 इकाई दूर, जो ऋणात्मक दिशा O Y डैश में मापी जाती है। उसकी चाल: 6 बाईं ओर और 2 नीचे, किसी भी क्रम में।",
-            ),
-          },
         ),
       ),
     },
@@ -202,41 +203,21 @@ const abscissaAndOrdinate = page(
       ),
       abscissa: words.definition(
         t(
-          "**The x-coordinate of a point is its perpendicular distance from the y-axis, measured along the x-axis: positive along OX, negative along OX′. It is also called the abscissa.**",
-          "**किसी बिंदु का x-निर्देशांक, y-अक्ष से उसकी लंब दूरी है, जो x-अक्ष के साथ मापी जाती है: OX की ओर धनात्मक, OX′ की ओर ऋणात्मक। इसे भुज भी कहते हैं।**",
+          "**The x-coordinate of a point is its perpendicular distance from the y-axis, measured along the x-axis: positive along [[OX|O X]], negative along [[OX′|O X dash]]. It is also called the abscissa.**",
+          "**किसी बिंदु का [[x|एक्स]]-निर्देशांक, [[y|वाई]]-अक्ष से उसकी लंब दूरी है, जो [[x|एक्स]]-अक्ष के साथ मापी जाती है: [[OX|O X]] की ओर धनात्मक, [[OX′|O X डैश]] की ओर ऋणात्मक। इसे भुज भी कहते हैं।**",
         ),
-        null,
-        {
-          says: t(
-            "The x-coordinate of a point is its perpendicular distance from the y-axis, measured along the x-axis: positive along O X, negative along O X dash. It is also called the abscissa.",
-            "किसी बिंदु का एक्स-निर्देशांक, वाई-अक्ष से उसकी लंब दूरी है, जो एक्स-अक्ष के साथ मापी जाती है: O X की ओर धनात्मक, O X डैश की ओर ऋणात्मक। इसे भुज भी कहते हैं।",
-          ),
-        },
       ),
       ordinate: words.definition(
         t(
-          "**The y-coordinate of a point is its perpendicular distance from the x-axis, measured along the y-axis: positive along OY, negative along OY′. It is also called the ordinate.**",
-          "**किसी बिंदु का y-निर्देशांक, x-अक्ष से उसकी लंब दूरी है, जो y-अक्ष के साथ मापी जाती है: OY की ओर धनात्मक, OY′ की ओर ऋणात्मक। इसे कोटि भी कहते हैं।**",
+          "**The y-coordinate of a point is its perpendicular distance from the x-axis, measured along the y-axis: positive along [[OY|O Y]], negative along [[OY′|O Y dash]]. It is also called the ordinate.**",
+          "**किसी बिंदु का [[y|वाई]]-निर्देशांक, [[x|एक्स]]-अक्ष से उसकी लंब दूरी है, जो [[y|वाई]]-अक्ष के साथ मापी जाती है: [[OY|O Y]] की ओर धनात्मक, [[OY′|O Y डैश]] की ओर ऋणात्मक। इसे कोटि भी कहते हैं।**",
         ),
-        null,
-        {
-          says: t(
-            "The y-coordinate of a point is its perpendicular distance from the x-axis, measured along the y-axis: positive along O Y, negative along O Y dash. It is also called the ordinate.",
-            "किसी बिंदु का वाई-निर्देशांक, एक्स-अक्ष से उसकी लंब दूरी है, जो वाई-अक्ष के साथ मापी जाती है: O Y की ओर धनात्मक, O Y डैश की ओर ऋणात्मक। इसे कोटि भी कहते हैं।",
-          ),
-        },
       ),
       ofPQ: words.body(
         t(
-          "So P has x-coordinate +4 and y-coordinate +3. Q has x-coordinate −6 and y-coordinate −2.",
-          "इसलिए P का x-निर्देशांक +4 और y-निर्देशांक +3 है। Q का x-निर्देशांक −6 और y-निर्देशांक −2 है।",
+          "So P has x-coordinate [[+4|plus 4]] and y-coordinate [[+3|plus 3]]. Q has x-coordinate [[−6|minus 6]] and y-coordinate [[−2|minus 2]].",
+          "इसलिए P का [[x|एक्स]]-निर्देशांक [[+4|धन 4]] और [[y|वाई]]-निर्देशांक [[+3|धन 3]] है। Q का [[x|एक्स]]-निर्देशांक [[−6|माइनस 6]] और [[y|वाई]]-निर्देशांक [[−2|माइनस 2]] है।",
         ),
-        {
-          says: t(
-            "So P has x-coordinate plus 4 and y-coordinate plus 3. Q has x-coordinate minus 6 and y-coordinate minus 2.",
-            "इसलिए P का एक्स-निर्देशांक धन 4 और वाई-निर्देशांक धन 3 है। Q का एक्स-निर्देशांक माइनस 6 और वाई-निर्देशांक माइनस 2 है।",
-          ),
-        },
       ),
       sheet: place(
         coordinatePlane,
@@ -248,28 +229,16 @@ const abscissaAndOrdinate = page(
       ),
       ask: words.body(
         t(
-          "The point is at P. **Drag it to where x\u00a0=\u00a0−6 and y\u00a0=\u00a0−2**: that is Q. Watch each sign change as it crosses an axis.",
-          "बिंदु P पर है। **उसे वहाँ खींचो जहाँ x\u00a0=\u00a0−6 और y\u00a0=\u00a0−2 है**: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
+          "The point is at P. **Drag it to where [[x\u00a0=\u00a0−6|x is minus 6]] and [[y\u00a0=\u00a0−2|y is minus 2]]**: that is Q. Watch each sign change as it crosses an axis.",
+          "बिंदु P पर है। **उसे वहाँ खींचो जहाँ [[x\u00a0=\u00a0−6|एक्स माइनस 6]] और [[y\u00a0=\u00a0−2|वाई माइनस 2]] है**: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
         ),
-        {
-          says: t(
-            "The point is at P. Drag it to where x is minus 6 and y is minus 2: that is Q. Watch each sign change as it crosses an axis.",
-            "बिंदु P पर है। उसे वहाँ खींचो जहाँ एक्स माइनस 6 और वाई माइनस 2 है: वही Q है। देखो कि अक्ष पार करते ही हर चिह्न कैसे बदलता है।",
-          ),
-        },
       ),
       crossing: hidden(
         words.body(
           t(
             "**Crossing the y-axis changes the sign of x; crossing the x-axis changes the sign of y.** The distances stay distances: the sign says which side.",
-            "**y-अक्ष पार करने पर x का चिह्न बदलता है; x-अक्ष पार करने पर y का।** दूरियाँ दूरियाँ ही रहती हैं: चिह्न बताता है कि किस ओर।",
+            "**[[y|वाई]]-अक्ष पार करने पर [[x|एक्स]] का चिह्न बदलता है; [[x|एक्स]]-अक्ष पार करने पर [[y|वाई]] का।** दूरियाँ दूरियाँ ही रहती हैं: चिह्न बताता है कि किस ओर।",
           ),
-          {
-            says: t(
-              "Crossing the y-axis changes the sign of x; crossing the x-axis changes the sign of y. The distances stay distances: the sign says which side.",
-              "वाई-अक्ष पार करने पर एक्स का चिह्न बदलता है; एक्स-अक्ष पार करने पर वाई का। दूरियाँ दूरियाँ ही रहती हैं: चिह्न बताता है कि किस ओर।",
-            ),
-          },
         ),
       ),
     },
@@ -290,16 +259,9 @@ const writingCoordinates = page(
       title: words.title(t("Writing the coordinates", "निर्देशांक लिखना")),
       pair: words.definition(
         t(
-          "**The coordinates of a point are written x-coordinate first, then y-coordinate, in brackets: P is (4, 3) and Q is (−6, −2).**",
-          "**किसी बिंदु के निर्देशांक पहले x-निर्देशांक, फिर y-निर्देशांक, कोष्ठक में लिखे जाते हैं: P है (4, 3) और Q है (−6, −2)।**",
+          "**The coordinates of a point are written x-coordinate first, then y-coordinate, in brackets: P is [[(4, 3)|the point 4, 3,]] and Q is [[(−6, −2)|the point minus 6, minus 2]].**",
+          "**किसी बिंदु के निर्देशांक पहले [[x|एक्स]]-निर्देशांक, फिर [[y|वाई]]-निर्देशांक, कोष्ठक में लिखे जाते हैं: P है [[(4, 3)|बिंदु 4, 3,]] और Q है [[(−6, −2)|बिंदु माइनस 6, माइनस 2]]।**",
         ),
-        null,
-        {
-          says: t(
-            "The coordinates of a point are written x-coordinate first, then y-coordinate, in brackets: P is the point 4, 3, and Q is the point minus 6, minus 2.",
-            "किसी बिंदु के निर्देशांक पहले एक्स-निर्देशांक, फिर वाई-निर्देशांक, कोष्ठक में लिखे जाते हैं: P है बिंदु 4, 3, और Q है बिंदु माइनस 6, माइनस 2।",
-          ),
-        },
       ),
       sheet: place(
         coordinatePlane,
@@ -311,28 +273,16 @@ const writingCoordinates = page(
       ),
       ask: words.body(
         t(
-          "**Drag the point anywhere on the plane:** its coordinates go with it. Then put it at **(3, 4)**.",
-          "**बिंदु को तल पर कहीं भी खींचो:** उसके निर्देशांक उसके साथ चलते हैं। फिर उसे **(3, 4)** पर रखो।",
+          "**Drag the point anywhere on the plane:** its coordinates go with it. Then put it at **[[(3, 4)|the point 3, 4]]**.",
+          "**बिंदु को तल पर कहीं भी खींचो:** उसके निर्देशांक उसके साथ चलते हैं। फिर उसे **[[(3, 4)|बिंदु 3, 4]]** पर रखो।",
         ),
-        {
-          says: t(
-            "Drag the point anywhere on the plane: its coordinates go with it. Then put it at the point 3, 4.",
-            "बिंदु को तल पर कहीं भी खींचो: उसके निर्देशांक उसके साथ चलते हैं। फिर उसे बिंदु 3, 4 पर रखो।",
-          ),
-        },
       ),
       notP: hidden(
         words.body(
           t(
-            "**(3, 4) is not P.** The same two numbers in the other order are another point: 3 along and 4 up, not 4 along and 3 up. The coordinates name exactly one point.",
-            "**(3, 4), P नहीं है।** वही दो संख्याएँ उलटे क्रम में एक दूसरा बिंदु हैं: 3 आगे और 4 ऊपर, न कि 4 आगे और 3 ऊपर। निर्देशांक ठीक एक ही बिंदु बताते हैं।",
+            "**[[(3, 4)|The point 3, 4]] is not P.** The same two numbers in the other order are another point: 3 along and 4 up, not 4 along and 3 up. The coordinates name exactly one point.",
+            "**[[(3, 4)|बिंदु 3, 4]], P नहीं है।** वही दो संख्याएँ उलटे क्रम में एक दूसरा बिंदु हैं: 3 आगे और 4 ऊपर, न कि 4 आगे और 3 ऊपर। निर्देशांक ठीक एक ही बिंदु बताते हैं।",
           ),
-          {
-            says: t(
-              "The point 3, 4 is not P. The same two numbers in the other order are another point: 3 along and 4 up, not 4 along and 3 up. The coordinates name exactly one point.",
-              "बिंदु 3, 4, P नहीं है। वही दो संख्याएँ उलटे क्रम में एक दूसरा बिंदु हैं: 3 आगे और 4 ऊपर, न कि 4 आगे और 3 ऊपर। निर्देशांक ठीक एक ही बिंदु बताते हैं।",
-            ),
-          },
         ),
       ),
       agreement: hidden(
@@ -346,15 +296,9 @@ const writingCoordinates = page(
       plan: hidden(
         words.body(
           t(
-            "On the fair ground's plan, the two main paths are the axes, crossing at O. Riya writes where the first stalls stand: **snacks at (3, 2), books at (−4, 1)**. **Tap a stall** to see its coordinates.",
-            "मेले के मैदान के नक्शे पर दो मुख्य रास्ते अक्ष हैं, जो O पर काटते हैं। रिया पहले स्टॉल की जगहें लिखती है: **नाश्ता (3, 2) पर, किताबें (−4, 1) पर**। उसके निर्देशांक देखने के लिए **किसी स्टॉल को दबाओ**।",
+            "On the fair ground's plan, the two main paths are the axes, crossing at O. Riya writes where the first stalls stand: **snacks at [[(3, 2)|the point 3, 2]], books at [[(−4, 1)|the point minus 4, 1]]**. **Tap a stall** to see its coordinates.",
+            "मेले के मैदान के नक्शे पर दो मुख्य रास्ते अक्ष हैं, जो O पर काटते हैं। रिया पहले स्टॉल की जगहें लिखती है: **नाश्ता [[(3, 2)|बिंदु 3, 2]] पर, किताबें [[(−4, 1)|बिंदु माइनस 4, 1]] पर**। उसके निर्देशांक देखने के लिए **किसी स्टॉल को दबाओ**।",
           ),
-          {
-            says: t(
-              "On the fair ground's plan, the two main paths are the axes, crossing at O. Riya writes where the first stalls stand: snacks at the point 3, 2, books at the point minus 4, 1. Tap a stall to see its coordinates.",
-              "मेले के मैदान के नक्शे पर दो मुख्य रास्ते अक्ष हैं, जो O पर काटते हैं। रिया पहले स्टॉल की जगहें लिखती है: नाश्ता बिंदु 3, 2 पर, किताबें बिंदु माइनस 4, 1 पर। उसके निर्देशांक देखने के लिए किसी स्टॉल को दबाओ।",
-            ),
-          },
         ),
       ),
       ground: hidden(
@@ -429,60 +373,36 @@ const readingPoints = page(
       b: hidden(
         words.body(
           t(
-            "B is 4 units from the y-axis along OX and 3 units from the x-axis along OY: abscissa 4, ordinate 3, coordinates (4, 3).",
-            "B, y-अक्ष से OX की ओर 4 इकाई और x-अक्ष से OY की ओर 3 इकाई दूर है: भुज 4, कोटि 3, निर्देशांक (4, 3)।",
+            "B is 4 units from the y-axis along [[OX|O X]] and 3 units from the x-axis along [[OY|O Y]]: abscissa 4, ordinate 3, coordinates [[(4, 3)|4, 3]].",
+            "B, [[y|वाई]]-अक्ष से [[OX|O X]] की ओर 4 इकाई और [[x|एक्स]]-अक्ष से [[OY|O Y]] की ओर 3 इकाई दूर है: भुज 4, कोटि 3, निर्देशांक [[(4, 3)|4, 3]]।",
           ),
-          {
-            says: t(
-              "B is 4 units from the y-axis along O X and 3 units from the x-axis along O Y: abscissa 4, ordinate 3, coordinates 4, 3.",
-              "B, वाई-अक्ष से O X की ओर 4 इकाई और एक्स-अक्ष से O Y की ओर 3 इकाई दूर है: भुज 4, कोटि 3, निर्देशांक 4, 3।",
-            ),
-          },
         ),
       ),
       pairOfM: hidden(askM),
       m: hidden(
         words.body(
           t(
-            "M is 3 units from the y-axis along OX′ and 4 units from the x-axis along OY: abscissa −3, ordinate 4, coordinates (−3, 4).",
-            "M, y-अक्ष से OX′ की ओर 3 इकाई और x-अक्ष से OY की ओर 4 इकाई दूर है: भुज −3, कोटि 4, निर्देशांक (−3, 4)।",
+            "M is 3 units from the y-axis along [[OX′|O X dash]] and 4 units from the x-axis along [[OY|O Y]]: abscissa [[−3|minus 3]], ordinate 4, coordinates [[(−3, 4)|minus 3, 4]].",
+            "M, [[y|वाई]]-अक्ष से [[OX′|O X डैश]] की ओर 3 इकाई और [[x|एक्स]]-अक्ष से [[OY|O Y]] की ओर 4 इकाई दूर है: भुज [[−3|माइनस 3]], कोटि 4, निर्देशांक [[(−3, 4)|माइनस 3, 4]]।",
           ),
-          {
-            says: t(
-              "M is 3 units from the y-axis along O X dash and 4 units from the x-axis along O Y: abscissa minus 3, ordinate 4, coordinates minus 3, 4.",
-              "M, वाई-अक्ष से O X डैश की ओर 3 इकाई और एक्स-अक्ष से O Y की ओर 4 इकाई दूर है: भुज माइनस 3, कोटि 4, निर्देशांक माइनस 3, 4।",
-            ),
-          },
         ),
       ),
       pairOfL: hidden(askL),
       l: hidden(
         words.body(
           t(
-            "L is 5 units from the y-axis along OX′ and 4 units from the x-axis along OY′: abscissa −5, ordinate −4, coordinates (−5, −4).",
-            "L, y-अक्ष से OX′ की ओर 5 इकाई और x-अक्ष से OY′ की ओर 4 इकाई दूर है: भुज −5, कोटि −4, निर्देशांक (−5, −4)।",
+            "L is 5 units from the y-axis along [[OX′|O X dash]] and 4 units from the x-axis along [[OY′|O Y dash]]: abscissa [[−5|minus 5]], ordinate [[−4|minus 4]], coordinates [[(−5, −4)|minus 5, minus 4]].",
+            "L, [[y|वाई]]-अक्ष से [[OX′|O X डैश]] की ओर 5 इकाई और [[x|एक्स]]-अक्ष से [[OY′|O Y डैश]] की ओर 4 इकाई दूर है: भुज [[−5|माइनस 5]], कोटि [[−4|माइनस 4]], निर्देशांक [[(−5, −4)|माइनस 5, माइनस 4]]।",
           ),
-          {
-            says: t(
-              "L is 5 units from the y-axis along O X dash and 4 units from the x-axis along O Y dash: abscissa minus 5, ordinate minus 4, coordinates minus 5, minus 4.",
-              "L, वाई-अक्ष से O X डैश की ओर 5 इकाई और एक्स-अक्ष से O Y डैश की ओर 4 इकाई दूर है: भुज माइनस 5, कोटि माइनस 4, निर्देशांक माइनस 5, माइनस 4।",
-            ),
-          },
         ),
       ),
       pairOfS: hidden(askS),
       s: hidden(
         words.body(
           t(
-            "S is 3 units from the y-axis along OX and 4 units from the x-axis along OY′: abscissa 3, ordinate −4, coordinates (3, −4).",
-            "S, y-अक्ष से OX की ओर 3 इकाई और x-अक्ष से OY′ की ओर 4 इकाई दूर है: भुज 3, कोटि −4, निर्देशांक (3, −4)।",
+            "S is 3 units from the y-axis along [[OX|O X]] and 4 units from the x-axis along [[OY′|O Y dash]]: abscissa 3, ordinate [[−4|minus 4]], coordinates [[(3, −4)|3, minus 4]].",
+            "S, [[y|वाई]]-अक्ष से [[OX|O X]] की ओर 3 इकाई और [[x|एक्स]]-अक्ष से [[OY′|O Y डैश]] की ओर 4 इकाई दूर है: भुज 3, कोटि [[−4|माइनस 4]], निर्देशांक [[(3, −4)|3, माइनस 4]]।",
           ),
-          {
-            says: t(
-              "S is 3 units from the y-axis along O X and 4 units from the x-axis along O Y dash: abscissa 3, ordinate minus 4, coordinates 3, minus 4.",
-              "S, वाई-अक्ष से O X की ओर 3 इकाई और एक्स-अक्ष से O Y डैश की ओर 4 इकाई दूर है: भुज 3, कोटि माइनस 4, निर्देशांक 3, माइनस 4।",
-            ),
-          },
         ),
       ),
     },
@@ -511,31 +431,30 @@ const onAxis = (
   name: string,
   axis: "x" | "y",
   [swappedPair, flippedPair, notZeroPair]: [string, string, string],
-  [dist, distHi, distSaid, distSaidHi]: [string, string, string, string],
+  dist: Localized,
 ): Slip[] => {
-  const [zero, other] = axis === "x" ? ["y", "x"] : ["x", "y"];
-  const [zeroSaid, otherSaid] = axis === "x" ? ["वाई", "एक्स"] : ["एक्स", "वाई"];
+  const [zero, other]: ["x" | "y", "x" | "y"] = axis === "x" ? ["y", "x"] : ["x", "y"];
   return [
     {
       pair: swappedPair,
-      en: `That is y first. ${name} is on the ${axis}-axis, so ${zero}\u00a0=\u00a00, written ${zero === "x" ? "first" : "second"}.`,
-      hi: `यह y पहले है। ${name}, ${axis}-अक्ष पर है, इसलिए ${zero}\u00a0=\u00a00, जो ${zero === "x" ? "पहले" : "दूसरा"} लिखा जाता है।`,
-      enSays: `That is y first. ${name} is on the ${axis}-axis, so ${zero} is 0, written ${zero === "x" ? "first" : "second"}.`,
-      hiSays: `यह वाई पहले है। ${name}, ${axis === "x" ? "एक्स" : "वाई"}-अक्ष पर है, इसलिए ${zeroSaid} 0 है, जो ${zero === "x" ? "पहले" : "दूसरा"} लिखा जाता है।`,
+      note: t(
+        `That is y first. ${name} is on the ${axis}-axis, so ${isEn(zero, 0)}, written ${zero === "x" ? "first" : "second"}.`,
+        `यह ${hiLetter("y")} पहले है। ${name}, ${hiLetter(axis)}-अक्ष पर है, इसलिए ${isHi(zero, 0)}, जो ${zero === "x" ? "पहले" : "दूसरा"} लिखा जाता है।`,
+      ),
     },
     {
       pair: flippedPair,
-      en: `That point is on the other side of O. ${name} is ${dist}.`,
-      hi: `वह बिंदु O की दूसरी ओर है। ${name}, ${distHi} है।`,
-      enSays: `That point is on the other side of O. ${name} is ${distSaid}.`,
-      hiSays: `वह बिंदु O की दूसरी ओर है। ${name}, ${distSaidHi} है।`,
+      note: t(
+        `That point is on the other side of O. ${name} is ${dist.en}.`,
+        `वह बिंदु O की दूसरी ओर है। ${name}, ${dist.hi} है।`,
+      ),
     },
     {
       pair: notZeroPair,
-      en: `${name} is on the ${axis}-axis: 0 units from it, so its ${zero}-coordinate is 0. Only its ${other}-coordinate isn't.`,
-      hi: `${name}, ${axis}-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका ${zero}-निर्देशांक 0 है। केवल ${other}-निर्देशांक 0 नहीं है।`,
-      enSays: `${name} is on the ${axis}-axis: 0 units from it, so its ${zero}-coordinate is 0. Only its ${other}-coordinate isn't.`,
-      hiSays: `${name}, ${axis === "x" ? "एक्स" : "वाई"}-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका ${zeroSaid}-निर्देशांक 0 है। केवल ${otherSaid}-निर्देशांक 0 नहीं है।`,
+      note: t(
+        `${name} is on the ${axis}-axis: 0 units from it, so its ${zero}-coordinate is 0. Only its ${other}-coordinate isn't.`,
+        `${name}, ${hiLetter(axis)}-अक्ष पर है: उससे 0 इकाई दूर, इसलिए उसका ${hiLetter(zero)}-निर्देशांक 0 है। केवल ${hiLetter(other)}-निर्देशांक 0 नहीं है।`,
+      ),
     },
   ];
 };
@@ -546,12 +465,7 @@ const askAxisB = pairQuestion(
     "B",
     "y",
     ["(3, 0)", "(0, −3)", "(3, 3)"],
-    [
-      "3 units above O, along OY",
-      "O से OY की ओर 3 इकाई ऊपर",
-      "3 units above O, along O Y",
-      "O से O Y की ओर 3 इकाई ऊपर",
-    ],
+    t("3 units above O, along [[OY|O Y]]", "O से [[OY|O Y]] की ओर 3 इकाई ऊपर"),
   ),
 );
 const askAxisC = pairQuestion(
@@ -561,12 +475,7 @@ const askAxisC = pairQuestion(
     "C",
     "x",
     ["(0, −5)", "(5, 0)", "(−5, −5)"],
-    [
-      "5 units left of O, along OX′",
-      "O से OX′ की ओर 5 इकाई बाईं ओर",
-      "5 units left of O, along O X dash",
-      "O से O X डैश की ओर 5 इकाई बाईं ओर",
-    ],
+    t("5 units left of O, along [[OX′|O X dash]]", "O से [[OX′|O X डैश]] की ओर 5 इकाई बाईं ओर"),
   ),
 );
 const askAxisE = pairQuestion(
@@ -576,12 +485,10 @@ const askAxisE = pairQuestion(
     "E",
     "x",
     ["(0, ⅔)", "(−⅔, 0)", "(⅔, ⅔)"],
-    [
-      "two-thirds of a unit right of O, along OX",
-      "O से OX की ओर दो-तिहाई इकाई दाईं ओर",
-      "two-thirds of a unit right of O, along O X",
-      "O से O X की ओर दो-तिहाई इकाई दाईं ओर",
-    ],
+    t(
+      "two-thirds of a unit right of O, along [[OX|O X]]",
+      "O से [[OX|O X]] की ओर दो-तिहाई इकाई दाईं ओर",
+    ),
   ),
 );
 
@@ -594,14 +501,8 @@ const pointsOnAxes = page(
       ask: words.body(
         t(
           "**Drag the point onto the x-axis**, then onto the y-axis, then onto O, and watch its coordinates.",
-          "**बिंदु को x-अक्ष पर खींचो**, फिर y-अक्ष पर, फिर O पर, और उसके निर्देशांक देखो।",
+          "**बिंदु को [[x|एक्स]]-अक्ष पर खींचो**, फिर [[y|वाई]]-अक्ष पर, फिर O पर, और उसके निर्देशांक देखो।",
         ),
-        {
-          says: t(
-            "Drag the point onto the x-axis, then onto the y-axis, then onto O, and watch its coordinates.",
-            "बिंदु को एक्स-अक्ष पर खींचो, फिर वाई-अक्ष पर, फिर O पर, और उसके निर्देशांक देखो।",
-          ),
-        },
       ),
       sheet: place(
         coordinatePlane,
@@ -622,46 +523,25 @@ const pointsOnAxes = page(
       onX: hidden(
         words.definition(
           t(
-            "**A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is (x, 0).** Press **y\u00a0=\u00a00**: every point with y\u00a0=\u00a00 lights up, and they make the whole x-axis. In Riya's town, a house on the main road needs no walk up the street: its second number is 0.",
-            "**x-अक्ष पर कोई बिंदु x-अक्ष से 0 इकाई दूर है, इसलिए उसका y-निर्देशांक 0 है: वह (x, 0) है।** **y\u00a0=\u00a00** दबाओ: y\u00a0=\u00a00 वाले सारे बिंदु चमक उठते हैं, और वे पूरा x-अक्ष बनाते हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।",
+            "**A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is [[(x, 0)|the point x, 0]].** Press **[[y\u00a0=\u00a00|y equals 0]]**: every point with [[y\u00a0=\u00a00|y equal to 0]] lights up, and they make the whole x-axis. In Riya's town, a house on the main road needs no walk up the street: its second number is 0.",
+            "**[[x|एक्स]]-अक्ष पर कोई बिंदु [[x|एक्स]]-अक्ष से 0 इकाई दूर है, इसलिए उसका [[y|वाई]]-निर्देशांक 0 है: वह [[(x, 0)|बिंदु एक्स, 0]] है।** **[[y\u00a0=\u00a00|वाई बराबर 0]]** दबाओ: [[y\u00a0=\u00a00|वाई बराबर 0]] वाले सारे बिंदु चमक उठते हैं, और वे पूरा [[x|एक्स]]-अक्ष बनाते हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।",
           ),
-          null,
-          {
-            says: t(
-              "A point on the x-axis is 0 units from the x-axis, so its y-coordinate is 0: it is the point x, 0. Press y equals 0: every point with y equal to 0 lights up, and they make the whole x-axis. In Riya's town, a house on the main road needs no walk up the street: its second number is 0.",
-              "एक्स-अक्ष पर कोई बिंदु एक्स-अक्ष से 0 इकाई दूर है, इसलिए उसका वाई-निर्देशांक 0 है: वह बिंदु एक्स, 0 है। वाई बराबर 0 दबाओ: वाई बराबर 0 वाले सारे बिंदु चमक उठते हैं, और वे पूरा एक्स-अक्ष बनाते हैं। रिया के शहर में, मुख्य सड़क पर बने मकान तक गली में ऊपर नहीं चलना पड़ता: उसकी दूसरी संख्या 0 है।",
-            ),
-          },
         ),
       ),
       onY: hidden(
         words.definition(
           t(
-            "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is (0, y).** Every point with x\u00a0=\u00a00 makes the whole y-axis. With **y\u00a0=\u00a00** pressed, press **x\u00a0=\u00a00** too: which points have both y\u00a0=\u00a00 and x\u00a0=\u00a00?",
-            "**y-अक्ष पर कोई बिंदु y-अक्ष से 0 इकाई दूर है, इसलिए उसका x-निर्देशांक 0 है: वह (0, y) है।** x\u00a0=\u00a00 वाले सारे बिंदु मिलकर पूरा y-अक्ष बनाते हैं। **y\u00a0=\u00a00** दबाने के बाद **x\u00a0=\u00a00** भी दबाओ: किन बिंदुओं का y\u00a0=\u00a00 और x\u00a0=\u00a00 दोनों है?",
+            "**A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is [[(0, y)|the point 0, y]].** Every point with [[x\u00a0=\u00a00|x equal to 0]] makes the whole y-axis. With **[[y\u00a0=\u00a00|y equals 0]]** pressed, press **[[x\u00a0=\u00a00|x equals 0]]** too: which points have both [[y\u00a0=\u00a00|y equal to 0]] and [[x\u00a0=\u00a00|x equal to 0]]?",
+            "**[[y|वाई]]-अक्ष पर कोई बिंदु [[y|वाई]]-अक्ष से 0 इकाई दूर है, इसलिए उसका [[x|एक्स]]-निर्देशांक 0 है: वह [[(0, y)|बिंदु 0, वाई]] है।** [[x\u00a0=\u00a00|एक्स बराबर 0]] वाले सारे बिंदु मिलकर पूरा [[y|वाई]]-अक्ष बनाते हैं। **[[y\u00a0=\u00a00|वाई बराबर 0]]** दबाने के बाद **[[x\u00a0=\u00a00|एक्स बराबर 0]]** भी दबाओ: किन बिंदुओं का [[y\u00a0=\u00a00|वाई बराबर 0]] और [[x\u00a0=\u00a00|एक्स बराबर 0]] दोनों है?",
           ),
-          null,
-          {
-            says: t(
-              "A point on the y-axis is 0 units from the y-axis, so its x-coordinate is 0: it is the point 0, y. Every point with x equal to 0 makes the whole y-axis. With y equals 0 pressed, press x equals 0 too: which points have both y equal to 0 and x equal to 0?",
-              "वाई-अक्ष पर कोई बिंदु वाई-अक्ष से 0 इकाई दूर है, इसलिए उसका एक्स-निर्देशांक 0 है: वह बिंदु 0, वाई है। एक्स बराबर 0 वाले सारे बिंदु मिलकर पूरा वाई-अक्ष बनाते हैं। वाई बराबर 0 दबाने के बाद एक्स बराबर 0 भी दबाओ: किन बिंदुओं का वाई बराबर 0 और एक्स बराबर 0 दोनों है?",
-            ),
-          },
         ),
       ),
       atO: hidden(
         words.definition(
           t(
-            "**The origin is 0 units from both axes, so its coordinates are (0, 0).** It is the one point with both y\u00a0=\u00a00 and x\u00a0=\u00a00.",
-            "**मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक (0, 0) हैं।** यही वह एक बिंदु है जिसका y\u00a0=\u00a00 और x\u00a0=\u00a00 दोनों हैं।",
+            "**The origin is 0 units from both axes, so its coordinates are [[(0, 0)|0, 0]].** It is the one point with both [[y\u00a0=\u00a00|y equal to 0]] and [[x\u00a0=\u00a00|x equal to 0]].",
+            "**मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक [[(0, 0)|0, 0]] हैं।** यही वह एक बिंदु है जिसका [[y\u00a0=\u00a00|वाई बराबर 0]] और [[x\u00a0=\u00a00|एक्स बराबर 0]] दोनों हैं।",
           ),
-          null,
-          {
-            says: t(
-              "The origin is 0 units from both axes, so its coordinates are 0, 0. It is the one point with both y equal to 0 and x equal to 0.",
-              "मूल बिंदु दोनों अक्षों से 0 इकाई दूर है, इसलिए उसके निर्देशांक 0, 0 हैं। यही वह एक बिंदु है जिसका वाई बराबर 0 और एक्स बराबर 0 दोनों हैं।",
-            ),
-          },
         ),
       ),
       q: hidden(
@@ -694,30 +574,18 @@ const pointsOnAxes = page(
       whyB: hidden(
         words.body(
           t(
-            "B is on the y-axis, 3 units from the x-axis along OY: **B is (0, 3)**.",
-            "B, y-अक्ष पर है, x-अक्ष से OY की ओर 3 इकाई: **B है (0, 3)**।",
+            "B is on the y-axis, 3 units from the x-axis along [[OY|O Y]]: **B is [[(0, 3)|the point 0, 3]]**.",
+            "B, [[y|वाई]]-अक्ष पर है, [[x|एक्स]]-अक्ष से [[OY|O Y]] की ओर 3 इकाई: **B है [[(0, 3)|बिंदु 0, 3]]**।",
           ),
-          {
-            says: t(
-              "B is on the y-axis, 3 units from the x-axis along O Y: B is the point 0, 3.",
-              "B, वाई-अक्ष पर है, एक्स-अक्ष से O Y की ओर 3 इकाई: B है बिंदु 0, 3।",
-            ),
-          },
         ),
       ),
       pairOfC: hidden(askAxisC),
       whyC: hidden(
         words.body(
           t(
-            "C is on the x-axis, 5 units from the y-axis along OX′: **C is (−5, 0)**.",
-            "C, x-अक्ष पर है, y-अक्ष से OX′ की ओर 5 इकाई: **C है (−5, 0)**।",
+            "C is on the x-axis, 5 units from the y-axis along [[OX′|O X dash]]: **C is [[(−5, 0)|the point minus 5, 0]]**.",
+            "C, [[x|एक्स]]-अक्ष पर है, [[y|वाई]]-अक्ष से [[OX′|O X डैश]] की ओर 5 इकाई: **C है [[(−5, 0)|बिंदु माइनस 5, 0]]**।",
           ),
-          {
-            says: t(
-              "C is on the x-axis, 5 units from the y-axis along O X dash: C is the point minus 5, 0.",
-              "C, एक्स-अक्ष पर है, वाई-अक्ष से O X डैश की ओर 5 इकाई: C है बिंदु माइनस 5, 0।",
-            ),
-          },
         ),
       ),
       pairOfE: hidden(askAxisE),
@@ -781,62 +649,37 @@ const WHERE: Record<Where, ReturnType<typeof t>> = {
   xAxis: t("On the x-axis", "x-अक्ष पर"),
   yAxis: t("On the y-axis", "y-अक्ष पर"),
 };
-/** What each place's coordinates are, as a wrong choice is told: shown, and said. */
-const PATTERN: Record<Where, [string, string, string, string]> = {
-  I: [
-    "Quadrant I is (+,\u00a0+).",
-    "पहला चतुर्थांश (+,\u00a0+) है।",
-    "Quadrant one is plus, plus.",
-    "पहला चतुर्थांश धन, धन है।",
-  ],
-  II: [
-    "Quadrant II is (−,\u00a0+).",
-    "दूसरा चतुर्थांश (−,\u00a0+) है।",
-    "Quadrant two is minus, plus.",
-    "दूसरा चतुर्थांश ऋण, धन है।",
-  ],
-  III: [
-    "Quadrant III is (−,\u00a0−).",
-    "तीसरा चतुर्थांश (−,\u00a0−) है।",
-    "Quadrant three is minus, minus.",
-    "तीसरा चतुर्थांश ऋण, ऋण है।",
-  ],
-  IV: [
-    "Quadrant IV is (+,\u00a0−).",
-    "चौथा चतुर्थांश (+,\u00a0−) है।",
-    "Quadrant four is plus, minus.",
-    "चौथा चतुर्थांश धन, ऋण है।",
-  ],
-  xAxis: [
-    "On the x-axis, y\u00a0=\u00a00.",
-    "x-अक्ष पर y\u00a0=\u00a00 होता है।",
-    "On the x-axis, y is 0.",
-    "एक्स-अक्ष पर वाई 0 होता है।",
-  ],
-  yAxis: [
-    "On the y-axis, x\u00a0=\u00a00.",
-    "y-अक्ष पर x\u00a0=\u00a00 होता है।",
-    "On the y-axis, x is 0.",
-    "वाई-अक्ष पर एक्स 0 होता है।",
-  ],
+/** What each place's coordinates are, as a wrong choice is told. */
+const PATTERN: Record<Where, Localized> = {
+  I: t(
+    "Quadrant [[I|one]] is [[(+,\u00a0+)|plus, plus]].",
+    "पहला चतुर्थांश [[(+,\u00a0+)|धन, धन]] है।",
+  ),
+  II: t(
+    "Quadrant [[II|two]] is [[(−,\u00a0+)|minus, plus]].",
+    "दूसरा चतुर्थांश [[(−,\u00a0+)|ऋण, धन]] है।",
+  ),
+  III: t(
+    "Quadrant [[III|three]] is [[(−,\u00a0−)|minus, minus]].",
+    "तीसरा चतुर्थांश [[(−,\u00a0−)|ऋण, ऋण]] है।",
+  ),
+  IV: t(
+    "Quadrant [[IV|four]] is [[(+,\u00a0−)|plus, minus]].",
+    "चौथा चतुर्थांश [[(+,\u00a0−)|धन, ऋण]] है।",
+  ),
+  xAxis: t(`On the x-axis, ${isEn("y", 0)}.`, "[[x|एक्स]]-अक्ष पर [[y\u00a0=\u00a00|वाई 0]] होता है।"),
+  yAxis: t(`On the y-axis, ${isEn("x", 0)}.`, "[[y|वाई]]-अक्ष पर [[x\u00a0=\u00a00|एक्स 0]] होता है।"),
 };
 const whereOf = (x: number, y: number): Where =>
   y === 0 ? "xAxis" : x === 0 ? "yAxis" : x > 0 ? (y > 0 ? "I" : "IV") : y > 0 ? "II" : "III";
 
 /** A round: "From the signs alone: where is (x, y)?", the same six choices, each wrong one told. */
 function whereRound(x: number, y: number) {
-  const pair = `(${shown(x)}, ${shown(y)})`;
-  const pairSaid = `${said(x, "minus")}, ${said(y, "minus")}`;
-  const pairSaidHi = `${said(x, "माइनस")}, ${said(y, "माइनस")}`;
   const answer = whereOf(x, y);
   return choice({
     prompt: t(
-      `From the signs alone: where is the point ${pair}?`,
-      `केवल चिह्नों से बताओ: बिंदु ${pair} कहाँ है?`,
-    ),
-    says: t(
-      `From the signs alone: where is the point ${pairSaid}?`,
-      `केवल चिह्नों से बताओ: बिंदु ${pairSaidHi} कहाँ है?`,
+      `From the signs alone: where is the point ${pairEn(x, y)}?`,
+      `केवल चिह्नों से बताओ: बिंदु ${pairHi(x, y)} कहाँ है?`,
     ),
     options: (["I", "II", "III", "IV", "xAxis", "yAxis"] as const).map((id) =>
       id === answer
@@ -845,12 +688,8 @@ function whereRound(x: number, y: number) {
             id,
             label: WHERE[id],
             feedback: t(
-              `${PATTERN[id][0]} This point is ${pair}.`,
-              `${PATTERN[id][1]} यह बिंदु ${pair} है।`,
-            ),
-            feedbackSays: t(
-              `${PATTERN[id][2]} This point is ${pairSaid}.`,
-              `${PATTERN[id][3]} यह बिंदु ${pairSaidHi} है।`,
+              `${PATTERN[id].en} This point is ${pairEn(x, y)}.`,
+              `${PATTERN[id].hi} यह बिंदु ${pairHi(x, y)} है।`,
             ),
           },
     ),
@@ -896,16 +735,9 @@ const signsAndQuadrants = page(
       rule: hidden(
         words.definition(
           t(
-            "**In quadrant I a point is (+,\u00a0+); in II, (−,\u00a0+); in III, (−,\u00a0−); in IV, (+,\u00a0−).** Each quadrant lies between two halves of the axes: quadrant II between OX′ and OY, so x is negative and y positive there.",
-            "**पहले चतुर्थांश (I) में बिंदु (+,\u00a0+) होता है; दूसरे (II) में (−,\u00a0+); तीसरे (III) में (−,\u00a0−); चौथे (IV) में (+,\u00a0−)।** हर चतुर्थांश अक्षों के दो आधे भागों के बीच है: दूसरा चतुर्थांश OX′ और OY के बीच है, इसलिए वहाँ x ऋणात्मक और y धनात्मक है।",
+            "**In quadrant [[I|one]] a point is [[(+,\u00a0+)|plus, plus]]; in [[II|quadrant two]], [[(−,\u00a0+)|minus, plus]]; in [[III|quadrant three]], [[(−,\u00a0−)|minus, minus]]; in [[IV|quadrant four]], [[(+,\u00a0−)|plus, minus]].** Each quadrant lies between two halves of the axes: quadrant [[II|two]] between [[OX′|O X dash]] and [[OY|O Y]], so x is negative and y positive there.",
+            "**पहले [[चतुर्थांश (I)|चतुर्थांश]] में बिंदु [[(+,\u00a0+)|धन, धन]] होता है; [[दूसरे (II)|दूसरे]] में [[(−,\u00a0+)|ऋण, धन]]; [[तीसरे (III)|तीसरे]] में [[(−,\u00a0−)|ऋण, ऋण]]; [[चौथे (IV)|चौथे]] में [[(+,\u00a0−)|धन, ऋण]]।** हर चतुर्थांश अक्षों के दो आधे भागों के बीच है: दूसरा चतुर्थांश [[OX′|O X डैश]] और [[OY|O Y]] के बीच है, इसलिए वहाँ [[x|एक्स]] ऋणात्मक और [[y|वाई]] धनात्मक है।",
           ),
-          null,
-          {
-            says: t(
-              "In quadrant one a point is plus, plus; in quadrant two, minus, plus; in quadrant three, minus, minus; in quadrant four, plus, minus. Each quadrant lies between two halves of the axes: quadrant two between O X dash and O Y, so x is negative and y positive there.",
-              "पहले चतुर्थांश में बिंदु धन, धन होता है; दूसरे में ऋण, धन; तीसरे में ऋण, ऋण; चौथे में धन, ऋण। हर चतुर्थांश अक्षों के दो आधे भागों के बीच है: दूसरा चतुर्थांश O X डैश और O Y के बीच है, इसलिए वहाँ एक्स ऋणात्मक और वाई धनात्मक है।",
-            ),
-          },
         ),
       ),
       round1: hidden(ROUNDS[0]),
@@ -942,15 +774,9 @@ const anyAxes = page(
       title: words.title(t("Why these axes?", "यही अक्ष क्यों?")),
       link: words.body(
         t(
-          "Two perpendicular lines can be drawn anywhere, pointing any way. The dot is the point P. On the agreed axes, P is **(3, 2)**, and P stays where it is. **Drag O** to move the axes, and **turn them by the ↻ handle** on the x-axis. Watch P's coordinates.",
-          "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। यह बिंदु P है। माने हुए अक्षों पर P **(3, 2)** है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए **O को खींचो**, और x-अक्ष पर बने **↻ हैंडल से उन्हें घुमाओ**। P के निर्देशांक देखो।",
+          "Two perpendicular lines can be drawn anywhere, pointing any way. The dot is the point P. On the agreed axes, P is **[[(3, 2)|the point 3, 2]]**, and P stays where it is. **Drag O** to move the axes, and **turn them by the [[↻|turning]] handle** on the x-axis. Watch P's coordinates.",
+          "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। यह बिंदु P है। माने हुए अक्षों पर P **[[(3, 2)|बिंदु 3, 2]]** है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए **O को खींचो**, और [[x|एक्स]]-अक्ष पर बने **[[↻|घुमाने वाले]] हैंडल से उन्हें घुमाओ**। P के निर्देशांक देखो।",
         ),
-        {
-          says: t(
-            "Two perpendicular lines can be drawn anywhere, pointing any way. The dot is the point P. On the agreed axes, P is the point 3, 2, and P stays where it is. Drag O to move the axes, and turn them by the turning handle on the x-axis. Watch P's coordinates.",
-            "दो लंब रेखाएँ कहीं भी, किसी भी दिशा में खींची जा सकती हैं। यह बिंदु P है। माने हुए अक्षों पर P बिंदु 3, 2 है, और P अपनी जगह रहता है। अक्षों को खिसकाने के लिए O को खींचो, और एक्स-अक्ष पर बने घुमाने वाले हैंडल से उन्हें घुमाओ। P के निर्देशांक देखो।",
-          ),
-        },
       ),
       sheet: place(
         coordinatePlane,
@@ -984,29 +810,17 @@ const anyAxes = page(
       putBack: hidden(
         words.body(
           t(
-            "On the agreed axes P was (3, 2). **Put the axes back** and see: O at the crossing it started on, and the x-axis level again.",
-            "माने हुए अक्षों पर P (3, 2) था। **अक्षों को वापस रखो** और देखो: O फिर उसी जगह पर, और x-अक्ष फिर से आड़ा।",
+            "On the agreed axes P was [[(3, 2)|the point 3, 2]]. **Put the axes back** and see: O at the crossing it started on, and the x-axis level again.",
+            "माने हुए अक्षों पर P [[(3, 2)|बिंदु 3, 2]] था। **अक्षों को वापस रखो** और देखो: O फिर उसी जगह पर, और [[x|एक्स]]-अक्ष फिर से आड़ा।",
           ),
-          {
-            says: t(
-              "On the agreed axes P was the point 3, 2. Put the axes back and see: O at the crossing it started on, and the x-axis level again.",
-              "माने हुए अक्षों पर P बिंदु 3, 2 था। अक्षों को वापस रखो और देखो: O फिर उसी जगह पर, और एक्स-अक्ष फिर से आड़ा।",
-            ),
-          },
         ),
       ),
       back: hidden(
         words.body(
           t(
-            "Back on the agreed axes, P is (3, 2) again, the same for everyone.",
-            "माने हुए अक्षों पर लौटकर P फिर (3, 2) है, सबके लिए एक जैसा।",
+            "Back on the agreed axes, P is [[(3, 2)|the point 3, 2]] again, the same for everyone.",
+            "माने हुए अक्षों पर लौटकर P फिर [[(3, 2)|बिंदु 3, 2]] है, सबके लिए एक जैसा।",
           ),
-          {
-            says: t(
-              "Back on the agreed axes, P is the point 3, 2 again, the same for everyone.",
-              "माने हुए अक्षों पर लौटकर P फिर बिंदु 3, 2 है, सबके लिए एक जैसा।",
-            ),
-          },
         ),
       ),
     },
@@ -1055,24 +869,16 @@ const coordinatesOfH = choice({
       id: "swapped",
       label: t("(−3, −5)", "(−3, −5)"),
       feedback: t(
-        "That is y first: (−3, −5) is E. H is 5 units left of the y-axis, so x\u00a0=\u00a0−5, written first.",
-        "यह y पहले है: (−3, −5) तो E है। H, y-अक्ष से 5 इकाई बाईं ओर है, इसलिए x\u00a0=\u00a0−5, जो पहले लिखा जाता है।",
-      ),
-      feedbackSays: t(
-        "That is y first: minus 3, minus 5 is E. H is 5 units left of the y-axis, so x is minus 5, written first.",
-        "यह वाई पहले है: माइनस 3, माइनस 5 तो E है। H, वाई-अक्ष से 5 इकाई बाईं ओर है, इसलिए एक्स माइनस 5 है, जो पहले लिखा जाता है।",
+        `That is y first: ${pairEn(-3, -5)} is E. H is 5 units left of the y-axis, so ${isEn("x", -5)}, written first.`,
+        `यह ${hiLetter("y")} पहले है: ${pairHi(-3, -5)} तो E है। H, ${hiLetter("y")}-अक्ष से 5 इकाई बाईं ओर है, इसलिए ${isHi("x", -5)}, जो पहले लिखा जाता है।`,
       ),
     },
     {
       id: "ySign",
       label: t("(−5, 3)", "(−5, 3)"),
       feedback: t(
-        "(−5, 3) is above the x-axis. H is below it, along OY′, so its y-coordinate is negative.",
-        "(−5, 3), x-अक्ष के ऊपर है। H उसके नीचे, OY′ की ओर है, इसलिए उसका y-निर्देशांक ऋणात्मक है।",
-      ),
-      feedbackSays: t(
-        "The point minus 5, 3 is above the x-axis. H is below it, along O Y dash, so its y-coordinate is negative.",
-        "बिंदु माइनस 5, 3, एक्स-अक्ष के ऊपर है। H उसके नीचे, O Y डैश की ओर है, इसलिए उसका वाई-निर्देशांक ऋणात्मक है।",
+        "[[(−5, 3)|The point minus 5, 3]] is above the x-axis. H is below it, along [[OY′|O Y dash]], so its y-coordinate is negative.",
+        "[[(−5, 3)|बिंदु माइनस 5, 3]], [[x|एक्स]]-अक्ष के ऊपर है। H उसके नीचे, [[OY′|O Y डैश]] की ओर है, इसलिए उसका [[y|वाई]]-निर्देशांक ऋणात्मक है।",
       ),
     },
     {
@@ -1080,55 +886,41 @@ const coordinatesOfH = choice({
       label: t("(5, 3)", "(5, 3)"),
       feedback: t(
         "Those are H's distances without their signs. H is left of the y-axis and below the x-axis: both coordinates are negative.",
-        "ये H की दूरियाँ हैं, बिना चिह्न के। H, y-अक्ष के बाईं ओर और x-अक्ष के नीचे है: दोनों निर्देशांक ऋणात्मक हैं।",
-      ),
-      feedbackSays: t(
-        "Those are H's distances without their signs. H is left of the y-axis and below the x-axis: both coordinates are negative.",
-        "ये H की दूरियाँ हैं, बिना चिह्न के। H, वाई-अक्ष के बाईं ओर और एक्स-अक्ष के नीचे है: दोनों निर्देशांक ऋणात्मक हैं।",
+        "ये H की दूरियाँ हैं, बिना चिह्न के। H, [[y|वाई]]-अक्ष के बाईं ओर और [[x|एक्स]]-अक्ष के नीचे है: दोनों निर्देशांक ऋणात्मक हैं।",
       ),
     },
   ],
   answer: "right",
 });
 const pointAt = choice({
-  prompt: t("Which point is (5, −5)?", "बिंदु (5, −5) कौन-सा है?"),
-  says: t("Which point is the point 5, minus 5?", "बिंदु 5, माइनस 5 कौन-सा है?"),
+  prompt: t(
+    "Which point is [[(5, −5)|the point 5, minus 5]]?",
+    "बिंदु [[(5, −5)|5, माइनस 5]] कौन-सा है?",
+  ),
   options: [
     { id: "c", label: t("C", "C") },
     {
       id: "e",
       label: t("E", "E"),
       feedback: t(
-        "E is (−3, −5): 3 units left of the y-axis. (5, −5) is 5 units right of it.",
-        "E है (−3, −5): y-अक्ष से 3 इकाई बाईं ओर। (5, −5) उससे 5 इकाई दाईं ओर है।",
-      ),
-      feedbackSays: t(
-        "E is the point minus 3, minus 5: 3 units left of the y-axis. The point 5, minus 5 is 5 units right of it.",
-        "E है बिंदु माइनस 3, माइनस 5: वाई-अक्ष से 3 इकाई बाईं ओर। बिंदु 5, माइनस 5 उससे 5 इकाई दाईं ओर है।",
+        "E is [[(−3, −5)|the point minus 3, minus 5]]: 3 units left of the y-axis. [[(5, −5)|The point 5, minus 5]] is 5 units right of it.",
+        "E है [[(−3, −5)|बिंदु माइनस 3, माइनस 5]]: [[y|वाई]]-अक्ष से 3 इकाई बाईं ओर। [[(5, −5)|बिंदु 5, माइनस 5]] उससे 5 इकाई दाईं ओर है।",
       ),
     },
     {
       id: "g",
       label: t("G", "G"),
       feedback: t(
-        "G is (2, −4): 2 units right and 4 down. (5, −5) is further right and lower.",
-        "G है (2, −4): 2 इकाई दाईं ओर और 4 नीचे। (5, −5) और दाईं ओर और और नीचे है।",
-      ),
-      feedbackSays: t(
-        "G is the point 2, minus 4: 2 units right and 4 down. The point 5, minus 5 is further right and lower.",
-        "G है बिंदु 2, माइनस 4: 2 इकाई दाईं ओर और 4 नीचे। बिंदु 5, माइनस 5 और दाईं ओर और और नीचे है।",
+        "G is [[(2, −4)|the point 2, minus 4]]: 2 units right and 4 down. [[(5, −5)|The point 5, minus 5]] is further right and lower.",
+        "G है [[(2, −4)|बिंदु 2, माइनस 4]]: 2 इकाई दाईं ओर और 4 नीचे। [[(5, −5)|बिंदु 5, माइनस 5]] और दाईं ओर और और नीचे है।",
       ),
     },
     {
       id: "d",
       label: t("D", "D"),
       feedback: t(
-        "D is (6, 2), above the x-axis. (5, −5) is below it: its y-coordinate is negative.",
-        "D है (6, 2), x-अक्ष के ऊपर। (5, −5) उसके नीचे है: उसका y-निर्देशांक ऋणात्मक है।",
-      ),
-      feedbackSays: t(
-        "D is the point 6, 2, above the x-axis. The point 5, minus 5 is below it: its y-coordinate is negative.",
-        "D है बिंदु 6, 2, एक्स-अक्ष के ऊपर। बिंदु 5, माइनस 5 उसके नीचे है: उसका वाई-निर्देशांक ऋणात्मक है।",
+        "D is [[(6, 2)|the point 6, 2]], above the x-axis. [[(5, −5)|The point 5, minus 5]] is below it: its y-coordinate is negative.",
+        "D है [[(6, 2)|बिंदु 6, 2]], [[x|एक्स]]-अक्ष के ऊपर। [[(5, −5)|बिंदु 5, माइनस 5]] उसके नीचे है: उसका [[y|वाई]]-निर्देशांक ऋणात्मक है।",
       ),
     },
   ],
@@ -1170,48 +962,33 @@ const findThePoint = page(
       summary: hidden(
         words.body(
           t(
-            "**In short:** the x-coordinate (abscissa) of a point is its distance from the y-axis, and the y-coordinate (ordinate) its distance from the x-axis, each with a sign for its side.",
-            "**संक्षेप में:** किसी बिंदु का x-निर्देशांक (भुज) y-अक्ष से उसकी दूरी है, और y-निर्देशांक (कोटि) x-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ।",
+            "**In short:** the x-coordinate[[ (abscissa)|, the abscissa,]] of a point is its distance from the y-axis, and the y-coordinate[[ (ordinate)|, the ordinate,]] its distance from the x-axis, each with a sign for its side.",
+            "**संक्षेप में:** किसी बिंदु का [[x|एक्स]]-निर्देशांक[[ (भुज)|, यानी भुज,]] [[y|वाई]]-अक्ष से उसकी दूरी है, और [[y|वाई]]-निर्देशांक[[ (कोटि)|, यानी कोटि,]] [[x|एक्स]]-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ।",
           ),
-          {
-            says: t(
-              "In short: the x-coordinate, the abscissa, of a point is its distance from the y-axis, and the y-coordinate, the ordinate, its distance from the x-axis, each with a sign for its side.",
-              "संक्षेप में: किसी बिंदु का एक्स-निर्देशांक, यानी भुज, वाई-अक्ष से उसकी दूरी है, और वाई-निर्देशांक, यानी कोटि, एक्स-अक्ष से उसकी दूरी, हर एक अपनी ओर बताने वाले चिह्न के साथ।",
-            ),
-          },
         ),
       ),
       summaryPair: hidden(
-        words.body(t("A point is written (x, y), x first.", "बिंदु (x, y) लिखा जाता है, x पहले।"), {
-          says: t("A point is written x, y, x first.", "बिंदु एक्स, वाई लिखा जाता है, एक्स पहले।"),
-        }),
+        words.body(
+          t(
+            "A point is written [[(x, y)|x, y]], x first.",
+            "बिंदु [[(x, y)|एक्स, वाई]] लिखा जाता है, [[x|एक्स]] पहले।",
+          ),
+        ),
       ),
       summaryAxes: hidden(
         words.body(
           t(
-            "On the x-axis a point is (x, 0); on the y-axis, (0, y); the origin is (0, 0).",
-            "x-अक्ष पर बिंदु (x, 0) होता है; y-अक्ष पर (0, y); मूल बिंदु (0, 0) है।",
+            "On the x-axis a point is [[(x, 0)|x, 0]]; on the y-axis, [[(0, y)|0, y]]; the origin is [[(0, 0)|0, 0]].",
+            "[[x|एक्स]]-अक्ष पर बिंदु [[(x, 0)|एक्स, 0]] होता है; [[y|वाई]]-अक्ष पर [[(0, y)|0, वाई]]; मूल बिंदु [[(0, 0)|0, 0]] है।",
           ),
-          {
-            says: t(
-              "On the x-axis a point is x, 0; on the y-axis, 0, y; the origin is 0, 0.",
-              "एक्स-अक्ष पर बिंदु एक्स, 0 होता है; वाई-अक्ष पर 0, वाई; मूल बिंदु 0, 0 है।",
-            ),
-          },
         ),
       ),
       summarySigns: hidden(
         words.body(
           t(
-            "In quadrant I a point is (+,\u00a0+); in II, (−,\u00a0+); in III, (−,\u00a0−); in IV, (+,\u00a0−).",
-            "पहले चतुर्थांश में बिंदु (+,\u00a0+) होता है; दूसरे में (−,\u00a0+); तीसरे में (−,\u00a0−); चौथे में (+,\u00a0−)।",
+            "In quadrant [[I|one]] a point is [[(+,\u00a0+)|plus, plus]]; in [[II|two]], [[(−,\u00a0+)|minus, plus]]; in [[III|three]], [[(−,\u00a0−)|minus, minus]]; in [[IV|four]], [[(+,\u00a0−)|plus, minus]].",
+            "पहले चतुर्थांश में बिंदु [[(+,\u00a0+)|धन, धन]] होता है; दूसरे में [[(−,\u00a0+)|ऋण, धन]]; तीसरे में [[(−,\u00a0−)|ऋण, ऋण]]; चौथे में [[(+,\u00a0−)|धन, ऋण]]।",
           ),
-          {
-            says: t(
-              "In quadrant one a point is plus, plus; in two, minus, plus; in three, minus, minus; in four, plus, minus.",
-              "पहले चतुर्थांश में बिंदु धन, धन होता है; दूसरे में ऋण, धन; तीसरे में ऋण, ऋण; चौथे में धन, ऋण।",
-            ),
-          },
         ),
       ),
     },

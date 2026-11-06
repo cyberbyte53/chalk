@@ -11,17 +11,13 @@ import { Concept } from "../../concepts.gen";
  */
 const NAMES: Record<
   "axes" | "axis" | "quadrants" | "origin" | "directions",
-  { label: Localized; feedback: Localized; feedbackSays?: Localized }
+  { label: Localized; feedback: Localized }
 > = {
   axes: {
     label: t("The x-axis and the y-axis", "x-अक्ष और y-अक्ष"),
     feedback: t(
-      "The x-axis and the y-axis are the two lines themselves: X′X across and Y′Y up.",
-      "x-अक्ष और y-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X′X और खड़ी Y′Y।",
-    ),
-    feedbackSays: t(
-      "The x-axis and the y-axis are the two lines themselves: X dash X across and Y dash Y up.",
-      "एक्स-अक्ष और वाई-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी X डैश X और खड़ी Y डैश Y।",
+      "The x-axis and the y-axis are the two lines themselves: [[X′X|X dash X]] across and [[Y′Y|Y dash Y]] up.",
+      "[[x|एक्स]]-अक्ष और [[y|वाई]]-अक्ष स्वयं दोनों रेखाएँ हैं: आड़ी [[X′X|X डैश X]] और खड़ी [[Y′Y|Y डैश Y]]।",
     ),
   },
   axis: {
@@ -48,12 +44,8 @@ const NAMES: Record<
   directions: {
     label: t("The positive and negative directions", "धनात्मक और ऋणात्मक दिशाएँ"),
     feedback: t(
-      "The directions are the halves of each axis, OX and OX′, OY and OY′, not the lines or the parts.",
-      "दिशाएँ हर अक्ष के आधे भाग हैं, OX और OX′, OY और OY′, न कि रेखाएँ या भाग।",
-    ),
-    feedbackSays: t(
-      "The directions are the halves of each axis, O X and O X dash, O Y and O Y dash, not the lines or the parts.",
-      "दिशाएँ हर अक्ष के आधे भाग हैं, O X और O X डैश, O Y और O Y डैश, न कि रेखाएँ या भाग।",
+      "The directions are the halves of each axis, [[OX|O X]] and [[OX′|O X dash]], [[OY|O Y]] and [[OY′|O Y dash]], not the lines or the parts.",
+      "दिशाएँ हर अक्ष के आधे भाग हैं, [[OX|O X]] और [[OX′|O X डैश]], [[OY|O Y]] और [[OY′|O Y डैश]], न कि रेखाएँ या भाग।",
     ),
   },
 };
@@ -114,9 +106,7 @@ export const nameTheLines = family({
       options: (Object.keys(NAMES) as Name[]).map((id) => ({
         id,
         label: NAMES[id].label,
-        ...(id === answer
-          ? {}
-          : { feedback: NAMES[id].feedback, feedbackSays: NAMES[id].feedbackSays }),
+        ...(id === answer ? {} : { feedback: NAMES[id].feedback }),
       })),
       answer,
     });
