@@ -41,6 +41,6 @@ export const tapTheDesk = family({
         },
       ],
     });
-    return scene({ pieces: { room, ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { room, ask: ask } });
   },
 });

@@ -112,6 +112,6 @@ export const quadrantOrAxis = family({
       keepOrder: true,
       answer: whereOf(x, y),
     });
-    return scene({ pieces: { ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { ask: ask } });
   },
 });

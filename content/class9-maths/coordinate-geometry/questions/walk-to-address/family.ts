@@ -47,6 +47,6 @@ export const walkToAddress = family({
           ]
         : [],
     });
-    return scene({ pieces: { town, ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { town, ask: ask } });
   },
 });

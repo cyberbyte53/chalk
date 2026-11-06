@@ -1,13 +1,13 @@
-import { type Placed, type Says, type SceneUse, type Step, cue, place, tap } from "@chalk/author";
+import { type Placed, type Says, type Step, cue, place, tap } from "@chalk/author";
 import type { Localized } from "@chalk/content";
 import { AnswerStatus, type Color } from "@chalk/prop";
 import { TextStyle, choice as choiceProp, goal, text } from "@chalk/prop-basics";
 import { type Option, seedOf, settle, wordsOf } from "./choice-question";
 
 /**
- * Words and questions for a board. A question comes with what it adds
- * to the scene (`use`): its witness, its note checks, and for a check, whether it is right (a need
- * the scene gives) and the note for each wrong state worth one.
+ * Words and questions for a board. A question is placed once, in the board's `pieces`, and its key is
+ * its name: it brings what it adds to the board (its witness, its note checks, and for a check,
+ * whether it is right, a need the board gives, and the note for each wrong state worth one).
  */
 
 /**
@@ -37,7 +37,6 @@ export type Note = { when: (read: Read) => boolean; say: Localized; reach: reado
  * what their try is recorded as; `solve` is how a learner gets it right (the witness).
  */
 export function check(spec: {
-  name?: string;
   about: string;
   prompt: Localized;
   /** What the question says, when it isn't its prompt as shown. */
@@ -46,39 +45,41 @@ export function check(spec: {
   answer?: (read: Read) => Localized | null;
   solve: readonly Step[];
   notes?: readonly Note[];
-}): { piece: Placed<typeof goal>; use: SceneUse } {
-  const name = spec.name ?? "ask";
-  const piece = place(
-    goal,
-    { prompt: spec.prompt, about: spec.about },
-    spec.says === undefined ? {} : { says: spec.says },
-  );
+}): Placed<typeof goal> {
+  const given = { prompt: spec.prompt, about: spec.about };
+  const piece = place(goal, given, spec.says === undefined ? {} : { says: spec.says });
   const reader = (me: Readonly<Record<string, Readonly<Record<string, unknown>>>>) =>
     ((piece: string) => me[piece] ?? {}) as Read;
   const notes = spec.notes ?? [];
   type T = { to: Record<string, { giveFeedback: (p: { text: Localized }) => unknown }> };
   return {
-    piece,
-    use: {
-      give: {
-        [name]: {
-          isMet: (me: never) => spec.isRight(reader(me)),
-          answer: (me: never) => spec.answer?.(reader(me)) ?? null,
+    ...piece,
+    named: (name) => ({
+      given,
+      use: {
+        give: {
+          [name]: {
+            isMet: (me: never) => spec.isRight(reader(me)),
+            answer: (me: never) => spec.answer?.(reader(me)) ?? null,
+          },
         },
+        hear: {
+          [`${name}.wrong`]: ((
+            me: Record<string, Readonly<Record<string, unknown>>>,
+            _: unknown,
+            t: T,
+          ) => {
+            const note = notes.find((n) => n.when(reader(me)));
+            return note !== undefined && t.to[name]?.giveFeedback({ text: note.say });
+          }) as never,
+        },
+        witness: [...spec.solve, tap(name, "check")],
+        noteChecks: notes.map((n) => ({
+          steps: [...n.reach, tap(name, "check")],
+          feedback: n.say,
+        })),
       },
-      hear: {
-        [`${name}.wrong`]: ((
-          me: Record<string, Readonly<Record<string, unknown>>>,
-          _: unknown,
-          t: T,
-        ) => {
-          const note = notes.find((n) => n.when(reader(me)));
-          return note !== undefined && t.to[name]?.giveFeedback({ text: note.say });
-        }) as never,
-      },
-      witness: [...spec.solve, tap(name, "check")],
-      noteChecks: notes.map((n) => ({ steps: [...n.reach, tap(name, "check")], feedback: n.say })),
-    },
+    }),
   };
 }
 
@@ -87,15 +88,13 @@ export function check(spec: {
  * witness (the answer, Check) and a note check for each wrong option with feedback.
  */
 export function choice(spec: {
-  name?: string;
   prompt: Localized;
   /** What the question says, when it isn't its prompt as shown. */
   says?: Localized;
   options: readonly Option[];
   answer: string;
   keepOrder?: boolean;
-}): { piece: Placed<typeof choiceProp>; use: SceneUse } {
-  const name = spec.name ?? "ask";
+}): Placed<typeof choiceProp> {
   if (!spec.options.some((o) => o.id === spec.answer))
     throw new Error(`choice: the answer "${spec.answer}" is not one of the options`);
   const ids = spec.options.map((o) => o.id);
@@ -106,13 +105,13 @@ export function choice(spec: {
     const twice = labels.find((label, i) => labels.indexOf(label) !== i);
     if (twice !== undefined) throw new Error(`choice: two options read the same ("${twice}")`);
   }
-  const shown =
-    spec.keepOrder === true
-      ? spec.options
-      : settle(spec.options, seedOf(`${name}|${wordsOf(spec.prompt)}|${ids.join(",")}`));
-  const piece = place(
-    choiceProp,
-    {
+  // The options as shown, shuffled the same way every build by the question's name, once known.
+  const givenAs = (name: string) => {
+    const shown =
+      spec.keepOrder === true
+        ? spec.options
+        : settle(spec.options, seedOf(`${name}|${wordsOf(spec.prompt)}|${ids.join(",")}`));
+    return {
       prompt: spec.prompt,
       options: shown.map((o) =>
         o.feedback === undefined
@@ -120,29 +119,36 @@ export function choice(spec: {
           : { id: o.id, label: o.label, feedback: o.feedback },
       ),
       answer: spec.answer,
-    },
+    };
+  };
+  const piece = place(
+    choiceProp,
+    givenAs("ask"),
     spec.says === undefined ? {} : { says: spec.says },
   );
   const notes = spec.options.filter((o) => o.id !== spec.answer && o.feedback !== undefined);
   return {
-    piece,
-    use: {
-      // Each wrong option's note is said when that option is checked: the student hears why.
-      cues: Object.fromEntries(
-        notes.map((o) => [
-          `${name}-${o.id}-note`,
-          cue(o.feedbackSays ?? (o.feedback as Localized), {
-            when: `${name}.checked`,
-            where: { optionId: o.id, status: AnswerStatus.Wrong },
-            about: name,
-          }),
-        ]),
-      ),
-      witness: [tap(name, "select", { option: spec.answer }), tap(name, "check")],
-      noteChecks: notes.map((o) => ({
-        steps: [tap(name, "select", { option: o.id }), tap(name, "check")],
-        feedback: o.feedback as Localized,
-      })),
-    },
+    ...piece,
+    named: (name) => ({
+      given: givenAs(name),
+      use: {
+        // Each wrong option's note is said when that option is checked: the student hears why.
+        cues: Object.fromEntries(
+          notes.map((o) => [
+            `${name}-${o.id}-note`,
+            cue(o.feedbackSays ?? (o.feedback as Localized), {
+              when: `${name}.checked`,
+              where: { optionId: o.id, status: AnswerStatus.Wrong },
+              about: name,
+            }),
+          ]),
+        ),
+        witness: [tap(name, "select", { option: spec.answer }), tap(name, "check")],
+        noteChecks: notes.map((o) => ({
+          steps: [tap(name, "select", { option: o.id }), tap(name, "check")],
+          feedback: o.feedback as Localized,
+        })),
+      },
+    }),
   };
 }

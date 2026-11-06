@@ -52,6 +52,6 @@ export const placeTheDot = family({
           ]
         : [],
     });
-    return scene({ pieces: { sheet, ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { sheet, ask: ask } });
   },
 });

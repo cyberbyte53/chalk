@@ -86,7 +86,6 @@ function slipsOf(name: string, x: number, y: number): Slip[] {
 /** "What are the coordinates of B?": its pair, and the slips with their notes. */
 function pairQuestion(name: string, right: string, slips: readonly Slip[]) {
   return choice({
-    name: `pairOf${name}`,
     prompt: t(`What are the coordinates of ${name}?`, `${name} के निर्देशांक क्या हैं?`),
     options: [
       { id: "right", label: t(right, right) },
@@ -426,7 +425,7 @@ const readingPoints = page(
           },
         }),
       ),
-      pairOfB: askB.piece,
+      pairOfB: askB,
       b: hidden(
         words.body(
           t(
@@ -441,7 +440,7 @@ const readingPoints = page(
           },
         ),
       ),
-      pairOfM: hidden(askM.piece),
+      pairOfM: hidden(askM),
       m: hidden(
         words.body(
           t(
@@ -456,7 +455,7 @@ const readingPoints = page(
           },
         ),
       ),
-      pairOfL: hidden(askL.piece),
+      pairOfL: hidden(askL),
       l: hidden(
         words.body(
           t(
@@ -471,7 +470,7 @@ const readingPoints = page(
           },
         ),
       ),
-      pairOfS: hidden(askS.piece),
+      pairOfS: hidden(askS),
       s: hidden(
         words.body(
           t(
@@ -504,11 +503,6 @@ const readingPoints = page(
       ],
       "pairOfS.correct": (_, __, t) => [t.self.show({ name: "s" }), t.self.pass()],
     },
-    uses: [askB.use, askM.use, askL.use, askS.use],
-    witness: (["pairOfB", "pairOfM", "pairOfL", "pairOfS"] as const).flatMap((q) => [
-      tap(q, "select", { option: "right" }),
-      tap(q, "check"),
-    ]),
   }),
 );
 
@@ -696,7 +690,7 @@ const pointsOnAxes = page(
           }),
         ),
       ),
-      pairOfB: hidden(askAxisB.piece),
+      pairOfB: hidden(askAxisB),
       whyB: hidden(
         words.body(
           t(
@@ -711,7 +705,7 @@ const pointsOnAxes = page(
           },
         ),
       ),
-      pairOfC: hidden(askAxisC.piece),
+      pairOfC: hidden(askAxisC),
       whyC: hidden(
         words.body(
           t(
@@ -726,7 +720,7 @@ const pointsOnAxes = page(
           },
         ),
       ),
-      pairOfE: hidden(askAxisE.piece),
+      pairOfE: hidden(askAxisE),
       whyE: hidden(
         words.body(
           t(
@@ -769,15 +763,10 @@ const pointsOnAxes = page(
                 t.self.show({ name: "pairOfB" }),
               ],
     },
-    uses: [askAxisB.use, askAxisC.use, askAxisE.use],
     witness: [
       tap("sheet.reading", "movePoint", { x: 3, y: 0 }),
       tap("sheet.reading", "movePoint", { x: 0, y: 2 }),
       tap("sheet.reading", "movePoint", { x: 0, y: 0 }),
-      ...(["pairOfB", "pairOfC", "pairOfE"] as const).flatMap((q) => [
-        tap(q, "select", { option: "right" }),
-        tap(q, "check"),
-      ]),
     ],
   }),
 );
@@ -835,13 +824,12 @@ const whereOf = (x: number, y: number): Where =>
   y === 0 ? "xAxis" : x === 0 ? "yAxis" : x > 0 ? (y > 0 ? "I" : "IV") : y > 0 ? "II" : "III";
 
 /** A round: "From the signs alone: where is (x, y)?", the same six choices, each wrong one told. */
-function whereRound(name: string, x: number, y: number) {
+function whereRound(x: number, y: number) {
   const pair = `(${shown(x)}, ${shown(y)})`;
   const pairSaid = `${said(x, "minus")}, ${said(y, "minus")}`;
   const pairSaidHi = `${said(x, "माइनस")}, ${said(y, "माइनस")}`;
   const answer = whereOf(x, y);
   return choice({
-    name,
     prompt: t(
       `From the signs alone: where is the point ${pair}?`,
       `केवल चिह्नों से बताओ: बिंदु ${pair} कहाँ है?`,
@@ -872,10 +860,10 @@ function whereRound(name: string, x: number, y: number) {
 }
 /** Four rounds: three quadrants and an axis, none the quadrant just dragged through last. */
 const ROUNDS = [
-  whereRound("round1", -3, 5),
-  whereRound("round2", 2, -4),
-  whereRound("round3", -4, -1),
-  whereRound("round4", 0, -3),
+  whereRound(-3, 5),
+  whereRound(2, -4),
+  whereRound(-4, -1),
+  whereRound(0, -3),
 ] as const;
 
 /** Each quadrant's signs, found by taking the point through all four, then called before seeing. */
@@ -920,10 +908,10 @@ const signsAndQuadrants = page(
           },
         ),
       ),
-      round1: hidden(ROUNDS[0].piece),
-      round2: hidden(ROUNDS[1].piece),
-      round3: hidden(ROUNDS[2].piece),
-      round4: hidden(ROUNDS[3].piece),
+      round1: hidden(ROUNDS[0]),
+      round2: hidden(ROUNDS[1]),
+      round3: hidden(ROUNDS[2]),
+      round4: hidden(ROUNDS[3]),
     },
     passBy: "rules",
     hear: {
@@ -938,15 +926,10 @@ const signsAndQuadrants = page(
       "round3.correct": (_, __, t) => t.self.show({ name: "round4" }),
       "round4.correct": (_, __, t) => t.self.pass(),
     },
-    uses: ROUNDS.map((r) => r.use),
     witness: [
       tap("sheet.reading", "movePoint", { x: -3, y: 2 }),
       tap("sheet.reading", "movePoint", { x: -3, y: -2 }),
       tap("sheet.reading", "movePoint", { x: 3, y: -2 }),
-      ...(["II", "IV", "III", "yAxis"] as const).flatMap((option, i) => [
-        tap(`round${i + 1}`, "select", { option }),
-        tap(`round${i + 1}`, "check"),
-      ]),
     ],
   }),
 );
@@ -1065,7 +1048,6 @@ const anyAxes = page(
  * fig-3-14): H's coordinates, and the point at (5, −5).
  */
 const coordinatesOfH = choice({
-  name: "coordinatesOfH",
   prompt: t("What are the coordinates of H?", "H के निर्देशांक क्या हैं?"),
   options: [
     { id: "right", label: t("(−5, −3)", "(−5, −3)") },
@@ -1109,7 +1091,6 @@ const coordinatesOfH = choice({
   answer: "right",
 });
 const pointAt = choice({
-  name: "pointAt",
   prompt: t("Which point is (5, −5)?", "बिंदु (5, −5) कौन-सा है?"),
   says: t("Which point is the point 5, minus 5?", "बिंदु 5, माइनस 5 कौन-सा है?"),
   options: [
@@ -1184,8 +1165,8 @@ const findThePoint = page(
           },
         }),
       ),
-      coordinatesOfH: coordinatesOfH.piece,
-      pointAt: hidden(pointAt.piece),
+      coordinatesOfH: coordinatesOfH,
+      pointAt: hidden(pointAt),
       summary: hidden(
         words.body(
           t(
@@ -1244,13 +1225,6 @@ const findThePoint = page(
         t.self.pass(),
       ],
     },
-    uses: [coordinatesOfH.use, pointAt.use],
-    witness: [
-      tap("coordinatesOfH", "select", { option: "right" }),
-      tap("coordinatesOfH", "check"),
-      tap("pointAt", "select", { option: "c" }),
-      tap("pointAt", "check"),
-    ],
   }),
 );
 

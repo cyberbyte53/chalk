@@ -47,6 +47,6 @@ export const tableLamp = family({
       ],
       answer: "two",
     });
-    return scene({ pieces: { ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { ask: ask } });
   },
 });

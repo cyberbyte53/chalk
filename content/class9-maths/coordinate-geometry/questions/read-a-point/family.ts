@@ -78,6 +78,6 @@ export const readAPoint = family({
       ],
       answer: "right",
     });
-    return scene({ pieces: { figure, ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { figure, ask: ask } });
   },
 });

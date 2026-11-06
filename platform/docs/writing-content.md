@@ -71,9 +71,8 @@ const seatingPlan = page(
       title: words.title(t("Desks in a classroom", "कक्षा में डेस्क")),
       tap: words.body(t("Tap the desk at (5, 3), then the one at (3, 5).", "…")),
       room: place(coordinatePlane, setup(classroom(), { places: { showAddress: true } })),
-      same: hidden(same.piece),          // a question, shown once both desks are tapped
+      same: hidden(same),                // a question, shown once both desks are tapped
     },
-    uses: [same.use],
     hear: {
       "room.places.targetChosen": (me, p, t) => …,
     },
@@ -89,7 +88,7 @@ export const overview = [busStops, streetAndHouse, dotOnPaper, seatingPlan, twoL
 - **What appears later:** `hidden(piece)` starts it hidden; a rule shows it (`t.self.show({ name: "found" })`). A piece hidden that nothing shows doesn't build.
 - **The lesson's rules:** `hear` answers a piece's signal (`"town.walker.arrived": (me, p, t) => …`), `onSaid` a line's end. A rule reads the board as `me` (each piece by name), the payload as `p`, and acts with `t` ([board-model.md](board-model.md#a-rule)). Conditions are plain TypeScript, typed from the pieces.
 - **When the student may go on:** when every question on the page is right; at once on a page with none. `passBy: "rules"` makes it pass only when a rule says `t.self.pass()`. Passing also opens the board (`isOpen`): what the student may then play with is the board's choice (houses placed with `choosing: Choosing.OnceOpen`, or a rule that hands them the dot), so the story can't be broken while it is being shown ([board-model.md](board-model.md#the-boards-own-actions-and-signals)).
-- **Questions:** `choice({ prompt, options, answer })` from `@chalk/patterns`, its options shuffled the same way every build (`keepOrder` keeps them as written); `check({ about, prompt, isRight, solve, notes })` for "get this prop into a state, then Check". Each gives a `piece` and a `use` (its rules, its witness, its note checks): place the piece, list the use in `uses`. The build writes the page's concept into them, ungraded: answering one teaches but counts towards no mastery. Bank questions are graded on the concepts they test.
+- **Questions:** `choice({ prompt, options, answer })` from `@chalk/patterns`, its options shuffled the same way every build (`keepOrder` keeps them as written); `check({ about, prompt, isRight, solve, notes })` for "get this prop into a state, then Check". Place a question in `pieces` once: its key is its name, and it brings its own rules, witness and note checks (a board's witness takes a question's answer only where it must come out of order: `tap(key, …)`). The build writes the page's concept into them, ungraded: answering one teaches but counts towards no mastery. Bank questions are graded on the concepts they test.
 - **A picture:** a prop drawn still, from the setup you give it: `place(coordinatePlane, …, { still: t("The main road and Street 4, with Aman's house", "…") })`. Nothing on it can be tapped, dragged or focused, and the sentence is what a screen reader reads.
 - **Sizes are the player's:** a board is drawn for a phone and fits any screen on its own (the column grows to 640px, text grows with it, props scale; see [making-a-prop.md](./making-a-prop.md)). A placement can override its prop's rule: `place(def, given, { size: { fit: "fill" } })`.
 - **Every interactive page has a witness:** how a student gets through it, as taps (`tap("town", "walker.step", { direction: "up" })`) and waits, played on the real props at publish.
@@ -116,7 +115,7 @@ export const walkToAddress = family({
       notes: [{ when: plane.isAt("town", house, street), say: t("The street comes first…", "…"),
                 reach: plane.walkTo("town", house, street) }],
     });
-    return scene({ pieces: { town, ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { town, ask } });
   },
 });
 ```

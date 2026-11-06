@@ -53,7 +53,7 @@ export const pickDecimal = family({
       options,
       answer,
     });
-    return scene({ pieces: { ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { ask } });
   },
 });
 `;

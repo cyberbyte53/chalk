@@ -73,6 +73,6 @@ export const busToStop = family({
         },
       ],
     });
-    return scene({ pieces: { road, ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { road, ask: ask } });
   },
 });

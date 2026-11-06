@@ -25,8 +25,8 @@ and before real learners.
 
 ## 3. Finish simplifying boards and props (each builds on the last)
 
-- [ ] **A question written once** on a board; the answer taps boards repeat by hand go
-  (`simpler-boards.md`, items 2 and 5). Its own short build plan first.
+- [x] **A question written once** on a board; the answer taps boards repeat by hand go
+  (`question-once.md`).
 - [ ] **One way for wrong-answer notes**: a question holds its notes and says them; check notes become
   spoken (new clips, en and hi) (`simpler-boards.md`, item 3).
 - [ ] **Speech marks**: `[[shown|said]]`, `says` only for rephrasing (`said-once.md`).

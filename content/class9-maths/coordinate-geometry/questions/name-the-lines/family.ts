@@ -120,6 +120,6 @@ export const nameTheLines = family({
       })),
       answer,
     });
-    return scene({ pieces: { sheet, ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { sheet, ask: ask } });
   },
 });

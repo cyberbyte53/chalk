@@ -114,7 +114,6 @@ const TAPPED = t("The house you tapped", "तुम्हारा चुना 
 
 /** Counting the new streets from her corner, as she counted the old: the other way, so −1. */
 const firstWest = choice({
-  name: "firstWest",
   prompt: t(
     "Riya numbered the old streets 1, 2, 3, … going **east** from her corner. Counting from her corner the same way, what number should the first new street **west** of it get?",
     "रिया ने पुरानी गलियाँ अपने कोने से **पूर्व** की ओर 1, 2, 3, … गिनी थीं। अपने कोने से उसी तरह गिनते हुए, उसके **पश्चिम** में पहली नई गली को कौन-सी संख्या मिलनी चाहिए?",
@@ -184,7 +183,7 @@ const townGrows = page(
           },
         }),
       ),
-      firstWest: firstWest.piece,
+      firstWest: firstWest,
       town: hidden(
         place(
           coordinatePlane,
@@ -293,7 +292,6 @@ const townGrows = page(
       "town.places.targetChosen": (_, p, t) =>
         p.isAnother && t.to.town.places.nameTarget({ name: TAPPED }),
     },
-    uses: [firstWest.use],
     witness: [
       tap("firstWest", "select", { option: "minus" }),
       tap("firstWest", "check"),

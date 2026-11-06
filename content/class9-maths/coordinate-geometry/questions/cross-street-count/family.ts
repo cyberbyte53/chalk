@@ -42,6 +42,6 @@ export const crossStreetCount = family({
       ],
       answer: "oneEach",
     });
-    return scene({ pieces: { ask: ask.piece }, uses: [ask.use] });
+    return scene({ pieces: { ask: ask } });
   },
 });

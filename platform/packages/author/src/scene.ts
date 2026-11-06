@@ -116,6 +116,11 @@ export type Placed<D extends AnyProp = AnyProp> = Says & {
   readonly size?: Size;
   /** Drawn still, as a picture of what it shows (in words): nothing on it responds. */
   readonly still?: Localized;
+  /**
+   * A question (`choice`, `check` in @chalk/patterns): once the board knows its name (its key in
+   * `pieces`), what it is given and what it adds to the board (its checks, notes and witness).
+   */
+  readonly named?: (key: string) => { readonly given: Given; readonly use: SceneUse };
 };
 
 /** Places a prop: `place(coordinatePlane, { plane: { upLines: [] } })`. */
@@ -154,7 +159,7 @@ export const capital = <const W extends string>(word: W): Capitalize<W> =>
   (word.charAt(0).toUpperCase() + word.slice(1)) as Capitalize<W>;
 
 /** The same piece, hidden until a rule shows it (`t.self.show({ name: "found" })`). */
-export function hidden<D extends AnyProp>(placed: Placed<D>): Placed<D> {
+export function hidden<Q extends Placed>(placed: Q): Q {
   const out = { ...placed, isHidden: true };
   noteStack(out, stackOf(placed));
   return out;
@@ -276,11 +281,6 @@ export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> 
       ) => import("@chalk/prop").NeedsOf<P[K]["def"]>[J];
     };
   };
-  /**
-   * Ready-made parts a pattern brings (a question with its check, its notes and its witness): their
-   * rules, what they give, their witness steps and note checks, joined with the scene's own.
-   */
-  readonly uses?: readonly SceneUse[];
   /** "rules": the board passes only when a rule says `t.self.pass()`. Else by its questions. */
   readonly passBy?: "rules";
   /** How a learner gets this board right, played on the real props at publish. */
@@ -289,7 +289,7 @@ export type SceneSpec<P extends Pieces, L extends Lines = Record<never, never>> 
   readonly noteChecks?: readonly NoteCheck[];
 };
 
-/** What a pattern adds to a scene, untyped: it names its own pieces' paths. */
+/** What a question adds to a board, untyped: it names its own piece by the key it is placed under. */
 export type SceneUse = {
   readonly give?: Readonly<Record<string, Readonly<Record<string, (me: never) => unknown>>>>;
   /** Cues it brings (a question's notes, said when it is answered wrong), joined with the scene's. */
@@ -328,7 +328,31 @@ export function scene<const P extends Pieces, const L extends Lines = Record<nev
   };
 }
 
-function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
+/**
+ * The board's questions named: each takes its key as its name (its options shuffled by it, its
+ * checks, notes and witness addressed to it), and what each adds joins the board's own.
+ */
+function withQuestions(
+  spec: SceneSpec<Pieces, Lines>,
+): SceneSpec<Pieces, Lines> & { readonly uses: readonly SceneUse[] } {
+  const uses: SceneUse[] = [];
+  const pieces = Object.fromEntries(
+    Object.entries(spec.pieces).map(([key, placed]) => {
+      if (placed.named === undefined) return [key, placed];
+      const { given, use } = placed.named(key);
+      uses.push(use);
+      const { named: _, ...rest } = placed;
+      const out: Placed = { ...rest, given };
+      // Where the author wrote it, kept for look, the editor and Alt-click.
+      noteStack(out, stackOf(placed));
+      return [key, out];
+    }),
+  );
+  return { ...spec, pieces, uses };
+}
+
+function buildScene(name: string, written: SceneSpec<Pieces, Lines>): BuiltBoard {
+  const spec = withQuestions(written);
   const names = Object.keys(spec.pieces);
   // "board" names the board's own events (board.said): a piece can't have that name.
   if (names.includes(BOARD_EVENTS))
@@ -337,7 +361,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
   // The scene's own cues, and those its patterns bring: one set, each name once. Words join the
   // board's lines (they take turns); sounds play alongside.
   const allCues: Record<string, Cue> = { ...spec.cues };
-  for (const use of spec.uses ?? [])
+  for (const use of spec.uses)
     for (const [named, given] of Object.entries(use.cues ?? {})) {
       if (Object.hasOwn(allCues, named))
         throw new Error(`Board ${name}: two cues are named "${named}"`);
@@ -512,7 +536,7 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
             ? [{ line, values: told }]
             : [{ line }];
       });
-  const uses = spec.uses ?? [];
+  const uses = spec.uses;
   const rulesFrom = [spec.hear ?? {}, ...uses.map((u) => u.hear ?? {})] as Record<
     string,
     AnyFn | undefined

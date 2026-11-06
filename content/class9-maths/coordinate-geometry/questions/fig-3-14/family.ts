@@ -261,6 +261,6 @@ export const fig314 = family({
       ],
       answer: "right",
     });
-    return scene({ pieces: { figure, ask: question.piece }, uses: [question.use] });
+    return scene({ pieces: { figure, ask: question } });
   },
 });

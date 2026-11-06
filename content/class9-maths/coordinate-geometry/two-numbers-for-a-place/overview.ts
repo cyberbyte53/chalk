@@ -16,7 +16,6 @@ const { setup, town, notebook, classroom, walkTo } = plane;
 
 /** A bus on a straight road: the number line they know, its own short story. */
 const side = choice({
-  name: "side",
   prompt: t("The bus is at −2. Where is it?", "बस −2 पर है। वह कहाँ है?"),
   says: t("The bus is at minus 2. Where is it?", "बस माइनस 2 पर है। वह कहाँ है?"),
   options: [
@@ -112,7 +111,7 @@ const busStops = page(
           },
         ),
       ),
-      side: hidden(side.piece),
+      side: hidden(side),
       enough: hidden(
         words.definition(
           t(
@@ -130,7 +129,6 @@ const busStops = page(
       ],
       "side.correct": (_, __, t) => t.self.show({ name: "enough" }),
     },
-    uses: [side.use],
     witness: [...walkTo("line", 3, 0), ...walkTo("line", -5, 0)],
   }),
 );
@@ -358,7 +356,6 @@ const dotOnPaper = page(
 
 /** A desk is (column, row), column first: (5, 3) and (3, 5) are two different desks. */
 const same = choice({
-  name: "same",
   prompt: t(
     "Are the desks (5, 3) and (3, 5) the same desk?",
     "क्या डेस्क (5, 3) और (3, 5) एक ही डेस्क हैं?",
@@ -426,7 +423,7 @@ const seatingPlan = page(
           },
         }),
       ),
-      same: hidden(same.piece),
+      same: hidden(same),
     },
     hear: {
       // The desk tapped is marked with its pair; once both are marked, the question.
@@ -440,7 +437,6 @@ const seatingPlan = page(
         ];
       },
     },
-    uses: [same.use],
     witness: [
       tap("room.places", "chooseTarget", { x: 5, y: 3 }),
       tap("room.places", "chooseTarget", { x: 3, y: 5 }),
