@@ -61,6 +61,26 @@ Clean-up: `authoring/reviews/`, `authoring/retros/` and each chapter's `runs/` g
 person's verdicts on sounds, by ear) is taste: `authoring/taste/sounds.json`; `authoring/sources/` becomes
 `authoring/books-pdf/`, so "source" means only a chapter's extracted facts.
 
+## What a command makes, what an agent fills
+
+Anything with a fixed shape is made by a command, the same every time (as Hugo's archetypes, Rails'
+generators): folders in both trees at the same paths, file skeletons with their sections, registrations,
+text and pages extracted from a PDF. An agent fills what needs judgement: the outline's items, the plan,
+the boards, lessons, translations. Templates live in `authoring/templates/` (and code skeletons beside
+their code); changing one changes only what is made after.
+
+| Command | Makes |
+|---|---|
+| `pnpm new book <book>` | `content/<book>/` (`build.yaml`, a cover `art.tsx` stub), `authoring/books/<book>/taste.md` (its settings block and headings), the book registered in `content/build.yaml` |
+| `pnpm new chapter <book> <chapter> --source <pdf>` | both chapter folders; `source/en/` with the PDF, its text page by page and page images; `plan.md` and `boards.md` with their sections; `comments.yaml`; the chapter registered in its book. The agent then writes the outline from the text |
+| `pnpm new lesson <chapter> <lesson>` | `content/…/<lesson>/` (`build.yaml`, an `overview.ts` skeleton, an `art.tsx` card stub), registered in the chapter |
+| `pnpm new family <chapter> <family>` | `questions/<family>/` with `family.ts` and `params.yaml` skeletons |
+| `pnpm attach <chapter> <language> --source <pdf>` | `source/<language>/` with the PDF, its text, and the outline's skeleton aligned to English (the same ids, its words empty for the agent to fill from the book) |
+| `pnpm taste <path>` | the effective taste anywhere (below) |
+
+The skills then say "run this, then fill that", and every chapter has the same shape the checks, the
+editor's tree and the skills rely on.
+
 ## Taste: settings that cascade, prose read in order
 
 Each level's `taste.md` holds two kinds of thing, each inherited the way that fits it (as Hugo's front
@@ -185,12 +205,14 @@ Each step built and proved on its own, and committed.
 2. **Threads:** weight, opener closes.
 3. **`plan.md` and `boards.md`** and their checks; chapter 1's four planning files rewritten into them (the
    person is told first, and approves `plan.md` once).
-4. **The editor and pipeline:** the tree's three entries, Approve on `plan.md` only.
-5. **Skills and AGENTS.md:** four skills, reading `taste.md`; AGENTS.md's steps, runs and closing rule.
-6. **Hindi grounded** for chapter 1 (spike first), and the term check on today's lines.
-7. **The languages mechanism** (`languages.md`).
-8. **Checks:** the mechanical ones the audit found (one name per thing; a prompt that gives away its
+4. **Commands and templates:** `pnpm new book|chapter|lesson|family`, `pnpm attach`, making `plan.md`
+   and `boards.md` from their templates; proved by making a throwaway chapter and running the checks on it.
+5. **The editor and pipeline:** the tree's three entries, Approve on `plan.md` only.
+6. **Skills and AGENTS.md:** four skills, reading `taste.md`; AGENTS.md's steps, runs and closing rule.
+7. **Hindi grounded** for chapter 1 (spike first), and the term check on today's lines.
+8. **The languages mechanism** (`languages.md`).
+9. **Checks:** the mechanical ones the audit found (one name per thing; a prompt that gives away its
    answer; right answers spread across options; a label or control text not introduced earlier), each as a
    blocking check.
-9. **Approval by what students get** (`kept-by-what-students-get.md`).
-10. **Chapter 1 re-reviewed;** then the next chapter made this way.
+10. **Approval by what students get** (`kept-by-what-students-get.md`).
+11. **Chapter 1 re-reviewed;** then the next chapter made this way.
