@@ -117,4 +117,12 @@ export {
   timedVoice,
   type Voice,
 } from "./voice";
-export { type GroupLayoutSpec, IN_PICTURE, Place, shownOf, withShown } from "./layout";
+export {
+  type GroupLayoutSpec,
+  IN_PICTURE,
+  Place,
+  givenOf,
+  shownOf,
+  withGiven,
+  withShown,
+} from "./layout";

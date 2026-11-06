@@ -1,10 +1,9 @@
-import { type PropModule, propModule } from "@chalk/player";
-import { coordinatePlane } from "./coordinate-plane";
-import { sounds } from "./defs";
-import { CoordinatePlaneView } from "./view";
-
+// What the package offers, re-exported and nothing else: left out of a board's code fingerprint
+// (package.json `chalk.registries`); each name counts where it is written. A piece adds its line.
 export { type Clue, type Still, stillPossible } from "./clues";
+export { coordinatePlane } from "./coordinate-plane";
 export { throwOf } from "./dice";
+export { coordinatePlaneProp, coordinateProps } from "./module";
 export { Choosing, PlaceKind, type Place } from "./places";
 export {
   Axes,
@@ -20,14 +19,3 @@ export {
 } from "./plane";
 export { Reading } from "./reading";
 export { Direction, Roads, WalkerKind, stepFrom } from "./walker";
-
-export { coordinatePlane };
-
-export const coordinatePlaneProp = propModule(
-  coordinatePlane,
-  CoordinatePlaneView,
-  sounds[coordinatePlane.type],
-);
-
-/** Every prop in this package, for the library. */
-export const coordinateProps: readonly PropModule[] = [coordinatePlaneProp];

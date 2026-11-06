@@ -1,5 +1,5 @@
 /** @jsxImportSource preact */
-import { type Locale, type Piece, PieceKind, Pin, type PropPiece } from "@chalk/content";
+import { type Locale, type Piece, PieceKind, type PropPiece } from "@chalk/content";
 import { Actor } from "@chalk/content";
 import {
   type Box,
@@ -251,10 +251,9 @@ export function Layout({
 function renderPiece(piece: Piece, context: LayoutContext): JSX.Element | null {
   switch (piece.kind) {
     case PieceKind.Column:
-    case PieceKind.Row:
       return (
         <div
-          class={piece.kind === PieceKind.Column ? "layout-column" : "layout-row"}
+          class="layout-column"
           style={piece.gap === undefined ? undefined : { gap: `${piece.gap}px` }}
         >
           {piece.children.map((child) => (
@@ -262,19 +261,6 @@ function renderPiece(piece: Piece, context: LayoutContext): JSX.Element | null {
           ))}
         </div>
       );
-    case PieceKind.Overlay: {
-      const [base, ...rest] = piece.children;
-      return (
-        <div class="layout-overlay">
-          {base !== undefined && <Layout piece={base} context={context} />}
-          {rest.map((child) => (
-            <div key={child.name} class={`pin pin-${piece.pins?.[child.name] ?? Pin.TopRight}`}>
-              <Layout piece={child} context={context} />
-            </div>
-          ))}
-        </div>
-      );
-    }
     case PieceKind.Space:
       return <div class="layout-space" />;
     case PieceKind.Prop:

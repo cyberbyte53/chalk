@@ -1,0 +1,127 @@
+/* ---- points: a figure's, the one to read, clues, plotted dots ---- */
+.cp-named-points {
+  /* Marks are to see: a tap goes through to the desk or house under them. */
+  pointer-events: none;
+}
+/* Plotted dots and their pairs are to see too: a tap beside one plots the next pair there. */
+.cp-plotted {
+  pointer-events: none;
+}
+.cp-named-point circle {
+  fill: var(--color-on-surface);
+}
+.cp-named-point.is-accent circle {
+  fill: var(--color-primary);
+}
+.cp-named-point.is-muted circle {
+  fill: var(--color-on-surface-variant);
+}
+.cp-drop {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 4;
+}
+/* A highlighted point's distances: in colour, as the dot's are (clues-view.tsx). */
+.cp-named-point.is-accent .cp-drop {
+  stroke: color-mix(in srgb, var(--color-primary) 70%, transparent);
+  stroke-width: 2.4;
+  stroke-dasharray: 6 5;
+}
+.cp-point {
+  fill: var(--color-primary);
+  stroke: var(--color-surface);
+  stroke-width: 3;
+  cursor: grab;
+}
+/* Focus is a ring around the dot, and only for the keyboard: not a box over the numbers after a drag. */
+.cp-point:focus {
+  outline: none;
+}
+.cp-point:focus-visible {
+  stroke: var(--color-primary-press);
+  stroke-width: 4;
+}
+/* A point's reading goes wherever the point is dragged: a halo of the page's colour keeps it
+   readable over the axes' numbers and a quadrant's name. */
+.cp-frame .cp-length,
+.cp-frame .cp-pair {
+  font: 700 var(--text-note) var(--font-display);
+  fill: var(--color-primary);
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.cp-still-region {
+  fill: color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+.cp-still-line {
+  stroke: color-mix(in srgb, var(--color-primary) 55%, transparent);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.cp-still-full {
+  stroke: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  stroke-width: 2;
+  stroke-dasharray: 6 5;
+}
+.cp-still-point {
+  fill: color-mix(in srgb, var(--color-primary) 25%, transparent);
+  stroke: var(--color-primary);
+  stroke-width: 3;
+}
+.cp-still.is-point .cp-still-full {
+  stroke: color-mix(in srgb, var(--color-primary) 70%, transparent);
+  stroke-width: 2.4;
+}
+.cp-measure line {
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 3;
+}
+.cp-frame .cp-measure text {
+  font: 700 var(--text-caption) var(--font-body);
+  fill: var(--color-on-surface);
+}
+.cp-hidden {
+  fill: var(--color-secondary);
+}
+.cp-dot.is-right circle {
+  fill: var(--color-right);
+}
+.cp-dot.is-wrong circle {
+  fill: var(--color-surface);
+  stroke: var(--color-wrong);
+  stroke-width: 2.5;
+}
+.cp-dot.is-wrong text {
+  fill: var(--color-wrong);
+}
+.cp-dot .cp-swap-self,
+.cp-dot.is-right .cp-swap-self {
+  fill: none;
+  stroke: var(--color-on-surface-variant);
+  stroke-width: 2;
+  stroke-dasharray: 3 3;
+}
+.cp-swap {
+  fill: var(--color-on-surface-variant);
+}
+.cp-swap-line {
+  stroke: var(--color-on-surface-variant);
+  stroke-dasharray: 3 4;
+}
+.cp-table {
+  border-collapse: collapse;
+  font: var(--text-body) var(--font-body);
+  color: var(--color-on-surface);
+}
+.cp-table th,
+.cp-table td {
+  border: 1px solid var(--color-outline-variant);
+  padding: 4px 10px;
+  text-align: center;
+}
+.cp-table td.is-next {
+  background: var(--color-primary-container);
+}

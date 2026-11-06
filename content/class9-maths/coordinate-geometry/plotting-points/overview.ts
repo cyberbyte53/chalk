@@ -1,4 +1,4 @@
-import { hidden, page, place, scene, t, tap } from "@chalk/author";
+import { capital, hidden, page, piecesFrom, place, scene, t, tap } from "@chalk/author";
 import { plane, words } from "@chalk/patterns";
 import {
   Choosing,
@@ -553,9 +553,24 @@ const plotFromATable = page(
   }),
 );
 
+/** The stalls at the fair, by name. */
+const StallKey = {
+  Snacks: "snacks",
+  Books: "books",
+  Balloons: "balloons",
+  Toys: "toys",
+  Prizes: "prizes",
+  Bangles: "bangles",
+  Shoes: "shoes",
+  Tea: "tea",
+  Masks: "masks",
+  Juice: "juice",
+} as const;
+type StallKey = (typeof StallKey)[keyof typeof StallKey];
+
 /** A stall on the trail's fair ground: where it stands, its sign, and its name in a sentence. */
 type Stall = {
-  key: string;
+  key: StallKey;
   x: number;
   y: number;
   sign: [string, string];
@@ -568,22 +583,36 @@ type Stall = {
  * books stand where Riya's plan put them in lesson 3.
  */
 const ROUTE: Stall[] = [
-  { key: "snacks", x: 3, y: 2, sign: ["Snacks", "नाश्ता"], en: "snack", hiOf: "नाश्ते का" },
-  { key: "books", x: -4, y: 1, sign: ["Books", "किताबें"], en: "book", hiOf: "किताबों का" },
-  { key: "balloons", x: -2, y: -4, sign: ["Balloons", "गुब्बारे"], en: "balloon", hiOf: "गुब्बारों का" },
-  { key: "toys", x: 2, y: 0, sign: ["Toys", "खिलौने"], en: "toy", hiOf: "खिलौनों का" },
-  { key: "prizes", x: 4, y: -4, sign: ["Prizes", "इनाम"], en: "prize", hiOf: "इनामों का" },
+  { key: StallKey.Snacks, x: 3, y: 2, sign: ["Snacks", "नाश्ता"], en: "snack", hiOf: "नाश्ते का" },
+  { key: StallKey.Books, x: -4, y: 1, sign: ["Books", "किताबें"], en: "book", hiOf: "किताबों का" },
+  {
+    key: StallKey.Balloons,
+    x: -2,
+    y: -4,
+    sign: ["Balloons", "गुब्बारे"],
+    en: "balloon",
+    hiOf: "गुब्बारों का",
+  },
+  { key: StallKey.Toys, x: 2, y: 0, sign: ["Toys", "खिलौने"], en: "toy", hiOf: "खिलौनों का" },
+  { key: StallKey.Prizes, x: 4, y: -4, sign: ["Prizes", "इनाम"], en: "prize", hiOf: "इनामों का" },
 ];
 /**
  * Where a slip lands: each clue's address swapped, or a sign flipped where the swap would stand on
  * the stall beside it (the first clue's, and the axis stop's).
  */
 const DECOYS: Stall[] = [
-  { key: "bangles", x: 3, y: -2, sign: ["Bangles", "चूड़ियाँ"], en: "bangle", hiOf: "चूड़ियों का" },
-  { key: "shoes", x: 1, y: -4, sign: ["Shoes", "जूते"], en: "shoe", hiOf: "जूतों का" },
-  { key: "tea", x: -4, y: -2, sign: ["Tea", "चाय"], en: "tea", hiOf: "चाय का" },
-  { key: "masks", x: -2, y: 0, sign: ["Masks", "मुखौटे"], en: "mask", hiOf: "मुखौटों का" },
-  { key: "juice", x: -4, y: 4, sign: ["Juice", "जूस"], en: "juice", hiOf: "जूस का" },
+  {
+    key: StallKey.Bangles,
+    x: 3,
+    y: -2,
+    sign: ["Bangles", "चूड़ियाँ"],
+    en: "bangle",
+    hiOf: "चूड़ियों का",
+  },
+  { key: StallKey.Shoes, x: 1, y: -4, sign: ["Shoes", "जूते"], en: "shoe", hiOf: "जूतों का" },
+  { key: StallKey.Tea, x: -4, y: -2, sign: ["Tea", "चाय"], en: "tea", hiOf: "चाय का" },
+  { key: StallKey.Masks, x: -2, y: 0, sign: ["Masks", "मुखौटे"], en: "mask", hiOf: "मुखौटों का" },
+  { key: StallKey.Juice, x: -4, y: 4, sign: ["Juice", "जूस"], en: "juice", hiOf: "जूस का" },
 ];
 const STALLS = [...ROUTE, ...DECOYS];
 
@@ -593,7 +622,6 @@ const saidEn = (s: { x: number; y: number }) =>
   [s.x, s.y].map((n) => (n < 0 ? `minus ${-n}` : `${n}`)).join(", ");
 const saidHi = (s: { x: number; y: number }) =>
   [s.x, s.y].map((n) => (n < 0 ? `माइनस ${-n}` : `${n}`)).join(", ");
-const capital = (w: string) => w.charAt(0).toUpperCase() + w.slice(1);
 
 /** The clue a route stall gives: the next stall's address, or, at the last, the kite. */
 const clueAt = (i: number) => {
@@ -681,9 +709,9 @@ const treasureTrail = page(
           ),
         },
       ),
-      ...Object.fromEntries(ROUTE.map((s, i) => [`at${capital(s.key)}`, clueAt(i)])),
+      ...piecesFrom(ROUTE.map((s, i) => [`at${capital(s.key)}`, clueAt(i)] as const)),
       // Every stall but the first clue's, which can't be reached too early.
-      ...Object.fromEntries(STALLS.slice(1).map((s) => [`not${capital(s.key)}`, wrongStop(s)])),
+      ...piecesFrom(STALLS.slice(1).map((s) => [`not${capital(s.key)}`, wrongStop(s)] as const)),
       notThere: hidden(
         words.body(
           t(
@@ -721,14 +749,17 @@ const treasureTrail = page(
     hear: {
       // A step on: what the last stall said goes.
       "ground.walker.stepped": (me, _, t) =>
-        [...STALLS.slice(1).map((s) => `not${capital(s.key)}`), "notThere"]
+        [...STALLS.slice(1).map((s) => `not${capital(s.key)}` as const), "notThere" as const]
           .filter((name) => !me.hidden.includes(name))
           .map((name) => t.self.hide({ name })),
       // A stall tapped: only where Riya stands. The clue's stall gives the next clue; any other
       // says what it is and where.
       "ground.places.targetChosen": (me, p, t) => {
-        const shown = (name: string) => !me.hidden.includes(name);
-        const notes = [...STALLS.slice(1).map((s) => `not${capital(s.key)}`), "notThere"]
+        const shown = (name: (typeof me.hidden)[number]) => !me.hidden.includes(name);
+        const notes = [
+          ...STALLS.slice(1).map((s) => `not${capital(s.key)}` as const),
+          "notThere" as const,
+        ]
           .filter(shown)
           .map((name) => t.self.hide({ name }));
         const at = me.ground.walker.at;
@@ -738,7 +769,9 @@ const treasureTrail = page(
         const target = ROUTE[k];
         const stall = STALLS.find((s) => s.x === p.x && s.y === p.y);
         if (target !== undefined && stall === target) {
-          const before = k === 0 ? "first" : `at${capital(ROUTE[k - 1]?.key ?? "")}`;
+          const last = ROUTE[k - 1];
+          const before =
+            last === undefined ? ("first" as const) : (`at${capital(last.key)}` as const);
           return [
             ...notes,
             t.self.hide({ name: before }),

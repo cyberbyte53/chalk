@@ -81,40 +81,8 @@
   flex-direction: column;
   gap: 16px;
 }
-.layout-row {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
 .layout-space {
   flex: 1;
-}
-.layout-overlay {
-  position: relative;
-}
-.pin {
-  position: absolute;
-}
-.pin-topLeft {
-  top: 8px;
-  left: 8px;
-}
-.pin-topRight {
-  top: 8px;
-  right: 8px;
-}
-.pin-bottomLeft {
-  bottom: 8px;
-  left: 8px;
-}
-.pin-bottomRight {
-  bottom: 8px;
-  right: 8px;
-}
-.pin-center {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .with-audio-retry {

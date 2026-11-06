@@ -22,5 +22,15 @@
   },
   "devDependencies": {
     "preact-render-to-string": "6.5.13"
+  },
+  "chalk": {
+    "pieces": "src/pieces.ts",
+    "registries": [
+      "src/pieces.ts",
+      "src/drawings.ts",
+      "src/sounds.ts",
+      "src/index.ts",
+      "src/styles.css"
+    ]
   }
 }

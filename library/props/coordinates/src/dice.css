@@ -1,0 +1,55 @@
+/* ---- the dice game ---- */
+.cp-counter circle {
+  stroke: var(--color-surface);
+  stroke-width: 2;
+}
+.cp-counter.is-a circle {
+  fill: var(--color-primary);
+}
+.cp-counter.is-b circle {
+  fill: var(--color-secondary);
+}
+.cp-frame .cp-counter text {
+  font: 800 var(--text-caption) var(--font-display);
+  fill: var(--color-on-primary);
+}
+.cp-dice {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.cp-die {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font: 800 var(--text-note) var(--font-display);
+  color: var(--color-on-primary);
+}
+.cp-die.is-red {
+  background: var(--color-wrong);
+}
+.cp-die.is-green {
+  background: var(--color-right);
+}
+
+/* The four quadrants, each its own light tint (tintsQuadrants). */
+.cp-frame .cp-quadrant-tint.is-1 {
+  fill: color-mix(in srgb, var(--color-category-1) 14%, transparent);
+}
+.cp-frame .cp-quadrant-tint.is-2 {
+  fill: color-mix(in srgb, var(--color-category-2) 12%, transparent);
+}
+.cp-frame .cp-quadrant-tint.is-3 {
+  fill: color-mix(in srgb, var(--color-category-3) 12%, transparent);
+}
+.cp-frame .cp-quadrant-tint.is-4 {
+  fill: color-mix(in srgb, var(--color-category-4) 12%, transparent);
+}
+
+/* The crossing as a thing labels keep clear of naming: drawn as nothing. */
+.cp-frame .cp-crossing-point {
+  fill: none;
+}

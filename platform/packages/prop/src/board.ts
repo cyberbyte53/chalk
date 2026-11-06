@@ -11,7 +11,7 @@ import {
   type VoiceTools,
   keysOf,
 } from "./define";
-import { withShown } from "./layout";
+import { withGiven, withShown } from "./layout";
 import { type Move, moveAt } from "./move";
 import { type Entry, TimeQueue } from "./queue";
 import { type Heard, type LineCall, type Voice, silentVoice } from "./voice";
@@ -137,7 +137,12 @@ export type BoardState = {
   readonly nodes: Readonly<
     Record<
       string,
-      { vars: Readonly<Record<string, unknown>>; moves: Readonly<Record<string, Move>> }
+      {
+        vars: Readonly<Record<string, unknown>>;
+        moves: Readonly<Record<string, Move>>;
+        /** The children its placement named (`givenOf`), if any. */
+        given?: readonly string[];
+      }
     >
   >;
   readonly queue: readonly Entry<Omit<Later, "host">>[];
@@ -156,6 +161,8 @@ type Node = {
   /** Its name in its holder. */
   readonly name: string;
   readonly children: ReadonlyMap<string, Node>;
+  /** The children its placement gave anything, by name (`givenOf`). */
+  given: ReadonlySet<string>;
   vars: Readonly<Record<string, unknown>>;
   /** Its variables on the move, by name. */
   readonly moves: Map<string, Move>;
@@ -237,6 +244,7 @@ export class Board {
       nodes[path] = {
         vars: structuredClone(node.vars),
         moves: structuredClone(Object.fromEntries(node.moves)),
+        ...(node.given.size === 0 ? {} : { given: [...node.given] }),
       };
     const queue = this.queue.all
       .filter((e) => e.what.host === undefined)
@@ -306,6 +314,7 @@ export class Board {
       if (node === undefined)
         throw new Error(`Board: the snapshot has ${path}, this board doesn't`);
       node.vars = structuredClone(saved.vars);
+      node.given = new Set(saved.given ?? []);
       node.moves.clear();
       for (const [name, move] of Object.entries(saved.moves))
         node.moves.set(name, structuredClone(move));
@@ -395,7 +404,16 @@ export class Board {
   ): Node {
     const own: Record<string, unknown> = {};
     const children = new Map<string, Node>();
-    const node: Node = { path, def, holder, name, children, vars: {}, moves: new Map() };
+    const node: Node = {
+      path,
+      def,
+      holder,
+      name,
+      children,
+      given: new Set(Object.keys(given).filter((key) => def.children?.[key] !== undefined)),
+      vars: {},
+      moves: new Map(),
+    };
     for (const [key, value] of Object.entries(given)) if (!def.children?.[key]) own[key] = value;
     const start = { ...(def.start as Record<string, unknown> | undefined), ...own };
     node.vars = this.checked(def, path, start);
@@ -482,6 +500,7 @@ export class Board {
       }
       withShown(view, shown);
     }
+    withGiven(view, node.given);
     return Object.freeze(view);
   }
 

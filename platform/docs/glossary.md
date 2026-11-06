@@ -7,7 +7,7 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Chapter** | Concepts in book order, as in the NCERT book (older: lessons grouped) | `content/<book>/<chapter>/build.yaml`, `BuiltChapter` |
 | **Lesson** | An ordered run of boards. Story, walkthrough, practice and quiz are all lessons. | `Lesson` (`@chalk/content`) |
 | **Board** | One screen: its scene (the outermost prop, holding the pieces and the lesson's rules) and how its pieces are laid out | `Board`, `scene()` (`@chalk/author`) |
-| **Piece** | A node in a board's layout tree: layout pieces (Column, Row, Overlay, Space) arrange; a prop piece places a prop | `Piece`, `PieceKind` |
+| **Piece** | A node in a board's layout: a column of prop pieces, top to bottom, with a space at its foot; a prop piece places a prop | `Piece`, `PieceKind` |
 | **Prop** | Anything on a board, and the one building block: variables, facts, needs, actions, signals, rules, parts, a view, a role. A prop that holds props is a prop like any other | `prop()` (`@chalk/prop`), `library/props/<name>/` |
 | **Variable** | A prop's own data: anyone reads it, only its own rules change it | `variables`, `start` |
 | **Fact** | Worked out from a prop's variables and needs; read like a variable | `facts` |

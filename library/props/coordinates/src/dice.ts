@@ -1,6 +1,7 @@
 import { localizedSchema } from "@chalk/content";
 import { type Out, PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
+import { always, piece } from "./piece";
 import { type Point, pointSchema } from "./plane";
 
 export const throwSchema = z
@@ -166,4 +167,13 @@ export const dice = prop({
       : s.counters.length > s.playerNames.length
         ? "every counter needs its player's name"
         : undefined,
+});
+
+/** On the coordinate plane: the dice game. While on, a tap on the plane is its. */
+export const dicePiece = piece({
+  prop: dice,
+  isOn: isDiceOn,
+  takesTaps: always,
+  turns: { front: 40, below: 50, controls: 70 },
+  says: "the dice game",
 });

@@ -1,5 +1,6 @@
 import { type Out, PropRole, action, prop, signal } from "@chalk/prop";
 import { z } from "zod";
+import { always, piece } from "./piece";
 import { type PlaneCore, fromPlane, isInWindow } from "./plane";
 
 /** A pair to plot, from a table or a list. */
@@ -159,3 +160,12 @@ function dotAt(
     ...(plotted.length === me.toPlot.length ? [t.tell.allPlotted()] : []),
   ];
 }
+
+/** On the coordinate plane: pairs to plot. While on, a tap on the plane is theirs. */
+export const plottingPiece = piece({
+  prop: plotting,
+  isOn: isPlottingOn,
+  takesTaps: always,
+  turns: { above: 30, on: 30, front: 20, below: 40, controls: 60 },
+  says: "pairs to plot at a chosen scale",
+});
