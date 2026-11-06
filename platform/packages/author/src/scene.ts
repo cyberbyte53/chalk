@@ -13,6 +13,7 @@ import {
 } from "@chalk/content";
 import { AnswerStatus, PropRole, type Size } from "@chalk/prop";
 import {
+  type ActionDef,
   type AnyProp,
   type Cause,
   type ChildrenOf,
@@ -137,6 +138,21 @@ export function place<D extends AnyProp>(
   return placed;
 }
 
+/**
+ * Pieces made from a list, each named by its own pair:
+ * `...piecesFrom(ROUTE.map((s, i) => [`at${capital(s.key)}`, clueAt(i)] as const))`. Their names
+ * stay known (`atSnacks` …), so a rule's `show` and `hide` are checked against them as written.
+ */
+export function piecesFrom<const K extends string, V extends Placed>(
+  pairs: readonly (readonly [K, V])[],
+): Record<K, V> {
+  return Object.fromEntries(pairs) as Record<K, V>;
+}
+
+/** A word with its first letter capital, its type too: `capital("snacks")` is `"Snacks"`. */
+export const capital = <const W extends string>(word: W): Capitalize<W> =>
+  (word.charAt(0).toUpperCase() + word.slice(1)) as Capitalize<W>;
+
 /** The same piece, hidden until a rule shows it (`t.self.show({ name: "found" })`). */
 export function hidden<D extends AnyProp>(placed: Placed<D>): Placed<D> {
   const out = { ...placed, isHidden: true };
@@ -185,6 +201,14 @@ const sceneActions = {
 };
 type SceneActions = typeof sceneActions;
 /**
+ * A board's own actions, its `show` and `hide` taking only its pieces' names: a name that isn't one
+ * is refused as the rule is written (the type), and as it runs (the payload, checked when sent).
+ */
+type SceneActionsOf<P extends Pieces> = Omit<SceneActions, "show" | "hide"> & {
+  readonly show: ActionDef<{ name: keyof P & string }>;
+  readonly hide: ActionDef<{ name: keyof P & string }>;
+};
+/**
  * What the board itself tells: it opened, a piece was shown, a line was said (it ended), it passed,
  * Continue. Real events, written `board.<signal>`: lines can be declared on them, and the script
  * shows every moment as one of them.
@@ -199,12 +223,15 @@ const sceneSignals = {
 type SceneSignals = typeof sceneSignals;
 
 /** What a scene's rules read: its own variables and every piece by name. */
-type SceneMe<P extends Pieces> = Readonly<SceneVars> & {
+type SceneMe<P extends Pieces> = Readonly<Omit<SceneVars, "hidden">> & {
+  /** The pieces not shown yet. */
+  readonly hidden: readonly (keyof P & string)[];
+} & {
   readonly [K in keyof P]: import("@chalk/prop").ReaderOf<P[K]["def"]>;
 };
 type SceneTools<P extends Pieces> = Tools<
   SceneVars,
-  SceneActions,
+  SceneActionsOf<P>,
   SceneSignals,
   ChildrenOfPieces<P>
 >;
@@ -526,7 +553,11 @@ function buildScene(name: string, spec: SceneSpec<Pieces, Lines>): BuiltBoard {
     describe: `The board ${name}.`,
     variables: sceneVariables,
     start: { hidden: names.filter(isHidden), isPassed: false, saying: [], reads: [] },
-    actions: sceneActions,
+    actions: {
+      ...sceneActions,
+      show: action({ name: z.enum(names as [string, ...string[]]) }),
+      hide: action({ name: z.enum(names as [string, ...string[]]) }),
+    },
     signals: sceneSignals,
     // Once the board has passed, its point is made: it is open, and a piece that needs `isOpen`
     // lets the student play with it freely (any house, the clues again).
