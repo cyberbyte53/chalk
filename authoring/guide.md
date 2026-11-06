@@ -55,9 +55,9 @@ Their idea, not their subject:
 ## Working with the person
 
 Concise: one sentence where one does. Stuck, or at a decision that is his: ask with the `ask` tool, never
-in prose. Name a file by its full path from the repo's root, as a link in markdown
+in prose. Name a file or a folder by its full path from the repo's root, as a link in markdown
 ([authoring/books/class9-maths/coordinate-geometry/boards.md](books/class9-maths/coordinate-geometry/boards.md),
-not `boards.md`), so he can open it. Comments are pinned where they apply; whoever opened one closes it.
+not `boards.md`), so he can open it; the same in what tools write for him (skeletons, check messages). Comments are pinned where they apply; whoever opened one closes it.
 
 ## Settings
 
@@ -76,5 +76,5 @@ voices:
 
 - Examples for each principle, from several subjects: [authoring/guide/examples.md](guide/examples.md)
 - Writing Hindi: [authoring/guide/hi.md](guide/hi.md)
-- How a chapter is made: the skills in `.agents/skills/`; [platform/docs/authoring-pipeline.md](../platform/docs/authoring-pipeline.md)
+- How a chapter is made: the skills in [.agents/skills/](../.agents/skills/); [platform/docs/authoring-pipeline.md](../platform/docs/authoring-pipeline.md)
 - Layout, one name per thing, give-aways: machine checks, not this guide

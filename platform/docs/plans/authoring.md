@@ -214,6 +214,8 @@ makes wrong** (AGENTS.md, the skills, platform/docs), so agents are never pointe
    files, `source/` moved to `source/en/` with its three readers); chapter 1's four planning files rewritten
    into them (the person is told first, and approves `plan.md` once).
 5. **Commands:** `pnpm new chapter`, `pnpm attach`, the unlisted-folder check; proved on a throwaway chapter.
+   What they write and print names every file and folder by its full path from the repo's root, linked
+   in markdown.
 6. **Skills:** four, reading `pnpm guide`; the clean-up of `authoring/` (runs, retros, archive).
 7. **Hindi grounded** for chapter 1 (the PDF spike first), and the term check on today's lines.
 8. **Checks:** the mechanical ones the audit found (one name per thing; a prompt that gives away its
