@@ -32,9 +32,10 @@ authoring/books/<book>/
     source/               FACTS, extracted once, never edited by hand
       en/                   book.pdf, outline.yaml (every section, figure, example, exercise: id, page,
                             words), figures/ (the book's diagrams, cut out)
-      hi/, bn/, …           attached later: the chapter in that language (book.pdf) and terms.yaml (each key
-                            term of the English outline as this book writes it, with its page; how its
-                            letters and notation are read aloud)
+      hi/, bn/, …           attached later, by the same extraction: the chapter in that language
+                            (book.pdf); outline.yaml with the same ids as English, each item as THIS book
+                            writes it; terms.yaml (each key term, with its page; how its letters and
+                            notation are read aloud)
     plan.md               INTENT, English: the one file the person reads, comments on and says yes to
     boards.md             DETAIL, English: the agent's working design, never gated
     comments.yaml         threads, as now
@@ -79,10 +80,14 @@ Everything is made and reviewed in English; another language is added on top, th
 (`languages.md`):
 
 1. its book is added to `source/<language>/` (given, or fetched);
-2. its `terms.yaml` is extracted: every key term of the English outline as that book writes it, with its
-   page; no term from memory;
-3. every English line is translated with the lesson's boards in view, following the terms;
-4. a machine check: where a mapped English term is in a line, its mapped term is in the translation;
+2. **the same extraction** as English: its `outline.yaml` aligned item by item to the English one (same ids,
+   its own words), and its `terms.yaml`, every key term with its page; nothing from memory;
+3. every English line is translated with what grounds it: the line, its board and lesson, the outline ids
+   that board cites and **the matching passages of this book** (its own definition, example, exercise
+   wording), and the terms;
+4. machine checks: a mapped term in a line has its mapped term in the translation; a line quoting the book
+   (a definition, an exercise) matches the book's wording in the language; every English outline item has
+   its aligned item, or is marked missing with a reason;
 5. reviewed by someone who reads the language.
 
 Chapter 1's Hindi gets this once: its book attached, its terms extracted, every line checked against them.

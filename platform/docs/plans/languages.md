@@ -92,10 +92,13 @@ the English, marked, so work isn't blocked. Speech marks (`said-once.md`) are ea
 ### 5b. A language is attached, grounded in its own book
 
 A language's book and its terms are facts, kept with the chapter's source:
-`authoring/books/<book>/<chapter>/source/<language>/` holds `book.pdf` and `terms.yaml`: every key term of
-the English outline as that book writes it, with its page (abscissa → भुज, p. 54), and how its letters
-and notation are read aloud. Extracted once, from the book, never from memory. A machine check: where a
-mapped English term is in a line, its mapped term is in the translation.
+`authoring/books/<book>/<chapter>/source/<language>/` holds `book.pdf`, its `outline.yaml` (made by the
+same extraction as English, with the same ids: each item as that book writes it) and `terms.yaml`: every
+key term as that book writes it, with its page (abscissa → भुज, p. 54), and how its letters and notation
+are read aloud. Extracted once, from the book, never from memory. The translator gets, for each line, the
+passages of that book its board cites (by outline id), so definitions, examples and exercises keep the
+book's own words. Machine checks: a mapped term in a line has its mapped term in the translation; a line
+quoting the book matches the book's wording; every English item has its aligned item, or a reason.
 
 ### 6. Translating: one lesson at a time, by an agent
 
