@@ -22,7 +22,6 @@ export function panelHtml(base: string, query: string): string {
 <div class="bar">
   <span class="where" id="where"></span>
   <button id="select" title="Pick a piece to comment on (key: c)">Pick</button>
-  <button id="copy" class="on" style="display:none" title="Copy one line for the agent: apply this review (key: a)">Copy for agent</button>
   <button id="play" title="Play it as the app does: one board at a time, Continue, practice, results (key: p)">Play</button>
   <button id="hindi" title="Hindi">हि</button>
   <button id="out" title="Open in Cursor\'s browser (design mode: ⌘⇧D, click a piece, ⌘L adds it to the chat)">↗</button>

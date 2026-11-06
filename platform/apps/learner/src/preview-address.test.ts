@@ -11,8 +11,8 @@ describe("the addresses the preview opens", () => {
       "?dev&source=content/class9-maths/coordinate-geometry/questions/place-the-dot",
       "?dev&at=library/props/coordinates/coordinatePlane",
       "?dev&at=library/props/",
-      "?dev&review=20261029-1133",
-      "?dev&reviews",
+      "?dev&threads",
+      "?dev&threads&thread=cmvyww2w2120",
     ])
       expect(opens(search), search).toBe(true);
   });

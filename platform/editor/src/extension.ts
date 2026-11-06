@@ -2,7 +2,7 @@ import { execFileSync, spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import * as vscode from "vscode";
-import { FileComments } from "./file-comments";
+import { ANSWER_COMMAND, FileComments } from "./file-comments";
 import { panelHtml } from "./panel-html";
 import {
   type PlanningFile,
@@ -16,7 +16,7 @@ import {
   stateDetail,
   stateWords,
 } from "./planning";
-import { type ReviewItem, ReviewsTree } from "./reviews";
+import { type ThreadItem, ThreadsTree } from "./threads";
 
 /**
  * Chalk in the editor (Cursor, VS Code): content seen as boards beside its code.
@@ -95,10 +95,6 @@ async function ensureServer(): Promise<boolean> {
 /** What the preview should show for a file or folder in content/ (a `?dev&…` query), or null. */
 function queryFor(file: string): string | null {
   const path = rel(file);
-  // A review file shows its boards with its threads; the folder, every review.
-  if (path === "authoring/reviews" || path === "authoring/reviews/") return "reviews";
-  const review = /^authoring\/reviews\/([^/]+)\.yaml$/.exec(path);
-  if (review?.[1] !== undefined) return `review=${review[1]}`;
   if (!path.startsWith("content/")) return null;
   const parts = path.slice("content/".length).split("/").filter(Boolean);
   let isDir = false;
@@ -207,8 +203,6 @@ type Picked = {
 async function changeComments(change: Record<string, unknown>): Promise<{
   ok: boolean;
   error?: string;
-  count?: number;
-  review?: { id: string };
 }> {
   if (!(await ensureServer())) return { ok: false, error: "the dev server isn't running" };
   try {
@@ -221,43 +215,6 @@ async function changeComments(change: Record<string, unknown>): Promise<{
   } catch (e) {
     return { ok: false, error: String(e) };
   }
-}
-
-/** How many threads are in your sitting, not yet handed to an agent (the panel's button shows it). */
-async function tellReview(): Promise<void> {
-  let count = 0;
-  try {
-    const res = await fetch(new URL("dev-review?sitting", base));
-    count = ((await res.json()) as unknown[]).length;
-  } catch {}
-  void panel?.webview.postMessage({ type: "review", count });
-}
-
-/**
- * Hands your sitting to an agent: every thread you started or replied to since your last handover.
- * The dev server writes it as reviews/<id>.yaml, and one line naming it is copied for the agent's
- * chat; the agent reads it with the chalk `comments` tool (review: <id>).
- */
-async function copyReview(): Promise<void> {
-  const done = await changeComments({ op: "handover" });
-  if (!done.ok) {
-    void vscode.window.showErrorMessage(`Chalk: couldn't hand the review over: ${done.error}`);
-    return;
-  }
-  if (!done.count) {
-    void vscode.window.showInformationMessage(
-      "Chalk: nothing new since your last handover. Pick a piece (c) to comment, or reply on a thread.",
-    );
-    return;
-  }
-  await vscode.env.clipboard.writeText(
-    `apply review ${done.review?.id ?? "latest"} (${done.count} thread${done.count > 1 ? "s" : ""})`,
-  );
-  void tellReview();
-  void reviews.refresh();
-  void vscode.window.showInformationMessage(
-    "Chalk: copied. Paste it into the agent's chat (⌘V); plan mode is a good place to start.",
-  );
 }
 
 /**
@@ -304,7 +261,7 @@ async function leaveComment(p: Picked): Promise<void> {
     void vscode.window.showErrorMessage(`Chalk: the comment wasn't saved: ${done.error}`);
     return;
   }
-  void tellReview();
+  void threads.refresh();
   tree.refresh();
 }
 
@@ -317,13 +274,8 @@ function onMessage(
       void panel?.webview.postMessage({ type: "reveal", ...pendingReveal });
       pendingReveal = undefined;
     } else revealCursor();
-    void tellReview();
   } else if (m.type === "open") void openSite(m.site);
-  else if (m.type === "copy") void copyReview();
-  else if (m.type === "copyText" && typeof (m as { text?: unknown }).text === "string") {
-    void vscode.env.clipboard.writeText((m as { text: string }).text);
-    void vscode.window.showInformationMessage("Chalk: copied. Paste it into the agent's chat.");
-  } else if (m.type === "clipboard" && typeof (m as { text?: unknown }).text === "string") {
+  else if (m.type === "clipboard" && typeof (m as { text?: unknown }).text === "string") {
     // Copy and cut in the preview's text boxes: the editor keeps those keys from the iframe.
     void vscode.env.clipboard.writeText((m as { text: string }).text);
   } else if (m.type === "paste")
@@ -370,7 +322,7 @@ type Node = {
   label: string;
   path: string;
   kind:
-    | "reviews"
+    | "threads"
     | "book"
     | "chapter"
     | "planning"
@@ -412,12 +364,12 @@ function chapterThreads(chapter: string) {
     (t.board ?? "").startsWith(`${chapter}/`) ||
     (t.source ?? "").startsWith(`authoring/books/${chapter}/`) ||
     (t.source ?? "").startsWith(`content/${chapter}/`);
-  return reviews.allThreads.filter(on);
+  return threads.allThreads.filter(on);
 }
 
 /** A book's own threads: on its screen (its title, art), not its chapters'. */
 function bookThreads(book: string) {
-  return reviews.allThreads.filter((t) => t.board === book);
+  return threads.allThreads.filter((t) => t.board === book);
 }
 
 function openComments(
@@ -427,24 +379,15 @@ function openComments(
   const mine = isBook ? bookThreads(node) : chapterThreads(node);
   return {
     yours: mine.filter((t) => t.waitsOn === "person").length,
-    agents: mine.filter((t) => t.waitsOn === "agent").length,
+    agents: mine.filter((t) => t.waitsOn === "fixer" || t.waitsOn === "reviewer").length,
     ready: mine.filter((t) => t.status === "ready").length,
   };
 }
 
-/** Anything in the Chalk tree: the content and its planning, or the reviews (reviews.ts). */
-type Element = Node | ReviewItem;
-const isReview = (e: Element): e is ReviewItem =>
-  e.kind === "yours" ||
-  e.kind === "past" ||
-  e.kind === "sitting" ||
-  e.kind === "review" ||
-  e.kind === "thread";
+/** Anything in the Chalk tree: the content and its planning, or the open threads (threads.ts). */
+type Element = Node | ThreadItem;
+const isThreadItem = (e: Element): e is ThreadItem => e.kind === "yours" || e.kind === "thread";
 
-/**
- * The one Chalk tree: Reviews at the top (your threads not handed over, then each review), then
- * book → chapter → its planning files and lessons.
- */
 /**
  * Every prop, as the catalogue lists them (`pnpm catalogue` writes it from the definitions): a
  * line per prop, `### \`type\` · role` then its address and the chapters that place it.
@@ -482,21 +425,22 @@ function propsIn(catalogue: string): Node[] {
 class ChalkTree implements vscode.TreeDataProvider<Element> {
   private readonly changed = new vscode.EventEmitter<void>();
   readonly onDidChangeTreeData = this.changed.event;
-  constructor(private readonly reviews: ReviewsTree) {
-    reviews.onDidChangeTreeData(() => this.changed.fire());
+  constructor(private readonly threads: ThreadsTree) {
+    threads.onDidChangeTreeData(() => this.changed.fire());
   }
   refresh(): void {
     this.changed.fire();
   }
 
   getTreeItem(element: Element): vscode.TreeItem {
-    if (isReview(element)) return this.reviews.getTreeItem(element);
+    if (isThreadItem(element)) return this.threads.getTreeItem(element);
     const node = element;
-    if (node.kind === "reviews") {
-      const item = new vscode.TreeItem("Reviews", vscode.TreeItemCollapsibleState.Expanded);
+    if (node.kind === "threads") {
+      const item = new vscode.TreeItem("Threads", vscode.TreeItemCollapsibleState.Expanded);
       item.iconPath = new vscode.ThemeIcon("comment-discussion");
-      item.description = this.reviews.summary;
-      item.contextValue = "reviews";
+      item.description = this.threads.summary;
+      item.contextValue = "threads";
+      item.command = { command: "chalk.threads.open", title: "Open", arguments: [] };
       return item;
     }
     if (node.kind === "content") {
@@ -597,8 +541,8 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
   }
 
   async getChildren(element?: Element): Promise<Element[]> {
-    if (element !== undefined && isReview(element)) return this.reviews.getChildren(element);
-    if (element?.kind === "reviews") return this.reviews.getChildren(undefined);
+    if (element !== undefined && isThreadItem(element)) return this.threads.getChildren(element);
+    if (element?.kind === "threads") return this.threads.getChildren(undefined);
     if (element?.kind === "props" || element?.kind === "package") {
       const all = propsIn(join(root, "library", "catalogue.md"));
       // Props: a folder per package; a package: its props.
@@ -624,7 +568,7 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
     if (node === undefined) {
       // Three sections: the threads, the books, the props.
       return [
-        { label: "Reviews", path: "", kind: "reviews", file: "" },
+        { label: "Threads", path: "", kind: "threads", file: "" },
         { label: "Content", path: "content", kind: "content", file: "" },
         { label: "Props", path: "library/props", kind: "props", file: "" },
       ];
@@ -741,8 +685,8 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
   }
 }
 
-const reviews = new ReviewsTree(() => base);
-const tree = new ChalkTree(reviews);
+const threads = new ThreadsTree(() => base);
+const tree = new ChalkTree(threads);
 
 /** The planning files' failing checks, as problems on their lines (planning.ts). */
 const problems = vscode.languages.createDiagnosticCollection("chalk");
@@ -787,14 +731,13 @@ async function approveFile(node: Node | undefined, isApproved: boolean): Promise
 async function writeThread(id: string, text: string, status?: string): Promise<boolean> {
   const done = await changeComments({ op: "write", id, text, ...(status ? { status } : {}) });
   if (!done.ok) void vscode.window.showErrorMessage(`Chalk: ${done.error}`);
-  void reviews.refresh();
-  void tellReview();
+  void threads.refresh();
   return done.ok;
 }
 
-/** The Reviews view's commands: open, reply, close, withdraw a thread; copy or close a review. */
-function reviewCommands(fileComments: FileComments): vscode.Disposable[] {
-  const thread = ReviewsTree.threadOf;
+/** The threads' commands: open, reply, answer, close, withdraw a thread; close all ready. */
+function threadCommands(fileComments: FileComments): vscode.Disposable[] {
+  const thread = ThreadsTree.threadOf;
   return [
     vscode.commands.registerCommand("chalk.thread.open", async (item: unknown) => {
       const t = thread(item);
@@ -802,15 +745,20 @@ function reviewCommands(fileComments: FileComments): vscode.Disposable[] {
       // A thread on a planning file: the file, at its words.
       if (t.board === undefined && t.source?.startsWith("authoring/books/"))
         return fileComments.reveal(t);
-      // The thread on its review's page (or your sitting's), opened at it.
-      await showQuery(`review=${ReviewsTree.reviewIdOf(item) ?? "sitting"}&thread=${t.id}`);
+      // The thread on the open threads' page, opened at it.
+      await showQuery(`threads&thread=${t.id}`);
     }),
     vscode.commands.registerCommand("chalk.thread.board", async (item: unknown) => {
       const t = thread(item);
       if (t?.board !== undefined) await showQuery(`at=content/${t.board}`, t.source);
     }),
-    vscode.commands.registerCommand("chalk.review.open", async (item: unknown) => {
-      await showQuery(`review=${ReviewsTree.pageOf(item)}`);
+    vscode.commands.registerCommand("chalk.threads.open", async () => {
+      await showQuery("threads");
+    }),
+    // An option of an agent's question, picked (a link on the thread in a planning file): his
+    // answer is that option's label.
+    vscode.commands.registerCommand(ANSWER_COMMAND, async (id: unknown, label: unknown) => {
+      if (typeof id === "string" && typeof label === "string") await writeThread(id, label);
     }),
     vscode.commands.registerCommand("chalk.thread.source", (item: unknown) =>
       openSite(thread(item)?.source),
@@ -837,23 +785,14 @@ function reviewCommands(fileComments: FileComments): vscode.Disposable[] {
       const t = thread(item);
       if (t !== undefined) await writeThread(t.id, "", "withdrawn");
     }),
-    vscode.commands.registerCommand("chalk.review.copy", async (item: unknown) => {
-      const r = ReviewsTree.reviewOf(item);
+    vscode.commands.registerCommand("chalk.threads.closeReady", async (item: unknown) => {
+      const r = ThreadsTree.readyOf(item);
       if (r === undefined) return;
-      const n = r.review.threads.length;
-      await vscode.env.clipboard.writeText(
-        `apply review ${r.review.id} (${n} thread${n === 1 ? "" : "s"})`,
-      );
-      void vscode.window.showInformationMessage("Chalk: copied. Paste it into the agent's chat.");
-    }),
-    vscode.commands.registerCommand("chalk.review.closeReady", async (item: unknown) => {
-      const r = ReviewsTree.readyOf(item);
-      if (r === undefined) return;
-      const ready = r.threads.filter((t) => t.status === "ready");
+      const ready = r.filter((t) => t.status === "ready");
       let closed = 0;
       for (const t of ready) if (await writeThread(t.id, "", "closed")) closed++;
       void vscode.window.showInformationMessage(
-        `Chalk: closed ${closed} of ${ready.length} ready thread${ready.length === 1 ? "" : "s"} in ${r.name}.`,
+        `Chalk: closed ${closed} of ${ready.length} ready thread${ready.length === 1 ? "" : "s"} on your turn.`,
       );
     }),
     vscode.commands.registerCommand("chalk.chapter.closeReady", async (node: Node) => {
@@ -865,9 +804,8 @@ function reviewCommands(fileComments: FileComments): vscode.Disposable[] {
         `Chalk: closed ${closed} of ${ready.length} ready thread${ready.length === 1 ? "" : "s"} in ${node.label}.`,
       );
     }),
-    vscode.commands.registerCommand("chalk.review.activity", async (item: unknown) => {
-      const r = ReviewsTree.reviewOf(item);
-      await showQuery(r === undefined ? "activity" : `activity&review=${r.review.id}`);
+    vscode.commands.registerCommand("chalk.activity", async () => {
+      await showQuery("activity");
     }),
   ];
 }
@@ -875,11 +813,11 @@ function reviewCommands(fileComments: FileComments): vscode.Disposable[] {
 /** The Chalk tree, with a note in it when the dev server isn't answering. */
 function chalkView(): vscode.Disposable {
   const view = vscode.window.createTreeView("chalk.tree", { treeDataProvider: tree });
-  const note = reviews.onDidChangeTreeData(() => {
-    view.message = reviews.message;
+  const note = threads.onDidChangeTreeData(() => {
+    view.message = threads.message;
   });
   // Read once the dev server is up (the preview or the agent starts it).
-  void ensureServer().then(() => reviews.refresh());
+  void ensureServer().then(() => threads.refresh());
   return vscode.Disposable.from(view, note);
 }
 
@@ -896,8 +834,7 @@ export function activate(context: vscode.ExtensionContext): void {
   let timer: NodeJS.Timeout | undefined;
   // Threads on planning files, in the files themselves.
   const fileComments = new FileComments(root, changeComments, () => {
-    void reviews.refresh();
-    void tellReview();
+    void threads.refresh();
   });
   context.subscriptions.push(
     log,
@@ -912,7 +849,7 @@ export function activate(context: vscode.ExtensionContext): void {
     ),
     vscode.commands.registerCommand("chalk.refresh", () => {
       tree.refresh();
-      void reviews.refresh();
+      void threads.refresh();
       void refreshProblems();
     }),
     vscode.commands.registerCommand("chalk.planning.approve", (node?: Node) =>
@@ -928,15 +865,14 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("chalk.fileComment.close", (t: vscode.CommentThread) =>
       fileComments.close(t),
     ),
-    reviews.onDidChangeTreeData(() => void fileComments.show(reviews.allThreads)),
+    threads.onDidChangeTreeData(() => void fileComments.show(threads.allThreads)),
     vscode.commands.registerCommand("chalk.addSource", async () => {
       await addSource(root);
       tree.refresh();
     }),
     problems,
-    vscode.commands.registerCommand("chalk.copyReview", () => copyReview()),
     chalkView(),
-    ...reviewCommands(fileComments),
+    ...threadCommands(fileComments),
     // The preview follows the file you're in, and the line your cursor is on.
     vscode.window.onDidChangeActiveTextEditor((editor) => {
       if (panel === undefined || editor === undefined) return;
@@ -951,15 +887,13 @@ export function activate(context: vscode.ExtensionContext): void {
   const watcher = vscode.workspace.createFileSystemWatcher(
     new vscode.RelativePattern(
       folder,
-      "{build/index.json,library/catalogue.md,authoring/books/**,authoring/props/*/comments.yaml,authoring/reviews/*.yaml}",
+      "{build/index.json,library/catalogue.md,authoring/books/**,authoring/props/*/comments.yaml}",
     ),
   );
-  // A thread or a review changed (a reply in the preview, an agent's answer): the tree's counts
-  // and the panel's "Copy for agent (n)" follow.
+  // A thread changed (a reply in the preview, an agent's answer): the tree's counts follow.
   const refresh = () => {
     tree.refresh();
-    void tellReview();
-    void reviews.refresh();
+    void threads.refresh();
     void refreshProblems();
   };
   void ensureServer().then(() => refreshProblems());

@@ -14,7 +14,7 @@ const thread = (id: string, status: Filed["status"], messages: Filed["messages"]
     target: "sheet",
     text: `finding ${id}`,
     messages,
-    ...(status === "closed" || status === "withdrawn" ? {} : { turn: "agent" }),
+    ...(status === "closed" || status === "withdrawn" ? {} : { turn: "fixer" }),
     home: "b/c",
   }) as Filed;
 
@@ -57,6 +57,29 @@ describe("what comments answers", () => {
     expect(threadsAnswer(settled, settled, {})).toBe(
       "No open threads match.\n\n2 closed and 1 withdrawn here, settled: `closed: true` to read them, or one by `id`.",
     );
+  });
+});
+
+describe("weight and options", () => {
+  it("a finding says its weight; an ask its options and what he picked", () => {
+    const finding = { ...thread("f", "open"), weight: "consider" } as Filed;
+    expect(threadsAnswer([finding], [finding], {})).toContain("• f [open, consider]");
+    const ask = {
+      ...thread("q", "open"),
+      by: "fixer",
+      role: "fixer",
+      text: "Ring or not?",
+      turn: "fixer",
+      options: [
+        { label: "Ring", why: "shows the point" },
+        { label: "No ring", why: "less to see" },
+      ],
+      messages: [{ by: "you", role: "person", at: "2026-11-01T02:00:00Z", text: "No ring" }],
+    } as Filed;
+    const text = threadsAnswer([ask], [ask], {});
+    expect(text).toContain("fixer asks: “Ring or not?”");
+    expect(text).toContain("option 1: Ring: shows the point");
+    expect(text).toContain("picked: No ring");
   });
 });
 

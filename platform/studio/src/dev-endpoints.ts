@@ -9,7 +9,6 @@ import {
   YOU,
   applyChange,
   readComments,
-  sittingOf,
   waitsOn,
 } from "./comments";
 import { type Step, approve, readChapter, readChapters, takeBack } from "./pipeline";
@@ -48,8 +47,8 @@ const withTurn = <T extends Thread>(ts: readonly T[]) =>
   ts.map((t) => ({ ...t, waitsOn: waitsOn(t) ?? null }));
 
 /**
- * /dev-review (comments.ts): GET the threads and reviews (?problems: what a file holds that doesn't
- * fit; ?sitting: the caller's threads not yet handed over); POST one change.
+ * /dev-review (comments.ts): GET every thread (?problems: what a file holds that doesn't fit); POST
+ * one change.
  */
 export async function reviewEndpoint(
   root: string,
@@ -60,8 +59,7 @@ export async function reviewEndpoint(
     const read = readComments(root);
     const url = req.url ?? "";
     if (url.includes("problems")) return send(res, 200, read.problems);
-    if (url.includes("sitting")) return send(res, 200, withTurn(sittingOf(read, whoOf(req))));
-    return send(res, 200, { threads: withTurn(read.threads), reviews: read.reviews });
+    return send(res, 200, { threads: withTurn(read.threads) });
   }
   let change: Change;
   try {
@@ -74,7 +72,6 @@ export async function reviewEndpoint(
   send(res, applied.ok ? 200 : 409, {
     ...applied,
     threads: withTurn(read.threads),
-    reviews: read.reviews,
   });
 }
 

@@ -81,6 +81,9 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Runtime** | One board, live, on the student's screen: the board model's `Board`, its clock moved each frame, the voice, the recorder | `BoardRuntime` (`@chalk/player`) |
 | **Library** | The registry of every prop type | `@chalk/library` |
 | **Studio** | Authoring tools: the content build, the catalogue, the chalk MCP | `@chalk/studio` |
+| **Thread** | Something said about a board, a piece, a prop or a planning file, and everything written on it since; whose turn it is (a role: the person, the fixer, the reviewer); whoever opened it closes it, the person any ([comments.md](comments.md)) | `Thread`, `applyChange` (`platform/studio/src/comments.ts`) |
+| **Weight** | How much a reviewer's finding weighs: must (the fixer fixes it) or consider (the fixer decides, and says what it did) | `Weight` |
+| **Ask** | An agent's question to the person: a thread with two to four options, the agent's pick first, on his turn; his answer is a reply (an option's label, or his words) | `ask` (chalk MCP), `options`, `pickedOption` |
 | **Server** | The one Node process on the box: the API and the built app | `@chalk/server`, `createApp` |
 | **Account** | Someone who signed in with Google, known by Google's id (`sub`), not their email | `accounts`, `Account` (`@chalk/api`) |
 | **Sign-in** | One device's signed-in state: a random token in an HttpOnly cookie; only its hash is stored. Lasts 90 days. (Not the events' `sessionId`, which is one run of the app) | `sign_ins`, `SIGN_IN_COOKIE` |

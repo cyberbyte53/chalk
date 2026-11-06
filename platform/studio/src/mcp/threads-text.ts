@@ -1,5 +1,5 @@
 import { contentAddress, propAddress, shownAddress } from "@chalk/content/address";
-import { type Filed, Status, waitsOn } from "../comments";
+import { type Filed, Role, Status, pickedOption, waitsOn } from "../comments";
 
 /**
  * Threads in words, as `comments` answers: the open ones in full (what an agent has to act on or
@@ -29,14 +29,19 @@ function turnWords(c: Filed): string {
 /** One thread in full: where, what it showed, every message (a plan is its planned message). */
 export function threadLine(c: Filed): string {
   return [
-    `• ${c.id} [${c.status}]${turnWords(c)} ${c.by}${c.by === c.role ? "" : ` (${c.role})`}${c.from ? ` (from ${c.from})` : ""} ${threadAt(c)}`,
+    `• ${c.id} [${c.status}${c.weight ? `, ${c.weight}` : ""}]${turnWords(c)} ${c.by}${c.by === c.role ? "" : ` (${c.role})`}${c.from ? ` (from ${c.from})` : ""} ${threadAt(c)}`,
     `  source: ${c.source ?? "?"}`,
     ...(c.snapshot ? [`  showed: ${oneLine(c.snapshot)}`] : []),
-    `  ${c.by}: “${oneLine(c.text)}”`,
+    `  ${c.by}${c.options ? " asks" : ""}: “${oneLine(c.text)}”`,
+    ...(c.options ?? []).map((o, i) => `  option ${i + 1}: ${o.label}: ${oneLine(o.why)}`),
     ...(c.quote ? [`  quote: ${oneLine(c.quote)}`] : []),
     ...c.messages.map(
       (m) => `  ${m.by}${m.status ? ` → ${m.status}` : ""}: ${oneLine(m.text) || "(no words)"}`,
     ),
+    // An ask he has answered: the option he picked, or none (his own words are in his reply).
+    ...(c.options !== undefined && c.messages.some((m) => m.role === Role.Person)
+      ? [`  picked: ${pickedOption(c)?.label ?? "none of the options: his own answer"}`]
+      : []),
     ...(c.changed?.length ? [`  changed: ${changedWords(c.changed)}`] : []),
   ].join("\n");
 }
@@ -59,7 +64,7 @@ const isSettled = (c: Filed) => c.status === Status.Closed || c.status === Statu
 
 /**
  * The answer: one thread by `id`; else the open threads found, in full, and how many settled ones
- * there are too (all of them in full with `closed`). `head` comes first (a review's standing).
+ * there are too (all of them in full with `closed`). `head` comes first.
  */
 export function threadsAnswer(
   all: readonly Filed[],

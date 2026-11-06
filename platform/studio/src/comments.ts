@@ -14,27 +14,26 @@ import { z } from "zod";
 import { changesFromGit, reachIndex, rollUp } from "./reach";
 
 /**
- * Comments and reviews (platform/docs/comments.md).
+ * Comments (platform/docs/comments.md).
  *
- * A **thread** is one thing said about a board, a piece or a prop, and everything written on it
- * since: its messages. A thread's **home** is what it is about: a chapter (content/<book>/<chapter>)
- * or a prop package (library/props/<package>). Threads are about the work, not part of it, so they
- * are kept under authoring/, one file per home: authoring/books/<book>/<chapter>/comments.yaml, or
- * authoring/props/<package>/comments.yaml. A **review** is one participant's sitting handed to
- * another: authoring/reviews/<id>.yaml lists its threads.
- * Reviews point to threads; threads know nothing of reviews.
+ * A **thread** is one thing said about a board, a piece, a prop or a planning file, and everything
+ * written on it since: its messages. A thread's **home** is what it is about: a chapter
+ * (content/<book>/<chapter>) or a prop package (library/props/<package>). Threads are about the
+ * work, not part of it, so they are kept under authoring/, one file per home:
+ * authoring/books/<book>/<chapter>/comments.yaml, or authoring/props/<package>/comments.yaml.
  *
  * Everyone who writes is a participant with a role (the person, a fixer agent, a reviewer agent).
- * Anyone starts a thread. Each thread says whose turn it is (`turn`): every write sets it, from what
- * the write does (`turnAfter`), or as the writer says (a reviewer's taste question is the person's).
- * Every view reads that one field; nothing works it out again. Only the person closes. Every write goes through `applyChange`, which checks it against two tables: the
- * status moves each role may make, and what else each role may do. The caller never picks its own
- * role: the person writes through the preview, an agent through the chalk MCP with its role fixed
- * when it connects.
+ * Anyone starts a thread. Each thread says whose turn it is (`turn`, a role): every write sets it,
+ * from what the write does (`turnAfter`), or as the writer says. Every view reads that one field;
+ * nothing works it out again. Whoever opened a thread closes it: a ready thread goes back to its
+ * opener's role; the person may close any. A reviewer's finding has a weight (must, consider); an
+ * agent's question to the person (`ask`) has options. Every write goes through `applyChange`, which
+ * checks it against two tables: the status moves each role may make, and what else each role may
+ * do. The caller never picks its own role: the person writes through the preview and the editor,
+ * an agent through the chalk MCP with its role fixed when it connects.
  */
 
 export const COMMENTS_FILE = "comments.yaml";
-export const REVIEWS_DIR = "authoring/reviews";
 
 export const Status = {
   Open: "open",
@@ -58,27 +57,39 @@ export const YOU: Who = { name: "you", role: Role.Person };
 
 // ---- What each role may do ----
 
-/** A status move: to `to`, from any of `from` (all when absent), on threads it started only if `own`. */
-/** A move a role may make: to a status, from some, maybe only on its own threads or on its turn. */
-type Move = { to: Status; from?: readonly Status[]; own?: boolean; onTurn?: Turn };
+/**
+ * How much a reviewer's finding weighs: a must the fixer fixes; a consider the fixer decides, and
+ * says what it did in its reply.
+ */
+export const Weight = { Must: "must", Consider: "consider" } as const;
+export type Weight = (typeof Weight)[keyof typeof Weight];
+
+/** A move a role may make: to a status, from some (all when absent), maybe only on its own threads or on a turn. */
+type Move = { to: Status; from?: readonly Status[]; own?: boolean; onTurn?: Role };
 
 /** The status moves each role may make. A message with no move is open to everyone. */
 export const MOVES: Readonly<Record<Role, readonly Move[]>> = {
+  // The person closes any thread.
   [Role.Person]: [{ to: Status.Open }, { to: Status.Closed }, { to: Status.Withdrawn }],
-  // An agent takes back a thread of its own that became moot (a question settled in chat).
+  // An agent takes back a thread of its own that became moot (a question settled in chat), and
+  // closes a thread of its own once it is back on its turn (its fix made, its question answered).
   [Role.Fixer]: [
     { to: Status.Planned, from: [Status.Open, Status.Planned] },
-    // A fix someone sent back ("not yet": the agent's turn) is planned again, then made ready again.
-    { to: Status.Planned, from: [Status.Ready], onTurn: "agent" },
+    // A fix sent back ("not yet": the fixer's turn) is planned again, then made ready again.
+    { to: Status.Planned, from: [Status.Ready], onTurn: Role.Fixer },
     { to: Status.Ready, from: [Status.Planned] },
     { to: Status.Withdrawn, from: [Status.Open, Status.Planned], own: true },
+    { to: Status.Closed, from: [Status.Open, Status.Ready], own: true, onTurn: Role.Fixer },
   ],
-  [Role.Reviewer]: [{ to: Status.Withdrawn, from: [Status.Open], own: true }],
+  [Role.Reviewer]: [
+    { to: Status.Withdrawn, from: [Status.Open], own: true },
+    { to: Status.Closed, from: [Status.Open, Status.Ready], own: true, onTurn: Role.Reviewer },
+  ],
 };
 
 /**
  * What else each role may do: deleting its own, and re-pointing a thread whose place is gone
- * (merged, renamed), saying where it went. Everyone starts threads and hands over.
+ * (merged, renamed), saying where it went. Everyone starts threads.
  */
 export const ACTS: Readonly<Record<Role, { deletesOwn: boolean; moves: boolean }>> = {
   [Role.Person]: { deletesOwn: true, moves: true },
@@ -104,6 +115,10 @@ export const messageSchema = z
   .strict();
 export type Message = z.infer<typeof messageSchema>;
 
+/** One answer an agent offers the person (`ask`): a short label, and why. */
+export const optionSchema = z.object({ label: z.string().min(1), why: z.string().min(1) }).strict();
+export type Option = z.infer<typeof optionSchema>;
+
 export const threadSchema = z
   .object({
     id: z.string().min(1),
@@ -122,8 +137,15 @@ export const threadSchema = z
     /** What the target said when the thread was started, so it can be found if lines move. */
     snapshot: z.string().optional(),
     commit: z.string().optional(),
-    /** Whose turn it is while it is open, planned or ready; absent once closed or withdrawn. */
-    turn: z.enum(["person", "agent"]).optional(),
+    /** Whose turn it is while it is open, planned or ready (a role); absent once closed or withdrawn. */
+    turn: roleSchema.optional(),
+    /** A reviewer's finding: must (fixed) or consider (the fixer decides). */
+    weight: z.nativeEnum(Weight).optional(),
+    /**
+     * An agent's question to the person (`ask`): two to four answers, the agent's pick first. His
+     * answer is a reply: an option's label, or his own words.
+     */
+    options: z.array(optionSchema).min(2).max(4).optional(),
     /** Where it came from when not the preview: "chat" for feedback given in an agent's chat. */
     from: z.string().optional(),
     /** For a thread on a plan: the words picked. */
@@ -148,24 +170,9 @@ export const threadSchema = z
   })
   .strict();
 export type Thread = z.infer<typeof threadSchema>;
-export type Turn = NonNullable<Thread["turn"]>;
 
 /** A thread and where it is filed: "content/<book>/<chapter>" or "library/props/<package>". */
 export type Filed = Thread & { home: string };
-
-export const reviewSchema = z
-  .object({
-    id: z.string().min(1),
-    by: z.string().min(1),
-    role: roleSchema,
-    at: z.string(),
-    /** Later handovers that added to it while it wasn't done, oldest first. */
-    added: z.array(z.string()).optional(),
-    /** Its threads, in the order they were written: the comments file each is in, and its id. */
-    threads: z.array(z.object({ file: z.string(), id: z.string() }).strict()).min(1),
-  })
-  .strict();
-export type Review = z.infer<typeof reviewSchema>;
 
 // ---- Where a thread lives ----
 
@@ -241,7 +248,7 @@ function homes(root: string): string[] {
 }
 
 /**
- * A home's comments file, relative to the repo (what a review lists): content/<book>/<chapter> is
+ * A home's comments file, relative to the repo: content/<book>/<chapter> is
  * kept in authoring/books/<book>/<chapter>, library/props/<package> in authoring/props/<package>.
  */
 export function fileOf(home: string): string {
@@ -254,7 +261,7 @@ export function fileOf(home: string): string {
 
 // ---- Reading ----
 
-export type Read = { threads: Filed[]; reviews: Review[]; problems: string[] };
+export type Read = { threads: Filed[]; problems: string[] };
 
 const issues = (e: z.ZodError) =>
   e.issues.map((x) => `${x.path.join(".")}: ${x.message}`).join("; ");
@@ -268,10 +275,7 @@ function readYaml(file: string, label: string, problems: string[]): unknown {
   }
 }
 
-/**
- * Every thread (oldest first) and every review (oldest first), and everything a file holds that
- * doesn't fit: never skipped silently.
- */
+/** Every thread (oldest first), and everything a file holds that doesn't fit: never skipped silently. */
 export function readComments(root: string): Read {
   const threads: Filed[] = [];
   const problems: string[] = [];
@@ -291,54 +295,28 @@ export function readComments(root: string): Read {
     }
   }
   threads.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
-
-  const reviews: Review[] = [];
-  const dir = join(root, REVIEWS_DIR);
-  if (existsSync(dir))
-    for (const name of readdirSync(dir).filter((n) => n.endsWith(".yaml"))) {
-      const label = `${REVIEWS_DIR}/${name}`;
-      const raw = readYaml(join(dir, name), label, problems);
-      if (raw === undefined) continue;
-      const checked = reviewSchema.safeParse(raw);
-      if (!checked.success) {
-        problems.push(`${label}: ${issues(checked.error)}`);
-        continue;
-      }
-      if (`${checked.data.id}.yaml` !== name)
-        problems.push(`${label}: its id is ${checked.data.id}`);
-      for (const t of checked.data.threads)
-        if (!threads.some((x) => x.id === t.id && fileOf(x.home) === t.file))
-          problems.push(`${label}: no thread ${t.id} in ${t.file}`);
-      reviews.push(checked.data);
-    }
-  reviews.sort((a, b) => a.at.localeCompare(b.at) || a.id.localeCompare(b.id));
-  return { threads, reviews, problems };
+  return { threads, problems };
 }
-
-/** A review's threads, in its order, as they are now. */
-export function threadsOf(review: Review, threads: readonly Filed[]): Filed[] {
-  return review.threads.flatMap((t) => threads.find((x) => x.id === t.id) ?? []);
-}
-
-/** The most recent review, if any. */
-export const latestReview = (reviews: readonly Review[]): Review | undefined => reviews.at(-1);
 
 /** Whose turn it is on a thread: as it says, and no one's once closed or withdrawn. */
-export function waitsOn(t: Thread): Turn | undefined {
+export function waitsOn(t: Thread): Role | undefined {
   if (t.status === Status.Closed || t.status === Status.Withdrawn) return undefined;
   return t.turn;
 }
 
 /**
- * Whose turn it is after a write, from what the write does. The person's words are the agent's to
- * answer; a plan is the agent's to carry out; ready, or an agent's question or reason, is the
- * person's; a reviewer's words are the fixer's to answer. Closed and withdrawn: no one's.
+ * Whose turn it is after a write by `role` on a thread `opener` started, from what the write does.
+ * Ready goes back to whoever opened the thread, to close it or send it back; a plan is the fixer's
+ * to carry out; the person's words and a reviewer's are the fixer's to answer; a fixer's words (a
+ * question, a reason, what it decided on a consider) are the reviewer's on a reviewer's thread,
+ * else the person's. Closed and withdrawn: no one's.
  */
-export function turnAfter(role: Role, to: Status | undefined): Turn | undefined {
+export function turnAfter(role: Role, to: Status | undefined, opener: Role): Role | undefined {
   if (to === Status.Closed || to === Status.Withdrawn) return undefined;
-  if (to === Status.Ready) return "person";
-  if (to === Status.Planned) return "agent";
-  return role === Role.Fixer ? "person" : "agent";
+  if (to === Status.Ready) return opener;
+  if (to === Status.Planned) return Role.Fixer;
+  if (role !== Role.Fixer) return Role.Fixer;
+  return opener === Role.Reviewer ? Role.Reviewer : Role.Person;
 }
 
 /**
@@ -353,90 +331,31 @@ function withTurn(entry: unknown): unknown {
     messages?: { role?: Role; status?: Status }[];
   };
   if ("turn" in t || t.status === Status.Closed || t.status === Status.Withdrawn) return t;
-  const last = t.messages?.at(-1)?.role ?? t.role ?? Role.Person;
+  const opener = t.role ?? Role.Person;
+  const last = t.messages?.at(-1)?.role ?? opener;
   const turn =
     about !== undefined && t.status === Status.Open
-      ? "agent"
-      : turnAfter(last, t.status === Status.Open ? undefined : t.status);
+      ? Role.Fixer
+      : turnAfter(last, t.status === Status.Open ? undefined : t.status, opener);
   return turn === undefined ? t : { ...t, turn };
 }
 
-/** Threads still waiting on the agent. */
-export const isUnanswered = (t: Thread): boolean => waitsOn(t) === "agent";
+/** Threads still waiting on `role` (the fixer, unless said). */
+export const isUnanswered = (t: Thread, role: Role = Role.Fixer): boolean => waitsOn(t) === role;
 
-/** How a review stands, worked out from its threads: "3 ready, 1 open", and whether it's done. */
-export function standing(threads: readonly Thread[]): { text: string; isDone: boolean } {
-  const counts = new Map<Status, number>();
-  for (const t of threads) counts.set(t.status, (counts.get(t.status) ?? 0) + 1);
-  const order = [Status.Open, Status.Planned, Status.Ready, Status.Closed, Status.Withdrawn];
-  const text = order
-    .filter((s) => counts.has(s))
-    .map((s) => `${counts.get(s)} ${s}`)
-    .join(", ");
-  return { text, isDone: threads.every((t) => waitsOn(t) === undefined) };
+/** The option the person picked on an `ask`: his last reply that is one of its labels. */
+export function pickedOption(t: Thread): Option | undefined {
+  if (t.options === undefined) return undefined;
+  for (const m of [...t.messages].reverse()) {
+    if (m.role !== Role.Person || m.text.trim() === "") continue;
+    return t.options.find((o) => o.label === m.text.trim());
+  }
+  return undefined;
 }
 
 /** The last message that moved the thread to `status`: its plan (planned), its answer (ready). */
 export const lastMove = (t: Thread, status: Status): Message | undefined =>
   [...t.messages].reverse().find((m) => m.status === status);
-
-// ---- The sitting ----
-
-/** When a review was last handed over: its first handover, or the last that added to it. */
-export const handedOverAt = (r: Review): string => r.added?.at(-1) ?? r.at;
-
-/** When `name` last handed over (an ISO time), or "" if never. */
-function lastHandover(reviews: readonly Review[], name: string): string {
-  return reviews
-    .filter((r) => r.by === name)
-    .map(handedOverAt)
-    .reduce((a, b) => (a > b ? a : b), "");
-}
-
-/**
- * `name`'s review still in progress: their latest, while any of its threads isn't closed or
- * withdrawn. A handover adds to it (a reviewer's next pass is the same review); a new review starts
- * once the person has settled every thread in it.
- */
-export function openReviewOf(read: Read, name: string): Review | undefined {
-  const latest = read.reviews
-    .filter((r) => r.by === name)
-    .sort((a, b) => a.at.localeCompare(b.at))
-    .at(-1);
-  if (latest === undefined) return undefined;
-  const mine = threadsOf(latest, read.threads);
-  return mine.some((t) => waitsOn(t) !== undefined) ? latest : undefined;
-}
-
-/**
- * `who`'s sitting: every thread they started or wrote on since their last handover, in the order
- * they did it. Closing or withdrawing alone doesn't count: there's nothing in it to hand over.
- */
-export function sittingOf(read: Read, who: Who): Filed[] {
-  const since = lastHandover(read.reviews, who.name);
-  const when = (t: Filed): string | undefined => {
-    const times = [
-      ...(t.by === who.name && t.createdAt > since ? [t.createdAt] : []),
-      ...t.messages
-        .filter(
-          (m) =>
-            m.by === who.name &&
-            m.at > since &&
-            m.status !== Status.Closed &&
-            m.status !== Status.Withdrawn,
-        )
-        .map((m) => m.at),
-    ];
-    return times.sort()[0];
-  };
-  return read.threads
-    .flatMap((t) => {
-      const at = when(t);
-      return at === undefined ? [] : [{ t, at }];
-    })
-    .sort((a, b) => a.at.localeCompare(b.at))
-    .map(({ t }) => t);
-}
 
 // ---- Writing (the one writer) ----
 
@@ -454,30 +373,15 @@ function writeHome(root: string, home: string, all: readonly Filed[]): void {
   renameSync(`${file}.tmp`, file);
 }
 
-function writeReview(root: string, review: Review): void {
-  const file = join(root, REVIEWS_DIR, `${review.id}.yaml`);
-  mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(`${file}.tmp`, `${HEADER}${stringify(review, { lineWidth: 100 })}`);
-  renameSync(`${file}.tmp`, file);
-}
-
 export const newId = (): string =>
   `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`;
 
-/** The time of a write: always later than the last, so a sitting's edge is never ambiguous. */
+/** The time of a write: always later than the last, so threads and messages keep their order. */
 let lastNow = 0;
 const now = (): string => {
   lastNow = Math.max(Date.now(), lastNow + 1);
   return new Date(lastNow).toISOString();
 };
-
-/** A review's id: its minute (20261026-1734), with -2, -3… if that minute already has one. */
-function reviewId(root: string, at: string): string {
-  const base = at.slice(0, 16).replace(/[-:]/g, "").replace("T", "-");
-  let id = base;
-  for (let n = 2; existsSync(join(root, REVIEWS_DIR, `${id}.yaml`)); n++) id = `${base}-${n}`;
-  return id;
-}
 
 function git(root: string, ...args: string[]): string {
   try {
@@ -562,11 +466,20 @@ function changedFrom(root: string, commit: string, since: string): string[] {
 /** What a new thread says: where it is, its words. The writer adds the rest. */
 export type NewThread = Pick<
   Thread,
-  "board" | "target" | "prop" | "source" | "snapshot" | "commit" | "from" | "quote"
+  | "board"
+  | "target"
+  | "prop"
+  | "source"
+  | "snapshot"
+  | "commit"
+  | "from"
+  | "quote"
+  | "weight"
+  | "options"
 > & {
   text: string;
-  /** Whose turn it starts as, when not what starting it says (a reviewer's taste question: "person"). */
-  turn?: Turn;
+  /** Whose turn it starts as, when not what starting it says. An `ask` (options) is always the person's. */
+  turn?: Role;
 };
 
 /** One change. Every write goes through here. */
@@ -574,8 +487,8 @@ export type Change =
   /** Start a thread. */
   | { op: "start"; thread: NewThread }
   /** Write on a thread, maybe moving its status. */
-  | { op: "write"; id: string; text: string; status?: Status; turn?: Turn }
-  /** Delete a thread no one else has touched and that was never handed over. */
+  | { op: "write"; id: string; text: string; status?: Status; turn?: Role }
+  /** Delete a thread no one else has touched. */
   | { op: "delete"; id: string }
   /** Re-point a thread whose place is gone (a piece renamed, a board merged), saying where it went. */
   | {
@@ -583,20 +496,16 @@ export type Change =
       id: string;
       to: Pick<Thread, "board" | "target" | "prop" | "source" | "quote">;
       text: string;
-    }
-  /** Hand over the sitting as a review. */
-  | { op: "handover" };
+    };
 
-export type Applied =
-  | { ok: true; thread?: Filed; review?: Review; count?: number }
-  | { ok: false; error: string };
+export type Applied = { ok: true; thread?: Filed } | { ok: false; error: string };
 
 /** Applies one change as `who`, or says why it isn't allowed. */
 export function applyChange(root: string, change: Change, who: Who): Applied {
   const read = readComments(root);
   if (read.problems.length > 0)
     return { ok: false, error: `fix the comments files first:\n${read.problems.join("\n")}` };
-  const { threads, reviews } = read;
+  const { threads } = read;
   const acts = ACTS[who.role];
   const save = (t: Filed): Applied => {
     const all = threads.some((x) => x.id === t.id)
@@ -613,13 +522,24 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
       return { ok: false, error: "only a fixer files what the person said in its chat" };
     const author = isFromChat ? YOU : who;
     const { turn, ...placed } = change.thread;
+    const isAsk = placed.options !== undefined;
+    // A reviewer's finding says how much it weighs; a question to the person (an ask) doesn't.
+    if (author.role === Role.Reviewer && !isAsk && placed.weight === undefined)
+      return {
+        ok: false,
+        error:
+          "a reviewer's finding has a weight: must (the fixer fixes it) or consider (the fixer decides, and says what it did)",
+      };
+    if (isAsk && new Set(placed.options?.map((o) => o.label)).size !== placed.options?.length)
+      return { ok: false, error: "each option has its own label" };
     const draft = {
       ...placed,
       id: newId(),
       by: author.name,
       role: author.role,
       status: Status.Open,
-      turn: turn ?? turnAfter(author.role, undefined),
+      // An ask is always the person's to answer.
+      turn: isAsk ? Role.Person : (turn ?? turnAfter(author.role, undefined, author.role)),
       createdAt: now(),
       commit: change.thread.commit ?? (git(root, "rev-parse", "HEAD") || undefined),
       messages: [],
@@ -630,39 +550,6 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
     if (home === undefined)
       return { ok: false, error: "can't tell which book, chapter or prop this is about" };
     return save({ ...checked.data, home });
-  }
-
-  if (change.op === "handover") {
-    const sitting = sittingOf(read, who);
-    if (sitting.length === 0) return { ok: true, count: 0 };
-    const at = now();
-    // One review in progress per person: a handover while it isn't done adds to it (a reply on
-    // one of its threads is already in it), and keeps its id.
-    const open = openReviewOf(read, who.name);
-    if (open !== undefined) {
-      const known = new Set(open.threads.map((x) => x.id));
-      const review: Review = {
-        ...open,
-        added: [...(open.added ?? []), at],
-        threads: [
-          ...open.threads,
-          ...sitting
-            .filter((t) => !known.has(t.id))
-            .map((t) => ({ file: fileOf(t.home), id: t.id })),
-        ],
-      };
-      writeReview(root, review);
-      return { ok: true, review, count: review.threads.length };
-    }
-    const review: Review = {
-      id: reviewId(root, at),
-      by: who.name,
-      role: who.role,
-      at,
-      threads: sitting.map((t) => ({ file: fileOf(t.home), id: t.id })),
-    };
-    writeReview(root, review);
-    return { ok: true, review, count: sitting.length };
   }
 
   const found = threads.find((x) => x.id === change.id);
@@ -702,8 +589,6 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
 
   if (change.op === "delete") {
     if (!acts.deletesOwn || !isOwn) return refuse(`a ${who.role} can't delete this thread`);
-    if (reviews.some((r) => r.threads.some((x) => x.id === t.id)))
-      return refuse("it was handed over: withdraw it instead, so the review still finds it");
     if (t.messages.some((m) => m.by !== who.name))
       return refuse("someone else wrote on it: withdraw it instead, so the thread is kept");
     writeHome(
@@ -773,7 +658,7 @@ export function applyChange(root: string, change: Change, who: Who): Applied {
   const turn =
     to === Status.Closed || to === Status.Withdrawn
       ? undefined
-      : (change.turn ?? turnAfter(who.role, to));
+      : (change.turn ?? turnAfter(who.role, to, t.role));
   // Settled: no one's turn, and nothing written for it.
   const { turn: _, ...rest } = t;
   return save(turn === undefined ? rest : { ...rest, turn });

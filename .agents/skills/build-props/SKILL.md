@@ -19,7 +19,7 @@ Props come first: lessons are written against their actions and fields. A prop's
 
 1. **Find what exists.** `show` `library/props/` (a line per prop: address, role, what it is for, how many boards use it), then the address of each that might fit: everything about it, every board that uses it, and what no board uses or only one does.
 2. **Every need in `flow.md`, grouped, gets one verdict** in a table with `Need`, `Boards` (board ids, comma-separated), `Verdict` and `Why` columns: **reuse** (as it is), **configure** (fields it has), **extend** (a new field or action), **new**, or **no prop** (words or a picture do it better). "One prop or three" is decided here: a prop isn't stretched to a need it wasn't made for because it is close.
-3. The pipeline step holds when every board's need has a verdict. Questions go on `props.md` as threads (`quote`). Commit, append `runs/<YYYY-MM-DD-HHMM>-props.md`, and stop for the person's approval in the editor (the Chalk tree).
+3. The pipeline step holds when every board's need has a verdict. Questions go on `props.md` with `ask` (`quote`, options with your pick first). Commit, append `runs/<YYYY-MM-DD-HHMM>-props.md`, and stop for the person's approval in the editor (the Chalk tree).
 
 ## 2. The design: each extend or new, its definition first
 

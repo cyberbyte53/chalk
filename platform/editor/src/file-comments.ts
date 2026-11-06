@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import * as vscode from "vscode";
-import type { Thread } from "./reviews";
+import { type Thread, turnWords } from "./threads";
 
 /**
  * Threads on a chapter's planning files, shown in the files themselves (VS Code's comments), on the
@@ -13,11 +13,42 @@ type Send = (change: Record<string, unknown>) => Promise<{ ok: boolean; error?: 
 
 const PLANNING = /^authoring\/books\/[^/]+\/[^/]+\/.+/;
 
+/** The command an option's link runs: his answer, that option's label (extension.ts). */
+export const ANSWER_COMMAND = "chalk.thread.answer";
+
 /** Whose turn or where it stands, in words. */
 function standing(t: Thread): string {
-  if (t.status === "open") return t.waitsOn === "person" ? "Your turn" : "With the agent";
-  if (t.status === "planned") return "Planned by the agent";
-  return "Ready: close it, or reply";
+  const weight = t.weight === undefined ? "" : ` · ${t.weight}`;
+  if (t.status === "open")
+    return t.waitsOn === "person"
+      ? t.options !== undefined
+        ? "Your turn: pick an option, or reply in your words"
+        : "Your turn"
+      : `${turnWords(t)}${weight}`;
+  if (t.status === "planned") return `Planned by the agent${weight}`;
+  return t.waitsOn === "person" ? "Ready: close it, or reply" : `Ready · ${turnWords(t)}${weight}`;
+}
+
+/**
+ * An agent's question: its words, then each option as a link that answers with its label (the
+ * agent's pick first). The links are live only while it waits on the person; the reply box below
+ * takes his own words.
+ */
+function askBody(t: Thread): vscode.MarkdownString {
+  const isOpen = t.waitsOn === "person" && t.status === "open";
+  const md = new vscode.MarkdownString(undefined, true);
+  md.isTrusted = { enabledCommands: [ANSWER_COMMAND] };
+  md.appendMarkdown(`${t.text}\n\n`);
+  for (const [i, o] of (t.options ?? []).entries()) {
+    const args = encodeURIComponent(JSON.stringify([t.id, o.label]));
+    const label = `${o.label}${i === 0 ? " ★" : ""}`;
+    md.appendMarkdown(
+      isOpen
+        ? `- [**$(check) ${label}**](command:${ANSWER_COMMAND}?${args}): ${o.why}\n`
+        : `- **${label}**: ${o.why}\n`,
+    );
+  }
+  return md;
 }
 
 /** The lines a thread is about: where its quote is now, else the lines it was started on. */
@@ -32,10 +63,14 @@ function rangeOf(doc: vscode.TextDocument, t: Thread): vscode.Range {
   return new vscode.Range(from, 0, to, doc.lineAt(to).text.length);
 }
 
-function commentOf(by: string, text: string, label?: string): vscode.Comment {
+function commentOf(
+  by: string,
+  text: string | vscode.MarkdownString,
+  label?: string,
+): vscode.Comment {
   return {
     author: { name: by },
-    body: new vscode.MarkdownString(text === "" ? "—" : text),
+    body: typeof text === "string" ? new vscode.MarkdownString(text === "" ? "—" : text) : text,
     mode: vscode.CommentMode.Preview,
     ...(label === undefined ? {} : { label }),
   };
@@ -99,7 +134,7 @@ export class FileComments implements vscode.Disposable {
         continue; // the file is gone: the threads check lists it
       }
       const comments = [
-        commentOf(t.by, t.text),
+        commentOf(t.by, t.options === undefined ? t.text : askBody(t), t.weight),
         ...t.messages.map((m) =>
           commentOf(
             m.by,

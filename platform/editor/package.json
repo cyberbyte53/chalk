@@ -2,7 +2,7 @@
   "name": "chalk-editor",
   "displayName": "Chalk",
   "description": "See Chalk content as boards beside its code: the book, chapter and lesson screens, every board as a phone draws it, pick a piece to ask the agent or leave a comment.",
-  "version": "0.6.16",
+  "version": "0.6.17",
   "publisher": "chalk",
   "private": true,
   "license": "UNLICENSED",
@@ -30,13 +30,8 @@
         "icon": "$(refresh)"
       },
       {
-        "command": "chalk.copyReview",
-        "title": "Chalk: Copy review for the agent",
-        "icon": "$(copy)"
-      },
-      {
         "command": "chalk.thread.open",
-        "title": "Open on its review"
+        "title": "Open on the open threads' page"
       },
       {
         "command": "chalk.thread.source",
@@ -59,18 +54,17 @@
         "icon": "$(circle-slash)"
       },
       {
-        "command": "chalk.review.copy",
-        "title": "Copy for agent",
-        "icon": "$(copy)"
+        "command": "chalk.thread.answer",
+        "title": "Answer with this option"
       },
       {
-        "command": "chalk.review.closeReady",
+        "command": "chalk.threads.closeReady",
         "title": "Close all ready",
         "icon": "$(check-all)"
       },
       {
-        "command": "chalk.review.activity",
-        "title": "Show its activity",
+        "command": "chalk.activity",
+        "title": "Chalk: Show activity",
         "icon": "$(history)"
       },
       {
@@ -79,8 +73,8 @@
         "icon": "$(link-external)"
       },
       {
-        "command": "chalk.review.open",
-        "title": "Open review",
+        "command": "chalk.threads.open",
+        "title": "Open threads",
         "icon": "$(preview)"
       },
       {
@@ -136,7 +130,7 @@
       "editor/title": [
         {
           "command": "chalk.preview",
-          "when": "resourcePath =~ /[\\\\/](content|reviews)([\\\\/]|$)/",
+          "when": "resourcePath =~ /[\\\\/]content([\\\\/]|$)/",
           "group": "navigation"
         },
         {
@@ -148,7 +142,7 @@
       "explorer/context": [
         {
           "command": "chalk.preview",
-          "when": "resourcePath =~ /[\\\\/](content|reviews)([\\\\/]|$)/",
+          "when": "resourcePath =~ /[\\\\/]content([\\\\/]|$)/",
           "group": "navigation"
         }
       ],
@@ -159,7 +153,7 @@
           "group": "navigation"
         },
         {
-          "command": "chalk.review.activity",
+          "command": "chalk.activity",
           "when": "view == chalk.tree",
           "group": "navigation"
         },
@@ -206,34 +200,14 @@
           "group": "2_open@2"
         },
         {
-          "command": "chalk.review.copy",
-          "when": "view == chalk.tree && viewItem =~ /^review/",
+          "command": "chalk.threads.closeReady",
+          "when": "view == chalk.tree && viewItem == yours-ready",
           "group": "inline@1"
         },
         {
-          "command": "chalk.review.closeReady",
-          "when": "view == chalk.tree && viewItem =~ /^(review|yours)-ready$/",
-          "group": "inline@2"
-        },
-        {
-          "command": "chalk.review.activity",
-          "when": "view == chalk.tree && viewItem =~ /^review/",
-          "group": "1_review@1"
-        },
-        {
-          "command": "chalk.review.copy",
-          "when": "view == chalk.tree && viewItem =~ /^review/",
-          "group": "1_review@2"
-        },
-        {
-          "command": "chalk.review.closeReady",
-          "when": "view == chalk.tree && viewItem =~ /^(review|yours)-ready$/",
-          "group": "1_review@3"
-        },
-        {
-          "command": "chalk.copyReview",
-          "when": "view == chalk.tree && viewItem == sitting",
-          "group": "inline@1"
+          "command": "chalk.threads.closeReady",
+          "when": "view == chalk.tree && viewItem == yours-ready",
+          "group": "1_threads@1"
         },
         {
           "command": "chalk.thread.board",
@@ -283,11 +257,7 @@
           "when": "false"
         },
         {
-          "command": "chalk.review.copy",
-          "when": "false"
-        },
-        {
-          "command": "chalk.review.closeReady",
+          "command": "chalk.threads.closeReady",
           "when": "false"
         },
         {
@@ -295,7 +265,7 @@
           "when": "false"
         },
         {
-          "command": "chalk.review.open",
+          "command": "chalk.threads.open",
           "when": "false"
         },
         {
@@ -304,6 +274,10 @@
         },
         {
           "command": "chalk.fileComment.close",
+          "when": "false"
+        },
+        {
+          "command": "chalk.thread.answer",
           "when": "false"
         }
       ],

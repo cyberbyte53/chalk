@@ -3,22 +3,18 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { parse } from "yaml";
 import {
   type Change,
   MOVES,
   type NewThread,
   Role,
   Status,
+  Weight,
   type Who,
   YOU,
   applyChange,
-  fileOf,
-  latestReview,
+  pickedOption,
   readComments,
-  sittingOf,
-  standing,
-  threadsOf,
   waitsOn,
 } from "./comments";
 import { goneThreads } from "./thread-places";
@@ -45,9 +41,21 @@ function apply(root: string, change: Change, who: Who) {
 }
 
 function start(root: string, extra: Partial<NewThread> = {}, who: Who = YOU) {
+  // A reviewer's finding says how much it weighs.
+  const weight =
+    who.role === Role.Reviewer && extra.options === undefined ? Weight.Must : undefined;
   const done = apply(
     root,
-    { op: "start", thread: { board: BOARD, target: "machine/put", text: "too small", ...extra } },
+    {
+      op: "start",
+      thread: {
+        board: BOARD,
+        target: "machine/put",
+        text: "too small",
+        ...(weight ? { weight } : {}),
+        ...extra,
+      },
+    },
     who,
   );
   if (done.thread === undefined) throw new Error("no thread");
@@ -97,7 +105,7 @@ describe("threads", () => {
     expect(read.threads.map((c) => c.id)).toEqual(expect.arrayContaining([onLesson.id, onBook.id]));
   });
 
-  it("moves only as each role may: the fixer plans and readies, only the person closes", () => {
+  it("moves only as each role may: the fixer plans and readies, the person closes what he opened", () => {
     const root = repo();
     const t = start(root);
     expect(write(root, t.id, FIXER, "done", Status.Ready)).toMatchObject({ ok: false });
@@ -143,48 +151,48 @@ describe("threads", () => {
     // The person's comment and a reviewer's finding wait on the agent.
     const comment = start(root);
     const finding = start(root, {}, REVIEWER);
-    expect(waitsOn(comment)).toBe("agent");
-    expect(waitsOn(finding)).toBe("agent");
+    expect(waitsOn(comment)).toBe(Role.Fixer);
+    expect(waitsOn(finding)).toBe(Role.Fixer);
     // The fixer's question waits on the person; their answer gives it back to the agent.
     const question = start(root, { text: "keep the summary?" }, FIXER);
     expect(question).toMatchObject({ by: "fixer", role: Role.Fixer });
-    expect(waitsOn(question)).toBe("person");
+    expect(waitsOn(question)).toBe(Role.Person);
     const answered = write(root, question.id, YOU, "yes, at each lesson's end");
     if (!answered.ok || answered.thread === undefined) throw new Error("not written");
-    expect(waitsOn(answered.thread)).toBe("agent");
+    expect(waitsOn(answered.thread)).toBe(Role.Fixer);
     // The fixer's reason, without a move, is for the person.
     const reason = write(root, comment.id, FIXER, "it is already 44px");
     if (!reason.ok || reason.thread === undefined) throw new Error("not written");
-    expect(waitsOn(reason.thread)).toBe("person");
-    // Planned is the agent's, ready the person's, closed no one's.
+    expect(waitsOn(reason.thread)).toBe(Role.Person);
+    // Planned is the fixer's, ready its opener's (here the fixer's own question), closed no one's.
     write(root, question.id, FIXER, "will add it", Status.Planned);
     expect(waitsOn(readComments(root).threads.find((t) => t.id === question.id) as never)).toBe(
-      "agent",
+      Role.Fixer,
     );
     write(root, question.id, FIXER, "added", Status.Ready);
     expect(waitsOn(readComments(root).threads.find((t) => t.id === question.id) as never)).toBe(
-      "person",
+      Role.Fixer,
     );
-    write(root, question.id, YOU, "", Status.Closed);
+    write(root, question.id, FIXER, "", Status.Closed);
     expect(waitsOn(readComments(root).threads.find((t) => t.id === question.id) as never)).toBe(
       undefined,
     );
     // The turn is kept on the thread: every view reads that one field.
     const kept = readComments(root).threads.find((t) => t.id === comment.id);
-    expect(kept?.turn).toBe("person");
+    expect(kept?.turn).toBe(Role.Person);
   });
 
   it("lets the writer say whose turn it is: a reviewer's taste call is the person's", () => {
     const root = repo();
-    const taste = start(root, { text: "taste: the ring or no ring?", turn: "person" }, REVIEWER);
-    expect(waitsOn(taste)).toBe("person");
+    const taste = start(root, { text: "taste: the ring or no ring?", turn: Role.Person }, REVIEWER);
+    expect(waitsOn(taste)).toBe(Role.Person);
     // A write can hand it on as well, whatever the write would say by itself.
     const handed = applyChange(
       root,
-      { op: "write", id: taste.id, text: "this one is mechanical after all", turn: "agent" },
+      { op: "write", id: taste.id, text: "this one is mechanical after all", turn: Role.Fixer },
       REVIEWER,
     );
-    expect(handed).toMatchObject({ thread: { turn: "agent" } });
+    expect(handed).toMatchObject({ thread: { turn: Role.Fixer } });
   });
 
   it("works out once the turn of a thread written before turns were kept, and drops about", () => {
@@ -197,7 +205,7 @@ describe("threads", () => {
     writeFileSync(file, old);
     const read = readComments(root);
     expect(read.problems).toEqual([]);
-    expect(read.threads.find((x) => x.id === t.id)).toMatchObject({ turn: "agent" });
+    expect(read.threads.find((x) => x.id === t.id)).toMatchObject({ turn: Role.Fixer });
     expect(read.threads.find((x) => x.id === t.id)).not.toHaveProperty("about");
   });
 
@@ -211,7 +219,7 @@ describe("threads", () => {
     expect(
       applyChange(
         root,
-        { op: "start", thread: { board: BOARD, text: "x", from: "chat" } },
+        { op: "start", thread: { board: BOARD, text: "x", from: "chat", weight: Weight.Must } },
         REVIEWER,
       ),
     ).toMatchObject({ ok: false });
@@ -228,21 +236,20 @@ describe("threads", () => {
     });
   });
 
-  it("deletes only an untouched thread never handed over; otherwise it is withdrawn", () => {
+  it("deletes only an untouched thread of the person's; otherwise it is withdrawn", () => {
     const root = repo();
     const untouched = start(root);
+    expect(applyChange(root, { op: "delete", id: untouched.id }, FIXER)).toMatchObject({
+      ok: false,
+    });
     expect(applyChange(root, { op: "delete", id: untouched.id }, YOU)).toEqual({ ok: true });
     const touched = start(root);
     write(root, touched.id, FIXER, "x", Status.Planned);
-    expect(applyChange(root, { op: "delete", id: touched.id }, YOU)).toMatchObject({ ok: false });
-    const handed = start(root);
-    apply(root, { op: "handover" }, YOU);
-    expect(applyChange(root, { op: "delete", id: handed.id }, YOU)).toMatchObject({
+    expect(applyChange(root, { op: "delete", id: touched.id }, YOU)).toMatchObject({
       ok: false,
-      error: expect.stringContaining("handed over"),
+      error: expect.stringContaining("withdraw it instead"),
     });
-    expect(applyChange(root, { op: "delete", id: handed.id }, FIXER)).toMatchObject({ ok: false });
-    expect(write(root, handed.id, YOU, "", Status.Withdrawn)).toMatchObject({
+    expect(write(root, touched.id, YOU, "", Status.Withdrawn)).toMatchObject({
       thread: { status: Status.Withdrawn },
     });
   });
@@ -273,7 +280,7 @@ describe("threads", () => {
       thread: { status: Status.Planned },
     });
     expect(write(root, t.id, FIXER, "wrapped", Status.Ready)).toMatchObject({
-      thread: { status: Status.Ready, turn: "person" },
+      thread: { status: Status.Ready, turn: Role.Person },
     });
   });
 
@@ -359,79 +366,109 @@ describe("threads", () => {
     expect(() => start(root)).toThrow(/fix the comments files first/);
   });
 
-  it("has a status move for every status; a reviewer only withdraws its own", () => {
-    expect(MOVES[Role.Reviewer].map((m) => [m.to, m.own])).toEqual([[Status.Withdrawn, true]]);
+  it("has a status move for every status; a reviewer only withdraws and closes its own", () => {
+    expect(MOVES[Role.Reviewer].map((m) => [m.to, m.own])).toEqual([
+      [Status.Withdrawn, true],
+      [Status.Closed, true],
+    ]);
     const reachable = new Set(Object.values(MOVES).flatMap((moves) => moves.map((m) => m.to)));
     expect([...reachable].sort()).toEqual(Object.values(Status).sort());
   });
 });
 
-describe("reviews", () => {
-  it("hands a sitting over as authoring/reviews/<id>.yaml, listing its threads in order", () => {
+describe("weight", () => {
+  it("is required on a reviewer's finding, and kept on it", () => {
     const root = repo();
-    const a = start(root);
-    const b = start(root, { prop: "valueMachine" });
-    const done = apply(root, { op: "handover" }, YOU);
-    expect(done).toMatchObject({ count: 2 });
-    const id = done.review?.id ?? "";
-    expect(id).toMatch(/^\d{8}-\d{4}$/);
-    const file = parse(readFileSync(join(root, "authoring", "reviews", `${id}.yaml`), "utf8"));
-    expect(file).toMatchObject({
-      id,
-      by: "you",
-      role: Role.Person,
-      threads: [
-        { file: "authoring/books/class10-maths/polynomials/comments.yaml", id: a.id },
-        { file: "authoring/props/polynomials/comments.yaml", id: b.id },
-      ],
-    });
-    // The threads themselves know nothing of it.
-    expect(readFileSync(join(root, fileOf(a.home)), "utf8")).not.toContain(id);
-    const read = readComments(root);
-    expect(read.problems).toEqual([]);
-    expect(latestReview(read.reviews)?.id).toBe(id);
     expect(
-      threadsOf(
-        read.reviews[0] ?? { id, by: "you", role: Role.Person, at: "", threads: [] },
-        read.threads,
-      ).map((t) => t.id),
-    ).toEqual([a.id, b.id]);
+      applyChange(root, { op: "start", thread: { board: BOARD, text: "clipped" } }, REVIEWER),
+    ).toMatchObject({ ok: false, error: expect.stringContaining("weight: must") });
+    const consider = start(root, { weight: Weight.Consider, text: "a softer colour?" }, REVIEWER);
+    expect(consider.weight).toBe(Weight.Consider);
+    expect(readComments(root).threads.find((t) => t.id === consider.id)?.weight).toBe(
+      Weight.Consider,
+    );
+    // Not asked of the person or a fixer.
+    expect(start(root).weight).toBeUndefined();
+    expect(start(root, {}, FIXER).weight).toBeUndefined();
   });
 
-  it("keeps one review while it isn't done: a reply and a new thread add to it", () => {
+  it("a consider the fixer leaves is its word to the reviewer, who closes it", () => {
     const root = repo();
-    const old = start(root);
-    const first = apply(root, { op: "handover" }, YOU);
-    expect(applyChange(root, { op: "handover" }, YOU)).toEqual({ ok: true, count: 0 });
-    write(root, old.id, FIXER, "x", Status.Planned);
-    write(root, old.id, FIXER, "done", Status.Ready);
-    write(root, old.id, YOU, "still small");
-    write(root, old.id, YOU, "and too low");
-    const fresh = start(root);
-    const second = apply(root, { op: "handover" }, YOU);
-    expect(second.review?.id).toBe(first.review?.id);
-    expect(second.review?.threads.map((t) => t.id)).toEqual([old.id, fresh.id]);
-    write(root, fresh.id, YOU, "one more thing");
-    expect(apply(root, { op: "handover" }, YOU).review?.added).toHaveLength(2);
-    expect(readComments(root).reviews).toHaveLength(1);
+    const t = start(root, { weight: Weight.Consider }, REVIEWER);
+    const left = write(root, t.id, FIXER, "left it: the book draws it this way");
+    expect(left).toMatchObject({ thread: { status: Status.Open, turn: Role.Reviewer } });
+    expect(write(root, t.id, REVIEWER, "", Status.Closed)).toMatchObject({
+      thread: { status: Status.Closed },
+    });
+  });
+});
+
+describe("whoever opened a thread closes it", () => {
+  /** A thread `opener` started, planned and made ready by the fixer. */
+  const readied = (root: string, opener: Who) => {
+    const t = start(root, {}, opener);
+    write(root, t.id, FIXER, "bigger", Status.Planned);
+    const done = write(root, t.id, FIXER, "made it 44px", Status.Ready);
+    if (!done.ok || done.thread === undefined) throw new Error(done.ok ? "no thread" : done.error);
+    return done.thread;
+  };
+
+  it("sends a ready thread back to its opener's role", () => {
+    const root = repo();
+    expect(readied(root, YOU).turn).toBe(Role.Person);
+    expect(readied(root, REVIEWER).turn).toBe(Role.Reviewer);
+    expect(readied(root, FIXER).turn).toBe(Role.Fixer);
+    // Filed from chat, it is the person's.
+    const chat = start(root, { from: "chat" }, FIXER);
+    write(root, chat.id, FIXER, "x", Status.Planned);
+    expect(write(root, chat.id, FIXER, "done", Status.Ready)).toMatchObject({
+      thread: { turn: Role.Person },
+    });
   });
 
-  it("adds a handover to the review in progress, and starts a new one once every thread is settled", () => {
+  it("the reviewer closes its own finding once ready, or sends it back to the fixer", () => {
     const root = repo();
-    const old = start(root);
-    const first = apply(root, { op: "handover" }, YOU);
-    write(root, old.id, FIXER, "x", Status.Planned);
-    write(root, old.id, FIXER, "done", Status.Ready);
-    // Ready isn't settled: the next pass is the same review.
-    const more = start(root);
-    expect(apply(root, { op: "handover" }, YOU).review?.id).toBe(first.review?.id);
-    write(root, old.id, YOU, "", Status.Closed);
-    write(root, more.id, YOU, "", Status.Withdrawn);
-    const fresh = start(root);
-    const second = apply(root, { op: "handover" }, YOU);
-    expect(second.review?.id).not.toBe(first.review?.id);
-    expect(second.review?.threads.map((t) => t.id)).toEqual([fresh.id]);
-    expect(readComments(root).reviews).toHaveLength(2);
+    const t = readied(root, REVIEWER);
+    expect(write(root, t.id, FIXER, "", Status.Closed)).toMatchObject({ ok: false });
+    // Not yet: the fixer's turn again, and the reviewer can't close it while it is.
+    expect(write(root, t.id, REVIEWER, "still clipped at 360")).toMatchObject({
+      thread: { status: Status.Ready, turn: Role.Fixer },
+    });
+    expect(write(root, t.id, REVIEWER, "", Status.Closed)).toMatchObject({ ok: false });
+    write(root, t.id, FIXER, "wrap it", Status.Planned);
+    write(root, t.id, FIXER, "wrapped", Status.Ready);
+    expect(write(root, t.id, REVIEWER, "holds", Status.Closed)).toMatchObject({
+      thread: { status: Status.Closed },
+    });
+  });
+
+  it("the fixer closes its own thread on its turn; nobody else's but the person's", () => {
+    const root = repo();
+    const question = start(root, { text: "keep the summary?" }, FIXER);
+    // Not before the person has answered it.
+    expect(write(root, question.id, FIXER, "", Status.Closed)).toMatchObject({ ok: false });
+    write(root, question.id, YOU, "no");
+    expect(write(root, question.id, REVIEWER, "", Status.Closed)).toMatchObject({ ok: false });
+    expect(write(root, question.id, FIXER, "dropped it", Status.Closed)).toMatchObject({
+      thread: { status: Status.Closed },
+    });
+    // A ready thread of the person's: only he closes it.
+    const comment = readied(root, YOU);
+    expect(write(root, comment.id, FIXER, "", Status.Closed)).toMatchObject({ ok: false });
+    expect(write(root, comment.id, REVIEWER, "", Status.Closed)).toMatchObject({ ok: false });
+    expect(write(root, comment.id, YOU, "", Status.Closed)).toMatchObject({ ok: true });
+  });
+
+  it("the person closes any thread, whoever opened it and whoever's turn it is", () => {
+    const root = repo();
+    for (const opener of [FIXER, REVIEWER]) {
+      const t = start(root, {}, opener);
+      expect(write(root, t.id, YOU, "", Status.Closed)).toMatchObject({
+        thread: { status: Status.Closed },
+      });
+    }
+    const ready = readied(root, REVIEWER);
+    expect(write(root, ready.id, YOU, "", Status.Closed)).toMatchObject({ ok: true });
   });
 
   it("says how to add a message to a thread already at that status", () => {
@@ -445,55 +482,84 @@ describe("reviews", () => {
       error: expect.stringContaining("leave the status out"),
     });
   });
+});
 
-  it("leaves out threads only closed or withdrawn in the sitting", () => {
+describe("ask", () => {
+  const OPTIONS = [
+    { label: "Keep the ring", why: "it shows where the point is" },
+    { label: "Drop it", why: "less on the screen" },
+  ];
+
+  it("starts a thread with options, always on the person's turn, without a weight", () => {
     const root = repo();
-    const t = start(root);
-    apply(root, { op: "handover" }, YOU);
-    write(root, t.id, YOU, "", Status.Closed);
-    expect(sittingOf(readComments(root), YOU)).toEqual([]);
+    for (const who of [FIXER, REVIEWER]) {
+      const t = start(root, { text: "the ring?", options: OPTIONS, turn: Role.Fixer }, who);
+      expect(t).toMatchObject({ options: OPTIONS, turn: Role.Person, status: Status.Open });
+      expect(t.weight).toBeUndefined();
+    }
+    expect(readComments(root).problems).toEqual([]);
   });
 
-  it("gives each participant their own sitting: a reviewer's pass is a review too", () => {
+  it("takes two to four options, each with its own label", () => {
     const root = repo();
-    const mine = start(root);
-    const found = start(root, {}, REVIEWER);
-    write(root, mine.id, REVIEWER, "the label is cut off at 360");
-    const done = apply(root, { op: "handover" }, REVIEWER);
-    expect(done.review).toMatchObject({ by: "reviewer", role: Role.Reviewer });
-    expect(done.review?.threads.map((t) => t.id)).toEqual([found.id, mine.id]);
-    // The person's sitting is untouched by it.
-    expect(sittingOf(readComments(root), YOU).map((t) => t.id)).toEqual([mine.id]);
-  });
-
-  it("says how a review stands, from its threads", () => {
-    const root = repo();
-    const a = start(root);
-    const b = start(root);
-    apply(root, { op: "handover" }, YOU);
-    write(root, a.id, FIXER, "x", Status.Planned);
-    write(root, a.id, FIXER, "done", Status.Ready);
-    const read = readComments(root);
-    const review = read.reviews[0];
-    if (review === undefined) throw new Error("no review");
-    expect(standing(threadsOf(review, read.threads))).toEqual({
-      text: "1 open, 1 ready",
-      isDone: false,
+    const ask = (options: { label: string; why: string }[]) =>
+      applyChange(root, { op: "start", thread: { board: BOARD, text: "?", options } }, FIXER);
+    expect(ask(OPTIONS.slice(0, 1))).toMatchObject({ ok: false });
+    expect(
+      ask([...OPTIONS, ...OPTIONS.map((o) => ({ ...o, label: `${o.label}!` }))]),
+    ).toMatchObject({ ok: true });
+    expect(
+      ask(
+        [...OPTIONS, ...OPTIONS, { label: "c", why: "c" }].map((o, i) => ({ ...o, label: `${i}` })),
+      ),
+    ).toMatchObject({ ok: false });
+    expect(ask([OPTIONS[0], OPTIONS[0]] as never)).toMatchObject({
+      ok: false,
+      error: expect.stringContaining("its own label"),
     });
-    write(root, b.id, YOU, "", Status.Withdrawn);
-    // Ready is still the person's to settle.
-    expect(standing(threadsOf(review, readComments(root).threads)).isDone).toBe(false);
-    write(root, a.id, YOU, "", Status.Closed);
-    expect(standing(threadsOf(review, readComments(root).threads)).isDone).toBe(true);
   });
 
-  it("reports a review that lists a thread that isn't there", () => {
+  it("is answered by a label (or his own words), which goes back to the fixer", () => {
     const root = repo();
-    start(root);
-    const done = apply(root, { op: "handover" }, YOU);
-    const file = join(root, "authoring", "reviews", `${done.review?.id}.yaml`);
-    writeFileSync(file, readFileSync(file, "utf8").replace(/id: c\w+/, "id: cgone"));
-    expect(readComments(root).problems[0]).toMatch(/no thread cgone/);
+    const t = start(root, { text: "the ring?", options: OPTIONS }, FIXER);
+    const answered = write(root, t.id, YOU, "Drop it");
+    if (!answered.ok || answered.thread === undefined) throw new Error("not written");
+    expect(answered.thread).toMatchObject({ status: Status.Open, turn: Role.Fixer });
+    expect(pickedOption(answered.thread)).toEqual(OPTIONS[1]);
+    const own = write(root, t.id, YOU, "keep it, but thinner");
+    if (!own.ok || own.thread === undefined) throw new Error("not written");
+    expect(pickedOption(own.thread)).toBeUndefined();
+  });
+
+  it("can be about a whole planning file, with no words quoted", () => {
+    const root = repo();
+    const plan = "authoring/books/class10-maths/polynomials/plan.md";
+    mkdirSync(join(root, "authoring/books/class10-maths/polynomials"), { recursive: true });
+    writeFileSync(join(root, plan), "# Plan\n");
+    const t = apply(
+      root,
+      {
+        op: "start",
+        thread: { source: `${plan}:1`, text: "two lessons or three?", options: OPTIONS },
+      },
+      FIXER,
+    ).thread;
+    expect(t).toMatchObject({ home: "content/class10-maths/polynomials", turn: Role.Person });
+    expect(t?.quote).toBeUndefined();
+    expect(t?.board).toBeUndefined();
+  });
+});
+
+describe("the threads kept in the repo", () => {
+  it("still read, with no weight or options on the old ones", () => {
+    const root = join(__dirname, "..", "..", "..");
+    const read = readComments(root);
+    expect(read.problems).toEqual([]);
+    const chapter = read.threads.filter(
+      (t) => t.home === "content/class9-maths/coordinate-geometry",
+    );
+    expect(chapter.length).toBeGreaterThan(0);
+    expect(chapter.some((t) => t.status === Status.Closed)).toBe(true);
   });
 });
 

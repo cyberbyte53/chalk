@@ -2070,7 +2070,7 @@ body.is-selecting .is-pick-target {
   }
 }
 
-/* A review in the preview (`?dev&review=<id>`) and the list of them (`?dev&reviews`). */
+/* The way back to the open threads' page, on a board opened from it. */
 .preview-review-head {
   flex-basis: 100%;
   display: flex;
@@ -2107,8 +2107,8 @@ body.is-selecting .is-pick-target {
   color: #b4b4bc;
 }
 
-/* The review page (`?dev&review=<id>`, review-page.tsx): its threads, each a fold with the
-   conversation and the board as it is now; and the list of reviews (`?dev&reviews`). */
+/* The open threads' page (`?dev&threads`, threads-page.tsx): each a fold with the conversation
+   and the board as it is now. */
 .rv {
   min-height: 100dvh;
   background: #18181b;
@@ -2741,4 +2741,82 @@ body.is-selecting .is-pick-target {
 .jg-notes li.is-now {
   opacity: 1;
   font-weight: 600;
+}
+
+/* A reviewer's finding's weight, beside whose turn it is. */
+.preview-weight,
+.rv-weight {
+  border-radius: 6px;
+  padding: 0 6px;
+  font: 12px / 1.6 system-ui, sans-serif;
+  background: #2a2a30;
+  color: #b4b4bc;
+}
+.preview-weight.is-must,
+.rv-weight.is-must {
+  background: #4c1d1d;
+  color: #fecaca;
+}
+
+/* An agent's question (thread-options.tsx): its options as buttons, the agent's pick first, and a
+   box for the person's own answer. */
+.thread-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0;
+  font: 13px / 1.4 system-ui, sans-serif;
+}
+.thread-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  border: 1px solid #3a3a40;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: #232328;
+  color: #e6e6ea;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.thread-option:hover:not(:disabled) {
+  border-color: #6366f1;
+}
+.thread-option:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+.thread-option.is-picked {
+  border-color: #4f46e5;
+  background: #312e81;
+  opacity: 1;
+}
+.thread-option span {
+  color: #b4b4bc;
+}
+.thread-option-own {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+}
+.thread-option-own textarea {
+  flex: 1;
+  min-height: 2.5em;
+  border: 1px solid #3a3a40;
+  border-radius: 8px;
+  padding: 6px 8px;
+  background: #18181b;
+  color: #e6e6ea;
+  font: inherit;
+}
+.thread-option-own button {
+  border: 1px solid #4f46e5;
+  border-radius: 8px;
+  padding: 5px 10px;
+  background: #4f46e5;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
 }

@@ -65,7 +65,7 @@ A board is its content (the board record) and the code it runs. The code graph's
 1. **The base, right.** The views were missed because every package now registers a prop as `propModule(def, View, sound)`, which `affected` didn't read; a board's code lacked the player and the stylesheets every board is drawn with. Both in, with tests.
 2. **`changes` draws with the jumping clock, only where the make-up changed,** every version, against what the review drew. `pass` keeps the review's drawings. The old one-picture comparison is gone.
 3. **Answers that fit:** a changed board's content said per piece in plain words (a prop's definition copied into the record is said with the code), at most eight functions among many boards, pictures cut to what differs. `affected` already answers a line per board.
-4. **Roles:** the reviewer sees `changes`, the fixer `affected`; only the reviewer passes. The self-review skill's `affected` step is gone; apply-review keeps it.
+4. **Roles:** the reviewer sees `changes`, the fixer `affected`; only the reviewer passes. The self-review skill's `affected` step is gone; apply-comments keeps it.
 5. The review's steps kept and played again.
 
 ## Not here

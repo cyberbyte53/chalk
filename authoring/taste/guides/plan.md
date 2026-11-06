@@ -12,4 +12,4 @@ Read by `plan-chapter` and `build-props` (for **Props**). Output: the planning f
 
 **Per lesson in the flow:** the idea's name as its heading, then its boards: each with the objectives it serves and the source it covers (figures, examples, exercises), what it is for, and what the student sees or does (in words, not prop names). New terms: 3–4 at most per lesson.
 
-**Questions for the person.** The decisions only they can make, each a thread on the words it is about, with your recommendation. Few, and real.
+**Questions for the person.** The decisions only they can make, each an `ask` on the words it is about, with your recommendation first. Few, and real.

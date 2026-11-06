@@ -5,9 +5,9 @@ import { type Thread, type Threads, useThreads } from "./threads";
 
 /**
  * Development only (`?dev&activity`): everything written on threads, newest first, across every
- * board: who started what, every message and status move, every review handed over. Live, so you
- * can watch a reviewer or a fixer work. `&review=<id>` keeps to one review's threads. A line opens
- * its board in the preview (a planning file's thread: open it in the editor).
+ * board: who started what, and every message and status move. Live, so you can watch a reviewer or
+ * a fixer work. A line opens its board in the preview (a planning file's thread: open it in the
+ * editor).
  */
 
 type Line = {
@@ -32,19 +32,16 @@ const hrefOf = (t: Thread): string | null => {
   return null;
 };
 
-function linesOf({ threads, reviews }: Threads, only: string | null): Line[] {
-  const review = only === null ? undefined : reviews.find((r) => r.id === only);
-  const ids = review === undefined ? null : new Set(review.threads.map((t) => t.id));
-  const shown = ids === null ? threads : threads.filter((t) => ids.has(t.id));
+function linesOf({ threads }: Threads): Line[] {
   const lines: Line[] = [];
-  for (const t of shown) {
+  for (const t of threads) {
     const where = whereOf(t);
     const href = hrefOf(t);
     lines.push({
       at: t.createdAt,
       by: t.by,
       role: t.role,
-      what: t.role === "person" ? "comment" : t.role,
+      what: t.role === "person" ? "comment" : t.options !== undefined ? `${t.role} asks` : t.role,
       where,
       words: t.text,
       href,
@@ -62,23 +59,6 @@ function linesOf({ threads, reviews }: Threads, only: string | null): Line[] {
         tone: m.status ?? "message",
       });
   }
-  for (const r of reviews)
-    if (review === undefined || r.id === review.id)
-      for (const [i, at] of [r.at, ...(r.added ?? [])].entries())
-        lines.push({
-          at,
-          by: r.by,
-          role: r.role,
-          what: i === 0 ? "handed over" : "added to",
-          where: `review ${r.id}`,
-          // How many it holds is known for now, not for each time: said on the latest.
-          words:
-            i === (r.added ?? []).length
-              ? `${r.threads.length} thread${r.threads.length === 1 ? "" : "s"}`
-              : "",
-          href: `?dev&activity&review=${encodeURIComponent(r.id)}`,
-          tone: "review",
-        });
   return lines.sort((a, b) => b.at.localeCompare(a.at));
 }
 
@@ -91,15 +71,14 @@ const timeOf = (at: string): string => {
 };
 
 export function ActivityFeed(): JSX.Element {
-  const only = new URLSearchParams(window.location.search).get("review");
   const { all } = useThreads();
-  const lines = useMemo(() => linesOf(all, only), [all, only]);
+  const lines = useMemo(() => linesOf(all), [all]);
   return (
     <main class="activity">
       <header class="activity-bar">
-        <strong>{only === null ? "Activity" : `Review ${only}`}</strong>
-        {only !== null && <a href="?dev&activity">All activity</a>}
-        <span>{`${all.threads.length} threads · ${all.reviews.length} reviews`}</span>
+        <strong>Activity</strong>
+        <a href="?dev&threads">Open threads</a>
+        <span>{`${all.threads.length} threads`}</span>
       </header>
       {lines.length === 0 ? (
         <p class="activity-empty">Nothing written yet.</p>

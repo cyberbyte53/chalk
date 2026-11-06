@@ -27,7 +27,6 @@ authoring/books/<book>/<chapter>/
   runs/                one note per pipeline run
   comments.yaml        threads on the chapter's boards and on the files above        (built)
 authoring/props/<package>/comments.yaml   threads on the package's props            (built)
-authoring/reviews/<id>.yaml               reviews                                    (built)
 library/props/<package>/src/   5–6  each prop's definition (its contract), then its view and run bodies
 library/catalogue.md              generated: every prop's page                       (built)
 content/<book>/<chapter>/
@@ -163,7 +162,7 @@ Today's `build-lesson`. **Gate (machine):** build, layout, both languages, the c
 
 ### 8 and 9. Review and wrap-up
 
-As today ([comments.md](comments.md); `apply-review`, `wrap-up`), with the thread changes below.
+As today ([comments.md](comments.md); `apply-comments`, `wrap-up`), with the thread changes below.
 
 ## Prop changes always go through the definition first
 
@@ -186,7 +185,7 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 
 **An approval is committed alone.** The commit that brings an `approved:` line changes nothing else in the file, so history says exactly which text was approved. The person's approval, not yet committed, goes in a commit of its own before any edit to that file. `pnpm check`'s pipeline step fails otherwise (`stampProblems`). (Id-level diffing, marking only what cites a changed id, is added later only if this proves too noisy.) Coming into an existing chapter works the same way.
 
-**Lessons are self-reviewed before the person sees them.** A built lesson with a board that is new, or changed since it was last passed (`authoring/books/<book>/<chapter>/reviewed.yaml`: each board's record from the build when the reviewer passed it, written only by the chalk MCP's `changes` tool), is **to self-review**: the Chalk tree marks it, and `pnpm check`'s pipeline step lists it (a note, not a failure: lessons change while they're built). `build-lesson` and `apply-review` end with a self-review by the `reviewer` agent, and only then hand the lesson over.
+**Lessons are self-reviewed before the person sees them.** A built lesson with a board that is new, or changed since it was last passed (`authoring/books/<book>/<chapter>/reviewed.yaml`: each board's record from the build when the reviewer passed it, written only by the chalk MCP's `changes` tool), is **to self-review**: the Chalk tree marks it, and `pnpm check`'s pipeline step lists it (a note, not a failure: lessons change while they're built). `build-lesson` and `apply-comments` end with a self-review by the `reviewer` agent, and only then hand the lesson over.
 
 ## Threads on everything
 
@@ -196,7 +195,7 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 
 **A thread whose target is gone must be answered** (built). If an open or planned thread's address no longer resolves, `pnpm check` fails on it, and the fixer either re-points it (with a message: "merged into the axes board") or answers it ("removed: the dice game is text now"). Closed threads are history. The preview shows an unresolved thread at the deepest part of its address that still exists, with its saved copy; that is display only.
 
-**Before → after** (built, in `apply-review`). A fixer's `ready` message carries the thing before and after: a picture, its generated page, or the old and new words.
+**Before → after** (built, in `apply-comments`). A fixer's `ready` message carries the thing before and after: a picture, its generated page, or the old and new words.
 
 **Gate questions are threads** (built). An agent's question at a gate is a thread on that file. No "Open questions" section.
 
@@ -207,7 +206,7 @@ The agent rechecks each and either changes it or says why it still holds; the pe
 | `plan-chapter` | `plan-chapter`: steps 1–4, one gate at a time |
 | `build-props` | `build-props`: steps 5–6 (match via `show` the library, definitions, build) |
 | `build-lesson` | `build-lesson`: step 7 |
-| `self-review`, `apply-review`, `wrap-up` | as today; `apply-review` adds before → after, re-points threads, and routes prop changes through the definition first |
+| `self-review`, `apply-comments`, `wrap-up` | as today; `apply-comments` adds before → after, re-points threads, and routes prop changes through the definition first |
 
 ## Moving over
 

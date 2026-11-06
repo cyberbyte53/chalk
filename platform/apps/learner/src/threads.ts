@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from "preact/hooks";
 
 /**
- * Threads and reviews in the browser (development only), as the dev server gives them: it is their
- * one writer (platform/studio/src/comments.ts, platform/docs/comments.md). Pages here write as the
- * person.
+ * Threads in the browser (development only), as the dev server gives them: it is their one writer
+ * (platform/studio/src/comments.ts, platform/docs/comments.md). Pages here write as the person.
  */
 
 export type ThreadStatus = "open" | "planned" | "ready" | "closed" | "withdrawn";
@@ -20,8 +19,8 @@ export type Message = {
 export type Thread = {
   id: string;
   status: ThreadStatus;
-  /** Whose turn it is, as the thread keeps it: the agent's, the person's, or no one's (settled). */
-  waitsOn: "agent" | "person" | null;
+  /** Whose turn it is, as the thread keeps it: a role's (the person, the fixer, the reviewer), or no one's (settled). */
+  waitsOn: "person" | "fixer" | "reviewer" | null;
   by: string;
   role: string;
   createdAt: string;
@@ -37,6 +36,10 @@ export type Thread = {
   snapshot?: string;
   quote?: string;
   from?: string;
+  /** A reviewer's finding: must, or consider. */
+  weight?: "must" | "consider";
+  /** An agent's question (ask): his answers to pick from, the agent's pick first. */
+  options?: { label: string; why: string }[];
   changed?: string[];
   /** What the changes reach, worked out when it became ready (platform/studio/src/reach). */
   reaches?: { pieces: number; boards: number; lessons: string[]; everything?: string };
@@ -51,22 +54,11 @@ export function reachWords(r: NonNullable<Thread["reaches"]>): string {
   return `reaches ${n(r.boards, "board")} (${n(r.pieces, "piece")}) in ${n(r.lessons.length, "lesson")}`;
 }
 
-/** One participant's sitting, handed over (reviews/<id>.yaml). */
-export type Review = {
-  id: string;
-  by: string;
-  role: string;
-  at: string;
-  /** Later handovers that added to it while it wasn't done. */
-  added?: string[];
-  threads: { id: string }[];
-};
+export type Threads = { threads: Thread[] };
 
-export type Threads = { threads: Thread[]; reviews: Review[] };
+export const NO_THREADS: Threads = { threads: [] };
 
-export const NO_THREADS: Threads = { threads: [], reviews: [] };
-
-/** Sends one change to the dev server; every thread and review after it, or why not. */
+/** Sends one change to the dev server; every thread after it, or why not. */
 export async function changeComments(change: Record<string, unknown>): Promise<Threads | string> {
   try {
     const res = await fetch("/dev-review", {
@@ -75,15 +67,13 @@ export async function changeComments(change: Record<string, unknown>): Promise<T
       body: JSON.stringify(change),
     });
     const body = (await res.json()) as Partial<Threads> & { ok: boolean; error?: string };
-    return body.ok
-      ? { threads: body.threads ?? [], reviews: body.reviews ?? [] }
-      : (body.error ?? `${res.status}`);
+    return body.ok ? { threads: body.threads ?? [] } : (body.error ?? `${res.status}`);
   } catch {
     return "the dev server isn't answering";
   }
 }
 
-/** Every thread and review, kept current: the dev server says the moment a file changes. */
+/** Every thread, kept current: the dev server says the moment a file changes. */
 export function useThreads(): {
   all: Threads;
   set: (all: Threads) => void;
@@ -125,8 +115,26 @@ export const planOf = (t: Thread): Message | undefined =>
 
 export const isFinished = (t: Thread): boolean => t.status === "closed" || t.status === "withdrawn";
 
-/** Whether it can only be withdrawn, not deleted: handed over, or someone else wrote on it. */
-export const isKept = (t: Thread, reviews: readonly Review[]): boolean =>
-  t.status !== "open" ||
-  t.messages.some((m) => m.by !== t.by) ||
-  reviews.some((r) => r.threads.some((x) => x.id === t.id));
+/** Whether it can only be withdrawn, not deleted: someone else wrote on it, or it moved on. */
+export const isKept = (t: Thread): boolean =>
+  t.status !== "open" || t.messages.some((m) => m.by !== t.by);
+
+/** An agent's question still waiting on the person's answer: its options are his to pick. */
+export const isAsking = (t: Thread): boolean =>
+  t.options !== undefined && t.waitsOn === "person" && !isFinished(t);
+
+/** Whose turn it is, in a few words: yours, the fixer's, the reviewer's. */
+export const turnWords = (t: Thread): string =>
+  t.waitsOn === "person"
+    ? t.status === "ready"
+      ? "your turn: ready"
+      : t.options !== undefined
+        ? "your turn: asked"
+        : "your turn"
+    : t.waitsOn === "fixer"
+      ? t.status === "planned"
+        ? "agent: planned"
+        : "agent's turn"
+      : t.waitsOn === "reviewer"
+        ? "reviewer's turn"
+        : t.status;

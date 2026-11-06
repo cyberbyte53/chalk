@@ -54,19 +54,21 @@ import { LibraryScreen } from "./library-screen";
 import { PlayInApp } from "./play-in-app";
 import { aloneBoard } from "./prop-alone";
 import { PropPanel } from "./prop-panel";
-import { ReviewList, ReviewPage } from "./review-page";
 import { ScriptView } from "./script-view";
+import { ThreadOptions } from "./thread-options";
 import { ThreadText } from "./thread-text";
 import {
-  type Review,
   type Thread,
   type Threads,
   changeComments,
+  isAsking,
   isKept,
   planOf,
   reachWords,
+  turnWords,
   useThreads,
 } from "./threads";
+import { ThreadsPage } from "./threads-page";
 
 /**
  * Development only (`?dev&at=<address>`): boards exactly as a phone draws them (the real player,
@@ -278,19 +280,6 @@ function openInEditor(site: string): void {
   void fetch(`/__open-in-editor?file=${encodeURIComponent(`../../../${site}`)}`);
 }
 
-/** Where a comment stands, in words: waiting for the agent, planned, done. */
-/** A thread's one label: whose turn it is, or how it was settled. */
-const turnWords = (t: Thread): string =>
-  t.waitsOn === "person"
-    ? t.status === "ready"
-      ? "your turn: ready"
-      : "your turn"
-    : t.waitsOn === "agent"
-      ? t.status === "planned"
-        ? "agent: planned"
-        : "agent's turn"
-      : t.status;
-
 /**
  * The board's comments under it, newest first, each with its whole thread: what was said, what the
  * agent plans or did, and a reply box (a reply reopens the comment for the agent). Finished ones
@@ -298,12 +287,10 @@ const turnWords = (t: Thread): string =>
  */
 function BoardThreads({
   threads,
-  reviews,
   onChange,
   phone,
 }: {
   threads: readonly Thread[];
-  reviews: readonly Review[];
   onChange: (all: Threads) => void;
   phone: { current: HTMLDivElement | null };
 }): JSX.Element {
@@ -361,6 +348,9 @@ function BoardThreads({
           onClick={() => setOpenId(isOpen ? null : t.id)}
         >
           <span class={`preview-turn is-${t.waitsOn ?? t.status}`}>{turnWords(t)}</span>
+          {t.weight !== undefined && (
+            <span class={`preview-weight is-${t.weight}`}>{t.weight}</span>
+          )}
           {t.prop !== undefined ? (
             <span class="preview-piece is-prop">{`prop ${t.prop}${t.target?.includes(SEP) ? `${SEP}${t.target.slice(t.target.indexOf(SEP) + 1)}` : ""}`}</span>
           ) : (
@@ -370,6 +360,8 @@ function BoardThreads({
             <ThreadText text={t.text} />
           </span>
         </button>
+        {/* An agent's question: his answers as buttons, shown open or folded while it waits on him. */}
+        {(isOpen || isAsking(t)) && <ThreadOptions thread={t} act={act} />}
         {isDetached(t) && (
           <div class="preview-detached">{`Not on this board any more. It said: ${t.snapshot ?? "?"}`}</div>
         )}
@@ -446,15 +438,17 @@ function BoardThreads({
           </form>
         ) : (
           <div class="preview-actions">
-            <button
-              type="button"
-              onClick={() => {
-                setDraft("");
-                setReplyingTo(t.id);
-              }}
-            >
-              Reply
-            </button>
+            {!isAsking(t) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setDraft("");
+                  setReplyingTo(t.id);
+                }}
+              >
+                Reply
+              </button>
+            )}
             {!isDone(t) && (
               <button
                 type="button"
@@ -464,7 +458,7 @@ function BoardThreads({
               </button>
             )}
             {!isDone(t) &&
-              (isKept(t, reviews) ? (
+              (isKept(t) ? (
                 <button
                   type="button"
                   onClick={() => void act({ op: "write", id: t.id, text: "", status: "withdrawn" })}
@@ -601,7 +595,6 @@ export function PreviewBoard({
   isShot,
   isSilent,
   threads,
-  reviews,
   onThreads,
 }: {
   shown: Shown;
@@ -613,7 +606,6 @@ export function PreviewBoard({
   /** One of several boards on the screen, not the one looked at: nothing is heard from it. */
   isSilent: boolean;
   threads: readonly Thread[];
-  reviews: readonly Review[];
   onThreads: (all: Threads) => void;
 }): JSX.Element {
   const board = useMemo(
@@ -686,7 +678,7 @@ export function PreviewBoard({
           <ScriptView path={shown.path} boardId={board.item?.id} locale={locale} />
         )}
         {!isShot && threads.length > 0 && (
-          <BoardThreads threads={threads} reviews={reviews} onChange={onThreads} phone={phone} />
+          <BoardThreads threads={threads} onChange={onThreads} phone={phone} />
         )}
       </div>
     </section>
@@ -802,13 +794,11 @@ function TreeScreen({
   path,
   locale,
   threads,
-  reviews,
   onThreads,
 }: {
   path: string;
   locale: Locale;
   threads: readonly Thread[];
-  reviews: readonly Review[];
   onThreads: (all: Threads) => void;
 }): JSX.Element {
   const [book, chapter] = path === "" ? [] : path.split("/");
@@ -827,7 +817,7 @@ function TreeScreen({
     <>
       {isInEditor && <PickComposer />}
       {onScreen.length > 0 && (
-        <BoardThreads threads={onScreen} reviews={reviews} onChange={onThreads} phone={phone} />
+        <BoardThreads threads={onScreen} onChange={onThreads} phone={phone} />
       )}
     </>
   );
@@ -1413,8 +1403,7 @@ export function PreviewShell({ bus }: { bus: EventBus }): JSX.Element {
     };
   }, [bus]);
   const params = new URLSearchParams(search);
-  if (params.has("reviews")) return <ReviewList key={search} />;
-  if (params.has("review")) return <ReviewPage key={search} bus={bus} />;
+  if (params.has("threads")) return <ThreadsPage key={search} bus={bus} />;
   if (params.has("play"))
     return (
       <PlayInApp
@@ -1440,7 +1429,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     library === undefined &&
     source === null &&
     path.split("/").filter(Boolean).length < 3;
-  // Opened from a review page (`back=<its query>`): a way back to it.
+  // Opened from the open threads' page (`back=<its query>`): a way back to it.
   const back = params.get("back");
   const withQuestions = params.get("show") === "questions";
   const isPlaying = params.has("earned");
@@ -1491,7 +1480,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
   }, [path, isLesson]);
   // Threads on the boards shown, kept current as files change (an agent's answer, a new thread).
   const {
-    all: { threads, reviews },
+    all: { threads },
     set: setThreads,
   } = useThreads();
 
@@ -1560,7 +1549,6 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
         });
       } else if (e.key === "s") setIsOne(!isOne);
       else if (e.key === "c") setSelecting((on) => !on);
-      else if (e.key === "a") toEditor({ type: "copy" });
       else if (e.key === "f") window.location.search = "?dev&activity";
       else if (e.key === "p") toggleParam("play");
       else if (e.key === "l") toggleParam("locale");
@@ -1648,15 +1636,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       <LibraryScreen pkg={library.pkg} locale={locale} bus={bus} reach={() => json("reach.json")} />
     );
   if (isTree)
-    return (
-      <TreeScreen
-        path={path}
-        locale={locale}
-        threads={threads}
-        reviews={reviews}
-        onThreads={setThreads}
-      />
-    );
+    return <TreeScreen path={path} locale={locale} threads={threads} onThreads={setThreads} />;
   if (error !== null) return <div class="preview-empty">{error}</div>;
   // Not .preview-empty: tools wait for "ready or nothing to show", and loading is neither.
   if (shown === null)
@@ -1679,7 +1659,7 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
     >
       {!isShot && back !== null && (
         <header class="preview-review-head">
-          <a href={`?${back}`}>← Back to the review</a>
+          <a href={`?${back}`}>← Back to the threads</a>
         </header>
       )}
       {!isShot && count > 1 && (
@@ -1723,10 +1703,9 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
       {isHelp && (
         <div class="preview-help">
           <b>s</b> one by one · <b>→ j</b> next · <b>← k</b> previous (on into the next lesson) ·{" "}
-          <b>c</b> pick (↑ ↓ wider, finer) · <b>a</b> copy review for the agent · <b>p</b> play as
-          the app · <b>l</b> language (English, Hindi) · <b>m</b> mute (or unmute) everything heard
-          · <b>v</b> script beside the board (what it can say) · <b>f</b> activity · <b>+ −</b> zoom
-          · <b>Esc</b> leave · <b>?</b> keys
+          <b>c</b> pick (↑ ↓ wider, finer) · <b>p</b> play as the app · <b>l</b> language (English,
+          Hindi) · <b>m</b> mute (or unmute) everything heard · <b>v</b> script beside the board
+          (what it can say) · <b>f</b> activity · <b>+ −</b> zoom · <b>Esc</b> leave · <b>?</b> keys
         </div>
       )}
       <BoardSpeedContext.Provider value={speed}>
@@ -1742,7 +1721,6 @@ function PreviewPage({ bus, search }: { bus: EventBus; search: string }): JSX.El
               shown={s}
               where={sources[s.path]}
               threads={threadsOn(threads, s)}
-              reviews={reviews}
               onThreads={setThreads}
               locale={locale}
               isPlaying={isPlaying}

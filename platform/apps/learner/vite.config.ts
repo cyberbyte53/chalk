@@ -81,7 +81,7 @@ function devContent(): Plugin {
  * studio's code runs in this config, so this server can't fail to start because of it. If the
  * studio service can't come up, the page gets its log's last lines, not an empty view.
  *
- * A threads or reviews file that changes on disk (written by the studio service, or git) is pushed
+ * A threads file that changes on disk (written by the studio service, or git) is pushed
  * to open previews at once (chalk:comments).
  */
 function devStudio(): Plugin {
@@ -131,9 +131,7 @@ function devStudio(): Plugin {
           void forward(req, res);
         else next();
       });
-      const isThreads = (file: string) =>
-        file.endsWith(`${sep}comments.yaml`) ||
-        (file.includes(`${sep}authoring${sep}reviews${sep}`) && file.endsWith(".yaml"));
+      const isThreads = (file: string) => file.endsWith(`${sep}comments.yaml`);
       let timer: NodeJS.Timeout | undefined;
       const changed = (file: string) => {
         if (!isThreads(file)) return;
@@ -143,7 +141,6 @@ function devStudio(): Plugin {
       server.watcher.add([
         join(ROOT, "authoring", "books", "*", "*", "comments.yaml"),
         join(ROOT, "authoring", "props", "*", "comments.yaml"),
-        join(ROOT, "authoring", "reviews", "*.yaml"),
       ]);
       for (const event of ["change", "add", "unlink"] as const) server.watcher.on(event, changed);
     },

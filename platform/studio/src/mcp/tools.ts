@@ -26,15 +26,12 @@ import {
   type Change,
   type Filed,
   MOVES,
-  type Review,
   Role,
   Status,
+  Weight,
   applyChange,
   isUnanswered,
-  latestReview,
   readComments,
-  standing,
-  threadsOf,
   waitsOn,
 } from "../comments";
 import { buildInputsKey, isBuildCurrent } from "../content/inputs";
@@ -176,13 +173,7 @@ function unknownBoard(board: string): string | undefined {
 
 // ---- Comments, through the dev server (their one writer) ----
 
-type Applied = {
-  ok: boolean;
-  error?: string;
-  thread?: Filed;
-  review?: Review;
-  count?: number;
-};
+type Applied = { ok: boolean; error?: string; thread?: Filed };
 
 /** How many plays are played again at once (changes); CHALK_PLAY_PAGES to measure another. */
 /**
@@ -210,16 +201,15 @@ async function changeComments(who: Who, change: Record<string, unknown>): Promis
   return applyChange(root, change as Change, who);
 }
 
-async function readAll(): Promise<{ threads: Filed[]; reviews: Review[] }> {
-  const { threads, reviews } = readComments(root);
-  return { threads, reviews };
+async function readAll(): Promise<{ threads: Filed[] }> {
+  return { threads: readComments(root).threads };
 }
 
-/** A write's result: the thread's status and whose turn it is now. */
+/** A write's result: the thread's status and whose turn it is now (a role's). */
 function turnOf(t: Filed | undefined): string {
   if (t === undefined) return "";
   const on = waitsOn(t);
-  return ` [${t.status}${on === undefined ? "" : `, ${on === "person" ? "the person's turn" : "the agent's turn"}`}]`;
+  return ` [${t.status}${on === undefined ? "" : `, the ${on}'s turn`}]`;
 }
 
 /** Who is calling: an agent's role (fixer, reviewer) and its name in threads. */
@@ -268,8 +258,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   const SEES: Readonly<Record<Who["role"], readonly string[]>> = {
     // What changed: the fixer asks what an edit reaches (affected), the reviewer what changed since
     // it reviewed (changes), and only the reviewer passes (platform/docs/changes.md).
-    [Role.Fixer]: ["show", "affected", "comments", "comment", "pipeline"],
-    [Role.Reviewer]: ["show", "changes", "comments", "comment", "pipeline"],
+    [Role.Fixer]: ["show", "affected", "comments", "comment", "ask", "pipeline"],
+    [Role.Reviewer]: ["show", "changes", "comments", "comment", "ask", "pipeline"],
   };
   const MY_MOVES = [...new Set(MOVES[ROLE].map((m) => m.to))] as Status[];
 
@@ -1100,17 +1090,18 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       "comments",
       {
         title: "Read comments",
-        description:
-          "Read threads: the person's (from the preview, the editor, or said in your chat), reviewers' and fixers' (questions, decisions, proposals). Each says whose turn it is. `review`: a review's id (\"apply review 20261026-1734\"), or \"latest\": the threads it handed over, in order, with how it stands. Or filter by `at`: threads at or under an address (a chapter, a board, a prop). The threads still open (open, planned, ready) come in full: address, source line, what it showed, every message (a plan is its planned message); settled ones (closed, withdrawn) are counted, `closed: true` to read them too. `id`: one thread in full, settled or not. `unanswered: true`: only what waits on the agent.",
+        description: `Read threads: the person's (from the preview, the editor, or said in your chat), reviewers' findings (each with its weight: must or consider) and agents' questions (an ask has options; the person's answer is a reply, often an option's label). Each says whose turn it is: the person's, the fixer's or the reviewer's. Filter by \`at\`: threads at or under an address (a chapter, a board, a prop, a planning file). The threads still open (open, planned, ready) come in full: address, source line, what it showed, every message (a plan is its planned message); settled ones (closed, withdrawn) are counted, \`closed: true\` to read them too. \`id\`: one thread in full, settled or not. \`unanswered: true\`: only what waits on you (a ${ROLE}).`,
         inputSchema: {
-          review: z.string().optional().describe('A review id, or "latest".'),
           at: z
             .string()
             .optional()
             .describe(
               'An address: threads at or under it ("content/class10-maths/real-numbers", "library/props/basics/choice"), or a planning file or folder ("authoring/books/class9-maths/coordinate-geometry/flow.md").',
             ),
-          unanswered: z.boolean().optional(),
+          unanswered: z
+            .boolean()
+            .optional()
+            .describe(`Only the threads on your turn (a ${ROLE}'s).`),
           closed: z
             .boolean()
             .optional()
@@ -1120,22 +1111,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         annotations: { readOnlyHint: true, openWorldHint: false },
       },
       async (args) => {
-        const { threads, reviews } = await readAll();
-        const review =
-          args.review === undefined
-            ? undefined
-            : args.review === "latest"
-              ? latestReview(reviews)
-              : reviews.find((r) => r.id === args.review);
-        if (args.review !== undefined && review === undefined)
-          return result([
-            text(
-              args.review === "latest"
-                ? "No review has been handed over yet."
-                : `No review ${args.review}. Reviews: ${reviews.map((r) => r.id).join(", ") || "none"}.`,
-            ),
-          ]);
-        let found = review === undefined ? threads : threadsOf(review, threads);
+        const { threads } = await readAll();
+        let found = threads;
         if (args.at?.startsWith("authoring/")) {
           // A planning file or folder: the threads written on it, by their source line.
           const prefix = args.at.replace(/\/$/, "");
@@ -1147,12 +1124,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             return at === prefix || at.startsWith(`${prefix}/`) || at.startsWith(`${prefix}#`);
           });
         }
-        if (args.unanswered) found = found.filter(isUnanswered);
-        const head =
-          review !== undefined
-            ? `Review ${review.id} by ${review.by} (${review.role}), ${review.threads.length} thread${review.threads.length === 1 ? "" : "s"}: ${standing(threadsOf(review, threads)).text}\n\n`
-            : "";
-        return result([text(threadsAnswer(threads, found, args, head))]);
+        if (args.unanswered) found = found.filter((t) => isUnanswered(t, ROLE));
+        return result([text(threadsAnswer(threads, found, args))]);
       },
     ),
     "comments",
@@ -1165,7 +1138,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     [Status.Ready]:
       "ready: what you did; needs a plan first and an answer to any reviewer's words on it; the files changed since its plan are recorded",
     [Status.Open]: "open: reopen it",
-    [Status.Closed]: "closed: done",
+    [Status.Closed]:
+      "closed: done, on a thread you opened once it is back on your turn (its fix holds, its question is answered and acted on)",
     [Status.Withdrawn]: "withdrawn: take back a thread you started that became moot (say why)",
   };
 
@@ -1177,6 +1151,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
   const placeOf = (
     at: string,
     quote: string | undefined,
+    isWholeFile = false,
   ):
     | { board?: string; target?: string; prop?: string; source?: string; quote?: string }
     | string => {
@@ -1185,8 +1160,10 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       const file = clean.split("#")[0] ?? clean;
       if (!/^authoring\/books\/[^/]+\/[^/]+\/.+/.test(file) || !existsSync(join(root, file)))
         return `no file ${file}`;
-      if (quote === undefined || quote.trim() === "")
+      if (quote === undefined || quote.trim() === "") {
+        if (isWholeFile) return { source: `${file}:1` };
         return "a thread on a file quotes the words it is about (quote)";
+      }
       const lines = readFileSync(join(root, file), "utf8").split("\n");
       const first = quote.trim().split("\n")[0] ?? "";
       const line = lines.findIndex((l) => l.includes(first));
@@ -1252,11 +1229,21 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         .optional()
         .describe("On a planning file: the exact words the thread is about, as written."),
       turn: z
-        .enum(["person", "agent"])
+        .nativeEnum(Role)
         .optional()
         .describe(
-          "Whose turn it is after this write, when not what the write says by itself: \"person\" for something only the person can decide (a taste call), \"agent\" for something an agent fixes. Left out: the person's words and a reviewer's are the agent's to answer; a fixer's question, reason or ready is the person's; a plan is the agent's.",
+          "Whose turn it is after this write, when not what the write says by itself (a question for the person: use `ask`). Left out: the person's words and a reviewer's are the fixer's to answer; a plan is the fixer's; ready goes back to whoever opened the thread; a fixer's words are the reviewer's on a reviewer's finding, else the person's.",
         ),
+      ...(ROLE === Role.Reviewer
+        ? {
+            weight: z
+              .nativeEnum(Weight)
+              .optional()
+              .describe(
+                "A new finding: how much it weighs (required). must: the fixer fixes it; consider: the fixer decides, and says what it did.",
+              ),
+          }
+        : {}),
       ...(ROLE === Role.Fixer
         ? {
             from: z
@@ -1283,7 +1270,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     status?: Status;
     at?: string;
     quote?: string;
-    turn?: "person" | "agent";
+    turn?: Role;
+    weight?: Weight;
     from?: "chat";
     plan?: string;
   };
@@ -1293,10 +1281,9 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       "comment",
       {
         title: "Write on threads",
-        description: `Write on threads, or start them; one or many at once. With \`id\`: write on that thread${MY_MOVES.length > 0 ? ", maybe moving its status" : ""}. With \`at\` (no id): start a thread there. You write as a ${ROLE}${NAME === ROLE ? "" : ` (${NAME})`}: this tool offers only what a ${ROLE} may do, and the writer refuses anything else. When you finish a pass, \`handover: true\` hands what you started or wrote on as one review.`,
+        description: `Write on threads, or start them; one or many at once. With \`id\`: write on that thread${MY_MOVES.length > 0 ? ", maybe moving its status" : ""}. With \`at\` (no id): start a thread there${ROLE === Role.Reviewer ? " (a finding, with its weight)" : ""}. Whoever opened a thread closes it, once it is back on their turn; the person may close any. A question for the person is \`ask\`, not a thread here. You write as a ${ROLE}${NAME === ROLE ? "" : ` (${NAME})`}: this tool offers only what a ${ROLE} may do, and the writer refuses anything else.`,
         inputSchema: {
           items: z.array(write).default([]),
-          handover: z.boolean().optional(),
         },
         annotations: {
           readOnlyHint: false,
@@ -1305,7 +1292,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           openWorldHint: false,
         },
       },
-      async ({ items: given, handover }) => {
+      async ({ items: given }) => {
         const items = given as Write[];
         const lines: string[] = [];
         for (const item of items) {
@@ -1365,6 +1352,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             thread: {
               ...place,
               ...(item.turn ? { turn: item.turn } : {}),
+              ...(item.weight ? { weight: item.weight } : {}),
               ...(item.from ? { from: item.from } : {}),
               text: item.text,
             },
@@ -1392,22 +1380,66 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
             ...settled,
           );
         }
-        if (handover) {
-          const done = await changeComments(who, { op: "handover" });
-          lines.push(
-            !done.ok
-              ? `✗ ${done.error}`
-              : done.review
-                ? done.review.added?.length
-                  ? `✓ added to review ${done.review.id}, still in progress (${done.count} threads)`
-                  : `✓ handed over review ${done.review.id} (${done.count} threads)`
-                : "Nothing to hand over: no thread started or written on since your last handover.",
-          );
-        }
         return result([text(lines.join("\n") || "Nothing to do.")]);
       },
     ),
     "comment",
+  );
+
+  offer(
+    server.registerTool(
+      "ask",
+      {
+        title: "Ask the person",
+        description:
+          "When you are stuck or at a real decision, ask the person here, never in prose: a question with two to four options in order of recommendation (the first is your pick), each with a short label and why, pinned where it applies. It starts a thread with the options, on the person's turn; the editor shows them as buttons and a box for his own words. His answer is a reply on it (an option's label, or his words), and it comes back to the fixer's turn: read it with `comments` (`unanswered: true`). Concise: he reads the question, the labels and the whys, nothing else.",
+        inputSchema: {
+          question: z.string().min(1).describe("The question, in a sentence or two."),
+          options: z
+            .array(
+              z
+                .object({
+                  label: z.string().min(1).describe("The answer, in a few words: what he clicks."),
+                  why: z.string().min(1).describe("Why, or what follows from it, in a line."),
+                })
+                .strict(),
+            )
+            .min(2)
+            .max(4)
+            .describe("Two to four, your recommendation first."),
+          at: z
+            .string()
+            .describe(
+              'Where it applies, by address: a board or a piece ("content/…/<board>#piece"), a prop ("library/props/<package>/<type>"), or a planning file ("authoring/books/<book>/<chapter>/plan.md": with quote for its words, without for the whole file).',
+            ),
+          quote: z
+            .string()
+            .optional()
+            .describe("On a planning file: the exact words it is about. Left out: the whole file."),
+        },
+        annotations: {
+          readOnlyHint: false,
+          destructiveHint: false,
+          idempotentHint: false,
+          openWorldHint: false,
+        },
+      },
+      async ({ question, options, at, quote }) => {
+        const place = placeOf(at, quote, true);
+        if (typeof place === "string") return result([text(`✗ ${place}`)]);
+        const done = await changeComments(who, {
+          op: "start",
+          thread: { ...place, text: question, options },
+        });
+        if (!done.ok || done.thread === undefined) return result([text(`✗ ${done.error}`)]);
+        return result([
+          text(
+            `✓ asked: ${done.thread.id} on ${at.trim()}${turnOf(done.thread)}. His answer comes back as a reply on it.`,
+          ),
+        ]);
+      },
+    ),
+    "ask",
   );
 
   return server;

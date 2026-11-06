@@ -15,11 +15,11 @@ export function panelMain(start: PanelStart): void {
   const frame = document.getElementById("frame") as HTMLIFrameElement;
   const where = document.getElementById("where") as HTMLElement;
   const select = document.getElementById("select") as HTMLElement;
-  const copy = document.getElementById("copy") as HTMLElement;
   const state = { query: start.query, play: false, hindi: false };
   // The address shown on the bar: what it is about, without the kind of address.
   const placeOf = (query: string) =>
-    query.replace(/^(at=content\/|at=|source=|review=)/, "") || "all books";
+    query.replace(/^(at=content\/|at=|source=)/, "").replace(/^threads.*/, "open threads") ||
+    "all books";
   const urlOf = () =>
     `${start.base}?dev&${state.query}${state.play ? "&play" : ""}${state.hindi ? "&locale=hi" : ""}`;
   const toFrame = (m: Record<string, unknown>) =>
@@ -53,11 +53,9 @@ export function panelMain(start: PanelStart): void {
   (document.getElementById("out") as HTMLElement).onclick = () =>
     vscode.postMessage({ type: "external", url: urlOf() });
   select.onclick = () => setSelecting(!select.classList.contains("on"));
-  copy.onclick = () => vscode.postMessage({ type: "copy" });
   // The same keys as inside the preview, when the panel's bar has focus.
   document.addEventListener("keydown", (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.key === "a") vscode.postMessage({ type: "copy" });
     if (e.key === "c") setSelecting(!select.classList.contains("on"));
   });
   window.addEventListener("message", (e) => {
@@ -82,10 +80,6 @@ export function panelMain(start: PanelStart): void {
       show(m.query);
       reload();
     } else if (m.type === "pick") setSelecting(true);
-    else if (m.type === "review") {
-      const count = typeof m.count === "number" ? m.count : 0;
-      copy.style.display = count > 0 ? "" : "none";
-      copy.textContent = `Copy for agent (${count})`;
-    } else toFrame(m);
+    else toFrame(m);
   });
 }
