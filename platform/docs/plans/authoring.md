@@ -1,176 +1,150 @@
 # Authoring: how a chapter is made
 
-Status: plan, reshaped with the person and reviewed twice (changes folded in). Nothing built. Replaces `platform/docs/authoring-pipeline.md` once agreed.
+Status: plan, agreed with the person step by step and reviewed three times. Nothing built. Replaces
+`platform/docs/authoring-pipeline.md` once built.
 
-## Why (what we learned)
+## Why
 
-- **Others:** people own *what* is taught and AI makes the volume (Duolingo, Khan Academy; Khan's "a
-  person shapes the first question, the AI makes more" is our question families); the interactive is the
-  expensive part and is designed first (Brilliant); a plan a person approves, then tracked work on disk
-  (Spec Kit, Kiro, Claude Code, Beads); feedback pinned to the exact spot (Frame.io).
-- **Chapter 1:** the breakup into source → objectives → flow → props was sound (each cites the one
-  before by ids, and the machine checks the chain); what hurt was the ceremony: four gates, a change
-  upstream un-approving everything below, 117 lines of flow to read, 132 reviewer threads closed by the
-  person unread. A prop built and thrown away (the stall) was the costliest mistake. Pinned comments and
-  the independent reviewer were the best parts. Hindi came from memory.
+- **Others:** people own *what* is taught and AI makes the volume (Duolingo, Khan Academy; Khan's "a person
+  shapes the first question of a kind, the AI makes more" is our question families); the interactive is
+  the expensive part and is designed first (Brilliant); a plan a person approves, then work tracked on disk
+  (Spec Kit, Kiro, Claude Code); feedback pinned to the exact spot (Frame.io); a house style with a short
+  style sheet per book (publishing); a glossary checked by machine and a style guide per language
+  (translation).
+- **Chapter 1:** source → objectives → flow → props was a sound chain (ids cited down it, checked by
+  machine); the ceremony hurt (four gates, a change upstream un-approving everything below, 117 lines of
+  flow to read, 132 reviewer threads closed by the person unread). A prop built and thrown away (the stall)
+  was the costliest mistake. Pinned comments and the independent reviewer were the best parts. Hindi came
+  from memory. An audit of its 167 threads: the constitution's principles mostly said "add", the person's
+  corrections mostly said "cut"; over half the threads were mechanical, which only checks can stop.
 - **First principles:** scarce: the person's attention and taste, props, being right against the book.
   Cheap: an agent's writing and re-checking. Ours alone: boards play the same every time, so a machine
-  checks what works before anyone looks; a reviewer's finding made twice becomes a check.
+  checks what works before anyone looks.
 
-## Taste: one main file per level, a map to focused files
-
-Like a publisher's house style and per-book style sheet, and a translator's style guide per language (both
-solve this problem), and like `AGENTS.md`: one short main file per level is where
-every agent starts; it holds the principles, the taste and a few before/after examples, and maps each job
-to the focused file it needs, opened only when the task needs it.
+## Files
 
 ```
 authoring/
-  taste.md        principles (about five, marked always), taste, examples; and a map:
-                    the cast → cast.yaml; Hindi → hi.md; …
-  cast.yaml       each character: name, how they look and speak, their voice per language (code reads it;
-                  from voices.json). They cross chapters and books; nothing else about the story does
-  hi.md           how we write and speak Hindi (तुम or आप, how letters and numbers are said, tone)
-  books/<book>/taste.md      only what differs from the top; its own map if it has its own files
+  taste.md               where every agent starts: the principles, the person's taste, a few before/after
+                         examples from his threads, two or three lessons to copy, and a map of the rest
+  hi.md                  how we write Hindi: tone and register (तुम, not आप; plain words). How numbers and
+                         letters are said is code (the language's number words), not prose
+  voices.json            who speaks in which voice, per language: unchanged (the voice code reads it)
+
+  books/<book>/
+    taste.md             only what differs from the top (its tone, look, languages, its cover's idea)
+    <chapter>/
+      source/            FACTS, extracted once, never edited by hand
+        en/                book.pdf, outline.yaml (every section, figure, example, exercise: id, page, words),
+                           page images (a figure is cropped only when a board needs it)
+        hi/, bn/, …        attached by the same extraction: book.pdf, outline.yaml (the same ids, this book's
+                           own words), terms.yaml (each key term with its word forms and page)
+      plan.md            INTENT, English: the one file the person approves
+      boards.md          DETAIL, English: the agent's design, never gated
+      jugnu-cases.yaml   Jugnu's stuck children, played (the person approves it, as today)
+      comments.yaml      threads
+      reviewed.yaml      the reviewer's pass per board
 ```
 
-The principles come from the audit of chapter 1's threads: about five a builder can hold in mind
-(nothing unexplained; each step needed before it is given, nothing gives it away; every piece earns its
-place, when in doubt cut; show it and let them do it with an honest prop; questions test what the boards
-taught, in their tools). Mechanical rules go to components and checks; "read it as the student" is the
-review itself; examples are before/after pairs from the person's own threads.
+Lessons, families (`family.ts`, `params.yaml`), `art.tsx` and `build.yaml` stay in `content/`; the plan
+holds only their ideas. `runs/`, `authoring/reviews/` and `authoring/retros/` go.
 
-## Files, by what they hold
+**The principles** (top of `taste.md`, kept by every level below): nothing unexplained; each step is
+needed before it is given, and nothing gives it away; every piece earns its place (when in doubt, cut);
+show it, and let them do it with an honest prop; questions test what the boards taught, in their tools.
+Lower levels add taste and may change it, saying why; they don't change these.
 
-Each piece of information lives by how often it changes, who reads it and who decides it.
+**`plan.md`**, one to two pages: the **goal** (what a student can do after the chapter); the
+**objectives**, each citing outline ids; the **story's arc** and the characters it uses; the **lessons**
+(by their `build.yaml` slugs), each with its goal, objectives, what the student does and its card's art;
+the chapter's **tile** art; the **props** (reuse / extend / new, each sketched, with why); the **question
+families** and what each tests; where it departs from the book's `taste.md`, and why.
 
-```
-authoring/books/<book>/
-  taste.md                the book: only what differs from the top (tone, look, languages, its cover)
+**`boards.md`**: per lesson, per board and per question family (`questions/<family>`): its purpose, its
+beat in the story, needs, the objectives and outline ids it serves, the props it uses. **Status is worked
+out, never written**: built (in the build), reviewed (passed), waiting (on a prop the person hasn't seen).
 
-  <chapter>/
-    source/               FACTS, extracted once, never edited by hand
-      en/                   book.pdf, outline.yaml (every section, figure, example, exercise: id, page,
-                            words), figures/ (the book's diagrams, cut out)
-      hi/, bn/, …           attached later, by the same extraction: the chapter in that language
-                            (book.pdf); outline.yaml with the same ids as English, each item as THIS book
-                            writes it; terms.yaml (each key term, with its page; how its letters and
-                            notation are read aloud)
-    plan.md               INTENT, English: the one file the person reads, comments on and says yes to
-    boards.md             DETAIL, English: the agent's working design, never gated
-    jugnu-cases.yaml      Jugnu's stuck children, played (the person approves it, as today)
-    comments.yaml         threads, as now
-    reviewed.yaml         the reviewer's pass per board, as now
-```
+**Checked by machine** (most exist in `pipeline.ts`, moved to read these files): every outline item is
+covered by an objective, or skipped with a reason; every objective is served by a board; every board cites
+a lesson and an objective that exist; `build.yaml`'s concepts are the plan's lessons, in order (all of
+them by "chapter ready"), each with its `art.tsx`.
 
-`runs/` (run notes) is deleted. Lessons, question families (`family.ts`, `params.yaml`), `art.tsx` and
-`build.yaml` stay in `content/`: the plan holds only their ideas, so nothing is written twice.
-
-**`plan.md`**, one to two pages: **goal** (one sentence: what a student can do after the chapter);
-**objectives**, each citing the outline ids it covers; **story and cast**, in full (it is taste);
-**lessons** (by their `build.yaml` slugs), each with its goal, objectives, what the student does, and
-its card's art; the **chapter's
-tile art**; **props**, reuse / extend / new, each with a sketch and why; **question families** and what each
-tests; **deviations** from the book's settings, with why.
-
-**`boards.md`**: per lesson (by its slug in `build.yaml`'s `concepts:`), per board and per question family
-(`questions/<family>`): purpose, needs, the objectives and outline ids it serves, and the props it uses.
-**Status is worked out, never written:** built (it is in the build), reviewed (`changesUnder` passes it),
-waiting (on a prop whose showing thread is open). The agent's to-do list is what isn't done.
-
-**Checked by machine** (most exist in `pipeline.ts` today: ids valid, coverage, objectives served, the
-outline counted against the text; they move to reading `plan.md` and `boards.md`): every outline item is
-covered by an objective or skipped with a reason (a failure, not a note); every objective is served by a
-board; every board cites a lesson and objective that exist; the plan's lessons are `build.yaml`'s concepts,
-one for one, each with its `art.tsx`.
-
-## Three stages, each ending with something for the person
+## Three stages
 
 ```
 1. PLAN     agent: extract the source → think how best to teach it → plan.md and boards.md
-            → the person: comments on plan.md, then yes (a button in the editor stamps it)
+            → the person comments, then says yes (a button in the editor stamps plan.md)
 2. BUILD    agent: new props first, each shown working alone (boards not using it go ahead; boards using
-            it wait on its thread, closed by the person), then lessons, question families and their rows, Jugnu's cases (from each family's named
-            wrong answers), art; every board self-checked (show); an independent reviewer plays every
-            board; its must-fix findings fixed → the person: "chapter ready", with the taste questions
-3. REVIEW   the person: plays, pins comments, answers taste questions → the agent fixes → whoever opened
-            a comment closes it → the person's yes on the chapter = done
+            it wait for the person); then lessons, question families and their rows, Jugnu's cases (from
+            each family's named wrong answers), art; every board self-checked; an independent reviewer
+            plays every board; its must-fix findings fixed → the person: "chapter ready"
+3. REVIEW   the person plays, comments, answers the reviewer's questions → the agent fixes → whoever opened
+            a thread closes it → the person's yes on the chapter = done
 ```
 
-The plan is the person's gate, not the only place he speaks: he may pin a comment on the plan, any board,
-any piece of one, or a prop, at any stage; it is handled like any other thread.
-
-- **A change after the plan's yes** starts as a comment on the plan: the agent updates `plan.md`, follows
-  the ids into `boards.md`, rebuilds what they touch; the person closes the comment and re-stamps the plan
-  with one click, the tree showing what changed since his yes. Nothing below the plan is ever approved, so
-  nothing cascades. Sources never move.
-- **The story is the flow of the boards:** `plan.md` has its arc and each lesson's part; `boards.md` each
-  board's beat. Continuity (a stall stays where it was) is checked there, by the reviewer.
-- **When the person corrects something that could recur**, the agent proposes one taste line then and
-  there, at the right layer (book or Chalk); the person says yes or no.
-- **A new book's first chapter** carries a "book" section in its plan (cast, look, cover), which becomes
-  the book's settings on the yes.
+- The person may comment on the plan, any board, any piece or any prop, at any stage.
+- A change after the plan's yes starts as a comment; the agent updates `plan.md` and follows its ids into
+  `boards.md`; the person closes the comment and re-stamps the plan with one click (the tree shows what
+  changed since). Nothing below the plan is approved, so nothing cascades. Sources never move.
+- The story is the flow of the boards: its arc in `plan.md`, each board's beat in `boards.md`; continuity
+  is checked there by the reviewer.
+- A new book's first chapter carries a "book" section in its plan; on the yes it becomes the book's
+  `taste.md`, and its cover is drawn in `content/<book>/art.tsx`.
+- **When the person corrects something that could recur:** a check if a machine can catch it; otherwise
+  one line in `taste.md` at the right level; the person says yes or no.
 
 ## A language, attached
 
-Everything is made and reviewed in English; another language is added on top, the same way each time
-(`languages.md`):
+Everything is made and reviewed in English; a language is added the same way each time:
 
-1. its book is added to `source/<language>/` (given, or fetched);
-2. **the same extraction** as English: its `outline.yaml` aligned item by item to the English one (same ids,
-   its own words), and its `terms.yaml`, every key term with its page; nothing from memory;
-3. every English line is translated with what grounds it: the line, its board and lesson, the outline ids
-   that board cites and **the matching passages of this book** (its own definition, example, exercise
-   wording), and the terms;
-4. machine checks: a mapped term in a line has its mapped term in the translation (terms list their word
-   forms: axis/axes, अक्ष/अक्षों); a line marked as quoting an outline id (a definition, an exercise) matches
-   that id's words in the language; every English outline item has its aligned item, or a reason;
+1. its book into `source/<language>/` (given, or fetched; Hindi NCERT PDFs often extract as broken text:
+   a spike first, OCR if needed);
+2. the same extraction as English: its outline aligned item by item (same ids, its own words), its terms
+   with their word forms and pages;
+3. each English line translated with what grounds it: its board and lesson, the passages of this book that
+   board cites, the terms, `hi.md`;
+4. machine checks: a mapped term in a line has its mapped term in the translation; a line marked as quoting
+   an outline id matches that id's words; every English item has its aligned item, or a reason;
 5. reviewed by someone who reads the language.
 
-Chapter 1's Hindi gets this once: its book attached, its terms extracted, every line checked against them.
-
-## Threads: the tracker we already have, three edits
+## Threads: the tracker we already have
 
 Threads (`comments.yaml`, written only by `platform/studio/src/comments.ts`) already pin a comment to its
-spot, keep what it looked like, the commit, whose turn it is, and what a fix changed and reached. They
-stay, with: a **weight** on a reviewer's finding (must, consider, taste: a new field); **whoever opened a
-thread closes it** (the `MOVES` table, `comments.ts` ~63-77: the reviewer gains a close move; AGENTS.md's
-"only the person closes" changes); a taste question is a thread on the person's turn. The
-hand-over of a sitting is the person's open comments: `authoring/reviews/`, run notes and retros go.
+spot with what it looked like, the commit, whose turn it is, and what a fix changed and reached. Two edits:
+a reviewer's finding carries a **weight**, must or consider (a question for the person is already a thread
+on his turn); and **whoever opened a thread closes it** (the reviewer gains a close move; AGENTS.md's "only
+the person closes" changes). The person's open comments are the hand-over of a sitting.
 
-## Tools: what stays, what goes
+## What stays, what goes
 
 | Today | After |
 |---|---|
-| brief, objectives, flow, props.md, each approved; the tree's gates | `plan.md` (one yes) + `boards.md` |
-| `source/outline.yaml` and its check | `source/en/`, its check extended to the plan and boards |
-| threads | threads, weighted, opener closes |
-| reviews, run notes, retros | the threads |
-| `reviewed.yaml` (the reviewer's pass per board) | stays, gaining what students get (`kept-by-what-students-get.md`) |
-| `show`, preview, prop panel, pinned comments, comments on a file's words, `changes`, `affected` | stay |
-| `pipeline` and the tree | the chapter's state: plan yes? boards left? open threads, whose turn? done? |
-| 6 skills | 4: plan (1), build (2), apply-comments (3), and the reviewer's |
-| the editor's tree (`pipeline.ts` `FILES`, `READS`; `planning.ts` `isApprovable`) | three entries: the outline (machine), `plan.md` (approved), `boards.md` (not); Approve shown from the server's `isApproved` |
-| `authoring/taste/`, `voices.json` | `taste.md` (map) + `cast.yaml`, `hi.md`; each guide goes with its stage's skill; `checks.md` becomes code |
-
-## Chapter 1 moves over
-
-`brief.md`, `objectives.md`, `flow.md`, `props.md` become `plan.md` (goal added, lesson goals and art
-added) and `boards.md` (from flow's per-board purposes); `source/` becomes `source/en/`; no open threads
-to move; its taste seeds the Chalk and book settings. The constitution is checked once against its
-threads: which should a principle have prevented?
+| brief, objectives, flow, props.md, each approved | `plan.md` (approved) + `boards.md` |
+| `source/` | `source/en/`, its checks extended to the plan and boards |
+| threads, reviews, run notes, retros | threads (weight, opener closes) |
+| `reviewed.yaml` | stays; gains what students get (hashing only the voice of each speaker) |
+| `show`, preview, prop panel, comments on boards and on a file's words, `changes`, `affected` | stay |
+| `pipeline` and the tree | the chapter's state: plan approved? boards left? open threads, whose turn? done? |
+| 6 skills | 4: plan, build, apply-comments, the reviewer |
+| constitution, exemplars | `taste.md` |
+| guides, `reviewer.md` | into their skills (the reviewer's into its skill and agent file) |
+| `checks.md` | the checks it lists are built, step by step (below); the file goes |
+| `voices.json` | unchanged |
 
 ## Order
 
-1. Thread edits: weight, opener closes, hand-over from open comments.
-2. `plan.md` / `boards.md` and their checks, the skills, `pipeline` and the tree; chapter 1 moved (this
-   rewrites its four approved files: the person is told first, and re-approves `plan.md` once).
-3. Hindi grounded: `source/hi/` for chapter 1 (a spike first: Hindi NCERT PDFs often extract as broken
-   text and may need OCR), its aligned outline and terms, the term check over today's `t(en, hi)` lines.
-4. The languages mechanism (`languages.md`): English written, each language a table.
-5. The top `taste.md` (from the audit), `cast.yaml`, `hi.md`; the book's `taste.md`.
-6. Approval by what students get (`kept-by-what-students-get.md`).
-7. Chapter 1 re-reviewed; then the next chapter made this way.
+Each step built and proved on its own, and committed.
 
-Figures start as whole-page images with the outline's page (NCERT's figures are mostly vector drawings,
-which image extraction misses); a figure is cropped only when a board needs it.
+1. **Taste:** `taste.md` from the audit, `hi.md`; the person reads them.
+2. **Threads:** weight, opener closes.
+3. **`plan.md` and `boards.md`** and their checks; chapter 1's four planning files rewritten into them (the
+   person is told first, and approves `plan.md` once).
+4. **The editor and pipeline:** the tree's three entries, Approve on `plan.md` only.
+5. **Skills and AGENTS.md:** four skills, reading `taste.md`; AGENTS.md's steps, runs and closing rule.
+6. **Hindi grounded** for chapter 1 (spike first), and the term check on today's lines.
+7. **The languages mechanism** (`languages.md`).
+8. **Checks:** the mechanical ones the audit found (one name per thing; a prompt that gives away its
+   answer; right answers spread across options; a label or control text not introduced earlier), each as a
+   blocking check.
+9. **Approval by what students get** (`kept-by-what-students-get.md`).
+10. **Chapter 1 re-reviewed;** then the next chapter made this way.
