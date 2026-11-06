@@ -89,11 +89,18 @@ A lesson is offered in a language when every line it uses has a row there. In de
 the English, marked, so work isn't blocked. Speech marks (`said-once.md`) are each language's own; its
 "no Latin letters in a Hindi line" becomes "nothing outside the language's script, maths and marks".
 
+### 5b. A language is attached, grounded in its own book
+
+A language's book and its terms are facts, kept with the chapter's source:
+`authoring/books/<book>/<chapter>/source/<language>/` holds `book.pdf` and `terms.yaml`: every key term of
+the English outline as that book writes it, with its page (abscissa → भुज, p. 54), and how its letters
+and notation are read aloud. Extracted once, from the book, never from memory. A machine check: where a
+mapped English term is in a line, its mapped term is in the translation.
+
 ### 6. Translating: one lesson at a time, by an agent
 
 `pnpm translate <lesson> <language>`: every missing row of the lesson's tables, translated with the
-lesson's boards in view, following the language's term list (made from that language's NCERT book when the
-chapter is planned) and writing its speech marks. It never touches English.
+lesson's boards in view, following the chapter's `source/<language>/terms.yaml` and writing its speech marks. It never touches English.
 
 ### 7. Reviewing per language (medium)
 
