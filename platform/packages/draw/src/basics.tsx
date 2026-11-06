@@ -7,7 +7,7 @@ import { chevron } from "./shapes";
 import { toPixels, useSpace } from "./stage";
 
 /**
- * The pieces props and art are drawn with. Every piece:
+ * The shapes props and art are drawn with. Every shape:
  * - takes positions in the stage's own numbers, never pixels;
  * - takes colours as a look role or a hex (`cssColor`), never anything else;
  * - draws its shape at the origin and moves it with `transform`, so moving it never redraws it;
@@ -15,7 +15,7 @@ import { toPixels, useSpace } from "./stage";
  */
 
 const colorStyle = (color: string | undefined): JSX.CSSProperties | undefined =>
-  color === undefined ? undefined : { "--piece-color": cssColor(color) };
+  color === undefined ? undefined : { "--shape-color": cssColor(color) };
 
 /** `part`: the name it is pointed at by (data-part), when it can be. */
 export type Tick = { value: number; label?: string; class?: string; part?: string };

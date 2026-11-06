@@ -19,15 +19,15 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Tick** | A rule that queues itself again (every 1/60 s), for a motion where each moment depends on the last | `t.later(1 / 60, t.self.tick())` |
 | **Action** | An event in: asks one prop to do something; its rule (`on`) decides, and may refuse. `from: "screen"` marks the student's | `action()`, `ActionDef` |
 | **Signal** | An event out: news a prop tells, heard by the props holding it, nearest first; siblings never hear it | `signal()`, `SignalDef` |
-| **Part** (of a view) | A named thing a prop's view draws: an input (it says what it `does`) or something the student reads (it `shows` a value). Its name is its address under the piece; what `show`'s steps, comments and Jugnu's pointing use | `does`, `says`, `shows` (`@chalk/prop` tags.ts) |
-| **Description** | A prop as the student sees it: read from the tags in what its view draws (one line, each part, what it knows but doesn't show) | `describeView` (`@chalk/player`), `Observation` |
+| **Element** | A named thing a prop's view draws for the student: an input (it says what it `does`) or something they read (it `shows` a value). Its name is its address under the piece; what `show`'s steps, comments and Jugnu's pointing use. (Older code and data say "part": `data-part`, `PartSnapshot`) | `does`, `says`, `shows` (`@chalk/prop` tags.ts) |
+| **Description** | A prop as the student sees it: read from the tags in what its view draws (one line, each element, what it knows but doesn't show) | `describeView` (`@chalk/player`), `Observation` |
 | **Role** | What a prop is for: an explainer (a world the student works in), a question, or part of the page (words) | `PropRole` |
-| **Drag** | A part the learner moves, inside a frame; the player wires pointer, keys and the frame's transform | `useDrags` (`@chalk/player`) |
+| **Drag** | An element the learner moves, inside a frame; the player wires pointer, keys and the frame's transform | `useDrags` (`@chalk/player`) |
 | **Address** | How people, agents and threads name a thing: where it lives, from one of two roots, `content/` + a path (`content/class10-maths/real-numbers/hcf-and-lcm/story`) or `library/props/<package>/<type>` (`library/props/basics/choice`), then after `#` where on it: names from the piece (or the prop) down, joined by `/` (`…/story#mirror/objectArrow/object`; on screen as `data-path`; a `/` inside a name from data is written `%2F`). One without a root is refused. What `show`, `comments`, `comment`, `affected` and the preview (`?dev&at=`) take | `parseAddress`, `contentAddress`, `propAddress` (`@chalk/content/address`); `pathOf`, `namesOf` (`@chalk/prop`), `findNode`, `addressOf` (`@chalk/player`) |
-| **Part** (of a prop) | A prop held by another (`children`): the walker in the coordinate plane. It owns its variables and knows nothing of the others; its holder joins them (needs given, signals heard) | `children`, `groupView` (`@chalk/player`) |
+| **Part** | A prop held by another (`children`): the walker in the coordinate plane. It owns its variables and knows nothing of the others; its holder joins them (needs given, signals heard). A board uses a part when its setup names it | `children`, `groupView` (`@chalk/player`); the plane's `PARTS` |
 | **Frame** | One picture several children draw into: its provider owns the window and the transform | `FrameSpec`, `FrameStage`, `useFrame` |
 | **Label** | Words naming one thing in a picture, placed round it with every other label, clear of everything drawn but what is coverable | `useLabel`, `data-coverable`, `solveLabels` |
-| **Drawing kit** | Stateless drawing pieces shared by props (labware, geometry marks, optics, circuit symbols) | `@chalk/draw` (`lab.tsx`, `marks.tsx`, `optics.tsx`, `circuit.tsx`) |
+| **Drawing kit** | Stateless drawing shapes shared by props (labware, geometry marks, optics, circuit symbols) | `@chalk/draw` (`lab.tsx`, `marks.tsx`, `optics.tsx`, `circuit.tsx`) |
 | **Written number** | A number as Chalk writes it, the same everywhere: exact (integer, fraction, surd) or a rounded decimal, as text and TeX | `exact`, `quantity`, `formula` (`@chalk/exact`) |
 | **Question** | A prop with the question role (`choice`, `goal`): status, attempts, feedback, `check`, `retry` | `PropRole.Question`, `QuestionView` |
 | **Concept** | The smallest thing a student can get wrong on its own: a folder with an overview (pages). Its id is what questions test and what learner counts hang on | `<concept>/build.yaml`, `BuiltConcept`, `concepts` on a question prop |
@@ -55,17 +55,17 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Page** | One board of a concept's overview: explanation, worked example, animation or sandbox | `page()`, `overview.ts`, `BuiltPage` |
 | **Question family** | A question template: a folder with `family.ts` (params → board) and `params.yaml` (the rows) | `family()`, `BuiltFamily` |
 | **Params row** | One row of `params.yaml`: one question's params, and optionally its level, origin, exclude | `paramsRowSchema` |
-| **Question** | A family built with one params row: a board with a question prop | `BuiltQuestion` |
+| **Built question** | A family built with one params row: a board with a question prop | `BuiltQuestion` |
 | **Origin** | Who wrote a params row: authored (a person or an agent they asked) or generated (the question generator) | `Origin` |
 | **Witness** | How a student gets a board right, as taps and waits; played on the real props at build. A board whose witness fails is not built | `witness`, `tap`, `Step` (`@chalk/author`) |
 | **Note check** | A known wrong answer and the note it should get; played like a witness | `noteChecks`, `NoteCheck` |
 | **Board pattern** | A reusable piece of board-building shared by every concept | `library/patterns/` |
 | **Explainer prop** | A prop that is a world the student works in (a number line, the coordinate plane). Words, questions and the board are not | `PropRole.Explainer` |
 | **Rich text** | What every learner-facing string may hold: words, `**bold**`, `*emphasis*`, `$maths$`, `$$display maths$$` (KaTeX, with mhchem). Checked at build | `RichText`, `parseRich`, `richProblems` (`@chalk/player`) |
-| **Art** | A book's, chapter's or concept's picture, drawn in code with the pieces (`art.tsx`), built to checked SVG | `defineArt`, `ArtFrame`, `BuiltArt`, `pnpm art` |
+| **Art** | A book's, chapter's or concept's picture, drawn in code with the shapes (`art.tsx`), built to checked SVG | `defineArt`, `ArtFrame`, `BuiltArt`, `pnpm art` |
 | **Stage** | A drawing: an SVG whose x (and y) ranges become d3 scales, plus layers for crowds and for what sits above them | `Stage`, `Space` (`@chalk/draw`) |
-| **Piece** | A shared drawing part (axis, dot, mark, curve, dots) that props and art are built from; placed in the stage's numbers, coloured by the look | `Axis`, `Dot`, `Dots` … (`@chalk/draw`) |
-| **Crowd** | Many of the same thing, drawn by a collection piece with WebGL (or canvas) once they pass a threshold | `Dots`, `CROWD_THRESHOLD` |
+| **Shape** | A shared drawing (axis, dot, mark, curve, dots) that props and art are built from; placed in the stage's numbers, coloured by the look | `Axis`, `Dot`, `Dots` … (`@chalk/draw`) |
+| **Crowd** | Many of the same thing, drawn by a collection shape with WebGL (or canvas) once they pass a threshold | `Dots`, `CROWD_THRESHOLD` |
 | **Look** | The design tokens every screen and prop is drawn with: colour roles, fonts, the type scale. The one place a raw colour lives | `@chalk/look`, `tokens.json`, `look.css` |
 | **Colour role** | A colour by what it is for (`primary`, `on-surface`, `right`), not by its value; the theme decides the value. A colour field takes a role or any `#rrggbb` | `Color`, `--color-*`, `cssColor` |
 | **Type scale** | The four text sizes a board uses (title, body, note, caption), each with its line height | `--text-*` (`@chalk/look`) |
@@ -85,7 +85,6 @@ One concept, one name, everywhere: code, content, docs and conversation. If a wo
 | **Account** | Someone who signed in with Google, known by Google's id (`sub`), not their email | `accounts`, `Account` (`@chalk/api`) |
 | **Sign-in** | One device's signed-in state: a random token in an HttpOnly cookie; only its hash is stored. Lasts 90 days. (Not the events' `sessionId`, which is one run of the app) | `sign_ins`, `SIGN_IN_COOKIE` |
 | **Setup** | The one-time screen after the first sign-in: name, school code, learner or teacher | `POST /api/me/setup` |
-| **Role** | What a prop is for: an explainer (a world the student works in), a question, or part of the page (words) | `PropRole` |
 | **School code** | The code we give a school; everyone types it at setup | `schools.code`, `pnpm add-school` |
 | **Group** | A teacher's learners for one course. No name: shown as its course and when it was made | `groups`, `TeacherGroup`, `JoinedGroup` |
 | **Join code** | Six characters (no look-alike letters) a learner types, or opens as `/join/<code>`, to join a group. A new code stops the old one | `groups.join_code`, `makeCode` |

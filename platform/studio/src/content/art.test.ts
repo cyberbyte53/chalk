@@ -9,7 +9,7 @@ const svg = (body: string) =>
 describe("art checks", () => {
   it("passes pieces drawn with the look's colours and a content colour", () => {
     expect(
-      artProblems(svg('<circle class="draw-dot" r="6" style="--piece-color:#2B4CD3"/>')),
+      artProblems(svg('<circle class="draw-dot" r="6" style="--shape-color:#2B4CD3"/>')),
     ).toEqual([]);
   });
   it("refuses a raw colour, a script, a link, a handler, and a drawing with no viewBox", () => {

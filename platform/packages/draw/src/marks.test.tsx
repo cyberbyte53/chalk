@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { expectKitPiece, expectStylesUseTokens } from "./kit-checks";
+import { expectKitShape, expectStylesUseTokens } from "./kit-checks";
 import {
   AngleArc,
   Arrowhead,
@@ -19,8 +19,8 @@ describe("geometry marks", () => {
     ["ticks", <EqualTicks key="d" part="ticks" from={[0, 0]} to={[40, 0]} count={2} />],
     ["parallel", <ParallelArrows key="e" part="parallel" from={[0, 0]} to={[40, 0]} />],
     ["length", <SideLabel key="f" part="length" from={[0, 0]} to={[40, 0]} text="5 cm" />],
-  ])("%s renders, carries data-part and uses no raw colour", (part, piece) => {
-    expectKitPiece(piece, part);
+  ])("%s renders, carries data-part and uses no raw colour", (part, shape) => {
+    expectKitShape(shape, part);
   });
 
   it("the kit's styles use only the look's tokens", () => {
@@ -28,9 +28,9 @@ describe("geometry marks", () => {
   });
 
   it("an arrowhead's tip sits at the anchor, or 5 px past it when centred", () => {
-    const tip = expectKitPiece(<Arrowhead part="h" at={[0, 0]} toward={[1, 0]} />, "h");
+    const tip = expectKitShape(<Arrowhead part="h" at={[0, 0]} toward={[1, 0]} />, "h");
     expect(tip).toContain('d="M0 0 L-9');
-    const mid = expectKitPiece(
+    const mid = expectKitShape(
       <Arrowhead part="h" at={[0, 0]} toward={[1, 0]} shape={HEAD_MIDDLE} />,
       "h",
     );
@@ -38,7 +38,7 @@ describe("geometry marks", () => {
   });
 
   it("a right-angle square's corner is `size` along both rays", () => {
-    const html = expectKitPiece(
+    const html = expectKitShape(
       <RightAngle part="r" vertex={[0, 0]} p={[50, 0]} q={[0, 50]} />,
       "r",
     );
@@ -46,7 +46,7 @@ describe("geometry marks", () => {
   });
 
   it("an angle's label sits inside the angle, past the arcs", () => {
-    const html = expectKitPiece(
+    const html = expectKitShape(
       <AngleArc part="a" vertex={[0, 0]} p={[50, 0]} q={[0, 50]} r={14} count={2} label="x" />,
       "a",
     );
@@ -56,12 +56,12 @@ describe("geometry marks", () => {
   });
 
   it("a side's label is pushed along the normal away from the inside, or radially", () => {
-    const below = expectKitPiece(
+    const below = expectKitShape(
       <SideLabel part="s" from={[0, 0]} to={[40, 0]} text="a" away={[20, -30]} />,
       "s",
     );
     expect(below).toContain('y="14"');
-    const radial = expectKitPiece(
+    const radial = expectKitShape(
       <SideLabel
         part="s"
         from={[0, 0]}

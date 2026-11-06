@@ -12,7 +12,7 @@ import {
   Switch,
   Wire,
 } from "./circuit";
-import { expectKitPiece } from "./kit-checks";
+import { expectKitShape } from "./kit-checks";
 
 describe("circuit symbols", () => {
   it.each([
@@ -42,39 +42,39 @@ describe("circuit symbols", () => {
       "dial",
       <Dial key="k" part="dial" at={[60, 60]} value={0.3} max={1} letter="A" reading="0.30 A" />,
     ],
-  ])("%s renders, carries data-part and uses no raw colour", (part, piece) => {
-    expectKitPiece(piece, part);
+  ])("%s renders, carries data-part and uses no raw colour", (part, shape) => {
+    expectKitShape(shape, part);
   });
 
   it("a symbol is placed by a transform, and none at the origin", () => {
-    expect(expectKitPiece(<Cell part="c" at={[50, 20]} angle={90} />, "c")).toContain(
+    expect(expectKitShape(<Cell part="c" at={[50, 20]} angle={90} />, "c")).toContain(
       'transform="translate(50 20) rotate(90)"',
     );
-    expect(expectKitPiece(<Cell part="c" />, "c")).not.toContain("transform=");
+    expect(expectKitShape(<Cell part="c" />, "c")).not.toContain("transform=");
   });
 
   it("a cell's + plate is the long one, on the right; leads can be left off", () => {
-    const html = expectKitPiece(<Cell part="c" lead={0} long={13} />, "c");
+    const html = expectKitShape(<Cell part="c" lead={0} long={13} />, "c");
     expect(html).toContain('class="kit-plate-plus" x1="5" y1="-13"');
     expect(html).not.toContain("kit-wire");
   });
 
   it("a dark bulb has no glow; a lit one glows by its brightness", () => {
-    expect(expectKitPiece(<Bulb part="b" />, "b")).not.toContain("kit-bulb-glow");
-    const lit = expectKitPiece(<Bulb part="b" brightness={1} />, "b");
+    expect(expectKitShape(<Bulb part="b" />, "b")).not.toContain("kit-bulb-glow");
+    const lit = expectKitShape(<Bulb part="b" brightness={1} />, "b");
     expect(lit).toContain('r="18"');
     expect(lit).toContain("kit-filament is-lit");
   });
 
   it("an open switch's lever is raised, a closed one rests on the far contact", () => {
-    expect(expectKitPiece(<Switch part="s" isClosed />, "s")).toContain('x2="14" y2="0"');
-    expect(expectKitPiece(<Switch part="s" isClosed={false} />, "s")).not.toContain(
+    expect(expectKitShape(<Switch part="s" isClosed />, "s")).toContain('x2="14" y2="0"');
+    expect(expectKitShape(<Switch part="s" isClosed={false} />, "s")).not.toContain(
       'x2="14" y2="0"',
     );
   });
 
   it("a dial past its end pins the needle and marks the reading", () => {
-    const html = expectKitPiece(
+    const html = expectKitShape(
       <Dial part="d" at={[0, 0]} value={5} max={1} letter="A" reading="5 A" />,
       "d",
     );

@@ -24,7 +24,7 @@ export {
   type Tick,
   Trail,
   type TrailProps,
-} from "./pieces";
+} from "./basics";
 export { arrowhead, chevron } from "./shapes";
 export {
   type Inset,

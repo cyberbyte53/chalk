@@ -8,12 +8,12 @@ import { useContext, useMemo, useState } from "preact/hooks";
 export type Inset = { left: number; right: number; top: number; bottom: number };
 
 /**
- * The space pieces draw in: d3 scales from the maths (a number, a metre) to pixels, the stage's
+ * The space shapes draw in: d3 scales from the maths (a number, a metre) to pixels, the stage's
  * size, and the layer above the SVG where crowds are painted.
  */
 export type Space = {
   x: ScaleLinear<number, number>;
-  /** Null for a one-dimensional stage (a number line): pieces then take `y` in px. */
+  /** Null for a one-dimensional stage (a number line): shapes then take `y` in px. */
   y: ScaleLinear<number, number> | null;
   width: number;
   height: number;
@@ -24,10 +24,10 @@ export type Space = {
 
 const SpaceContext = createContext<Space | null>(null);
 
-/** The space of the stage a piece is in. */
+/** The space of the stage a shape is in. */
 export function useSpace(): Space {
   const space = useContext(SpaceContext);
-  if (space === null) throw new Error("A drawing piece must sit inside a <Stage>");
+  if (space === null) throw new Error("A drawing shape must sit inside a <Stage>");
   return space;
 }
 
@@ -57,8 +57,8 @@ export type StageProps = {
 };
 
 /**
- * A drawing: an SVG the pieces draw into, and a layer above it for crowds. Its scales are made
- * once per range and size, so pieces that only depend on them never redraw while others move.
+ * A drawing: an SVG the shapes draw into, and a layer above it for crowds. Its scales are made
+ * once per range and size, so shapes that only depend on them never redraw while others move.
  */
 export function Stage({
   label,
@@ -121,7 +121,7 @@ export function Stage({
   );
 }
 
-/** Draws its pieces above any crowd on the stage (the one particle to follow among thousands). */
+/** Draws its shapes above any crowd on the stage (the one particle to follow among thousands). */
 export function OnTop({ children }: { children?: ComponentChildren }): JSX.Element | null {
   const space = useSpace();
   if (space.top === null) return null;
@@ -132,7 +132,7 @@ export function OnTop({ children }: { children?: ComponentChildren }): JSX.Eleme
 }
 
 /**
- * The same stretch of screen measuring different numbers: pieces inside place themselves on this
+ * The same stretch of screen measuring different numbers: shapes inside place themselves on this
  * range instead (a magnified tenth drawn under the line it came from).
  */
 export function Range({

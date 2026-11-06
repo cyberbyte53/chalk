@@ -3,7 +3,7 @@ import { cssColor } from "@chalk/look";
 import type { JSX } from "preact";
 import { createPortal } from "preact/compat";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
-import { Dot } from "./pieces";
+import { Dot } from "./basics";
 import { type Space, toPixels, useSpace } from "./stage";
 
 /** How a collection is drawn. The collection decides; the prop never does. */

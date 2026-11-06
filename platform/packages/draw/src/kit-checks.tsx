@@ -4,7 +4,7 @@ import type { JSX } from "preact";
 import { renderToString } from "preact-render-to-string";
 import { expect } from "vitest";
 
-/** Checks every kit module's test runs on its pieces (used only by tests). */
+/** Checks every kit module's test runs on its shapes (used only by tests). */
 
 const RAW_COLOR = /#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(/;
 /** A colour written on the element itself, even a named one, instead of through a kit class. */
@@ -18,12 +18,12 @@ export function expectStylesUseTokens(): void {
 }
 
 /**
- * Renders a piece and checks it: something drawn, `data-part` on its root, no colour of its own,
- * and every kit-* class inside it styled in styles.css (a group's class names a piece and may
+ * Renders a shape and checks it: something drawn, `data-part` on its root, no colour of its own,
+ * and every kit-* class inside it styled in styles.css (a group's class names a shape and may
  * carry no style). Returns the markup.
  */
-export function expectKitPiece(piece: JSX.Element, part: string): string {
-  const html = renderToString(piece);
+export function expectKitShape(shape: JSX.Element, part: string): string {
+  const html = renderToString(shape);
   expect(html.length).toBeGreaterThan(0);
   expect(html).toMatch(new RegExp(`^<[a-z]+[^>]*\\sdata-part="${part}"`));
   expect(html).not.toMatch(RAW_COLOR);

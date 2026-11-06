@@ -18,7 +18,7 @@ const ALLOWED_TAGS = new Set([
   "tspan",
 ]);
 
-/** A colour the content gave a piece (`--piece-color:#…`) is allowed; any other raw colour isn't. */
+/** A colour the content gave a piece (`--shape-color:#…`) is allowed; any other raw colour isn't. */
 const RAW_COLOR = /#[0-9a-fA-F]{3,8}\b/g;
 
 /** What's wrong with art's markup; empty when it can be inlined in the app as it is. */
@@ -35,7 +35,7 @@ export function artProblems(svg: string): string[] {
   if (/\s(?:xlink:)?href=|\ssrc=/i.test(svg)) problems.push("links to something outside itself");
   for (const match of svg.matchAll(RAW_COLOR)) {
     const before = svg.slice(Math.max(0, (match.index ?? 0) - 14), match.index);
-    if (!before.endsWith("--piece-color:"))
+    if (!before.endsWith("--shape-color:"))
       problems.push(
         `has a raw colour ${match[0]}: use a look role (Color.Primary) or give it to a piece`,
       );

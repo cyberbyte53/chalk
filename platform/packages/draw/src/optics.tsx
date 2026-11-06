@@ -5,7 +5,7 @@ import { Arrowhead, type ArrowheadShape, HEAD_TIP } from "./marks";
 import type { Pt } from "./point";
 
 /**
- * Ray-diagram pieces, in px: the object and image arrows, a ray with its mid-arrow, the principal
+ * Ray-diagram shapes, in px: the object and image arrows, a ray with its mid-arrow, the principal
  * axis and the named points on it (O, F, 2F, P, C). Stateless.
  */
 

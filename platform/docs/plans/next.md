@@ -17,10 +17,11 @@ and before real learners.
 
 ## 2. One word per meaning (glossary)
 
-- [ ] The plane's walker, places, clues… are **parts** (as the glossary already said), not "pieces".
-- [ ] A drawing kit's axis, dot, mark… are **shapes**.
-- [ ] What a view draws for the student (a button, a readout) is an **element**.
-- [ ] Glossary: one entry per word.
+- [x] The plane's walker, places, clues… are **parts** (as the glossary already said), not "pieces".
+- [x] A drawing kit's axis, dot, mark… are **shapes**.
+- [x] What a view draws for the student (a button, a readout) is an **element** (in the glossary and
+  docs; code names like `data-part`, `PartSnapshot` are renamed when that code is next touched).
+- [x] Glossary: one entry per word.
 
 ## 3. Finish simplifying boards and props (each builds on the last)
 

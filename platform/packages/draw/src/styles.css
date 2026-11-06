@@ -1,5 +1,5 @@
-/* @chalk/draw: the pieces, drawn only with the look's tokens. A piece's own colour (a look role or
-   a hex from the content) arrives as --piece-color. */
+/* @chalk/draw: the shapes, drawn only with the look's tokens. A shape's own colour (a look role or
+   a hex from the content) arrives as --shape-color. */
 
 .draw-stage {
   position: relative;
@@ -45,28 +45,28 @@
   stroke-linecap: round;
 }
 .draw-tick text {
-  fill: var(--piece-color, var(--color-on-surface));
+  fill: var(--shape-color, var(--color-on-surface));
   font: 800 var(--text-note) var(--font-display);
 }
 
 .draw-dot {
-  fill: var(--piece-color, var(--color-primary));
+  fill: var(--shape-color, var(--color-primary));
   stroke: var(--color-surface);
   stroke-width: 3px;
 }
 
 .draw-mark line {
-  stroke: var(--piece-color, var(--color-on-secondary-container));
+  stroke: var(--shape-color, var(--color-on-secondary-container));
   stroke-width: 2px;
   stroke-dasharray: 3 3;
 }
 .draw-mark circle {
-  fill: var(--piece-color, var(--color-on-secondary-container));
+  fill: var(--shape-color, var(--color-on-secondary-container));
   stroke: var(--color-surface);
   stroke-width: 3px;
 }
 .draw-mark text {
-  fill: var(--piece-color, var(--color-on-secondary-container));
+  fill: var(--shape-color, var(--color-on-secondary-container));
   font: 800 var(--text-body) var(--font-display);
   paint-order: stroke;
   stroke: var(--color-surface);
@@ -76,14 +76,14 @@
 
 .draw-curve {
   fill: none;
-  stroke: var(--piece-color, var(--color-on-surface));
+  stroke: var(--shape-color, var(--color-on-surface));
   stroke-width: var(--shape-stroke);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .draw-line {
-  stroke: var(--piece-color, var(--color-on-surface));
+  stroke: var(--shape-color, var(--color-on-surface));
   stroke-width: var(--shape-stroke);
   stroke-linecap: round;
 }
@@ -91,7 +91,7 @@
   stroke-width: var(--shape-stroke-thin);
 }
 .draw-label {
-  fill: var(--piece-color, var(--color-on-surface));
+  fill: var(--shape-color, var(--color-on-surface));
   font-family: var(--font-display);
   font-weight: 800;
 }
@@ -119,7 +119,7 @@
   stroke-width: 16px;
 }
 
-/* ---- The drawing kit (lab.tsx, marks.tsx, optics.tsx, circuit.tsx): stateless pieces in px.
+/* ---- The drawing kit (lab.tsx, marks.tsx, optics.tsx, circuit.tsx): stateless shapes in px.
    A prop restyles one through the `class` it passes, from its own tokens. ---- */
 
 /* lab */

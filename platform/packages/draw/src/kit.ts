@@ -1,14 +1,14 @@
 import type { Pt } from "./point";
 
 /**
- * What every drawing-kit piece (lab, marks, optics, circuit) takes besides its geometry. Kit pieces
+ * What every drawing-kit shape (lab, marks, optics, circuit) takes besides its geometry. Kit shapes
  * are stateless, take positions in px (a caller converts with its own frame or the stage's scales),
  * and are coloured only by their `kit-*` classes in styles.css.
  */
 export type KitProps = {
-  /** The name it is pointed at by: becomes `data-part` on the piece's root. */
+  /** The name it is pointed at by: becomes `data-part` on the shape's root. */
   part?: string;
-  /** Extra classes on the root, for a prop to restyle the piece from its own tokens. */
+  /** Extra classes on the root, for a prop to restyle the shape from its own tokens. */
   class?: string;
 };
 

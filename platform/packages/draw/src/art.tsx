@@ -7,12 +7,12 @@ export { ArtFrame };
 /** A piece of art: what `art.tsx` next to a book's, chapter's or concept's build.yaml exports. */
 export type Art = {
   frame: ArtFrame;
-  /** Draws it with @chalk/draw's pieces at the frame's size. Run at build, never in the app. */
+  /** Draws it with @chalk/draw's shapes at the frame's size. Run at build, never in the app. */
   draw: (size: { width: number; height: number }) => JSX.Element;
 };
 
 /**
- * Art for a book, chapter or concept, drawn with the same pieces as the props. The build renders
+ * Art for a book, chapter or concept, drawn with the same shapes as the props. The build renders
  * it to SVG and checks it; see docs/making-art.md.
  *
  *     export const art = defineArt(ArtFrame.Card, ({ width, height }) => (

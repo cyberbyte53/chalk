@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { expectKitPiece } from "./kit-checks";
+import { expectKitShape } from "./kit-checks";
 import {
   Beaker,
   Bubbles,
@@ -35,12 +35,12 @@ describe("labware", () => {
     ["flame", <Flame key="f" part="flame" x={10} y={60} kind={FlameKind.Sooty} />],
     ["tripod", <Tripod key="g" part="tripod" x={100} table={180} hasDish />],
     ["bubbles", <Bubbles key="h" part="bubbles" x={50} y={130} height={40} count={8} />],
-  ])("%s renders, carries data-part and uses no raw colour", (part, piece) => {
-    expectKitPiece(piece, part);
+  ])("%s renders, carries data-part and uses no raw colour", (part, shape) => {
+    expectKitShape(shape, part);
   });
 
   it("a tube's liquid fills from the level down, in the caller's class, under the glass", () => {
-    const html = expectKitPiece(
+    const html = expectKitShape(
       <TestTube part="t" x={50} top={40} bottom={140} level={100} liquid="my-acid">
         <circle class="my-precipitate" r={2} />
       </TestTube>,
@@ -52,7 +52,7 @@ describe("labware", () => {
   });
 
   it("an empty tube draws no liquid", () => {
-    expect(expectKitPiece(<TestTube part="t" x={0} top={0} bottom={100} />, "t")).not.toContain(
+    expect(expectKitShape(<TestTube part="t" x={0} top={0} bottom={100} />, "t")).not.toContain(
       "kit-liquid",
     );
   });
@@ -65,18 +65,18 @@ describe("labware", () => {
 
   it("an unlit lamp or burner has no flame", () => {
     expect(
-      expectKitPiece(<SpiritLamp part="l" x={0} table={100} isLit={false} />, "l"),
+      expectKitShape(<SpiritLamp part="l" x={0} table={100} isLit={false} />, "l"),
     ).not.toContain("kit-flame");
-    expect(expectKitPiece(<Burner part="b" x={0} table={100} />, "b")).not.toContain(
+    expect(expectKitShape(<Burner part="b" x={0} table={100} />, "b")).not.toContain(
       "kit-burner-flame",
     );
   });
 
   it("a sooty flame smokes and a clean one has a core", () => {
-    expect(expectKitPiece(<Flame part="f" x={0} y={0} kind={FlameKind.Sooty} />, "f")).toContain(
+    expect(expectKitShape(<Flame part="f" x={0} y={0} kind={FlameKind.Sooty} />, "f")).toContain(
       "kit-smoke",
     );
-    expect(expectKitPiece(<Flame part="f" x={0} y={0} kind={FlameKind.Clean} />, "f")).toContain(
+    expect(expectKitShape(<Flame part="f" x={0} y={0} kind={FlameKind.Clean} />, "f")).toContain(
       "kit-burner-flame-core",
     );
   });
