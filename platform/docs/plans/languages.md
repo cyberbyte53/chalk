@@ -75,7 +75,7 @@ language tables are generated into a words module the bundle imports. Only here 
 
 `platform/packages/content/src/languages/<code>.ts`: its code, name, script (for `SPEAKABLE`,
 `said.ts:52`), number words (`spoken.ts:40`'s `NUMBER_WORDS`), digit style. Voices are a taste setting
-(the top `taste.md`'s `voices:`, each speaker's voice per language, read through the taste loader); a
+(the top `guide.md`'s `voices:` setting, each speaker's voice per language); a
 language adds its voice there. `LOCALES` is the list of these; `localizedSchema` (`localized.ts:14`), the MCP's language
 lists (`tools.ts:815`, `look.ts:38,96,551`, `stress.ts:163`, `app-driver.ts:526`) and every per-language
 check derive from it. Adding a language: this file, its tables, a reviewer.

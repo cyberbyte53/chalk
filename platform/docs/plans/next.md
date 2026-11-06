@@ -31,24 +31,17 @@ and before real learners.
 - [x] **One way for wrong-answer notes**: a check's note is said as a choice's is (`notes-once.md`):
   42 notes newly spoken, 84 clips.
 
-## 4. Approval follows what the student gets
+## 4. Authoring: how a chapter is made (`authoring.md`)
 
-- [ ] **Kept by replay**: a board whose code changed but which plays and draws the same in every language
-  keeps its approval on its own (`adding-pieces.md`, steps 6-7).
-- [ ] **Re-approve chapter 1 once**, after section 3: only boards that really changed come to review.
+- [ ] Its order, steps 1-10: the guide (instructions, then settings), threads, `plan.md` / `boards.md`,
+  commands, the editor, skills, Hindi grounded, checks, chapter 1 re-reviewed.
 
-## 5. New: languages, and the loops (before the next chapter)
+## 5. After, when needed
 
-- [ ] **Languages**: English written, every other language a table per lesson file (`languages.md`).
-- [ ] **Authoring loop**: a one-page plan gate (lessons, each one's idea, props to build or reuse), pinned
-  comments closed by whoever opened them, taste questions to the person, recorded plays as tests,
-  reviewer findings weighted (must fix, consider, taste).
-- [ ] **Content pipeline**: each chapter's sources in both languages; the term list made from them
-  (memory: Hindi grounded in NCERT).
-  How a Hindi line says a Latin letter (point names O, P, axes X, Y, and x, y: 148 of 349 Hindi lines
-  today) is decided there, from the Hindi book and a teacher's ear, then checked by the build.
+- [ ] **Languages** (`languages.md`): English written, each language a table; before a third language.
+- [ ] **Approval by what students get** (`kept-by-what-students-get.md`); once boards are kept across changes.
 - [ ] **Learning loop** (before real learners): everything worked out from events; fewer tables; Jugnu in
-  its own package; a learner's record versioned by what the board uses.
+  its own package.
 
 ## Later, only when needed
 
