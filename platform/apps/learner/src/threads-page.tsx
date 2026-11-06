@@ -50,10 +50,11 @@ function standing(threads: readonly Thread[]): string {
 
 const placeOf = (t: Thread): string =>
   t.board === undefined
-    ? // A planning file: its name in the chapter (outline.yaml, plan.md).
+    ? // A chapter's planning file: its name in the chapter (plan.md); a guide file (authoring/guide.md,
+      // a book's guide/…): its full path.
       (t.source ?? "plan")
         .replace(/:\d.*$/, "")
-        .replace(/^authoring\/books\/[^/]+\/[^/]+\//, "")
+        .replace(/^authoring\/books\/[^/]+\/(?!guide\/)[^/]+\//, "")
         .replace(/^source\/([a-z]{2}\/)?/, "")
     : `${t.board.split("/").at(-1)}${t.target ? ` · ${t.target}` : ""}${t.prop ? ` · prop ${t.prop}` : ""}`;
 

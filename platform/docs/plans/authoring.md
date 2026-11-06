@@ -214,6 +214,7 @@ makes wrong** (AGENTS.md, the skills, platform/docs), so agents are never pointe
    files, `source/` moved to `source/en/` with its three readers); chapter 1's four planning files rewritten
    into them (the person is told first, and approves `plan.md` once).
 5. **Commands:** `pnpm new chapter`, `pnpm attach`, the unlisted-folder check; proved on a throwaway chapter.
+   `new chapter` refuses the reserved name "guide" (platform/docs/plans/making-tree.md).
    What they write and print names every file and folder by its full path from the repo's root, linked
    in markdown.
 6. **Skills:** four, reading `pnpm guide`; the clean-up of `authoring/` (runs, retros, archive).

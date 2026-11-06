@@ -30,6 +30,7 @@ import {
   Status,
   Weight,
   applyChange,
+  fileHomeOf,
   isUnanswered,
   readComments,
   waitsOn,
@@ -1090,13 +1091,13 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       "comments",
       {
         title: "Read comments",
-        description: `Read threads: the person's (from the preview, the editor, or said in your chat), reviewers' findings (each with its weight: must or consider) and agents' questions (an ask has options; the person's answer is a reply, often an option's label). Each says whose turn it is: the person's, the fixer's or the reviewer's. Filter by \`at\`: threads at or under an address (a chapter, a board, a prop, a planning file). The threads still open (open, planned, ready) come in full: address, source line, what it showed, every message (a plan is its planned message); settled ones (closed, withdrawn) are counted, \`closed: true\` to read them too. \`id\`: one thread in full, settled or not. \`unanswered: true\`: only what waits on you (a ${ROLE}).`,
+        description: `Read threads: the person's (from the preview, the editor, or said in your chat), reviewers' findings (each with its weight: must or consider) and agents' questions (an ask has options; the person's answer is a reply, often an option's label). Each says whose turn it is: the person's, the fixer's or the reviewer's. Filter by \`at\`: threads at or under an address (a chapter, a board, a prop, a planning file, a guide file or folder). The threads still open (open, planned, ready) come in full: address, source line, what it showed, every message (a plan is its planned message); settled ones (closed, withdrawn) are counted, \`closed: true\` to read them too. \`id\`: one thread in full, settled or not. \`unanswered: true\`: only what waits on you (a ${ROLE}).`,
         inputSchema: {
           at: z
             .string()
             .optional()
             .describe(
-              'An address: threads at or under it ("content/class10-maths/real-numbers", "library/props/basics/choice"), or a planning file or folder ("authoring/books/class9-maths/coordinate-geometry/plan.md").',
+              'An address: threads at or under it ("content/class10-maths/real-numbers", "library/props/basics/choice"), or a file or folder under authoring/: a planning file ("authoring/books/class9-maths/coordinate-geometry/plan.md"), a guide file or folder ("authoring/guide.md", "authoring/guide", "authoring/books/class9-maths/guide.md").',
             ),
           unanswered: z
             .boolean()
@@ -1114,7 +1115,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         const { threads } = await readAll();
         let found = threads;
         if (args.at?.startsWith("authoring/")) {
-          // A planning file or folder: the threads written on it, by their source line.
+          // A file or folder under authoring/ (planning, guide): the threads written on it, by their source line.
           const prefix = args.at.replace(/\/$/, "");
           found = found.filter((c) => (c.source ?? "").startsWith(prefix));
         } else if (args.at !== undefined) {
@@ -1145,8 +1146,8 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
 
   /**
    * Where a thread is, from an address: a board or something on it, a prop or a part of it, or a
-   * planning file in authoring/books/ with the exact words it is about (`quote`). Says what's wrong
-   * when it names none of these.
+   * file under authoring/ (a guide file, or a chapter's planning file) with the exact words it is
+   * about (`quote`). Says what's wrong when it names none of these.
    */
   const placeOf = (
     at: string,
@@ -1156,9 +1157,11 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
     | { board?: string; target?: string; prop?: string; source?: string; quote?: string }
     | string => {
     const clean = at.trim();
-    if (clean.startsWith("authoring/books/")) {
+    if (clean.startsWith("authoring/")) {
       const file = clean.split("#")[0] ?? clean;
-      if (!/^authoring\/books\/[^/]+\/[^/]+\/.+/.test(file) || !existsSync(join(root, file)))
+      if (fileHomeOf(file) === undefined)
+        return `${file}: a thread on a file is on a guide file (authoring/guide.md, authoring/guide/…, a book's guide.md or guide/…) or a chapter's file (authoring/books/<book>/<chapter>/…)`;
+      if (!existsSync(join(root, file)) || !statSync(join(root, file)).isFile())
         return `no file ${file}`;
       if (quote === undefined || quote.trim() === "") {
         if (isWholeFile) return { source: `${file}:1` };
@@ -1177,7 +1180,7 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
       return (e as Error).message;
     }
     if (a.root === "library")
-      return "a thread is on a board, a prop or a planning file: give one's address, not the library's";
+      return "a thread is on a board, a prop, a planning file or a guide file: give one's address, not the library's";
     if (a.root === "content") {
       const piece = a.part?.split("/")[0];
       const where = readSources(root)[a.path];
@@ -1222,12 +1225,12 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
         .string()
         .optional()
         .describe(
-          'Where, by address. A board or something on it ("content/…/<board>#piece/part"), a prop wherever it is used ("library/props/<package>/<type>", or #part), or a planning file ("authoring/books/<book>/<chapter>/plan.md", with quote). With id: re-point that thread here, its place being gone (the text says where it went and why).',
+          'Where, by address. A board or something on it ("content/…/<board>#piece/part"), a prop wherever it is used ("library/props/<package>/<type>", or #part), or a file under authoring/ with quote: a planning file ("authoring/books/<book>/<chapter>/plan.md") or a guide file ("authoring/guide.md", "authoring/guide/examples.md", "authoring/books/<book>/guide.md" or guide/…). With id: re-point that thread here, its place being gone (the text says where it went and why).',
         ),
       quote: z
         .string()
         .optional()
-        .describe("On a planning file: the exact words the thread is about, as written."),
+        .describe("On a planning or guide file: the exact words the thread is about, as written."),
       turn: z
         .nativeEnum(Role)
         .optional()
@@ -1410,12 +1413,14 @@ export function chalkMcp(who: Who, lane: string = DEFAULT_LANE): McpServer {
           at: z
             .string()
             .describe(
-              'Where it applies, by address: a board or a piece ("content/…/<board>#piece"), a prop ("library/props/<package>/<type>"), or a planning file ("authoring/books/<book>/<chapter>/plan.md": with quote for its words, without for the whole file).',
+              'Where it applies, by address: a board or a piece ("content/…/<board>#piece"), a prop ("library/props/<package>/<type>"), or a file under authoring/: a planning file ("authoring/books/<book>/<chapter>/plan.md") or a guide file ("authoring/guide.md", "authoring/guide/…", "authoring/books/<book>/guide.md" or guide/…), with quote for its words, without for the whole file.',
             ),
           quote: z
             .string()
             .optional()
-            .describe("On a planning file: the exact words it is about. Left out: the whole file."),
+            .describe(
+              "On a planning or guide file: the exact words it is about. Left out: the whole file.",
+            ),
         },
         annotations: {
           readOnlyHint: false,

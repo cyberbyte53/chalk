@@ -72,10 +72,11 @@ export const turnWords = (t: Thread): string =>
 
 const where = (t: Thread) =>
   t.board === undefined
-    ? // A planning file: its chapter and name (coordinate-geometry · outline.yaml).
+    ? // A chapter's planning file: its chapter and name (coordinate-geometry · plan.md); a guide
+      // file: its full path (authoring/guide/examples.md).
       (t.source ?? "plan")
         .replace(/:\d.*$/, "")
-        .replace(/^authoring\/books\/[^/]+\/([^/]+)\/(?:source\/)?/, "$1 · ")
+        .replace(/^authoring\/books\/[^/]+\/(?!guide\/)([^/]+)\/(?:source\/)?/, "$1 · ")
     : `${t.board.split("/").at(-1)}${t.target ? ` · ${t.target}` : ""}${t.prop ? ` · prop ${t.prop}` : ""}`;
 
 const planOf = (t: Thread) => [...t.messages].reverse().find((m) => m.status === "planned");

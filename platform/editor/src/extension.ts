@@ -27,9 +27,10 @@ import { type ThreadItem, ThreadsTree } from "./threads";
  * - Pick a piece, then ask the agent about it (it goes to the chat with its board, line and words)
  *   or leave a comment (sent to the dev server, which files it under authoring/: the chapter's comments.yaml, or
  *   the prop's for a pick on a prop).
- * - The Chalk tree (in the explorer): book → chapter → its planning files (with their state; approve,
- *   take back) and its lessons, with open comments counted. A planning file's failing checks are
- *   problems on its lines; select words in one to comment on them (planning.ts).
+ * - The Chalk tree (in the explorer): book → chapter → lessons, with open comments counted. Each
+ *   level (all books, a book, a chapter) has a "Making" group first: its guide and guide/ files, and
+ *   a chapter's plan and boards (with their state; approve, take back). A planning file's failing
+ *   checks are problems on its lines; select words in any of these files to comment on them.
  *
  * It uses a dev server already running on :5173, or starts the learner app's (and the content
  * rebuild on save) itself.
@@ -323,7 +324,9 @@ type Node = {
     | "threads"
     | "book"
     | "chapter"
-    | "planning"
+    | "making"
+    | "guide"
+    | "guidedir"
     | "planfile"
     | "lesson"
     | "questions"
@@ -339,6 +342,8 @@ type Node = {
   file: string;
   /** A planning file's state, as the dev server reads it. */
   plan?: PlanningFile;
+  /** A level's title (Making, a missing guide): the heading of the guide written for it. */
+  title?: string;
 };
 
 const readJson = <T>(file: string): T | null => {
@@ -354,6 +359,26 @@ const dirsIn = (dir: string): string[] =>
     ? readdirSync(dir).filter((n) => !n.startsWith(".") && statSync(join(dir, n)).isDirectory())
     : [];
 
+/**
+ * A level's guide folder (authoring/guide/, a book's or a chapter's guide/): a reserved name, never
+ * a book or a chapter (as platform/studio/src/comments.ts's GUIDE).
+ */
+const GUIDE = "guide";
+
+/** The books, or a book's chapters, being planned: the folders under it, its guide/ apart. */
+const levelsIn = (dir: string): string[] => dirsIn(dir).filter((n) => n !== GUIDE);
+
+/** Every file under a folder, by its path in it, in order. */
+function filesUnder(dir: string, under = ""): string[] {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((d) => !d.name.startsWith("."))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .flatMap((d) =>
+      d.isDirectory() ? filesUnder(join(dir, d.name), `${under}${d.name}/`) : [`${under}${d.name}`],
+    );
+}
+
 /** A chapter's threads not yet settled, as the dev server gives them: how many are whose turn. */
 /** The threads on a chapter: on its boards, its planning files or its content's code. */
 function chapterThreads(chapter: string) {
@@ -365,9 +390,15 @@ function chapterThreads(chapter: string) {
   return threads.allThreads.filter(on);
 }
 
-/** A book's own threads: on its screen (its title, art), not its chapters'. */
+/** A book's own threads: on its screen (its title, art) and its guide files, not its chapters'. */
 function bookThreads(book: string) {
-  return threads.allThreads.filter((t) => t.board === book);
+  const guide = `authoring/books/${book}/${GUIDE}`;
+  return threads.allThreads.filter(
+    (t) =>
+      t.board === book ||
+      (t.board === undefined &&
+        ((t.source ?? "").startsWith(`${guide}.md`) || (t.source ?? "").startsWith(`${guide}/`))),
+  );
 }
 
 function openComments(
@@ -444,7 +475,7 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
     if (node.kind === "content") {
       const item = new vscode.TreeItem("Content", vscode.TreeItemCollapsibleState.Expanded);
       item.iconPath = new vscode.ThemeIcon("book");
-      item.tooltip = "Every book: its chapters, their planning files and lessons";
+      item.tooltip = "How we make lessons (Making), and every book: its chapters and their lessons";
       item.contextValue = "content";
       return item;
     }
@@ -472,7 +503,18 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       item.command = { command: "chalk.prop.open", title: "Open", arguments: [node.path] };
       return item;
     }
-    const isLeaf = node.kind === "lesson" || node.kind === "planfile" || node.kind === "family";
+    const isLeaf =
+      node.kind === "lesson" ||
+      node.kind === "planfile" ||
+      node.kind === "family" ||
+      node.kind === "guide";
+    if (node.kind === "guidedir") {
+      const item = new vscode.TreeItem(node.label, vscode.TreeItemCollapsibleState.Collapsed);
+      item.iconPath = vscode.ThemeIcon.Folder;
+      item.tooltip = rel(node.file);
+      item.contextValue = "guidedir";
+      return item;
+    }
     const item = new vscode.TreeItem(
       node.label,
       isLeaf ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Collapsed,
@@ -511,9 +553,21 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
         };
       return item;
     }
-    if (node.kind === "planning") {
-      item.iconPath = new vscode.ThemeIcon("checklist");
-      item.contextValue = "planning";
+    if (node.kind === "making") {
+      item.iconPath = new vscode.ThemeIcon("tools");
+      item.tooltip = `What makes this content: its guide, and a chapter's plan and boards (${rel(node.file)})`;
+      item.contextValue = "making";
+      return item;
+    }
+    if (node.kind === "guide") {
+      const exists = existsSync(node.file);
+      if (node.description !== undefined) item.description = node.description;
+      item.tooltip = `${rel(node.file)}${exists ? "" : "\n\nClick to write one from a skeleton."}`;
+      item.iconPath = new vscode.ThemeIcon(exists ? "book" : "circle-outline");
+      item.contextValue = "guide";
+      item.command = exists
+        ? { command: "vscode.open", title: "Open", arguments: [vscode.Uri.file(node.file)] }
+        : { command: "chalk.guide.create", title: "Write", arguments: [node.file, node.title] };
       return item;
     }
     if (node.kind === "questions") {
@@ -526,7 +580,8 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
     if (node.toReview !== undefined) {
       item.description = "to self-review";
       item.tooltip = `${node.path}\n\nTo self-review before you see it: ${node.toReview}.`;
-      item.iconPath = new vscode.ThemeIcon("warning");
+      // Waiting on an agent's self-review, not broken: a clock, not a warning.
+      item.iconPath = new vscode.ThemeIcon("clock");
     }
     item.command = {
       command: "chalk.preview",
@@ -571,13 +626,79 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
         { label: "Props", path: "library/props", kind: "props", file: "" },
       ];
     }
+    /** A level's Making: its folder under authoring/, and its title. */
+    const making = (path: string, levelTitle: string): Node => ({
+      label: "Making",
+      path,
+      kind: "making",
+      file: path === "" ? join(root, "authoring") : join(authoring, path),
+      title: levelTitle,
+    });
+    if (node.kind === "guidedir")
+      return filesUnder(node.file).map(
+        (f): Node => ({
+          label: f,
+          path: rel(join(node.file, f)),
+          kind: "guide",
+          file: join(node.file, f),
+        }),
+      );
+    if (node.kind === "making") {
+      const depth = node.path === "" ? 0 : node.path.split("/").length;
+      // Its guide.md, or which guide applies while it has none; then its guide/ files, if any.
+      const own = join(node.file, `${GUIDE}.md`);
+      const hasBookGuide = existsSync(join(dirname(node.file), `${GUIDE}.md`));
+      const guide: Node = {
+        label: "Guide",
+        path: rel(own),
+        kind: "guide",
+        file: own,
+        description: existsSync(own)
+          ? depth === 0
+            ? "for every book"
+            : undefined
+          : depth === 2 && hasBookGuide
+            ? "none: the book's and the top guide apply"
+            : "none: the top guide applies",
+        title: node.title,
+      };
+      const folder = join(node.file, GUIDE);
+      const guides: Node[] = [guide];
+      if (existsSync(folder))
+        guides.push({ label: `${GUIDE}/`, path: rel(folder), kind: "guidedir", file: folder });
+      if (depth < 2) return guides;
+      if (!(await ensureServer())) return guides;
+      const [book = "", chapter = ""] = node.path.split("/");
+      try {
+        const c = await readOne(base, book, chapter);
+        // The outline is the machine's: never shown; when it fails, plan.md says the agent fixes it.
+        const names: Record<string, string> = { "plan.md": "Plan", "boards.md": "Boards" };
+        const shown = c.files.filter((f) => !f.file.startsWith("source/"));
+        return [
+          ...guides,
+          ...shown.map(
+            (f): Node => ({
+              label: names[f.file] ?? f.file,
+              path: `${node.path}/${f.file}`,
+              kind: "planfile",
+              file: join(root, c.dir, f.file),
+              plan: f,
+            }),
+          ),
+        ];
+      } catch (e) {
+        log.appendLine(`Chalk: the planning files of ${node.path} couldn't be read: ${String(e)}`);
+        return guides;
+      }
+    }
     if (node.kind === "content") {
-      // Books built, and books being planned.
+      // How we make lessons, then the books built and the books being planned.
       const index = readJson<{ books: Ref[] }>(join(build, "index.json"));
       const books = [
-        ...new Set([...(index?.books ?? []).map((r) => r.path), ...dirsIn(authoring)]),
+        ...new Set([...(index?.books ?? []).map((r) => r.path), ...levelsIn(authoring)]),
       ];
       return [
+        making("", "every book"),
         ...books.map(
           (slug): Node => ({
             label: title(readJson(join(build, `${slug}.json`)), slug),
@@ -593,24 +714,23 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       const chapters = [
         ...new Set([
           ...(book?.chapters ?? []).map((r) => r.path),
-          ...dirsIn(join(authoring, node.path)).map((c) => `${node.path}/${c}`),
+          ...levelsIn(join(authoring, node.path)).map((c) => `${node.path}/${c}`),
         ]),
       ];
-      return chapters.map((slug, i) => ({
-        label: `${i + 1}. ${title(readJson(join(build, `${slug}.json`)), slug.split("/").at(-1) ?? slug)}`,
-        path: slug,
-        kind: "chapter",
-        file: join(root, "content", slug, "build.yaml"),
-      }));
+      return [
+        making(node.path, node.label),
+        ...chapters.map(
+          (slug, i): Node => ({
+            label: `${i + 1}. ${title(readJson(join(build, `${slug}.json`)), slug.split("/").at(-1) ?? slug)}`,
+            path: slug,
+            kind: "chapter",
+            file: join(root, "content", slug, "build.yaml"),
+          }),
+        ),
+      ];
     }
     if (node.kind === "chapter") {
       const chapter = readJson<{ concepts: Ref[] }>(join(build, `${node.path}.json`));
-      const planning: Node = {
-        label: "Planning",
-        path: node.path,
-        kind: "planning",
-        file: join(authoring, node.path),
-      };
       // Which lessons wait on a self-review (a lesson changed since a reviewer last looked).
       const [book = "", name = ""] = node.path.split("/");
       const lessons = await readOne(base, book, name)
@@ -631,7 +751,7 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
               },
             ];
       return [
-        planning,
+        making(node.path, title(readJson(join(build, `${node.path}.json`)), name)),
         ...(chapter?.concepts ?? []).map((ref): Node => {
           const slug = ref.path;
           const state = lessons.find((l) => slug.endsWith(`/${l.slug}`));
@@ -661,25 +781,6 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
           ...(n === undefined ? {} : { description: `${n} ${n === 1 ? "question" : "questions"}` }),
         };
       });
-    }
-    if (node.kind === "planning") {
-      if (!(await ensureServer())) return [];
-      const [book = "", chapter = ""] = node.path.split("/");
-      try {
-        const c = await readOne(base, book, chapter);
-        // The outline is the machine's: never shown; when it fails, plan.md says the agent fixes it.
-        const shown = c.files.filter((f) => !f.file.startsWith("source/"));
-        return shown.map((f, i) => ({
-          label: `${i + 1}. ${f.file.replace(/^source\/[a-z]{2}\//, "")}`,
-          path: `${node.path}/${f.file}`,
-          kind: "planfile",
-          file: join(root, c.dir, f.file),
-          plan: f,
-        }));
-      } catch (e) {
-        log.appendLine(`Chalk: the planning files of ${node.path} couldn't be read: ${String(e)}`);
-        return [];
-      }
     }
     return [];
   }
@@ -727,6 +828,31 @@ async function approveFile(node: Node | undefined, isApproved: boolean): Promise
   tree.refresh();
   void refreshProblems();
 }
+/**
+ * A missing guide's first words: its heading (the level's title), and a link to the guide directly
+ * above it (a chapter's: its book's if there is one, else the top), named by its full path.
+ */
+function guideSkeleton(file: string, level: string): string {
+  const dir = dirname(file);
+  const top = join(root, "authoring", `${GUIDE}.md`);
+  // Under authoring/books/: [book] for a book, [book, chapter] for a chapter; [] for the top.
+  const [book, chapter] = rel(dir)
+    .replace(/^authoring\/?/, "")
+    .replace(/^books\//, "")
+    .split("/");
+  const candidates =
+    chapter !== undefined
+      ? [join(root, "authoring", "books", book ?? "", `${GUIDE}.md`), top]
+      : book !== ""
+        ? [top]
+        : [];
+  const above = candidates.find((g) => existsSync(g));
+  const heading = `# How we make the lessons of ${level || rel(dir)}\n`;
+  if (above === undefined) return `${heading}\nSay only what is different here.\n`;
+  const link = `[${rel(above)}](${relative(dir, above).split(sep).join("/")})`;
+  return `${heading}\nAdds to ${link}: say only what is different here, and where it changes that guide, say so.\n`;
+}
+
 /** Writes on a thread as you, then redraws what shows threads. Says why, if it was refused. */
 async function writeThread(id: string, text: string, status?: string): Promise<boolean> {
   const done = await changeComments({ op: "write", id, text, ...(status ? { status } : {}) });
@@ -742,8 +868,8 @@ function threadCommands(fileComments: FileComments): vscode.Disposable[] {
     vscode.commands.registerCommand("chalk.thread.open", async (item: unknown) => {
       const t = thread(item);
       if (t === undefined) return;
-      // A thread on a planning file: the file, at its words.
-      if (t.board === undefined && t.source?.startsWith("authoring/books/"))
+      // A thread on a planning or guide file: the file, at its words.
+      if (t.board === undefined && t.prop === undefined && t.source?.startsWith("authoring/"))
         return fileComments.reveal(t);
       // The thread on the open threads' page, opened at it.
       await showQuery(`threads&thread=${t.id}`);
@@ -832,13 +958,22 @@ export function activate(context: vscode.ExtensionContext): void {
   // Agents in this window (Cursor's, Claude Code's) connect to the chalk MCP service.
 
   let timer: NodeJS.Timeout | undefined;
-  // Threads on planning files, in the files themselves.
+  // Threads on planning and guide files, in the files themselves.
   const fileComments = new FileComments(root, changeComments, () => {
     void threads.refresh();
   });
   context.subscriptions.push(
     log,
     vscode.commands.registerCommand("chalk.preview", (uri?: vscode.Uri) => showPreview(uri)),
+    // A level's missing guide, written from a skeleton that links the guide directly above it.
+    vscode.commands.registerCommand("chalk.guide.create", async (file: string, level = "") => {
+      if (!existsSync(file)) {
+        mkdirSync(dirname(file), { recursive: true });
+        writeFileSync(file, guideSkeleton(file, level));
+      }
+      await vscode.window.showTextDocument(vscode.Uri.file(file));
+      tree.refresh();
+    }),
     vscode.commands.registerCommand("chalk.pick", async () => {
       await showPreview();
       void panel?.webview.postMessage({ type: "pick" });
@@ -883,7 +1018,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const watcher = vscode.workspace.createFileSystemWatcher(
     new vscode.RelativePattern(
       folder,
-      "{build/index.json,library/catalogue.md,authoring/books/**,authoring/props/*/comments.yaml}",
+      "{build/index.json,library/catalogue.md,authoring/comments.yaml,authoring/guide.md,authoring/guide/**,authoring/books/**,authoring/props/*/comments.yaml}",
     ),
   );
   // A thread changed (a reply in the preview, an agent's answer): the tree's counts follow.

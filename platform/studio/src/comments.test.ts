@@ -13,6 +13,8 @@ import {
   type Who,
   YOU,
   applyChange,
+  fileHomeOf,
+  homeOf,
   pickedOption,
   readComments,
   waitsOn,
@@ -547,6 +549,69 @@ describe("ask", () => {
     expect(t).toMatchObject({ home: "content/class10-maths/polynomials", turn: Role.Person });
     expect(t?.quote).toBeUndefined();
     expect(t?.board).toBeUndefined();
+  });
+});
+
+describe("threads on guide files", () => {
+  const BOOK = "authoring/books/class10-maths";
+  const FILES: [file: string, home: string, comments: string][] = [
+    ["authoring/guide.md", "authoring", "authoring/comments.yaml"],
+    ["authoring/guide/examples.md", "authoring", "authoring/comments.yaml"],
+    [`${BOOK}/guide.md`, "content/class10-maths", `${BOOK}/comments.yaml`],
+    [`${BOOK}/guide/x.md`, "content/class10-maths", `${BOOK}/comments.yaml`],
+    [
+      `${BOOK}/polynomials/plan.md`,
+      "content/class10-maths/polynomials",
+      `${BOOK}/polynomials/comments.yaml`,
+    ],
+  ];
+
+  function guided(): string {
+    const root = repo();
+    for (const [file] of FILES) {
+      mkdirSync(join(root, file, ".."), { recursive: true });
+      writeFileSync(join(root, file), "# A guide\n\nSay only what is different here.\n");
+    }
+    return root;
+  }
+
+  it("files each in its home, from its path, and reads it back", () => {
+    const root = guided();
+    const started = FILES.map(([file, home, comments]) => {
+      const t = start(root, {
+        board: undefined,
+        target: undefined,
+        source: `${file}:3`,
+        quote: "only what is different",
+        text: `on ${file}`,
+      });
+      expect(t.home, file).toBe(home);
+      expect(readFileSync(join(root, comments), "utf8"), file).toContain(`on ${file}`);
+      return t;
+    });
+    const read = readComments(root);
+    expect(read.problems).toEqual([]);
+    for (const t of started)
+      expect(read.threads.find((x) => x.id === t.id)).toMatchObject({
+        home: t.home,
+        source: t.source,
+        quote: "only what is different",
+      });
+  });
+
+  it("never takes a guide folder for a book or a chapter", () => {
+    const root = guided();
+    // Not a thread list: read as a chapter's or a book's, it would be a problem.
+    writeFileSync(join(root, BOOK, "guide", "comments.yaml"), "not: a list\n");
+    mkdirSync(join(root, "authoring/books/guide"), { recursive: true });
+    writeFileSync(join(root, "authoring/books/guide/comments.yaml"), "not: a list\n");
+    expect(readComments(root).problems).toEqual([]);
+    expect(fileHomeOf(`${BOOK}/guide/x.md:1`)).toBe("content/class10-maths");
+    expect(fileHomeOf("authoring/books/guide/x/plan.md")).toBeUndefined();
+    expect(fileHomeOf(`${BOOK}/notes.md`)).toBeUndefined();
+    expect(
+      homeOf(root, { board: "class10-maths/guide/x", source: "content/class10-maths/guide/x:1" }),
+    ).toBe(undefined);
   });
 });
 

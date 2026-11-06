@@ -139,6 +139,8 @@ function devStudio(): Plugin {
         timer = setTimeout(() => server.ws.send({ type: "custom", event: "chalk:comments" }), 50);
       };
       server.watcher.add([
+        join(ROOT, "authoring", "comments.yaml"),
+        join(ROOT, "authoring", "books", "*", "comments.yaml"),
         join(ROOT, "authoring", "books", "*", "*", "comments.yaml"),
         join(ROOT, "authoring", "props", "*", "comments.yaml"),
       ]);

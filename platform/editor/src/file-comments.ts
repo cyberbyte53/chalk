@@ -3,7 +3,8 @@ import * as vscode from "vscode";
 import { type Thread, turnWords } from "./threads";
 
 /**
- * Threads on a chapter's planning files, shown in the files themselves (VS Code's comments), on the
+ * Threads on a chapter's planning files and on every guide file (authoring/guide.md,
+ * authoring/guide/…, and a book's or a chapter's guide.md and guide/…), shown in the files themselves (VS Code's comments), on the
  * words they are about: read, reply, close, or start one with the + in the margin. Everything is
  * read from and written through the dev server, the one writer (platform/docs/comments.md); this
  * only draws what it is given and sends what the person does.
@@ -11,7 +12,13 @@ import { type Thread, turnWords } from "./threads";
 
 type Send = (change: Record<string, unknown>) => Promise<{ ok: boolean; error?: string }>;
 
-const PLANNING = /^authoring\/books\/[^/]+\/[^/]+\/.+/;
+/**
+ * The files a thread can be on: the guide for every book (authoring/guide.md, authoring/guide/…), a
+ * book's guide.md or guide/…, and any file in a chapter's folder (its planning files, its guide).
+ * As platform/studio/src/comments.ts's fileHomeOf.
+ */
+const PLANNING =
+  /^authoring\/(?:guide\.md|guide\/.+|books\/(?!guide\/)[^/]+\/(?:guide\.md|guide\/.+|(?!guide\/)[^/]+\/.+))$/;
 
 /** The command an option's link runs: his answer, that option's label (extension.ts). */
 export const ANSWER_COMMAND = "chalk.thread.answer";
@@ -87,7 +94,7 @@ export class FileComments implements vscode.Disposable {
     private readonly send: Send,
     private readonly refresh: () => void,
   ) {
-    // The + in the margin on every planning file.
+    // The + in the margin on every planning and guide file.
     this.controller.commentingRangeProvider = {
       provideCommentingRanges: (doc) =>
         this.relOf(doc.uri) === undefined
@@ -100,7 +107,7 @@ export class FileComments implements vscode.Disposable {
     };
   }
 
-  /** A planning file's path in the repo, if the file is one. */
+  /** A planning or guide file's path in the repo, if the file is one. */
   private relOf(uri: vscode.Uri): string | undefined {
     if (uri.scheme !== "file" || !uri.fsPath.startsWith(this.root)) return undefined;
     const rel = uri.fsPath
@@ -110,13 +117,13 @@ export class FileComments implements vscode.Disposable {
     return PLANNING.test(rel) && !rel.endsWith("comments.yaml") ? rel : undefined;
   }
 
-  /** Draws the threads still talked about on the planning files they are on. */
+  /** Draws the threads still talked about on the planning and guide files they are on. */
   async show(threads: readonly Thread[]): Promise<void> {
     const live = threads.filter(
       (t) =>
         t.board === undefined &&
         t.source !== undefined &&
-        PLANNING.test(t.source) &&
+        PLANNING.test(t.source.replace(/:\d+(-\d+)?$/, "")) &&
         (t.status === "open" || t.status === "planned" || t.status === "ready"),
     );
     for (const [id, drawn] of this.shown)

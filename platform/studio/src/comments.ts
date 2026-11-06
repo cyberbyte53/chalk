@@ -171,7 +171,7 @@ export const threadSchema = z
   .strict();
 export type Thread = z.infer<typeof threadSchema>;
 
-/** A thread and where it is filed: "content/<book>/<chapter>" or "library/props/<package>". */
+/** A thread and where it is filed: "authoring", "content/<book>[/<chapter>]" or "library/props/<package>". */
 export type Filed = Thread & { home: string };
 
 // ---- Where a thread lives ----
@@ -194,41 +194,86 @@ export function propHomes(root: string): Map<string, string> {
 }
 
 /**
- * Where a thread is filed: its prop's package, else its board's (or source's) chapter, else (a
- * thread at a book itself, on the book's screen) its book.
+ * The home of the guide for every book (authoring/guide.md, authoring/guide/): its threads are kept
+ * in authoring/comments.yaml.
+ */
+export const AUTHORING_HOME = "authoring";
+
+/**
+ * A reserved name: a level's guide folder (authoring/guide/, authoring/books/<book>/guide/), never a
+ * book or a chapter. Every lister of books and chapters skips it.
+ */
+export const GUIDE = "guide";
+
+/**
+ * The home of a thread on a file under authoring/, from its path alone (a source line's `:12` is
+ * dropped): the guide for every book → "authoring"; a book's guide.md or guide/ → its book; a file
+ * in a chapter's folder → its chapter. Undefined for any other path.
+ */
+export function fileHomeOf(source: string): string | undefined {
+  const path = source.replace(/:\d+(-\d+)?$/, "");
+  if (path === `authoring/${GUIDE}.md` || path.startsWith(`authoring/${GUIDE}/`))
+    return AUTHORING_HOME;
+  const m = /^authoring\/books\/([^/]+)\/(.+)$/.exec(path);
+  if (!m?.[1] || !m[2] || m[1] === GUIDE) return undefined;
+  const [first, ...rest] = m[2].split("/");
+  if (first === `${GUIDE}.md` || (first === GUIDE && rest.length > 0)) return `content/${m[1]}`;
+  return first && rest.length > 0 ? `content/${m[1]}/${first}` : undefined;
+}
+
+/**
+ * Where a thread is filed: its prop's package; else, for a file under authoring/, its file's home
+ * (by path); else its board's (or source's) chapter; else (a thread at a book itself, on the book's
+ * screen, or a source line in a book's own files) its book.
  */
 export function homeOf(
   root: string,
   c: Pick<Thread, "prop" | "board" | "source">,
 ): string | undefined {
   if (c.prop !== undefined) return propHomes(root).get(c.prop);
+  if (c.board === undefined && c.source?.startsWith("authoring/")) return fileHomeOf(c.source);
   // A chapter, or a book, is a folder under content/ or its planning under authoring/books/ (a
-  // source line's file, build.yaml:1, is neither).
+  // source line's file, build.yaml:1, is neither); "guide" is never one.
   const isFolder = (...parts: string[]) =>
-    existsSync(join(root, "content", ...parts)) ||
-    existsSync(join(root, "authoring", "books", ...parts));
+    !parts.includes(GUIDE) &&
+    [join(root, "content", ...parts), join(root, "authoring", "books", ...parts)].some(
+      (dir) => existsSync(dir) && statSync(dir).isDirectory(),
+    );
   for (const value of [c.board, c.source]) {
     if (value === undefined) continue;
     const [book, chapter] = value.replace(/^content\/|^authoring\/books\//, "").split("/");
     if (book && chapter && isFolder(book, chapter)) return `content/${book}/${chapter}`;
   }
+  // The book: a board that is the book itself, or a source line in the book's own files.
   const [book, ...rest] = (c.board ?? "").replace(/^content\//, "").split("/");
-  return book && rest.length === 0 && isFolder(book) ? `content/${book}` : undefined;
+  if (book && rest.length === 0 && isFolder(book)) return `content/${book}`;
+  const [sourceBook] = (c.board === undefined ? (c.source ?? "") : "")
+    .replace(/^content\//, "")
+    .split("/");
+  return sourceBook && isFolder(sourceBook) ? `content/${sourceBook}` : undefined;
 }
 
 const dirsIn = (dir: string): string[] =>
   existsSync(dir)
     ? readdirSync(dir, { withFileTypes: true })
-        .filter((d) => d.isDirectory() && !d.name.startsWith(".") && d.name !== "node_modules")
+        .filter(
+          (d) =>
+            d.isDirectory() &&
+            !d.name.startsWith(".") &&
+            d.name !== "node_modules" &&
+            d.name !== GUIDE,
+        )
         .map((d) => d.name)
     : [];
 
 /**
- * Every home a thread can be about: each book, chapter and prop package there is, and any that
- * still has threads kept under authoring/ (its folder since removed: its threads are still read).
+ * Every home a thread can be about: the guide for every book, each book, chapter and prop package
+ * there is, and any that still has threads kept under authoring/ (its folder since removed: its
+ * threads are still read).
  */
 function homes(root: string): string[] {
   const kept = [
+    AUTHORING_HOME,
     ...dirsIn(join(root, "authoring", "books")).map((book) => `content/${book}`),
     ...dirsIn(join(root, "authoring", "books")).flatMap((book) =>
       dirsIn(join(root, "authoring", "books", book)).map((chapter) => `content/${book}/${chapter}`),
@@ -248,15 +293,19 @@ function homes(root: string): string[] {
 }
 
 /**
- * A home's comments file, relative to the repo: content/<book>/<chapter> is
- * kept in authoring/books/<book>/<chapter>, library/props/<package> in authoring/props/<package>.
+ * A home's comments file, relative to the repo: "authoring" (the guide for every book) is kept in
+ * authoring/, content/<book>[/<chapter>] in authoring/books/<book>[/<chapter>],
+ * library/props/<package> in authoring/props/<package>.
  */
 export function fileOf(home: string): string {
+  if (home === AUTHORING_HOME) return `authoring/${COMMENTS_FILE}`;
   if (home.startsWith("content/"))
     return `authoring/books/${home.slice("content/".length)}/${COMMENTS_FILE}`;
   if (home.startsWith("library/props/"))
     return `authoring/props/${home.slice("library/props/".length)}/${COMMENTS_FILE}`;
-  throw new Error(`no home ${home}: threads are about a book, a chapter or a prop package`);
+  throw new Error(
+    `no home ${home}: threads are about the guide, a book, a chapter or a prop package`,
+  );
 }
 
 // ---- Reading ----

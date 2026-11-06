@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
-import { readComments, waitsOn } from "./comments";
+import { GUIDE, readComments, waitsOn } from "./comments";
 import { type BoardChange, changesUnder } from "./reviewed";
 
 /**
@@ -616,7 +616,8 @@ export function readChapters(root: string): Chapter[] {
   if (!existsSync(books)) return [];
   const dirs = (d: string) =>
     readdirSync(d, { withFileTypes: true })
-      .filter((x) => x.isDirectory())
+      // "guide" is a level's guide folder, never a book or a chapter.
+      .filter((x) => x.isDirectory() && x.name !== GUIDE)
       .map((x) => x.name);
   return dirs(books).flatMap((book) =>
     dirs(join(books, book))

@@ -12,6 +12,7 @@ import {
   nextStep,
   readBoards,
   readChapter,
+  readChapters,
   readLessons,
   readPlan,
   stampProblems,
@@ -260,6 +261,18 @@ describe("a chapter's checks", () => {
     build(root, ["coordinates", "plotting"]);
     writeFileSync(join(root, "content", "b", "c", "art.tsx"), "export const art = 1;\n");
     expect(texts(root, Step.Boards)).toEqual([]);
+  });
+});
+
+describe("the chapters", () => {
+  it("never takes a guide folder for a book or a chapter", () => {
+    const root = chapter();
+    // A guide folder holding what would make it a chapter: still not one.
+    for (const dir of ["authoring/books/b/guide", "authoring/books/guide/c"]) {
+      mkdirSync(join(root, dir), { recursive: true });
+      writeFileSync(join(root, dir, "plan.md"), PLAN);
+    }
+    expect(readChapters(root).map((c) => c.dir)).toEqual(["authoring/books/b/c"]);
   });
 });
 
