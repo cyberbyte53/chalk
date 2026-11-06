@@ -17,16 +17,36 @@ Status: plan, reshaped with the person and reviewed twice (changes folded in). N
   Cheap: an agent's writing and re-checking. Ours alone: boards play the same every time, so a machine
   checks what works before anyone looks; a reviewer's finding made twice becomes a check.
 
+## Taste: one main file per level, a map to focused files
+
+Like a publisher's house style and per-book style sheet, a series bible, and a translator's style guide
+per language (all three solve this problem), and like `AGENTS.md`: one short main file per level is where
+every agent starts; it holds the principles, the taste and a few before/after examples, and maps each job
+to the focused file it needs, opened only when the task needs it.
+
+```
+authoring/
+  taste.md        principles (about five, marked always), taste, examples; and a map:
+                    voices and cast → cast.yaml; the story world → story.md; Hindi → hi.md; …
+  cast.yaml       who's who, and each one's voice per language (code reads it; from voices.json)
+  story.md        the series bible: the world, the characters, a continuity log every chapter adds to
+  hi.md           how we write and speak Hindi (तुम or आप, how letters and numbers are said, tone)
+  books/<book>/taste.md      only what differs from the top; its own map if it has its own files
+```
+
+The principles come from the audit of chapter 1's threads: about five a builder can hold in mind
+(nothing unexplained; each step needed before it is given, nothing gives it away; every piece earns its
+place, when in doubt cut; show it and let them do it with an honest prop; questions test what the boards
+taught, in their tools). Mechanical rules go to components and checks; "read it as the student" is the
+review itself; examples are before/after pairs from the person's own threads.
+
 ## Files, by what they hold
 
 Each piece of information lives by how often it changes, who reads it and who decides it.
 
 ```
 authoring/books/<book>/
-  settings.yaml           the book: tone, look, teaching style, pacing, languages; its cover. Over the
-                          Chalk-wide settings (authoring/settings.yaml: the constitution, whose principles
-                          always hold, and the cast: Riya and Aman cross books, each with their voice per
-                          language, from today's authoring/voices.json)
+  taste.md                the book: only what differs from the top (tone, look, languages, its cover)
 
   <chapter>/
     source/               FACTS, extracted once, never edited by hand
@@ -85,7 +105,7 @@ any piece of one, or a prop, at any stage; it is handled like any other thread.
   with one click, the tree showing what changed since his yes. Nothing below the plan is ever approved, so
   nothing cascades. Sources never move.
 - **Story in the plan:** its arc, the cast and each lesson's part in it; each board's beat is in `boards.md`.
-- **When the person corrects something that could recur**, the agent proposes one settings line then and
+- **When the person corrects something that could recur**, the agent proposes one taste line then and
   there, at the right layer (book or Chalk); the person says yes or no.
 - **A new book's first chapter** carries a "book" section in its plan (cast, look, cover), which becomes
   the book's settings on the yes.
@@ -130,7 +150,7 @@ hand-over of a sitting is the person's open comments: `authoring/reviews/`, run 
 | `pipeline` and the tree | the chapter's state: plan yes? boards left? open threads, whose turn? done? |
 | 6 skills | 4: plan (1), build (2), apply-comments (3), and the reviewer's |
 | the editor's tree (`pipeline.ts` `FILES`, `READS`; `planning.ts` `isApprovable`) | three entries: the outline (machine), `plan.md` (approved), `boards.md` (not); Approve shown from the server's `isApproved` |
-| `authoring/taste/` | the Chalk settings layer; each guide goes with its stage's skill |
+| `authoring/taste/`, `voices.json` | `taste.md` (map) + `cast.yaml`, `story.md`, `hi.md`; each guide goes with its stage's skill; `checks.md` becomes code |
 
 ## Chapter 1 moves over
 
@@ -147,7 +167,7 @@ threads: which should a principle have prevented?
 3. Hindi grounded: `source/hi/` for chapter 1 (a spike first: Hindi NCERT PDFs often extract as broken
    text and may need OCR), its aligned outline and terms, the term check over today's `t(en, hi)` lines.
 4. The languages mechanism (`languages.md`): English written, each language a table.
-5. Book and Chalk settings, seeded from `taste/` and `voices.json`.
+5. The top `taste.md` (from the audit), `cast.yaml`, `story.md`, `hi.md`; the book's `taste.md`.
 6. Approval by what students get (`kept-by-what-students-get.md`).
 7. Chapter 1 re-reviewed; then the next chapter made this way.
 
