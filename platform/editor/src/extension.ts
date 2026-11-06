@@ -261,8 +261,7 @@ async function leaveComment(p: Picked): Promise<void> {
     void vscode.window.showErrorMessage(`Chalk: the comment wasn't saved: ${done.error}`);
     return;
   }
-  void threads.refresh();
-  tree.refresh();
+  // The comment is written to a comments.yaml: the watcher redraws.
 }
 
 function onMessage(
@@ -865,8 +864,7 @@ async function approveFile(node: Node | undefined, isApproved: boolean): Promise
     void vscode.window.showInformationMessage(
       `Chalk: ${f.file} ${isApproved ? "approved" : "is a draft again"}.`,
     );
-  tree.refresh();
-  void refreshProblems();
+  // The stamp is written to the file: the watcher redraws.
 }
 /**
  * A missing guide's first words: its heading (the level's title), and a link to the guide directly
@@ -893,11 +891,10 @@ function guideSkeleton(file: string, level: string): string {
   return `${heading}\nAdds to ${link}: say only what is different here, and where it changes that guide, say so.\n`;
 }
 
-/** Writes on a thread as you, then redraws what shows threads. Says why, if it was refused. */
+/** Writes on a thread as you (the watcher redraws). Says why, if it was refused. */
 async function writeThread(id: string, text: string, status?: string): Promise<boolean> {
   const done = await changeComments({ op: "write", id, text, ...(status ? { status } : {}) });
   if (!done.ok) void vscode.window.showErrorMessage(`Chalk: ${done.error}`);
-  void threads.refresh();
   return done.ok;
 }
 
@@ -999,9 +996,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   let timer: NodeJS.Timeout | undefined;
   // Threads on planning and guide files, in the files themselves.
-  const fileComments = new FileComments(root, changeComments, () => {
-    void threads.refresh();
-  });
+  // A reply in a file is written to a comments.yaml: the watcher redraws.
+  const fileComments = new FileComments(root, changeComments, () => {});
   context.subscriptions.push(
     log,
     vscode.commands.registerCommand("chalk.preview", (uri?: vscode.Uri) => showPreview(uri)),
@@ -1012,7 +1008,6 @@ export function activate(context: vscode.ExtensionContext): void {
         writeFileSync(file, guideSkeleton(file, level));
       }
       await vscode.window.showTextDocument(vscode.Uri.file(file));
-      tree.refresh();
     }),
     vscode.commands.registerCommand("chalk.pick", async () => {
       await showPreview();
