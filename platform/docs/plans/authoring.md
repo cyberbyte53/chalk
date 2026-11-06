@@ -132,6 +132,10 @@ folder in `content/` that its `build.yaml` doesn't list fails (today it is silen
 ```
 
 - The person may comment on the plan, any board, any piece or any prop, at any stage.
+- **When an agent is stuck or at a real decision, it asks the person**, as coding agents do: one question,
+  two to four concrete options with the recommended one first, room for his own answer. A question is a
+  thread on his turn, pinned where it applies, its options shown as buttons in the editor beside a text box;
+  his answer moves the work on. Everything said to him is concise: one sentence where one does.
 - A change after the plan's yes starts as a comment; the agent updates `plan.md` and follows its ids into
   `boards.md`; the person closes the comment and re-stamps the plan with one click (the tree shows what
   changed since; the stamp is committed alone, as today). Nothing below the plan is approved, so nothing
