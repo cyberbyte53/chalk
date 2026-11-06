@@ -27,8 +27,7 @@ and before real learners.
 
 - [x] **A question written once** on a board; the answer taps boards repeat by hand go
   (`question-once.md`).
-- [ ] **Speech marks**: `[[shown|said]]`, `says` only for rephrasing (`said-once.md`). Before notes: the
-  newly spoken check notes have maths in them, and marks are how they get their spoken words.
+- [x] **Speech marks**: `[[shown|said]]`, `says` only for rephrasing (`said-once.md`).
 - [ ] **One way for wrong-answer notes**: a question holds its notes and says them; check notes become
   spoken (new clips, en and hi) (`simpler-boards.md`, item 3).
 
@@ -46,6 +45,8 @@ and before real learners.
   reviewer findings weighted (must fix, consider, taste).
 - [ ] **Content pipeline**: each chapter's sources in both languages; the term list made from them
   (memory: Hindi grounded in NCERT).
+  How a Hindi line says a Latin letter (point names O, P, axes X, Y, and x, y: 148 of 349 Hindi lines
+  today) is decided there, from the Hindi book and a teacher's ear, then checked by the build.
 - [ ] **Learning loop** (before real learners): everything worked out from events; fewer tables; Jugnu in
   its own package; a learner's record versioned by what the board uses.
 

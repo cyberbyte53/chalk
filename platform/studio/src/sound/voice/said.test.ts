@@ -35,6 +35,26 @@ describe("what a voice says: words a person wrote, never rewritten", () => {
   });
 });
 
+describe("a line written once, with marks", () => {
+  it("says a line's marks as their spoken words", () => {
+    expect(said({ own: { en: "Plot [[R(−4, 2)|R, the point minus 4, 2]]." } }, "en")).toEqual({
+      words: "Plot R, the point minus 4, 2.",
+      from: "screen",
+    });
+  });
+
+  it("refuses a says that is only the line again (its bold and marks as said)", () => {
+    const own = { en: "Go to **[[(3, 2)|the point 3, 2]]**." };
+    expect(said({ own, says: { en: "Go to the point 3, 2." } }, "en")).toMatchObject({
+      needs: expect.stringContaining("says is the line itself"),
+    });
+    expect(said({ own, says: { en: "Now, go to the point 3, 2." } }, "en")).toEqual({
+      words: "Now, go to the point 3, 2.",
+      from: "written",
+    });
+  });
+});
+
 describe("what a voice can be given", () => {
   it("plain words, digits and punctuation, in both scripts", () => {
     expect(unspeakable("Street 4, House 5. गली 4, मकान 5।")).toEqual([]);

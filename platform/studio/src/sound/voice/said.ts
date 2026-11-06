@@ -14,6 +14,14 @@ export type Said =
   | { words: string; from: "written" | "screen" }
   | { needs: string; suggested?: string };
 
+/** A line's words as a voice is given them: marks resolved, bold and emphasis as their words. */
+const spoken = (text: string) =>
+  richSpeech(text, "en")
+    .pieces.map((p) => (p.kind === "words" ? p.text : `[maths ${p.latex}]`))
+    .join("")
+    .replace(/\s+/g, " ")
+    .trim();
+
 export function said(
   line: {
     readonly own?: Readonly<Record<string, string>>;
@@ -27,6 +35,13 @@ export function said(
   const from = written === undefined ? "screen" : "written";
   const say = written ?? line.own?.[locale];
   if (say === undefined) return undefined;
+  // A `says` said as the line itself is (its marks resolved, its bold as words) is only a second
+  // copy, which drifts: `says` is for a line rephrased for the ear.
+  const ownWords = line.own?.[locale];
+  if (written !== undefined && ownWords !== undefined && spoken(written) === spoken(ownWords))
+    return {
+      needs: "its says is the line itself: delete it (mark only the bits said differently)",
+    };
   const { pieces, problems } = richSpeech(say, locale, readMaths);
   if (problems.length > 0)
     return { needs: `its text doesn't read cleanly (${problems.join("; ")})` };
