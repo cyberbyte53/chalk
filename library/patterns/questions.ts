@@ -1,5 +1,5 @@
 import { type Placed, type Says, type Step, cue, place, tap } from "@chalk/author";
-import type { Localized } from "@chalk/content";
+import { type Localized, shownOf } from "@chalk/content";
 import { AnswerStatus, type Color } from "@chalk/prop";
 import { TextStyle, choice as choiceProp, goal, text } from "@chalk/prop-basics";
 import { type Option, seedOf, settle, wordsOf } from "./choice-question";
@@ -101,7 +101,7 @@ export function choice(spec: {
   if (new Set(ids).size !== ids.length) throw new Error("choice: two options share an id");
   // Two options a student can't tell apart: one of them is right and wrong at once.
   for (const locale of ["en", "hi"] as const) {
-    const labels = spec.options.map((o) => o.label[locale]);
+    const labels = spec.options.map((o) => shownOf(o.label[locale]));
     const twice = labels.find((label, i) => labels.indexOf(label) !== i);
     if (twice !== undefined) throw new Error(`choice: two options read the same ("${twice}")`);
   }

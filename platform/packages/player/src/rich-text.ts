@@ -1,6 +1,7 @@
 import katex from "katex";
 // Registers \ce{…} (chemistry) and \pu{…} (physical units) with KaTeX.
 import "katex/contrib/mhchem";
+import { markProblems, shownOf } from "@chalk/content";
 import { type OwnMarkup, ours } from "./own-markup";
 
 /**
@@ -33,7 +34,9 @@ const DOLLAR = "$";
 const STAR = "*";
 
 /** Splits rich text into spans. Never throws: an unclosed marker is reported and kept as text. */
-export function parseRich(source: string): Parsed {
+export function parseRich(written: string): Parsed {
+  // A line's speech marks (`[[shown|said]]`, @chalk/content marks.ts): what is drawn is the shown.
+  const source = shownOf(written);
   const spans: Span[] = [];
   const problems: string[] = [];
   let text = "";
@@ -44,6 +47,11 @@ export function parseRich(source: string): Parsed {
   let i = 0;
   while (i < source.length) {
     const ch = source[i];
+    if (ch === "\\" && (source.startsWith("[[", i + 1) || source.startsWith("]]", i + 1))) {
+      text += source.slice(i + 1, i + 3);
+      i += 3;
+      continue;
+    }
     if (ch === "\\" && source[i + 1] === DOLLAR) {
       text += DOLLAR;
       i += 2;
@@ -158,7 +166,8 @@ export function mathHtml(math: string, isDisplay: boolean): OwnMarkup {
 
 /** Everything wrong with a rich string: unclosed markers, and maths KaTeX can't typeset. For the validator. */
 export function richProblems(source: string): string[] {
-  const { spans, problems } = parseRich(source);
+  const { spans, problems: parsed } = parseRich(source);
+  const problems = [...markProblems(source), ...parsed];
   for (const span of spans) {
     if (span.kind !== SpanKind.Math && span.kind !== SpanKind.DisplayMath) continue;
     try {

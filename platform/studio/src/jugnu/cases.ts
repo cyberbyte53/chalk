@@ -2,7 +2,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadBoard } from "@chalk/author";
-import { Actor, builtPageSchema, builtQuestionSchema } from "@chalk/content";
+import { Actor, builtPageSchema, builtQuestionSchema, shownOf } from "@chalk/content";
 import { modules } from "@chalk/content-source/modules";
 import { propModules } from "@chalk/library/modules";
 import { BoardRuntime, type RuntimeState } from "@chalk/player";
@@ -106,7 +106,10 @@ export function questionsSeen(runtime: BoardRuntime): string[] {
   return runtime.propNames().flatMap((name) => {
     const view = runtime.getView(name) as Record<string, unknown>;
     if (!("status" in view)) return [];
-    const words = (v: unknown) => (v as { en?: string } | null)?.en;
+    const words = (v: unknown) => {
+      const en = (v as { en?: string } | null)?.en;
+      return en === undefined ? undefined : shownOf(en);
+    };
     const options = (view.options as { id: string; label: unknown }[] | undefined)
       ?.map((o) => `${o.id}="${words(o.label)}"`)
       .join(", ");

@@ -1,3 +1,4 @@
+import { saidOf, shownOf } from "@chalk/content";
 import {
   AnswerFeedback,
   type PropViewProps,
@@ -29,7 +30,7 @@ export function TextView({ view, locale }: PropViewProps<typeof text>): JSX.Elem
     <p
       class={`piece-text text-${s.style}${s.color === null ? "" : " has-color"}`}
       style={s.color === null ? undefined : { "--tone": cssColor(s.color) }}
-      {...shows("text", s.text[locale])}
+      {...shows("text", shownOf(s.text[locale]))}
     >
       <RichText text={s.text[locale]} />
     </p>
@@ -66,7 +67,7 @@ export function ChoiceView({ view, locale, call }: PropViewProps<typeof choice>)
   );
   return (
     <div class="piece-question">
-      <p class="question-prompt" {...shows("prompt", s.prompt[locale])}>
+      <p class="question-prompt" {...shows("prompt", shownOf(s.prompt[locale]))}>
         <RichText text={s.prompt[locale]} />
       </p>
       <fieldset ref={fit} class="choices" style={{ "--columns": String(columns) }}>
@@ -75,11 +76,11 @@ export function ChoiceView({ view, locale, call }: PropViewProps<typeof choice>)
             type="button"
             key={option.id}
             aria-pressed={s.selected === option.id}
-            aria-label={plainText(option.label[locale])}
+            aria-label={plainText(saidOf(option.label[locale]))}
             class={choiceClass(s, option.id)}
             disabled={isLocked}
             {...says([choice.actions.select, choice.actions.check], option.id)}
-            {...shows(`option:${option.id}`, option.label[locale])}
+            {...shows(`option:${option.id}`, shownOf(option.label[locale]))}
             onClick={() => answer(option.id)}
           >
             <RichText text={option.label[locale]} />
@@ -100,7 +101,7 @@ export function GoalView({ view, locale }: PropViewProps<typeof goal>): JSX.Elem
   const s = view;
   return (
     <div class="piece-question">
-      <p class="question-prompt" {...shows("prompt", s.prompt[locale])}>
+      <p class="question-prompt" {...shows("prompt", shownOf(s.prompt[locale]))}>
         <RichText text={s.prompt[locale]} />
       </p>
       <AnswerFeedback status={s.status} feedback={s.feedback} locale={locale} />

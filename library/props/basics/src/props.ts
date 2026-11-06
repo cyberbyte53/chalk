@@ -1,4 +1,4 @@
-import { AGENT_LOCALE, localizedSchema } from "@chalk/content";
+import { AGENT_LOCALE, localizedSchema, shownOf } from "@chalk/content";
 import {
   AnswerStatus,
   CheckedBy,
@@ -46,7 +46,7 @@ export const text = prop({
     })
     .strict(),
   start: { text: UNSET, style: TextStyle.Body, color: null },
-  summary: (me) => `words: ${me.text[AGENT_LOCALE]}`,
+  summary: (me) => `words: ${shownOf(me.text[AGENT_LOCALE])}`,
 });
 
 const questionVariables = { prompt: localizedSchema, ...questionFields };

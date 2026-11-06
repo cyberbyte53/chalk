@@ -1,4 +1,4 @@
-import type { Localized } from "@chalk/content";
+import { type Localized, shownOf } from "@chalk/content";
 
 /** A multiple-choice question's options, and the order they come in. */
 
@@ -18,10 +18,13 @@ export type Option = {
  * when the question does.
  */
 export function wordsOf(prompt: Localized): string {
-  return Object.keys(prompt)
-    .sort()
-    .map((locale) => prompt[locale as keyof Localized])
-    .join("|");
+  return (
+    Object.keys(prompt)
+      .sort()
+      // As shown: marking how a bit is said doesn't reshuffle the options.
+      .map((locale) => shownOf(prompt[locale as keyof Localized]))
+      .join("|")
+  );
 }
 
 /** A stable whole number from a string (FNV-1a), to seed `settle`. */

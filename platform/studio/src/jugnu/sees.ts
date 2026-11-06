@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { Actor, builtChapterSchema, builtConceptSchema } from "@chalk/content";
+import { Actor, builtChapterSchema, builtConceptSchema, shownOf } from "@chalk/content";
 import type { BoardRuntime } from "@chalk/player";
 import { CheckedBy } from "@chalk/prop";
 import { findUp } from "../find-up";
@@ -43,7 +43,7 @@ const withoutNote = (value: unknown): unknown =>
 export function checkFound(runtime: BoardRuntime): { question: string; found: string }[] {
   return runtime.propNames().flatMap((name) => {
     const note = (runtime.getView(name) as { feedback?: { en?: string } | null }).feedback?.en;
-    return note === undefined ? [] : [{ question: name, found: note }];
+    return note === undefined ? [] : [{ question: name, found: shownOf(note) }];
   });
 }
 

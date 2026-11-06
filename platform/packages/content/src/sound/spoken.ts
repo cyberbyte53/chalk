@@ -1,4 +1,5 @@
 import { LOCALES, type Locale, type Localized } from "../localized";
+import { saidOf } from "../marks";
 
 /**
  * How a line is said in phrases (platform/docs/sound.md). A line's words are a template written
@@ -16,7 +17,9 @@ const BLANK = /\{(\w+)\}/g;
  * `$…$` (maths, rich-text.ts) braces are maths (`$x^{2}$`), never a blank.
  */
 type Piece = { readonly words: string } | { readonly blank: string };
-function piecesOf(template: string): Piece[] {
+function piecesOf(written: string): Piece[] {
+  // Blanks are spoken: they are read in the line as said (speech marks resolved, marks.ts).
+  const template = saidOf(written);
   const out: Piece[] = [];
   for (const [i, part] of template.split("$").entries()) {
     if (i % 2 === 1) {

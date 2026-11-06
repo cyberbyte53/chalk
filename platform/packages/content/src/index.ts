@@ -40,6 +40,7 @@ export {
   type PayloadOf,
 } from "./event";
 export { canonical, hashOf, idOf, piecePath, sha256 } from "./hash";
+export { type Marked, markProblems, saidOf, saidParts, shownOf } from "./marks";
 export {
   ART_SIZE,
   ArtFrame,

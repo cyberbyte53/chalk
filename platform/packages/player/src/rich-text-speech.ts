@@ -1,4 +1,4 @@
-import type { Locale } from "@chalk/content";
+import { type Locale, saidOf } from "@chalk/content";
 import { SpanKind, parseRich } from "./rich-text";
 
 /**
@@ -27,7 +27,7 @@ export type RichSpeech = {
 };
 
 export function richSpeech(source: string, locale: Locale, readMaths?: MathsReader): RichSpeech {
-  const { spans, problems } = parseRich(source);
+  const { spans, problems } = parseRich(saidOf(source));
   const pieces: SaidPiece[] = [];
   for (const span of spans) {
     switch (span.kind) {

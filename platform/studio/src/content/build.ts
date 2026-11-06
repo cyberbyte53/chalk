@@ -50,8 +50,11 @@ import {
   builtFile,
   builtPageSchema,
   builtQuestionSchema,
+  markProblems,
   piecePath,
   propPieces,
+  saidParts,
+  shownOf,
   soundListSchema,
   walkPieces,
 } from "@chalk/content";
@@ -64,6 +67,7 @@ import { parse as parseYaml } from "yaml";
 import type { ZodType, ZodTypeDef } from "zod";
 import type { Problem } from "../problem";
 import { SOUND_LIST, castSchema, voiceChapter, providers as voiceProviders } from "../sound/voice";
+import { unspeakable } from "../sound/voice/said";
 import { renderArt } from "./art";
 import { recordOf } from "./board-record";
 import {
@@ -980,6 +984,7 @@ async function buildChapter(c: Context, chapterPath: string): Promise<Ref | unde
     props: explainers(c, [...drafts.flatMap((d) => [...d.used]), ...bank.flatMap((q) => q.props)]),
   };
   noteLongAnswers(c, chapterPath);
+  checkMarks(c, chapterPath);
   await voiceOf(c, chapterPath, c.problems.length === problemsBefore);
   return emit(c, item, builtChapterSchema);
 }
@@ -1041,6 +1046,36 @@ async function voiceOf(c: Context, chapterPath: string, isWhole: boolean): Promi
   }
 }
 
+/**
+ * Every text on every board of a chapter, in every language: its speech marks (`[[shown|said]]`,
+ * @chalk/content marks.ts) read cleanly, and what each says is speakable. A mark that doesn't read
+ * would show its brackets; a spoken part a voice can't say would be guessed.
+ */
+function checkMarks(c: Context, chapterPath: string): void {
+  const visit = (node: unknown, where: string): void => {
+    if (typeof node === "string") {
+      for (const problem of markProblems(node)) report(c, where, `"${node}": ${problem}`);
+      for (const part of saidParts(node)) {
+        const odd = unspeakable(part.replace(/\{\w+\}/g, " "));
+        if (odd.length > 0)
+          report(
+            c,
+            where,
+            `"${node}": the mark's spoken words have "${odd.join(" ")}": write them in words`,
+          );
+      }
+      return;
+    }
+    if (Array.isArray(node)) {
+      for (const child of node) visit(child, where);
+      return;
+    }
+    if (node === null || typeof node !== "object") return;
+    for (const value of Object.values(node)) visit(value, where);
+  };
+  for (const [path, board] of c.boards) if (path.startsWith(`${chapterPath}/`)) visit(board, path);
+}
+
 /** Above this share, "pick the longest option" works too often: say so (it doesn't stop the build). */
 const LONGEST_ANSWER_LIMIT = 0.4;
 
@@ -1063,7 +1098,7 @@ function noteLongAnswers(c: Context, chapterPath: string): void {
       const lengths = new Map<string, number>();
       for (const option of o.options as { id?: unknown; label?: { en?: unknown } }[]) {
         if (typeof option?.id === "string" && typeof option.label?.en === "string") {
-          lengths.set(option.id, option.label.en.length);
+          lengths.set(option.id, shownOf(option.label.en).length);
         }
       }
       const answer = lengths.get(o.answer);
