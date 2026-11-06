@@ -217,7 +217,13 @@ makes wrong** (AGENTS.md, the skills, platform/docs), so agents are never pointe
    `new chapter` refuses the reserved name "guide" (platform/docs/plans/making-tree.md).
    What they write and print names every file and folder by its full path from the repo's root, linked
    in markdown.
-6. **Skills:** four, reading `pnpm guide`; the clean-up of `authoring/` (runs, retros, archive).
+6. **Skills, right after the sources work** (`platform/docs/plans/sources.md`): one home per rule (the step
+   guides in `authoring/taste/` fold into their skills; what the guide says is cut from them); every
+   instruction rewritten against the system as it then is. Two checks in `pnpm check` keep them so: **a
+   word budget per file** (AGENTS.md ≤ 800, each skill ≤ 600, the guide ≤ 800: adding a line means cutting
+   one) and **instructions name only what exists** (every file, folder, command and tool named in
+   AGENTS.md, the skills and the guides). The skills show in the Chalk tree (the top Making group), so the
+   person can read and comment on them.
 7. **Hindi grounded** for chapter 1 (the PDF spike first), and the term check on today's lines.
 8. **Checks:** the mechanical ones the audit found (one name per thing; a prompt that gives away its
    answer; right answers spread across options; a label or control text not introduced earlier).
