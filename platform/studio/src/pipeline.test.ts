@@ -290,7 +290,7 @@ describe("approving the plan", () => {
       `${OUTLINE}- { id: fig3.9, kind: figure }\n`,
     );
     commit(bad, "an outline the text doesn't have");
-    expect(() => approve(bad, "b", "c", Step.Plan)).toThrow(/outline.yaml comes first/);
+    expect(() => approve(bad, "b", "c", Step.Plan)).toThrow(/the agent fixes source\/en\/outline.yaml first/);
   });
 
   it("a draft plan's failing checks don't fail the check; an approved plan's do", async () => {

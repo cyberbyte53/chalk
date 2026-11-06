@@ -667,14 +667,8 @@ class ChalkTree implements vscode.TreeDataProvider<Element> {
       const [book = "", chapter = ""] = node.path.split("/");
       try {
         const c = await readOne(base, book, chapter);
-        // The outline is the machine's: shown only when a check on it fails or it isn't written.
-        const shown = c.files.filter(
-          (f) =>
-            f.isApprovable ||
-            !f.file.startsWith("source/") ||
-            f.status === "missing" ||
-            f.problems.length > 0,
-        );
+        // The outline is the machine's: never shown; when it fails, plan.md says the agent fixes it.
+        const shown = c.files.filter((f) => !f.file.startsWith("source/"));
         return shown.map((f, i) => ({
           label: `${i + 1}. ${f.file.replace(/^source\/[a-z]{2}\//, "")}`,
           path: `${node.path}/${f.file}`,

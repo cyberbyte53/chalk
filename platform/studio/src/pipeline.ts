@@ -643,9 +643,13 @@ export function approvalBlocker(root: string, c: Chapter, step: Step): string | 
   if (f === undefined) return `no step ${step}`;
   if (!f.isApprovable) return `${f.file} is checked by the machine, not approved`;
   if (f.status === "missing") return `${f.file} isn't written yet`;
-  for (const before of c.files.slice(0, at))
+  for (const before of c.files.slice(0, at)) {
+    // The machine's files (the outline) are the agent's to fix, never the person's.
+    if (!before.isApprovable && (before.status === "missing" || before.problems.length > 0))
+      return `the agent fixes ${before.file} first (${before.status === "missing" ? "not written" : before.problems.map((p) => p.text).join("; ")})`;
     if (before.status !== "approved" || before.recheck.length > 0 || before.problems.length > 0)
       return `${before.file} comes first: it is ${before.status}${before.problems.length > 0 ? ", and its checks fail" : ""}${before.recheck.length > 0 ? ", and to be checked again" : ""}`;
+  }
   if (f.problems.length > 0)
     return `${f.file}'s checks fail: ${f.problems.map((p) => p.text).join("; ")}`;
   const rel = join(c.dir, f.file);
