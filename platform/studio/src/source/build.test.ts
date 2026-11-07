@@ -491,7 +491,13 @@ describe("an extract, from the real PDF, through build, check and feedback", () 
       // The answer stays as the record once the change is taken in.
       expect(checkExtract(x).problems).toEqual([]);
 
-      expect(feedback(root, "b/c").lines[1]).toMatch(/0 overrides in 1 extract/);
+      // No tool's content was overridden yet (this page file's blocks differ from the draft's: those
+      // are structure edits, tested in feedback.test.ts).
+      expect(
+        feedback(root, "b/c").lines.filter((l) =>
+          /\t(hindi-repair|figure-snap|table-cells)\t/.test(l),
+        ),
+      ).toEqual([]);
 
       // An override, with its cause and note, comes out with everything about it.
       const word = stored.rows?.[0]?.[0] === undefined ? "" : `L${rows[0]}.1`;
@@ -507,7 +513,9 @@ describe("an extract, from the real PDF, through build, check and feedback", () 
       expect(lines[1]).toBe(
         `b/c\ten\treader\t${TOOL_VERSIONS.reader}\t13\t${word}\taddition\tx\tX\tother\ta capital, as printed`,
       );
-      expect(lines[2]).toMatch(/1 override in 1 extract/);
+      // The structure edit (this page file's table against the draft's two text blocks) comes after it.
+      expect(lines[2]).toMatch(/structure-draft.*merge/);
+      expect(lines.at(-1)).toMatch(/2 overrides in 1 extract/);
     },
   );
 });
