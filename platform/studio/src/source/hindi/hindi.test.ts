@@ -220,6 +220,28 @@ describe("a page's spans, found from where its pieces sit", () => {
     expect(reading("प्लेटलेट")).not.toBe("प्लेट");
     expect(reading("अपररूप")).not.toBe("अपरूप");
   });
+  it("joins a word the PDF split with a space narrower than the line's gaps between words", () => {
+    // Gaps of 3 between words; 1.5 inside के वल.
+    const justified = line(
+      ["यह", 10, 20],
+      ["के", 23, 30],
+      ["वल", 31.5, 40],
+      ["एक", 43, 50],
+      ["पद", 53, 60],
+      ["है", 63, 70],
+    );
+    expect(read(justified)).toEqual(["यह", "केवल", "एक", "पद", "है"]);
+    // The same pieces at the line's usual gap stay two words.
+    const even = line(
+      ["यह", 10, 20],
+      ["के", 23, 30],
+      ["वल", 33, 40],
+      ["एक", 43, 50],
+      ["पद", 53, 60],
+      ["है", 63, 70],
+    );
+    expect(read(even)).toEqual(["यह", "के", "वल", "एक", "पद", "है"]);
+  });
   it("keeps a run without Hindi as the PDF gives it", () => {
     expect(pageSpans(line(["(10X,", 50, 70]))).toEqual([
       { ids: ["L1.1"], pdf: ["(10X,"], repair: { reading: "(10X," } },

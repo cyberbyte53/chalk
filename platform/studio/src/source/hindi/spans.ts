@@ -74,9 +74,74 @@ export function pageSpans(page: NumberedPage): PageSpan[] {
       last = { word, line: l };
     });
   });
-  return spans.map(({ ids, pdf }) => ({
+  return joinNarrowGaps(page, spans).map(({ ids, pdf }) => ({
     ids,
     pdf,
     repair: pdf.some((p) => DEVANAGARI.test(p)) ? repair(pdf) : { reading: pdf.join("") },
   }));
 }
+
+/** A gap this much narrower than its line's usual gap is inside a word (के|वल 2.3 against 3.0). */
+export const NARROW = 0.8;
+/** A line's usual gap is known from this many gaps. */
+const GAPS = 4;
+const LETTER = /[\u0904-\u0939\u0958-\u0961\u0972-\u097F]/u;
+const ONLY_HINDI = /^[\u0900-\u097F\u200C\u200D]+$/u;
+
+/**
+ * Two neighbouring spans of a line joined where the PDF put a space inside a word: the gap between
+ * them well below the line's usual gap (a justified line's gaps between words are equal), each all
+ * Hindi with a letter of its own (a loose mark belongs to the word before), and together exactly one
+ * known word. A line with few gaps, or none narrower, is left as it is: the agent's.
+ */
+function joinNarrowGaps(
+  page: NumberedPage,
+  spans: { ids: string[]; pdf: string[] }[],
+): { ids: string[]; pdf: string[] }[] {
+  const wordOf = (id: string) => {
+    const [l, j] = id.slice(1).split(".").map(Number);
+    return page.lines[(l ?? 0) - 1]?.[(j ?? 0) - 1];
+  };
+  const lineOf = (id: string) => id.slice(1).split(".")[0];
+  const gapBetween = (a: { ids: string[] }, b: { ids: string[] }) => {
+    const [x, y] = [wordOf(a.ids.at(-1) ?? ""), wordOf(b.ids[0] ?? "")];
+    const sameLine = lineOf(a.ids.at(-1) ?? "") === lineOf(b.ids[0] ?? "");
+    return x === undefined || y === undefined || !sameLine ? undefined : y.x0 - x.x1;
+  };
+  const usual = new Map<string, number>();
+  const byLine = new Map<string, number[]>();
+  spans.forEach((s, i) => {
+    const gap = i === 0 ? undefined : gapBetween(spans[i - 1] ?? s, s);
+    if (gap !== undefined) {
+      const l = lineOf(s.ids[0] ?? "") ?? "";
+      byLine.set(l, [...(byLine.get(l) ?? []), gap]);
+    }
+  });
+  for (const [l, gaps] of byLine)
+    if (gaps.length >= GAPS)
+      usual.set(l, [...gaps].sort((a, b) => a - b)[Math.floor(gaps.length / 2)] ?? 0);
+  const out: { ids: string[]; pdf: string[] }[] = [];
+  for (const s of spans) {
+    const prev = out.at(-1);
+    const gap = prev === undefined ? undefined : gapBetween(prev, s);
+    const line = usual.get(lineOf(s.ids[0] ?? "") ?? "");
+    const [a, b] = [prev?.pdf.join("") ?? "", s.pdf.join("")];
+    const joins =
+      prev !== undefined &&
+      gap !== undefined &&
+      line !== undefined &&
+      gap < NARROW * line &&
+      ONLY_HINDI.test(a) &&
+      ONLY_HINDI.test(b) &&
+      LETTER.test(a) &&
+      LETTER.test(b) &&
+      isOneWord(repair([...prev.pdf, ...s.pdf]));
+    if (joins && prev !== undefined) {
+      prev.ids.push(...s.ids);
+      prev.pdf.push(...s.pdf);
+    } else out.push({ ids: [...s.ids], pdf: [...s.pdf] });
+  }
+  return out;
+}
+
+const isOneWord = (r: Repair) => "reading" in r && !r.reading.includes(" ");
