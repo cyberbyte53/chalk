@@ -65,8 +65,8 @@ taken from the PDF wherever its text is sound.
    are the figure's; a reference ("Fig. 7.2", "(7.1)" in a sentence) is text, not a figure or an
    equation. A book too long for one agent is split into page ranges, one agent each, and the seams
    checked.
-3. **Build and check** (`pnpm source` again, the machine): `items.yaml` built from the words (
-   joined; a block that continues joined with the next page's continued block; maths written as the
+3. **Build and check** (`pnpm source` again, the machine): `items.yaml` built from the words (a
+   block that continues joined with the next page's continued block; maths written as the
    lessons do: `−`, `2/3`), ids positional; figures cropped; terms listed; then the checks. A page that
    fails goes back to its agent with the failure. The agent then looks at every crop.
 4. **Match** (once both languages hold): the machine pairs them by their numbers.
