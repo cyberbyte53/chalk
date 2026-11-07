@@ -14,4 +14,8 @@ Read by `plan-chapter` and `build-props` (for **Props**). Output: `plan.md` (app
 
 **Leaving something out** of the source is a decision: `plan.md`'s `Skipped`, in the book's words, and `boards.md`'s, by id, each with why.
 
+**Everything the book teaches is covered**, whether or not the syllabus or NCERT's rationalisation keeps it: "not in the syllabus" is never a reason to leave something out.
+
+**The book fixes what is covered, not the order.** Choose the order that teaches best (start from the story's real problem, bring a later idea forward where it helps); where it differs from the book's, say why in the plan.
+
 **Questions for the person.** The decisions only they can make, each an `ask` on the words it is about, with your recommendation first. Few, and real.
