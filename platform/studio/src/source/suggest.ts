@@ -22,7 +22,7 @@ const STUDIO = join(import.meta.dirname, "../..");
 const TSX = join(STUDIO, "node_modules/.bin/tsx");
 const TSCONFIG = join(STUDIO, "../../tsconfig.base.json");
 
-/** A Hindi span's suggestion: a reading, or (`left`) why the tool made none. */
+/** A tool's suggestion for some words: a reading, or (`left`) why it made none. */
 export type WordSuggestion = {
   /** Its words' ids (`L12.3`), and the range they make. */
   ids: string[];
@@ -86,18 +86,23 @@ export function wordSuggestions(
 
 /** A words file's closing part: every suggestion the same, and where a tool made none. */
 export function suggestionLines(list: readonly WordSuggestion[]): string {
-  const made = list.flatMap((s) =>
-    s.reading === undefined ? [] : [`${s.range} ${s.pdf.join(" ")} → ${s.reading}`],
-  );
-  const left = list.flatMap((s) =>
-    s.left === undefined ? [] : [`${s.range} ${s.pdf.join(" ")}: ${s.left}`],
-  );
   const part = (title: string, lines: readonly string[]) =>
     lines.length === 0 ? "" : `# ${title}\n${lines.join("\n")}\n`;
-  return (
-    part(`${Tool.HindiRepair} suggests (proofread each against the image):`, made) +
-    part(`${Tool.HindiRepair} made no suggestion (read each from the image):`, left)
-  );
+  return [Tool.Scripts, Tool.HindiRepair]
+    .map((tool) => {
+      const mine = list.filter((s) => s.by === tool);
+      const made = mine.flatMap((s) =>
+        s.reading === undefined ? [] : [`${s.range} ${s.pdf.join(" ")} → ${s.reading}`],
+      );
+      const left = mine.flatMap((s) =>
+        s.left === undefined ? [] : [`${s.range} ${s.pdf.join(" ")}: ${s.left}`],
+      );
+      return (
+        part(`${tool} suggests (proofread each against the image):`, made) +
+        part(`${tool} made no suggestion (read each from the image):`, left)
+      );
+    })
+    .join("");
 }
 
 /** A table's rows as text: a merged cell at its first place, empty in the others. */
@@ -114,7 +119,7 @@ export function rowsOf(table: Table): string[][] {
 
 const OBJECTS_FILE = "objects.json";
 const objectsKey = (pdf: string) =>
-  `${sha256(readFileSync(pdf))} ${TOOL_VERSIONS[Tool.FigureSnap]} texts 2`;
+  `${sha256(readFileSync(pdf))} ${TOOL_VERSIONS[Tool.FigureSnap]} ${TOOL_VERSIONS[Tool.Scripts]}`;
 
 /** Reads a PDF's objects (what repeats across its pages left out) into its pages' cache. */
 export async function writeObjects(pdf: string, cache: string): Promise<void> {

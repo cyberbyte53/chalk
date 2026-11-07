@@ -16,7 +16,7 @@ import { type Word, poppler } from "./read";
 import type { Box } from "./schema";
 
 /** A cropped figure's pixels per point (216 dpi). */
-export const CROP_SCALE = 3;
+const CROP_SCALE = 3;
 
 /** A pixel clearly drawn: dark in some channel, or coloured (not a photo's near-white noise). */
 const isInk = (d: Buffer, i: number): boolean => {
@@ -67,7 +67,7 @@ export const showsOn =
  * whitened figures' own light greys): the words of other blocks that
  * the box takes in (`blank`) made white, so the picture is the figure alone.
  */
-export function cropFigure(
+function cropFigure(
   pdf: string,
   page: number,
   box: Box,

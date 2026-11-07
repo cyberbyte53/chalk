@@ -3,7 +3,7 @@ import { type PageText, type Word, attr, decode, poppler } from "./pages";
 /** The `text` reader: a PDF whose text layer is Unicode, read with poppler. */
 
 /** `pdftotext -bbox-layout`'s pages: every word, in reading order. */
-export function pagesFromBbox(xhtml: string): PageText[] {
+function pagesFromBbox(xhtml: string): PageText[] {
   return xhtml
     .split(/<page /)
     .slice(1)

@@ -27,7 +27,7 @@ type End = (typeof End)[keyof typeof End];
 type Rule = { end: End; strip: string; add: string; then: string; condition: RegExp };
 
 /** The `.aff` file's rules by flag (this dictionary has no compounds). */
-export function affixRules(aff: string): Map<string, Rule[]> {
+function affixRules(aff: string): Map<string, Rule[]> {
   const rules = new Map<string, Rule[]>();
   for (const line of aff.split("\n")) {
     const f = line.trim().split(/\s+/);
@@ -60,7 +60,7 @@ function applyRule(word: string, r: Rule): string | undefined {
  * A stem and every word its flags make: its suffixes (a suffix's own flags applied to what it made,
  * two suffixes at most), and its prefixes on each of those.
  */
-export function expandStem(stem: string, flags: string, rules: Map<string, Rule[]>): string[] {
+function expandStem(stem: string, flags: string, rules: Map<string, Rule[]>): string[] {
   const rulesOf = (fs: string, end: End) =>
     [...fs].flatMap((flag) => rules.get(flag) ?? []).filter((r) => r.end === end);
   const suffixed = [stem];

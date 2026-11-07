@@ -1,7 +1,7 @@
 import { Locale } from "@chalk/content";
 import { describe, expect, it } from "vitest";
 import { trimTerm } from "./build";
-import { checkAttached, checkMain, suggest } from "./concepts";
+import { checkAttached, checkMain, suggestAttached } from "./concepts";
 import { Cause, type Item, ItemKind, type MainConcepts } from "./schema";
 
 const item = (id: string, kind: ItemKind, text: string, number?: string): Item => ({
@@ -59,7 +59,7 @@ describe("the main book's concepts", () => {
 });
 
 describe("attaching a book to the main one", () => {
-  const s = suggest(main, en, hi);
+  const s = suggestAttached(main, en, hi);
   it("suggests the paired numbered items, the paired section, and the term printed beside the main word", () => {
     expect(s).toEqual([
       { key: "solution-is-homogeneous", items: ["1.2"], sections: ["1"], terms: ["विलयन"] },

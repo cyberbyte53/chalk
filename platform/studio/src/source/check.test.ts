@@ -288,7 +288,7 @@ describe("ids are positions", () => {
   });
 });
 
-describe("an extract not read by the new pipeline", () => {
+describe("an extract not read page by page", () => {
   it("is a note, its items.yaml as written", () => {
     const dir = mkdtempSync(join(tmpdir(), "chalk-source-"));
     mkdirSync(dir, { recursive: true });
@@ -299,7 +299,7 @@ describe("an extract not read by the new pipeline", () => {
       lang: Locale.En,
     });
     expect(report.problems).toEqual([]);
-    expect(report.notes[0]).toMatch(/not yet read by the new pipeline/);
+    expect(report.notes[0]).toMatch(/not yet read page by page/);
     expect(report.items).toHaveLength(1);
   });
   it("from before tools were recorded is a note too, not checked: it is to be read again", () => {

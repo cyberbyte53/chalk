@@ -183,24 +183,6 @@ function withReadings(words: NumberedPage, ids: readonly string[], readings: rea
     .replace(/\t+/g, " ");
 }
 
-/**
- * A number's or title's text where the PDF glued a number to the next word with a tab ("2.4\tलवण",
- * one word, which a reading may give with a space): the number is the PDF's text before the tab, and
- * the title is its words without that number.
- */
-function splitAtTab(
-  words: NumberedPage,
-  ids: readonly string[],
-  readings: readonly Reading[],
-  part: "number" | "title",
-): string {
-  const pdf = words.words.get(ids[0] ?? "")?.text ?? "";
-  const number = pdf.split("\t")[0] ?? "";
-  if (part === "number") return number;
-  const text = withReadings(words, ids, readings);
-  return text.startsWith(number) ? text.slice(number.length).trim() : text;
-}
-
 /** What the tools alone make of some words: their readings in, the rest as the PDF gives them. */
 function asTheToolsGive(
   words: NumberedPage,
@@ -449,11 +431,14 @@ function labelOf(
   if (range === undefined) return undefined;
   const ids = tryExpand(range, at.words, at.problems, `${where}, its ${name}`);
   if (ids === undefined) return undefined;
-  // A number glued to the next word by a tab: the number before it, a title after it.
-  const glued = at.words.words.get(ids[0] ?? "")?.text.includes("\t") === true;
-  const text = glued
-    ? splitAtTab(at.words, ids, readings, name === "number" ? "number" : "title")
-    : withReadings(at.words, ids, readings);
+  const text = withReadings(at.words, ids, readings);
+  // A number the PDF glued to the next word with a tab ("2.4\tलवण", one word, which a reading may
+  // give with a space): the number is the PDF's text before the tab, the title the rest.
+  const [number = "", ...after] = (at.words.words.get(ids[0] ?? "")?.text ?? "").split("\t");
+  if (after.length > 0) {
+    if (name === "number") return { ids, text: number };
+    if (text.startsWith(number)) return { ids, text: text.slice(number.length).trim() };
+  }
   return { ids, text };
 }
 
@@ -470,14 +455,8 @@ const SAME_BOX = 1;
 const sameBox = (a: Box, b: Box) => a.every((v, i) => Math.abs(v - (b[i] ?? 0)) <= SAME_BOX);
 
 /** A figure's or table's box decided: snapped from the rough one, or the agent's over it. */
-function decideBox(
-  b: PageBlock,
-  handle: string,
-  where: string,
-  ids: readonly string[],
-  at: BlockContext,
-) {
-  const { words, tools, raised, overrides, problems, page } = at;
+function decideBox(b: PageBlock, handle: string, ids: readonly string[], at: BlockContext) {
+  const { words, tools, raised, overrides, page } = at;
   const made: Made[] = [];
   if (!CROPPED.includes(b.kind) || b.box === undefined || !isInside(b.box, words))
     return { made, ...(b.box === undefined ? {} : { box: b.box }) };
@@ -624,7 +603,7 @@ function buildBlock(b: PageBlock, i: number, at: BlockContext): Block {
   const readings = decideWords(b, where, ids, at);
   const number = labelOf(b.number, "number", where, readings, at);
   const title = labelOf(b.title, "title", where, readings, at);
-  const box = decideBox(b, handle, where, ids, at);
+  const box = decideBox(b, handle, ids, at);
   const cells = decideCells(b, handle, where, ids, readings, box.box, at);
   return {
     page,
@@ -655,7 +634,7 @@ export type JoinSide = (typeof JoinSide)[keyof typeof JoinSide];
  * and takes its kind and number from where it starts. A join is unpaired only where both its pages
  * are read (or it runs off the book's first or last page): a page not read yet is reported apart.
  */
-export function joinPages(
+function joinPages(
   pages: readonly BuiltPage[],
   pageCount: number,
 ): { joined: Block[][]; unpaired: Unpaired[] } {

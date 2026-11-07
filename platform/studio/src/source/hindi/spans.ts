@@ -5,8 +5,8 @@ import { type Repair, repair } from "./repair";
  * A page's Hindi spans, found by the machine with no agent: the pieces of a line that touch on the
  * page are one word, and only a gap is between words. A PDF breaks a word into pieces (a mark, a
  * stray space) but keeps them touching; a word's own gap (about 2.4 points in the proof's books) is
- * never closed. Each touching run is repaired as one span; pieces with a gap between them are never
- * joined, so the PDF's own words stay split wherever it has a gap.
+ * kept, unless it is well narrower than its line's gaps and the two sides make one known word
+ * (joinNarrowGaps). Each span is repaired as one word.
  */
 
 /** The most a piece may start past the run's right edge and still touch it, in points. */
@@ -16,25 +16,6 @@ export const TOUCH = 0.5;
 export type PageSpan = { ids: string[]; pdf: string[]; repair: Repair };
 
 const DEVANAGARI = /[ऀ-ॿ]/u;
-
-/**
- * A line's words in touching runs. A mark's box is a point inside its word, so a piece is measured
- * from the run's furthest right edge so far, never only the piece before it.
- */
-export function touchingRuns(line: readonly Word[]): number[][] {
-  const runs: number[][] = [];
-  let right = Number.NEGATIVE_INFINITY;
-  line.forEach((w, i) => {
-    const run = runs.at(-1);
-    if (run !== undefined && w.x0 <= right + TOUCH) run.push(i);
-    else {
-      runs.push([i]);
-      right = Number.NEGATIVE_INFINITY;
-    }
-    right = Math.max(right, w.x1);
-  });
-  return runs;
-}
 
 const middle = (w: Word) => (w.y0 + w.y1) / 2;
 /** Two words at one height on the page: the PDF may number one printed line as two. */
@@ -82,7 +63,7 @@ export function pageSpans(page: NumberedPage): PageSpan[] {
 }
 
 /** A gap this much narrower than its line's usual gap is inside a word (के|वल 2.3 against 3.0). */
-export const NARROW = 0.8;
+const NARROW = 0.8;
 /** A line's usual gap is known from this many gaps. */
 const GAPS = 4;
 const LETTER = /[\u0904-\u0939\u0958-\u0961\u0972-\u097F]/u;

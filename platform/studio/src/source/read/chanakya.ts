@@ -161,7 +161,7 @@ export function fromChanakya(code: string): string {
 }
 
 /** Whether a PDF font is Chanakya (its code needs converting). */
-export const isChanakya = (font: string): boolean => /chanakya/i.test(font);
+const isChanakya = (font: string): boolean => /chanakya/i.test(font);
 
 /** How far a Hindi line's marks (ि, ें, the reph) rise above its run, as a share of its height. */
 const MARKS_ABOVE = 0.3;
@@ -172,7 +172,7 @@ const MARKS_BELOW = 0.15;
  * `pdftohtml -xml -zoom 1`'s pages, each run of text read by its font (a legacy Hindi font's code
  * converted): its words (placed across the run by their share of its letters) in reading order.
  */
-export function pagesFromXml(xml: string): PageText[] {
+function pagesFromXml(xml: string): PageText[] {
   // A font is declared on the first page that uses it, and used by later pages by its id.
   const fonts = new Map<string | undefined, string>();
   return xml

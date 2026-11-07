@@ -76,7 +76,7 @@ const isMarks = (piece: string) => [...piece].every((c) => MARK.test(c));
  * (or its nukta), a nukta on a consonant, a bindu on a letter or its vowel sign. `सेे` and `क््य`
  * aren't; they are the PDF's doubles, never a reading.
  */
-export function wellFormed(word: string): boolean {
+function wellFormed(word: string): boolean {
   let before = "";
   for (const c of word) {
     const onLetter = CONSONANT.test(before) || before === NUKTA;

@@ -294,7 +294,7 @@ export function buildExtract(x: Extract): ExtractBuild {
   const notes: string[] = [];
   const pagesDir = join(x.dir, SourceFile.Pages);
   if (!existsSync(pagesDir)) {
-    notes.push("not yet read by the new pipeline (no pages/): its items.yaml is as it was written");
+    notes.push("not yet read page by page (no pages/): its items.yaml is as it was written");
     return { issues: [], problems, notes };
   }
   const book = readYaml(join(x.dir, SourceFile.Book), bookSchema);

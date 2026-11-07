@@ -297,7 +297,7 @@ const SCRIPT = `
  * The page's image behind the page and every crop, written once. Not a custom property: Chrome drops
  * one whose value is over 2 MiB, and a full page 1 photo is more (base64 of a 1.7 MB PNG).
  */
-export const pageImage = (base64: string): string =>
+const pageImage = (base64: string): string =>
   `.left, .crop { background-image: url("data:image/png;base64,${base64}"); }`;
 
 /** A page's sheet, as a page of its own: its image is in the page, so the file can go anywhere. */

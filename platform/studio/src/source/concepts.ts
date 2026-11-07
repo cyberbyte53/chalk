@@ -26,7 +26,7 @@ import {
 export const MAIN = Locale.En;
 
 /** A text as compared: its letters, any punctuation or spacing between words one space. */
-const plain = (s: string) =>
+const asCompared = (s: string) =>
   ` ${s
     .normalize("NFC")
     .toLowerCase()
@@ -35,7 +35,7 @@ const plain = (s: string) =>
 
 /** Whether a term is printed in any of the items: as whole words, punctuation aside. */
 const printedIn = (term: string, items: readonly Item[]) =>
-  items.some((i) => plain(i.text ?? "").includes(plain(term)));
+  items.some((i) => asCompared(i.text ?? "").includes(asCompared(term)));
 
 /** One language's built items and terms, and its concepts file if written. */
 type Book = { lang: Locale; items: Item[]; terms: Term[]; dir: string };
@@ -74,9 +74,9 @@ function leftover(
   concepts: readonly { terms?: string[] }[],
   answers: Record<string, string>,
 ): string[] {
-  const named = new Set(concepts.flatMap((i) => i.terms ?? []).map(plain));
+  const named = new Set(concepts.flatMap((i) => i.terms ?? []).map(asCompared));
   return [...new Set(terms.map((t) => t.term))]
-    .filter((t) => !named.has(plain(t)) && answers[t] === undefined)
+    .filter((t) => !named.has(asCompared(t)) && answers[t] === undefined)
     .map(
       (t) =>
         `${where}: the book sets apart "${t}", in no concept: add it to one, or answer it under answers with why`,
@@ -109,7 +109,7 @@ export type Suggestion = {
 };
 
 /** For each main concept, where the attached book has it, from what pairs exactly. */
-export function suggest(concepts: MainConcepts, main: Book, attached: Book): Suggestion[] {
+export function suggestAttached(concepts: MainConcepts, main: Book, attached: Book): Suggestion[] {
   const { pairs } = matchItems(main.items, attached.items);
   const across = new Map(pairs.map((p) => [p.en, p.hi]));
   const sections = new Map(
@@ -125,7 +125,7 @@ export function suggest(concepts: MainConcepts, main: Book, attached: Book): Sug
     return undefined;
   };
   return concepts.concepts.map((concept) => {
-    const mainTerms = new Set(concept.terms.map(plain));
+    const mainTerms = new Set(concept.terms.map(asCompared));
     return {
       key: concept.key,
       items: [...new Set(concept.items.flatMap((id) => across.get(id) ?? []))],
@@ -133,7 +133,7 @@ export function suggest(concepts: MainConcepts, main: Book, attached: Book): Sug
       terms: [
         ...new Set(
           attached.terms
-            .filter((t) => t.en !== undefined && mainTerms.has(plain(t.en)))
+            .filter((t) => t.en !== undefined && mainTerms.has(asCompared(t.en)))
             .map((t) => t.term),
         ),
       ],
@@ -162,7 +162,7 @@ export function checkAttached(
     const s = suggestions.find((x) => x.key === concept.key);
     const dropped = [
       ...(s?.items ?? []).filter((i) => !concept.items.includes(i)),
-      ...(s?.terms ?? []).filter((t) => !concept.terms.map(plain).includes(plain(t))),
+      ...(s?.terms ?? []).filter((t) => !concept.terms.map(asCompared).includes(asCompared(t))),
     ];
     if (dropped.length > 0 && concept.cause === undefined)
       problems.push(
@@ -262,7 +262,7 @@ function checkChapter(source: string): {
       const a = readBook(source, lang);
       problems.push(...a.problems);
       if (a.book === undefined) return { lang, sheet: "", written: false };
-      const s = suggest(main.concepts, main.book, a.book);
+      const s = suggestAttached(main.concepts, main.book, a.book);
       const file = readYaml(join(source, lang, SourceFile.Concepts), attachedConceptsSchema);
       if (file.problem !== undefined) problems.push(file.problem);
       if (file.value !== undefined)
@@ -330,7 +330,7 @@ export function lookUp(
   const keys = new Set(
     files.flatMap((f) =>
       f.concepts
-        .filter((i) => (i.terms ?? []).some((t) => plain(t) === plain(term)))
+        .filter((i) => (i.terms ?? []).some((t) => asCompared(t) === asCompared(term)))
         .map((i) => i.key),
     ),
   );

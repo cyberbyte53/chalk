@@ -23,7 +23,7 @@ export function hindiWords(): ReadonlySet<string> {
 }
 
 /** Whether a word (Devanagari letters only) is in the list. */
-export const inHindiList = (word: string): boolean => hindiWords().has(word.normalize("NFC"));
+const inHindiList = (word: string): boolean => hindiWords().has(word.normalize("NFC"));
 
 const BOOKS = join(import.meta.dirname, "../../../../../authoring/books");
 
@@ -34,7 +34,7 @@ let learned: ReadonlySet<string> | undefined;
  * Hindi page files: what the list lacks and the books have taught us. Read once. `CHALK_LEARNED_FROM`
  * keeps only the books whose path holds it (a measure on books the words didn't come from).
  */
-export function learnedWords(): ReadonlySet<string> {
+function learnedWords(): ReadonlySet<string> {
   if (learned !== undefined) return learned;
   const from = process.env.CHALK_LEARNED_FROM;
   const words = new Set<string>();

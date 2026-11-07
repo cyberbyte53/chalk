@@ -123,7 +123,7 @@ const tallyLine = (what: string, rows: readonly BlockRow[]) => {
 };
 
 /** The default file a run's rows are written to (not in git). */
-export const MEASURE_FILE = join(".chalk-source-pages", "measure.tsv");
+const MEASURE_FILE = join(".chalk-source-pages", "measure.tsv");
 
 export type MeasureRun = {
   root: string;

@@ -17,7 +17,7 @@ const PAGES = join(ROOT, "authoring/books", CHAPTER, "source/hi/pages");
 const WORDS = join(ROOT, ".chalk-source-pages", CHAPTER, "hi");
 
 /** A words file's words by id (`L12.3`), in order, without the `*` that marks a broken one. */
-export function readWordsFile(text: string): Map<string, string> {
+function readWordsFile(text: string): Map<string, string> {
   const words = new Map<string, string>();
   for (const line of text.split("\n")) {
     const m = /^L(\d+) \[[^\]]*\] (.*)$/.exec(line);
