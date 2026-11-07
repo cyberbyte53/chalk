@@ -1,15 +1,21 @@
 # A chapter's sources: the book, as data
 
-Status: plan, rewritten 7 Nov 2026 after looking at how document parsing is done and testing rules on
-NCERT maths and science; reviewed; trialled (below); being built. Earlier versions of this file are in
-git; the decisions that held are kept.
+Status: the first build is done (`01f6e99d`) and proved on an unseen chapter in both languages (below).
+This revision, round 2, folds in what the proof showed: tools that take the repetitive work off the
+reader, an ideas list per book, and matching as its own step. Reviewed with experiments on the proof's
+pages (folded in); to be built. Earlier
+versions of this file are in git.
 
-**In short.** `pnpm source` turns a chapter's PDF into numbered words, in lines, and page images. An agent per
-language reads the pages in order and says which lines make which block (a paragraph, a box, a caption,
-a question) and where each figure is; where the PDF's text is broken, it reads the words, held to the
-PDF's own letters. The machine builds the items from the lines, crops the figures and checks everything;
-then the languages are matched by their numbers. No layout rules, no word lists per book. This is
-document anchoring, as olmOCR does it, with our agents as the model and our checks around them.
+**In short.** Extraction takes one PDF in one language. `pnpm source` turns it into page images with
+their lines numbered on them, and numbered words, with what the machine can work out already done (broken
+Hindi repaired where only one real word fits, maths written from where its pieces sit, running heads
+proposed). The session running the `extract-chapter` skill reads the pages in order: which words make
+which block, which drawing is each figure, the words the machine couldn't repair; and at the end the
+book's ideas, each with its terms and where it is introduced. The machine builds the items, snaps each
+figure to its drawing, lays tables into rows, draws a review sheet of each page, and raises issues to fix
+or answer. Matching two languages is a separate step: numbered things pair by number, ideas pair by an
+agent, into one small file. This is document anchoring (as olmOCR does it), with our agents as the model,
+the machine doing everything that can be computed, and checks around both.
 
 ## What it is for
 
@@ -47,101 +53,133 @@ taken from the PDF wherever its text is sound.
   reason, kept beside the item ("the PDF lacks ई and ं; the image shows ईंधन"). An answered issue passes
   and stays listed; the orchestrator reads every answer. Only what can't be meant can't be answered: a
   file that doesn't parse, a range not on the page.
-- **Each language alone, then matched by numbers** (never assumed one to one; what one book has and the
-  other doesn't is listed with why).
+- **The machine computes what can be computed; the reader judges the rest.** Every tool proposes or
+  checks; none decides what only reading the page can.
+- **Each language alone; matching is its own step.** Extracting a book never looks at another
+  language's. Matching pairs what both books number, and their ideas (never assumed one to one; what
+  one book has and the other doesn't is listed with why).
 - **Record exactly which book:** the edition its pages print, the address, the sha256.
 
 ## The stages
 
-1. **Prepare** (`pnpm source <book>/<chapter> <lang> <pdf>`, the machine): the PDF copied in and recorded;
-   each page rendered; its text read by the book's reader (`text`, or `chanakya`: the old Hindi font
-   converted by its table) into numbered words (`L12.3`: line 12's third word), in the PDF's lines, each
-   with its box, bold and italic; words that look broken marked as hints (a doubled sign or consonant,
-   U+FFFD, a joiner, a mark standing alone). One file per page: its image and its words. Lines are only
-   a convenience: the PDF's lines can run across a side column and the body, so a block cites word
-   ranges (`L12.1-6`, `L12.7-L14`).
-2. **Read** (the session running the `extract-chapter` skill, the pages in order, so it knows what an
-   earlier page left open):
-   for each page, from its image and lines, a structure file: the blocks in reading order, each its
-   word ranges, kind and number (as printed), and whether it continues from the page before or onto
-   the next; each figure's and table's box and caption; the words that are the page's running head,
-   footer or decoration; a reading for any span it reads from the image (Hindi whose letters the PDF
-   broke, marked or not; maths); the terms the page defines (a span). Words inside a figure (axis labels)
-   are the figure's; a reference ("Fig. 7.2", "(7.1)" in a sentence) is text, not a figure or an
-   equation. 
-3. **Build and check** (`pnpm source` again, the machine): `items.yaml` built from the words and
-   readings (a block that continues joined with the next page's continued block, taking its number
-   from where it starts), ids positional; figures cropped; terms listed; then the checks. A page with
-   issues goes back to its agent with them, each to fix or answer. The agent then looks at every crop.
-4. **Match** (once both languages hold): the machine pairs them by their numbers.
+**Extract** (one PDF; the `extract-chapter` skill):
 
-**One run is one PDF.** The `extract-chapter` skill takes one language's PDF; both languages are two
-runs (in parallel if wanted), neither seeing the other's book. The match is part of a non-English
-book's check, once English is extracted.
+1. **Prepare** (`pnpm source <book>/<chapter> <lang> <pdf> --address <url>`, the machine): the PDF copied
+   in and recorded in `book.yaml` (its sha256, address, reader; its title and edition are the
+   session's to set from page 1, since the PDF's text can't be trusted for them and some books print
+   no edition). For each page, into `.chalk-source-pages/<book>/<chapter>/<lang>/`:
+   - its image, and the same image with each line's number drawn at its start (`L14`);
+   - its words, numbered (`L14.3`), a PDF line split where a column-sized gap runs through it (a side
+     box beside the body);
+   - the machine's proposals, each marked in the words file and each a reading the session may keep or
+     change:
+     - **Hindi repaired**, every Hindi word, not only those that look broken (94 unmarked words were
+       broken in the proof, सूक्षष्मदर्शी 26 times): from a PDF span the machine makes its candidates
+       (pieces joined, doubles collapsed, ॠ→ऋ, ा+ॅ→ॉ, a mark standing alone tried in each place it can
+       go); if exactly one candidate is in the Hindi word list it is the repair; with several or none,
+       the span stays marked for the session. On the proof's 2,356 readings this repairs 2,095 with
+       none wrong, and leaves about 260 to read (30 with several real candidates, 157 technical words
+       the list lacks, 22 in a non-Unicode encoding).
+     - Later, with a maths chapter (nothing to show on science chapter 2): maths written from position
+       (a smaller, raised piece a superscript, stacked digits a fraction) and furniture proposed from
+       repetition.
+2. **Read** (the session, the pages in order, so it knows what a page leaves open): for each page a
+   page file, `source/<lang>/pages/page-NN.yaml`: blocks in reading order (their words, kind, number as
+   printed, title, whether they continue), each figure's and table's rough box, the furniture, readings
+   for what the machine couldn't repair (a reading must be one of the span's candidates; an unreachable
+   span, such as a non-Unicode glyph, is answered with why), and answers to issues. Then, having read the whole chapter,
+   `source/<lang>/ideas.yaml`: the chapter's key ideas (about 15 to 30), each one line in the book's
+   language, its terms exactly as printed, and the items it is introduced in.
+3. **Build and check** (`pnpm source` again, the machine): items built from the page files; a block
+   that continues joined with the next page's continued block (taking its number from where it starts);
+   ids positional, an exercise holding everything up to the next section or exercise; each figure's
+   box snapped to the PDF's own image and vector objects inside the rough box (the objects at the same
+   place on every page, the watermark, background and logo, left out; the PDF's object frame and its
+   text frame made one), its crop those objects with its label words; each table's cells taken from
+   its drawn rules and its words placed in them by position (a table without rules: the session marks
+   its rows); figures cropped; a review sheet per page (the image with each block outlined and labelled with its id, kind
+   and number); then the checks, each raising issues to fix or answer. The session looks at every crop,
+   every review sheet and every answer.
 
-**The record** is the agents' page files (`pages/page-NN.yaml`, in git): what was decided, from which
-PDF words, with every reading and every answer. `items.yaml` is built from them and the PDF, so
-`pnpm check` builds it again and checks the two agree, and lists every answered issue. Ids are positions
-(`2.4`: section 2's fourth block) until anything cites them; then they never change (a later split keeps
-the id on its first part and gives the rest `2.4b`): the check fails when a cited id would change.
+**Match** (once both books are extracted; `pnpm source match <book>/<chapter>`): the machine pairs every
+numbered thing by kind and digits (a question by its number and which exercise it is in, counted in
+order); an agent pairs the two ideas lists and their terms. Both go into `source/match.yaml`: the pairs,
+and what one book has and the other doesn't, each with why. The check: every numbered thing and every
+idea on both sides is paired or answered; each term pair's terms belong to their paired ideas.
+
+**The record** is the page files, `ideas.yaml` and `match.yaml` (in git): every judgment, with every
+reading and every answer. `items.yaml` is built from them and the PDF, so `pnpm check` builds it again
+and checks the two agree. Ids are positions (`2.4`: section 2's fourth block) until anything cites them;
+then they never change (a later split keeps the id on its first part and gives the rest `2.4b`): the
+check fails when a cited id would change.
 
 ## Checks
 
-- **Every word is used once:** each word is in exactly one block, figure, table or the page's
-  furniture.
-- **Pages join:** a block that continues is followed by a continued block on the next page, and a
-  continued block follows one that continues.
-- **Readings hold to the PDF's letters:** a reading and the PDF's span have the same consonants and
-  full vowels in the same order, and the same marks (vowel signs, ं, ँ, ्) as a set within each word,
-  after taking out spaces, joiners and U+FFFD, collapsing doubles, and reading ॠ as ऋ; a reading that
-  itself has a doubled sign fails. (Tested on 26 broken words of the science book: all true readings
-  pass.) Where a mark sits within the word is the agent's call from the image; the machine can't
-  check it.
-- **Numbers:** each kind's numbers are in order, none twice; each number is in its block's words.
-- **Figures** each have a box inside the page, their caption beside it, and a crop.
-- **Terms** are in the words of their block.
-- **Languages match** by kind and the number's digits (a question by its number and which exercise it is
-  in, counted in order, since an exercise may be unnumbered), or the difference is answered in
-  `book.yaml`'s `unmatched` with why.
+Every check raises issues the session fixes or answers; none silently passes.
 
-Every check raises issues the agent fixes or answers (above); none silently passes.
+- **Every word is used once:** in exactly one block, figure, table or the page's furniture.
+- **Pages join:** a block that continues is followed by a continued block on the next page.
+- **Readings are the page's:** a Hindi reading must be one of its span's candidates (exact: nothing can
+  be invented, and the true reading is always reachable unless the PDF dropped letters, as इधन for
+  ईंधन, answered with why); each word of it in the Hindi word list, else an issue, raised once per
+  distinct word for the whole book (a technical word the list lacks is answered once, "a real word,
+  as printed", and joins the book's list). A reading of maths keeps the PDF's letters and digits.
+- **Numbers:** each kind's numbers in order, none twice; each number in its block's words.
+- **Figures and tables** each have a box inside the page with its caption, and a crop; an object
+  crossing the rough box's edge is an issue (a figure cut off: it found the two crops the proof fixed
+  by eye).
+- **Ideas:** each term printed in the items its idea cites (trailing punctuation aside); every bold
+  phrase inside a text block (the PDF's font says bold: activity verbs, box titles and page numbers are
+  outside text blocks) in some idea, or answered.
+- **Match** (its own step), above.
 
 The checks on the plan (every block cited or skipped, cites exist, `plan.md` has no ids) are the
-pipeline's, run by plan-chapter; the check that lessons use the book's terms is self-review's.
+pipeline's, run by plan-chapter; the check that lessons use the book's terms is self-review's, reading
+`match.yaml`'s term pairs.
 
 ## Files
 
 ```
-authoring/books/<book>/<chapter>/source/<lang>/
-  book.yaml       title, reader, edition as printed, address, sha256, pages, the book's page numbers;
-                  unmatched (not English); answers (the answers pages' PDF, when the book has one)
-  book.pdf        the chapter, as downloaded
-  pages/page-NN.yaml   the agent's reading of each page (the record, above)
-  items.yaml      built: every block { id, kind, page, number?, title?, text, crop?, answer? }
-  figures/<id>.png
-  terms.yaml      built: { term, item }
-.chalk-source-pages/<book>/<chapter>/<lang>/    not in git: page images and numbered words (made again
-                                                from the PDF whenever needed)
+authoring/books/<book>/<chapter>/source/
+  <lang>/                one folder per language, the same shape
+    book.yaml            title, reader, edition (as printed, or none), address, sha256, pages;
+                         answers (the answers pages' PDF, when the book has one)
+    book.pdf             the PDF, as downloaded
+    pages/page-NN.yaml   the session's reading of each page
+    ideas.yaml           the chapter's key ideas: { idea, terms, items } (replaces the first build's
+                         terms.yaml)
+    words.yaml           Hindi: the words this book prints that the list lacks, each answered once
+    items.yaml           built: every block { id, kind, page, number?, title?, text, rows?, crop?, answer? }
+    figures/<id>.png     built
+  match.yaml             the two languages paired: numbered things, ideas, terms; and what only one has
+platform/studio/src/source/hindi/   the Hindi word list (LibreOffice hi_IN, GPL, with its licence;
+                                    used only by this authoring tool, never in the app)
+.chalk-source-pages/<book>/<chapter>/<lang>/  not in git: images, numbered images, words, review sheets
 ```
 
-Kinds (closed): section, text, box (with its printed `title`: "Pause and Ponder", "Think It Over"),
-figure, table, equation, example, activity, exercise, question. A Hindi term's English pair comes from
-its brackets (**मूलबिन्दु (origin)**) when the book prints them.
+Kinds (closed): section, heading (a heading without a number: "Mitosis"), text, box (with its printed
+`title`), figure, table (with `rows`), equation, example, activity, exercise, question.
+
+**The Hindi word list** is the LibreOffice `hi_IN` dictionary (207k stems with affix rules, expanded once
+to a flat list), kept as its own folder with its GPL licence and used only by this authoring tool, plus
+every book's `words.yaml`. It has some junk (सेे, जंतुओ), so it decides only between candidates; the
+candidates make sure nothing is invented.
 
 ## The code
 
 `platform/studio/src/source/`, self-contained (libraries and `@chalk/content`'s `Locale` only; the rest
-of Chalk only reads its files): `pipeline.ts` (prepare; build and check), `read/` (a file per reader and
-what they share: lines, marked words), `build.ts`, `check.ts`, `files.ts`, `schema.ts` (also the
-structure file's). `platform/studio/src/source-cli.ts` only parses arguments (`node:util`
-`parseArgs`). The skill `.agents/skills/extract-chapter/` runs it and holds what the agents need: the
-structure file's shape with a worked example of each kind; that Hindi is read from the image and the
-text layer only constrains its letters; side columns (a margin note such as टिप्पणी or "Think It Over" is
-a `box` with its title; the "Next Level Up" / "सोपान ऊपर" tags are furniture); and a failed check sent
-back with its exact words.
+of Chalk only reads its files): `pipeline.ts` (prepare; build and check; match), `read/` (a file per
+reader; lines with column splits; the proposals: Hindi repair, maths, furniture), `build.ts` (blocks,
+joins, ids, figure snapping, table rows), `sheets.ts` (numbered images and review sheets), `check.ts`,
+`match.ts`, `files.ts`, `schema.ts`. `platform/studio/src/source-cli.ts` only parses arguments. The
+skill `.agents/skills/extract-chapter/` (one PDF), with `reading.md` for reading the pages and writing
+the ideas; matching is a section of the same skill, run once both books are extracted. The PDF's
+image and vector objects are read with pdf.js (Apache-2.0; PyMuPDF does the same but is AGPL).
 
-Goes from today's code: the agent typing items, matching typed words against the page, the box guesses
-(`boxes.ts`), the head and foot bands, the fraction heuristics.
+**Tools considered and not used:** Docling (tested: 8 of 17 captions, a section missed, 7 minutes a
+chapter), MinerU and Marker (layout drafts: structure was never the cost, and a weak draft costs more to
+correct than to write), PyMuPDF (AGPL; and it reads the Kokila Hindi worse than poppler), pdffigures2
+(papers only, unmaintained), Camelot (tables from rules is a few lines here).
 
 ## Trial (7 Nov 2026)
 
@@ -158,19 +196,32 @@ figures); answers made by hand first; an agent per book, from written instructio
   `title`; a frame without a heading is still a box.
 - **Agents agree** with each other run to run; about 1–3 minutes and 50–80k tokens per 3 pages.
 
-## Proof, after building
+## Proof (7 Nov 2026), and what it changed
 
-Run frozen on an unseen chapter in both languages (science chapter 2), with no change to code or skill
-during the run: every check holding; fixes needed after the first read counted and reported. Chapter 1
-stays as a regression test: built into a scratch folder, it matches today's `items.yaml` (the same blocks
-and ids, the same words but for maths written by the rules and drawn figure labels, which leave the
-figures' text).
+Science chapter 2, "Cell: The Building Block of Life" (2026), 20 pages in each language, read with the
+first build's skill unchanged:
+- **English:** 158 blocks, 26 figures and tables, 1 issue answered, 9 minutes; 3 crops fixed by eye.
+- **Hindi (Kokila):** 158 blocks, 28 issues answered, 21 minutes; **2,356 spans read from the image**.
+- **Found:** questions after a figure fell out of their exercise (ids); headings without a number had
+  no kind (English made them text, Hindi sections); matching sat inside a language's check; titles were
+  cut and no edition is printed. And the letters check was both too loose (wrong collapses passed:
+  अध्यन, प्रूपी, त्व) and too strict (30 true readings answered: split conjuncts, vowels in two parts,
+  real doubles). Round 2 above answers each: the word list, the Hindi repair, the `heading` kind, the
+  exercise rule, matching as its own step, the session setting title and edition.
+
+**Measure for round 2:** first, the proof's 2,356 Hindi readings become a test of the repair (target:
+none wrong). Then both books of this chapter redone, compared with the first proof: spans the session
+reads (from 2,356), minutes, wrong machine repairs (0), the edge-crossing issue against the crops fixed
+by eye, issues answered, and a hand sample of blocks checked. Then chapter 1, converted with its cited
+ids kept, as the regression test.
 
 ## Order
 
-1. Done: chapter 1 English and Hindi extracted and checked; Hindi matched (36 of 36 numbers).
-2. Done: the trial.
-3. Build: prepare, the skill, build and check; today's code removed as it is replaced.
-4. The proof on science chapter 2.
-5. The terms check on the lessons; chapter 1's threads filed.
-6. `pnpm new chapter` runs it; docs and skills say it (full paths).
+1. Done: the first build; the trial; the proof.
+2. Round 2: the fixes (ids, `heading`, matching out of extraction, title and edition); the repair's
+   test from the proof's readings; then, in the order they save most: the Hindi repair and the word
+   list; numbered page images and column splits; figure snapping and table cells; review sheets; then
+   `ideas.yaml` and the match step. Maths from position and furniture proposals with a maths chapter.
+3. The measure above, on science chapter 2; then chapter 1 converted.
+4. The lessons' terms check (self-review, from `match.yaml`); chapter 1's threads filed.
+5. `pnpm new chapter` runs it; docs and skills say it (full paths).
