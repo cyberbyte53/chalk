@@ -1,0 +1,46 @@
+page: 8
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF"
+furniture: L1, L19.1, L21.1, L34.1, L39.1, L52
+terms:
+  - L19.2-4
+  - L21.2-4
+  - L26.1-2
+  - L47.4-5
+  - L48.10-11
+blocks:
+  - kind: section
+    number: L2.1
+    title: L2.2-4
+    words: L2
+  - kind: text
+    words: L3-L11
+  - kind: text
+    words: L12-L18, L19.2-14, L20, L21.2-13, L22
+  - kind: text
+    words: L23-L26
+  - kind: section
+    number: L27.1
+    title: L27.2-9
+    words: L27
+  - kind: heading
+    title: L28
+    words: L28
+  - kind: text
+    words: L29-L30
+  - kind: text
+    words: L31, L33, L34.2-6, L35, L37, L39.2-10, L40
+  - kind: figure
+    number: L38.1-2
+    words: L32, L36, L38
+    box: [339, 500, 592, 592]
+  - kind: text
+    words: L41-L48
+    read:
+      "L42.7-L44.1": { text: "(H₂)," }
+  - kind: text
+    words: L49-L50
+  - kind: text
+    words: L51

@@ -1,0 +1,28 @@
+page: 17
+proofread: true
+furniture: L42-L43, L60-L61
+blocks:
+  - kind: figure
+    number: L7.1-2
+    words: L1-L8
+    box: [53, 96, 262, 284]
+  - kind: activity
+    continued: true
+    words: L9-L22
+  - kind: table
+    number: L23.1-2
+    title: L23.3-7
+    words: L23-L37
+    box: [50, 305, 548, 498]
+  - kind: text
+    words: L44
+  - kind: figure
+    number: L40.1-2
+    words: L38-L41
+    box: [50, 518, 150, 733]
+  - kind: text
+    words: L45-L49
+  - kind: text
+    words: L50-L57
+  - kind: text
+    words: L58-L59

@@ -1,0 +1,47 @@
+page: 2
+proofread: true
+notes:
+  other: "the PDF has no arrow in a word equation"
+answers:
+  "crosses L28.1": "only the top of the picture's plain green background is left out, so the crop doesn't take in the page's compass above it"
+  "again L35.1": "Fig. 9.1 is printed as two pictures, (a) and (b), each with its own caption"
+furniture: L1, L47-L49, L65, L74
+blocks:
+  - kind: activity
+    number: L2.1-2
+    title: L2.3-L3
+    words: L2-L14
+  - kind: text
+    words: L15-L23
+  - kind: text
+    words: L24-L25
+  - kind: figure
+    number: L33.1-3
+    words: L28-L34
+    box: [363, 86, 590, 258]
+    crop: { box: [363, 92, 590, 258], cause: wrong-box }
+  - kind: figure
+    number: L40.1-3
+    words: L35-L41
+    box: [363, 258, 590, 444]
+    crop: { box: [363, 258, 590, 444], cause: wrong-box }
+  - kind: activity
+    number: L26.1-2
+    title: L26.3-L27
+    words: L26-L27, L42-L45
+  - kind: equation
+    words: L46, L50
+    read:
+      "L46.6": { text: "hydrogencarbonate) →", cause: other }
+  - kind: text
+    words: L51-L52
+  - kind: heading
+    title: L53
+    words: L53
+  - kind: text
+    words: L54-L64
+    continues: true
+  - kind: figure
+    number: L72.1-3
+    words: L66-L73
+    box: [357, 545, 592, 752]

@@ -1,0 +1,65 @@
+page: 2
+proofread: true
+furniture: L1, L58, L35-L37
+notes:
+  other: the PDF sets part of the words अंकीय तुला as a separate line (L41) laid over L40; read the two lines whole
+answers:
+  read L40.3-L41.4: the PDF splits अंकीय तुला across two overlapping lines (अ क ु ा … ं ीय त ल); the reading reorders those same letters as the image prints them
+  again L21.14: the book prints two pictures under 9.1, (क) and (ख), each with its own caption
+  word स्पैचुला: a real word (spatula), as printed on the page; the list lacks it
+  word डालिए: a real word, as printed on the page; the list lacks it
+  word पाठ्यांक: a real word (reading of a balance), as printed on the page; the list lacks it
+  word नमकयुक्त: a real word, as printed on the page; the list lacks it
+  word हाइड्रोजनकार्बोनेट: a real word (hydrogencarbonate), as printed on the page; the list lacks it
+blocks:
+  - kind: activity
+    number: L2.1-2
+    title: L2.4-L3
+    words: L2-L4, L6, L8, L10, L12-L13, L15, L17-L18
+    read:
+      L10.2: पाठ्यांक
+      L12.8: डालिए।
+      L13.8: स्पैचुला
+      L13.12: डालिए।
+      L15.4: पाठ्यांक
+  - kind: figure
+    number: L14.1-2
+    words: L5, L7, L9, L11, L14, L16
+    box: [380, 88, 585, 250]
+  - kind: text
+    words: L19-L20, L21.1-13, L22.1-13, L23, L24.1-14, L25-L26
+  - kind: figure
+    number: L27.14-15
+    words: L21.14-16, L22.14-15, L24.15-16, L27.14-22, L28
+    box: [374, 244, 580, 440]
+    read:
+      L22.14: नमकयुक्त
+  - kind: text
+    words: L27.1-13, L29
+  - kind: activity
+    number: L30.1-2
+    title: L30.4-10
+    words: L30-L33
+  - kind: equation
+    words: L34
+    read:
+      L34.6: हाइड्रोजनकार्बोनेट)
+  - kind: text
+    words: L38
+  - kind: heading
+    title: L39
+    words: L39
+  - kind: text
+    words: L40-L42, L44-L45, L47, L49, L51-L52, L54-L55, L57
+    continues: true
+    read:
+      L40.3-L41.4: { text: "अंकीय तुला पर स्वच्छ एवं शुष्क 100 mL का शंक्वाकार", cause: other }
+      L45.1: पाठ्यांक
+      L49.2: डालिए।
+      L51.8: हाइड्रोजनकार्बोनेट)
+      L52.5: डालिए।
+      L55.5: पाठ्यांक
+  - kind: figure
+    number: L56.1-2
+    words: L43, L46, L48, L50, L53, L56
+    box: [360, 567, 570, 755]

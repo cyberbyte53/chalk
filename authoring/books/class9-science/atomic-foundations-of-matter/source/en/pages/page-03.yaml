@@ -1,0 +1,48 @@
+page: 3
+proofread: true
+answers:
+  "crosses L20.1": "that path is the arrow from 'Balloon containing baking soda' to Fig. 9.2 (b), not part of (c)"
+  "again L16.1": "Fig. 9.2 is printed as three pictures, (a), (b) and (c), each with its own caption"
+  "again L20.1": "Fig. 9.2 is printed as three pictures, (a), (b) and (c), each with its own caption"
+  "again L55.1": "Fig. 9.3 is printed as three pictures, (a), (b) and (c), each with its own caption"
+furniture: L59-L60, L79-L80
+blocks:
+  - kind: box
+    title: L1
+    words: L1-L15
+  - kind: figure
+    number: L25.1-3
+    words: L16-L19, L25-L26
+    box: [170, 64, 388, 254]
+    crop: { box: [168, 62, 388, 255], cause: wrong-box }
+  - kind: figure
+    number: L27.1-3
+    words: L20-L24, L27-L28
+    box: [320, 66, 546, 258]
+    crop: { box: [321, 64, 548, 259], cause: wrong-box }
+  - kind: text
+    continued: true
+    words: L29-L32
+  - kind: box
+    title: L33
+    words: L33-L36
+  - kind: text
+    words: L40-L41
+  - kind: text
+    words: L42-L44
+  - kind: text
+    words: L45-L46
+  - kind: heading
+    title: L52
+    words: L52
+  - kind: text
+    words: L61-L78
+    continues: true
+  - kind: figure
+    number: L53.1-3
+    words: L37-L39, L47-L51, L53-L54
+    box: [44, 340, 232, 536]
+  - kind: figure
+    number: L57.1-3
+    words: L55-L58
+    box: [44, 545, 240, 740]

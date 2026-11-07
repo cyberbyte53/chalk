@@ -1,0 +1,65 @@
+page: 5
+proofread: true
+furniture: L31-L33, L80, L2.1, L9.1
+cause: other
+notes:
+  other: maths the PDF flattens - a fraction set as two numbers, its bar a drawn line; = and × in a symbol font the PDF holds as private glyphs; and words in English laid under the Hindi ones, not printed
+answers:
+  read L72.6-7: the same letters, without the space and tab the PDF puts inside the word; the image prints करेगा
+  read L75.6-7: the same letters, without the space and tab the PDF puts inside the word; the image prints करेगा
+  word एथेनॉल: a real word (ethanol), as printed on the page; the list lacks it
+  read L70.2-4: English words the PDF holds under कार्बन डाइऑक्साइड, not printed on the page
+blocks:
+  - kind: text
+    words: L34-L36
+    read:
+      L34.3-4: सल्फेट
+      L35.6-7: सल्फेट
+  - kind: equation
+    words: L37
+  - kind: text
+    words: L38-L39
+  - kind: box
+    title: L40
+    words: L40-L47
+    read:
+      L46.1-2: रूपरेखा
+  - kind: example
+    number: L48.1-2
+    words: L48-L51
+    read:
+      L49.1-2: कैल्सियम
+      L50.13-14: कैल्सियम
+  - kind: text
+    words: L52-L61
+    read:
+      L52.3-4: कैल्सियम
+      L54.1: अभिकारकों
+      L57.1-2: कैल्सियम
+      L59.1: अभिकारकों
+      L60.1: अभिकारकों
+  - kind: example
+    number: L62.1-2
+    words: L62-L66
+  - kind: text
+    words: L67-L68, L72.1-7, L71, L69, L73, L70, L72.8-9, L75, L76, L77, L74, L78-L79
+    read:
+      L72.6-7: करेगा
+      L75.6-7: करेगा
+      L71.1: "="
+      L75.8: "="
+      L74.1: "×"
+      L73: "/12"
+      L77: "/12"
+      L70.2-4: ""
+  - kind: box
+    title: L1
+    words: L1, L2.2-L8, L9.2-4, L10-L13
+    read:
+      L2.4: फ्लास्कों
+  - kind: box
+    title: L14
+    words: L14-L30
+    read:
+      L16.4: एथेनॉल
+      L19.6: इससे

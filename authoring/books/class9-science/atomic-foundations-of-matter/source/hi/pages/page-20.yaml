@@ -1,0 +1,75 @@
+page: 20
+proofread: true
+furniture: L1, L49
+cause: other
+notes:
+  other: the PDF sets charges and subscripts as plain characters, often on lines of their own (Al 3+, PO 4 3–), or puts a space inside a word (करे गा, आरे खित, कै ल्सियम, फे रिक)
+answers:
+  word द्विपरमाणुक: a real word (diatomic), as printed on the page; the list lacks it
+  word नों: the plural ending, printed (नों) after कथन; the list lacks it
+blocks:
+  - kind: exercise
+    title: L2
+    words: L2
+  - kind: question
+    number: L3.1
+    words: L3-L10
+    read:
+      L3.4: तत्व
+      L3.15: तत्व
+      L5.12-13: करेगा
+      L5.16-17: करेगा?
+      L7.12-13: करेगा
+      L7.16-17: करेगा?
+  - kind: question
+    number: L11.1
+    words: L11-L16
+    read:
+      L11.3: तत्व
+      L11.15: द्विपरमाणुक
+      L14.8-9: आरेखित
+      L15.4: तत्व
+      L15.17-18: आरेखित
+      L16.2: तत्व
+  - kind: question
+    number: L17.1
+    words: L17-L26
+    read:
+      L19.3-4: "Al³⁺"
+      L19.7-8: "Cl⁻"
+      L20.3-4: "Mg²⁺"
+      L20.7-L22.1: "PO₄³⁻"
+      L23.3-4: "Fe³⁺"
+      L23.7-8: "O²⁻"
+      L24.3-4: "Ca²⁺"
+      L24.7-L26.1: "SO₄²⁻"
+  - kind: question
+    number: L27.1
+    words: L27-L33
+    read:
+      L27.4: (नों)
+      L27.11: (नों)
+      L28.2: तत्व
+      L28.3-4: अणुओं
+      L28.10-11: परमाणुओं
+      L29.14-15: परमाणुओं
+      L32.5-8: परमाणुओं
+      L32.18: सहसंयोजी
+  - kind: question
+    number: L34.1
+    words: L34-L37
+    read:
+      L36.2-3: कैल्सियम
+      L37.2-3: फेरिक
+  - kind: question
+    number: L38.1
+    words: L38-L48
+    read:
+      L39.2-3: "Ca²⁺"
+      L39.5-6: "Br⁻"
+      L40.2-3: "Al³⁺"
+      L40.5-L42.1: "CO₃²⁻"
+      L43.2-3: "K⁺"
+      L43.5-L45.1: "SO₄²⁻"
+      L46.2-L48.1: "NH₄⁺"
+      L48.3-4: "Cl⁻"

@@ -1,0 +1,41 @@
+page: 4
+proofread: true
+answers:
+  "again L14.1": "Fig. 9.3 is printed as three pictures, (a), (b) and (c), each with its own caption"
+  "again L75.1": "Fig. 9.4 is printed as two pictures, (a) and (b), each with its own caption"
+furniture: L1, L72, L86
+terms:
+  - L27.5-9
+blocks:
+  - kind: text
+    continued: true
+    words: L2-L5
+  - kind: text
+    words: L6-L13
+  - kind: section
+    number: L23.1
+    title: L23.2-6
+    words: L23
+  - kind: text
+    words: L24-L28
+  - kind: box
+    title: L31
+    words: L31-L38
+  - kind: text
+    words: L49, L50.1-7
+  - kind: activity
+    number: L53.1-2
+    title: L53.3-10
+    words: L53-L71
+  - kind: figure
+    number: L29.1-3
+    words: L14-L22, L29-L30
+    box: [419, 103, 592, 315]
+  - kind: figure
+    number: L73.1-3
+    words: L39-L48, L50.8, L51-L52, L73-L74
+    box: [415, 336, 592, 542]
+  - kind: figure
+    number: L84.1-3
+    words: L75-L85
+    box: [415, 540, 594, 737]

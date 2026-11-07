@@ -1,0 +1,57 @@
+page: 18
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF"
+furniture: L1, L60
+terms:
+  - L50.6-7
+  - L51.1-3
+blocks:
+  - kind: text
+    words: L2-L4
+  - kind: box
+    title: L5
+    words: L5-L12
+  - kind: section
+    number: L13.1
+    title: L13.2-6
+    words: L13
+  - kind: text
+    words: L14-L16
+  - kind: example
+    number: L17
+    words: L17-L24
+    read:
+      "L18.5-L20": { text: "(H₂O)" }
+      "L22.4-L24.1": { text: "H₂O" }
+  - kind: example
+    number: L26
+    words: L26-L33
+    read:
+      "L27.6-L29": { text: "(CO₂)" }
+      "L31.4-L32": { text: "CO₂" }
+  - kind: text
+    words: L34-L35
+  - kind: figure
+    number: L38.1-2
+    words: L25, L37-L39
+    box: [485, 265, 590, 512]
+  - kind: box
+    title: L36
+    words: L36, L40-L47
+    read:
+      "L40.9-L42": { text: "(HNO₃)." }
+      "L44.8-L46": { text: "(CH₄)." }
+  - kind: section
+    number: L48.1
+    title: L48.2-7
+    words: L48
+  - kind: text
+    words: L49-L51
+  - kind: example
+    number: L52
+    words: L52-L59
+    read:
+      "L53.7-L55": { text: "(Na₂O)" }
+      "L57.5-L59.1": { text: "Na₂O" }

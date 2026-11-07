@@ -1,0 +1,117 @@
+concepts:
+  - key: mass-unchanged-in-physical-change
+    concept: In a physical change, such as dissolving salt in water, the total mass stays the same.
+    terms: []
+    items: ["0.7"]
+  - key: escaping-gas-and-closed-set-up
+    concept: When a reaction gives off a gas in an open flask the reading drops because the gas escapes; in a closed set-up the mass before and after is the same.
+    terms: []
+    items: ["0.28"]
+  - key: law-of-conservation-of-mass
+    concept: Matter can neither be created nor destroyed in a chemical reaction, so the total mass stays the same (the Law of Conservation of Mass, proposed by Lavoisier).
+    terms: [Law of Conservation of Mass]
+    items: ["1.1"]
+  - key: mass-of-reactants-equals-products
+    concept: The total mass of the reactants equals the total mass of the products, so an unknown mass in a reaction can be worked out from the others.
+    terms: []
+    items: ["1.14", "1.16"]
+  - key: law-of-constant-proportions
+    concept: A compound always contains its elements in a fixed ratio by mass, whatever its source (the Law of Constant Proportions, or of Definite Proportions, or Proust's Law).
+    terms: [Law of Constant Proportions, Law of Definite Proportions, Proust’s Law]
+    items: ["2.1", "2.2"]
+  - key: using-the-fixed-ratio
+    concept: From a compound's fixed mass ratio, the mass of one element needed to combine with a given mass of the other can be worked out.
+    terms: []
+    items: ["2.6"]
+  - key: daltons-atomic-theory
+    concept: Dalton's Atomic Theory explains both laws; matter is made of indivisible atoms, atoms of one element are identical, different elements have different atoms, and atoms combine in simple whole-number ratios and only rearrange in a reaction.
+    terms: [Dalton’s Atomic Theory]
+    items: ["2.10", "3.2"]
+  - key: molecule
+    concept: A molecule is an electrically neutral group of more than one atom that can exist on its own and shows the substance's properties; it can be of an element or of a compound.
+    terms: [molecules]
+    items: ["3.7", "4.1"]
+  - key: some-elements-exist-as-atoms
+    concept: Some elements, such as helium, exist only as single atoms because their atoms are already stable.
+    terms: []
+    items: ["4.1"]
+  - key: atoms-share-or-transfer-electrons
+    concept: Atoms share, gain or lose electrons to complete their valence shell (an octet, or two electrons in the K-shell) and become stable.
+    terms: [Sharing of electrons, Transfer of electrons]
+    items: ["4.2"]
+  - key: chemical-bond
+    concept: A chemical bond is the force that holds atoms together; bonding lowers the energy and makes the arrangement more stable.
+    terms: [chemical bond]
+    items: ["4.3"]
+  - key: covalent-bond
+    concept: A covalent bond is a pair of electrons shared between two atoms, as in the hydrogen molecule H₂.
+    terms: [covalent bond]
+    items: ["4.4.5"]
+  - key: single-and-double-bonds
+    concept: Atoms sharing one pair of electrons are joined by a single bond (H—H, Cl—Cl); atoms sharing two pairs are joined by a double bond (O=O).
+    terms: [single bond, double bond]
+    items: ["4.4.5", "4.4.17"]
+  - key: covalent-compounds
+    concept: Atoms of different elements can also share electrons, forming covalent compounds such as hydrogen chloride (HCl) and water (H₂O).
+    terms: []
+    items: ["4.4.23", "4.4.26"]
+  - key: naming-covalent-compounds
+    concept: Covalent compounds are named with prefixes (mono-, di-, tri- and so on) for the number of atoms, the second element ending in -ide; a few keep common names, like water and ammonia.
+    terms: []
+    items: ["4.4.30", "4.4.34"]
+  - key: cation
+    concept: An atom that loses electrons becomes a positively charged cation, such as Na⁺.
+    terms: [cation]
+    items: ["4.5.4"]
+  - key: anion
+    concept: An atom that gains electrons becomes a negatively charged anion, such as Cl⁻ or S²⁻.
+    terms: [anion]
+    items: ["4.5.6", "4.5.12"]
+  - key: ionic-bond
+    concept: An ionic bond is the electrostatic attraction between oppositely charged ions formed by transferring electrons, as in sodium chloride.
+    terms: [ionic bond]
+    items: ["4.5.8"]
+  - key: ionic-crystals
+    concept: Ionic compounds don't form molecules; their ions are arranged in a repeating 3-D crystal.
+    terms: []
+    items: ["4.5.10", "7.4"]
+  - key: naming-ionic-compounds
+    concept: An ionic compound is named cation first, then anion; simple anions end in -ide, and ions made of several atoms are polyatomic ions.
+    terms: [polyatomic ions]
+    items: ["4.5.16"]
+  - key: common-ions-and-valency
+    concept: Each common ion has a formula and a valency equal to the size of its charge.
+    terms: []
+    items: ["4.5.17", "4.5.18"]
+  - key: formulae-of-covalent-compounds
+    concept: To write a covalent compound's formula, write the elements' symbols and cross over their valencies as subscripts, leaving out a 1 (H₂S, CCl₄).
+    terms: []
+    items: ["5.2.1", "5.2.2"]
+  - key: formulae-of-ionic-compounds
+    concept: To write an ionic compound's formula, cross over the numbers of the ions' charges and reduce to the simplest ratio, so the charges balance (CaCl₂, MgO).
+    terms: []
+    items: ["5.3.1", "5.3.3"]
+  - key: brackets-for-polyatomic-ions
+    concept: Brackets go around a polyatomic ion that appears more than once in a formula, as in Mg(OH)₂ and Al₂(SO₄)₃.
+    terms: []
+    items: ["5.3.7", "5.3.8"]
+  - key: solubility-of-ionic-and-covalent
+    concept: Ionic compounds generally dissolve in water but not in kerosene or petrol; most covalent compounds do the opposite.
+    terms: []
+    items: ["6.6"]
+  - key: conductivity-of-ionic-and-covalent
+    concept: Ionic compounds conduct electricity when dissolved in water, where their ions are free to move, but not as solids; covalent compounds don't conduct because they give no ions.
+    terms: []
+    items: ["6.7"]
+  - key: melting-and-boiling-points
+    concept: Ionic compounds have high melting and boiling points because of strong attractions between ions; covalent compounds usually have low ones.
+    terms: []
+    items: ["6.9"]
+  - key: molecular-mass
+    concept: The molecular mass of a covalent compound is the sum of the atomic masses of the atoms in its molecule (H₂O is 18 u).
+    terms: []
+    items: ["7.1", "7.2"]
+  - key: formula-unit-mass
+    concept: In an ionic compound, a formula unit is the simplest whole-number ratio of its ions, and its formula unit mass is the sum of their atomic masses.
+    terms: [formula unit, formula unit mass]
+    items: ["8.1"]

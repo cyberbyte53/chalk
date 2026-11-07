@@ -1,0 +1,50 @@
+page: 21
+proofread: true
+cause: other
+notes:
+  other: "a subscript or a charge set on its own line, or apart, by the PDF"
+furniture: L50-L53
+blocks:
+  - kind: question
+    number: L2.1
+    words: L2.1-11, L1, L2.12-13, L3
+    read:
+      "L2.11, L1": { text: "Cl⁻" }
+  - kind: figure
+    number: L5
+    words: L4-L5
+    box: [170, 118, 530, 232]
+  - kind: question
+    number: L6.1
+    words: L6-L22
+    read:
+      "L7.4-L11.1": { text: "(NH₄NO₃)," }
+      "L13.4-L17.1": { text: "(H₃PO₄)," }
+      "L19.4-L21.1": { text: "(NaHCO₃)," }
+  - kind: question
+    number: L23.1
+    words: L23-L27
+  - kind: question
+    number: L28.1
+    words: L28-L32
+    read:
+      "L29.14-L30": { text: "LiNO₃" }
+  - kind: table
+    number: L33
+    words: L33-L41
+    box: [155, 465, 550, 572]
+    read:
+      "L34.1-2": { text: "NO₃⁻" }
+      "L34.3-4": { text: "SO₄²⁻" }
+      "L34.5-6": { text: "PO₄³⁻" }
+      "L35-L37": { text: "NH₄⁺" }
+      "L38.1-2": { text: "Li⁺" }
+      "L38.3-L39": { text: "LiNO₃" }
+      "L40.1-2": { text: "Al³⁺" }
+      "L41.1-2": { text: "Cu²⁺" }
+  - kind: question
+    number: L42.1
+    words: L42-L44
+  - kind: question
+    number: L45.1
+    words: L45-L49

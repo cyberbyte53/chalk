@@ -1,0 +1,78 @@
+page: 10
+proofread: true
+furniture: L1, L62
+cause: other
+notes:
+  other: the PDF sets a subscript as a plain digit on its own line (H 2 O, CO 2), puts a space inside a word (के वल), or lays the opening words of a line over each other in three lines (L56-L58)
+answers:
+  word अतःयह: as printed on the page, without a space
+  word निरुपित: as printed on the page (with ु)
+  word निऑन: a real word (neon), as printed on the page; the list lacks it
+  word आइड: the suffix -ide, as printed on the page; the list lacks it
+  read L49.17: the PDF lacks त्त् (महवपूर््ण); the image shows महत्त्वपूर्ण
+  read L54.9: the PDF lacks त्त् (महवपूर््ण); the image shows महत्त्वपूर्ण
+  read L52.17: the PDF lacks ई and ं (इधनोों); the image shows ईंधनों
+  read L56.1-L58.16: the PDF lays the line's opening words over each other in three lines (L56, L57, L58); the reading puts those same letters in the order the image prints them
+blocks:
+  - kind: text
+    words: L2-L4
+    read:
+      L2.11-12: परमाणुओं
+  - kind: figure
+    number: L7.1-2
+    words: L5-L7
+    box: [113, 136, 410, 240]
+  - kind: text
+    words: L9-L11, L12.1-6, L13
+    read:
+      L11.3: अतःयह
+      L11.5: सहसंयोजी
+  - kind: text
+    words: L15, L17, L19, L23, L25, L29
+    read:
+      L17.10-11: केवल
+      L23.15-16: परमाणुओं
+  - kind: figure
+    number: L35.1-2
+    words: L33-L36
+    box: [105, 388, 420, 488]
+  - kind: text
+    words: L37-L40
+    read:
+      L37.6-L39.1: "H₂O"
+      L39.3: निरुपित
+      L39.10-11: परमाणुओं
+  - kind: box
+    title: L47
+    words: L47-L54
+    read:
+      L48.2-3: परमाणुओं
+      L48.13: तत्वों
+      L49.17: महत्त्वपूर्ण
+      L51.13-14: अभिक्रियाओं
+      L52.17: ईंधनों
+      L54.9: महत्त्वपूर्ण
+  - kind: heading
+    title: L55
+    words: L55
+    read:
+      L55.2: सहसंयोजी
+  - kind: text
+    words: L56-L61
+    continues: true
+    read:
+      L56.1-L58.16: "सहसंयोजी यौगिकों का नामकरण यौगिक में प्रत्येक तत्व के परमाणुओं की संख्या को इंगित करके किया"
+      L60.3: तत्व
+      L60.5-6: परमाणुओं
+      L60.14: तत्व
+      L61.3: तत्व
+      L61.9: आइड
+  - kind: box
+    title: L8
+    words: L8, L12.7-10, L14, L16, L18, L20-L22, L24, L26-L28, L30-L32, L41-L46
+    read:
+      L12.8-9: अणुओं
+      L20-L22: "(CO₂)"
+      L26.2-L28: "(H₂S)"
+      L30.3-L32: "(NH₃)"
+      L41.1: "11. निऑन"

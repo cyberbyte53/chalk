@@ -1,0 +1,46 @@
+page: 10
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF, a space the PDF puts inside a bond's symbols, or a tab inside a line"
+furniture: L1, L67
+blocks:
+  - kind: text
+    words: L2-L5
+  - kind: figure
+    number: L8.1-2
+    words: L6-L8
+    box: [115, 140, 435, 252]
+  - kind: text
+    words: L9-L12
+    read:
+      "L12.11-12": { text: "H—Cl." }
+  - kind: text
+    words: L13-L14, L16, L18, L20, L22
+  - kind: figure
+    number: L33.1-2
+    words: L23-L33
+    box: [88, 390, 430, 502]
+    crop: { box: [86, 388, 433, 503], cause: wrong-box }
+  - kind: text
+    words: L34-L37
+    read:
+      "L34.9-L36.1": { text: "H₂O," }
+  - kind: box
+    title: L15
+    words: L15, L17, L19, L21, L38-L53
+    read:
+      "L38.1": { text: "(i) Carbon" }
+      "L39-L41": { text: "(CO₂)" }
+      "L42.1": { text: "(ii) Hydrogen" }
+      "L43-L45": { text: "(H₂S)" }
+      "L46.3-L48": { text: "(NH₃)" }
+  - kind: box
+    title: L54
+    words: L54-L63
+  - kind: heading
+    title: L64
+    words: L64
+  - kind: text
+    words: L65-L66
+    continues: true

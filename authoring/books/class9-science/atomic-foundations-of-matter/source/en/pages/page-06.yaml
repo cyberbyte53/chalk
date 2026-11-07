@@ -1,0 +1,36 @@
+page: 6
+proofread: true
+furniture: L1, L23, L71
+terms:
+  - L20.6-9
+  - L21.3-6
+  - L22.1-2
+blocks:
+  - kind: text
+    words: L2-L7
+  - kind: section
+    number: L8.1
+    title: L8.2-5
+    words: L8
+  - kind: text
+    words: L9-L19
+  - kind: text
+    words: L20-L22
+  - kind: box
+    title: L24
+    words: L24-L47
+  - kind: box
+    title: L48
+    words: L48-L54, L55.1-13, L56
+  - kind: figure
+    number: L55.14-15
+    words: L55.14-16
+    box: [488, 410, 566, 506]
+  - kind: example
+    number: L57.1-2
+    words: L57-L59
+  - kind: text
+    words: L60
+  - kind: box
+    title: L61
+    words: L61-L70

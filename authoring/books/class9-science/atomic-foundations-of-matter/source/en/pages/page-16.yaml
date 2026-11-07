@@ -1,0 +1,43 @@
+page: 16
+proofread: true
+cause: other
+notes:
+  other: "a subscript or a charge set on its own line, or apart, by the PDF"
+furniture: L1, L70
+blocks:
+  - kind: text
+    words: L2-L7
+    read:
+      "L2.10-12": { text: "(OH⁻)" }
+      "L3.4-6": { text: "(Mg²⁺)." }
+      "L6.6-8": { text: "(OH⁻)" }
+  - kind: box
+    title: L8
+    words: L8-L10, L12, L11, L18.1, L19, L20-L27, L13-L14, L17, L15-L16, L18.2, L29, L28, L30-L35
+    read:
+      "L20.2-L21": { text: "Al(OH)₃" }
+      "L23.3-L25.1": { text: "Al(OH)₃," }
+      "L25.3-L27": { text: "AlOH₃." }
+      "L15.2-L16": { text: "SO₄" }
+      "L30-L35": { text: "Al₂(SO₄)₃" }
+  - kind: box
+    title: L36
+    words: L36-L57
+    read:
+      "L38.2-L39": { text: "CO₂" }
+      "L41.2-L42": { text: "NO₂" }
+      "L44.2-L45": { text: "SF₆" }
+      "L47.2-L48": { text: "PCl₃" }
+      "L57.2-3": { text: "Fe³⁺" }
+      "L57.5-6": { text: "OH⁻" }
+      "L57.8-9": { text: "K⁺" }
+      "L57.11-12": { text: "CO₃²⁻" }
+  - kind: section
+    number: L58.1
+    title: L58.2-L59
+    words: L58-L59
+  - kind: activity
+    number: L60.1-2
+    title: L60.3-5
+    words: L60-L69
+    continues: true

@@ -1,0 +1,45 @@
+page: 5
+proofread: true
+cause: other
+notes:
+  other: "the PDF has no arrow in a word equation, and a fraction's bar isn't in its text"
+furniture: L2.1, L3, L35-L36, L85-L86
+blocks:
+  - kind: box
+    title: L1
+    words: L1, L2.2-5, L4-L17
+  - kind: box
+    title: L18
+    words: L18-L34
+  - kind: text
+    words: L37-L39
+  - kind: equation
+    words: L40
+    read:
+      "L40.5": { text: "chloride →" }
+  - kind: text
+    words: L41-L43
+  - kind: box
+    title: L44
+    words: L44-L50
+    read:
+      "L47.5": { text: "(dilute) →" }
+  - kind: example
+    number: L51.1-2
+    words: L51-L55
+  - kind: text
+    words: L57, L56, L58-L67
+  - kind: example
+    number: L68.1-2
+    words: L68-L69
+  - kind: equation
+    words: L71, L70
+    read:
+      "L71.3": { text: "Oxygen →" }
+  - kind: text
+    words: L72-L73
+  - kind: text
+    words: L74-L75, L78, L76, L79, L77, L81.1-8, L80, L82, L81.9-11, L83, L84
+    read:
+      "L79": { text: "/ 12" }
+      "L82": { text: "/ 12" }

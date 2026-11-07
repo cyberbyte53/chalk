@@ -1,0 +1,21 @@
+page: 1
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF"
+furniture: L1-L2, L4.1, L5-L7, L34, L36, L37.1-2, L47
+blocks:
+  - kind: heading
+    words: L25-L26
+    title: L25-L26
+  - kind: text
+    words: L27-L32
+  - kind: text
+    words: L33, L35, L37.3-11, L38-L39
+  - kind: text
+    words: L40-L46
+  - kind: box
+    title: L3
+    words: L3, L4.2-4, L8-L24
+    read:
+      "L16.2-L18.1": { text: "O₂." }

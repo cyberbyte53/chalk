@@ -1,0 +1,117 @@
+page: 13
+proofread: true
+furniture: L71-L74
+cause: other
+notes:
+  wrong-cells: the grid put a superscript charge before its symbol (– F) and kept it apart from it
+  other: the PDF sets a subscript or superscript as a plain character on its own line (Mg 2+, Na 2 S), or puts a space inside a word (कै ल्सियम, फे रस, परमाणुओ ं)
+terms:
+  - L26.17-18
+answers:
+  word धनायनों: a real word, plural of धनायन, as printed on the page; the list lacks it
+  word पाते: a real word, as printed on the page; the list lacks it
+  word ऋणायनों: a real word, plural of ऋणायन, as printed on the page; the list lacks it
+  word अधातुएँ: a real word (non-metals), as printed on the page; the list lacks it
+  word अधातुओं: a real word, plural of अधातु, as printed on the page; the list lacks it
+  word बहुपरमाण्विक: a real word (polyatomic), as printed on the page; the list lacks it
+  word संयोजकताएँ: a real word, plural of संयोजकता, as printed on the page; the list lacks it
+  word एकपरमाणुक: a real word (monatomic), as printed on the page; the list lacks it
+  word लीथियम: a real word (lithium), as printed on the page; the list lacks it
+  word फेरस: a real word (ferrous), as printed on the page; the list lacks it
+  word फेरिक: a real word (ferric), as printed on the page; the list lacks it
+  word क्यूप्रस: a real word (cuprous), as printed on the page; the list lacks it
+  word क्यूप्रिक: a real word (cupric), as printed on the page; the list lacks it
+  word फ्लुओराइड: a real word (fluoride), as printed on the page; the list lacks it
+blocks:
+  - kind: box
+    title: L1
+    words: L1, L3-L13
+    read:
+      L5.6-7: "Mg²⁺"
+      L5.8: बनने
+      L7.2: ___________आयन
+      L9.5-6: कैल्सियम
+      L9.8-9: परमाणुओं
+      L9.11: धनायनों
+      L11.6-L13.1: "(Na₂S)"
+  - kind: heading
+    title: L21
+    words: L21
+  - kind: text
+    words: L22-L28
+    read:
+      L23.4: ऋणायनों
+      L23.8-10: अंत
+      L23.11: आइड
+      L24.1: अधातुएँ
+      L24.12-13: धातुओं
+      L24.16-17: अधातुओं
+      L25.7-8: कैल्सियम
+      L26.7: तत्वों
+      L26.9-10: परमाणुओं
+      L26.17: बहुपरमाण्विक
+      L27.4: बहुपरमाण्विक
+      L27.9-11: अंत
+      L27.12: आइड
+      L28.6: संयोजकताएँ
+  - kind: table
+    number: L29.1-2
+    words: L29, L30.1-3, L30.4, L30.5, L32.1, L32.2, L31, L32.3, L34.1, L34.2, L33, L34.3, L36.1, L36.2, L35, L36.3, L37.1, L37.2-3, L38, L40.1-2, L40.3, L39, L40.4, L42.1, L42.2, L41, L42.3, L44.1-3, L44.4, L43, L44.5, L46.1-3, L46.4, L45, L46.5, L48.1-2, L48.3, L47, L48.4, L49.1-2, L49.3-4, L50, L52.1, L52.2, L51, L52.3, L54.1, L54.2, L53, L54.3, L56.1, L56.2, L55, L56.3, L58.1, L58.2, L57, L58.3, L60.1, L60.2, L59, L60.3, L61, L62-L63, L64, L66.1, L66.2, L65, L66.3, L68.1, L68.2, L67, L68.3, L70.1, L70.2, L69, L70.3
+    cells:
+      rows:
+        - ["L30.1-3", "L30.4", "L30.5"]
+        - ["L32.1", "L32.2, L31", "L32.3"]
+        - ["L34.1", "L34.2, L33", "L34.3"]
+        - ["L36.1", "L36.2, L35", "L36.3"]
+        - ["L37.1", "L37.2-3", "L38"]
+        - ["L40.1-2", "L40.3, L39", "L40.4"]
+        - ["L42.1", "L42.2, L41", "L42.3"]
+        - ["L44.1-3", "L44.4, L43", "L44.5"]
+        - ["L46.1-3", "L46.4, L45", "L46.5"]
+        - ["L48.1-2", "L48.3, L47", "L48.4"]
+        - ["L49.1-2", "L49.3-4", "L50"]
+        - ["L52.1", "L52.2, L51", "L52.3"]
+        - ["L54.1", "L54.2, L53", "L54.3"]
+        - ["L56.1", "L56.2, L55", "L56.3"]
+        - ["L58.1", "L58.2, L57", "L58.3"]
+        - ["L60.1", "L60.2, L59", "L60.3"]
+        - ["L61", "L62-L63", "L64"]
+        - ["L66.1", "L66.2, L65", "L66.3"]
+        - ["L68.1", "L68.2, L67", "L68.3"]
+        - ["L70.1", "L70.2, L69", "L70.3"]
+      cause: wrong-cells
+    box: [157, 415, 546, 751]
+    read:
+      L29.6: एकपरमाणुक
+      L34.1: लीथियम
+      L40.1-2: कैल्सियम
+      L44.2-3: (फेरस)
+      L46.2-3: (फेरिक)
+      L48.2: (क्यूप्रस)
+      L49.2: (क्यूप्रिक)
+      L58.1: फ्लुओराइड
+      L31: "⁺"
+      L33: "⁺"
+      L35: "⁺"
+      L47: "⁺"
+      L39: "²⁺"
+      L41: "²⁺"
+      L43: "²⁺"
+      L51: "²⁺"
+      L53: "²⁺"
+      L45: "³⁺"
+      L55: "³⁺"
+      L57: "⁻"
+      L59: "⁻"
+      L65: "⁻"
+      L67: "²⁻"
+      L69: "²⁻"
+      L37.2-3: "Ag⁺"
+      L49.3-4: "Cu²⁺"
+      L62-L63: "Br⁻"
+  - kind: box
+    title: L2
+    words: L2, L14-L20
+    read:
+      L14.2-3: परमाणुओं
+      L15.5: पाते?

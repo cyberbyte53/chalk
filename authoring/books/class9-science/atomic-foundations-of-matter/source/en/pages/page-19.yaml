@@ -1,0 +1,23 @@
+page: 19
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF"
+furniture: L24.1, L26.1, L29.1, L32.1, L35.1, L37.1, L40.1, L42.1, L44.1, L46.1, L49-L52
+blocks:
+  - kind: example
+    number: L1
+    words: L1-L12
+    read:
+      "L2.7-L5": { text: "Ca(NO₃)₂" }
+      "L7.5-L10": { text: "Ca(NO₃)₂" }
+  - kind: box
+    title: L13
+    words: L13-L19
+    read:
+      "L16.10-L18": { text: "Mg(OH)₂." }
+  - kind: text
+    words: L20-L22
+  - kind: box
+    title: L23
+    words: L23, L24.2-12, L25, L26.2-11, L27-L28, L29.2-12, L30-L31, L32.2-10, L33-L34, L35.2-12, L36, L37.2-13, L38-L39, L40.2-10, L41, L42.2-11, L43, L44.2-13, L45, L46.2-14, L47-L48

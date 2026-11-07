@@ -1,0 +1,110 @@
+page: 11
+proofread: true
+furniture: L63-L65, L70, L8.1, L10.1, L13.1, L16.1, L19.1, L22.1, L27.1
+cause: other
+notes:
+  other: the PDF sets a subscript or superscript as a plain character on its own line (CO 2, N 2 O 4, Na +, e –), or puts a space inside a word (के वल)
+terms:
+  - L58.7
+answers:
+  word टेट्रा: the prefix tetra-, as printed on the page; the list lacks it
+  word पेन्टा: the prefix penta-, as printed on the page; the list lacks it
+  word हेक्सा: the prefix hexa-, as printed on the page; the list lacks it
+  word पेंटऑक्साइड: a real word (pentoxide), as printed on the page; the list lacks it
+  word ट्राइऑक्साइड: a real word (trioxide), as printed on the page; the list lacks it
+  word मोनोकार्बन: a word the book makes up to show a wrong name, as printed on the page; the list lacks it
+  word डाइसल्फाइड: a real word (disulphide), as printed on the page; the list lacks it
+  word ट्राइक्लोराइड: a real word (trichloride), as printed on the page; the list lacks it
+  word हेक्साफ्लुओराइड: a real word (hexafluoride), as printed on the page; the list lacks it
+  word डाइनाइट्रोजन: a real word (dinitrogen), as printed on the page; the list lacks it
+  word टेट्रॉक्साइड: a real word (tetroxide), as printed on the page; the list lacks it
+  word टेट्राऑक्साइड: a wrong name the book shows, as printed on the page; the list lacks it
+  word जोड़ा: a real word, as printed on the page; the list lacks it
+  word डाइहाइड्रोजन: a real word (dihydrogen), as printed on the page; the list lacks it
+  word द्विअंगी: a real word (binary), as printed on the page; the list lacks it
+  word ट्राइहाइड्राइड: a real word (trihydride), as printed on the page; the list lacks it
+  word रहेगा: a real word, as printed on the page; the list lacks it
+  word धनावेशी: a real word (positively charged), as printed on the page; the list lacks it
+  word स्पीशीज: a real word (species), as printed on the page; the list lacks it
+blocks:
+  - kind: text
+    continued: true
+    words: L1-L6
+    read:
+      L1.2: टेट्रा-(4),
+      L1.3: पेन्टा-(5),
+      L1.4: हेक्सा-(6)
+      L1.6-7: परमाणुओं
+      L1.15: तत्व
+      L2.12: तत्व
+      L3.1: तत्व
+      L3.18: तत्व
+      L4.20: मोनोक्सॉइड–
+      L5.3: पेंटऑक्साइड
+      L6.9: ट्राइऑक्साइड
+  - kind: heading
+    title: L7
+    words: L7
+  - kind: text
+    words: L8.2-L9, L10.2-L12, L13.2-L15, L16.2-L18, L19.2-L21, L22.2-L26, L27.2-L31
+    read:
+      L8.6: मोनोक्सॉइड
+      L10.2-L11.1: "CO₂"
+      L12.10: मोनोकार्बन
+      L13.2-L14.1: "CS₂"
+      L15.3: डाइसल्फाइड
+      L16.2-L17.1: "PCl₃"
+      L18.3: ट्राइक्लोराइड
+      L19.2-L20.1: "SF₆"
+      L21.3: हेक्साफ्लुओराइड
+      L22.2-L25.1: "N₂O₄"
+      L26.2: डाइनाइट्रोजन
+      L26.3: टेट्रॉक्साइड
+      L26.10: टेट्राऑक्साइड)।
+      L27.2-L30.1: "N₂O₅"
+      L31.2: डाइनाइट्रोजन
+      L31.3: पेंटऑक्साइड
+  - kind: text
+    words: L32-L37
+    read:
+      L32.5: तत्व
+      L32.15: जोड़ा
+      L33.1-4: परमाणुओं
+      L34.9-L36.1: "H₂S"
+      L37.3: डाइहाइड्रोजन
+  - kind: text
+    words: L38-L44
+    read:
+      L38.2-5: द्विअंगी
+      L38.16-L40.1: "H₂O"
+      L41.17-L42.1: "NH₃"
+      L44.5: ट्राइहाइड्राइड
+  - kind: section
+    number: L45.1
+    title: L45.2-8
+    words: L45
+  - kind: text
+    words: L46-L51
+    read:
+      L49.10: तत्वों
+      L50.1: तत्वों
+  - kind: text
+    words: L52-L53
+  - kind: text
+    words: L54-L56
+    read:
+      L54.11-12: केवल
+      L56.5: रहेगा?
+  - kind: text
+    words: L57-L59
+    read:
+      L57.15: धनावेशी
+      L58.1: स्पीशीज
+      L58.12-13: "Na⁺"
+  - kind: figure
+    number: L69.1-2
+    words: L60-L62, L66-L69
+    box: [220, 660, 496, 770]
+    read:
+      L66.2-3: "e⁻"
+      L67.4-6: "(Na⁺)"

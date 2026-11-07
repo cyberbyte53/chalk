@@ -1,0 +1,78 @@
+page: 8
+proofread: true
+furniture: L1, L43, L15.1, L17.1, L29.1, L31.1
+cause: other
+notes:
+  other: the PDF puts a space inside a word (के वल, परमाणुओ ं) or sets a subscript as a plain digit on its own line (H 2)
+terms:
+  - L15.2-4
+  - L17.2-4
+  - L22.4-5
+  - L39.3-4
+  - L40.9-10
+answers:
+  word विद्युतरूप: a real word, as printed on the page; the list lacks it
+  word ऊर्जाओं: a real word, plural of ऊर्जा, as printed on the page; the list lacks it
+  word सहसंयोजक: a real word (covalent), as printed on the page; the list lacks it
+  word सहसंयोजी: a real word (covalent), as printed on the page; the list lacks it
+  word सहभाजित: a real word (shared), as printed on the page; the list lacks it
+blocks:
+  - kind: section
+    number: L2.1
+    title: L2.2-10
+    words: L2
+  - kind: text
+    words: L3-L9
+    read:
+      L3.3: तत्व
+      L3.9: तत्व
+      L4.10: तत्वों
+      L6.11: विद्युतरूप
+      L8.19: तत्व,
+      L9.3-4: केवल
+      L9.5-6: परमाणुओं
+  - kind: text
+    words: L10-L14, L15.2-L16, L17.2-L19
+    read:
+      L13.19: तत्वों
+  - kind: text
+    words: L20-L22
+    read:
+      L20.12-13: परमाणुओं
+      L20.15-16: ऊर्जाओं
+      L21.5: जिससे
+      L21.16-17: परमाणुओं
+  - kind: section
+    number: L23.1
+    title: L23.2-8
+    words: L23
+    read:
+      L23.7: सहसंयोजक
+  - kind: heading
+    title: L24
+    words: L24
+    read:
+      L24.2: तत्वों
+  - kind: text
+    words: L25-L26.10, L27, L29.2-8, L30.1-9, L31.2-L33
+    read:
+      L25.6: तत्वों
+      L30.5-6: केवल
+  - kind: text
+    words: L34-L40
+    read:
+      L34.14-L36.1: "(H₂)"
+      L37.12: सहभाजित
+      L38.9-10: परमाणुओं
+      L38.15: सहभाजित
+      L39.3: सहसंयोजी
+  - kind: text
+    words: L41
+    read:
+      L41.4-5: परमाणुओं
+  - kind: text
+    words: L42
+  - kind: figure
+    number: L30.10-11
+    words: L26.11, L28, L29.9-12, L30.10-15
+    box: [340, 498, 592, 590]

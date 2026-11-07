@@ -1,0 +1,83 @@
+page: 6
+proofread: true
+furniture: L1, L20, L62
+cause: other
+notes:
+  other: the PDF puts a space inside the word (के वल, मर्क री, वस्तुओ ं)
+terms:
+  - L18.2-5
+  - L18.7-10
+  - L19.2-4
+answers:
+  word प्राउस्ट: a name (Proust), as printed on the page; the list lacks it
+  word विघटित: a real word (decomposed), as printed on the page; the list lacks it
+  word हिंगुला: a name (the Indian name of cinnabar), as printed on the page; the list lacks it
+  word सिनेबार: a name (cinnabar), as printed on the page; the list lacks it
+  word मोनोक्सॉइड: a real word (monoxide), as printed on the page; the list lacks it
+  read L6.7: the PDF lacks त्त् (महवपूर््ण); the image shows महत्त्वपूर्ण
+blocks:
+  - kind: text
+    words: L2-L6
+    read:
+      L3.3: तत्वों
+      L6.7: { text: "महत्त्वपूर्ण", cause: wrong-reading }
+  - kind: section
+    number: L7.1
+    title: L7.2-5
+    words: L7
+  - kind: text
+    words: L8-L17
+    read:
+      L8.1: लवाइजिए
+      L8.5: प्राउस्ट
+      L9.6: तत्वों
+      L9.13: तत्व
+      L11.3: तत्वों
+      L15.16: विघटित
+  - kind: text
+    words: L18-L19
+    read:
+      L19.2: प्राउस्ट
+  - kind: box
+    title: L41
+    words: L41-L47
+    read:
+      L42.3-4: सभ्यताओं
+      L42.16-17: वस्तुओं
+      L43.11: ‘हिंगुला’
+      L43.21: ‘सिनेबार’
+      L44.9-10: सभ्यताओं
+      L44.16: ‘सिनेबार’
+      L44.22: तत्व
+      L44.23-24: मर्करी
+      L46.2-3: सभ्यताओं
+      L46.10-11: मर्करी
+      L46.22: सिनेबार
+      L47.7-8: प्रकृति
+  - kind: figure
+    number: L48.1-2
+    words: L48-L49
+    box: [509, 416, 587, 529]
+    read:
+      L49.1: सिनेबार
+  - kind: example
+    number: L50.1-2
+    words: L50-L52
+  - kind: text
+    words: L53
+  - kind: box
+    title: L54
+    words: L54-L61
+    read:
+      L56.13: जिससे
+      L57.2: मोनोक्सॉइड
+      L57.14: मोनोक्सॉइड
+      L59.5-6: केवल
+  - kind: box
+    title: L21
+    words: L21-L40
+    read:
+      L22.3: प्राउस्ट
+      L29.1: तत्व
+      L30.6: प्राउस्ट
+      L38.8: महत्त्वपूर्ण

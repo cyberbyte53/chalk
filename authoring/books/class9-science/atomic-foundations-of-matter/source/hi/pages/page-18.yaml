@@ -1,0 +1,76 @@
+page: 18
+proofread: true
+furniture: L1, L58
+cause: other
+notes:
+  other: the PDF sets a subscript as a plain digit on its own line (H 2 O, CO 2, HNO 3, CH 4, Na 2 O), or puts a space inside a word (अणुओ ं)
+terms:
+  - L51.4-7
+  - L52.3-5
+blocks:
+  - kind: text
+    words: L2-L3
+    read:
+      L3.4: सहसंयोजी
+  - kind: box
+    title: L4
+    words: L4-L11
+  - kind: section
+    number: L12.1
+    title: L12.2-6
+    words: L12
+    read:
+      L12.2: सहसंयोजी
+  - kind: text
+    words: L13-L14
+    read:
+      L13.2: सहसंयोजी
+      L13.10-11: अणुओं
+      L13.15: उपस्थित
+      L13.16-17: परमाणुओं
+  - kind: example
+    number: L15.1-2
+    words: L15-L19
+    read:
+      L16.2-L18.1: "(H₂O)"
+  - kind: text
+    words: L20-L22
+    read:
+      L20-L22.1: "H₂O"
+  - kind: example
+    number: L23.1-2
+    words: L23-L27
+    read:
+      L24.3-L26.1: "(CO₂)"
+  - kind: text
+    words: L28-L30
+    read:
+      L28-L29: "CO₂"
+  - kind: text
+    words: L31-L32
+  - kind: box
+    title: L33
+    words: L33, L40-L47
+    read:
+      L40.4-L42.1: "(HNO₃)"
+      L44.3-L46.1: "(CH₄)"
+  - kind: section
+    number: L48.1
+    title: L48.2-9
+    words: L48
+  - kind: text
+    words: L49-L52
+    read:
+      L49.6: सरलतम
+  - kind: example
+    number: L53.1-2
+    words: L53-L57
+    read:
+      L54.3-L56.1: "(Na₂O)"
+  - kind: figure
+    number: L37.1-2
+    words: L34-L39
+    box: [487, 267, 588, 514]
+    read:
+      L36.2: नैफ्थलीन
+      L37.3-L38.2: सहसंयोजी

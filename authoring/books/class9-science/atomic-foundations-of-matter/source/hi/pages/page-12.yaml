@@ -1,0 +1,54 @@
+page: 12
+proofread: true
+furniture: L1, L45, L39-L41
+cause: other
+notes:
+  other: the PDF sets a superscript charge as a plain character apart from its symbol (Cl –, Na +, S 2–, e –)
+terms:
+  - L5.5
+  - L16.2-3
+blocks:
+  - kind: text
+    words: L2-L6
+    read:
+      L5.17-18: "Cl⁻"
+  - kind: figure
+    number: L12.1-2
+    words: L7-L12
+    box: [142, 170, 442, 286]
+    read:
+      L8.2-3: "e⁻"
+      L11.8-10: "(Cl⁻)"
+  - kind: text
+    words: L13-L16
+  - kind: figure
+    number: L20.1-2
+    words: L17-L20
+    box: [174, 357, 412, 397]
+    read:
+      L17.4-5: "Na⁺"
+      L17.7-L18.1: "Cl⁻"
+  - kind: box
+    title: L21
+    words: L21-L26, L35-L38
+    read:
+      L24.5-7: "(Na⁺)"
+      L24.11-13: "(Cl⁻)"
+      L36.1-2: बिंदुओं
+      L36.13: ग))।
+      L36.14: इससे
+      L37.10-11: कक्षाओं
+  - kind: figure
+    number: L33.1-2
+    words: L27, L29, L28, L30-L34
+    box: [127, 510, 488, 633]
+    read:
+      L27: "Na⁺"
+      L28-L29: "Cl⁻"
+      L30.1-2: "Cl⁻"
+      L30.3-4: "Na⁺"
+  - kind: text
+    words: L42-L44
+    read:
+      L42.2: तत्व
+      L44.12-13: "S²⁻"

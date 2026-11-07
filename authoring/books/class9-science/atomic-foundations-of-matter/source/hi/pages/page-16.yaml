@@ -1,0 +1,67 @@
+page: 16
+proofread: true
+furniture: L1, L67
+cause: other
+notes:
+  other: the PDF sets subscripts and charges as plain characters, often on lines of their own (Al(OH) 3, Fe 3+, CO 32–), or puts a space inside a word (के वल, फे रिक)
+answers:
+  word नैफ्थलीन: a real word (naphthalene), as printed on the page; the list lacks it
+  word विलेयता: a real word (solubility), as printed on the page; the list lacks it
+  word किरोसिन: a real word (kerosene), as printed on the page; the list lacks it
+  word वोल्टता: a real word (voltage), as printed on the page; the list lacks it
+  word रहिए: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: text
+    words: L2-L7
+    read:
+      L2.8-10: "(Mg²⁺)"
+      L3.2-4: "(⁻OH)"
+      L3.18: बहुपरमाण्विक
+      L5.16-18: "(⁻OH)"
+      L6.7-8: केवल
+      L6.10: बहुपरमाण्विक
+  - kind: box
+    title: L8
+    words: L8, L9, L11, L10, L12, L13-L20, L21, L23, L22, L26-L27, L24, L28, L25, L29-L34
+    read:
+      L13.2-L14.1: "Al(OH)₃"
+      L16.4-L17.1: "Al(OH)₃"
+      L18.4-L19.1: "AlOH₃"
+      L21.2-3: सल्फेट
+      L26-L27: "SO₄"
+      L29-L34: "Al₂(SO₄)₃"
+  - kind: box
+    title: L35
+    words: L35-L55
+    read:
+      L37.2-L38.1: "CO₂"
+      L40.2-L41.1: "NO₂"
+      L43.2-L44.1: "SF₆"
+      L46.2-L47.1: "PCl₃"
+      L50.2: हाइड्रोजनकार्बोनेट
+      L52.1-2: (iii) फेरिक
+      L53.2: क्यूप्रस
+      L55.2-3: "Fe³⁺"
+      L55.5-6: "⁻OH"
+      L55.8-9: "K⁺"
+      L55.11-12: "CO₃²⁻"
+  - kind: section
+    number: L56.1
+    title: L56.2-7
+    words: L56
+    read:
+      L56.4: सहसंयोजी
+  - kind: activity
+    number: L57.1-2
+    title: L57.3-5
+    words: L57-L66
+    continues: true
+    read:
+      L58.9-10: सल्फेट,
+      L58.13: नैफ्थलीन
+      L60.1: (क) विलेयता
+      L60.6: किरोसिन
+      L61.6: किरोसिन
+      L65.13: निम्न-वोल्टता
+      L66.3: किरोसिन
+      L66.14: रहिए।

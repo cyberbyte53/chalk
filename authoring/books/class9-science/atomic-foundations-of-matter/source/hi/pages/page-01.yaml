@@ -1,0 +1,28 @@
+page: 1
+proofread: true
+furniture: L1-L2, L18, L38, L4.1, L9.1, L15.1, L25.1-2, L26, L27.1-2
+blocks:
+  - kind: heading
+    words: L19
+    title: L19
+  - kind: text
+    words: L20-L23, L24, L25.3-16, L27.3-16
+    read:
+      L21.2: अवपरमाणुक
+      L23.2-5: परमाणुओं
+  - kind: text
+    words: L28-L30
+    read:
+      L28.8: तत्व,
+      L30.2: बनने
+  - kind: text
+    words: L31-L37
+  - kind: box
+    title: L3
+    words: L3, L4.2-L8, L9.2-L14, L15.2-L17
+    read:
+      L10.2-L11.1: { text: "O₂", cause: other }
+notes:
+  other: a subscript the PDF sets as a plain digit on its own line (O 2), printed O₂
+answers:
+  word अवपरमाणुक: a real word (subatomic), as printed on the page; the list lacks it

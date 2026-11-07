@@ -1,0 +1,52 @@
+page: 9
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF, or a space the PDF puts inside a bond's symbols"
+furniture: L65.1, L67.1, L69-L72
+terms:
+  - L57.7-8
+blocks:
+  - kind: box
+    title: L1
+    words: L1-L13
+    read:
+      "L5.3-L7.1": { text: "(N₂)." }
+      "L11.3-L13.1": { text: "(F₂)." }
+  - kind: box
+    title: L14
+    words: L14-L25
+  - kind: text
+    words: L26-L31
+  - kind: figure
+    number: L38.1-2
+    words: L32-L38
+    box: [217, 176, 547, 293]
+  - kind: text
+    words: L39-L43
+    read:
+      "L40.10-L42.1": { text: "(Cl₂)" }
+      "L43.5-6": { text: "Cl—Cl." }
+  - kind: text
+    words: L44
+  - kind: text
+    words: L45-L48
+  - kind: text
+    words: L49-L52
+    read:
+      "L50.3-L52.1": { text: "(O₂)," }
+  - kind: figure
+    number: L55.1-2
+    words: L53-L55
+    box: [190, 448, 515, 556]
+  - kind: text
+    words: L56-L58
+    read:
+      "L58.7-9": { text: "O=O." }
+  - kind: heading
+    title: L59
+    words: L59
+  - kind: text
+    words: L60-L63
+  - kind: text
+    words: L64, L65.2-10, L66, L67.2-12, L68

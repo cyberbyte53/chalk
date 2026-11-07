@@ -1,0 +1,28 @@
+page: 22
+proofread: true
+cause: other
+notes:
+  other: "a superscript set on its own line, or apart, by the PDF"
+furniture: L1, L21.1, L24.1, L26.1, L27.1, L30.1, L32.1, L33.1, L38
+blocks:
+  - kind: question
+    number: L2.1
+    words: L2-L7
+  - kind: question
+    number: L8.1
+    words: L8-L16
+  - kind: question
+    number: L18.1
+    words: L18.1-7, L17, L18.8-L19
+    read:
+      "L18.4-5": { text: "²⁷Al," }
+      "L18.6-7, L17": { text: "⁸⁰Br⁻" }
+      "L18.9-11": { text: "²⁰¹Hg²⁺" }
+  - kind: box
+    title: L20
+    words: L20, L21.2-12, L22-L23, L24.2-13, L25, L26.2-14, L27.2-14, L28-L29, L30.2-12, L31, L32.2-14, L33.2-L34
+    read:
+      "L33.2-L34": { text: "https://phet.colorado.edu/sims/html/build-a-molecule/latest/build-a-molecule_all.html", cause: broken-across-lines }
+  - kind: box
+    title: L35
+    words: L35-L37

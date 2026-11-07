@@ -1,0 +1,178 @@
+pairs:
+  - key: activity 9.1
+    en: "0.6"
+    hi: "0.6"
+  - key: figure 9.1
+    en: "0.10"
+    hi: "0.9"
+  - key: activity 9.2
+    en: "0.11"
+    hi: "0.11"
+  - key: figure 9.2
+    en: "0.19"
+    hi: "0.18"
+  - key: figure 9.3
+    en: "1.5"
+    hi: "1.5"
+  - key: section 9.1
+    en: "1"
+    hi: "1"
+  - key: activity 9.3
+    en: "1.4"
+    hi: "1.4"
+  - key: figure 9.4
+    en: "1.7"
+    hi: "1.7"
+  - key: example 9.1
+    en: "1.14"
+    hi: "1.12"
+  - key: example 9.2
+    en: "1.16"
+    hi: "1.14"
+  - key: section 9.2
+    en: "2"
+    hi: "2"
+  - key: figure 9.5
+    en: "2.5"
+    hi: "2.4"
+  - key: example 9.3
+    en: "2.6"
+    hi: "2.5"
+  - key: section 9.3
+    en: "3"
+    hi: "3"
+  - key: section 9.4
+    en: "4"
+    hi: "4"
+  - key: section 9.4.1
+    en: "4.4"
+    hi: "4.4"
+  - key: figure 9.6
+    en: 4.4.4
+    hi: 4.4.6
+  - key: figure 9.7
+    en: 4.4.11
+    hi: 4.4.8
+  - key: figure 9.8
+    en: 4.4.16
+    hi: 4.4.13
+  - key: figure 9.9
+    en: 4.4.22
+    hi: 4.4.21
+  - key: figure 9.10
+    en: 4.4.25
+    hi: 4.4.24
+  - key: section 9.4.2
+    en: "4.5"
+    hi: "4.5"
+  - key: figure 9.11
+    en: 4.5.5
+    hi: 4.5.5
+  - key: figure 9.12
+    en: 4.5.7
+    hi: 4.5.7
+  - key: figure 9.13
+    en: 4.5.9
+    hi: 4.5.9
+  - key: figure 9.14
+    en: 4.5.11
+    hi: 4.5.11
+  - key: table 9.1
+    en: 4.5.18
+    hi: 4.5.18
+  - key: section 9.5
+    en: "5"
+    hi: "5"
+  - key: section 9.5.1
+    en: "5.2"
+    hi: "5.2"
+  - key: section 9.5.2
+    en: "5.3"
+    hi: "5.3"
+  - key: section 9.6
+    en: "6"
+    hi: "6"
+  - key: activity 9.4
+    en: "6.1"
+    hi: "6.1"
+  - key: figure 9.15
+    en: "6.2"
+    hi: "6.2"
+  - key: table 9.2
+    en: "6.3"
+    hi: "6.3"
+  - key: figure 9.16
+    en: "6.5"
+    hi: "6.8"
+  - key: section 9.7
+    en: "7"
+    hi: "7"
+  - key: example 9.4
+    en: "7.2"
+    hi: "7.2"
+  - key: example 9.5
+    en: "7.3"
+    hi: "7.4"
+  - key: figure 9.17
+    en: "7.5"
+    hi: "8.3"
+  - key: section 9.8
+    en: "8"
+    hi: "8"
+  - key: example 9.6
+    en: "8.2"
+    hi: "8.2"
+  - key: example 9.7
+    en: "8.3"
+    hi: "8.5"
+  - key: question 1 of exercise 1
+    en: 8.7.1
+    hi: 8.10.1
+  - key: question 2 of exercise 1
+    en: 8.7.2
+    hi: 8.10.2
+  - key: question 3 of exercise 1
+    en: 8.7.3
+    hi: 8.10.3
+  - key: question 4 of exercise 1
+    en: 8.7.4
+    hi: 8.10.4
+  - key: question 5 of exercise 1
+    en: 8.7.5
+    hi: 8.10.5
+  - key: question 6 of exercise 1
+    en: 8.7.6
+    hi: 8.10.6
+  - key: question 7 of exercise 1
+    en: 8.7.7
+    hi: 8.10.7
+  - key: figure 9.18
+    en: 8.7.8
+    hi: 8.10.8
+  - key: question 8 of exercise 1
+    en: 8.7.9
+    hi: 8.10.9
+  - key: question 9 of exercise 1
+    en: 8.7.10
+    hi: 8.10.10
+  - key: question 10 of exercise 1
+    en: 8.7.11
+    hi: 8.10.11
+  - key: table 9.3
+    en: 8.7.12
+    hi: 8.10.12
+  - key: question 11 of exercise 1
+    en: 8.7.13
+    hi: 8.10.13
+  - key: question 12 of exercise 1
+    en: 8.7.14
+    hi: 8.10.14
+  - key: question 13 of exercise 1
+    en: 8.7.15
+    hi: 8.10.15
+  - key: question 14 of exercise 1
+    en: 8.7.16
+    hi: 8.10.16
+  - key: question 15 of exercise 1
+    en: 8.7.17
+    hi: 8.10.17

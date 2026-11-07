@@ -1,0 +1,56 @@
+page: 22
+proofread: true
+furniture: L1, L38, L22.1, L24.1, L27.1, L29.1, L31.1, L33.1, L34.1
+cause: other
+notes:
+  other: the PDF sets mass numbers and charges as plain characters (27 Al, Br –, Hg 2+), or puts a space inside a word (फै ले, सल्फे ट)
+  broken-across-lines: the address runs onto the next line
+  wrong-reading: the end of संभावित (ं वित) is set on a line of its own laid over this one; the repair read स भा as सभा
+answers:
+  word अभिक्रियाशील: a real word (reactive), as printed on the page; the list lacks it
+  word किंन्ही: as printed on the page (किंन्ही); the list lacks it
+  read L27.13-14: the PDF sets the end of संभावित (ं वित) on a line of its own laid over this one (L26.1-2); the image prints संभावित here
+  read L26.1-2: the letters ं वित belong to संभावित (L27.13-14), where they are read
+blocks:
+  - kind: question
+    number: L2.1
+    words: L2-L7
+    read:
+      L2.3: तत्वों,
+      L4.3: तत्व
+      L4.5: अभिक्रियाशील
+      L5.14: सहसंयोजी
+  - kind: question
+    number: L8.1
+    words: L8-L18
+    read:
+      L10.6-7: सल्फेट
+      L12.9-10: सल्फेट
+  - kind: question
+    number: L19.1
+    words: L19-L20
+    read:
+      L19.2-3: "²⁷Al,"
+      L19.4-6: "⁸⁰Br⁻"
+      L19.8-10: "²⁰¹Hg²⁺"
+  - kind: heading
+    title: L21
+    words: L21
+  - kind: text
+    words: L22.2-L23, L24.2-L25, L27.2-14, L26, L28, L29.2-L30, L31.2-L32, L33.2-21, L34.2-L35
+    read:
+      L24.2: किंन्ही
+      L24.4: तत्वों
+      L24.6-7: परमाणुओं
+      L27.2: धनायनों
+      L27.4: ऋणायनों
+      L27.13-14: { text: "संभावित", cause: wrong-reading }
+      L26.1-2: ""
+      L29.8-9: फैले
+      L33.2-3: अणुओं
+      L34.2-L35.1: { text: "https://phet.colorado.edu/sims/html/build-a-molecule/latest/build-a-molecule_all.html", cause: broken-across-lines }
+  - kind: box
+    title: L36
+    words: L36-L37
+    read:
+      L36.3: है...

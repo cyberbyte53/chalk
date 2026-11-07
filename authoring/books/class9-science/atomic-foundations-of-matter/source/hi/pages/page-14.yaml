@@ -1,0 +1,84 @@
+page: 14
+proofread: true
+furniture: L1, L71
+cause: other
+notes:
+  other: the PDF sets subscripts and superscripts as plain characters on lines of their own, apart from their symbol (NO 3 –, H 2 S, CCl 4)
+  wrong-cells: the grid kept a formula's subscript and charge in rows apart from its symbol
+answers:
+  read L15-L17.1: the PDF sets HCO, its subscript 3 and its charge – on three lines; the reading puts those same characters in the order the image prints them (HCO₃⁻)
+  again L2.1: the book prints table 9.1 in two parts, (क) on the page before and (ख) here, each with its own caption
+  word संयोजकताओं: a real word, plural of संयोजकता, as printed on the page; the list lacks it
+  word टेट्राक्लोराइड: a real word (tetrachloride), as printed on the page; the list lacks it
+  word मूर्धांक: a real word (superscript), as printed on the page; the list lacks it
+blocks:
+  - kind: table
+    number: L2.1-2
+    words: L2-L3, L10, L4, L25, L11, L5, L12-L14, L6, L15-L17, L7, L26, L19, L18, L20, L8, L27, L21, L9, L28, L22-L24
+    box: [89, 85, 479, 238]
+    read:
+      L2.6: बहुपरमाण्विक
+      L6.1: हाइड्रोजनकार्बोनेट
+      L8: सल्फेट
+      L25: "⁻"
+      L12-L14.1: "NO₃⁻"
+      L15-L17.1: "HCO₃⁻"
+      L19: "₃"
+      L18: "²⁻"
+      L27: "SO₄²"
+      L21.1: "⁻"
+      L28: "⁺"
+      L22-L23: "NH₄"
+    cells:
+      rows:
+        - ["L3", "L10.1-3", "L10.4-7"]
+        - ["L4", "L25, L11.1", "L11.2"]
+        - ["L5", "L12-L14.1", "L14.2"]
+        - ["L6", "L15-L17.1", "L17.2"]
+        - ["L7", "L26, L19, L18", "L20"]
+        - ["L8", "L27, L21.1", "L21.2"]
+        - ["L9", "L28, L22-L23", "L24"]
+      cause: wrong-cells
+  - kind: section
+    number: L29.1
+    title: L29.2-7
+    words: L29
+  - kind: text
+    words: L30-L31
+    read:
+      L31.16-17: विधि भी
+  - kind: section
+    number: L32.1
+    title: L32.2-7
+    words: L32
+    read:
+      L32.2: सहसंयोजी
+  - kind: text
+    words: L33-L37
+    read:
+      L33.2: सहसंयोजी
+      L34.5: तत्वों
+      L35.3: तत्वों
+      L35.5: संयोजकताएँ
+      L36.5-6: परमाणुओं
+      L36.8-9: संयोजकताओं
+      L37.1: तत्वों
+  - kind: box
+    title: L38
+    words: L38, L39, L41, L40, L48, L42, L49, L50-L52, L43, L44, L60, L45-L46, L47, L61, L62-L64, L53, L54, L65, L55-L56, L66, L57-L59
+    read:
+      L41.1: तत्व
+      L44.1: तत्व
+      L54.1: तत्व
+      L53.2: टेट्राक्लोराइड
+      L62.4-L64.1: "H₂S"
+      L57.4-L58.1: "CCl₄"
+  - kind: section
+    number: L67.1
+    title: L67.2-9
+    words: L67
+  - kind: text
+    words: L68-L70
+    continues: true
+    read:
+      L70.4: मूर्धांक

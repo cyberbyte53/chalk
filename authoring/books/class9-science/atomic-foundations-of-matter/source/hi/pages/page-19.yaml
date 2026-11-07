@@ -1,0 +1,59 @@
+page: 19
+proofread: true
+furniture: L55-L58, L29.1, L31.1, L34.1, L38.1, L40.1, L41.1, L44.1, L47.1, L50.1, L52.1
+cause: other
+notes:
+  other: the PDF sets subscripts as plain digits on lines of their own (Na 2 O, Ca(NO 3 ) 2), or sets part of a word on a line laid over the next (ं जन over स यो, ु ं over परमाण ओ)
+answers:
+  read L38.12-13: the PDF sets the end of संयोजन (ं जन) on a line of its own laid over this one (L37.1-2); the image prints संयोजन here
+  read L37.1-2: the letters ं जन belong to संयोजन (L38.12-13), where they are read
+  read L47.13-14: the PDF sets the signs ु ं of परमाणुओं on a line of their own (L46.1-2); the image prints परमाणुओं here
+  read L46.1-2: the signs ु ं belong to परमाणुओं (L47.13-14), where they are read
+blocks:
+  - kind: text
+    words: L1-L3
+    read:
+      L1.3-L3.1: "(Na₂O)"
+  - kind: example
+    number: L4.1-2
+    words: L4-L10
+    read:
+      L5.1-2: कैल्सियम
+      L5.5-L8.1: "Ca(NO₃)₂"
+  - kind: text
+    words: L11-L16
+    read:
+      L11-L14: "Ca(NO₃)₂"
+  - kind: box
+    title: L17
+    words: L17-L23
+    read:
+      L20.3-L21.1: "Mg(OH)₂"
+  - kind: text
+    words: L24-L27
+    read:
+      L24.3-4: अणुओं
+  - kind: box
+    title: L28
+    words: L28, L29.2-L30, L31.2-L33, L34.2-L36, L38.2-13, L37, L39, L40.2-15, L41.2-L43, L44.2-L45, L47.2-14, L46, L48-L49, L50.2-L51, L52.2-L54
+    read:
+      L31.6: तत्व
+      L35.2-3: परमाणुओं
+      L38.8: तत्वों
+      L38.12-13: संयोजन
+      L37.1-2: ""
+      L40.3: सहसंयोजी
+      L40.5-6: परमाणुओं
+      L41.2-3: परमाणुओं
+      L42.11: जिससे
+      L44.3: सहसंयोजी
+      L44.10: तत्वों
+      L44.13: तत्व
+      L45.1-2: परमाणुओं
+      L47.11: तत्वों
+      L47.13-14: परमाणुओं
+      L46.1-2: ""
+      L48.1: सरलतम
+      L50.15-16: परमाणुओं
+      L52.15-16: परमाणुओं
+      L53.13: सरलतम

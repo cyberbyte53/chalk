@@ -1,0 +1,4686 @@
+# Built by pnpm source from pages/ and book.pdf (platform/docs/plans/sources.md): don't edit, edit the page files.
+- id: "0.1"
+  kind: heading
+  page: 1
+  title: द्रव्य का परमाण्विक आधार
+  text: द्रव्य का परमाण्विक आधार
+  made:
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+- id: "0.2"
+  kind: text
+  page: 1
+  text: अध्याय 8 ‘एक यात्रा — परमाणु के भीतर’ में आपने परमाणु की संरचना का अन्वेषण किया। आपने
+    अवपरमाणुक कणों, जैसे — इलेक्ट्रॉन, प्रोटॉन और न्यूट्रॉन की खोज, उनके गुणधर्मों और परमाणु में
+    उनकी अवस्थिति के विषय में भी अध्ययन किया। आपने यह भी सीखा कि जिन परमाणुओं के संयोजकता (बाह्यतम)
+    कोश में इलेक्ट्रॉनों का अष्टक (आठ इलेक्ट्रॉन) होता है, वे स्थायी होते हैं। संयोजकता इलेक्ट्रॉनों
+    का अष्टक प्राप्त करने के लिए परमाणु इलेक्ट्रॉनों को त्याग सकते हैं, ग्रहण कर सकते हैं अथवा साझा
+    कर सकते हैं।
+  made:
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.8, by: hindi-repair}
+    - {words: L20.14, by: hindi-repair}
+    - {words: L21.2, by: agent}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.9, by: hindi-repair}
+    - {words: L21.13, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.5, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.10, by: hindi-repair}
+    - {words: L23.2-5, by: agent}
+    - {words: L23.7-L24.2, by: hindi-repair}
+    - {words: L24.5, by: hindi-repair}
+    - {words: L24.6, by: hindi-repair}
+    - {words: L24.8, by: hindi-repair}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L25.7, by: hindi-repair}
+    - {words: L25.9, by: hindi-repair}
+    - {words: L25.11, by: hindi-repair}
+    - {words: L25.12, by: hindi-repair}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.7, by: hindi-repair}
+    - {words: L27.11, by: hindi-repair}
+    - {words: L27.16, by: hindi-repair}
+- id: "0.3"
+  kind: text
+  page: 1
+  text: आपने यह भी सीखा है कि जब तत्व, यौगिक बनाते हैं तब उनके अनेक गुणधर्म परिवर्तित हो जाते हैं।
+    उदाहरण के लिए — हाइड्रोजन और ऑक्सीजन दोनों गैसें हैं जबकि इनके संयोजन से बनने वाला पदार्थ जल है
+    जो सामान्य ताप पर द्रव अवस्था में होता है।
+  made:
+    - {words: L28.8, by: agent}
+    - {words: L28.11, by: hindi-repair}
+    - {words: L28.15-18, by: hindi-repair}
+    - {words: L28.19, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.10, by: hindi-repair}
+    - {words: L29.11, by: hindi-repair}
+    - {words: L29.12, by: hindi-repair}
+    - {words: L29.13, by: hindi-repair}
+    - {words: L30.2, by: agent}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L30.8, by: hindi-repair}
+    - {words: L30.12, by: hindi-repair}
+    - {words: L30.13, by: hindi-repair}
+- id: "0.4"
+  kind: text
+  page: 1
+  text: यह रोचक है कि जल के गुणधर्म हाइड्रोजन अथवा ऑक्सीजन के गुणधर्मों के समान नहीं होते हैं।
+    हाइड्रोजन एक ज्वलनशील गैस है और ऑक्सीजन दहन में सहायक होती है जबकि जल न तो ज्वलनशील पदार्थ है और
+    न ही दहन में सहायता करता है अपितु यह अग्नि को बुझा देता है। यद्यपि यह ज्ञात हुआ कि जल का
+    द्रव्यमान हाइड्रोजन और ऑक्सीजन के द्रव्यमानों के योग के समान है जिनके संयोजन से वह बना है। आइए,
+    अन्वेषण करें कि क्या भौतिक और रासायनिक परिवर्तनों में द्रव्यमान अपरिवर्तित रहता है।
+  made:
+    - {words: L31.7-10, by: hindi-repair}
+    - {words: L31.13, by: hindi-repair}
+    - {words: L31.15-18, by: hindi-repair}
+    - {words: L31.21, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.5, by: hindi-repair}
+    - {words: L32.9, by: hindi-repair}
+    - {words: L32.11, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.10, by: hindi-repair}
+    - {words: L33.16, by: hindi-repair}
+    - {words: L34.9, by: hindi-repair}
+    - {words: L34.12, by: hindi-repair}
+    - {words: L34.14, by: hindi-repair}
+    - {words: L35.4-L36.2, by: hindi-repair}
+    - {words: L36.8, by: hindi-repair}
+    - {words: L36.11, by: hindi-repair}
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.2, by: hindi-repair}
+    - {words: L37.3, by: hindi-repair}
+    - {words: L37.4, by: hindi-repair}
+- id: "0.5"
+  kind: box
+  page: 1
+  title: चिंतन कीजिए
+  text: चिंतन कीजिए जल विभिन्न स्रोतों से प्राप्त किया जा सकता है। क्या जल के ये सभी प्रतिदर्श
+    (sample) रासायनिक रूप से एकसमान होते हैं? ऑक्सीजन को कभी O और कभी O₂ के रूप में निरूपित किया
+    जाता है। इन दोनों प्रतीकों में क्या अंतर है? जल में घुला हुआ नमक विद्युत का सुचालक होता है परंतु
+    चीनी नहीं, ऐसा क्यों?
+  made:
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.4, by: hindi-repair}
+    - {words: L4.6, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2-L11.1, by: agent}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.4, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3, by: hindi-repair}
+    - {words: L16.4, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L17.1-2, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.6, by: hindi-repair}
+- id: "0.6"
+  kind: activity
+  page: 2
+  number: क्रियाकलाप 9.1
+  title: आइए, एक भौतिक परिवर्तन का परीक्षण करें
+  text: "क्रियाकलाप 9.1 — आइए, एक भौतिक परिवर्तन का परीक्षण करें 1. एक अंकीय तुला (digital weighing
+    balance) पर एक स्वच्छ और शुष्क 100 mL का बीकर रखिए। 2. आधेय भार (tare) अथवा पुन: नियोजन बटन
+    (reset button) को दबाकर पाठ्यांक को शून्य कीजिए। 3. बीकर में लगभग 50 mL जल डालिए। 4. बीकर में
+    रखे जल में एक स्पैचुला भरकर साधारण नमक डालिए। 5. तुला का पाठ्यांक अभिलेखित कीजिए (चित्र 9.1 क)।
+    6. बीकर को सावधानीपूर्वक तब तक हिलाइए जब तक कि नमक घुल न जाए । अपने प्रेक्षणों को अभिलेखित कीजिए
+    (चित्र 9.1 ख)।"
+  made:
+    - {words: L2.7, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L4.10, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L8.6-9, by: hindi-repair}
+    - {words: L10.2, by: agent}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.8, by: agent}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.8, by: agent}
+    - {words: L13.12, by: agent}
+    - {words: L15.4, by: agent}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+- id: "0.7"
+  kind: figure
+  page: 2
+  number: चित्र 9.1
+  text: बीकर में लवणयुक्त जल एवं अविलेय लवण अंकीय तुला चित्र 9.1 — (क) जल और अविलेय नमक का भार
+  crop: [376, 88.6, 584.8, 252.1]
+  made:
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L7.2, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.7, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "0.8"
+  kind: text
+  page: 2
+  text: आपने क्या अवलोकन किया? आप यह देख सकते हैं कि विलयन का द्रव्यमान लिए गए जल और नमक के
+    द्रव्यमानों के योग के समान है। यह दर्शाता है कि विलयन बनाने जो एक भौतिक परिवर्तन है, के समय
+    द्रव्यमान में व्यावहारिक रूप से कोई परिवर्तन नहीं होता। यह सभी भौतिक परिवर्तनों के लिए सत्य है।
+    आप उपर्युक्त क्रियाकलाप को एक कागज तथा उसके टुकड़ों को तोलकर भी दोहरा सकते हैं और यह अवलोकन कर
+    सकते हैं कि कागज के टुकड़े किए जाने से पूर्व एवं पश्चात कागज का द्रव्यमान परिवर्तित होता है अथवा
+    नहीं।
+  made:
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.9, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L20.9, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.9, by: hindi-repair}
+    - {words: L21.13, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.6, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L22.12, by: hindi-repair}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L23.5, by: hindi-repair}
+    - {words: L23.12, by: hindi-repair}
+    - {words: L24.6, by: hindi-repair}
+    - {words: L24.12, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.6, by: hindi-repair}
+    - {words: L25.8, by: hindi-repair}
+    - {words: L25.11, by: hindi-repair}
+    - {words: L25.12, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+- id: "0.9"
+  kind: figure
+  page: 2
+  number: चित्र 9.1
+  text: जल में विलेय नमकयुक्त बीकर अंकीय तुला चित्र 9.1 — (ख) जल में नमक के विलयन का भार
+  crop: [376, 246.8, 577.6, 441.2]
+  made:
+    - {words: L21.15, by: hindi-repair}
+    - {words: L21.16, by: hindi-repair}
+    - {words: L22.14, by: agent}
+    - {words: L22.15, by: hindi-repair}
+    - {words: L24.15, by: hindi-repair}
+    - {words: L24.16, by: hindi-repair}
+    - {words: L27.14, by: hindi-repair}
+    - {words: L27.19, by: hindi-repair}
+    - {words: L27.21, by: hindi-repair}
+    - {words: L27.22, by: hindi-repair}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "0.10"
+  kind: text
+  page: 2
+  text: आइए, अब हम यह ज्ञात करें कि क्या यह रासायनिक परिवर्तनों के लिए भी सत्य है।
+  made:
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.11, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+- id: "0.11"
+  kind: activity
+  page: 2
+  number: क्रियाकलाप 9.2
+  title: आइए, एक रासायनिक परिवर्तन की जाँच करें
+  text: क्रियाकलाप 9.2 — आइए, एक रासायनिक परिवर्तन की जाँच करें आप विभिन्न रासायनिक परिवर्तनों के विषय
+    में अध्ययन कर चुके हैं। क्या आपको स्मरण है कि जब बेकिंग सोडा को सिरके में मिलाया गया था तब क्या
+    हुआ था? इस रासायनिक परिवर्तन के समय कार्बन डाइऑक्साइड गैस उत्पन्न हुई थी। इस अभिक्रिया को हम
+    निम्नलिखित प्रकार से निरूपित करते हैं—
+  made:
+    - {words: L30.7, by: hindi-repair}
+    - {words: L30.10, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L31.8, by: hindi-repair}
+    - {words: L31.10-13, by: hindi-repair}
+    - {words: L31.14, by: hindi-repair}
+    - {words: L31.15, by: hindi-repair}
+    - {words: L31.17, by: hindi-repair}
+    - {words: L32.5, by: hindi-repair}
+    - {words: L32.10, by: hindi-repair}
+    - {words: L32.15, by: hindi-repair}
+    - {words: L32.18, by: hindi-repair}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L33.10, by: hindi-repair}
+    - {words: L33.15, by: hindi-repair}
+- id: "0.12"
+  kind: equation
+  page: 2
+  text: सिरका + बेकिंग सोडा (सोडियम हाइड्रोजनकार्बोनेट) कार्बन डाइऑक्साइड + अन्य पदार्थ
+  made:
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.4, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+    - {words: L34.6, by: agent}
+    - {words: L34.7, by: hindi-repair}
+    - {words: L34.8, by: hindi-repair}
+    - {words: L34.11, by: hindi-repair}
+- id: "0.13"
+  kind: text
+  page: 2
+  text: आइए, ज्ञात करें कि क्या रासायनिक परिवर्तन के पूर्व और पश्चात द्रव्यमान समान रहता है अथवा नहीं।
+  made:
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.7, by: hindi-repair}
+    - {words: L38.9, by: hindi-repair}
+    - {words: L38.11, by: hindi-repair}
+    - {words: L38.12, by: hindi-repair}
+    - {words: L38.17, by: hindi-repair}
+- id: "0.14"
+  kind: heading
+  page: 2
+  title: प्रायोगिक व्यवस्था 1
+  text: प्रायोगिक व्यवस्था 1
+  made:
+    - {words: L39.2, by: hindi-repair}
+- id: "0.15"
+  kind: text
+  page: 2
+  text: "1. एक अंकीय तुला पर स्वच्छ एवं शुष्क 100 mL का शंक्वाकार फ्लास्क और एक मध्यम आकार का गुब्बारा
+    रखिए। 2. आधेय भार अथवा पुन: नियोजन बटन को दबाकर तुला के पाठ्यांक को शून्य कीजिए। 3. शंक्वाकार
+    फ्लास्क में लगभग 20 mL सिरका अथवा नींबू का रस डालिए। 4. लगभग 2 g बेकिंग सोडा (सोडियम
+    हाइड्रोजनकार्बोनेट) लीजिए और उसे गुब्बारे में डालिए। 5. बेकिंग सोडा युक्त गुब्बारे को तुला पर
+    शंक्वाकार फ्लास्क के साथ रखिए और आरंभिक पाठ्यांक अभिलेखित कीजिए (चित्र 9.2 क)। 6. सिरका युक्त
+    शंक्वाकार फ्लास्क में गुब्बारे से बेकिंग सोडा (सोडियम हाइड्रोजनकार्बोनेट) को ध्यानपूर्वक
+    स्थानांतरित कीजिए (चित्र 9.2 ख )। 7. शंक्वाकार फ्लास्क और गुब्बारे को पुनः तुला पर रखिए और अंतिम
+    पाठ्यांक अभिलेखित कीजिए (चित्र 9.2 ग)।"
+  made:
+    - {words: L40.3-L41.4, by: agent}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.4, by: hindi-repair}
+    - {words: L42.7, by: hindi-repair}
+    - {words: L45.1, by: agent}
+    - {words: L45.3-6, by: hindi-repair}
+    - {words: L47.2-5, by: hindi-repair}
+    - {words: L47.6, by: hindi-repair}
+    - {words: L47.7, by: hindi-repair}
+    - {words: L47.13, by: hindi-repair}
+    - {words: L49.2, by: agent}
+    - {words: L51.8, by: agent}
+    - {words: L52.3, by: hindi-repair}
+    - {words: L52.4, by: hindi-repair}
+    - {words: L52.5, by: agent}
+    - {words: L54.4, by: hindi-repair}
+    - {words: L54.5, by: hindi-repair}
+    - {words: L54.9, by: hindi-repair}
+    - {words: L54.10, by: hindi-repair}
+    - {words: L55.5, by: agent}
+    - {words: L22.3, page: 3, by: hindi-repair}
+    - {words: L22.4, page: 3, by: hindi-repair}
+    - {words: L22.5, page: 3, by: hindi-repair}
+    - {words: L22.6, page: 3, by: hindi-repair}
+    - {words: L22.7, page: 3, by: hindi-repair}
+    - {words: L22.12, page: 3, by: agent}
+    - {words: L23.1, page: 3, by: hindi-repair}
+    - {words: L23.2, page: 3, by: hindi-repair}
+    - {words: L24.2, page: 3, by: hindi-repair}
+    - {words: L24.3, page: 3, by: hindi-repair}
+    - {words: L24.5, page: 3, by: hindi-repair}
+    - {words: L24.13, page: 3, by: agent}
+- id: "0.16"
+  kind: figure
+  page: 2
+  number: चित्र 9.2
+  text: शंक्वाकार फ्लास्क सिरका बेकिंग सोडा युक्त गुब्बारा अंकीय तुला चित्र 9.2 (क) — सिरका तथा बेकिंग
+    सोडा का भार
+  crop: [362.9, 558.1, 568.8, 758.5]
+  made:
+    - {words: L43.1-4, by: hindi-repair}
+    - {words: L43.5, by: hindi-repair}
+    - {words: L46.1, by: hindi-repair}
+    - {words: L48.1, by: hindi-repair}
+    - {words: L48.2, by: hindi-repair}
+    - {words: L48.3, by: hindi-repair}
+    - {words: L50.1-4, by: hindi-repair}
+    - {words: L53.1, by: hindi-repair}
+    - {words: L53.2, by: hindi-repair}
+    - {words: L56.1, by: hindi-repair}
+    - {words: L56.5, by: hindi-repair}
+    - {words: L56.6, by: hindi-repair}
+    - {words: L56.7, by: hindi-repair}
+    - {words: L56.8, by: hindi-repair}
+    - {words: L56.9, by: hindi-repair}
+    - {words: L56.10, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "0.17"
+  kind: figure
+  page: 3
+  number: चित्र 9.2
+  text: बेकिंग सोडा युक्त गुब्बारा शंक्वाकार फ्लास्क चित्र 9.2 — (ख) सिरका युक्त शंक्वाकार फ्लास्क में
+    बेकिंग सोडा डालते हुए
+  crop: [171.5, 69.4, 387.3, 265.8]
+  made:
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.5, by: hindi-repair}
+    - {words: L18.6, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.8, by: hindi-repair}
+    - {words: L18.9, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "0.18"
+  kind: figure
+  page: 3
+  number: चित्र 9.2
+  text: गुब्बारा अभिक्रिया मिश्रण अंकीय तुला चित्र 9.2 — (ग) अभिक्रिया मिश्रण एवं खाली गुब्बारे का भार
+  crop: [343.8, 71, 544.5, 269.8]
+  made:
+    - {words: L14.1, by: hindi-repair}
+    - {words: L15.1, by: hindi-repair}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.2, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.5, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.5, by: hindi-repair}
+    - {words: L21.6, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "0.19"
+  kind: box
+  page: 3
+  title: टिप्पणी
+  text: टिप्पणी शंक्वाकार फ्लास्क और गुब्बारे को अंकीय तुला पर रखिए। इससे ऐसी त्रुटियाँ नहीं होतीं जो
+    गुब्बारे पर बेकिंग सोडा के छोटे कणों के चिपके रहने के कारण उत्पन्न हो सकती हैं।
+  made:
+    - {words: L26.1, by: hindi-repair}
+    - {words: L36.1-4, by: hindi-repair}
+    - {words: L36.5, by: hindi-repair}
+    - {words: L36.7-10, by: hindi-repair}
+    - {words: L36.12-L37.4, by: agent}
+    - {words: L38.1, by: hindi-repair}
+    - {words: L38.2, by: hindi-repair}
+    - {words: L38.4-7, by: hindi-repair}
+    - {words: L38.13, by: hindi-repair}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.4, by: hindi-repair}
+- id: "0.20"
+  kind: text
+  page: 3
+  text: 8. आपने क्या अवलोकन किया? 9. क्या आरंभिक और अंतिम पाठ्यांक समान हैं?
+  made:
+    - {words: L40.3, by: hindi-repair}
+    - {words: L41.2, by: hindi-repair}
+    - {words: L41.5-8, by: hindi-repair}
+    - {words: L41.9, by: agent}
+    - {words: L41.11, by: hindi-repair}
+- id: "0.21"
+  kind: text
+  page: 3
+  text: एक तीव्र बुदबुदाहट दिखाई देती है। अंतिम पाठ्यांक आरंभिक पाठ्यांक से भिन्न होता है। इसका क्या
+    कारण हो सकता है?
+  made:
+    - {words: L42.8, by: agent}
+    - {words: L42.10, by: agent}
+    - {words: L42.12, by: hindi-repair}
+    - {words: L43.4, by: hindi-repair}
+- id: "0.22"
+  kind: text
+  page: 3
+  text: उपर्युक्त प्रयोग को भिन्न प्रकार से दोहराइए जैसा कि नीचे वर्णित किया गया है।
+  made:
+    - {words: L44.1, by: hindi-repair}
+    - {words: L44.4, by: hindi-repair}
+    - {words: L44.11, by: hindi-repair}
+- id: "0.23"
+  kind: heading
+  page: 3
+  title: प्रायोगिक व्यवस्था 2
+  text: प्रायोगिक व्यवस्था 2
+  made:
+    - {words: L45.2, by: hindi-repair}
+- id: "0.24"
+  kind: text
+  page: 3
+  text: 1. एक तुला पर स्वच्छ, शुष्क 100 mL शंक्वाकार फ्लास्क और मध्यम आकार का एक गुब्बारा रखिए। 2.
+    आधेय भार अथवा पुनः नियोजन बटन को दबाकर तुला के पाठ्यांक को शून्य कीजिए। 3. शंक्वाकार फ्लास्क में
+    लगभग 20 mL सिरका अथवा नींबू का रस डालिए। 4. एक गुब्बारे में लगभग 2 g बेकिंग सोडा (सोडियम
+    हाइड्रोजनकार्बोनेट) डालिए। 5. एक धागे की सहायता से बेकिंग सोडा युक्त गुब्बारे को शंक्वाकार
+    फ्लास्क के मुँह पर बाँधते समय यह सुनिश्चित कीजिए कि बेकिंग सोडा सिरके में न गिरे । 6. सिरका
+    युक्त शंक्वाकार फ्लास्क तथा बेकिंग सोडायुक्त गुब्बारे को तोलिए और पाठ्यांक अभिलेखित कीजिए (चित्र
+    9.3 क)। 7. गुब्बारे के दूसरे सिरे को ऊपर की ओर उठाइए जिससे बेकिंग सोडा (सोडियम
+    हाइड्रोजनकार्बोनेट) सिरके में गिर जाए (चित्र 9.3 ख)। 8. आपने क्या अवलोकन किया? 9. जैसा कि
+    प्रायोगिक व्यवस्था 1 में देखा गया था कि अभिक्रिया के समय एक तीव्र बुदबुदाहट होती है जो गुब्बारे
+    को फुला देती है। 10. अंतिम पाठ्यांक को अभिलेखित कीजिए (चित्र 9.3 ग)। 11. क्या इस प्रयोग में
+    आरंभिक और अंतिम पाठ्यांक समान हैं?
+  made:
+    - {words: L46.5, by: hindi-repair}
+    - {words: L46.6, by: hindi-repair}
+    - {words: L46.9, by: hindi-repair}
+    - {words: L46.10, by: hindi-repair}
+    - {words: L46.12, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L48.5-8, by: hindi-repair}
+    - {words: L48.13-16, by: agent}
+    - {words: L48.18-20, by: agent}
+    - {words: L48.22-25, by: hindi-repair}
+    - {words: L50.2, by: hindi-repair}
+    - {words: L50.3, by: hindi-repair}
+    - {words: L50.4, by: hindi-repair}
+    - {words: L50.10, by: hindi-repair}
+    - {words: L50.13, by: agent}
+    - {words: L51.3, by: hindi-repair}
+    - {words: L51.4, by: hindi-repair}
+    - {words: L51.11, by: agent}
+    - {words: L51.12, by: agent}
+    - {words: L52.9-12, by: hindi-repair}
+    - {words: L52.13-16, by: hindi-repair}
+    - {words: L52.18-21, by: hindi-repair}
+    - {words: L52.22, by: hindi-repair}
+    - {words: L52.24-26, by: hindi-repair}
+    - {words: L54.5, by: hindi-repair}
+    - {words: L54.11, by: hindi-repair}
+    - {words: L56.3, by: hindi-repair}
+    - {words: L56.4, by: hindi-repair}
+    - {words: L56.5, by: hindi-repair}
+    - {words: L56.8, by: agent}
+    - {words: L56.9, by: hindi-repair}
+    - {words: L57.1, by: agent}
+    - {words: L59.2-5, by: hindi-repair}
+    - {words: L59.7-10, by: hindi-repair}
+    - {words: L59.17, by: agent}
+    - {words: L60.1, by: agent}
+    - {words: L60.3, by: hindi-repair}
+    - {words: L63.3, by: hindi-repair}
+    - {words: L64.5, by: hindi-repair}
+    - {words: L64.7, by: hindi-repair}
+    - {words: L65.1-7, by: hindi-repair}
+    - {words: L65.11-14, by: hindi-repair}
+    - {words: L2.3, page: 4, by: agent}
+    - {words: L3.2, page: 4, by: hindi-repair}
+    - {words: L3.5, page: 4, by: hindi-repair}
+    - {words: L3.9, page: 4, by: agent}
+    - {words: L3.11-12, page: 4, by: hindi-repair}
+- id: "0.25"
+  kind: box
+  page: 3
+  title: टिप्पणी
+  text: "टिप्पणी सामान्यत: किसी भी मापन में अंतिम अंक में ±1 की अनिश्चितता होती है। अत: अंकीय तुला के
+    पाठ्यांकों में अंतर प्रायोगिक त्रुटि के अंतर्गत होता है और स्थिरांक माना जा सकता है।"
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L2.1, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.4, by: agent}
+    - {words: L6.3, by: agent}
+    - {words: L6.4, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+- id: "0.26"
+  kind: figure
+  page: 3
+  number: चित्र 9.3
+  text: बेकिंग सोडा युक्त गुब्बारा शंक्वाकार फ्लास्क सिरका अंकीय तुला चित्र 9.3 — (क) सिरका और बेकिंग
+    सोडा का भार
+  crop: [41.2, 340.2, 212.8, 536.5]
+  made:
+    - {words: L27.1, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+    - {words: L34.7, by: hindi-repair}
+    - {words: L34.8, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.2, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "0.27"
+  kind: figure
+  page: 3
+  number: चित्र 9.3
+  text: शंक्वाकार फ्लास्क सिरका चित्र 9.3 (ख) — सिरकायुक्त शंक्वाकार फ्लास्क में बेकिंग सोडा डालते हुए
+  crop: [44.9, 544.5, 223.3, 738.4]
+  made:
+    - {words: L53.1, by: hindi-repair}
+    - {words: L55.1, by: hindi-repair}
+    - {words: L58.1, by: hindi-repair}
+    - {words: L61.1, by: hindi-repair}
+    - {words: L61.5, by: agent}
+    - {words: L61.6, by: hindi-repair}
+    - {words: L61.7, by: hindi-repair}
+    - {words: L62.1, by: hindi-repair}
+    - {words: L62.2, by: hindi-repair}
+    - {words: L62.3, by: hindi-repair}
+    - {words: L62.4, by: hindi-repair}
+    - {words: L62.5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "0.28"
+  kind: text
+  page: 4
+  text: इस प्रयोग में अंतिम पाठ्यांक, आरंभिक पाठ्यांक के समान है। आपने ध्यान दिया होगा कि रासायनिक
+    अभिक्रिया से पूर्व सिरका और बेकिंग सोडा (सोडियम हाइड्रोजनकार्बोनेट) का कुल द्रव्यमान अभिक्रिया
+    के पश्चात उत्पन्न कार्बन डाइऑक्साइड और निर्मित अन्य पदार्थों के कुल द्रव्यमान के समान है।
+    प्रायोगिक व्यवस्था 1 के अंतर्गत द्रव्यमान में भिन्नता इस कारण से देखी गई क्योंकि इस रासायनिक
+    अभिक्रिया में उत्पन्न गैस मुक्त हो जाती है जिसके परिणामस्वरूप आरंभिक और अंतिम पाठ्यांकों में
+    अंतर आ जाता है।
+  made:
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.5, by: agent}
+    - {words: L4.7, by: agent}
+    - {words: L4.12, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L5.11, by: agent}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.6, by: hindi-repair}
+    - {words: L6.7, by: hindi-repair}
+    - {words: L6.8, by: hindi-repair}
+    - {words: L6.9, by: hindi-repair}
+    - {words: L6.11, by: hindi-repair}
+    - {words: L6.12, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L7.12, by: hindi-repair}
+    - {words: L7.13, by: hindi-repair}
+    - {words: L7.14, by: hindi-repair}
+    - {words: L7.15, by: hindi-repair}
+    - {words: L8.6, by: hindi-repair}
+    - {words: L8.10, by: hindi-repair}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L8.13, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L9.6, by: agent}
+    - {words: L9.7, by: hindi-repair}
+- id: "1"
+  kind: section
+  page: 4
+  number: "9.1"
+  title: द्रव्यमान संरक्षण का नियम
+  text: 9.1 द्रव्यमान संरक्षण का नियम
+  made:
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3-6, by: hindi-repair}
+- id: "1.1"
+  kind: text
+  page: 4
+  text: "क्रियाकलाप 9.2 यह दर्शाता है कि किसी रासायनिक अभिक्रिया के पूर्व और पश्चात कुल द्रव्यमान समान
+    ही रहता है। अत: किसी भी रासायनिक अभिक्रिया में द्रव्य का न तो सृजन किया जा सकता है और न ही उसे
+    नष्ट किया जा सकता है। इसे द्रव्यमान संरक्षण का नियम कहते हैं जिसे वर्ष 1789 में आन्तवॉ लवाइजिए
+    (Antoine Lavoisier) ने प्रतिपादित किया।"
+  made:
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+    - {words: L17.13, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.12, by: hindi-repair}
+    - {words: L19.13, by: hindi-repair}
+    - {words: L21.10, by: hindi-repair}
+    - {words: L21.16, by: hindi-repair}
+    - {words: L23.4, by: hindi-repair}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L23.8, by: hindi-repair}
+    - {words: L23.9, by: agent}
+    - {words: L23.10, by: agent}
+- id: "1.2"
+  kind: box
+  page: 4
+  title: वैज्ञानिक-परिचय
+  text: वैज्ञानिक-परिचय आन्तवॉ लवाइजिए को आधुनिक रसायन का जनक कहा जाता है। इन्होंने द्रव्यमान संरक्षण
+    का नियम प्रतिपादित किया। यह नियम प्रत्येक रासायनिक अभिक्रिया के लिए अनुपयोगी होता है। लवाइजिए
+    इसका निरंतर अध्ययन करते रहे और यह प्रस्तावित किया कि “... प्रत्येक संक्रिया में, संक्रिया के
+    पूर्व और संक्रिया के पश्चात द्रव्यमान की समान मात्रा विद्यमान रहती है”।
+  made:
+    - {words: L26.1, by: agent}
+    - {words: L26.2, by: agent}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.4, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L29.3, by: agent}
+    - {words: L29.6, by: hindi-repair}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L30.5, by: hindi-repair}
+    - {words: L30.7, by: hindi-repair}
+    - {words: L30.10, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+- id: "1.3"
+  kind: text
+  page: 4
+  text: आइए , इस नियम के पुनः जाँच हेतु सोडियम सल्फेट और बेरियम क्लोराइड के मध्य अभिक्रिया पर विचार करें।
+  made:
+    - {words: L41.10-11, by: agent}
+    - {words: L41.14, by: hindi-repair}
+    - {words: L41.16, by: hindi-repair}
+- id: "1.4"
+  kind: activity
+  page: 4
+  number: क्रियाकलाप 9.3
+  title: आइए, नियम की जाँच करें — सामूहिक क्रियाकलाप
+  text: "क्रियाकलाप 9.3 — आइए, नियम की जाँच करें — सामूहिक क्रियाकलाप 1. किसी तुला पर दो स्वच्छ एवं
+    शुष्क 100 mL शंक्वाकार फ्लास्क रखिए और उन्हें ‘क’ और ‘ख’ से चिह्नित कीजिए। 2. आधेय भार अथवा पुन:
+    नियोजन बटन को दबाकर तुला के पाठ्यांक को शून्य कीजिए। 3. शंक्वाकार फ्लास्क ‘क’ में 1% m/v सोडियम
+    सल्फेट का 10 mL विलयन लीजिए । 4. शंक्वाकार फ्लास्क ‘ख’ में 1% m/v बेरियम क्लोराइड विलयन के 10 mL
+    लीजिए। 5. दोनों शंक्वाकार फ्लास्कों, ‘क’ और ‘ख’ को तुला पर रखकर अबाधित छोड़ दीजिए और दोनों
+    विलयनों का कुल द्रव्यमान अभिलेखित कीजिए (चित्र 9.4 क)। 6. शंक्वाकार फ्लास्क ‘ख’ से विलयन को
+    शंक्वाकार फ्लास्क ‘क’ में स्थानांतरित कीजिए और दोनों विलयनों को सावधानीपूर्वक मिश्रित कीजिए। 7.
+    आपने क्या अवलोकन किया? 8. अब चित्र 9.4 (ख) में दर्शाए अनुसार दोनों शंक्वाकार फ्लास्कों ‘क’ और
+    ‘ख’ को पुनः तुला पर रखिए और पाठ्यांक को अभिलेखित कीजिए। 9. क्या विलयनों को मिश्रित करने के
+    पश्चात आपको पाठ्यांक में कोई परिवर्तन दिखाई देता है?"
+  made:
+    - {words: L45.8, by: hindi-repair}
+    - {words: L46.6, by: hindi-repair}
+    - {words: L46.8, by: hindi-repair}
+    - {words: L46.11, by: hindi-repair}
+    - {words: L46.12, by: hindi-repair}
+    - {words: L46.15, by: hindi-repair}
+    - {words: L47.5, by: agent}
+    - {words: L48.12, by: agent}
+    - {words: L48.14, by: hindi-repair}
+    - {words: L49.2, by: hindi-repair}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+    - {words: L49.9-10, by: agent}
+    - {words: L50.2, by: hindi-repair}
+    - {words: L50.3, by: hindi-repair}
+    - {words: L50.5, by: hindi-repair}
+    - {words: L50.9, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.3, by: hindi-repair}
+    - {words: L52.4, by: agent}
+    - {words: L52.13, by: hindi-repair}
+    - {words: L53.2, by: hindi-repair}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+    - {words: L54.2, by: hindi-repair}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L54.8, by: hindi-repair}
+    - {words: L54.9, by: hindi-repair}
+    - {words: L54.11, by: hindi-repair}
+    - {words: L54.12, by: hindi-repair}
+    - {words: L55.3, by: hindi-repair}
+    - {words: L55.4, by: hindi-repair}
+    - {words: L55.6, by: hindi-repair}
+    - {words: L56.3, by: hindi-repair}
+    - {words: L57.6, by: hindi-repair}
+    - {words: L57.7, by: hindi-repair}
+    - {words: L57.9, by: hindi-repair}
+    - {words: L57.10, by: hindi-repair}
+    - {words: L57.11, by: agent}
+    - {words: L58.6, by: agent}
+    - {words: L59.2, by: hindi-repair}
+    - {words: L59.3, by: hindi-repair}
+    - {words: L59.8, by: hindi-repair}
+    - {words: L59.10, by: agent}
+    - {words: L59.11, by: hindi-repair}
+    - {words: L59.13, by: hindi-repair}
+- id: "1.5"
+  kind: figure
+  page: 4
+  number: चित्र 9.3
+  text: फूला हुआ गुब्बारा शंक्वाकार फ्लास्क अभिक्रिया मिश्रण अंकीय तुला चित्र 9.3 — (ग) अंतिम
+    अभिक्रिया मिश्रण का भार
+  crop: [438.1, 113.4, 599.9, 306.8]
+  made:
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L15.1, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.2, by: hindi-repair}
+    - {words: L21.22-23, by: agent}
+    - {words: L20.1, by: agent}
+    - {box: true, by: figure-snap}
+- id: "1.6"
+  kind: figure
+  page: 4
+  number: चित्र 9.4
+  text: क शंक्वाकार फ्लास्क ख बेरियम क्लोराइड विलयन सोडियम सल्फेट विलयन अंकीय तुला चित्र 9.4 — (क)
+    मिश्रित करने से पूर्व विलयनों (अभिकारकों) का भार
+  crop: [420.8, 336.2, 595.7, 548.3]
+  made:
+    - {words: L33.1, by: hindi-repair}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L39.1-2, by: agent}
+    - {words: L62.1, by: hindi-repair}
+    - {words: L62.5, by: hindi-repair}
+    - {words: L62.6, by: hindi-repair}
+    - {words: L62.7, by: hindi-repair}
+    - {words: L62.8, by: hindi-repair}
+    - {words: L63.1, by: hindi-repair}
+    - {words: L63.2, by: agent}
+    - {words: L63.3, by: hindi-repair}
+    - {words: L63.4, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "1.7"
+  kind: figure
+  page: 4
+  number: चित्र 9.4
+  text: क ख शंक्वाकार फ्लास्क अभिक्रिया मिश्रण अंकीय तुला चित्र 9.4 — (ख) मिश्रित करने के पश्चात
+    उत्पादों का भार
+  crop: [420.8, 546.2, 598.6, 749.6]
+  made:
+    - {words: L65.2, by: hindi-repair}
+    - {words: L66.1, by: hindi-repair}
+    - {words: L67.1, by: hindi-repair}
+    - {words: L68.1, by: hindi-repair}
+    - {words: L69.1, by: hindi-repair}
+    - {words: L69.2, by: hindi-repair}
+    - {words: L70.1, by: hindi-repair}
+    - {words: L70.5, by: hindi-repair}
+    - {words: L70.6, by: hindi-repair}
+    - {words: L70.7, by: hindi-repair}
+    - {words: L71.1, by: hindi-repair}
+    - {words: L71.2, by: hindi-repair}
+    - {words: L71.3, by: hindi-repair}
+    - {words: L71.4, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "1.8"
+  kind: text
+  page: 5
+  text: जब सोडियम सल्फेट और बेरियम क्लोराइड के विलयनों को मिश्रित किया जाता है तो सोडियम क्लोराइड के
+    साथ-साथ बेरियम सल्फेट का एक श्वेत अवक्षेप प्राप्त होता है। इसे निम्नलिखित प्रकार से निरूपित किया
+    जा सकता है—
+  made:
+    - {words: L34.3-4, by: agent}
+    - {words: L34.7, by: hindi-repair}
+    - {words: L34.9, by: hindi-repair}
+    - {words: L35.2, by: hindi-repair}
+    - {words: L35.6-7, by: agent}
+    - {words: L35.10, by: hindi-repair}
+    - {words: L35.12, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+- id: "1.9"
+  kind: equation
+  page: 5
+  text: सोडियम सल्फेट + बेरियम क्लोराइड बेरियम सल्फेट + सोडियम क्लोराइड
+  made:
+    - {words: L37.2, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L37.10, by: hindi-repair}
+- id: "1.10"
+  kind: text
+  page: 5
+  text: क्रियाकलाप 9.2 के आधार पर यह स्थापित हो गया कि किसी रासायनिक परिवर्तन (रासायनिक अभिक्रिया) के
+    समय भार एवं इसी प्रकार द्रव्यमान संरक्षित रहता है।
+  made:
+    - {words: L38.7, by: hindi-repair}
+    - {words: L38.13, by: hindi-repair}
+    - {words: L39.9, by: hindi-repair}
+- id: "1.11"
+  kind: box
+  page: 5
+  title: वैज्ञानिक की भाँति सोचिए
+  text: वैज्ञानिक की भाँति सोचिए आपको एक रासायनिक अभिक्रिया दी गई है जिसमे जिंक, तनु हाइड्रोक्लोरिक
+    अम्ल के साथ अभिक्रिया कर जिंक क्लोराइड और हाइड्रोजन गैस बनाता है। जिंक + हाइड्रोक्लोरिक अम्ल
+    (तनु) जिंक क्लोराइड + हाइड्रोजन इस अभिक्रिया का उपयोग इस परिकल्पना का परीक्षण करने के लिए कीजिए
+    कि किसी भी रासायनिक अभिक्रिया में द्रव्यमान संरक्षित रहता है। इसके लिए एक प्रयोग की रूपरेखा
+    बनाकर इसका निष्पादन कीजिए। आप क्रियाकलाप 9.2 में दर्शाई गई व्यवस्था से एक भिन्न प्रकार की
+    व्यवस्था का उपयोग कर सकते हैं।
+  made:
+    - {words: L40.1, by: hindi-repair}
+    - {words: L40.2, by: hindi-repair}
+    - {words: L40.3, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L41.1, by: hindi-repair}
+    - {words: L41.3, by: hindi-repair}
+    - {words: L41.4, by: hindi-repair}
+    - {words: L41.5, by: hindi-repair}
+    - {words: L41.7, by: hindi-repair}
+    - {words: L41.8, by: hindi-repair}
+    - {words: L41.9, by: hindi-repair}
+    - {words: L41.10, by: hindi-repair}
+    - {words: L41.11, by: hindi-repair}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L42.5, by: hindi-repair}
+    - {words: L42.6, by: hindi-repair}
+    - {words: L42.8, by: hindi-repair}
+    - {words: L42.9, by: hindi-repair}
+    - {words: L42.10, by: hindi-repair}
+    - {words: L42.11, by: hindi-repair}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.3, by: hindi-repair}
+    - {words: L43.4, by: hindi-repair}
+    - {words: L43.6, by: hindi-repair}
+    - {words: L43.7, by: hindi-repair}
+    - {words: L44.6, by: hindi-repair}
+    - {words: L45.5, by: hindi-repair}
+    - {words: L45.6, by: hindi-repair}
+    - {words: L46.1-2, by: agent}
+    - {words: L46.5, by: hindi-repair}
+    - {words: L46.10, by: hindi-repair}
+    - {words: L46.11, by: hindi-repair}
+    - {words: L46.13, by: hindi-repair}
+    - {words: L47.3, by: hindi-repair}
+    - {words: L47.6, by: hindi-repair}
+    - {words: L47.11, by: hindi-repair}
+- id: "1.12"
+  kind: example
+  page: 5
+  number: उदाहरण 9.1
+  text: उदाहरण 9.1 — मान लीजिए कि किसी सामूहिक क्रियाकलाप में विद्यार्थी एक बंद पात्र में 4.0 g
+    कैल्सियम कार्बोनेट एवं 2.92 g हाइड्रोक्लोरिक अम्ल लेते हैं। अभिक्रिया पूर्ण होने के पश्चात
+    विद्यार्थियों को 1.76 g कार्बन डाइऑक्साइड, 0.72 g जल और 4.44 g कैल्सियम क्लोराइड प्राप्त होता
+    है। जाँच कीजिए कि द्रव्यमान संरक्षण के नियम का पालन हुआ है अथवा नहीं।
+  made:
+    - {words: L48.10, by: hindi-repair}
+    - {words: L48.13-15, by: hindi-repair}
+    - {words: L48.17, by: hindi-repair}
+    - {words: L49.1-2, by: agent}
+    - {words: L49.7, by: hindi-repair}
+    - {words: L49.8, by: hindi-repair}
+    - {words: L49.10, by: hindi-repair}
+    - {words: L49.12, by: hindi-repair}
+    - {words: L49.15, by: hindi-repair}
+    - {words: L50.1, by: hindi-repair}
+    - {words: L50.5, by: hindi-repair}
+    - {words: L50.6, by: hindi-repair}
+    - {words: L50.13-14, by: agent}
+    - {words: L50.15, by: hindi-repair}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.7, by: hindi-repair}
+    - {words: L51.16, by: hindi-repair}
+- id: "1.13"
+  kind: text
+  page: 5
+  text: उत्तर — कैल्सियम कार्बोनेट का द्रव्यमान = 4.0 g हाइड्रोक्लोरिक अम्ल का द्रव्यमान = 2.92 g
+    अभिकारकों का कुल द्रव्यमान 4.0 g + 2.92 g = 6.92 g कार्बन डाइऑक्साइड का द्रव्यमान = 1.76 g जल का
+    द्रव्यमान = 0.72 g कैल्सियम क्लोराइड का द्रव्यमान = 4.44 g उत्पादों का कुल द्रव्यमान — 1.76 g +
+    0.72 g + 4.44 g = 6.92 g अभिकारकों के कुल द्रव्यमान तथा उत्पादों के कुल द्रव्यमान की तुलना
+    कीजिए। अभिकारकों का द्रव्यमान = उत्पादों का द्रव्यमान अतः द्रव्यमान संरक्षण के नियम का पालन हो
+    रहा है।
+  made:
+    - {words: L52.3-4, by: agent}
+    - {words: L52.7, by: hindi-repair}
+    - {words: L53.1, by: hindi-repair}
+    - {words: L53.2, by: hindi-repair}
+    - {words: L53.4, by: hindi-repair}
+    - {words: L54.1, by: agent}
+    - {words: L54.4, by: hindi-repair}
+    - {words: L55.1, by: hindi-repair}
+    - {words: L55.2, by: hindi-repair}
+    - {words: L55.4, by: hindi-repair}
+    - {words: L56.3, by: hindi-repair}
+    - {words: L57.1-2, by: agent}
+    - {words: L57.3, by: hindi-repair}
+    - {words: L57.5, by: hindi-repair}
+    - {words: L58.1, by: hindi-repair}
+    - {words: L58.4, by: hindi-repair}
+    - {words: L59.1, by: agent}
+    - {words: L59.4, by: hindi-repair}
+    - {words: L59.6, by: hindi-repair}
+    - {words: L59.9, by: hindi-repair}
+    - {words: L60.1, by: agent}
+    - {words: L60.3, by: hindi-repair}
+    - {words: L60.5, by: hindi-repair}
+    - {words: L60.7, by: hindi-repair}
+    - {words: L61.2, by: hindi-repair}
+- id: "1.14"
+  kind: example
+  page: 5
+  number: उदाहरण 9.2
+  text: "उदाहरण 9.2 — दिए गए समीकरण के अनुसार 12 g कार्बन के साथ 32 g ऑक्सीजन संयोजित होकर 44 g कार्बन
+    डाइऑक्साइड का निर्माण करती है। कार्बन + ऑक्सीजन कार्बन डाइऑक्साइड यदि 2.4 g कार्बन, ऑक्सीजन के
+    साथ पूर्णत: अभिक्रिया करे तो कार्बन डाइऑक्साइड गैस की कितनी मात्रा उत्पन्न होगी?"
+  made:
+    - {words: L62.3, by: hindi-repair}
+    - {words: L62.10, by: hindi-repair}
+    - {words: L62.15, by: hindi-repair}
+    - {words: L63.5, by: hindi-repair}
+    - {words: L63.6, by: hindi-repair}
+    - {words: L63.8, by: hindi-repair}
+    - {words: L64.1, by: hindi-repair}
+    - {words: L64.3, by: hindi-repair}
+    - {words: L64.4, by: hindi-repair}
+    - {words: L64.5, by: hindi-repair}
+    - {words: L65.4, by: hindi-repair}
+    - {words: L65.5, by: hindi-repair}
+    - {words: L65.8, by: hindi-repair}
+    - {words: L65.12, by: hindi-repair}
+    - {words: L65.13, by: hindi-repair}
+    - {words: L66.4, by: hindi-repair}
+- id: "1.15"
+  kind: text
+  page: 5
+  text: "उत्तर — दिया गया है कि 12 g कार्बन, 32 g ऑक्सीजन के साथ अभिक्रिया कर 44 g कार्बन डाइऑक्साइड
+    बनाता है। अतः 1 g कार्बन प्रदान करेगा = 44 /12 g कार्बन डाइऑक्साइड इसलिए 2.4 g कार्बन प्रदान
+    करेगा = 44 /12 × 2.4 g = 8.8 g कार्बन डाइऑक्साइड अत: 8.8 g कार्बन डाइऑक्साइड गैस उत्पन्न होगी।"
+  made:
+    - {words: L67.2, by: hindi-repair}
+    - {words: L67.8, by: hindi-repair}
+    - {words: L67.11, by: hindi-repair}
+    - {words: L68.1, by: hindi-repair}
+    - {words: L68.2, by: hindi-repair}
+    - {words: L72.4, by: hindi-repair}
+    - {words: L72.6-7, by: agent}
+    - {words: L71.1, by: agent}
+    - {words: L73, by: agent}
+    - {words: L70.2-4, by: agent}
+    - {words: L72.8, by: hindi-repair}
+    - {words: L72.9, by: hindi-repair}
+    - {words: L75.4, by: hindi-repair}
+    - {words: L75.6-7, by: agent}
+    - {words: L75.8, by: agent}
+    - {words: L77, by: agent}
+    - {words: L74.1, by: agent}
+    - {words: L78.4, by: hindi-repair}
+    - {words: L78.5, by: hindi-repair}
+    - {words: L79.4, by: hindi-repair}
+    - {words: L79.5, by: hindi-repair}
+    - {words: L79.7, by: hindi-repair}
+- id: "1.16"
+  kind: box
+  page: 5
+  title: टिप्पणी
+  text: "टिप्पणी दोनों शंक्वाकार फ्लास्कों को अंकीय तुला पर रखिए। यह उन त्रुटियों के उत्पन्न होने से
+    बचाता है जो विलयन को स्थानांतरित करते समय फ्लास्क की दीवारों पर विलयन की सूक्ष्म मात्रा के चिपके
+    रहने से उत्पन्न हो सकती है। चूँकि इस अभिक्रिया में कोई गैस नहीं बनती है, अत: इस अभिक्रिया को एक
+    खुले निकाय में किया जाता है।"
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.4, by: agent}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L9.2-L10.1, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L12.5, by: hindi-repair}
+- id: "1.17"
+  kind: box
+  page: 5
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 1. एक विद्यार्थी किसी खुले बीकर में 10 g एथेनॉल जलाता है। अभिक्रिया पूर्ण होने
+    के पश्चात बीकर में कोई अवशेष शेष नहीं रहता है। क्या इससे यह निष्कर्ष निकलता है कि द्रव्यमान
+    संरक्षण के नियम का उल्लंघन हुआ है? व्याख्या कीजिए। 2. जब 20 g हाइड्रोजन, 160 g ऑक्सीजन के साथ
+    पूर्णतः अभिक्रिया करता है तब द्रव्यमान संरक्षण के नियम के अनुसार जल की कितनी मात्रा का निर्माण
+    होगा?
+  made:
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.4, by: agent}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.5, by: hindi-repair}
+    - {words: L19.6, by: agent}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+    - {words: L24.5, by: hindi-repair}
+    - {words: L25.1, by: hindi-repair}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L27.2-L28.2, by: hindi-repair}
+    - {words: L29.1-4, by: hindi-repair}
+    - {words: L30.2, by: hindi-repair}
+- id: "1.18"
+  kind: text
+  page: 6
+  text: उपर्युक्त क्रियाकलापों में हमने अनेक यौगिकों का उपयोग किया है। आइए, सीखें कि तत्वों से ये
+    यौगिकों का निर्माण किस प्रकार होता है। आइए, जल का उदाहरण लें। क्या जल के निर्माण हेतु हाइड्रोजन
+    किसी निश्चित अनुपात में ऑक्सीजन के साथ संयोजित होती है अथवा वे किसी भी अनुपात में संयोजित हो
+    सकते हैं? यह हमें एक और महत्त्वपूर्ण नियम की ओर ले जाता है।
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.6, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.3, by: agent}
+    - {words: L3.6, by: hindi-repair}
+    - {words: L3.8, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.4, by: hindi-repair}
+    - {words: L4.7, by: hindi-repair}
+    - {words: L4.11, by: hindi-repair}
+    - {words: L4.13, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.12, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.4, by: hindi-repair}
+    - {words: L6.7, by: agent}
+- id: "2"
+  kind: section
+  page: 6
+  number: "9.2"
+  title: स्थिर अनुपात का नियम
+  text: 9.2 स्थिर अनुपात का नियम
+  made:
+    - {words: L7.2, by: hindi-repair}
+- id: "2.1"
+  kind: text
+  page: 6
+  text: लवाइजिए के पश्चात जोसेफ प्राउस्ट (Joseph Proust) ने प्रस्तावित किया कि दो अथवा दो से अधिक
+    तत्वों से बने किसी भी यौगिक में तत्व द्रव्यमान के एक निश्चित अनुपात में संयोजित होते हैं। यदि
+    दूसरे शब्दों में कहा जाए तो किसी यौगिक में तत्वों का एक निश्चित अनुपात होता है और वह उसके स्रोत
+    पर निर्भर नहीं करता है। उदाहरणार्थ—यदि विभिन्न स्रोतों, जैसे नदियों, बोरवेल अथवा समुद्र से
+    एकत्रित जल का शोधन करके विश्लेषण किया जाए तो इसमें सदैव हाइड्रोजन और ऑक्सीजन का द्रव्यमान 1:8 के
+    अनुपात में होता है। यह क्या इंगित करता है? यदि किसी स्रोत से 9 g शोधित जल को विघटित किया जाए तो
+    सदैव 1 g हाइड्रोजन और 8 g ऑक्सीजन प्राप्त होती है। इस अनुपात को 1:8 के रूप में भी लिखा जाता है।
+  made:
+    - {words: L8.1, by: agent}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L8.5, by: agent}
+    - {words: L8.9, by: hindi-repair}
+    - {words: L9.6, by: agent}
+    - {words: L9.12, by: hindi-repair}
+    - {words: L9.13, by: agent}
+    - {words: L9.14, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L10.9, by: hindi-repair}
+    - {words: L10.10, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: agent}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.15, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.4, by: hindi-repair}
+    - {words: L12.5, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.8, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.12, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.9, by: hindi-repair}
+    - {words: L14.13, by: hindi-repair}
+    - {words: L15.1-4, by: hindi-repair}
+    - {words: L15.16, by: agent}
+    - {words: L16.8, by: hindi-repair}
+    - {words: L16.9, by: hindi-repair}
+    - {words: L17.2, by: hindi-repair}
+- id: "2.2"
+  kind: text
+  page: 6
+  text: इसे स्थिर अनुपात का नियम अथवा निश्चित अनुपात का नियम अथवा कभी-कभी प्राउस्ट का नियम भी कहते हैं।
+  made:
+    - {words: L18.2, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L19.2, by: agent}
+    - {words: L19.7, by: hindi-repair}
+- id: "2.3"
+  kind: box
+  page: 6
+  title: जिज्ञासा-सूत्र
+  text: "जिज्ञासा-सूत्र अनेक प्राचीन सभ्यताओं में चट्टानों से प्राप्त लाल वर्णक का उपयोग चित्रकला और
+    विभिन्न वस्तुओं को रंगने के लिए व्यापक रूप से किया जाता था। भारत में इसे ‘हिंगुला’ नाम से और
+    लैटिन व अंग्रेजी भाषा में इसे ‘सिनेबार’ नाम से जाना जाता था। सहस्त्र वर्षों से अनेक सभ्यताओं में
+    यह खोजा गया कि ‘सिनेबार’ को गर्म करने पर दो तत्व मर्करी और सल्फर प्राप्त होते हैं जिनके
+    द्रव्यमान प्रतिशत क्रमश: लगभग 86.22% और 13.78% होते हैं। यह रोचक है कि अधिकांश सभ्यताओं ने भी यह
+    ज्ञात किया कि मर्करी और सल्फर को इस अनुपात में एक साथ पीसने पर सिनेबार बन सकता है यद्यपि दोनों
+    की विषाक्त प्रकृति के कारण इस प्रक्रिया का व्यापक उपयोग नहीं हुआ है।"
+  made:
+    - {words: L42.3-4, by: agent}
+    - {words: L42.5, by: hindi-repair}
+    - {words: L42.6, by: hindi-repair}
+    - {words: L42.8, by: hindi-repair}
+    - {words: L42.10, by: hindi-repair}
+    - {words: L42.15, by: hindi-repair}
+    - {words: L42.16-17, by: agent}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L43.9, by: hindi-repair}
+    - {words: L43.11, by: agent}
+    - {words: L43.19, by: hindi-repair}
+    - {words: L43.21, by: agent}
+    - {words: L44.5, by: hindi-repair}
+    - {words: L44.6, by: hindi-repair}
+    - {words: L44.9-10, by: agent}
+    - {words: L44.11, by: hindi-repair}
+    - {words: L44.16, by: agent}
+    - {words: L44.18, by: hindi-repair}
+    - {words: L44.22, by: agent}
+    - {words: L44.23-24, by: agent}
+    - {words: L45.2, by: hindi-repair}
+    - {words: L45.3, by: hindi-repair}
+    - {words: L45.5, by: hindi-repair}
+    - {words: L45.7, by: hindi-repair}
+    - {words: L45.15, by: hindi-repair}
+    - {words: L46.2-3, by: agent}
+    - {words: L46.10-11, by: agent}
+    - {words: L46.13, by: hindi-repair}
+    - {words: L46.17, by: hindi-repair}
+    - {words: L46.22, by: agent}
+    - {words: L47.4, by: hindi-repair}
+    - {words: L47.6, by: hindi-repair}
+    - {words: L47.7-8, by: agent}
+    - {words: L47.14, by: hindi-repair}
+    - {words: L47.16, by: hindi-repair}
+- id: "2.4"
+  kind: figure
+  page: 6
+  number: चित्र 9.5
+  text: चित्र 9.5 — सिनेबार
+  crop: [509, 416.2, 587, 528.5]
+  made:
+    - {words: L49.1, by: agent}
+    - {box: true, by: figure-snap}
+- id: "2.5"
+  kind: example
+  page: 6
+  number: उदाहरण 9.3
+  text: उदाहरण 9.3 — सोडियम क्लोराइड (NaCl) में सोडियम और क्लोरीन का द्रव्यमान अनुपात 23:35.5 है। यदि
+    46 g सोडियम पूर्णतः अभिक्रिया करता है तो NaCl के निर्माण के लिए कितनी मात्रा में क्लोरीन की
+    आवश्यकता होगी?
+  made:
+    - {words: L50.5, by: hindi-repair}
+    - {words: L50.7, by: hindi-repair}
+    - {words: L50.10, by: hindi-repair}
+    - {words: L50.12, by: hindi-repair}
+    - {words: L51.6, by: hindi-repair}
+    - {words: L51.13, by: hindi-repair}
+    - {words: L51.18, by: hindi-repair}
+    - {words: L51.19, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+- id: "2.6"
+  kind: text
+  page: 6
+  text: उत्तर — क्लोरीन का आवश्यक द्रव्यमान = (35.5 ÷ 23) × 46 = 71 g
+  made:
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.5, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+- id: "2.7"
+  kind: box
+  page: 6
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 3. किसी यौगिक में सल्फर और ऑक्सीजन के द्रव्यमान का प्रतिशत क्रमशः 40% और 60%
+    है। इसी यौगिक के किसी प्रतिदर्श में 20 g सल्फर है तो ऑक्सीजन का द्रव्यमान कितना होना चाहिए जिससे
+    स्थिर अनुपात के नियम का पालन हो? 4. कार्बन मोनोक्सॉइड (CO) में कार्बन और ऑक्सीजन का द्रव्यमान
+    अनुपात 3:4 है। कार्बन मोनोक्सॉइड बनाने के लिए 9 g कार्बन से ऑक्सीजन की कितनी मात्रा संयोजन
+    करेगी? 5. स्थिर अनुपात का नियम केवल यौगिकों के लिए सत्य होता है परंतु मिश्रणों के लिए नहीं। कारण
+    दीजिए। 6. दो विद्यार्थियों X और Y ने कॉपर और ऑक्सीजन को क्रमशः 4:1 और 8:2 के अनुपात में संयोजित
+    करके कॉपर का ऑक्साइड बनाया। क्या उनके परिणाम स्थिर अनुपात के नियम की पुष्टि करते हैं? व्याख्या
+    कीजिए।
+  made:
+    - {words: L54.1, by: hindi-repair}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L55.1, by: hindi-repair}
+    - {words: L55.2, by: hindi-repair}
+    - {words: L55.3, by: hindi-repair}
+    - {words: L55.6, by: hindi-repair}
+    - {words: L55.7, by: hindi-repair}
+    - {words: L55.8, by: hindi-repair}
+    - {words: L55.9, by: hindi-repair}
+    - {words: L55.10, by: hindi-repair}
+    - {words: L55.11, by: hindi-repair}
+    - {words: L55.15, by: hindi-repair}
+    - {words: L55.16, by: hindi-repair}
+    - {words: L55.17, by: hindi-repair}
+    - {words: L55.18, by: hindi-repair}
+    - {words: L55.19, by: hindi-repair}
+    - {words: L55.20, by: hindi-repair}
+    - {words: L56.1, by: hindi-repair}
+    - {words: L56.5, by: hindi-repair}
+    - {words: L56.6, by: hindi-repair}
+    - {words: L56.7, by: hindi-repair}
+    - {words: L56.8, by: hindi-repair}
+    - {words: L56.9, by: hindi-repair}
+    - {words: L56.10, by: hindi-repair}
+    - {words: L56.11, by: hindi-repair}
+    - {words: L56.12, by: hindi-repair}
+    - {words: L56.13, by: agent}
+    - {words: L56.14, by: hindi-repair}
+    - {words: L56.15-18, by: hindi-repair}
+    - {words: L56.19, by: hindi-repair}
+    - {words: L56.20, by: hindi-repair}
+    - {words: L56.21, by: hindi-repair}
+    - {words: L56.22, by: hindi-repair}
+    - {words: L56.23, by: hindi-repair}
+    - {words: L57.1, by: hindi-repair}
+    - {words: L57.2, by: agent}
+    - {words: L57.4, by: hindi-repair}
+    - {words: L57.5, by: hindi-repair}
+    - {words: L57.7, by: hindi-repair}
+    - {words: L57.8, by: hindi-repair}
+    - {words: L57.9, by: hindi-repair}
+    - {words: L57.10, by: hindi-repair}
+    - {words: L57.12, by: hindi-repair}
+    - {words: L57.13, by: hindi-repair}
+    - {words: L57.14, by: agent}
+    - {words: L57.15, by: hindi-repair}
+    - {words: L57.16, by: hindi-repair}
+    - {words: L57.17, by: hindi-repair}
+    - {words: L58.1, by: hindi-repair}
+    - {words: L58.2, by: hindi-repair}
+    - {words: L58.3, by: hindi-repair}
+    - {words: L58.4, by: hindi-repair}
+    - {words: L58.5, by: hindi-repair}
+    - {words: L58.6, by: hindi-repair}
+    - {words: L58.7, by: hindi-repair}
+    - {words: L58.8-9, by: hindi-repair}
+    - {words: L59.1, by: hindi-repair}
+    - {words: L59.2, by: hindi-repair}
+    - {words: L59.3, by: hindi-repair}
+    - {words: L59.4, by: hindi-repair}
+    - {words: L59.5-6, by: agent}
+    - {words: L59.7, by: hindi-repair}
+    - {words: L59.8, by: hindi-repair}
+    - {words: L59.9, by: hindi-repair}
+    - {words: L59.11, by: hindi-repair}
+    - {words: L59.12, by: hindi-repair}
+    - {words: L59.13-14, by: hindi-repair}
+    - {words: L59.15, by: hindi-repair}
+    - {words: L59.16, by: hindi-repair}
+    - {words: L59.17, by: hindi-repair}
+    - {words: L59.18, by: hindi-repair}
+    - {words: L59.19, by: hindi-repair}
+    - {words: L59.20, by: hindi-repair}
+    - {words: L60.3, by: hindi-repair}
+    - {words: L60.10, by: hindi-repair}
+    - {words: L60.18, by: hindi-repair}
+    - {words: L61.1, by: hindi-repair}
+    - {words: L61.3, by: hindi-repair}
+    - {words: L61.6, by: hindi-repair}
+    - {words: L61.11, by: hindi-repair}
+    - {words: L61.13, by: hindi-repair}
+    - {words: L61.14, by: hindi-repair}
+- id: "2.8"
+  kind: box
+  page: 6
+  title: वैज्ञानिक-परिचय
+  text: वैज्ञानिक-परिचय जोसेफ लुई प्राउस्ट एक प्रसिद्ध फ्रांसीसी रसायनज्ञ थे। इन्हें इनके उल्लेखनीय
+    प्रायोगिक कार्यों के लिए जाना जाता है। इन्होंने निश्चित अनुपात के नियम में योगदान दिया और यह
+    दर्शाया कि रासायनिक यौगिकों में तत्व सदैव द्रव्यमान के एक निश्चित अनुपात में विद्यमान होते हैं।
+    उदाहरणार्थ— प्राउस्ट ने कॉपर कार्बोनेट के संघटन का अध्ययन किया। इन्होंने दर्शाया कि कॉपर
+    कार्बोनेट में कॉपर, कार्बन और ऑक्सीजन के द्रव्यमानों का अनुपात समान होता है जो इस बात पर निर्भर
+    नहीं करता कि उसे किस प्रकार बनाया गया है अथवा किस स्रोत से प्राप्त किया गया है। इनके इस कार्य ने
+    एक महत्त्वपूर्ण आधारशिला रखी जिसने आधुनिक रसायन को आकार देने में सहायता प्रदान की।
+  made:
+    - {words: L21.1, by: hindi-repair}
+    - {words: L22.3, by: agent}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L27.2-5, by: hindi-repair}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L28.7, by: hindi-repair}
+    - {words: L29.1, by: agent}
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.6, by: hindi-repair}
+    - {words: L29.7-10, by: hindi-repair}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L30.5, by: hindi-repair}
+    - {words: L30.6, by: agent}
+    - {words: L31.5-L32.2, by: hindi-repair}
+    - {words: L32.4, by: hindi-repair}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.4, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L35.2-5, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.8, by: agent}
+    - {words: L39.4-7, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+- id: "2.9"
+  kind: text
+  page: 7
+  text: यहाँ जिन दो नियमों की चर्चा की गई है वे डॉल्टन के परमाणु सिद्धांत का आधार तैयार करते हैं। यह
+    सिद्धांत तार्किक रूप से यह समझाने का प्रयास करता है कि पदार्थ एक निश्चित अनुपात में ही क्यों
+    संयोजन करते हैं और किसी रासायनिक अभिक्रिया में द्रव्यमान का ह्रास अथवा सृजन क्यों नहीं होता?
+    डॉल्टन ने कुछ समय पश्चात यह प्रस्तावित कर इनकी व्याख्या की कि किसी रासायनिक अभिक्रिया में परमाणु
+    अविभाज्य रहते हैं और केवल पुनर्व्यवस्थित होते हैं, न तो उनका सृजन होता है और न ही वे नष्ट होते
+    हैं।
+  made:
+    - {words: L1.7, by: hindi-repair}
+    - {words: L1.9, by: hindi-repair}
+    - {words: L1.14, by: hindi-repair}
+    - {words: L1.17, by: hindi-repair}
+    - {words: L1.22, by: hindi-repair}
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2-3, by: agent}
+    - {words: L2.13, by: hindi-repair}
+    - {words: L2.15, by: hindi-repair}
+    - {words: L2.17, by: hindi-repair}
+    - {words: L2.19, by: hindi-repair}
+    - {words: L4.2, by: hindi-repair}
+    - {words: L4.7, by: hindi-repair}
+    - {words: L4.8, by: hindi-repair}
+    - {words: L4.13, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L4.16, by: hindi-repair}
+    - {words: L5.8, by: hindi-repair}
+    - {words: L5.10, by: hindi-repair}
+    - {words: L5.13, by: hindi-repair}
+    - {words: L5.19, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L7.5-6, by: agent}
+    - {words: L7.7, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L7.20, by: hindi-repair}
+    - {words: L7.22, by: hindi-repair}
+- id: "3"
+  kind: section
+  page: 7
+  number: "9.3"
+  title: डॉल्टन का परमाणु सिद्धांत
+  text: 9.3 डॉल्टन का परमाणु सिद्धांत
+  made:
+    - {words: L12.2, by: hindi-repair}
+    - {words: L12.5, by: hindi-repair}
+- id: "3.1"
+  kind: text
+  page: 7
+  text: जॉन डॉल्टन ने अपने परमाणु सिद्धांत को कुछ अभिगृहीतों (postulates) के रूप में प्रस्तावित किया
+    है। इन अभिगृहीतों ने पूर्व के प्रायोगिक अवलोकनों को संयोजित किया और आधुनिक वैज्ञानिक सिद्धांत के
+    लिए एक आधार की भाँति कार्य किया। अभिगृहीत एक ऐसी मूल अभिधारणा है जिसे बिना किसी औपचारिक प्रमाण
+    के सत्य माना जाता है तथा जिससे नवीन विचारों का उद्भव तथा विकास होता है।
+  made:
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.9, by: agent}
+    - {words: L13.13, by: hindi-repair}
+    - {words: L13.14, by: hindi-repair}
+    - {words: L14.1, by: agent}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L14.8-L15.2, by: hindi-repair}
+    - {words: L15.7, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.8, by: agent}
+    - {words: L17.10, by: hindi-repair}
+    - {words: L17.12-13, by: hindi-repair}
+- id: "3.2"
+  kind: text
+  page: 7
+  text: जॉन डॉल्टन के अभिगृहीत— संपूर्ण द्रव्य अत्यंत सूक्ष्म कणों से मिलकर बना होता है जिन्हें परमाणु
+    कहते हैं और ये रासायनिक अभिक्रियाओं में भाग लेते हैं। परमाणु अविभाज्य कण होते हैं जिन्हें किसी
+    भी रासायनिक अभिक्रिया में न तो सृजित किया जा सकता है और न ही नष्ट किया जा सकता है। किसी तत्व के
+    सभी परमाणुओं के द्रव्यमान एवं रासायनिक गुणधर्म समान होते हैं। विभिन्न तत्वों के परमाणुओं के
+    द्रव्यमान एवं रासायनिक गुणधर्म भिन्न-भिन्न होते हैं। परमाणु सरल पूर्णांकों के अनुपात में संयोजित
+    होकर यौगिक बनाते हैं। किसी यौगिक में परमाणुओं की सापेक्ष संख्या एवं उनके प्रकार निश्चित होते
+    हैं।
+  made:
+    - {words: L18.3, by: hindi-repair}
+    - {words: L19.6, by: hindi-repair}
+    - {words: L19.7, by: hindi-repair}
+    - {words: L19.8, by: hindi-repair}
+    - {words: L19.9, by: hindi-repair}
+    - {words: L19.10, by: hindi-repair}
+    - {words: L19.16, by: hindi-repair}
+    - {words: L19.19, by: hindi-repair}
+    - {words: L20.4-5, by: agent}
+    - {words: L20.6, by: hindi-repair}
+    - {words: L20.9, by: hindi-repair}
+    - {words: L23.3, by: hindi-repair}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L23.7, by: hindi-repair}
+    - {words: L23.12, by: hindi-repair}
+    - {words: L25.9, by: hindi-repair}
+    - {words: L27.3, by: agent}
+    - {words: L27.6-7, by: agent}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.12, by: hindi-repair}
+    - {words: L27.15, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L29.3, by: agent}
+    - {words: L29.5-6, by: agent}
+    - {words: L29.8, by: hindi-repair}
+    - {words: L29.11, by: hindi-repair}
+    - {words: L29.12, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L33.12, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L35.5-6, by: agent}
+    - {words: L35.9, by: hindi-repair}
+    - {words: L35.13, by: hindi-repair}
+    - {words: L35.15, by: hindi-repair}
+- id: "3.3"
+  kind: text
+  page: 7
+  text: परमाणुओं और उनके व्यवहार की आधुनिक समझ के विषय में डॉल्टन के अभिगृहीतों ने आधार प्रदान किया।
+  made:
+    - {words: L37.1-2, by: agent}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.11, by: hindi-repair}
+    - {words: L37.12, by: hindi-repair}
+    - {words: L39.1, by: agent}
+- id: "3.4"
+  kind: text
+  page: 7
+  text: उदाहरणार्थ— हाइड्रोजन और ऑक्सीजन परमाणु संयोजन कर जल का निर्माण करते हैं परंतु ये परमाणु न तो
+    स्वयं नष्ट होते हैं एवं न ही किसी अन्य परमाणु में परिवर्तित होते हैं। इसी प्रकार मैग्नीशियम वायु
+    में जलकर मैग्नीशियम ऑक्साइड का एक श्वेत पाउडर बनाता है। इससे यह ज्ञात होता है कि मैग्नीशियम के
+    परमाणु ऑक्सीजन के परमाणुओं के साथ संयोजित होकर मैग्नीशियम ऑक्साइड बनाते हैं।
+  made:
+    - {words: L40.1, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L40.6-L41.2, by: hindi-repair}
+    - {words: L41.6, by: hindi-repair}
+    - {words: L41.8, by: hindi-repair}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L42.4, by: hindi-repair}
+    - {words: L42.6, by: hindi-repair}
+    - {words: L42.11, by: hindi-repair}
+    - {words: L42.13, by: hindi-repair}
+    - {words: L42.14, by: hindi-repair}
+    - {words: L42.16, by: hindi-repair}
+    - {words: L42.19, by: hindi-repair}
+    - {words: L42.21, by: hindi-repair}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L43.3, by: hindi-repair}
+    - {words: L43.6, by: hindi-repair}
+    - {words: L43.10, by: agent}
+    - {words: L43.16, by: hindi-repair}
+    - {words: L44.2, by: hindi-repair}
+    - {words: L44.4-5, by: agent}
+    - {words: L44.10, by: hindi-repair}
+    - {words: L44.11, by: hindi-repair}
+    - {words: L44.13, by: hindi-repair}
+- id: "3.5"
+  kind: box
+  page: 7
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 7. नीचे दिए गए अभिकथन एवं कारण पढ़िए और उनके संबंध में आगे दिए गए विकल्पों में
+    से सही विकल्प का चयन कीजिए। अभिकथन — 2 g हाइड्रोजन 16 g ऑक्सीजन के साथ संयोजित होकर 18 g जल का
+    निर्माण करती है। कारण — डॉल्टन के परमाणु सिद्धांत के अनुसार परमाणु, द्रव्यमान के सरल पूर्णांक
+    अनुपात में संयोजन कर यौगिक बनाते हैं। (i) अभिकथन और कारण दोनों सत्य हैं और कारण, अभिकथन की सही
+    व्याख्या है। (ii) अभिकथन और कारण दोनों सत्य हैं और कारण, अभिकथन की सही व्याख्या नहीं है। (iii)
+    अभिकथन सत्य है परंतु कारण असत्य है। (iv) अभिकथन असत्य है परंतु कारण सत्य है।
+  made:
+    - {words: L45.1, by: hindi-repair}
+    - {words: L45.3, by: hindi-repair}
+    - {words: L46.8, by: hindi-repair}
+    - {words: L46.12, by: hindi-repair}
+    - {words: L46.16, by: hindi-repair}
+    - {words: L46.17, by: hindi-repair}
+    - {words: L46.20, by: hindi-repair}
+    - {words: L47.8, by: hindi-repair}
+    - {words: L47.17, by: hindi-repair}
+    - {words: L48.3, by: hindi-repair}
+    - {words: L48.6, by: hindi-repair}
+    - {words: L48.10, by: hindi-repair}
+    - {words: L48.13, by: hindi-repair}
+    - {words: L48.15, by: hindi-repair}
+    - {words: L48.20, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+    - {words: L49.6, by: hindi-repair}
+    - {words: L49.7, by: hindi-repair}
+    - {words: L49.13, by: hindi-repair}
+    - {words: L50.5, by: hindi-repair}
+    - {words: L50.6, by: hindi-repair}
+    - {words: L50.7, by: hindi-repair}
+    - {words: L50.13, by: hindi-repair}
+    - {words: L50.14, by: hindi-repair}
+    - {words: L51.3, by: hindi-repair}
+    - {words: L51.7, by: hindi-repair}
+    - {words: L52.3, by: hindi-repair}
+    - {words: L52.7, by: hindi-repair}
+- id: "3.6"
+  kind: text
+  page: 7
+  text: इसके पश्चात वैज्ञानिकों ने यह खोजा कि परमाणु किस प्रकार संयोजित होकर अणु बनाते हैं। आइए, इसे
+    समझें!
+  made:
+    - {words: L53.2, by: hindi-repair}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.11-L54.2, by: hindi-repair}
+    - {words: L54.6, by: hindi-repair}
+    - {words: L55.2, by: hindi-repair}
+- id: "3.7"
+  kind: box
+  page: 7
+  title: क्या होगा यदि...
+  text: क्या होगा यदि... परमाणु एक निश्चित अनुपात में संयोजित न होकर किसी भी अनुपात में जुड़ सकते हैं?
+    यह हमारे आस-पास के पदार्थों को किस प्रकार प्रभावित करेगा?
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L1.3, by: agent}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L6.4-7, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L11.2-3, by: agent}
+- id: "3.8"
+  kind: box
+  page: 7
+  title: वैज्ञानिक-परिचय
+  text: वैज्ञानिक-परिचय जॉन डॉल्टन का जन्म इंग्लैंड में हुआ था। वह वर्ष 1793 में एक महाविद्यालय में
+    गणित, भौतिक और रसायन विज्ञान के अध्यापन हेतु मेनचेस्टर चले गए। वहाँ उन्होंने अपना अधिकांश जीवन
+    शिक्षण और शोध करते हुए व्यतीत किया। वर्ष 1808 में इन्होंने अपना परमाणु सिद्धांत प्रस्तुत किया जो
+    द्रव्य के अध्ययन में एक निर्णायक मोड़ सिद्ध हुआ ।
+  made:
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L28.5, by: hindi-repair}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L32.6, by: hindi-repair}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.4, by: hindi-repair}
+    - {words: L34.7, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.4, by: hindi-repair}
+    - {words: L36.6, by: hindi-repair}
+    - {words: L36.7, by: hindi-repair}
+    - {words: L38.1, by: hindi-repair}
+    - {words: L38.2, by: hindi-repair}
+- id: "4"
+  kind: section
+  page: 8
+  number: "9.4"
+  title: परमाणु किस प्रकार संयोजन करते हैं?
+  text: 9.4 परमाणु किस प्रकार संयोजन करते हैं?
+  made:
+    - {words: L2.5-8, by: hindi-repair}
+    - {words: L2.10, by: hindi-repair}
+- id: "4.1"
+  kind: text
+  page: 8
+  text: एक ही तत्व के परमाणु संयोजन कर उस तत्व का अणु बना सकते हैं, उदाहरणार्थ — हाइड्रोजन के एक अणु
+    में दो हाइड्रोजन परमाणु होते हैं। विभिन्न तत्वों के परमाणु संयोजित होकर किसी यौगिक का एक अणु
+    बनाते हैं। उदाहरणार्थ— हाइड्रोजन का एक परमाणु और क्लोरीन का एक परमाणु संयोजन द्वारा हाइड्रोजन
+    क्लोराइड का एक अणु बनाते हैं। अणु को विद्युतरूप से उदासीन किसी कण के रूप में परिभाषित कर सकते
+    हैं जिसमें एक से अधिक परमाणु होते हैं जो स्वतंत्र रूप से अस्तित्व में रह सकता है तथा उस पदार्थ
+    के सभी गुणधर्मों को प्रदर्शित करता है। यह भी स्मरण रखना चाहिए कि कुछ तत्व, जैसे— हीलियम केवल
+    परमाणुओं के रूप में ही अस्तित्व में होता है क्योंकि इसके परमाणु स्थायी होते हैं।
+  made:
+    - {words: L3.3, by: agent}
+    - {words: L3.9, by: agent}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.15, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.8, by: hindi-repair}
+    - {words: L4.9, by: hindi-repair}
+    - {words: L4.10, by: agent}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.8, by: hindi-repair}
+    - {words: L6.11, by: agent}
+    - {words: L6.18, by: hindi-repair}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.5, by: hindi-repair}
+    - {words: L7.11, by: hindi-repair}
+    - {words: L7.13, by: hindi-repair}
+    - {words: L7.16, by: hindi-repair}
+    - {words: L7.17, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.7, by: hindi-repair}
+    - {words: L8.9, by: hindi-repair}
+    - {words: L8.14, by: hindi-repair}
+    - {words: L8.19, by: agent}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L9.3-4, by: agent}
+    - {words: L9.5-6, by: agent}
+    - {words: L9.7, by: hindi-repair}
+    - {words: L9.9, by: hindi-repair}
+    - {words: L9.10, by: hindi-repair}
+    - {words: L9.11, by: hindi-repair}
+    - {words: L9.12, by: hindi-repair}
+    - {words: L9.13, by: hindi-repair}
+    - {words: L9.14, by: hindi-repair}
+    - {words: L9.15, by: hindi-repair}
+    - {words: L9.16, by: hindi-repair}
+    - {words: L9.17, by: hindi-repair}
+    - {words: L9.18, by: hindi-repair}
+    - {words: L9.19, by: hindi-repair}
+    - {words: L9.20, by: hindi-repair}
+- id: "4.2"
+  kind: text
+  page: 8
+  text: "अध्याय 8 ‘एक यात्रा— परमाणु के भीतर’ में आपने अध्ययन किया है कि बाह्यतम (संयोजकता) कोश में 8
+    इलेक्ट्रॉन (2 इलेक्ट्रॉन यदि K बाह्यतम कोश है) वाले परमाणु स्थायी होते हैं। यदि किसी परमाणु के
+    संयोजकता कोश में इलेक्ट्रॉनों की संख्या आठ से कम हो तो वह इलेक्ट्रॉनों को साझा कर, ग्रहण कर अथवा
+    त्याग कर अपने संयोजकता कोश को पूर्ण कर सकता है और स्थायी हो सकता है। इस प्रक्रिया में तत्वों के
+    परमाणु संयोजित होकर यौगिक बनाते हैं। यह सामान्यत: दो प्रकार से होता है जो निम्नलिखित हैं—
+    इलेक्ट्रॉनों की साझेदारी — इस प्रक्रिया में दूसरे परमाणु के साथ कुछ अथवा सभी इलेक्ट्रॉनों को
+    साझा किया जाता है। इलेक्ट्रॉनों का स्थानांतरण — इसके अंतर्गत एक अथवा अधिक संयोजकता इलेक्ट्रॉनों
+    को दूसरे परमाणु को स्थानांतरित किया जाता है अथवा किसी दूसरे परमाणु से एक अथवा एक से अधिक
+    इलेक्ट्रॉनों को ग्रहण किया जाता है।"
+  made:
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.8, by: hindi-repair}
+    - {words: L10.10, by: hindi-repair}
+    - {words: L10.15-18, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.13, by: hindi-repair}
+    - {words: L11.15, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.4, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.13, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.12, by: hindi-repair}
+    - {words: L13.17, by: hindi-repair}
+    - {words: L13.18, by: hindi-repair}
+    - {words: L13.19, by: agent}
+    - {words: L14.2-5, by: hindi-repair}
+    - {words: L14.9, by: hindi-repair}
+    - {words: L14.11, by: hindi-repair}
+    - {words: L14.18, by: hindi-repair}
+    - {words: L14.19, by: hindi-repair}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.8, by: hindi-repair}
+    - {words: L15.16, by: hindi-repair}
+    - {words: L17.2, by: hindi-repair}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.12, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+- id: "4.3"
+  kind: text
+  page: 8
+  text: जब परमाणु संयोजित होते हैं तब निकाय की कुल ऊर्जा व्यक्तिगत परमाणुओं की ऊर्जाओं के योग से कम हो
+    जाती है जिससे परिणामी व्यवस्था अधिक स्थायी हो जाती है। वह बल जो परमाणुओं को एक साथ बाँधे रखता
+    है, रासायनिक आबंध (Chemical Bond) कहलाता है। आइए, इसके विषय में और जानें।
+  made:
+    - {words: L20.5, by: hindi-repair}
+    - {words: L20.10, by: hindi-repair}
+    - {words: L20.11, by: hindi-repair}
+    - {words: L20.12-13, by: agent}
+    - {words: L20.15-16, by: agent}
+    - {words: L21.5, by: agent}
+    - {words: L21.7, by: hindi-repair}
+    - {words: L21.9, by: hindi-repair}
+    - {words: L21.16-17, by: agent}
+    - {words: L22.13, by: hindi-repair}
+    - {words: L22.15, by: hindi-repair}
+- id: "4.4"
+  kind: section
+  page: 8
+  number: 9.4.1
+  title: इलेक्ट्रॉनों की साझेदारी द्वारा आबंधन— सहसंयोजक आबंध
+  text: 9.4.1 इलेक्ट्रॉनों की साझेदारी द्वारा आबंधन— सहसंयोजक आबंध
+  made:
+    - {words: L23.2, by: hindi-repair}
+    - {words: L23.7, by: agent}
+- id: "4.4.1"
+  kind: heading
+  page: 8
+  title: क. तत्वों के अणु
+  text: क. तत्वों के अणु
+  made:
+    - {words: L24.2, by: agent}
+- id: "4.4.2"
+  kind: text
+  page: 8
+  text: आइए, इलेक्ट्रॉनों की साझेदारी द्वारा तत्वों के अणु निर्मित होने के विषय में समझें जिसका वर्णन
+    नीचे किया गया है। हाइड्रोजन अणु के निर्माण पर विचार कीजिए — हाइड्रोजन (परमाणु क्रमांक 1) का
+    इलेक्ट्रॉनिक विन्यास लिखिए। इसके K-कोश में केवल एक इलेक्ट्रॉन है। चूँकि K-कोश में कुल दो
+    इलेक्ट्रॉन ही हो सकते हैं। इसलिए हाइड्रोजन परमाणु को स्थायी होने के लिए एक और इलेक्ट्रॉन की
+    आवश्यकता होती है।
+  made:
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.6, by: agent}
+    - {words: L25.9, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L26.6, by: hindi-repair}
+    - {words: L27.4, by: hindi-repair}
+    - {words: L29.7, by: hindi-repair}
+    - {words: L29.8, by: hindi-repair}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L30.5-6, by: agent}
+    - {words: L30.8, by: hindi-repair}
+    - {words: L31.2-L32.1, by: hindi-repair}
+    - {words: L32.3, by: hindi-repair}
+    - {words: L32.6, by: hindi-repair}
+    - {words: L32.10, by: hindi-repair}
+    - {words: L33.5, by: hindi-repair}
+    - {words: L33.11, by: hindi-repair}
+    - {words: L33.13, by: hindi-repair}
+- id: "4.4.3"
+  kind: text
+  page: 8
+  text: "अत: हाइड्रोजन परमाणु परस्पर एक-एक इलेक्ट्रॉन को साझा कर हाइड्रोजन का एक अणु (H₂) बनाते हैं
+    जैसा कि चित्र 9.6 में दर्शाया गया है। इलेक्ट्रॉनों का सहभाजित युग्म दोनों हाइड्रोजन के नाभिकों
+    को आकर्षित करता है और स्थायी अणु बनाता है। परमाणुओं के मध्य इलेक्ट्रॉनों के सहभाजित युग्म की यह
+    परस्पर क्रिया सहसंयोजी आबंध (covalent bond) कहलाती है। यदि दो परमाणु एक-एक इलेक्ट्रॉन के सहभाजन
+    द्वारा जुड़े हुए हों तो उन्हें एकल आबंध (single bond) द्वारा जुड़ा हुआ कहा जाता है।"
+  made:
+    - {words: L34.4, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L34.14-L36.1, by: agent}
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.6, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L37.10, by: hindi-repair}
+    - {words: L37.12, by: agent}
+    - {words: L37.13-15, by: hindi-repair}
+    - {words: L37.16, by: hindi-repair}
+    - {words: L37.19, by: hindi-repair}
+    - {words: L38.1, by: hindi-repair}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.9-10, by: agent}
+    - {words: L38.12, by: hindi-repair}
+    - {words: L38.13, by: hindi-repair}
+    - {words: L38.15, by: agent}
+    - {words: L38.16, by: hindi-repair}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.3, by: agent}
+    - {words: L39.13, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L40.6, by: hindi-repair}
+    - {words: L40.8, by: hindi-repair}
+    - {words: L40.14, by: hindi-repair}
+- id: "4.4.4"
+  kind: text
+  page: 8
+  text: "इसे सामान्यत: दो परमाणुओं के प्रतीकों के बीच एकल रेखा, जैसे — H-H द्वारा निरूपित किया जाता है।"
+  made:
+    - {words: L41.2, by: hindi-repair}
+    - {words: L41.4-5, by: agent}
+    - {words: L41.7, by: hindi-repair}
+    - {words: L41.11-12, by: hindi-repair}
+- id: "4.4.5"
+  kind: text
+  page: 8
+  text: आइए, क्लोरीन अणु का उदाहरण लें।
+  made:
+    - {words: L42.2, by: hindi-repair}
+    - {words: L42.6, by: hindi-repair}
+- id: "4.4.6"
+  kind: figure
+  page: 8
+  number: चित्र 9.6
+  text: + हाइड्रोजन अणु हाइड्रोजन परमाणु हाइड्रोजन परमाणु चित्र 9.6 —हाइड्रोजन अणु का निर्माण
+  crop: [342.1, 502.2, 590.4, 589.1]
+  made:
+    - {words: L28.1, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L29.9, by: hindi-repair}
+    - {words: L29.10, by: hindi-repair}
+    - {words: L29.11, by: hindi-repair}
+    - {words: L29.12, by: hindi-repair}
+    - {words: L30.10, by: hindi-repair}
+    - {words: L30.12, by: hindi-repair}
+    - {words: L30.13, by: hindi-repair}
+    - {words: L30.14, by: hindi-repair}
+    - {words: L30.15, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.4.7"
+  kind: text
+  page: 9
+  text: क्लोरीन परमाणु के संयोजकता कोश में सात इलेक्ट्रॉन होते हैं। प्रत्येक क्लोरीन परमाणु को स्थायी
+    इलेक्ट्रॉनिक विन्यास प्राप्त करने के लिए एक इलेक्ट्रॉन की आवश्यकता होती है। दोनों क्लोरीन
+    परमाणुओं द्वारा एक-एक इलेक्ट्रॉन साझा करने (सहभाजन) पर एक क्लोरीन अणु का निर्माण होता है जैसा कि
+    चित्र 9.7 में दर्शाया गया है। इलेक्ट्रॉनों का साझा युग्म दोनों क्लोरीन परमाणुओं को एक साथ अणु के
+    रूप में बाँधे रखता है।
+  made:
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L14.10, by: hindi-repair}
+    - {words: L14.11, by: hindi-repair}
+    - {words: L14.12, by: hindi-repair}
+    - {words: L15.1, by: hindi-repair}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.11, by: hindi-repair}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3-4, by: agent}
+    - {words: L16.13, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.10, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+    - {words: L17.14, by: hindi-repair}
+    - {words: L17.17, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.2, by: hindi-repair}
+    - {words: L18.3-4, by: agent}
+    - {words: L18.11, by: hindi-repair}
+- id: "4.4.8"
+  kind: figure
+  page: 9
+  number: चित्र 9.7
+  text: + क्लोरीन परमाणु क्लोरीन क्लोरीन अणु परमाणु चित्र 9.7 — एक क्लोरीन अणु का निर्माण
+  crop: [217.2, 174, 547.4, 292.8]
+  made:
+    - {words: L20.1, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.5, by: hindi-repair}
+    - {words: L36.6, by: hindi-repair}
+    - {words: L36.7, by: hindi-repair}
+    - {words: L36.8, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.4.9"
+  kind: text
+  page: 9
+  text: चूँकि दो परमाणु एक इलेक्ट्रॉन युग्म को साझा करते हैं उन्हें एकल सहसंयोजी आबंध द्वारा जुड़ा हुआ
+    कहा जाता है। अतः क्लोरीन (Cl₂) अणु को Cl-Cl के रूप में निरूपित किया जा सकता है।
+  made:
+    - {words: L37.1-L38.1, by: hindi-repair}
+    - {words: L38.6, by: hindi-repair}
+    - {words: L38.10, by: hindi-repair}
+    - {words: L38.11, by: hindi-repair}
+    - {words: L38.13, by: agent}
+    - {words: L39.2-5, by: hindi-repair}
+    - {words: L39.11, by: hindi-repair}
+    - {words: L39.12-L41.1, by: agent}
+    - {words: L41.7, by: hindi-repair}
+- id: "4.4.10"
+  kind: text
+  page: 9
+  text: आइए, अब ऑक्सीजन अणु में आबंधन को जानें।
+  made:
+    - {words: L43.3, by: hindi-repair}
+    - {words: L43.5, by: hindi-repair}
+    - {words: L43.8, by: hindi-repair}
+- id: "4.4.11"
+  kind: text
+  page: 9
+  text: ऑक्सीजन परमाणु (परमाणु क्रमांक 8) का इलेक्ट्रॉनिक विन्यास लिखिए। आप यह अवलोकन कर सकते हैं कि
+    इसके संयोजकता कोश में छह इलेक्ट्रॉन उपस्थित हैं और इसे अपना अष्टक पूर्ण करने के लिए दो अन्य
+    इलेक्ट्रॉनों की आवश्यकता होती है।
+  made:
+    - {words: L44.1, by: hindi-repair}
+    - {words: L44.8, by: hindi-repair}
+    - {words: L45.4, by: hindi-repair}
+    - {words: L45.7-L46.2, by: hindi-repair}
+    - {words: L46.4, by: hindi-repair}
+    - {words: L46.7, by: hindi-repair}
+    - {words: L46.8, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L47.3, by: hindi-repair}
+    - {words: L47.8, by: hindi-repair}
+    - {words: L47.9, by: hindi-repair}
+    - {words: L47.11, by: hindi-repair}
+- id: "4.4.12"
+  kind: text
+  page: 9
+  text: अतः दोनों ऑक्सीजन परमाणु दो-दो इलेक्ट्रॉन साझा करते हैं और एक ऑक्सीजन अणु (O₂) का निर्माण करते
+    हैं जैसा कि चित्र 9.8 में दर्शाया गया है।
+  made:
+    - {words: L48.2, by: hindi-repair}
+    - {words: L48.3, by: hindi-repair}
+    - {words: L48.9, by: hindi-repair}
+    - {words: L48.12, by: hindi-repair}
+    - {words: L49.2-L51.1, by: agent}
+    - {words: L51.3, by: hindi-repair}
+    - {words: L51.5, by: hindi-repair}
+    - {words: L51.10, by: hindi-repair}
+    - {words: L51.11, by: hindi-repair}
+- id: "4.4.13"
+  kind: figure
+  page: 9
+  number: चित्र 9.8—
+  text: + ऑक्सीजन परमाणु ऑक्सीजन परमाणु ऑक्सीजन अणु चित्र 9.8— एक ऑक्सीजन अणु का निर्माण
+  crop: [235.2, 448.7, 522.9, 549.3]
+  made:
+    - {words: L53.1, by: hindi-repair}
+    - {words: L53.2, by: hindi-repair}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.4, by: hindi-repair}
+    - {words: L53.5, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+    - {words: L54.1, by: hindi-repair}
+    - {words: L54.4, by: hindi-repair}
+    - {words: L54.5, by: hindi-repair}
+    - {words: L54.6, by: hindi-repair}
+    - {words: L54.7, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.4.14"
+  kind: text
+  page: 9
+  text: इसमें दो परमाणु साझा इलेक्ट्रॉनों के दो युग्मों द्वारा जुड़े रहते हैं और एक द्वि-आबंध (double
+    bond) द्वारा परस्पर बंधे रहते हैं। इसे दो ऑक्सीजन परमाणुओं के बीच दो रेखाएँ खींचकर O = O द्वारा
+    निरूपित किया जाता है।
+  made:
+    - {words: L55.1, by: hindi-repair}
+    - {words: L55.5, by: hindi-repair}
+    - {words: L55.8, by: hindi-repair}
+    - {words: L55.10, by: hindi-repair}
+    - {words: L55.12, by: hindi-repair}
+    - {words: L56.2, by: hindi-repair}
+    - {words: L56.5, by: hindi-repair}
+    - {words: L56.8, by: hindi-repair}
+    - {words: L56.9-10, by: agent}
+    - {words: L56.14-15, by: agent}
+    - {words: L56.16, by: hindi-repair}
+- id: "4.4.15"
+  kind: heading
+  page: 9
+  title: ख. यौगिकों के अणु
+  text: ख. यौगिकों के अणु
+  made:
+    - {words: L58.2, by: hindi-repair}
+- id: "4.4.16"
+  kind: text
+  page: 9
+  text: भाग 9.4.1 क में आपने तत्वों के अणुओं के निर्माण के विषय में सीखा है जहाँ एक ही तत्व के दो
+    परमाणु संयोजित होते हैं। क्या होगा यदि दो भिन्न तत्वों के परमाणु संयोजित हों? आइए, इसे हाइड्रोजन
+    क्लोराइड अणु के निर्माण के उदाहरण द्वारा समझें।
+  made:
+    - {words: L61.4, by: hindi-repair}
+    - {words: L61.6, by: agent}
+    - {words: L61.8-9, by: agent}
+    - {words: L61.11, by: hindi-repair}
+    - {words: L61.14, by: hindi-repair}
+    - {words: L61.20, by: agent}
+    - {words: L62.3, by: hindi-repair}
+    - {words: L62.4, by: hindi-repair}
+    - {words: L62.8, by: hindi-repair}
+    - {words: L62.9, by: agent}
+    - {words: L62.13, by: hindi-repair}
+    - {words: L62.17, by: hindi-repair}
+    - {words: L63.3, by: hindi-repair}
+    - {words: L63.7, by: hindi-repair}
+- id: "4.4.17"
+  kind: text
+  page: 9
+  text: आप इसे निम्नलिखित चरणों के उपयोग द्वारा समझ सकते हैं— हाइड्रोजन और क्लोरीन के परमाणुओं का
+    इलेक्ट्रॉनिक विन्यास लिखिए (हाइड्रोजन का परमाणु क्रमांक 1 और क्लोरीन का 17 है)। क्लोरीन को अपना
+    अष्टक और हाइड्रोजन को अपना द्विक (duplet) पूर्ण करने के लिए आवश्यक इलेक्ट्रॉनों की संख्या की
+    गणना कीजिए।
+  made:
+    - {words: L64.3, by: hindi-repair}
+    - {words: L64.4, by: hindi-repair}
+    - {words: L64.10, by: hindi-repair}
+    - {words: L65.4, by: hindi-repair}
+    - {words: L65.6-7, by: agent}
+    - {words: L65.10, by: hindi-repair}
+    - {words: L66.4, by: hindi-repair}
+    - {words: L67.2, by: hindi-repair}
+    - {words: L67.5, by: hindi-repair}
+    - {words: L67.12, by: hindi-repair}
+    - {words: L67.16, by: hindi-repair}
+    - {words: L68.1, by: hindi-repair}
+    - {words: L68.3, by: hindi-repair}
+- id: "4.4.18"
+  kind: box
+  page: 9
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 8. नाइट्रोजन में पाँच संयोजकता इलेक्ट्रॉन होते हैं। नाइट्रोजन अणु (N₂) की
+    संरचना आरेखित कीजिए। 9. फ्लुओरीन का परमाणु क्रमांक 9 है। फ्लुओरीन अणु (F₂) के निर्माण की
+    व्याख्या कीजिए।
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L1.3, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.5-L3.2, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L5-L7.1, by: agent}
+    - {words: L7.3-L8.2, by: hindi-repair}
+    - {words: L8.3-4, by: agent}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.3-L12.1, by: agent}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+- id: "4.4.19"
+  kind: box
+  page: 9
+  title: एकता में शक्ति...
+  text: एकता में शक्ति... जिस प्रकार परमाणु सहसंयोजी आबंध बनाने के लिए इलेक्ट्रॉन साझा करते हैं उसी
+    प्रकार हम भी अपने आस-पास के व्यक्तियों के साथ परस्पर साझेदारी एवं देखभाल की भावना द्वारा घनिष्ठ
+    संबंध बना सकते हैं। इस प्रकार की साझेदारी से एकता और स्थायित्व प्राप्त होता है जिससे एक सशक्त
+    समाज की नींव बनती है और अंततः एक सशक्त राष्ट्र का निर्माण होता है।
+  made:
+    - {words: L22.1, by: agent}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.3, by: agent}
+    - {words: L23.4, by: agent}
+    - {words: L25.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L30.1, by: agent}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L31.1, by: agent}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L31.6, by: hindi-repair}
+    - {words: L32.4, by: agent}
+    - {words: L32.6, by: hindi-repair}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+- id: "4.4.20"
+  kind: text
+  page: 10
+  text: आपने ध्यान दिया होगा कि हाइड्रोजन और क्लोरीन दोनों के परमाणुओं को स्थायी इलेक्ट्रॉनिक विन्यास
+    प्राप्त करने के लिए एक-एक इलेक्ट्रॉन की आवश्यकता है। अतः दोनों परमाणु एक-एक इलेक्ट्रॉन साझा करके
+    हाइड्रोजन क्लोराइड का एक अणु बनाते हैं जैसा कि चित्र 9.9 में दर्शाया गया है।
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.9, by: hindi-repair}
+    - {words: L2.11-12, by: agent}
+    - {words: L2.14, by: hindi-repair}
+    - {words: L2.16, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.8, by: hindi-repair}
+    - {words: L3.11, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.8, by: hindi-repair}
+    - {words: L4.13, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+- id: "4.4.21"
+  kind: figure
+  page: 10
+  number: चित्र 9.9—
+  text: + हाइड्रोजन परमाणु क्लोरीन परमाणु हाइड्रोजन क्लोराइड अणु चित्र 9.9— हाइड्रोजन क्लोराइड अणु का
+    निर्माण
+  crop: [119.3, 138.8, 404.7, 240.5]
+  made:
+    - {words: L6.1, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.4, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.6, by: hindi-repair}
+    - {words: L6.7, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.5, by: hindi-repair}
+    - {words: L7.6, by: hindi-repair}
+    - {words: L7.7, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.4.22"
+  kind: text
+  page: 10
+  text: चूँकि एक हाइड्रोजन क्लोराइड अणु में हाइड्रोजन और क्लोरीन परमाणु इलेक्ट्रॉनों को साझा करके
+    जुड़े हैं, अतःयह एक सहसंयोजी यौगिक है। इसके साथ ही चूँकि हाइड्रोजन और क्लोरीन परमाणु
+    इलेक्ट्रॉनों का एक युग्म साझा करते हैं, वे एकल आबंध द्वारा जुड़े होते हैं और इसे H-Cl द्वारा
+    निरूपित किया जाता है।
+  made:
+    - {words: L9.1-L10.1, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L10.9, by: hindi-repair}
+    - {words: L10.11, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: agent}
+    - {words: L11.5, by: agent}
+    - {words: L11.11-L12.1, by: hindi-repair}
+    - {words: L12.4, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+    - {words: L13.13, by: hindi-repair}
+- id: "4.4.23"
+  kind: text
+  page: 10
+  text: आप यह जानते हैं कि हाइड्रोजन और ऑक्सीजन संयोजित होकर जल निर्मित करते हैं। स्थायी इलेक्ट्रॉनिक
+    विन्यास प्राप्त करने के लिए हाइड्रोजन को केवल एक और ऑक्सीजन को दो इलेक्ट्रॉनों की आवश्यकता होती
+    है। ऑक्सीजन अपने दो इलेक्ट्रॉन किसी दूसरे ऐसे परमाणु से किस प्रकार साझा कर सकता है जिसे एक ही
+    इलेक्ट्रॉन की आवश्यकता हो? दो हाइड्रोजन परमाणुओं द्वारा अपने एक-एक इलेक्ट्रॉन को ऑक्सीजन परमाणु
+    के साथ साझा करने से ऐसा संभव होता है जैसा कि चित्र 9.10 में दर्शाया गया है।
+  made:
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.8, by: hindi-repair}
+    - {words: L15.12, by: hindi-repair}
+    - {words: L15.14, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.10-11, by: agent}
+    - {words: L17.14, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.6, by: hindi-repair}
+    - {words: L19.11-14, by: hindi-repair}
+    - {words: L23.11, by: hindi-repair}
+    - {words: L23.15-16, by: agent}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.4, by: hindi-repair}
+- id: "4.4.24"
+  kind: figure
+  page: 10
+  number: चित्र 9.10—
+  text: + + हाइड्रोजन परमाणु ऑक्सीजन परमाणु हाइड्रोजन परमाणु चित्र 9.10— जल के अणु का निर्माण जल अणु
+  crop: [108.9, 391.1, 420.7, 485.6]
+  made:
+    - {words: L34.3, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L35.5, by: hindi-repair}
+    - {words: L35.6, by: hindi-repair}
+    - {words: L35.7, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.4.25"
+  kind: text
+  page: 10
+  text: अतः जल के अणु को H₂O द्वारा निरुपित किया जाता है जो दो हाइड्रोजन परमाणुओं और एक ऑक्सीजन परमाणु
+    की उपस्थिति को इंगित करता है।
+  made:
+    - {words: L37.6-L39.1, by: agent}
+    - {words: L39.3, by: agent}
+    - {words: L39.10-11, by: agent}
+    - {words: L40.1, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L40.6-9, by: hindi-repair}
+- id: "4.4.26"
+  kind: box
+  page: 10
+  title: विज्ञान एवं समाज
+  text: विज्ञान एवं समाज जब परमाणुओं के नाभिक टूटते हैं अथवा जुड़ते हैं और नए तत्वों का निर्माण करते
+    हैं तो एक बड़ी मात्रा में ऊर्जा उत्सर्जित करते हैं। इसे परमाण्विक अथवा नाभिकीय ऊर्जा कहते हैं और
+    यह आधुनिक जीवन में अत्यंत महत्त्वपूर्ण भूमिका निभाती है। विद्युत ऊर्जा के उत्पादन के अतिरिक्त
+    इसका उपयोग औषधि, वैज्ञानिक अनुसंधान और अंतरिक्ष की खोज में किया जाता है। नाभिकीय शक्ति संयंत्रों
+    में नाभिकीय अभिक्रियाओं की ऊष्मीय ऊर्जा भाप उत्पन्न करती है जो टरबाइन को प्रचालित करती है और
+    विद्युत उत्पन्न करती है, यह जीवाश्म ईंधनों का एक स्वच्छ विकल्प है। भारत में राजा रमन्ना जैसे
+    वैज्ञानिकों ने राष्ट्र के नाभिकीय ऊर्जा कार्यक्रम का विकास और राष्ट्र विकास के लिए इसके
+    शांतिपूर्ण उपयोग को बढ़ावा देकर महत्त्वपूर्ण योगदान दिया है।
+  made:
+    - {words: L47.1, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L47.3, by: hindi-repair}
+    - {words: L48.2-3, by: agent}
+    - {words: L48.7, by: hindi-repair}
+    - {words: L48.10, by: hindi-repair}
+    - {words: L48.13, by: agent}
+    - {words: L48.15, by: hindi-repair}
+    - {words: L48.17, by: hindi-repair}
+    - {words: L48.20, by: hindi-repair}
+    - {words: L48.22, by: hindi-repair}
+    - {words: L48.23, by: hindi-repair}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+    - {words: L49.8, by: hindi-repair}
+    - {words: L49.10, by: hindi-repair}
+    - {words: L49.15, by: hindi-repair}
+    - {words: L49.16, by: hindi-repair}
+    - {words: L49.17, by: agent}
+    - {words: L50.5, by: hindi-repair}
+    - {words: L50.7, by: hindi-repair}
+    - {words: L50.9, by: hindi-repair}
+    - {words: L51.4, by: hindi-repair}
+    - {words: L51.9, by: hindi-repair}
+    - {words: L51.10, by: hindi-repair}
+    - {words: L51.11, by: hindi-repair}
+    - {words: L51.13-14, by: agent}
+    - {words: L51.16, by: hindi-repair}
+    - {words: L51.17, by: hindi-repair}
+    - {words: L52.1, by: hindi-repair}
+    - {words: L52.12, by: hindi-repair}
+    - {words: L52.16, by: hindi-repair}
+    - {words: L52.17, by: agent}
+    - {words: L52.20, by: hindi-repair}
+    - {words: L53.1, by: hindi-repair}
+    - {words: L53.4, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+    - {words: L53.8, by: hindi-repair}
+    - {words: L53.10, by: hindi-repair}
+    - {words: L53.13, by: hindi-repair}
+    - {words: L53.14, by: hindi-repair}
+    - {words: L53.18, by: hindi-repair}
+    - {words: L54.4, by: hindi-repair}
+    - {words: L54.7, by: hindi-repair}
+    - {words: L54.9, by: agent}
+- id: "4.4.27"
+  kind: heading
+  page: 10
+  title: ग. सहसंयोजी यौगिकों का नामकरण
+  text: ग. सहसंयोजी यौगिकों का नामकरण
+  made:
+    - {words: L55.2, by: agent}
+    - {words: L55.3, by: hindi-repair}
+- id: "4.4.28"
+  kind: text
+  page: 10
+  text: सहसंयोजी यौगिकों का नामकरण यौगिक में प्रत्येक तत्व के परमाणुओं की संख्या को इंगित करके किया
+    जाता है। इन यौगिकों के नामकरण के लिए एक उपसर्ग प्रणाली का उपयोग किया जाता है जो किसी अणु में
+    प्रत्येक तत्व के परमाणुओं की संख्या को इंगित करती है। प्रथम तत्व का नाम सामान्य ही रखा जाता है
+    जबकि दूसरे तत्व के नाम के अंत में आइड (-ide) लगाया जाता है। उपसर्ग, जैसे — मोनो-(1), डाइ-(2),
+    ट्राइ-(3), टेट्रा-(4), पेन्टा-(5), हेक्सा-(6) इत्यादि परमाणुओं की संख्या व्यक्त करते हैं। यद्यपि
+    प्रथम तत्व के लिए मोनो को सामान्यतः नहीं लिखा जाता है परंतु दूसरे तत्व के लिए इसका उपयोग किया
+    जाता है। तत्व के अंग्रेजी नाम में यदि कोई उपसर्ग ‘o’ या ‘a’ के साथ समाप्त होता है और तत्व के नाम
+    का प्रारंभ स्वर (vowel) के साथ आरंभ होता है तो अंतिम स्वर को छोड़ दिया जाता है (उदाहरणार्थ—
+    मोनोक्सॉइड– monoxide , पेंटऑक्साइड –pentoxide)। यदि उपसर्ग ‘i’ के साथ समाप्त हो तब उच्चारण के
+    लिए इसे रख लिया जाता है, (उदाहरणार्थ, डाइऑक्साइड – dioxide, ट्राइऑक्साइड – trioxide)।
+  made:
+    - {words: L56.1-L58.16, by: agent}
+    - {words: L59.4, by: hindi-repair}
+    - {words: L59.10, by: hindi-repair}
+    - {words: L60.1, by: hindi-repair}
+    - {words: L60.2, by: hindi-repair}
+    - {words: L60.3, by: agent}
+    - {words: L60.5-6, by: agent}
+    - {words: L60.8, by: hindi-repair}
+    - {words: L60.14, by: agent}
+    - {words: L60.17, by: hindi-repair}
+    - {words: L61.3, by: agent}
+    - {words: L61.8, by: hindi-repair}
+    - {words: L61.9, by: agent}
+    - {words: L61.14, by: hindi-repair}
+    - {words: L1.2, page: 11, by: agent}
+    - {words: L1.3, page: 11, by: agent}
+    - {words: L1.4, page: 11, by: agent}
+    - {words: L1.5, page: 11, by: hindi-repair}
+    - {words: L1.6-7, page: 11, by: agent}
+    - {words: L1.9, page: 11, by: hindi-repair}
+    - {words: L1.10, page: 11, by: hindi-repair}
+    - {words: L1.12, page: 11, by: hindi-repair}
+    - {words: L1.15, page: 11, by: agent}
+    - {words: L2.5, page: 11, by: hindi-repair}
+    - {words: L2.6, page: 11, by: hindi-repair}
+    - {words: L2.12, page: 11, by: agent}
+    - {words: L3.1, page: 11, by: agent}
+    - {words: L3.5, page: 11, by: hindi-repair}
+    - {words: L3.8, page: 11, by: hindi-repair}
+    - {words: L3.14, page: 11, by: hindi-repair}
+    - {words: L3.18, page: 11, by: agent}
+    - {words: L4.1, page: 11, by: hindi-repair}
+    - {words: L4.9-12, page: 11, by: hindi-repair}
+    - {words: L4.13, page: 11, by: hindi-repair}
+    - {words: L4.15, page: 11, by: hindi-repair}
+    - {words: L4.19, page: 11, by: hindi-repair}
+    - {words: L4.20, page: 11, by: agent}
+    - {words: L5.3, page: 11, by: agent}
+    - {words: L5.6, page: 11, by: hindi-repair}
+    - {words: L5.10, page: 11, by: hindi-repair}
+    - {words: L5.13, page: 11, by: hindi-repair}
+    - {words: L6.5, page: 11, by: hindi-repair}
+    - {words: L6.6, page: 11, by: hindi-repair}
+    - {words: L6.9, page: 11, by: agent}
+- id: "4.4.29"
+  kind: box
+  page: 10
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 10. निम्नलिखित अणुओं का निर्माण दर्शाइए— (i) कार्बन डाइऑक्साइड (CO₂) (ii)
+    हाइड्रोजन सल्फाइड (H₂S) (iii) अमोनिया (NH₃) 11. निऑन (परमाणु क्रमांक 10) अपने संयोजकता
+    इलेक्ट्रॉनों को न तो स्थानांतरित करता है और न ही साझा करता है। व्याख्या कीजिए।
+  made:
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L12.7, by: hindi-repair}
+    - {words: L12.8-9, by: agent}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L20-L22, by: agent}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.2-L28, by: agent}
+    - {words: L30.3-L32, by: agent}
+    - {words: L41.1, by: agent}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L44.1, by: hindi-repair}
+    - {words: L46.1, by: hindi-repair}
+- id: "4.4.30"
+  kind: heading
+  page: 11
+  title: उदाहरण
+  text: उदाहरण
+- id: "4.4.31"
+  kind: text
+  page: 11
+  text: CO का नाम कार्बन मोनोक्सॉइड (carbon monoxide) के रूप में लिखा जाता है न कि कार्बन मोनो ऑक्साइड
+    (carbon monooxide) के रूप में। CO₂ को कार्बन डाइऑक्साइड नाम दिया जाता है (न कि मोनोकार्बन
+    डाइऑक्साइड)। CS₂ को कार्बन डाइसल्फाइड नाम दिया जाता है जिसमें दो सल्फर परमाणु प्रदर्शित हो रहे
+    हैं। PCl₃ को फॉस्फोरस ट्राइक्लोराइड नाम दिया जाता है जिसमें तीन क्लोरीन परमाणु प्रदर्शित हो रहे
+    हैं। SF₆ को सल्फर हेक्साफ्लुओराइड नाम दिया जाता है जिसमें छह फ्लुओरीन परमाणु प्रदर्शित हो रहे
+    हैं। N₂O₄ को डाइनाइट्रोजन टेट्रॉक्साइड नाम दिया जाता है (न कि टेट्राऑक्साइड)। N₂O₅ को
+    डाइनाइट्रोजन पेंटऑक्साइड नाम दिया जाता है।
+  made:
+    - {words: L8.5, by: hindi-repair}
+    - {words: L8.6, by: agent}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L8.17, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.6, by: hindi-repair}
+    - {words: L10.2-L11.1, by: agent}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.10, by: agent}
+    - {words: L12.11, by: hindi-repair}
+    - {words: L13.2-L14.1, by: agent}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.3, by: agent}
+    - {words: L15.8, by: hindi-repair}
+    - {words: L15.10, by: hindi-repair}
+    - {words: L15.12, by: hindi-repair}
+    - {words: L15.15, by: hindi-repair}
+    - {words: L16.2-L17.1, by: agent}
+    - {words: L18.2, by: hindi-repair}
+    - {words: L18.3, by: agent}
+    - {words: L18.8, by: hindi-repair}
+    - {words: L18.10, by: hindi-repair}
+    - {words: L18.12, by: hindi-repair}
+    - {words: L18.15, by: hindi-repair}
+    - {words: L19.2-L20.1, by: agent}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.3, by: agent}
+    - {words: L21.8, by: hindi-repair}
+    - {words: L21.10, by: hindi-repair}
+    - {words: L21.12, by: hindi-repair}
+    - {words: L21.15, by: hindi-repair}
+    - {words: L22.2-L25.1, by: agent}
+    - {words: L26.2, by: agent}
+    - {words: L26.3, by: agent}
+    - {words: L26.10, by: agent}
+    - {words: L27.2-L30.1, by: agent}
+    - {words: L31.2, by: agent}
+    - {words: L31.3, by: agent}
+- id: "4.4.32"
+  kind: text
+  page: 11
+  text: जब सूत्र में प्रथम तत्व हाइड्रोजन हो तो हाइड्रोजन से पहले कोई उपसर्ग नहीं जोड़ा जाता है चाहे
+    परमाणुओं की संख्या कुछ भी हो। उदाहरण के लिए— H₂S को हाइड्रोजन सल्फाइड नाम दिया जाता है न कि
+    डाइहाइड्रोजन सल्फाइड।
+  made:
+    - {words: L32.3, by: hindi-repair}
+    - {words: L32.5, by: agent}
+    - {words: L32.13, by: hindi-repair}
+    - {words: L32.14, by: hindi-repair}
+    - {words: L32.15, by: agent}
+    - {words: L33.1-4, by: agent}
+    - {words: L33.6-L34.2, by: hindi-repair}
+    - {words: L34.9-L36.1, by: agent}
+    - {words: L36.4, by: hindi-repair}
+    - {words: L37.3, by: agent}
+    - {words: L37.4, by: hindi-repair}
+- id: "4.4.33"
+  kind: text
+  page: 11
+  text: कुछ द्विअंगी यौगिकों को उनके सामान्य नामों से जाना जाता है। उदाहरणार्थ— H₂O जिसे हाइड्रोजन
+    मोनोक्साइड नाम दिया जाना चाहिए उसे सामान्यतः जल के नाम से जाना जाता है। इसी प्रकार NH₃ जो कि
+    वास्तव में नाइट्रोजन ट्राइहाइड्राइड है, उसे अमोनिया के रूप में जाना जाता है।
+  made:
+    - {words: L38.2-5, by: agent}
+    - {words: L38.6, by: hindi-repair}
+    - {words: L38.9, by: hindi-repair}
+    - {words: L38.10, by: hindi-repair}
+    - {words: L38.15, by: hindi-repair}
+    - {words: L38.16-L40.1, by: agent}
+    - {words: L41.1, by: hindi-repair}
+    - {words: L41.7, by: hindi-repair}
+    - {words: L41.17-L42.1, by: agent}
+    - {words: L44.2, by: hindi-repair}
+    - {words: L44.3, by: hindi-repair}
+    - {words: L44.5, by: agent}
+    - {words: L44.11, by: hindi-repair}
+- id: "4.5"
+  kind: section
+  page: 11
+  number: 9.4.2
+  title: इलेक्ट्रॉन स्थानांतरण द्वारा आबंधन — आयनिक आबंध
+  text: 9.4.2 इलेक्ट्रॉन स्थानांतरण द्वारा आबंधन — आयनिक आबंध
+  made:
+    - {words: L45.3, by: hindi-repair}
+- id: "4.5.1"
+  kind: text
+  page: 11
+  text: यदि किसी परमाणु के संयोजकता कोश में चार से कम इलेक्ट्रॉन होते हैं तो वह सामान्यतः स्थायी
+    इलेक्ट्रॉनिक विन्यास प्राप्त करने हेतु अपने संयोजकता इलेक्ट्रॉनों को त्याग देता है। अध्याय 8 ‘एक
+    यात्रा — परमाणु के भीतर’ की तालिका 8.4 में दिए गए प्रथम 18 तत्वों के इलेक्ट्रॉनिक विन्यासों का
+    उपयोग करके चार ऐसे तत्वों की पहचान कीजिए। चार से अधिक संयोजकता इलेक्ट्रॉन वाले परमाणु अष्टक
+    पूर्ण करने के लिए सामान्यतः इलेक्ट्रॉन ग्रहण करते हैं अथवा साझा करते हैं।
+  made:
+    - {words: L46.7, by: hindi-repair}
+    - {words: L46.13, by: hindi-repair}
+    - {words: L46.16, by: hindi-repair}
+    - {words: L46.17, by: hindi-repair}
+    - {words: L47.1, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L47.6-L48.2, by: hindi-repair}
+    - {words: L48.3, by: hindi-repair}
+    - {words: L48.5, by: hindi-repair}
+    - {words: L48.8, by: hindi-repair}
+    - {words: L48.11, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+    - {words: L49.10, by: agent}
+    - {words: L49.13, by: hindi-repair}
+    - {words: L50.1, by: agent}
+    - {words: L50.9, by: hindi-repair}
+    - {words: L50.12, by: hindi-repair}
+    - {words: L50.13, by: hindi-repair}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.5, by: hindi-repair}
+    - {words: L51.9, by: hindi-repair}
+- id: "4.5.2"
+  kind: text
+  page: 11
+  text: आप सोडियम क्लोराइड (साधारण नमक) से परिचित हैं जिसका रासायनिक सूत्र NaCl है। आइए , NaCl में
+    आबंधन का उदाहरण लें।
+  made:
+    - {words: L52.3, by: hindi-repair}
+    - {words: L52.8, by: hindi-repair}
+    - {words: L53.2, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+- id: "4.5.3"
+  kind: text
+  page: 11
+  text: सोडियम का परमाणु क्रमांक 11 है। इसके संयोजकता कोश में केवल एक इलेक्ट्रॉन है और यह इस संयोजकता
+    इलेक्ट्रॉन को त्यागकर स्थायी इलेक्ट्रॉनिक विन्यास प्राप्त कर सकता है। क्या यह एक इलेक्ट्रॉन खोकर
+    भी उदासीन ही रहेगा? यदि नहीं, तो इस पर क्या आवेश होगा और क्यों?
+  made:
+    - {words: L54.10, by: hindi-repair}
+    - {words: L54.11-12, by: agent}
+    - {words: L55.4, by: hindi-repair}
+    - {words: L55.5, by: hindi-repair}
+    - {words: L55.7, by: hindi-repair}
+    - {words: L55.8, by: hindi-repair}
+    - {words: L55.12, by: hindi-repair}
+    - {words: L56.5, by: agent}
+    - {words: L56.7, by: hindi-repair}
+    - {words: L56.11, by: hindi-repair}
+    - {words: L56.15, by: hindi-repair}
+- id: "4.5.4"
+  kind: text
+  page: 11
+  text: जब सोडियम परमाणु (चित्र 9.11 क) अपना संयोजकता इलेक्ट्रॉन त्यागता है तो यह एक धनावेशी स्पीशीज
+    बन जाता है जिसे सोडियम धनायन (cation) कहते हैं और Na⁺ के रूप में निरूपित करते हैं (चित्र 9.11
+    ख)। ऐसा इसलिए होता है क्योंकि इसमें 11 प्रोटॉन और 10 इलेक्ट्रॉन होते हैं।
+  made:
+    - {words: L57.10, by: hindi-repair}
+    - {words: L57.15, by: agent}
+    - {words: L58.1, by: agent}
+    - {words: L58.10, by: hindi-repair}
+    - {words: L58.12-13, by: agent}
+    - {words: L58.16, by: hindi-repair}
+    - {words: L58.19, by: hindi-repair}
+    - {words: L59.8, by: hindi-repair}
+    - {words: L59.9, by: hindi-repair}
+    - {words: L59.16, by: hindi-repair}
+- id: "4.5.5"
+  kind: figure
+  page: 11
+  number: चित्र 9.11—
+  text: + सोडियम द्वारा एक इलेक्ट्रॉन का त्याग करना + e⁻ (ख) सोडियम धनायन (Na⁺) (क) सोडियम परमाणु (Na)
+    चित्र 9.11— सोडियम धनायन का निर्माण
+  crop: [226, 662.2, 493.3, 768.6]
+  made:
+    - {words: L62.3, by: hindi-repair}
+    - {words: L66.2-3, by: agent}
+    - {words: L67.4-6, by: agent}
+    - {words: L69.6, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.5.6"
+  kind: text
+  page: 12
+  text: दूसरी ओर क्लोरीन परमाणु का इलेक्ट्रॉनिक विन्यास यह दर्शाता है कि इसमें सात संयोजकता इलेक्ट्रॉन
+    हैं (चित्र 9.12 क)। यह किसी दूसरे परमाणु से एक इलेक्ट्रॉन प्राप्त करके स्थायी इलेक्ट्रॉनिक
+    विन्यास प्राप्त कर सकता है। एक अतिरिक्त इलेक्ट्रॉन प्राप्त करने के पश्चात इस पर एक इकाई ऋण आवेश
+    आ जाता है और इसे क्लोरीन का ऋणायन (anion) कहते हैं और इसे क्लोराइड भी कहा जाता है। इसे Cl⁻ से
+    निरूपित किया जाता है (चित्र 9.12 ख)।
+  made:
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.7, by: hindi-repair}
+    - {words: L2.9, by: hindi-repair}
+    - {words: L2.12, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.12, by: hindi-repair}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.16, by: hindi-repair}
+    - {words: L3.17, by: hindi-repair}
+    - {words: L4.5, by: hindi-repair}
+    - {words: L4.7, by: hindi-repair}
+    - {words: L4.10, by: hindi-repair}
+    - {words: L4.15, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.8, by: hindi-repair}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L5.17-18, by: agent}
+- id: "4.5.7"
+  kind: figure
+  page: 12
+  number: चित्र 9.12—
+  text: – + e⁻ क्लोरीन द्वारा एक इलेक्ट्रॉन ग्रहण करना (क) क्लोरीन परमाणु (Cl) (ख) क्लोराइड आयन (Cl⁻)
+    चित्र 9.12— एक क्लोराइड आयन का निर्माण
+  crop: [144.1, 168.7, 439.9, 285.1]
+  made:
+    - {words: L8.2-3, by: agent}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.8-10, by: agent}
+    - {words: L12.4, by: hindi-repair}
+    - {words: L12.7, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.5.8"
+  kind: text
+  page: 12
+  text: धनायन और ऋणायन संयुक्त रूप से आयन कहलाते हैं। जब एक बार सोडियम और क्लोराइड आयन बन जाते हैं तो
+    अपने विपरीत आवेशों के कारण वे स्थिर विद्युत आकर्षण बल द्वारा परस्पर जुड़े रहते हैं (चित्र 9.13)।
+    विपरीत आवेश वाले आयनों के मध्य यह स्थिर विद्युत आकर्षण बल जो उन्हें बाँधे रखता है, आयनिक आबंध
+    (ionic bond) कहलाता है।
+  made:
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.9, by: hindi-repair}
+    - {words: L13.15, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.7, by: hindi-repair}
+    - {words: L14.11, by: hindi-repair}
+    - {words: L14.13, by: hindi-repair}
+    - {words: L14.16, by: hindi-repair}
+    - {words: L14.17, by: hindi-repair}
+    - {words: L14.19, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L15.8, by: hindi-repair}
+    - {words: L15.10, by: hindi-repair}
+    - {words: L15.12, by: hindi-repair}
+    - {words: L15.15, by: hindi-repair}
+- id: "4.5.9"
+  kind: figure
+  page: 12
+  number: चित्र 9.13—
+  text: Na. + Cl Na⁺ + Cl⁻ NaCl चित्र 9.13— इलेक्ट्रॉन के स्थानांतरण द्वारा सोडियम क्लोराइड का निर्माण
+  crop: [173.6, 356.6, 412.4, 397.1]
+  made:
+    - {words: L17.4-5, by: agent}
+    - {words: L17.7-L18.1, by: agent}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.3, by: hindi-repair}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.5, by: hindi-repair}
+    - {words: L20.6, by: hindi-repair}
+    - {words: L20.7, by: hindi-repair}
+    - {words: L20.8, by: hindi-repair}
+    - {words: L20.9, by: hindi-repair}
+    - {words: L20.10, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.5.10"
+  kind: box
+  page: 12
+  title: जिज्ञासा-सूत्र
+  text: जिज्ञासा-सूत्र आयनिक यौगिक सामान्यतः एकल इकाई के रूप में नहीं पाए जाते हैं। वे त्रिविमीय (3-D)
+    क्रिस्टल बनाते हैं जिसमें आयन पुनरावृत्ति प्रतिरूप में व्यवस्थित होते हैं। उदाहरण के लिए— सोडियम
+    क्लोराइड (NaCl) (चित्र 9.14 क) में प्रत्येक सोडियम आयन (Na⁺) छह क्लोराइड आयनों (Cl⁻) से घिरा
+    होता है और प्रत्येक क्लोराइड आयन छह सोडियम आयनों से घिरा होता है। ये विपरीत आवेशित आयन एक नियमित
+    पुनरावृत्ति 3-D प्रतिरूप में व्यवस्थित होते हैं जिसे एक क्रिस्टल संरचना कहा जाता है (चित्र 9.14
+    ख)। क्रिस्टल संरचना को क्रिस्टल जालक (lattice) के रूप में निरूपित किया जाता है जिसमें आयन
+    बिंदुओं अथवा गोलों के रूप में दर्शाए जाते हैं (चित्र 9.14 ग))। इससे क्रिस्टल में आयनों की
+    व्यवस्था को दृष्टिगत करने में सहायता मिलती है। आप उच्च कक्षाओं में क्रिस्टल संरचना के विषय में
+    और अधिक सीखेंगे।
+  made:
+    - {words: L21.1, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.9, by: hindi-repair}
+    - {words: L22.12, by: hindi-repair}
+    - {words: L22.16, by: hindi-repair}
+    - {words: L22.18, by: hindi-repair}
+    - {words: L22.19, by: hindi-repair}
+    - {words: L23.4, by: hindi-repair}
+    - {words: L23.5, by: hindi-repair}
+    - {words: L23.7, by: hindi-repair}
+    - {words: L23.12, by: hindi-repair}
+    - {words: L24.1, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.5-7, by: agent}
+    - {words: L24.9, by: hindi-repair}
+    - {words: L24.10, by: hindi-repair}
+    - {words: L24.11-13, by: agent}
+    - {words: L24.19, by: hindi-repair}
+    - {words: L24.20, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.9, by: hindi-repair}
+    - {words: L25.16, by: hindi-repair}
+    - {words: L25.17, by: hindi-repair}
+    - {words: L26.2, by: hindi-repair}
+    - {words: L26.5, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L35.9, by: hindi-repair}
+    - {words: L35.14, by: hindi-repair}
+    - {words: L36.1-2, by: agent}
+    - {words: L36.4, by: hindi-repair}
+    - {words: L36.7, by: hindi-repair}
+    - {words: L36.8, by: hindi-repair}
+    - {words: L36.10, by: hindi-repair}
+    - {words: L36.13, by: agent}
+    - {words: L36.14, by: agent}
+    - {words: L36.15, by: hindi-repair}
+    - {words: L36.16, by: hindi-repair}
+    - {words: L36.17, by: hindi-repair}
+    - {words: L36.19, by: hindi-repair}
+    - {words: L37.2, by: hindi-repair}
+    - {words: L37.4, by: hindi-repair}
+    - {words: L37.9, by: hindi-repair}
+    - {words: L37.10-11, by: agent}
+    - {words: L37.12, by: hindi-repair}
+    - {words: L37.13, by: hindi-repair}
+    - {words: L37.17, by: hindi-repair}
+    - {words: L38.2, by: hindi-repair}
+- id: "4.5.11"
+  kind: figure
+  page: 12
+  number: चित्र 9.14—
+  text: Na⁺ Cl⁻ Cl⁻ Na⁺ (ग) (क) (ख) चित्र 9.14— सोडियम क्लोराइड (क) क्रिस्टल, (ख) क्रिस्टल संरचना और
+    (ग) क्रिस्टल जालक
+  crop: [127.8, 511.4, 486.9, 632.7]
+  made:
+    - {words: L27, by: agent}
+    - {words: L28-L29, by: agent}
+    - {words: L30.1-2, by: agent}
+    - {words: L30.3-4, by: agent}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.6, by: hindi-repair}
+    - {words: L33.8, by: hindi-repair}
+    - {words: L33.9-L34.2, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.5.12"
+  kind: text
+  page: 12
+  text: कुछ तत्व जैसे सल्फर के बाह्यतम कोश में छह इलेक्ट्रॉन होते हैं और उसे अपना अष्टक पूर्ण करने के
+    लिए दो इलेक्ट्रॉनों को ग्रहण करने की आवश्यकता होती है। जब एक सल्फर परमाणु दो इलेक्ट्रॉन ग्रहण
+    करता है तो इस पर दो इकाई ऋण आवेश आ जाता है और इसे S²⁻ के रूप में निरूपित किया जाता है।
+  made:
+    - {words: L42.2, by: agent}
+    - {words: L42.4, by: hindi-repair}
+    - {words: L42.8, by: hindi-repair}
+    - {words: L42.12, by: hindi-repair}
+    - {words: L42.16, by: hindi-repair}
+    - {words: L42.17, by: hindi-repair}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L43.7, by: hindi-repair}
+    - {words: L43.12, by: hindi-repair}
+    - {words: L44.5, by: hindi-repair}
+    - {words: L44.12-13, by: agent}
+    - {words: L44.16, by: hindi-repair}
+- id: "4.5.13"
+  kind: box
+  page: 13
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 12. ऑक्सीजन (O) किस प्रकार का आयन बनाएगा? 13. रिक्त स्थानों की पूर्ति कीजिए —
+    मैग्नीशियम और क्लोरीन में से Mg²⁺ बनने के लिए मैग्नीशियम परमाणु दो इलेक्ट्रॉन त्याग सकता है।
+    यद्यपि क्लोरीन परमाणु एक इलेक्ट्रॉन ग्रहण करके ___________ बनाता है। अब मैग्नीशियम का
+    ___________आयन और क्लोरीन के ___________ आयन संयोजित हो कर मैग्नीशियम क्लोराइड बनाते हैं। 14.
+    पोटैशियम (K) और कैल्सियम (Ca) परमाणुओं के धनायनों के निर्माण तथा उनके संगत क्लोराइडों के निर्माण
+    को चित्र द्वारा दर्शाइए। 15. दर्शाइए कि सोडियम सल्फाइड (Na₂S) का निर्माण किस प्रकार होता है?
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L1.3, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L4.2, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.5, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L5.6-7, by: agent}
+    - {words: L5.8, by: agent}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L5.14, by: hindi-repair}
+    - {words: L5.15, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.6, by: hindi-repair}
+    - {words: L6.13, by: hindi-repair}
+    - {words: L7.2, by: agent}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.11, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L9.5-6, by: agent}
+    - {words: L9.8-9, by: agent}
+    - {words: L9.11, by: agent}
+    - {words: L9.13, by: hindi-repair}
+    - {words: L9.17, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6-L13.1, by: agent}
+    - {words: L13.3, by: hindi-repair}
+- id: "4.5.14"
+  kind: heading
+  page: 13
+  title: क. आयनिक यौगिकों का नामकरण
+  text: क. आयनिक यौगिकों का नामकरण
+  made:
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.5, by: hindi-repair}
+- id: "4.5.15"
+  kind: text
+  page: 13
+  text: "आयनिक यौगिकों का नाम लिखते हुए पहले धनायन का नाम लिखा जाता है तत्पश्चात ऋणायन का नाम लिखते
+    हैं। सरल ऋणायनों के नामों का अंत आइड (-ide) से होता है। प्रायः धातुएँ धनायन बनाती हैं और अधातुएँ
+    ऋणायन बनाती हैं। आयनिक यौगिक विशेषतः तब बनते हैं जब धातुओं का संयोजन अधातुओं से होता है,
+    उदाहरणार्थ— सोडियम क्लोराइड, कैल्सियम ऑक्साइड, मैग्नीशियम सल्फाइड इत्यादि। कुछ आयन दो अथवा दो से
+    अधिक तत्वों के परमाणुओं के संयोजन से बनते हैं और बहुपरमाण्विक आयन कहलाते हैं। सामान्यत:
+    बहुपरमाण्विक आयनों के नाम का अंत आइड (-ide) से नहीं होता। कुछ सामान्य आयनों के नाम, सूत्र एवं
+    संयोजकताएँ तालिका 9.1 में दर्शाए गए हैं।"
+  made:
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.14, by: hindi-repair}
+    - {words: L22.15, by: hindi-repair}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L23.4, by: agent}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L23.8-10, by: agent}
+    - {words: L23.11, by: agent}
+    - {words: L23.17-20, by: hindi-repair}
+    - {words: L23.23, by: hindi-repair}
+    - {words: L24.1, by: agent}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L24.10, by: hindi-repair}
+    - {words: L24.12-13, by: agent}
+    - {words: L24.16-17, by: agent}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L25.6, by: hindi-repair}
+    - {words: L25.7-8, by: agent}
+    - {words: L25.9, by: hindi-repair}
+    - {words: L25.10, by: hindi-repair}
+    - {words: L25.11, by: hindi-repair}
+    - {words: L25.12, by: hindi-repair}
+    - {words: L26.7, by: agent}
+    - {words: L26.9-10, by: agent}
+    - {words: L26.15, by: hindi-repair}
+    - {words: L26.17, by: agent}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.4, by: agent}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.9-11, by: agent}
+    - {words: L27.12, by: agent}
+    - {words: L27.15, by: hindi-repair}
+    - {words: L27.18, by: hindi-repair}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L28.6, by: agent}
+    - {words: L28.9, by: hindi-repair}
+    - {words: L28.10, by: hindi-repair}
+    - {words: L28.12, by: hindi-repair}
+- id: "4.5.16"
+  kind: table
+  page: 13
+  number: तालिका 9.1—
+  text: तालिका 9.1— (क) कुछ सामान्य एकपरमाणुक आयन आयन का नाम सूत्र संयोजकता सोडियम Na ⁺ 1 लीथियम Li ⁺
+    1 पोटैशियम K ⁺ 1 सिल्वर Ag⁺ 1 कैल्सियम Ca ²⁺ 2 बेरियम Ba ²⁺ 2 आयरन (फेरस) Fe ²⁺ 2 आयरन (फेरिक)
+    Fe ³⁺ 3 कॉपर (क्यूप्रस) Cu ⁺ 1 कॉपर (क्यूप्रिक) Cu²⁺ 2 मैग्नीशियम Mg ²⁺ 2 जिंक Zn ²⁺ 2 ऐलुमिनियम
+    Al ³⁺ 3 फ्लुओराइड F ⁻ 1 क्लोराइड Cl ⁻ 1 ब्रोमाइड Br⁻ 1 आयोडाइड I ⁻ 1 ऑक्साइड O ²⁻ 2 सल्फाइड S ²⁻
+    2
+  rows:
+    - [आयन का नाम, सूत्र, संयोजकता]
+    - [सोडियम, Na ⁺, "1"]
+    - [लीथियम, Li ⁺, "1"]
+    - [पोटैशियम, K ⁺, "1"]
+    - [सिल्वर, Ag⁺, "1"]
+    - [कैल्सियम, Ca ²⁺, "2"]
+    - [बेरियम, Ba ²⁺, "2"]
+    - [आयरन (फेरस), Fe ²⁺, "2"]
+    - [आयरन (फेरिक), Fe ³⁺, "3"]
+    - [कॉपर (क्यूप्रस), Cu ⁺, "1"]
+    - [कॉपर (क्यूप्रिक), Cu²⁺, "2"]
+    - [मैग्नीशियम, Mg ²⁺, "2"]
+    - [जिंक, Zn ²⁺, "2"]
+    - [ऐलुमिनियम, Al ³⁺, "3"]
+    - [फ्लुओराइड, F ⁻, "1"]
+    - [क्लोराइड, Cl ⁻, "1"]
+    - [ब्रोमाइड, Br⁻, "1"]
+    - [आयोडाइड, I ⁻, "1"]
+    - [ऑक्साइड, O ²⁻, "2"]
+    - [सल्फाइड, S ²⁻, "2"]
+  crop: [157.5, 415.9, 546.1, 750.3]
+  made:
+    - {words: L29.5, by: hindi-repair}
+    - {words: L29.6, by: agent}
+    - {words: L30.2, by: hindi-repair}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L30.5, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L31, by: agent}
+    - {words: L34.1, by: agent}
+    - {words: L33, by: agent}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L35, by: agent}
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.2-3, by: agent}
+    - {words: L40.1-2, by: agent}
+    - {words: L39, by: agent}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L41, by: agent}
+    - {words: L44.2-3, by: agent}
+    - {words: L43, by: agent}
+    - {words: L46.2-3, by: agent}
+    - {words: L45, by: agent}
+    - {words: L48.1, by: hindi-repair}
+    - {words: L48.2, by: agent}
+    - {words: L47, by: agent}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L49.2, by: agent}
+    - {words: L49.3-4, by: agent}
+    - {words: L52.1, by: hindi-repair}
+    - {words: L51, by: agent}
+    - {words: L54.1, by: hindi-repair}
+    - {words: L53, by: agent}
+    - {words: L56.1, by: hindi-repair}
+    - {words: L55, by: agent}
+    - {words: L58.1, by: agent}
+    - {words: L57, by: agent}
+    - {words: L60.1, by: hindi-repair}
+    - {words: L59, by: agent}
+    - {words: L61.1, by: hindi-repair}
+    - {words: L62-L63, by: agent}
+    - {words: L66.1, by: hindi-repair}
+    - {words: L65, by: agent}
+    - {words: L68.1, by: hindi-repair}
+    - {words: L67, by: agent}
+    - {words: L70.1, by: hindi-repair}
+    - {words: L69, by: agent}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: agent}
+- id: "4.5.17"
+  kind: box
+  page: 13
+  title: क्या होता यदि ...
+  text: क्या होता यदि ... हम परमाणुओं को प्रत्यक्ष रूप से देख पाते? यह वैज्ञानिकों के लिए किस प्रकार
+    सहायक होता और किस प्रकार की चुनौतियाँ उत्पन्न करता?
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L14.2-3, by: agent}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.5, by: agent}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3, by: hindi-repair}
+    - {words: L16.4, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.2, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+- id: "4.5.18"
+  kind: table
+  page: 14
+  number: तालिका 9.1—
+  text: तालिका 9.1— (ख) कुछ सामान्य बहुपरमाण्विक आयन आयन का नाम सूत्र संयोजकता हाइड्रॉक्साइड ⁻ OH 1
+    नाइट्रेट NO₃⁻ 1 हाइड्रोजनकार्बोनेट HCO₃⁻ 1 कार्बोनेट CO ₃ ²⁻ 2 सल्फेट SO₄² ⁻ 2 अमोनियम ⁺ NH₄ 1
+  rows:
+    - [आयन का नाम, सूत्र, संयोजकता]
+    - [हाइड्रॉक्साइड, ⁻ OH, "1"]
+    - [नाइट्रेट, NO₃⁻, "1"]
+    - [हाइड्रोजनकार्बोनेट, HCO₃⁻, "1"]
+    - [कार्बोनेट, CO ₃ ²⁻, "2"]
+    - [सल्फेट, SO₄² ⁻, "2"]
+    - [अमोनियम, ⁺ NH₄, "1"]
+  crop: [89.5, 85.7, 478.1, 237.4]
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.6, by: agent}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L10.1-3, by: hindi-repair}
+    - {words: L10.4-7, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L25, by: agent}
+    - {words: L5.1-2, by: hindi-repair}
+    - {words: L12-L14.1, by: agent}
+    - {words: L6.1, by: agent}
+    - {words: L15-L17.1, by: agent}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L19, by: agent}
+    - {words: L18, by: agent}
+    - {words: L8, by: agent}
+    - {words: L27, by: agent}
+    - {words: L21.1, by: agent}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L28, by: agent}
+    - {words: L22-L23, by: agent}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: agent}
+- id: "5"
+  kind: section
+  page: 14
+  number: "9.5"
+  title: रासायनिक सूत्रों को लिखना
+  text: 9.5 रासायनिक सूत्रों को लिखना
+  made:
+    - {words: L29.2, by: hindi-repair}
+    - {words: L29.3-5, by: hindi-repair}
+    - {words: L29.6, by: hindi-repair}
+    - {words: L29.7, by: hindi-repair}
+- id: "5.1"
+  kind: text
+  page: 14
+  text: आपने पहले सीखा है कि साझा अथवा स्थानांतरित किए गए इलेक्ट्रॉनों की संख्या ज्ञात करके यौगिकों के
+    सूत्रों को किस प्रकार लिखा जाता है। सूत्रों को शीघ्रता से लिखने की एक अन्य विधि भी है।
+  made:
+    - {words: L30.1, by: hindi-repair}
+    - {words: L30.2, by: hindi-repair}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L30.5, by: hindi-repair}
+    - {words: L30.6, by: hindi-repair}
+    - {words: L30.7, by: hindi-repair}
+    - {words: L30.8, by: hindi-repair}
+    - {words: L30.9, by: hindi-repair}
+    - {words: L30.11, by: hindi-repair}
+    - {words: L30.12, by: hindi-repair}
+    - {words: L30.13, by: hindi-repair}
+    - {words: L30.14, by: hindi-repair}
+    - {words: L30.15, by: hindi-repair}
+    - {words: L30.16, by: hindi-repair}
+    - {words: L30.17, by: hindi-repair}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.5, by: hindi-repair}
+    - {words: L31.6, by: hindi-repair}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L31.8, by: hindi-repair}
+    - {words: L31.9, by: hindi-repair}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L31.11, by: hindi-repair}
+    - {words: L31.12, by: hindi-repair}
+    - {words: L31.13, by: hindi-repair}
+    - {words: L31.16-17, by: agent}
+    - {words: L31.18, by: hindi-repair}
+- id: "5.2"
+  kind: section
+  page: 14
+  number: 9.5.1
+  title: सहसंयोजी यौगिकों के रासायनिक सूत्र लिखना
+  text: 9.5.1 सहसंयोजी यौगिकों के रासायनिक सूत्र लिखना
+  made:
+    - {words: L32.2, by: agent}
+    - {words: L32.3, by: hindi-repair}
+- id: "5.2.1"
+  kind: text
+  page: 14
+  text: किसी सहसंयोजी यौगिक का रासायनिक सूत्र लिखने के लिए निम्नलिखित चरणों का पालन कीजिए— (i) यौगिक
+    के संघटक तत्वों के प्रतीक लिखिए। (ii) इन तत्वों की संयोजकताएँ लिखिए (तालिका 9.1 का संदर्भ
+    लीजिए)। (iii) संयोजन करने वाले परमाणुओं की संयोजकताओं का तिर्यक (criss-cross)) कीजिए और उन्हें
+    तत्वों के प्रतीकों के बाद पादांक (subscripts) के रूप में लिखिए जैसा कि नीचे दर्शाया गया है।
+  made:
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.2, by: agent}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.5, by: hindi-repair}
+    - {words: L33.6, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L33.8, by: hindi-repair}
+    - {words: L33.9, by: hindi-repair}
+    - {words: L33.10, by: hindi-repair}
+    - {words: L33.11, by: hindi-repair}
+    - {words: L33.12, by: hindi-repair}
+    - {words: L33.13, by: hindi-repair}
+    - {words: L33.14, by: hindi-repair}
+    - {words: L34.5, by: agent}
+    - {words: L35.3, by: agent}
+    - {words: L35.5, by: agent}
+    - {words: L35.10, by: hindi-repair}
+    - {words: L36.5-6, by: agent}
+    - {words: L36.8-9, by: agent}
+    - {words: L36.11, by: hindi-repair}
+    - {words: L36.15, by: hindi-repair}
+    - {words: L37.1, by: agent}
+    - {words: L37.3, by: hindi-repair}
+    - {words: L37.10, by: hindi-repair}
+    - {words: L37.15, by: hindi-repair}
+- id: "5.2.2"
+  kind: box
+  page: 14
+  title: उदाहरण —
+  text: उदाहरण — हाइड्रोजन क्लोराइड का सूत्र— तत्व का प्रतीक H Cl संयोजकता 1 1 यौगिक का सूत्र HCl
+    होगा। यदि तिर्यक करने के पश्चात संयोजकता एक है तब उसे लिखा नहीं जाता है। हाइड्रोजन सल्फाइड का
+    सूत्र— तत्व का प्रतीक H S संयोजकता 1 2 यौगिक का सूत्र H₂S होगा। कार्बन टेट्राक्लोराइड का सूत्र—
+    तत्व का प्रतीक C Cl संयोजकता 4 1 यौगिक का सूत्र CCl₄ होगा।
+  made:
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.2, by: hindi-repair}
+    - {words: L39.3, by: hindi-repair}
+    - {words: L39.4, by: hindi-repair}
+    - {words: L41.1, by: agent}
+    - {words: L41.2, by: hindi-repair}
+    - {words: L41.3, by: hindi-repair}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L50.1, by: hindi-repair}
+    - {words: L50.2, by: hindi-repair}
+    - {words: L50.3, by: hindi-repair}
+    - {words: L50.5, by: hindi-repair}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.2, by: hindi-repair}
+    - {words: L51.3, by: hindi-repair}
+    - {words: L51.4, by: hindi-repair}
+    - {words: L51.5, by: hindi-repair}
+    - {words: L51.6, by: hindi-repair}
+    - {words: L51.8, by: hindi-repair}
+    - {words: L52.1, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.3, by: hindi-repair}
+    - {words: L52.4, by: hindi-repair}
+    - {words: L52.5, by: hindi-repair}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L43.3, by: hindi-repair}
+    - {words: L43.4, by: hindi-repair}
+    - {words: L44.1, by: agent}
+    - {words: L44.2, by: hindi-repair}
+    - {words: L44.3, by: hindi-repair}
+    - {words: L45.1-L46.2, by: hindi-repair}
+    - {words: L62.4-L64.1, by: agent}
+    - {words: L53.1, by: hindi-repair}
+    - {words: L53.2, by: agent}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.4, by: hindi-repair}
+    - {words: L54.1, by: agent}
+    - {words: L54.2, by: hindi-repair}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L55.1-L56.2, by: hindi-repair}
+    - {words: L57.1, by: hindi-repair}
+    - {words: L57.2, by: hindi-repair}
+    - {words: L57.3, by: hindi-repair}
+    - {words: L57.4-L58.1, by: agent}
+    - {words: L59.1, by: hindi-repair}
+- id: "5.3"
+  kind: section
+  page: 14
+  number: 9.5.2
+  title: आयनिक यौगिकों के रासायनिक सूत्र लिखना
+  text: 9.5.2 आयनिक यौगिकों के रासायनिक सूत्र लिखना
+  made:
+    - {words: L67.2, by: hindi-repair}
+    - {words: L67.3, by: hindi-repair}
+    - {words: L67.4, by: hindi-repair}
+    - {words: L67.5, by: hindi-repair}
+    - {words: L67.6-8, by: hindi-repair}
+    - {words: L67.9, by: hindi-repair}
+- id: "5.3.1"
+  kind: text
+  page: 14
+  text: "किसी आयनिक यौगिक का रासायनिक सूत्र लिखने के लिए नीचे दिए गए चरणों का पालन कीजिए— (i)
+    सर्वप्रथम धनायन का प्रतीक लिखिए तत्पश्चात ऋणायन का प्रतीक लिखिए। (ii) आवेशों को मूर्धांक
+    (superscripts) में लिखने की अपेक्षा उन्हें प्रतीकों के नीचे लिखिए। (iii) सूत्र प्राप्त करने के
+    लिए नीचे दर्शाए अनुसार आवेशों (केवल संख्या) का तिर्यक बनाइए। (iv) रासायनिक सूत्र किसी यौगिक में
+    तत्वों का सरलतम अनुपात दर्शाता है। अत: यदि सूत्र में कोई पादांक (subscripts) हैं तो तिर्यक करने
+    के पश्चात उसे एक सामान्य इकाई से भाग दिया जाता है। उदाहरणार्थ— यदि हमें 2 और 4 पादांक प्राप्त
+    होते हैं तो इन्हें 2 से भाग देकर 1 और 2 प्राप्त होता है जिनका उपयोग सूत्र में पादांक के रूप में
+    किया जाता है।"
+  made:
+    - {words: L68.13, by: hindi-repair}
+    - {words: L69.2, by: hindi-repair}
+    - {words: L69.7, by: hindi-repair}
+    - {words: L69.8, by: hindi-repair}
+    - {words: L70.2, by: hindi-repair}
+    - {words: L70.4, by: agent}
+    - {words: L70.6, by: hindi-repair}
+    - {words: L70.10, by: hindi-repair}
+    - {words: L70.11, by: hindi-repair}
+    - {words: L5.3, page: 15, by: hindi-repair}
+    - {words: L5.8, page: 15, by: hindi-repair}
+    - {words: L5.10, page: 15, by: hindi-repair}
+    - {words: L5.11-12, page: 15, by: agent}
+    - {words: L5.13, page: 15, by: hindi-repair}
+    - {words: L5.15, page: 15, by: hindi-repair}
+    - {words: L6.6, page: 15, by: hindi-repair}
+    - {words: L6.7, page: 15, by: agent}
+    - {words: L6.9, page: 15, by: agent}
+    - {words: L6.11, page: 15, by: hindi-repair}
+    - {words: L6.16, page: 15, by: hindi-repair}
+    - {words: L7.1, page: 15, by: hindi-repair}
+    - {words: L7.3, page: 15, by: hindi-repair}
+    - {words: L7.4, page: 15, by: hindi-repair}
+    - {words: L7.5, page: 15, by: hindi-repair}
+    - {words: L7.6, page: 15, by: hindi-repair}
+    - {words: L7.7, page: 15, by: hindi-repair}
+    - {words: L7.8, page: 15, by: hindi-repair}
+    - {words: L7.9, page: 15, by: hindi-repair}
+    - {words: L7.11, page: 15, by: hindi-repair}
+    - {words: L7.12, page: 15, by: hindi-repair}
+    - {words: L7.13, page: 15, by: hindi-repair}
+    - {words: L7.14, page: 15, by: hindi-repair}
+    - {words: L7.15, page: 15, by: hindi-repair}
+    - {words: L7.16, page: 15, by: hindi-repair}
+    - {words: L7.17, page: 15, by: hindi-repair}
+    - {words: L8.1, page: 15, by: hindi-repair}
+    - {words: L8.2, page: 15, by: hindi-repair}
+    - {words: L8.3, page: 15, by: hindi-repair}
+    - {words: L8.7, page: 15, by: hindi-repair}
+    - {words: L8.8, page: 15, by: hindi-repair}
+    - {words: L8.9, page: 15, by: hindi-repair}
+    - {words: L8.10, page: 15, by: hindi-repair}
+    - {words: L8.11, page: 15, by: hindi-repair}
+    - {words: L8.12, page: 15, by: hindi-repair}
+    - {words: L8.14, page: 15, by: hindi-repair}
+    - {words: L8.15, page: 15, by: hindi-repair}
+    - {words: L8.16, page: 15, by: hindi-repair}
+    - {words: L8.20, page: 15, by: hindi-repair}
+    - {words: L8.21, page: 15, by: hindi-repair}
+    - {words: L9.1, page: 15, by: hindi-repair}
+    - {words: L9.2, page: 15, by: hindi-repair}
+    - {words: L9.3, page: 15, by: hindi-repair}
+    - {words: L9.4, page: 15, by: hindi-repair}
+    - {words: L9.5, page: 15, by: hindi-repair}
+    - {words: L9.6, page: 15, by: hindi-repair}
+    - {words: L9.7, page: 15, by: hindi-repair}
+    - {words: L9.9, page: 15, by: hindi-repair}
+    - {words: L9.10, page: 15, by: hindi-repair}
+    - {words: L9.11, page: 15, by: hindi-repair}
+    - {words: L9.12, page: 15, by: hindi-repair}
+- id: "5.3.2"
+  kind: box
+  page: 15
+  title: उदाहरण —
+  text: "उदाहरण — कैल्सियम क्लोराइड का सूत्र— प्रतीक Ca Cl आवेश 2+ 1– सूत्र CaCl₂ अत: कैल्सियम
+    क्लोराइड के सूत्र में प्रत्येक कैल्सियम आयन (Ca²⁺) के लिए दो क्लोराइड आयन (Cl⁻) हैं। धन एवं ऋण
+    आवेशों को निश्चित रूप से एक-दूसरे को संतुलित करना चाहिए और पूर्ण संरचना उदासीन ही होनी चाहिए।
+    ऐलुमिनियम ऑक्साइड का सूत्र— प्रतीक Al O आवेश 3+ 2– सूत्र Al₂O₃ मैग्नीशियम ऑक्साइड का सूत्र—
+    प्रतीक Mg O आवेश 2+ 2– यहाँ दोनों तत्वों की संयोजकताएँ एकसमान हैं। हमें Mg₂O₂ सूत्र प्राप्त हुआ
+    है परंतु इसे सहज रूप में MgO लिखा जाता है।"
+  made:
+    - {words: L11.1-2, by: agent}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L17-L18, by: agent}
+    - {words: L20.2-3, by: agent}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.7, by: hindi-repair}
+    - {words: L20.8, by: hindi-repair}
+    - {words: L20.9-10, by: agent}
+    - {words: L20.12-14, by: agent}
+    - {words: L20.18, by: hindi-repair}
+    - {words: L20.20-22, by: agent}
+    - {words: L20.23, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.6, by: hindi-repair}
+    - {words: L21.9-12, by: hindi-repair}
+    - {words: L21.14-L22.4, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.9-L23.2, by: hindi-repair}
+    - {words: L25.1, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.3, by: hindi-repair}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L35-L38, by: agent}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L40.2, by: hindi-repair}
+    - {words: L40.3, by: agent}
+    - {words: L40.5-L41.2, by: agent}
+    - {words: L41.4, by: hindi-repair}
+    - {words: L41.5, by: hindi-repair}
+    - {words: L42-L45, by: agent}
+    - {words: L46.2, by: hindi-repair}
+    - {words: L46.9, by: hindi-repair}
+- id: "5.3.3"
+  kind: text
+  page: 15
+  text: इस विधि को धातु एवं अन्य बहुपरमाण्विक आयनों से बने यौगिकों जैसे कि कैल्सियम कार्बोनेट के सूत्र
+    लिखने में भी प्रयुक्त किया जा सकता है।
+  made:
+    - {words: L48.6, by: hindi-repair}
+    - {words: L48.7, by: agent}
+    - {words: L48.8, by: hindi-repair}
+    - {words: L48.11, by: hindi-repair}
+    - {words: L48.14-15, by: agent}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+- id: "5.3.4"
+  kind: text
+  page: 15
+  text: मैग्नीशियम हाइड्रॉक्साइड के लिए हम पहले धनायन (Mg²⁺) का प्रतीक लिखते हैं। इसके पश्चात ऋणायन
+    (⁻OH) का प्रतीक लिखते हैं। तत्पश्चात इनके आवेशों (केवल संख्याएँ) का तिर्यक कर सूत्र प्राप्त करते
+    हैं।
+  made:
+    - {words: L50.1, by: hindi-repair}
+    - {words: L50.2, by: hindi-repair}
+    - {words: L50.8-10, by: agent}
+    - {words: L50.14, by: hindi-repair}
+    - {words: L50.16, by: hindi-repair}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.2-4, by: agent}
+    - {words: L51.8, by: hindi-repair}
+    - {words: L51.9, by: hindi-repair}
+    - {words: L51.11, by: hindi-repair}
+    - {words: L51.12-13, by: agent}
+    - {words: L51.14, by: agent}
+    - {words: L51.16, by: hindi-repair}
+    - {words: L51.19, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+- id: "5.3.5"
+  kind: box
+  page: 15
+  title: उदाहरण—
+  text: उदाहरण— कैल्सियम कार्बोनेट का सूत्र— प्रतीक Ca CO₃ आवेश 2+ 2– सूत्र CaCO₃ यहाँ दोनों आयनों की
+    संयोजकताएँ समान हैं। सूत्र Ca₂(CO₃)₂ को सहज ही CaCO₃ लिखा जाता है जैसा कि ऊपर समझाया गया है।
+    मैग्नीशियम हाइड्रॉक्साइड का सूत्र— प्रतीक Mg OH आवेश 2+ 1– सूत्र Mg(OH)₂
+  made:
+    - {words: L54.1-2, by: agent}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L54.4, by: hindi-repair}
+    - {words: L54.5, by: hindi-repair}
+    - {words: L55.1, by: hindi-repair}
+    - {words: L55.3-L56.1, by: agent}
+    - {words: L58.1, by: hindi-repair}
+    - {words: L59.1, by: hindi-repair}
+    - {words: L59.2-L60.1, by: agent}
+    - {words: L61.2, by: hindi-repair}
+    - {words: L61.3, by: hindi-repair}
+    - {words: L61.5, by: agent}
+    - {words: L61.7, by: hindi-repair}
+    - {words: L61.9-L66.1, by: agent}
+    - {words: L67.4-L68.1, by: agent}
+    - {words: L73.1, by: hindi-repair}
+    - {words: L73.2, by: hindi-repair}
+    - {words: L73.3, by: hindi-repair}
+    - {words: L73.4, by: hindi-repair}
+    - {words: L75.1, by: hindi-repair}
+    - {words: L76.1, by: hindi-repair}
+    - {words: L77.1, by: hindi-repair}
+    - {words: L79-L80, by: agent}
+- id: "5.3.6"
+  kind: box
+  page: 15
+  title: टिप्पणी
+  text: टिप्पणी यौगिक के सूत्र में आयनों के आवेश इंगित नहीं किए जाते हैं।
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L3.4-7, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.2, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.4, by: hindi-repair}
+- id: "5.3.7"
+  kind: text
+  page: 16
+  text: इसलिए मैग्नीशियम हाइड्रॉक्साइड में प्रत्येक मैग्नीशियम आयन (Mg²⁺) के लिए दो हाइड्रॉक्साइड आयन
+    (⁻OH) होते हैं। जब किसी सूत्र में एक ही प्रकार के दो अथवा अधिक बहुपरमाण्विक आयन होते हैं तब हम
+    कोष्ठकों का उपयोग करते हैं। ऐलुमिनियम हाइड्रॉक्साइड के निम्नलिखित उदाहरण में पादांक 3 के साथ OH
+    आयन के चारों ओर कोष्ठक इंगित करता है कि तीन हाइड्रॉक्साइड (⁻OH) आयन एक ऐलुमिनियम आयन से बंधे
+    हैं। यदि केवल एक बहुपरमाण्विक ऋणायन उपस्थित हो तब कोष्ठकों की आवश्यकता नहीं होती।
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.6, by: hindi-repair}
+    - {words: L2.8-10, by: agent}
+    - {words: L2.14, by: hindi-repair}
+    - {words: L3.2-4, by: agent}
+    - {words: L3.6, by: hindi-repair}
+    - {words: L3.10, by: hindi-repair}
+    - {words: L3.18, by: agent}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.4, by: hindi-repair}
+    - {words: L4.8, by: hindi-repair}
+    - {words: L4.10, by: hindi-repair}
+    - {words: L4.12, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L5.7, by: hindi-repair}
+    - {words: L5.9, by: hindi-repair}
+    - {words: L5.15, by: hindi-repair}
+    - {words: L5.16-18, by: agent}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.7-8, by: agent}
+    - {words: L6.10, by: agent}
+    - {words: L6.11, by: hindi-repair}
+    - {words: L6.12, by: hindi-repair}
+    - {words: L6.15, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.2, by: hindi-repair}
+- id: "5.3.8"
+  kind: box
+  page: 16
+  title: उदाहरण—
+  text: उदाहरण— ऐलुमिनियम हाइड्रॉक्साइड का सूत्र— प्रतीक Al OH आवेश 3+ 1– सूत्र Al(OH)₃ नोट— ऐलुमिनियम
+    हाइड्रॉक्साइड का सूत्र Al(OH)₃ है न कि AlOH₃ । ऐलुमिनियम सल्फेट का सूत्र— प्रतीक Al SO₄ आवेश 3+
+    2– सूत्र Al₂(SO₄)₃
+  made:
+    - {words: L9.2, by: hindi-repair}
+    - {words: L13.2-L14.1, by: agent}
+    - {words: L15.2-5, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L16.1-3, by: hindi-repair}
+    - {words: L16.4-L17.1, by: agent}
+    - {words: L18.4-L19.1, by: agent}
+    - {words: L21.2-3, by: agent}
+    - {words: L26-L27, by: agent}
+    - {words: L29-L34, by: agent}
+- id: "5.3.9"
+  kind: box
+  page: 16
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 16. निम्नलिखित के नाम लिखिए। (i) CO₂ _______________________________ (ii) NO₂
+    _______________________________ (iii) SF₆ _______________________________ (iv) PCl₃
+    _______________________________ 17. निम्नलिखित के सूत्र लिखिए। (i) सोडियम हाइड्रोजनकार्बोनेट
+    ____________________________ (ii) सल्फर डाइऑक्साइड ____________________________ (iii) फेरिक
+    क्लोराइड ___________________________________ (iv) क्यूप्रस ऑक्साइड
+    ___________________________________ 18. निम्नलिखित आयनों के युग्मों से निर्मित यौगिकों के सूत्र
+    लिखिए— (i) Fe³⁺ और ⁻OH (ii) K⁺ और CO₃²⁻
+  made:
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.3, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L37.2-L38.1, by: agent}
+    - {words: L40.2-L41.1, by: agent}
+    - {words: L43.2-L44.1, by: agent}
+    - {words: L46.2-L47.1, by: agent}
+    - {words: L49.2, by: hindi-repair}
+    - {words: L50.1, by: hindi-repair}
+    - {words: L50.2, by: agent}
+    - {words: L51.3, by: hindi-repair}
+    - {words: L52.1-2, by: agent}
+    - {words: L52.3, by: hindi-repair}
+    - {words: L53.2, by: agent}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L54.2, by: hindi-repair}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L54.5, by: hindi-repair}
+    - {words: L54.7, by: hindi-repair}
+    - {words: L54.8, by: hindi-repair}
+    - {words: L55.2-3, by: agent}
+    - {words: L55.5-6, by: agent}
+    - {words: L55.8-9, by: agent}
+    - {words: L55.11-12, by: agent}
+- id: "6"
+  kind: section
+  page: 16
+  number: "9.6"
+  title: आयनिक और सहसंयोजी यौगिकों के गुणधर्म
+  text: 9.6 आयनिक और सहसंयोजी यौगिकों के गुणधर्म
+  made:
+    - {words: L56.4, by: agent}
+    - {words: L56.5, by: hindi-repair}
+    - {words: L56.7, by: hindi-repair}
+- id: "6.1"
+  kind: activity
+  page: 16
+  number: क्रियाकलाप 9.4—
+  title: आइए, प्रयोग करें
+  text: "क्रियाकलाप 9.4— आइए, प्रयोग करें 1. कुछ यौगिकों, जैसे — कर्पूर, सोडियम क्लोराइड, कॉपर सल्फेट,
+    चीनी और नैफ्थलीन के प्रतिदर्श (sample) एकत्रित कीजिए। (क) विलेयता (i) जल में (ii) किरोसिन में
+    एवं (iii) पेट्रोल में 2. प्रत्येक प्रतिदर्श को जल, किरोसिन और पेट्रोल में पृथक-पृथक घोलने का
+    प्रयास कीजिए। 3. अपने प्रेक्षणों को तालिका 9.2 में अभिलेखित कीजिए। (ख) जल में विद्युत चालकता
+    सुरक्षा प्रथम— यह कार्य अध्यापक की देखरेख में किया जाना चाहिए। जब इलेक्ट्रोड बैटरी से जुड़े हों
+    तब उन्हें स्पर्श न करें अपितु प्रघात के जोखिम से बचाव हेतु एक निम्न-वोल्टता की बैटरी का उपयोग
+    कीजिए। पेट्रोल और किरोसिन ज्वलनशील द्रव हैं, अत: उनके साथ कार्य करते हुए सावधान रहिए। 4. कार्बन
+    अथवा धातु के दो इलेक्ट्रोड लीजिए और गत्ते के एक टुकड़े में दो छिद्र कीजिए। इन इलेक्ट्रोडों को
+    गत्ते में बने इन छिद्रों में डालिए। 5. एक इलेक्ट्रोड का एक छोर 9V की बैटरी के टर्मिनल से जोड़िए
+    और दूसरे इलेक्ट्रोड का छोर प्रकाश बल्ब से जोड़िए जो बैटरी से जुड़ा हुआ है (जैसा कि चित्र 9.15
+    में दर्शाया गया है)। 6. प्रत्येक ठोस प्रतिदर्श की विद्युत चालकता का परीक्षण कीजिए और देखिए कि
+    बल्ब प्रदीप्त होता है अथवा नहीं। अपने अवलोकनों को लिखिए। 7. जल में घोले गए प्रत्येक प्रतिदर्श की
+    विद्युत चालकता का परीक्षण प्रतिदर्श के विलयन को एक-एक करके बीकर में स्थानांतरित करके कीजिए और
+    देखिए कि क्या बल्ब प्रदीप्त होता है। (चित्र 9.15) 8. तालिका 9.2 में दिए गए अन्य प्रतिदर्शों के
+    साथ अपने प्रेक्षणों को अंकित कीजिए।"
+  made:
+    - {words: L57.5, by: hindi-repair}
+    - {words: L58.3, by: hindi-repair}
+    - {words: L58.4, by: hindi-repair}
+    - {words: L58.5, by: hindi-repair}
+    - {words: L58.7, by: hindi-repair}
+    - {words: L58.9-10, by: agent}
+    - {words: L58.13, by: agent}
+    - {words: L58.15, by: hindi-repair}
+    - {words: L60.1, by: agent}
+    - {words: L60.4, by: hindi-repair}
+    - {words: L60.6, by: agent}
+    - {words: L60.7, by: hindi-repair}
+    - {words: L60.11, by: hindi-repair}
+    - {words: L61.2, by: hindi-repair}
+    - {words: L61.3, by: hindi-repair}
+    - {words: L61.6, by: agent}
+    - {words: L61.9, by: hindi-repair}
+    - {words: L62.3, by: hindi-repair}
+    - {words: L62.7, by: hindi-repair}
+    - {words: L62.8, by: hindi-repair}
+    - {words: L63.3, by: hindi-repair}
+    - {words: L64.4, by: hindi-repair}
+    - {words: L64.5, by: hindi-repair}
+    - {words: L64.8, by: hindi-repair}
+    - {words: L64.16, by: hindi-repair}
+    - {words: L64.17, by: hindi-repair}
+    - {words: L65.1, by: hindi-repair}
+    - {words: L65.2, by: hindi-repair}
+    - {words: L65.13, by: agent}
+    - {words: L66.3, by: agent}
+    - {words: L66.4, by: hindi-repair}
+    - {words: L66.6, by: hindi-repair}
+    - {words: L66.10, by: hindi-repair}
+    - {words: L66.14, by: agent}
+    - {words: L30.2, page: 17, by: hindi-repair}
+    - {words: L30.13, page: 17, by: hindi-repair}
+    - {words: L30.14, page: 17, by: hindi-repair}
+    - {words: L31.1, page: 17, by: hindi-repair}
+    - {words: L31.4, page: 17, by: hindi-repair}
+    - {words: L31.7, page: 17, by: hindi-repair}
+    - {words: L31.10, page: 17, by: hindi-repair}
+    - {words: L31.11, page: 17, by: hindi-repair}
+    - {words: L31.12, page: 17, by: agent}
+    - {words: L32.11, page: 17, by: hindi-repair}
+    - {words: L32.13, page: 17, by: agent}
+    - {words: L33.5, page: 17, by: hindi-repair}
+    - {words: L33.7, page: 17, by: agent}
+    - {words: L33.11, page: 17, by: hindi-repair}
+    - {words: L34.4, page: 17, by: hindi-repair}
+    - {words: L34.5, page: 17, by: hindi-repair}
+    - {words: L35.2, page: 17, by: hindi-repair}
+    - {words: L35.4, page: 17, by: hindi-repair}
+    - {words: L36.2, page: 17, by: hindi-repair}
+    - {words: L36.3, page: 17, by: hindi-repair}
+    - {words: L36.7, page: 17, by: hindi-repair}
+    - {words: L36.9, page: 17, by: hindi-repair}
+    - {words: L37.3, page: 17, by: hindi-repair}
+    - {words: L37.6, page: 17, by: hindi-repair}
+    - {words: L37.7, page: 17, by: hindi-repair}
+    - {words: L37.13, page: 17, by: hindi-repair}
+    - {words: L38.7, page: 17, by: hindi-repair}
+    - {words: L38.8, page: 17, by: hindi-repair}
+    - {words: L39.3, page: 17, by: hindi-repair}
+    - {words: L39.4, page: 17, by: hindi-repair}
+    - {words: L39.5, page: 17, by: hindi-repair}
+    - {words: L40.4, page: 17, by: hindi-repair}
+    - {words: L40.7, page: 17, by: hindi-repair}
+    - {words: L40.8, page: 17, by: agent}
+    - {words: L40.12, page: 17, by: hindi-repair}
+    - {words: L40.14-17, page: 17, by: hindi-repair}
+- id: "6.2"
+  kind: figure
+  page: 17
+  number: चित्र 9.15
+  text: गत्ता बीकर इलेक्ट्रोड प्रतिदर्श 9V बैटरी बल्ब 9V बैटरी चित्र 9.15 — विलयन की वैद्युत चालकता की
+    जाँच के लिए प्रायोगिक व्यवस्था
+  crop: [55, 89, 251.8, 284.2]
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L2.1, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "6.3"
+  kind: table
+  page: 17
+  number: तालिका 9.2—
+  text: तालिका 9.2— विलेयता एवं विद्युत चालकता के प्रेक्षण प्रयोग विलेयता यौगिकों की वैद्युत चालकता
+    किरोसिन(मिट्टी जल में पेट्रोल में ठोस अवस्था में जल में का तेल) में यौगिक कर्पूर सोडियम क्लोराइड
+    कॉपर सल्फेट चीनी नैफ्थलीन कोई अन्य
+  rows:
+    - [यौगिक, प्रयोग, "", "", "", ""]
+    - ["", विलेयता, "", "", यौगिकों की वैद्युत चालकता, ""]
+    - ["", जल में, किरोसिन(मिट्टी का तेल) में, पेट्रोल में, ठोस अवस्था में, जल में]
+    - [कर्पूर, "", "", "", "", ""]
+    - [सोडियम क्लोराइड, "", "", "", "", ""]
+    - [कॉपर सल्फेट, "", "", "", "", ""]
+    - [चीनी, "", "", "", "", ""]
+    - [नैफ्थलीन, "", "", "", "", ""]
+    - [कोई अन्य, "", "", "", "", ""]
+  crop: [52, 304.7, 547.6, 509.6]
+  made:
+    - {words: L11.3, by: agent}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L13.1, by: agent}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L14.1, by: agent}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.5, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L15.7, by: hindi-repair}
+    - {words: L15.9, by: hindi-repair}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.2-3, by: agent}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L22.1, by: agent}
+    - {words: L23.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "6.4"
+  kind: text
+  page: 17
+  text: 9. उन यौगिकों का समूह बनाइए जो तालिका 9.2 में सूचीबद्ध यौगिकों के समान गुणधर्म दर्शाते हैं।
+  made:
+    - {words: L42.3, by: hindi-repair}
+    - {words: L42.10, by: hindi-repair}
+    - {words: L42.12, by: hindi-repair}
+    - {words: L42.15, by: hindi-repair}
+    - {words: L42.16, by: hindi-repair}
+    - {words: L42.17, by: hindi-repair}
+- id: "6.5"
+  kind: text
+  page: 17
+  text: आयनिक यौगिक जैसे सोडियम क्लोराइड (चित्र 9.16 क) और कॉपर सल्फेट (चित्र 9.16 ख) जल में प्रायः
+    घुलनशील होते हैं किंतु किरोसिन और पेट्रोल जैसे विलायकों में अघुलनशील होते हैं। इसके विपरीत
+    अधिकांश सहसंयोजी यौगिक जैसे कि कर्पूर (चित्र 9.17 क) और नैफ्थलीन (चित्र 9.17 ख) जल में अघुलनशील
+    हैं परंतु किरोसिन और पेट्रोल में घुलनशील हैं।
+  made:
+    - {words: L43.5, by: hindi-repair}
+    - {words: L43.11-12, by: agent}
+    - {words: L44.1, by: hindi-repair}
+    - {words: L44.5, by: hindi-repair}
+    - {words: L44.7, by: agent}
+    - {words: L44.11, by: agent}
+    - {words: L44.12, by: hindi-repair}
+    - {words: L44.15, by: hindi-repair}
+    - {words: L45.3, by: agent}
+    - {words: L45.7, by: hindi-repair}
+    - {words: L45.12, by: agent}
+    - {words: L46.1, by: hindi-repair}
+    - {words: L46.3, by: hindi-repair}
+    - {words: L46.5, by: agent}
+    - {words: L46.8, by: hindi-repair}
+    - {words: L46.10, by: hindi-repair}
+- id: "6.6"
+  kind: text
+  page: 17
+  text: आयनिक यौगिक ठोस अवस्था में विद्युत का चालन नहीं करते हैं क्योंकि उनके आयन प्रबल बलों द्वारा
+    नियत स्थितियों में बँधे रहते हैं। विद्युत चालन के लिए आयनों को गति करने हेतु मुक्त होना चाहिए जो
+    तब ही संभव होता है जब आयनिक यौगिकों, जैसे सोडियम क्लोराइड और कॉपर सल्फेट को जल में घोला जाता है।
+    दूसरी ओर, कुछ सहसंयोजी यौगिक, जैसे— चीनी, जल में घुलनशील होते हैं किंतु विलयन में आयन नहीं बनाते
+    इसलिए ये विद्युत का चालन नहीं करते हैं। अन्य सहसंयोजी यौगिक, जैसे कि कर्पूर और नैफ्थलीन भी
+    विद्युत का चालन नहीं करते हैं। क्या आप इसका कारण दे सकते हैं?
+  made:
+    - {words: L47.4, by: hindi-repair}
+    - {words: L47.5, by: hindi-repair}
+    - {words: L47.9, by: hindi-repair}
+    - {words: L47.11, by: hindi-repair}
+    - {words: L47.12, by: hindi-repair}
+    - {words: L47.16, by: hindi-repair}
+    - {words: L48.3, by: hindi-repair}
+    - {words: L48.4, by: hindi-repair}
+    - {words: L48.7, by: hindi-repair}
+    - {words: L48.12, by: hindi-repair}
+    - {words: L48.17, by: hindi-repair}
+    - {words: L49.8, by: hindi-repair}
+    - {words: L49.11, by: hindi-repair}
+    - {words: L49.14-15, by: agent}
+    - {words: L49.18, by: hindi-repair}
+    - {words: L50.3-6, by: hindi-repair}
+    - {words: L50.9-L51.2, by: agent}
+    - {words: L51.7, by: hindi-repair}
+    - {words: L51.10, by: hindi-repair}
+    - {words: L51.13, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.9, by: hindi-repair}
+    - {words: L52.11, by: hindi-repair}
+    - {words: L52.12, by: hindi-repair}
+    - {words: L52.13, by: agent}
+    - {words: L52.17, by: hindi-repair}
+    - {words: L53.1, by: agent}
+    - {words: L53.6, by: hindi-repair}
+    - {words: L53.8, by: hindi-repair}
+    - {words: L53.9, by: hindi-repair}
+    - {words: L53.15, by: hindi-repair}
+- id: "6.7"
+  kind: text
+  page: 17
+  text: अनुमान लगाइए कि आयनिक और सहसंयोजी यौगिक गलित अवस्था (किसी पदार्थ की पिघली अवस्था) में विद्युत
+    का चालन करेंगे अथवा नहीं।
+  made:
+    - {words: L54.6-L55.2, by: agent}
+    - {words: L55.5, by: hindi-repair}
+    - {words: L55.7, by: hindi-repair}
+    - {words: L56.1, by: hindi-repair}
+    - {words: L56.2, by: hindi-repair}
+    - {words: L56.8, by: hindi-repair}
+- id: "6.8"
+  kind: figure
+  page: 17
+  number: चित्र9.16—
+  text: (क) सोडियम क्लोराइड (ख) कॉपर सल्फेट चित्र9.16— आयनिक यौगिक
+  crop: [51, 529.3, 148.2, 747.8]
+  made:
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.3, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.3-4, by: agent}
+    - {box: true, by: figure-snap}
+- id: "6.9"
+  kind: text
+  page: 18
+  text: प्रबल अंतर-आयनिक आकर्षण बलों के कारण आयनिक यौगिकों के गलनांक एवं क्वथनांक प्रायः उच्च होते हैं
+    जबकि सहसंयोजी यौगिकों के गलनांक एवं क्वथनांक निम्न होते हैं।
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.6, by: hindi-repair}
+    - {words: L2.7, by: hindi-repair}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.9, by: hindi-repair}
+    - {words: L2.10, by: hindi-repair}
+    - {words: L2.11, by: hindi-repair}
+    - {words: L2.12, by: hindi-repair}
+    - {words: L2.13, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L3.4, by: agent}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.6, by: hindi-repair}
+    - {words: L3.7, by: hindi-repair}
+    - {words: L3.8, by: hindi-repair}
+    - {words: L3.9, by: hindi-repair}
+    - {words: L3.10, by: hindi-repair}
+    - {words: L3.11, by: hindi-repair}
+    - {words: L3.12, by: hindi-repair}
+- id: "6.10"
+  kind: box
+  page: 18
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 19. किसी ठोस यौगिक में किस प्रकार का रासायनिक आबंध होगा जो ठोस अवस्था में
+    विद्युत का चालन नहीं करता है परंतु जल में घुलने पर विद्युत का चालन करता है 20. धातु X, जिसके
+    संयोजकता कोश (M कोश) में दो इलेक्ट्रॉन हैं, ऑक्सीजन से अभिक्रिया कर एक यौगिक बनाती है जो जल में
+    अल्प घुलनशील है। इसके लिए निम्न का पूर्वानुमान लगाइए। (i) सूत्र (ii) आबंध के प्रकार (iii) उसके
+    जलीय विलयन की वैद्युत चालकता
+  made:
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L5.6, by: hindi-repair}
+    - {words: L5.7, by: hindi-repair}
+    - {words: L5.8, by: hindi-repair}
+    - {words: L5.9, by: hindi-repair}
+    - {words: L5.10, by: hindi-repair}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L5.12, by: hindi-repair}
+    - {words: L5.13, by: hindi-repair}
+    - {words: L5.14, by: hindi-repair}
+    - {words: L5.15, by: hindi-repair}
+    - {words: L5.16, by: hindi-repair}
+    - {words: L5.17, by: hindi-repair}
+    - {words: L6.1, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.4-5, by: hindi-repair}
+    - {words: L6.7, by: hindi-repair}
+    - {words: L6.8, by: hindi-repair}
+    - {words: L6.10, by: hindi-repair}
+    - {words: L6.11, by: hindi-repair}
+    - {words: L6.12, by: hindi-repair}
+    - {words: L6.13, by: hindi-repair}
+    - {words: L6.14, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L7.12, by: hindi-repair}
+    - {words: L7.13, by: hindi-repair}
+    - {words: L8.5, by: hindi-repair}
+    - {words: L8.6, by: hindi-repair}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L8.13, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.7, by: hindi-repair}
+- id: "7"
+  kind: section
+  page: 18
+  number: "9.7"
+  title: सहसंयोजी यौगिकों का आण्विक द्रव्यमान
+  text: 9.7 सहसंयोजी यौगिकों का आण्विक द्रव्यमान
+  made:
+    - {words: L12.2, by: agent}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.5, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+- id: "7.1"
+  kind: text
+  page: 18
+  text: आप सहसंयोजी यौगिकों के सूत्र जानते हैं। आप उनके अणुओं के द्रव्यमान उनमें उपस्थित परमाणुओं के
+    द्रव्यमानों को जोड़ कर ज्ञात कर सकते हैं।
+  made:
+    - {words: L13.2, by: agent}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.9, by: hindi-repair}
+    - {words: L13.10-11, by: agent}
+    - {words: L13.12, by: hindi-repair}
+    - {words: L13.13, by: hindi-repair}
+    - {words: L13.14, by: hindi-repair}
+    - {words: L13.15, by: agent}
+    - {words: L13.16-17, by: agent}
+    - {words: L13.18, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.7, by: hindi-repair}
+    - {words: L14.8, by: hindi-repair}
+- id: "7.2"
+  kind: example
+  page: 18
+  number: उदाहरण 9.4
+  text: उदाहरण 9.4 जल (H₂O) का आण्विक द्रव्यमान परमाणु द्रव्यमान— H = 1 u; O = 16 u
+  made:
+    - {words: L15.1, by: hindi-repair}
+    - {words: L16.2-L18.1, by: agent}
+    - {words: L18.2, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+- id: "7.3"
+  kind: text
+  page: 18
+  text: H₂O का आण्विक द्रव्यमान = (1 u × 2) + (16 u × 1) = 18 u
+  made:
+    - {words: L20-L22.1, by: agent}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+- id: "7.4"
+  kind: example
+  page: 18
+  number: उदाहरण 9.5
+  text: उदाहरण 9.5 कार्बन डाइऑक्साइड (CO₂) का आण्विक द्रव्यमान परमाणु द्रव्यमान – C = 12 u; O = 16 u
+  made:
+    - {words: L23.1, by: hindi-repair}
+    - {words: L24.1, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.3-L26.1, by: agent}
+    - {words: L26.2, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+- id: "7.5"
+  kind: text
+  page: 18
+  text: CO₂ का आण्विक द्रव्यमान = (12 u × 1) + (16 u × 2) = 44 u
+  made:
+    - {words: L28-L29, by: agent}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L30.2, by: hindi-repair}
+    - {words: L30.3, by: hindi-repair}
+- id: "7.6"
+  kind: text
+  page: 18
+  text: आपने अनुभाग 9.4.2 में अध्ययन किया कि आयनिक यौगिकों में आयन 3-D क्रिस्टल बनाते हैं। आयनिक यौगिक
+    अणु नहीं बनाते हैं।
+  made:
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.6, by: hindi-repair}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L31.8, by: hindi-repair}
+    - {words: L31.9, by: hindi-repair}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L31.13, by: hindi-repair}
+    - {words: L31.14, by: hindi-repair}
+    - {words: L31.15, by: hindi-repair}
+    - {words: L31.16, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.3, by: hindi-repair}
+    - {words: L32.4, by: hindi-repair}
+    - {words: L32.5, by: hindi-repair}
+- id: "7.7"
+  kind: box
+  page: 18
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 21. नाइट्रिक अम्ल (HNO₃) का आण्विक द्रव्यमान ज्ञात कीजिए। परमाणु द्रव्यमान – H
+    = 1 u; N = 14 u; O = 16 u 22. मेथेन (CH₄) का आण्विक द्रव्यमान ज्ञात कीजिए। परमाणु द्रव्यमान— C =
+    12 u; H = 1 u
+  made:
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L40.3, by: hindi-repair}
+    - {words: L40.4-L42.1, by: agent}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L42.4, by: hindi-repair}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L44.3-L46.1, by: agent}
+    - {words: L46.3, by: hindi-repair}
+    - {words: L46.4, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+- id: "8"
+  kind: section
+  page: 18
+  number: "9.8"
+  title: आयनिक यौगिकों का सूत्र इकाई द्रव्यमान
+  text: 9.8 आयनिक यौगिकों का सूत्र इकाई द्रव्यमान
+  made:
+    - {words: L48.3, by: hindi-repair}
+    - {words: L48.5-7, by: hindi-repair}
+    - {words: L48.9, by: hindi-repair}
+- id: "8.1"
+  kind: text
+  page: 18
+  text: आयनिक यौगिकों में आयनों की सरलतम पूर्ण संख्या अनुपात के संग्रह को सूत्र इकाई कहते हैं। सूत्र
+    इकाई का द्रव्यमान सूत्र इकाई द्रव्यमान कहलाता है।
+  made:
+    - {words: L49.2, by: hindi-repair}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L49.4, by: hindi-repair}
+    - {words: L49.6, by: agent}
+    - {words: L49.7, by: hindi-repair}
+    - {words: L49.8-L50.2, by: hindi-repair}
+    - {words: L50.3-6, by: hindi-repair}
+    - {words: L50.8-L51.2, by: hindi-repair}
+    - {words: L51.4-6, by: hindi-repair}
+    - {words: L51.9, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.5, by: hindi-repair}
+- id: "8.2"
+  kind: example
+  page: 18
+  number: उदाहरण 9.6
+  text: उदाहरण 9.6 सोडियम ऑक्साइड (Na₂O) का सूत्र इकाई द्रव्यमान परमाणु द्रव्यमान Na = 23 u; O = 16 u
+  made:
+    - {words: L53.1, by: hindi-repair}
+    - {words: L54.2, by: hindi-repair}
+    - {words: L54.3-L56.1, by: agent}
+    - {words: L56.5, by: hindi-repair}
+    - {words: L57.1, by: hindi-repair}
+    - {words: L57.2, by: hindi-repair}
+- id: "8.3"
+  kind: figure
+  page: 18
+  number: चित्र 9.17—
+  text: (क) कर्पूर (ख) नैफ्थलीन चित्र 9.17— सहसंयोजी यौगिक
+  crop: [486.8, 267.6, 586.2, 514.3]
+  made:
+    - {words: L34.2-L35.1, by: hindi-repair}
+    - {words: L36.2, by: agent}
+    - {words: L37.3-L38.2, by: agent}
+    - {box: true, by: figure-snap}
+- id: "8.4"
+  kind: text
+  page: 19
+  text: सोडियम ऑक्साइड (Na₂O) का सूत्र इकाई द्रव्यमान = (23 u × 2) + (16 u × 1) = 62 u
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L1.2, by: hindi-repair}
+    - {words: L1.3-L3.1, by: agent}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+- id: "8.5"
+  kind: example
+  page: 19
+  number: उदाहरण 9.7
+  text: उदाहरण 9.7 कैल्सियम नाइट्रेट Ca(NO₃)₂ का सूत्र इकाई द्रव्यमान परमाणु द्रव्यमान — Ca = 40 u; N
+    = 14 u; O = 16 u
+  made:
+    - {words: L4.1, by: hindi-repair}
+    - {words: L5.1-2, by: agent}
+    - {words: L5.3-4, by: hindi-repair}
+    - {words: L5.5-L8.1, by: agent}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L9.3, by: hindi-repair}
+    - {words: L9.4, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+- id: "8.6"
+  kind: text
+  page: 19
+  text: Ca(NO₃)₂ का सूत्र इकाई द्रव्यमान = (40 u × 1) + {(14 u × 1) + (16 u × 3)} × 2 = 164 u
+  made:
+    - {words: L11-L14, by: agent}
+    - {words: L15.1, by: hindi-repair}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+- id: "8.7"
+  kind: box
+  page: 19
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 23. पोटैशियम क्लोराइड (KCl) का सूत्र इकाई द्रव्यमान ज्ञात कीजिए। परमाणु
+    द्रव्यमान — K = 39 u; Cl = 35.5 u 24. मैग्नीशियम हाइड्रॉक्साइड Mg(OH)₂ का सूत्र इकाई द्रव्यमान
+    ज्ञात कीजिए। परमाणु द्रव्यमान — Mg = 24 u; O = 16 u; H = 1 u
+  made:
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.2, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.5, by: hindi-repair}
+    - {words: L18.6, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.8, by: hindi-repair}
+    - {words: L18.9, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L20.3-L21.1, by: agent}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+    - {words: L22.5, by: hindi-repair}
+    - {words: L22.6, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L23.2, by: hindi-repair}
+- id: "8.8"
+  kind: text
+  page: 19
+  text: परमाणुओं, अणुओं और रासायनिक आबंधन की समझ उस प्रत्येक वस्तु के पीछे छिपे विज्ञान को उजागर करती
+    है जिनका हम प्रतिदिन उपयोग एवं उपभोग करते हैं। यह दर्शाती है कि किस प्रकार सूक्ष्म परमाणु संयोग
+    कर उस ब्रह्मांड का निर्माण करते हैं जिसमें हम रहते हैं।
+  made:
+    - {words: L24.1-2, by: hindi-repair}
+    - {words: L24.3-4, by: agent}
+    - {words: L24.11, by: hindi-repair}
+    - {words: L24.12, by: hindi-repair}
+    - {words: L25.11, by: hindi-repair}
+    - {words: L25.13, by: hindi-repair}
+    - {words: L25.18, by: hindi-repair}
+    - {words: L26.2-L27.2, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.7, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.10, by: hindi-repair}
+    - {words: L27.13, by: hindi-repair}
+- id: "8.9"
+  kind: box
+  page: 19
+  title: सारांश
+  text: सारांश किसी रासायनिक अभिक्रिया में द्रव्यमान का न तो सृजन किया जा सकता है और न ही उसे नष्ट
+    किया जा सकता है। इसे द्रव्यमान संरक्षण का नियम कहते हैं। किसी भी यौगिक में तत्व सदैव द्रव्यमान
+    के स्थिर अनुपात में संयोजित होते हैं, चाहे उसका निर्माण किसी भी प्रकार से किया जाए अथवा उसे कहीं
+    से भी प्राप्त किया जाए। इसे स्थिर अनुपात का नियम कहते हैं। एक अणु को एक ऐसे वैद्युत उदासीन कण के
+    रूप में परिभाषित किया जा सकता है जो एक से अधिक परमाणुओं से बनता है और स्वतंत्र रूप से अस्तित्व
+    में रह सकता है तथा अपने सभी रासायनिक गुणधर्म दर्शाता है। परमाणु स्थायित्व प्राप्त करने के लिए
+    तत्वों अथवा यौगिक के संयोजन से अणु बनाते हैं। परमाणु जिस बल द्वारा एक-दूसरे से जुड़े रहते हैं
+    उसे रासायनिक आबंध कहते हैं। एक सहसंयोजी आबंध परमाणुओं के मध्य इलेक्ट्रॉनों को साझा करने से बनता
+    है। परमाणुओं के मध्य इलेक्ट्रॉनों के स्थानांतरण से आयनिक आबंध बनता है जिसमें एक परमाणु
+    इलेक्ट्रॉन त्यागता है और दूसरा परमाणु इलेक्ट्रॉन ग्रहण करता है जिससे क्रमशः धनायन और ऋणायन बनते
+    हैं। किसी सहसंयोजी यौगिक का रासायनिक सूत्र उसके संघटक तत्वों तथा प्रत्येक तत्व के परमाणुओं की
+    संख्या को निरूपित करता है। किसी आयनिक यौगिक का रासायनिक सूत्र उसमें उपस्थित विभिन्न तत्वों के
+    परमाणुओं की सरलतम पूर्ण संख्या के अनुपात को व्यक्त करता है। किसी अणु का आण्विक द्रव्यमान वह कुल
+    द्रव्यमान है जो उसके सभी संघटक परमाणुओं के परमाणु द्रव्यमानों के योग द्वारा परिकलित किया जाता
+    है। किसी आयनिक यौगिक का सूत्र इकाई द्रव्यमान उसकी सूत्र इकाई में उपस्थित सभी परमाणुओं के परमाणु
+    द्रव्यमानों का योग है। (किसी आयनिक यौगिक में आयनों की सरलतम पूर्ण संख्या का अनुपात उसकी सूत्र
+    इकाई होता है।)
+  made:
+    - {words: L29.5, by: hindi-repair}
+    - {words: L29.6, by: hindi-repair}
+    - {words: L29.19, by: hindi-repair}
+    - {words: L30.6, by: hindi-repair}
+    - {words: L30.11, by: hindi-repair}
+    - {words: L31.5, by: hindi-repair}
+    - {words: L31.6, by: agent}
+    - {words: L31.8, by: hindi-repair}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L31.12, by: hindi-repair}
+    - {words: L31.15, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.10, by: hindi-repair}
+    - {words: L32.13, by: hindi-repair}
+    - {words: L32.17, by: hindi-repair}
+    - {words: L33.5, by: hindi-repair}
+    - {words: L34.12, by: hindi-repair}
+    - {words: L35.2-3, by: agent}
+    - {words: L35.8, by: hindi-repair}
+    - {words: L35.11, by: hindi-repair}
+    - {words: L35.12, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L36.3, by: hindi-repair}
+    - {words: L38.3, by: hindi-repair}
+    - {words: L38.4, by: hindi-repair}
+    - {words: L38.8, by: agent}
+    - {words: L38.12-13, by: agent}
+    - {words: L37.1-2, by: agent}
+    - {words: L37.6, by: hindi-repair}
+    - {words: L39.4-7, by: hindi-repair}
+    - {words: L39.9-12, by: hindi-repair}
+    - {words: L39.14, by: hindi-repair}
+    - {words: L39.19, by: hindi-repair}
+    - {words: L40.3, by: agent}
+    - {words: L40.5-6, by: agent}
+    - {words: L40.8, by: hindi-repair}
+    - {words: L40.9, by: hindi-repair}
+    - {words: L41.2-3, by: agent}
+    - {words: L41.5, by: hindi-repair}
+    - {words: L41.6, by: hindi-repair}
+    - {words: L41.8, by: hindi-repair}
+    - {words: L41.14, by: hindi-repair}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L42.11, by: agent}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.3, by: hindi-repair}
+    - {words: L44.3, by: agent}
+    - {words: L44.10, by: agent}
+    - {words: L44.12, by: hindi-repair}
+    - {words: L44.13, by: agent}
+    - {words: L45.1-2, by: agent}
+    - {words: L45.4, by: hindi-repair}
+    - {words: L47.8, by: hindi-repair}
+    - {words: L47.9, by: hindi-repair}
+    - {words: L47.10, by: hindi-repair}
+    - {words: L47.11, by: agent}
+    - {words: L47.13-14, by: agent}
+    - {words: L46.1-2, by: agent}
+    - {words: L48.1, by: agent}
+    - {words: L48.2, by: hindi-repair}
+    - {words: L48.3-L49.2, by: hindi-repair}
+    - {words: L49.4-7, by: hindi-repair}
+    - {words: L49.9, by: hindi-repair}
+    - {words: L50.5, by: hindi-repair}
+    - {words: L50.6, by: hindi-repair}
+    - {words: L50.9, by: hindi-repair}
+    - {words: L50.15-16, by: agent}
+    - {words: L51.2, by: hindi-repair}
+    - {words: L52.8, by: hindi-repair}
+    - {words: L52.12, by: hindi-repair}
+    - {words: L52.13, by: hindi-repair}
+    - {words: L52.15-16, by: agent}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.10, by: hindi-repair}
+    - {words: L53.11, by: hindi-repair}
+    - {words: L53.13, by: agent}
+    - {words: L53.14, by: hindi-repair}
+    - {words: L53.15, by: hindi-repair}
+- id: "8.10"
+  kind: exercise
+  page: 20
+  title: अभ्यास प्रश्न
+  text: अभ्यास प्रश्न
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+- id: "8.10.1"
+  kind: question
+  page: 20
+  number: "1."
+  text: 1. किसी एक तत्व (क) के तीसरे कोश में एक इलेक्ट्रॉन है। एक अन्य तत्व (ख) है जिसके दूसरे कोश में
+    छह इलेक्ट्रॉन हैं। (i) स्थायित्व प्राप्त करने के लिए ‘क’ कितने इलेक्ट्रॉनों का त्याग करेगा अथवा
+    ग्रहण करेगा? (ii) वह किस प्रकार का आयन बनाएगा? (iii) स्थायित्व प्राप्त करने के लिए ‘ख’ कितने
+    इलेक्ट्रॉनों का त्याग करेगा अथवा ग्रहण करेगा? (iv) वह किस प्रकार का आयन बनाएगा? (v) ‘क ‘और ‘ख’
+    के संयोजित होने पर किस प्रकार का आबंध बनेगा? (vi) उनके संयोजन से निर्मित यौगिक का सूत्र क्या
+    होगा?
+  made:
+    - {words: L3.4, by: agent}
+    - {words: L3.9, by: hindi-repair}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.15, by: agent}
+    - {words: L3.19-22, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.4, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.9, by: hindi-repair}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L5.12-13, by: agent}
+    - {words: L5.16-17, by: agent}
+    - {words: L7.2, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L7.11, by: hindi-repair}
+    - {words: L7.12-13, by: agent}
+    - {words: L7.16-17, by: agent}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L10.9, by: hindi-repair}
+- id: "8.10.2"
+  kind: question
+  page: 20
+  number: "2."
+  text: 2. किसी तत्व ‘च’ के बाह्यतम कोश में छह इलेक्ट्रॉन हैं और वह एक द्विपरमाणुक अणु बनाता है। (i)
+    ऐसा क्यों हुआ होगा? (ii) वह किस प्रकार का आबंध बनाएगा? (iii) उसके द्वारा निर्मित अणु की संरचना
+    आरेखित कीजिए। (iv) एक अन्य तत्व ‘छ’ के दूसरे कोश में दो इलेक्ट्रॉन हैं। उस अणु की संरचना आरेखित
+    कीजिए जो तत्व ‘च’ और ‘छ’ के संयोजन से बनेगा।
+  made:
+    - {words: L11.3, by: agent}
+    - {words: L11.8, by: hindi-repair}
+    - {words: L11.11, by: hindi-repair}
+    - {words: L11.15, by: agent}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L14.8-9, by: agent}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.4, by: agent}
+    - {words: L15.9, by: hindi-repair}
+    - {words: L15.12, by: hindi-repair}
+    - {words: L15.17-18, by: agent}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.2, by: agent}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.8, by: hindi-repair}
+    - {words: L16.9, by: hindi-repair}
+- id: "8.10.3"
+  kind: question
+  page: 20
+  number: "3."
+  text: 3. आप एक नवीन आयनिक यौगिक की अभिकल्पना करना चाहते हैं जिसमें कुल धन आवेश 6+ है और कुल ऋण आवेश
+    6– है। निम्नलिखित में से कौन-सा संयोजन आयनों की सही संख्या दर्शाता है? (i) 2 Al³⁺ और 3 Cl⁻ (ii)
+    3 Mg²⁺ और 1 PO₄³⁻ (iii) 2 Fe³⁺ और 3 O²⁻ (iv) 3 Ca²⁺ और 2 SO₄²⁻
+  made:
+    - {words: L17.8, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+    - {words: L17.12, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.8, by: hindi-repair}
+    - {words: L18.12, by: hindi-repair}
+    - {words: L18.15, by: hindi-repair}
+    - {words: L18.16, by: hindi-repair}
+    - {words: L19.3-4, by: agent}
+    - {words: L19.7-8, by: agent}
+    - {words: L20.3-4, by: agent}
+    - {words: L20.7-L22.1, by: agent}
+    - {words: L23.3-4, by: agent}
+    - {words: L23.7-8, by: agent}
+    - {words: L24.3-4, by: agent}
+    - {words: L24.7-L26.1, by: agent}
+- id: "8.10.4"
+  kind: question
+  page: 20
+  number: "4."
+  text: 4. सही कथन (नों) का चयन कीजिए और गलत कथन (नों) को सही कीजिए। (i) तत्व अणुओं से बनते हैं और
+    यौगिक परमाणुओं से बनते हैं। (ii) किसी यौगिक का अणु सदैव एक ही प्रकार के दो अथवा अधिक परमाणुओं से
+    मिलकर बनता है। (iii) नाइट्रोजन गैस के एक अणु में तीन नाइट्रोजन परमाणु होते हैं। (iv) जल दो
+    हाइड्रोजन परमाणुओं से मिलकर बना है जो एक ऑक्सीजन परमाणु से सहसंयोजी रूप से आबंधित होते हैं।
+  made:
+    - {words: L27.4, by: agent}
+    - {words: L27.11, by: agent}
+    - {words: L28.2, by: agent}
+    - {words: L28.3-4, by: agent}
+    - {words: L28.7, by: hindi-repair}
+    - {words: L28.10-11, by: agent}
+    - {words: L28.14, by: hindi-repair}
+    - {words: L29.14-15, by: agent}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L31.12, by: hindi-repair}
+    - {words: L32.5-8, by: agent}
+    - {words: L32.15, by: hindi-repair}
+    - {words: L32.18, by: agent}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.5, by: hindi-repair}
+- id: "8.10.5"
+  kind: question
+  page: 20
+  number: "5."
+  text: 5. निम्नलिखित यौगिकों के रासायनिक सूत्र लिखिए। (i) ऐलुमिनियम नाइट्रेट (ii) कैल्सियम ऑक्साइड
+    (iii) फेरिक ऑक्साइड
+  made:
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L36.2-3, by: agent}
+    - {words: L36.4, by: hindi-repair}
+    - {words: L37.2-3, by: agent}
+    - {words: L37.4, by: hindi-repair}
+- id: "8.10.6"
+  kind: question
+  page: 20
+  number: "6."
+  text: 6. आयनों के निम्नलिखित युग्मों से निर्मित यौगिकों के सूत्र लिखिए। (i) Ca²⁺ और Br⁻ (ii) Al³⁺ और
+    CO₃²⁻ (iii) K⁺ और SO₄²⁻ (iv) NH₄⁺ और Cl⁻
+  made:
+    - {words: L38.2, by: hindi-repair}
+    - {words: L38.4, by: hindi-repair}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.7, by: hindi-repair}
+    - {words: L38.8, by: hindi-repair}
+    - {words: L39.2-3, by: agent}
+    - {words: L39.5-6, by: agent}
+    - {words: L40.2-3, by: agent}
+    - {words: L40.5-L42.1, by: agent}
+    - {words: L43.2-3, by: agent}
+    - {words: L43.5-L45.1, by: agent}
+    - {words: L46.2-L48.1, by: agent}
+    - {words: L48.3-4, by: agent}
+- id: "8.10.7"
+  kind: question
+  page: 21
+  number: "7."
+  text: 7. चित्र 9.18 में निम्नलिखित में से कौन Cl⁻ आयन को सही प्रकार से निरूपित कर रहा है (क्लोरीन की
+    परमाणु संख्या 17 है)?
+  made:
+    - {words: L1.4, by: hindi-repair}
+    - {words: L1.5, by: hindi-repair}
+    - {words: L1.6, by: hindi-repair}
+    - {words: L1.9-10, by: agent}
+    - {words: L1.20, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+- id: "8.10.8"
+  kind: figure
+  page: 21
+  number: चित्र 9.18
+  text: (i) (ii) (iii) (iv) चित्र 9.18
+  crop: [175.1, 118.7, 528.1, 227.3]
+  made:
+    - {words: L4.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "8.10.9"
+  kind: question
+  page: 21
+  number: "8."
+  text: 8. निम्नलिखित पदार्थों का सूत्र इकाई द्रव्यमान ज्ञात कीजिए। (i) अमोनियम नाइट्रेट (NH₄NO₃)
+    जिसका उपयोग नाइट्रोजन उर्वरक के रूप में किया जाता है जो पौधों की वृद्धि हेतु आवश्यक है। (ii)
+    फॉस्फोरिक अम्ल (H₃PO₄) जिसका उपयोग फॉस्फेट उर्वरक और अपमार्जकों के निर्माण में किया जाता है।
+    (iii) सोडियम हाइड्रोजनकार्बोनेट (NaHCO₃) जिसका उपयोग अम्लता को कम करता है और पाचन में सहायता
+    करता है।
+  made:
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.7, by: hindi-repair}
+    - {words: L6.4-L10.1, by: agent}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L10.8, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.4-L16.1, by: agent}
+    - {words: L16.4-5, by: agent}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.8, by: agent}
+    - {words: L16.10, by: hindi-repair}
+    - {words: L16.11, by: hindi-repair}
+    - {words: L18.3, by: agent}
+    - {words: L18.4-L20.1, by: agent}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.5, by: hindi-repair}
+- id: "8.10.10"
+  kind: question
+  page: 21
+  number: "9."
+  text: 9. उन यौगिकों के सूत्र लिखिए जो निम्नलिखित की परस्पर अभिक्रिया द्वारा बनते हैं— (i) मैग्नीशियम
+    और नाइट्रोजन (ii) लीथियम और नाइट्रोजन (iii) सोडियम और सल्फर (iv) ऐलुमिनियम और ऑक्सीजन
+  made:
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.10, by: hindi-repair}
+    - {words: L22.14, by: hindi-repair}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L24.2, by: agent}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+- id: "8.10.11"
+  kind: question
+  page: 21
+  number: "10."
+  text: 10. बाईं ओर दिए गए धनायनों और शीर्ष पर दिए गए ऋणायनों से निर्मित यौगिकों के सूत्र लिखकर तालिका
+    9.3 को पूर्ण कीजिए। LiNO₃ एक उदाहरण के रूप में दिया गया है।
+  made:
+    - {words: L27.2, by: agent}
+    - {words: L27.6, by: agent}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.12, by: agent}
+    - {words: L27.14, by: hindi-repair}
+    - {words: L27.15, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L28.6-L29.1, by: agent}
+    - {words: L30.5, by: hindi-repair}
+- id: "8.10.12"
+  kind: table
+  page: 21
+  number: तालिका 9.3
+  text: तालिका 9.3 NO₃⁻ SO₄²⁻ PO₄³⁻ NH₄⁺ Li⁺ LiNO₃ Al³⁺ Cu²⁺
+  rows:
+    - ["", NO₃⁻, SO₄²⁻, PO₄³⁻]
+    - [NH₄⁺, "", "", ""]
+    - [Li⁺, LiNO₃, "", ""]
+    - [Al³⁺, "", "", ""]
+    - [Cu²⁺, "", "", ""]
+  crop: [159.8, 495.7, 546.5, 595.4]
+  made:
+    - {words: L32-L34, by: agent}
+    - {words: L41-L42, by: agent}
+    - {words: L43-L44, by: agent}
+    - {words: L35-L37, by: agent}
+    - {words: L38, by: agent}
+    - {words: L45-L46, by: agent}
+    - {words: L39, by: agent}
+    - {words: L40, by: agent}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "8.10.13"
+  kind: question
+  page: 21
+  number: "11."
+  text: 11. 5.3 g सोडियम कार्बोनेट और 6.0 g ऐसीटिक अम्ल परस्पर अभिक्रिया द्वारा 2.2 g कार्बन
+    डाइऑक्साइड, 0.9 g जल और 8.2 g सोडियम ऐसीटेट बनाते हैं। जाँच कीजिए कि क्या इसमें द्रव्यमान
+    संरक्षण के नियम का अनुपालन हो रहा है।
+  made:
+    - {words: L47.9, by: agent}
+    - {words: L47.10, by: hindi-repair}
+    - {words: L47.11, by: hindi-repair}
+    - {words: L47.16, by: hindi-repair}
+    - {words: L48.1, by: hindi-repair}
+    - {words: L48.11, by: hindi-repair}
+    - {words: L48.15, by: hindi-repair}
+    - {words: L48.16, by: hindi-repair}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L49.2-L50.2, by: hindi-repair}
+- id: "8.10.14"
+  kind: question
+  page: 21
+  number: "12."
+  text: 12. यदि किसी स्पीशीज में 11 प्रोटॉन, 12 न्यूट्रॉन और 10 इलेक्ट्रॉन हैं, तो (i) उसका परमाणु
+    क्रमांक और द्रव्यमान संख्या क्या होंगे? (ii) क्या यह उदासीन है, धनायन है अथवा ऋणायन है? व्याख्या
+    कीजिए। (iii) इसका इलेक्ट्रॉनिक विन्यास लिखिए। (iv) स्पीशीज का नाम लिखिए।
+  made:
+    - {words: L51.4, by: agent}
+    - {words: L51.5, by: hindi-repair}
+    - {words: L51.9, by: hindi-repair}
+    - {words: L51.13, by: hindi-repair}
+    - {words: L52.6, by: hindi-repair}
+    - {words: L52.7-L53.2, by: hindi-repair}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.4, by: hindi-repair}
+    - {words: L54.2, by: hindi-repair}
+    - {words: L54.9, by: hindi-repair}
+    - {words: L54.11, by: hindi-repair}
+    - {words: L55.4, by: hindi-repair}
+    - {words: L56.2, by: agent}
+- id: "8.10.15"
+  kind: question
+  page: 22
+  number: "13."
+  text: 13. दो तत्वों, ‘क’ और ‘ख’ के विन्यास निम्नलिखित हैं— (क) 2, 8, 5		 (ख) 2, 8, 7 (i) कौन-सा तत्व
+    अधिक अभिक्रियाशील है? (ii) जब ‘क’ और ‘ख’ संयोजन करेंगे तब वे आयनिक आबंध बनाएँगे अथवा सहसंयोजी
+    आबंध? इलेक्ट्रॉन स्थानांतरण अथवा साझेदारी के उपयोग द्वारा समझाइए। (iii) उनसे निर्मित यौगिक के
+    सूत्र का पूर्वानुमान कीजिए।
+  made:
+    - {words: L2.3, by: agent}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.9, by: hindi-repair}
+    - {words: L2.10, by: hindi-repair}
+    - {words: L4.3, by: agent}
+    - {words: L4.5, by: agent}
+    - {words: L5.14, by: agent}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L7.8, by: hindi-repair}
+- id: "8.10.16"
+  kind: question
+  page: 22
+  number: "14."
+  text: 14. नीचे दिए गए अभिकथन एवं कारण को पढ़िए और उनके संबंध में आगे दिए गए विकल्पों में से सही
+    विकल्प का चयन कीजिए। अभिकथन — गलित अवस्था में कॉपर सल्फेट विद्युत का चालन करता है परंतु ठोस
+    अवस्था में नहीं। कारण— जालक की गलित अवस्था में कॉपर और सल्फेट आयनों की स्थिति नियत होती है जबकि
+    ठोस अवस्था में वे स्वतंत्र रूप से गति कर सकते हैं। सही विकल्प का चयन कीजिए— (i) अभिकथन और कारण
+    दोनों सत्य हैं और कारण, अभिकथन की सही व्याख्या है। (ii) अभिकथन और कारण दोनों सत्य हैं परंतु
+    कारण, अभिकथन की सही व्याख्या नहीं है। (iii) अभिकथन सत्य है, परंतु कारण असत्य है। (iv) अभिकथन
+    असत्य है, परंतु कारण सत्य है।
+  made:
+    - {words: L8.9, by: hindi-repair}
+    - {words: L8.13, by: hindi-repair}
+    - {words: L8.17, by: hindi-repair}
+    - {words: L8.18, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L10.6-7, by: agent}
+    - {words: L10.15, by: hindi-repair}
+    - {words: L10.16, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L12.5, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.9-10, by: agent}
+    - {words: L12.11, by: hindi-repair}
+    - {words: L12.13, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L15.5, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L15.7, by: hindi-repair}
+    - {words: L15.13, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.13, by: hindi-repair}
+    - {words: L16.14, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+- id: "8.10.17"
+  kind: question
+  page: 22
+  number: "15."
+  text: 15. ²⁷Al, ⁸⁰Br⁻ और ²⁰¹Hg²⁺ कणों में क्रमशः 13, 35 और 80 प्रोटॉन हैं। इनमें कितने इलेक्ट्रॉन और
+    न्यूट्रॉन हैं?
+  made:
+    - {words: L19.2-3, by: agent}
+    - {words: L19.4-6, by: agent}
+    - {words: L19.8-10, by: agent}
+    - {words: L19.11, by: hindi-repair}
+    - {words: L19.12, by: hindi-repair}
+    - {words: L19.19, by: hindi-repair}
+    - {words: L19.20, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+- id: "8.10.18"
+  kind: heading
+  page: 22
+  title: परियोजना कार्य
+  text: परियोजना कार्य
+  made:
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+- id: "8.10.19"
+  kind: text
+  page: 22
+  text: एक प्रयोग की अभिकल्पना और निष्पादन यह दर्शाने और तुलना करने हेतु कीजिए कि जल में हाइड्रोजन और
+    ऑक्सीजन सदैव समान अनुपात में अस्तित्व में होते हैं चाहे उसका स्रोत कुछ भी हो। किंन्ही तीन तत्वों
+    के परमाणुओं एवं आयनों की तुलना कीजिए। स्तंभ आलेखों (Bar graphs) का उपयोग करते हुए आयन निर्माण के
+    पूर्व और पश्चात इलेक्ट्रॉनों की संख्या दर्शाइए। धनायनों और ऋणायनों का एक कार्ड गेम बनाइए। इसमें
+    आप निम्नलिखित संभावित विचारों को संज्ञान में ले सकते हैं— कार्डों की ढेरी में से अथवा फैले हुए
+    कार्डों में से एक कार्ड उठा सकते हैं और अपने हाथ के कार्डों से उनका मिलान करते हुए यौगिक बना
+    सकते हैं। आप अवांछनीय कार्डों को छोड़ सकते हैं। यौगिक बनाने हेतु अन्य खिलाड़ियों से भी कार्ड ले
+    सकते हैं और उन कार्डों का उपयोग भी कर सकते हैं जो उनके पास पहले से हैं। अणुओं के विषय में और
+    अधिक सीखने के लिए आप नीचे दिए गए लिंक पर खोज कर सकते हैं—
+    https://phet.colorado.edu/sims/html/build-a-molecule/latest/build-a-molecule_all.html
+  made:
+    - {words: L22.5, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L22.9, by: hindi-repair}
+    - {words: L22.17, by: hindi-repair}
+    - {words: L23.3, by: hindi-repair}
+    - {words: L23.7, by: hindi-repair}
+    - {words: L23.8, by: hindi-repair}
+    - {words: L23.9, by: hindi-repair}
+    - {words: L23.11, by: hindi-repair}
+    - {words: L24.2, by: agent}
+    - {words: L24.4, by: agent}
+    - {words: L24.6-7, by: agent}
+    - {words: L24.9, by: hindi-repair}
+    - {words: L24.13, by: hindi-repair}
+    - {words: L24.14, by: hindi-repair}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L25.7, by: hindi-repair}
+    - {words: L25.9, by: hindi-repair}
+    - {words: L25.10, by: hindi-repair}
+    - {words: L25.12, by: hindi-repair}
+    - {words: L25.13, by: hindi-repair}
+    - {words: L27.2, by: agent}
+    - {words: L27.4, by: agent}
+    - {words: L27.7, by: hindi-repair}
+    - {words: L27.10, by: hindi-repair}
+    - {words: L27.12, by: hindi-repair}
+    - {words: L27.13-14, by: agent}
+    - {words: L26.1-2, by: agent}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.5, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L29.5, by: hindi-repair}
+    - {words: L29.8-9, by: agent}
+    - {words: L29.11, by: hindi-repair}
+    - {words: L29.12, by: hindi-repair}
+    - {words: L29.15, by: hindi-repair}
+    - {words: L29.18, by: hindi-repair}
+    - {words: L29.23, by: hindi-repair}
+    - {words: L30.9, by: hindi-repair}
+    - {words: L30.12, by: hindi-repair}
+    - {words: L30.16, by: hindi-repair}
+    - {words: L31.5, by: hindi-repair}
+    - {words: L31.6, by: hindi-repair}
+    - {words: L31.9, by: hindi-repair}
+    - {words: L31.12, by: hindi-repair}
+    - {words: L31.15, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.8, by: hindi-repair}
+    - {words: L33.2-3, by: agent}
+    - {words: L33.6, by: hindi-repair}
+    - {words: L33.21, by: hindi-repair}
+    - {words: L34.2-L35.1, by: agent}
+- id: "8.10.20"
+  kind: box
+  page: 22
+  title: खोज जारी है...
+  text: खोज जारी है... क्या कोई ऐसे रासायनिक परिवर्तन हैं जो द्रव्यमान संरक्षण के नियम का पालन नहीं करते?
+  made:
+    - {words: L36.3, by: agent}
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.2, by: hindi-repair}
+    - {words: L37.3, by: hindi-repair}
+    - {words: L37.4, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.6, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L37.8, by: hindi-repair}
+    - {words: L37.9, by: hindi-repair}
+    - {words: L37.10, by: hindi-repair}
+    - {words: L37.11, by: hindi-repair}
+    - {words: L37.12, by: hindi-repair}
+    - {words: L37.13, by: hindi-repair}
+    - {words: L37.14, by: hindi-repair}
+    - {words: L37.15, by: hindi-repair}
