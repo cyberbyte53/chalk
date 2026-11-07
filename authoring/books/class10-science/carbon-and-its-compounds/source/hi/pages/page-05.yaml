@@ -1,0 +1,77 @@
+page: 5
+proofread: true
+furniture: L36-L39, L16
+notes:
+  other: "a word the PDF splits with a space (प्राकृ तिक, के वल)"
+terms:
+  - "L27.12"
+  - "L31.2-3"
+  - "L31.13-L32.1"
+answers:
+  "read L27.12": "the PDF loses श (�ांृ); the image prints शृंखलन"
+  "read L28.6": "the PDF loses श (�ांृ); the image prints शृंखला"
+  "read L28.13": "the PDF loses श (�ांृ); the image prints शृंखला"
+  "read L32.10": "the PDF loses श (�ांृ); the image prints शृंखलन"
+  "read L34.9": "the PDF loses श (�ांृ); the image prints शृंखला"
+  "word फुलेरीन": "a real word (fullerene), as printed on the page"
+  "word बकमिंसटर": "a name (Buckminster), as printed on the page"
+  "word फ़ुलर": "a name (Fuller), as printed on the page"
+  "word जियोडेसिक": "a real word (geodesic), as printed on the page"
+  "word रसायनशास्त्रियों": "a real word (chemists), as printed on the page"
+  "word अभिक्रियाशील": "a real word (reactive), as printed on the page"
+blocks:
+  - kind: box
+    words: L1-L7
+    continued: true
+    read:
+      L2.13-14: { text: "प्राकृतिक", cause: other }
+      L3.1: फुलेरीन
+      L3.3: { text: "अपररूप", cause: wrong-reading }
+      L5.5: बकमिंसटर
+      L5.6: फ़ुलर
+      L6.3: जियोडेसिक
+      L6.4-L7.1: गुंबद
+      L7.10: फुलेरीन
+  - kind: exercise
+    title: L8
+    words: L8
+  - kind: question
+    number: L9.1
+    words: L9, L11-L13
+    read:
+      L11.1-L12.1: { text: "CO₂", cause: other }
+  - kind: question
+    number: L10.1
+    words: L10, L14-L15
+    read:
+      L14.4-5: परमाणुओं
+  - kind: section
+    number: L17.1
+    title: L17.2-5
+    words: L17
+  - kind: text
+    words: L18-L35
+    continues: true
+    read:
+      L18.2: तत्वों
+      L18.11: सहसंयोजी
+      L20.2-3: वस्तुओं
+      L21.4: रसायनशास्त्रियों
+      L22.8: तत्वों
+      L23.15-16: { text: "केवल", cause: other }
+      L24.1: तत्व
+      L24.4: सहसंयोजी
+      L24.7-8: प्रकृति
+      L26.8-9: परमाणुओं
+      L27.2: जिससे
+      L27.12: शृंखलन
+      L28.6: शृंखला,
+      L28.10-11: शाखाओं
+      L28.13: शृंखला
+      L30.11-14: परमाणुओं
+      L30.17-18: { text: "केवल", cause: other }
+      L32.10: शृंखलन
+      L33.4: तत्व
+      L34.5-6: परमाणुओं
+      L34.9: शृंखला
+      L35.1: अभिक्रियाशील

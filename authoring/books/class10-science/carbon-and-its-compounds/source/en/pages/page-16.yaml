@@ -1,0 +1,47 @@
+page: 16
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own (CH 3 COOH), printed CH₃COOH; signs it holds as unreadable glyphs; the reversible arrow is drawn, not in the text; a word split with a space (E thanoic)"
+answers:
+  "read L55.5-17": "the PDF overprints a C on the O of –O– at the same place; the image prints only O, so the C is dropped"
+furniture: L24-L26, L36-L38, L66-L68
+blocks:
+  - kind: box
+    title: L1-L2, L3.1
+    words: L1-L2, L3-L8
+  - kind: section
+    words: L9
+    number: L9.1
+    title: L9.2-5
+  - kind: text
+    words: L10-L17
+  - kind: activity
+    words: L23, L27-L34
+    number: L23.1-2
+  - kind: text
+    words: L18-L22
+  - kind: activity
+    words: L35, L39-L47
+    number: L35.1-2
+  - kind: figure
+    words: L56-L57
+    number: L56.1-2
+    title: L57
+    box: [330, 384, 548, 607]
+  - kind: heading
+    words: L48
+    title: L48
+  - kind: text
+    words: L49-L52
+  - kind: equation
+    words: L53-L54, L55.1-4, L58, L55.5-17, L59
+    read:
+      "L53": { text: "CH₃ − COOH + CH₃ − CH₂OH" }
+      "L54": { text: "Acid ⇌" }
+      "L55.1-4": { text: "CH₃ − C" }
+      "L58": { text: "(=O)" }
+      "L55.5-17": { text: "− O − CH₂ − CH₃ + H₂O" }
+      "L59.1-2": { text: "(Ethanoic" }
+  - kind: text
+    words: L60-L65

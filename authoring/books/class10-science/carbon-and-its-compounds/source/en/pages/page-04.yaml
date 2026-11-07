@@ -1,0 +1,47 @@
+page: 4
+proofread: true
+cause: other
+notes:
+  other: "a heading's letters the PDF spaces into separate words (Q U E S T I O N S), and a subscript set as a plain digit on its own line (CO 2), printed CO₂"
+answers:
+  "read L38": "the PDF sets the heading's large first letter Q apart from U E S T I O N S; the image prints the one word QUESTIONS, read whole here"
+  "read L41.1-8": "the rest of QUESTIONS, read whole on L38 with its first letter"
+furniture: L49-L52
+blocks:
+  - kind: text
+    words: L1-L3
+    continued: true
+  - kind: figure
+    words: L20-L22
+    number: L20.1-2
+    title: L21-L22
+    box: [436, 93, 556, 244]
+  - kind: box
+    title: L4-L6
+    words: L4-L18, L26-L37
+  - kind: figure
+    words: L19
+    title: L19
+    box: [115, 308, 250, 415]
+  - kind: figure
+    words: L25
+    title: L25
+    box: [258, 308, 432, 418]
+  - kind: figure
+    words: L23-L24
+    title: L23-L24
+    box: [434, 304, 532, 428]
+  - kind: exercise
+    title: L38, L41
+    words: L38, L41
+    read:
+      "L38": { text: "QUESTIONS" }
+      "L41.1-8": { text: "" }
+  - kind: question
+    number: L39
+    words: L39, L42-L45
+    read:
+      "L43.3-L45": { text: "CO₂?" }
+  - kind: question
+    number: L40
+    words: L40, L46-L48

@@ -1,0 +1,79 @@
+page: 4
+proofread: true
+furniture: L40-L43
+notes:
+  other: "a word the PDF splits with a space (कै से), or a subscript it sets as a plain digit (NH 3)"
+terms:
+  - "L19.6-7"
+answers:
+  "read L24.4-6": "the PDF splits the word and moves its letters (विद् त यु); the image shows विद्युत"
+  "read L39.2-4": "the PDF splits the word and moves its letters (विद् त यु); the image shows विद्युत"
+  "word चतुःसंयोजक": "a real word (tetravalent), as printed on the page"
+  "word अंतराअणुक": "a real word (intermolecular), as printed on the page"
+  "word अपररूप": "a real word (allotrope), as printed in the box's heading"
+  "word द्विआबंधी": "a real word (double-bonded), as printed on the page"
+  "word फिसलनशील": "a real word (slippery), as printed on the page"
+  "word अधातुओं": "a real word (non-metals), as printed on the page"
+  "word बकमिंसटरफुलेरीन": "a real word (buckminsterfullerene), as printed in the caption"
+blocks:
+  - kind: text
+    words: L5-L9
+    read:
+      L5.6-L6.1: { text: "NH₃", cause: other }
+      L8.11-12: { text: "कैसे", cause: other }
+      L8.15-18: परमाणुओं
+      L8.20-21: उत्कृष्ट
+      L9.8-9: अणुओं
+  - kind: text
+    words: L10-L17
+    read:
+      L12.15-L13.1: { text: "CH₄", cause: other }
+      L15.7: चतुःसंयोजक
+      L16.3-4: उत्कृष्ट
+      L17.4-5: परमाणुओं
+  - kind: figure
+    number: L25.2
+    words: L25-L26
+    box: [420, 85, 575, 237]
+  - kind: text
+    words: L18-L24
+    read:
+      L18.4-7: परमाणुओं
+      L18.21: बनने
+      L19.2: सहसंयोजी
+      L19.6: सहसंयोजी
+      L19.9-10: अणुओं
+      L20.6-11: अंतराअणुक
+      L22.2-3: परमाणुओं
+      L23.8-L24.2: सहसंयोजी
+      L24.4-6: विद्युत
+  - kind: box
+    title: L1-L4
+    continues: true
+    words: L1-L4, L27-L34, L36-L39
+    read:
+      L27.3: { text: "अपररूप", cause: wrong-reading }
+      L28.4: तत्व
+      L28.11: विविध
+      L29.4-7: परमाणुओं
+      L29.13-16: परमाणुओं
+      L30.13-14: परमाणुओं
+      L30.20: जिससे
+      L32.17-20: परमाणुओं
+      L33.9: जिससे
+      L33.18: द्विआबंधी
+      L36.4-5: संरचनाओं
+      L38.2: फिसलनशील
+      L38.10-11: अधातुओं
+      L39.2-4: विद्युत
+  - kind: figure
+    words: L35.1-3
+    box: [128, 470, 246, 612]
+  - kind: figure
+    words: L35.4-6
+    box: [250, 470, 424, 612]
+  - kind: figure
+    words: L35.7-10
+    box: [430, 470, 550, 612]
+    read:
+      L35.8: बकमिंसटरफुलेरीन

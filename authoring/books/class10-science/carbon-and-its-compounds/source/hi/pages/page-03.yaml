@@ -1,0 +1,85 @@
+page: 3
+proofread: true
+furniture: L69-L72
+notes:
+  other: "a word the PDF splits with a space (इले क् ट्रॉन, रे खा, के वल, कै सा), or a subscript it sets as a plain digit (H 2)"
+answers:
+  "word द्विपरमाणुक": "a real word (diatomic), as printed on the page"
+  "word द्विआबंध": "a real word (double bond), as printed on the page"
+  "word त्रिआबंध": "a real word (triple bond), as printed on the page"
+blocks:
+  - kind: text
+    words: L1, L2.2-14, L29-L38
+    read:
+      L1.5-6: अणुओं
+      L30.3-5: { text: "इलेक्ट्रॉन", cause: other }
+      L31.10-L32.1: { text: "H₂,", cause: other }
+      L34.9-10: उत्कृष्ट
+      L36.10-L37.2: बिंदुओं
+  - kind: text
+    words: L39-L41
+    read:
+      L39.8-9: परमाणुओं
+      L39.12: सहसंयोजी
+      L40.9-10: परमाणुओं
+      L40.14-15: { text: "रेखा", cause: other }
+  - kind: text
+    words: L42-L47
+    read:
+      L43.4-6: द्विपरमाणुक
+      L43.10-L44.1: { text: "Cl₂", cause: other }
+      L46.10-11: { text: "केवल", cause: other }
+  - kind: text
+    words: L48-L56
+    read:
+      L48.4-5: परमाणुओं
+      L48.8: द्विआबंध
+      L48.10: बनना
+      L51.8-10: { text: "इलेक्ट्रॉनों", cause: other }
+      L53.7: जिससे
+      L55.16-17: परमाणुओं
+      L56.3-4: द्विआबंध
+      L56.5: बनना
+  - kind: text
+    words: L57-L59
+    read:
+      L58.8-9: परमाणुओं
+      L59.12: द्विआबंध?
+  - kind: text
+    words: L60-L68
+    read:
+      L60.3: द्विपरमाणुक
+      L60.6-7: { text: "कैसा", cause: other }
+      L63.7: जिससे
+      L64.6-7: परमाणुओं
+      L64.10: त्रिआबंध
+      L64.12: बनना
+      L65.1-L66.1: { text: "N₂", cause: other }
+      L67.7: त्रिआबंध
+  - kind: figure
+    number: L9.2
+    words: L2.1, L3-L10
+    box: [60, 80, 245, 216]
+    read:
+      L4.1-L5.1: { text: "H₂", cause: other }
+  - kind: figure
+    number: L11.2
+    words: L11-L13
+    box: [60, 228, 200, 340]
+    read:
+      L12.4-5: परमाणुओं
+  - kind: figure
+    number: L19.2
+    words: L14-L18, L19-L21
+    box: [60, 340, 215, 531]
+    read:
+      L15.1-L16.1: { text: "O₂", cause: other }
+      L20.4-5: परमाणुओं
+  - kind: figure
+    number: L26.2
+    words: L22-L28
+    box: [60, 520, 215, 713]
+    read:
+      L23.1-L24.1: { text: "N₂", cause: other }
+      L27.4-7: परमाणुओं
+      L28.2: त्रिआबंध

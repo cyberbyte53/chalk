@@ -1,0 +1,54 @@
+page: 14
+proofread: true
+cause: other
+notes:
+  other: "the PDF spaces out a heading's letters (Q U E S T I O N S) and sets subscripts as plain digits on their own lines (CH 4), printed CH₄"
+furniture: L36, L42-L44
+blocks:
+  - kind: figure
+    words: ""
+    box: [94, 86, 348, 116]
+  - kind: text
+    words: L1-L2
+  - kind: text
+    words: L3-L5
+  - kind: section
+    words: L6
+    number: L6.1
+    title: L6.2-3
+  - kind: text
+    words: L7-L13
+  - kind: figure
+    words: ""
+    box: [94, 310, 292, 356]
+  - kind: text
+    words: L14-L17
+  - kind: section
+    words: L18
+    number: L18.1
+    title: L18.2-3
+  - kind: text
+    words: L19-L24
+  - kind: equation
+    words: L25-L31
+    read:
+      "L25-L26": { text: "CH₄" }
+      "L27.2-L28": { text: "Cl₂" }
+      "L29.2-L31.1": { text: "CH₃Cl" }
+  - kind: exercise
+    words: L32
+    title: L32
+    read:
+      "L32.1-9": { text: "QUESTIONS" }
+  - kind: question
+    words: L33
+    number: L33.1
+  - kind: question
+    words: L34-L35
+    number: L34.1
+  - kind: section
+    words: L37-L38
+    number: L37.1
+    title: L37.2-L38
+  - kind: text
+    words: L39-L41

@@ -1,0 +1,46 @@
+page: 14
+proofread: true
+furniture: L39-L42, L1-L2, L7-L9
+cause: other
+notes:
+  other: "a word the PDF splits with a space (प्रकृ ति, के रोसिन, के वल)"
+answers:
+  "word बुन्सेन": "a name (Bunsen), as printed on the page"
+  "word ज्वालाओं": "a real word (flames), as printed on the page"
+  "word तले": "a real word (bottoms), as printed on the page"
+  "word जलते": "a real word (burning), as printed on the page"
+blocks:
+  - kind: activity
+    words: L3-L5
+    continued: true
+    read:
+      L3.3-4: "प्रकृति"
+  - kind: activity
+    number: L6.2
+    words: L6, L10-L13
+    read:
+      L10.2: बुन्सेन
+      L10.9-10: ज्वालाओं
+  - kind: text
+    words: L18-L23
+    read:
+      L22.6-7: "केरोसिन"
+  - kind: text
+    words: L24-L27
+    read:
+      L24.5: तले
+      L25.8: व्यय
+  - kind: box
+    title: L14-L17
+    words: L14-L17, L28-L38
+    read:
+      L28.2: जलते
+      L31.7: जलते
+      L32.10: उज्ज्वल
+      L33.5-6: "केवल"
+      L34.5-6: वाष्पीकृत
+      L34.16: जलते
+      L35.4-5: परमाणुओं
+      L35.17: उज्ज्वल
+      L36.2: तत्व
+      L36.8: तत्व

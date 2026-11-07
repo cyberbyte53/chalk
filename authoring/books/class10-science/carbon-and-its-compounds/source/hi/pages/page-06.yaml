@@ -1,0 +1,67 @@
+page: 6
+proofread: true
+furniture: L41-L44
+notes:
+  other: "a word the PDF splits with a space (कार्ब न, प्राकृ तिक, के वल), or subscripts it sets as plain digits (C 2 H 6)"
+answers:
+  "no drawing L39.1": "the figure is set in words alone (C—C, चरण 1): the rough box holds them and its caption"
+  "read L20.11": "the PDF loses श (�ृं); the image prints शृंखलन"
+  "read L21.14-15": "the PDF loses श (�ृं); the image prints शृंखलाओं"
+  "word चतुःसंयोजकता": "a real word (tetravalency), as printed on the page"
+  "word वोहलर": "a name (Wöhler), as printed on the page"
+  "word सायनेट": "a real word (cyanate), as printed on the page"
+  "word कार्बाईड": "a real word (carbide), as printed on the page"
+  "word एथेन": "a real word (ethane), as printed on the page"
+  "word जोड़ा": "a real word (joined), as printed on the page"
+blocks:
+  - kind: text
+    words: L5-L13
+    continued: true
+    read:
+      L5.6-7: परमाणुओं
+      L7.7-8: { text: "कार्बन", cause: other }
+      L7.10-12: संयोजकता
+      L7.18-19: { text: "कार्बन", cause: other }
+      L8.1-2: परमाणुओं
+      L8.8: तत्वों
+      L8.10-11: परमाणुओं
+      L10.3: तत्वों
+      L12.12: तत्व
+  - kind: text
+    words: L14-L18
+    read:
+      L14.3: तत्वों
+      L17.16-19: परमाणुओं
+      L17.21: तत्वों
+  - kind: box
+    title: L1-L4
+    words: L1-L4, L19-L26
+    read:
+      L20.9: चतुःसंयोजकता
+      L20.11: शृंखलन
+      L21.14-15: शृंखलाओं
+      L22.7-8: { text: "प्राकृतिक", cause: other }
+      L23.4-5: { text: "केवल", cause: other }
+      L24.9-10: फ्रेडरिक
+      L24.11: वोहलर
+      L24.16: सायनेट
+      L25.9: कार्बाईड,
+  - kind: section
+    number: L27.1
+    title: L27.2-12
+    words: L27
+  - kind: text
+    words: L28-L38
+    continues: true
+    read:
+      L29.16: बनने
+      L30.1: एथेन
+      L30.5-L33.1: { text: "C₂H₆", cause: other }
+      L35.3-6: परमाणुओं
+      L35.14: जोड़ा
+      L36.9-10: परमाणुओं
+      L37.5: एथेन
+  - kind: figure
+    number: L40.2-3
+    words: L39-L40
+    box: [185, 645, 365, 690]

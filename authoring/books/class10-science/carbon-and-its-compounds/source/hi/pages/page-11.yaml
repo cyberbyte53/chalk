@@ -1,0 +1,77 @@
+page: 11
+proofread: true
+furniture: L84-L87, L67.1-2, L68.1-2, L70.1-2, L72
+notes:
+  other: "subscripts the PDF sets as plain digits (C 3 H 8), or a word it splits with a space (एेल्के नों, प्रकृ ति)"
+answers:
+  "read L74.15-16": "the PDF loses श (�ृं); the image prints शृंखलाओं"
+  "word ऐल्कीनों": "a real word (alkenes), as printed on the page"
+  "word ऐल्केनों": "a real word (alkanes), as printed on the page"
+  "word ऐल्काइनों": "a real word (alkynes), as printed on the page"
+  "word विलेयता": "a real word (solubility), as printed on the page"
+  "word एल्कोहलों": "a real word (alcohols), as printed on the page"
+  "word पूर्वलग्न": "a real word (prefix), as printed on the page"
+  "word प्रोपेनॉल": "a real word (propanol), as printed on the page"
+blocks:
+  - kind: text
+    words: L1-L9
+    read:
+      L1.3-L5.1: { text: "(C₃H₈)", cause: other }
+      L5.4-L9.1: { text: "(C₄H₁₀)", cause: other }
+  - kind: text
+    words: L10-L11
+  - kind: text
+    words: L12-L28
+    read:
+      L12.3: ऐल्कीनों
+      L12.13: एथीन
+      L13.13: एथेन
+      L14.5-L17.1: { text: "C₃H₆", cause: other }
+      L18.2-L21.1: { text: "C₄H₈", cause: other }
+      L22.2-L25.1: { text: "C₅H₁₀", cause: other }
+      L26.5-L27.1: { text: "-CH₂-", cause: other }
+  - kind: text
+    words: L29-L36
+    read:
+      L29.10-11: परमाणुओं
+      L30.1-L31.2: संबंध
+      L31.6: ऐल्कीनों
+      L31.12-L34.1: { text: "CₙH₂ₙ", cause: other }
+      L36.9-10: ऐल्केनों
+      L36.12: ऐल्काइनों
+  - kind: text
+    words: L37-L41
+    read:
+      L39.10: विलेयता
+  - kind: activity
+    number: L42.2
+    words: L42-L66, L67.3-9, L68.3-19, L69, L70.3-18, L71
+    read:
+      L43.11-L45.1: { text: "CH₃OH", cause: other }
+      L45.3-L49.1: { text: "C₂H₅OH", cause: other }
+      L50.2-L54.1: { text: "C₂H₅OH", cause: other }
+      L54.3-L58.1: { text: "C₃H₇OH", cause: other }
+      L58.4-L62.1: { text: "C₃H₇OH", cause: other }
+      L62.3-L66.1: { text: "C₄H₉OH", cause: other }
+      L68.10: एल्कोहलों
+      L68.13-14: परमाणुओं
+  - kind: section
+    number: L73.1
+    title: L73.2-5
+    words: L73
+  - kind: text
+    words: L74-L77
+    read:
+      L74.15-16: शृंखलाओं
+      L75.9-10: { text: "प्रकृति", cause: other }
+      L75.13: ‘पूर्वलग्न’
+      L76.18: एल्कोहलों
+      L77.5: एथेनॉल,
+      L77.6: प्रोपेनॉल
+  - kind: text
+    words: L78-L83
+    continues: true
+    read:
+      L79.5-6: परमाणुओं
+      L82.1: "(ii) प्रकार्यात्मक"
+      L82.7: पूर्वलग्न

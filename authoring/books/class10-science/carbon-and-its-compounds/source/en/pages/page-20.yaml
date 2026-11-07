@@ -1,0 +1,26 @@
+page: 20
+proofread: true
+cause: other
+notes:
+  other: "a heading's letters the PDF spaces into separate words (E X E R C I S E S); subscripts the PDF sets on their own lines (C 2 H 6), printed C₂H₆"
+furniture: L2-L11, L53-L55
+blocks:
+  - kind: box
+    title: L1
+    words: L1, L12-L31
+  - kind: exercise
+    title: L32
+    words: L32
+    read:
+      "L32": { text: "EXERCISES" }
+  - kind: question
+    number: L33.1
+    words: L33-L41
+    read:
+      "L33.7-L36": { text: "C₂H₆" }
+  - kind: question
+    number: L42.1
+    words: L42-L46
+  - kind: question
+    number: L47.1
+    words: L47-L52

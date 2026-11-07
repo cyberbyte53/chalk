@@ -1,0 +1,108 @@
+page: 13
+proofread: true
+furniture: L60-L63, L18, L58.1-2
+cause: other
+notes:
+  other: "a word the PDF splits with a space (करें गे, कै से, कै म्फर), or subscripts it sets as plain digits (CO 2)"
+answers:
+  "read L10.2": "the PDF's letters plus two tabs (a gap before (iv)); the word is ब्यूटेनोन"
+  "word समावयवों": "a real word (isomers), as printed on the page"
+  "word साइक्लोपेन्टेन": "a real word (cyclopentane), as printed on the page"
+  "word एथेनॉइक": "a real word (ethanoic), as printed on the page"
+  "word ब्रोमोपेन्टेन": "a real word (bromopentane), as printed on the page"
+  "word ब्यूटेनोन": "a real word (butanone), as printed on the page"
+  "word हेक्सेनैल": "a real word (hexanal), as printed on the page"
+  "word समावयव": "a real word (isomer), as printed on the page"
+  "word अपररूपों": "a real word (allotropes), as printed on the page"
+  "word स्पैचुला": "a real word (spatula), as printed on the page"
+  "word नैफ्थलीन": "a real word (naphthalene), as printed on the page"
+  "word कैम्फर": "a real word (camphor), as printed on the page"
+blocks:
+  - kind: exercise
+    title: L1
+    words: L1
+  - kind: question
+    number: L2.1
+    words: L2, L4
+    read:
+      L4.1: पेन्टेन
+      L4.7: समावयवों
+  - kind: question
+    number: L3.1
+    words: L3, L5-L6
+  - kind: question
+    number: L7.1
+    words: L7
+    read:
+      L7.2: साइक्लोपेन्टेन
+  - kind: question
+    number: L8.1
+    words: L8-L11
+    read:
+      L9.2: एथेनॉइक
+      L9.5: ब्रोमोपेन्टेन*
+      L10.2: ब्यूटेनोन
+      L10.4: हेक्सेनैल
+      L11.2: ब्रोमोपेन्टेन
+      L11.5: समावयव
+  - kind: question
+    number: L12.1
+    words: L12-L17
+    read:
+      L12.5-6: "कैसे"
+      L12.7-8: "करेंगे?"
+      L13.2-L14.1: "CH₃"
+      L15.1-L16.1: "—CH₂"
+  - kind: figure
+    words: L19
+    box: [105, 262, 320, 356]
+  - kind: section
+    number: L20.1
+    title: L20.2-6
+    words: L20
+  - kind: text
+    words: L21-L24
+    read:
+      L21.13-14: "करेंगे।"
+  - kind: section
+    number: L25.1
+    title: L25.2
+    words: L25
+  - kind: text
+    words: L26-L29
+    read:
+      L26.3: अपररूपों
+  - kind: equation
+    number: L30.1
+    words: L30-L34
+    read:
+      L30.4-L31.1: "O₂"
+      L32.2-L33.1: "CO₂"
+  - kind: equation
+    number: L35.1
+    words: L35-L43
+    read:
+      L35.2-L36.1: "CH₄"
+      L37.2-L38.1: "O₂"
+      L39.2-L40.1: "CO₂"
+      L41.2-L43.1: "H₂O"
+  - kind: equation
+    number: L44.1
+    words: L44-L54
+    read:
+      L44.2-L48.1: "CH₃CH₂OH"
+      L48.3-L49.1: "O₂"
+      L50.2-L51.1: "CO₂"
+      L52.2-L54.1: "H₂O"
+  - kind: text
+    words: L55
+    read:
+      L55.11-12: अभिक्रियाओं
+  - kind: activity
+    number: L56.2
+    words: L56-L57, L58.3-L59
+    continues: true
+    read:
+      L58.4: स्पैचुला
+      L58.11: (नैफ्थलीन,
+      L58.12-13: "कैम्फर,"

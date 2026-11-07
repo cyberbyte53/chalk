@@ -1,0 +1,63 @@
+page: 12
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (CH 4, O 2), printed CH₄, O₂"
+furniture: L11, L50.1, L53.1, L55.1, L57-L59, L74-L76
+blocks:
+  - kind: question
+    words: L1-L4
+    number: L1.1
+  - kind: question
+    words: L5-L10, L12
+    number: L5.1
+    read:
+      "L6.2-L10.1": { text: "CH₃—CH₂—Br" }
+  - kind: figure
+    words: ""
+    box: [310, 180, 360, 207]
+  - kind: figure
+    words: ""
+    box: [145, 216, 272, 262]
+  - kind: section
+    words: L13
+    number: L13.1
+    title: L13.2-6
+  - kind: text
+    words: L14-L16
+  - kind: section
+    words: L17
+    number: L17.1
+    title: L17.2
+  - kind: text
+    words: L18-L21
+  - kind: equation
+    words: L22-L26
+    read:
+      "L22.4-L23": { text: "O₂" }
+      "L24.2-L25": { text: "CO₂" }
+  - kind: equation
+    words: L27-L35
+    read:
+      "L27.2-L28": { text: "CH₄" }
+      "L29.2-L30": { text: "O₂" }
+      "L31.2-L32": { text: "CO₂" }
+      "L33.2-L35.1": { text: "H₂O" }
+  - kind: equation
+    words: L36-L46
+    read:
+      "L36.2-L40.1": { text: "CH₃CH₂OH" }
+      "L40.3-L41": { text: "O₂" }
+      "L42.2-L43": { text: "CO₂" }
+      "L44.2-L46.1": { text: "H₂O" }
+  - kind: text
+    words: L47
+  - kind: activity
+    words: L48.1-2, L49, L50.2-L52, L53.2-L54, L55.2-L56
+    number: L48.1-2
+  - kind: activity
+    words: L48.3-4, L60-L67
+    number: L48.3-4
+  - kind: text
+    words: L68-L73
+    continues: true

@@ -1,0 +1,32 @@
+page: 10
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain letters and digits on their own lines (C n H 2n, CH 3 OH), printed CₙH₂ₙ, CH₃OH"
+furniture: L16-L19, L73-L75
+blocks:
+  - kind: text
+    words: L1-L8
+    continued: true
+    read:
+      "L3.5-L7.1": { text: "CₙH₂ₙ," }
+  - kind: text
+    words: L9-L14
+  - kind: activity
+    words: L15, L20-L49
+    number: L15.1-2
+    read:
+      "L21.3-L23.1": { text: "CH₃OH" }
+      "L23.3-L27.1": { text: "C₂H₅OH" }
+      "L27.3-L31.1": { text: "C₂H₅OH" }
+      "L31.3-L35.1": { text: "C₃H₇OH," }
+      "L35.4-L39": { text: "C₃H₇OH" }
+      "L40.2-L44": { text: "C₄H₉OH." }
+  - kind: section
+    words: L50
+    number: L50.1
+    title: L50.2-5
+  - kind: text
+    words: L51-L55
+  - kind: text
+    words: L56-L72

@@ -1,0 +1,27 @@
+page: 19
+proofread: true
+furniture: L2-L6, L18-L22, L47, L48-L50
+blocks:
+  - kind: activity
+    words: L1, L7-L16
+    number: L1.1-2
+    read:
+      "L15.7-L16.1": { text: "hydrogencarbonates/sulphates/chlorides", cause: broken-across-lines }
+  - kind: activity
+    words: L17, L23-L28
+    number: L17.1-2
+  - kind: text
+    words: L29-L40
+  - kind: exercise
+    title: L41
+    words: L41
+    read:
+      "L41": { text: "QUESTIONS", cause: other }
+  - kind: question
+    number: L42.1
+    words: L42
+  - kind: question
+    number: L43.1
+    words: L43-L46
+notes:
+  other: "a heading's letters the PDF spaces into separate words (Q U E S T I O N S)"

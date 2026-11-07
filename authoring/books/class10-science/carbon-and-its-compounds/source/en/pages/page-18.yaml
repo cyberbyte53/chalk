@@ -1,0 +1,16 @@
+page: 18
+proofread: true
+furniture: L35-L37
+blocks:
+  - kind: text
+    words: L1-L9
+  - kind: text
+    words: L10-L11
+  - kind: box
+    title: L12-L14
+    words: L12-L33
+  - kind: figure
+    words: L34
+    number: L34.1-2
+    title: L34.3-7
+    box: [105, 329, 545, 712]

@@ -1,0 +1,59 @@
+page: 3
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (Cl 2, N 2, NH 3, CH 4), printed Cl₂, N₂, NH₃, CH₄"
+furniture: L68-L70
+blocks:
+  - kind: text
+    words: L12-L15
+    continued: true
+  - kind: figure
+    words: L1-L2
+    number: L1.1-2
+    title: L2
+    box: [64, 85, 228, 213]
+    crop: { box: [62, 84, 231, 187], cause: wrong-box }
+  - kind: text
+    words: L16-L19
+  - kind: figure
+    words: L3-L5
+    number: L3.1-2
+    title: L4-L5
+    box: [64, 230, 228, 319]
+  - kind: text
+    words: L20-L25
+    read:
+      "L21.10-L23": { text: "Cl₂." }
+  - kind: text
+    words: L26-L33
+  - kind: figure
+    words: L6-L8
+    number: L6.1-2
+    title: L7-L8
+    box: [64, 338, 228, 500]
+  - kind: text
+    words: L34-L36
+  - kind: text
+    words: L37-L46
+    read:
+      "L43.10-L44": { text: "N₂" }
+  - kind: figure
+    words: L9-L11
+    number: L9.1-2
+    title: L10-L11
+    box: [64, 518, 228, 675]
+    crop: { box: [62, 516, 219, 633], cause: wrong-box }
+  - kind: text
+    words: L47-L52
+    read:
+      "L47.8-L49.1": { text: "NH₃." }
+  - kind: text
+    words: L53-L63
+    read:
+      "L57.5-L59.1": { text: "CH₄." }
+  - kind: text
+    words: L64-L67
+    continues: true
+    read:
+      "L66.12-L67.1": { text: "intermolecular", cause: broken-across-lines }

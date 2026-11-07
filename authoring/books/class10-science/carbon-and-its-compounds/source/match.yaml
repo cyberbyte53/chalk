@@ -1,0 +1,224 @@
+pairs:
+  - key: activity 4.1
+    en: "0.3"
+    hi: "0.3"
+  - key: section 4.1
+    en: "1"
+    hi: "1"
+  - key: table 4.1
+    en: "1.3"
+    hi: "1.3"
+  - key: figure 4.1
+    en: "1.8"
+    hi: "1.13"
+  - key: figure 4.2
+    en: "1.10"
+    hi: "1.14"
+  - key: figure 4.3
+    en: "1.13"
+    hi: "1.15"
+  - key: figure 4.4
+    en: "1.16"
+    hi: "1.16"
+  - key: figure 4.5
+    en: "1.20"
+    hi: "1.19"
+  - key: question 1 of exercise 1
+    en: 1.25.1
+    hi: 1.25.1
+  - key: question 2 of exercise 1
+    en: 1.25.2
+    hi: 1.25.2
+  - key: section 4.2
+    en: "2"
+    hi: "2"
+  - key: section 4.2.1
+    en: "2.6"
+    hi: "2.4"
+  - key: figure 4.6
+    en: 2.6.5
+    hi: 2.4.4
+  - key: figure 4.7
+    en: 2.6.13
+    hi: 2.4.13
+  - key: section 4.2.2
+    en: "2.7"
+    hi: "2.5"
+  - key: table 4.2
+    en: 2.7.2
+    hi: 2.5.2
+  - key: figure 4.8
+    en: 2.7.6
+    hi: 2.5.5
+  - key: figure 4.9
+    en: 2.7.9
+    hi: 2.5.8
+  - key: figure 4.10
+    en: 2.7.11
+    hi: 2.5.10
+  - key: section 4.2.3
+    en: "2.8"
+    hi: "2.6"
+  - key: table 4.3
+    en: 2.8.2
+    hi: 2.6.2
+  - key: section 4.2.4
+    en: "2.9"
+    hi: "2.7"
+  - key: activity 4.2
+    en: 2.9.6
+    hi: 2.7.8
+  - key: section 4.2.5
+    en: "2.10"
+    hi: "2.8"
+  - key: table 4.4
+    en: 2.10.3
+    hi: 2.8.3
+  - key: question 1 of exercise 2
+    en: 2.10.4.1
+    hi: 2.8.4.1
+  - key: question 2 of exercise 2
+    en: 2.10.4.2
+    hi: 2.8.4.2
+  - key: question 3 of exercise 2
+    en: 2.10.4.3
+    hi: 2.8.4.3
+  - key: question 4 of exercise 2
+    en: 2.10.4.4
+    hi: 2.8.4.4
+  - key: question 5 of exercise 2
+    en: 2.10.4.5
+    hi: 2.8.4.5
+  - key: section 4.3
+    en: "3"
+    hi: "3"
+  - key: section 4.3.1
+    en: "3.2"
+    hi: "3.2"
+  - key: activity 4.3
+    en: 3.2.6
+    hi: 3.2.6
+  - key: activity 4.4
+    en: 3.2.7
+    hi: 3.2.7
+  - key: section 4.3.2
+    en: "3.3"
+    hi: "3.3"
+  - key: activity 4.5
+    en: 3.3.1
+    hi: 3.3.1
+  - key: section 4.3.3
+    en: "3.4"
+    hi: "3.4"
+  - key: section 4.3.4
+    en: "3.5"
+    hi: "3.5"
+  - key: question 1 of exercise 3
+    en: 3.5.3.1
+    hi: 3.5.3.1
+  - key: question 2 of exercise 3
+    en: 3.5.3.2
+    hi: 3.5.3.2
+  - key: section 4.4
+    en: "4"
+    hi: "4"
+  - key: section 4.4.1
+    en: "4.2"
+    hi: "4.2"
+  - key: activity 4.6
+    en: 4.2.4
+    hi: 4.2.2
+  - key: section 4.4.2
+    en: "4.3"
+    hi: "4.3"
+  - key: activity 4.7
+    en: 4.3.2
+    hi: 4.3.2
+  - key: activity 4.8
+    en: 4.3.4
+    hi: 4.3.4
+  - key: activity 4.9
+    en: 4.3.14
+    hi: 4.3.13
+  - key: question 1 of exercise 4
+    en: 4.3.18.1
+    hi: 4.3.17.1
+  - key: question 2 of exercise 4
+    en: 4.3.18.2
+    hi: 4.3.17.2
+  - key: section 4.5
+    en: "5"
+    hi: "5"
+  - key: activity 4.10
+    en: "5.1"
+    hi: "5.1"
+  - key: figure 4.12
+    en: "5.2"
+    hi: "5.2"
+  - key: activity 4.11
+    en: "5.7"
+    hi: "5.7"
+  - key: activity 4.12
+    en: "5.8"
+    hi: "5.8"
+  - key: question 1 of exercise 5
+    en: 5.10.1
+    hi: 5.10.1
+  - key: question 2 of exercise 5
+    en: 5.10.2
+    hi: 5.10.2
+  - key: question 1 of exercise 6
+    en: 5.11.1
+    hi: 5.11.1
+  - key: question 2 of exercise 6
+    en: 5.11.2
+    hi: 5.11.2
+  - key: question 3 of exercise 6
+    en: 5.11.3
+    hi: 5.11.3
+  - key: question 4 of exercise 6
+    en: 5.11.4
+    hi: 5.11.4
+  - key: question 5 of exercise 6
+    en: 5.11.5
+    hi: 5.11.5
+  - key: question 6 of exercise 6
+    en: 5.11.6
+    hi: 5.11.6
+  - key: question 7 of exercise 6
+    en: 5.11.7
+    hi: 5.11.7
+  - key: question 8 of exercise 6
+    en: 5.11.8
+    hi: 5.11.8
+  - key: question 9 of exercise 6
+    en: 5.11.9
+    hi: 5.11.9
+  - key: question 10 of exercise 6
+    en: 5.11.10
+    hi: 5.11.10
+  - key: question 11 of exercise 6
+    en: 5.11.11
+    hi: 5.11.11
+  - key: question 12 of exercise 6
+    en: 5.11.12
+    hi: 5.11.12
+  - key: question 13 of exercise 6
+    en: 5.11.13
+    hi: 5.11.13
+  - key: question 14 of exercise 6
+    en: 5.11.14
+    hi: 5.11.14
+  - key: question 15 of exercise 6
+    en: 5.11.15
+    hi: 5.11.15
+answers:
+  only en figure 4.11: "in the Hindi book too: its caption on page 18 prints चित्र
+    4. एस्टर का निर्माण, the number cut short in print (hi 4.3.3); that is this
+    figure, formation of ester"
+  only en figure 4.13: "in the Hindi book too: hi 5.6 on page 21 is the same
+    drawing, its caption चित्र 4.13 मैल हटाने में साबुन का प्रभाव printed inside
+    the image (the text layer has no caption, so the item has no number); the
+    Hindi text cites (चित्र 4.13) for it"
+  only hi figure 4: "not a separate figure: it is figure 4.11 (formation of
+    ester), its number printed short as चित्र 4."

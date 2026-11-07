@@ -1,0 +1,27 @@
+page: 13
+proofread: true
+cause: other
+notes:
+  other: "the PDF splits a word with a space (lear nt)"
+furniture: L40-L43, L62-L64
+blocks:
+  - kind: text
+    words: L7-L12
+    continued: true
+  - kind: box
+    words: L4-L6, L13-L25
+    title: L4-L6
+  - kind: box
+    words: L1-L3, L26-L37
+    title: L1-L3
+  - kind: section
+    words: L38
+    number: L38.1
+    title: L38.2
+  - kind: activity
+    words: L39, L44-L51
+    number: L39.1-2
+  - kind: text
+    words: L52-L61
+    read:
+      "L52.3-4": { text: "learnt" }

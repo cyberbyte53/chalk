@@ -1,0 +1,80 @@
+page: 16
+proofread: true
+furniture: L29-L32, L21
+cause: other
+notes:
+  other: "a word the PDF splits with a space (निकै ल, एेल्के न, करें गे), subscripts it sets as plain digits (CH 4), the equation's label set in the Chanakya font, whose code the text layer holds, and the arrow's pieces as unreadable glyphs"
+answers:
+  "read L3.4": "the PDF loses श (�ृं); the image prints शृंखलाएँ"
+  "read L3.13": "the PDF loses श (�ृं); the image prints शृंखलाएँ"
+  "word हाड्रोजनीकरण": "as printed: the page prints हाड्रोजनीकरण (the book's slip for हाइड्रोजनीकरण)"
+  "word अनभिक्रित": "as printed (unreactive): the page prints अनभिक्रित"
+  "word अभिकर्मकों": "a real word (reagents), as printed on the page"
+  "read L14.1-6": "the label is set in the Chanakya font, whose code the text layer holds ((lw;Z osQ izdk'k dh mifLFkfr esa)); the image prints (सूर्य के प्रकाश की उपस्थिति में)"
+blocks:
+  - kind: text
+    words: L1-L3
+    continued: true
+    read:
+      L1.10-11: "निकैल"
+      L2.4: हाड्रोजनीकरण
+      L3.4: शृंखलाएँ
+      L3.13: शृंखलाएँ
+  - kind: text
+    words: L4-L6
+  - kind: section
+    number: L7.1
+    title: L7.2-3
+    words: L7
+  - kind: text
+    words: L8-L13
+    read:
+      L8.4: अनभिक्रित
+      L8.9: अभिकर्मकों
+      L10.11-12: परमाणुओं
+      L11.14-15: परमाणुओं
+      L12.11-12: "ऐल्केन"
+  - kind: equation
+    words: L15, L16.1-3, L14, L16.4-9
+    read:
+      L15.1-2: "CH₄"
+      L15.4-5: "Cl₂"
+      L16.1: ""
+      L16.2: ""
+      L14.1-6: "(सूर्य के प्रकाश की उपस्थिति में)"
+      L16.4-7: "CH₃Cl"
+  - kind: exercise
+    title: L17
+    words: L17
+  - kind: question
+    number: L18.1
+    words: L18
+    read:
+      L18.4: एथेनॉइक
+  - kind: question
+    number: L19.1
+    words: L19-L20
+    read:
+      L19.4: एथाइन
+      L20.3: एथाइन
+  - kind: section
+    number: L22.1
+    title: L22.2-9
+    words: L22
+    read:
+      L22.8: एथेनॉइक
+  - kind: text
+    words: L23-L24
+    read:
+      L24.5: एथेनॉइक
+      L24.11-12: "करेंगे।"
+  - kind: section
+    number: L25.1
+    title: L25.2-4
+    words: L25
+  - kind: text
+    words: L26-L28
+    continues: true
+    read:
+      L26.2: कक्ष
+      L27.5: एथेनॉल

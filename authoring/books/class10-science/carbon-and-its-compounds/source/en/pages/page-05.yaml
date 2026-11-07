@@ -1,0 +1,16 @@
+page: 5
+proofread: true
+furniture: L40-L42
+blocks:
+  - kind: section
+    words: L1
+    number: L1.1
+    title: L1.2-5
+  - kind: text
+    words: L2-L21
+  - kind: text
+    words: L22-L27
+  - kind: text
+    words: L28-L33
+  - kind: text
+    words: L34-L39

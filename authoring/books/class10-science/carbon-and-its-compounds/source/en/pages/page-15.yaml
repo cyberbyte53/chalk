@@ -1,0 +1,47 @@
+page: 15
+proofread: true
+cause: other
+notes:
+  other: "subscripts and charges the PDF sets as plain digits, apart or on their own lines (2CH 3 CH 2 OH, Na +), printed 2CH₃CH₂OH, Na⁺"
+answers:
+  "read L53-L54": "the PDF sets the subscripts 2 and 4 on a line of their own under H SO; the image prints H₂SO₄"
+furniture: L26.1, L30.1, L31.1, L46.2-3, L74-L76
+blocks:
+  - kind: section
+    words: L1
+    number: L1.1
+    title: L1.2-4
+  - kind: text
+    words: L2-L11
+  - kind: heading
+    words: L12
+    title: L12
+  - kind: text
+    words: L13
+  - kind: activity
+    words: L14, L25, L26.2-7, L27-L29, L30.2-5, L31.2-8
+    number: L14.1-2
+  - kind: equation
+    words: L15-L24, L32
+    read:
+      "L15.3-L19.1": { text: "2CH₃CH₂OH" }
+      "L19.3-L23.4": { text: "2CH₃CH₂O⁻Na⁺" }
+      "L23.6-L24": { text: "H₂" }
+  - kind: text
+    words: L33-L37
+  - kind: text
+    words: L38-L40
+  - kind: equation
+    words: L42-L45, L46.1, L41, L53-L54, L46.4-5, L47-L52
+    read:
+      "L42-L43": { text: "CH₃" }
+      "L44.2-L46.1": { text: "CH₂OH" }
+      "L53-L54": { text: "H₂SO₄" }
+      "L46.5-L47": { text: "CH₂" }
+      "L48.2-L49": { text: "CH₂" }
+      "L50.2-L52": { text: "H₂O" }
+  - kind: text
+    words: L58-L59
+  - kind: box
+    title: L55-L57
+    words: L55-L57, L60-L73

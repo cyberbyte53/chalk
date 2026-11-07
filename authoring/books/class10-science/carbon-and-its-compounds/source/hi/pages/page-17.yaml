@@ -1,0 +1,89 @@
+page: 17
+proofread: true
+furniture: L56-L59, L8.1-2, L10.1-2, L11.1
+cause: other
+notes:
+  other: "a word the PDF splits with a space (कै से, करें गे, कें द्रीय, यकृ त), sub/superscripts it sets as plain digits or on their own lines (CH 3), the equation's labels set in the Chanakya font, whose code the text layer holds, and the arrow's pieces as unreadable glyphs"
+answers:
+  "word एथॉक्साइड": "a real word (ethoxide), as printed on the page"
+  "word निर्जलीरण": "as printed: the page prints निर्जलीरण (the book's slip for निर्जलीकरण)"
+  "word निर्जलीकारक": "a real word (dehydrating agent), as printed on the page"
+  "word अर्न्तबाध": "as printed: the page prints अर्न्तबाध (inhibition)"
+  "word मेथेनैल": "a real word (methanal), as printed on the page"
+  "read L38.1": "the label is set in the Chanakya font, whose code the text layer holds (xeZ); the image prints गर्म"
+  "read L31.1": "the label is set in the Chanakya font, whose code the text layer holds (lkan with z on L33); the image prints सांद्र"
+  "read L33.1": "the last code (z, the र sign) of सांद्र, read into L31.1"
+  "read L39.2": "a subscript 2 the PDF sets on a line of its own (L39), read into CH₂ (L34.1)"
+  "read L39.3": "a subscript 2 the PDF sets on a line of its own (L39), read into CH₂ (L34.3)"
+  "read L39.4": "a subscript 2 the PDF sets on a line of its own (L39), read into H₂ (L34.5)"
+  "read L34.1": "the PDF sets the subscript 2 on its own line (L39); the image prints CH₂"
+  "read L34.3": "the PDF sets the subscript 2 on its own line (L39); the image prints CH₂"
+  "read L34.5": "the PDF sets the subscript 2 on its own line (L39); the image prints H₂"
+blocks:
+  - kind: text
+    words: L1-L5
+    continued: true
+  - kind: activity
+    number: L6.2
+    words: L6-L7, L8.3-L9, L10.3-7, L11.2-10
+    read:
+      L9.3: डालिए।
+      L11.6-7: "कैसे"
+      L11.9-10: "करेंगे?"
+  - kind: heading
+    title: L12
+    words: L12
+  - kind: text
+    words: L13
+  - kind: equation
+    words: L14-L24
+    read:
+      L14.3-L18.1: "2CH₃CH₂OH"
+      L18.3-L22.4: "2CH₃CH₂O⁻Na⁺"
+      L22.6-L23.1: "H₂"
+      L24.2: एथॉक्साइड)
+  - kind: text
+    words: L25-L27
+    read:
+      L26.6: एथॉक्साइड
+  - kind: text
+    words: L28-L30
+    read:
+      L29.11: निर्जलीरण
+      L29.13: एथीन
+  - kind: equation
+    words: L35-L38, L31, L33, L40, L39.1, L32, L34.1, L39.2, L34.2-3, L39.3, L34.4-5, L39.4, L34.6
+    read:
+      L35.1-L36.1: "CH₃"
+      L37.2-3: "CH₂"
+      L37.5: ""
+      L38.1: "गर्म"
+      L31.1: "सांद्र"
+      L33.1: ""
+      L40.1-4: "H₂SO₄"
+      L39.1: ""
+      L34.1: "CH₂"
+      L39.2: ""
+      L34.3: "CH₂"
+      L39.3: ""
+      L34.5: "H₂"
+      L39.4: ""
+  - kind: text
+    words: L45-L46
+    read:
+      L45.6: निर्जलीकारक
+  - kind: box
+    title: L41-L44
+    words: L41-L44, L47-L55
+    continues: true
+    read:
+      L48.12: इससे
+      L48.20-21: "केंद्रीय"
+      L51.18: अर्न्तबाध
+      L54.10-11: "यकृत"
+      L54.14-15: "ऑक्सीकृत"
+      L54.17: मेथेनैल
+      L54.21: मेथेनैल
+      L54.22-23: "यकृत"
+      L55.1-2: कोशिकाओं
+      L55.12: इससे

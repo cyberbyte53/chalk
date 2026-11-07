@@ -1,0 +1,52 @@
+page: 20
+proofread: true
+furniture: L31-L34, L8-L13
+notes:
+  other: "a word the PDF splits with a space (कै से)"
+answers:
+  "read L29.3": "the PDF loses श (�ृं); the image prints शृंखला"
+  "word परखनलियों": "a real word (test tubes), as printed on the page"
+  "word मिसेल": "a real word (micelle), as printed in the caption"
+  "word मिसेली": "a real word (micellar), as printed on the page"
+blocks:
+  - kind: exercise
+    title: L1
+    words: L1
+  - kind: question
+    number: L2.1
+    words: L2, L4
+    read:
+      L4.4: कार्बोक्सिलिक
+      L4.7-8: { text: "कैसे", cause: other }
+  - kind: question
+    number: L3.1
+    words: L3, L5
+  - kind: section
+    number: L6.1
+    title: L6.2-4
+    words: L6
+  - kind: activity
+    number: L7.2
+    words: L7, L14-L23
+    read:
+      L14.1: "दो परखनलियों"
+      L15.3-L16.1: "एक-एक बूँद"
+      L16.4: डालिए
+      L18.2: डालिए।
+      L19.1: "दोनों परखनलियों"
+      L20.5: "दोनों परखनलियों"
+      L22.4: "दोनों परखनलियों"
+  - kind: figure
+    number: L25.2
+    words: L24-L25
+    box: [158, 404, 396, 623]
+    read:
+      L25.3: मिसेल
+  - kind: text
+    words: L26-L30
+    continues: true
+    read:
+      L28.1: कार्बोक्सिलिक
+      L29.3: शृंखला
+      L29.11: "अणु मिसेली"
+      L30.10: "एक सिरा"

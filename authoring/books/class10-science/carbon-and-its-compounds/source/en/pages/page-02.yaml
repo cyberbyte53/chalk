@@ -1,0 +1,37 @@
+page: 2
+proofread: true
+cause: other
+notes:
+  other: "subscripts and charges the PDF sets as plain digits, apart or on their own lines (CH 3 COOH, C 4–), printed CH₃COOH, C⁴⁻"
+furniture: L71-L73
+blocks:
+  - kind: text
+    words: L1-L2
+    continued: true
+  - kind: text
+    words: L3-L5, L7.1-6, L8, L10, L12, L17-L18, L23, L31-L32, L36
+  - kind: table
+    words: L6, L7.7-9, L9, L11, L13-L16, L19-L22, L24-L30, L33-L35
+    number: L6.1-2
+    title: L6.3-9, L7.7-9
+    box: [291, 137, 549, 284]
+    cells: { rows: [["L9.1", "L9.2, L11.1-2", "L9.3, L11.3-4"], ["L13-L15", "L16.1", "L16.2"], ["L19-L21", "L22.1", "L22.2"], ["L25-L29", "L30", "L24"], ["L33-L35.1", "L35.2", "L35.3"]], cause: wrong-cells }
+    read:
+      "L13.3-L15": { text: "(CH₃COOH)" }
+      "L19.2-L21": { text: "(CHCl₃)" }
+      "L25.2-L29": { text: "(CH₃CH₂OH)" }
+      "L33.2-L35.1": { text: "(CH₄)" }
+  - kind: text
+    words: L37-L42
+  - kind: text
+    words: L43-L56
+    read:
+      "L50.8-9": { text: "C⁴⁻" }
+      "L53.8-9": { text: "C⁴⁺" }
+  - kind: text
+    words: L57-L63
+  - kind: text
+    words: L64-L70
+    continues: true
+    read:
+      "L68.4-L70.1": { text: "H₂." }

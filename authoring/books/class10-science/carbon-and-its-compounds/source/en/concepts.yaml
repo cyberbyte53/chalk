@@ -1,0 +1,189 @@
+concepts:
+  - key: carbon-is-everywhere-in-things-we-use
+    concept: Food, clothes, medicines, books and all living structures are based on carbon, though the earth's crust and atmosphere hold very little of it.
+    terms: []
+    items: ["0.3", "0.5", "0.6"]
+  - key: carbon-compounds-low-melting-non-conducting
+    concept: Most carbon compounds have low melting and boiling points and are poor conductors of electricity, so the forces between their molecules are weak and their bonding forms no ions.
+    terms: []
+    items: ["1.2", "1.3"]
+  - key: carbon-cannot-gain-or-lose-four-electrons
+    concept: Carbon has four valence electrons and cannot easily gain four (C⁴⁻) or lose four (C⁴⁺) to reach a noble gas configuration.
+    terms: []
+    items: ["1.4", "1.5"]
+  - key: sharing-electrons-gives-noble-gas-configuration
+    concept: Atoms can instead share valence electrons, so that the shared electrons belong to the outer shells of both and each attains a noble gas configuration.
+    terms: []
+    items: ["1.6", "1.7", "1.8"]
+  - key: single-double-triple-bonds
+    concept: One shared pair of electrons is a single bond, as in H₂ and Cl₂; two shared pairs a double bond, as in O₂; three shared pairs a triple bond, as in N₂; a bond is drawn as a line.
+    terms: [single covalent bond, double bond, triple bond]
+    items: ["1.9", "1.10", "1.11", "1.12", "1.13", "1.15", "1.16"]
+  - key: carbon-is-tetravalent-methane
+    concept: Carbon is tetravalent; in methane, CH₄, it shares its four valence electrons with four hydrogen atoms.
+    terms: [tetravalent]
+    items: ["1.18", "1.20"]
+  - key: covalent-bonds-and-their-compounds
+    concept: Bonds formed by sharing an electron pair are covalent bonds; covalent compounds have strong bonds within the molecule but weak forces between molecules, so low melting and boiling points, and they conduct electricity poorly.
+    terms: [covalent bonds]
+    items: ["1.19"]
+  - key: allotropes-of-carbon
+    concept: Carbon occurs as allotropes with very different physical properties, diamond (each carbon bonded to four others, rigid and hardest), graphite (hexagonal layers, smooth and conducting) and fullerenes such as C-60.
+    terms: [diamond, graphite, fullerene]
+    items: ["1.21", "1.22", "1.23", "1.24"]
+  - key: catenation
+    concept: Carbon can bond with other carbon atoms into long chains, branched chains and rings, a property called catenation, and its carbon-carbon bond is very strong.
+    terms: [catenation]
+    items: ["2.1", "2.2"]
+  - key: tetravalency-and-strong-bonds-give-many-compounds
+    concept: Because carbon has a valency of four and is small, it bonds strongly with many elements, and with catenation this gives millions of stable carbon compounds.
+    terms: []
+    items: ["2.1", "2.3", "2.4"]
+  - key: organic-compounds
+    concept: Carbon compounds were once thought to need a living system to form (organic compounds), until Wöhler made urea from ammonium cyanate; they are still studied as organic chemistry.
+    terms: [organic compounds]
+    items: ["2.5"]
+  - key: saturated-compounds
+    concept: Carbon compounds with only single bonds between carbon atoms, such as ethane and propane, are saturated and not very reactive.
+    terms: [saturated compounds]
+    items: ["2.1", "2.6.1", "2.6.2", "2.6.4", "2.6.5", "2.6.7"]
+  - key: unsaturated-compounds
+    concept: Carbon compounds with double or triple bonds between carbon atoms, such as ethene and ethyne, are unsaturated and more reactive than saturated ones.
+    terms: [unsaturated compounds]
+    items: ["2.1", "2.6.8", "2.6.9", "2.6.11", "2.6.12", "2.6.13"]
+  - key: drawing-a-carbon-compound
+    concept: A structure is drawn by first linking the carbon atoms, then filling their remaining valencies with hydrogen atoms, using double or triple bonds where valencies stay unsatisfied.
+    terms: []
+    items: ["2.6.1", "2.6.3", "2.6.11"]
+  - key: carbon-chains
+    concept: Carbon atoms form chains of different lengths, giving methane, ethane, propane, butane, pentane and hexane.
+    terms: []
+    items: ["2.7.1", "2.7.2"]
+  - key: structural-isomers
+    concept: Compounds with the same molecular formula but different structures, such as the two forms of C₄H₁₀, are structural isomers.
+    terms: [structural isomers]
+    items: ["2.7.3", "2.7.4", "2.7.6", "2.7.7"]
+  - key: carbon-rings
+    concept: Carbon atoms can also form rings, saturated as in cyclohexane or unsaturated as in benzene.
+    terms: []
+    items: ["2.7.8", "2.7.9", "2.7.10", "2.7.11"]
+  - key: hydrocarbons-alkanes-alkenes-alkynes
+    concept: Compounds of carbon and hydrogen only are hydrocarbons; saturated ones are alkanes, those with double bonds alkenes, those with triple bonds alkynes.
+    terms: [hydrocarbons, alkanes, alkenes, alkynes]
+    items: ["2.7.12"]
+  - key: heteroatoms-and-functional-groups
+    concept: An element that replaces hydrogen in a hydrocarbon chain is a heteroatom; it and groups containing it are functional groups, which give a compound its properties whatever the chain.
+    terms: [heteroatom, functional groups]
+    items: ["2.8.1", "2.8.2"]
+  - key: homologous-series
+    concept: A series of compounds in which the same functional group replaces hydrogen in carbon chains is a homologous series; successive members differ by a –CH₂– unit.
+    terms: [homologous series]
+    items: ["2.9.1", "2.9.2", "2.9.3", "2.9.4", "2.9.6"]
+  - key: homologous-series-general-formula
+    concept: The members of a homologous series share a general formula, such as CₙH₂ₙ for alkenes.
+    terms: []
+    items: ["2.9.4"]
+  - key: homologous-series-gradation
+    concept: In a homologous series physical properties such as melting and boiling points change gradually with molecular mass, while chemical properties, set by the functional group, stay similar.
+    terms: [gradation]
+    items: ["2.9.5"]
+  - key: naming-carbon-compounds
+    concept: A carbon compound is named from its carbon chain (propane for three carbons) with a prefix or suffix for its functional group, dropping the final 'e' before a vowel suffix, and with 'ene' or 'yne' for a double or triple bond.
+    terms: [prefix, suffix]
+    items: ["2.10.1", "2.10.2", "2.10.3"]
+  - key: combustion
+    concept: Carbon and most carbon compounds burn in oxygen to give carbon dioxide (and water) with heat and light.
+    terms: [combustion]
+    items: ["3.1", "3.2.1", "3.2.2", "3.2.3", "3.2.4", "3.2.5"]
+  - key: clean-and-sooty-flames
+    concept: Saturated hydrocarbons generally burn with a clean blue flame and unsaturated ones with a sooty yellow flame; too little air gives incomplete combustion and a sooty flame even from saturated fuels.
+    terms: [incomplete combustion]
+    items: ["3.2.6", "3.2.7", "3.2.8"]
+  - key: burning-fuels-pollute
+    concept: Coal and petroleum contain nitrogen and sulphur, so burning them gives oxides of sulphur and nitrogen, major pollutants.
+    terms: []
+    items: ["3.2.8"]
+  - key: flames-come-from-gases
+    concept: A flame is produced only when gaseous substances burn; glowing gaseous atoms give a luminous flame, and each element gives a characteristic colour.
+    terms: []
+    items: ["3.2.9"]
+  - key: fossil-fuels
+    concept: Coal formed from buried plants and petroleum from tiny sea organisms, changed over millions of years under pressure, so they are fossil fuels.
+    terms: [fossil fuels]
+    items: ["3.2.10"]
+  - key: oxidation-of-alcohols
+    concept: Alcohols can be oxidised to carboxylic acids by oxidising agents such as alkaline potassium permanganate or acidified potassium dichromate, which add oxygen to other substances.
+    terms: [oxidising agents]
+    items: ["3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.3.5"]
+  - key: addition-reaction-hydrogenation
+    concept: Unsaturated hydrocarbons add hydrogen in the presence of a catalyst such as nickel or palladium to give saturated ones, as in the hydrogenation of vegetable oils.
+    terms: [catalysts, hydrogenation]
+    items: ["3.4", "3.4.1", "3.4.2"]
+  - key: saturated-and-unsaturated-fats
+    concept: Animal fats contain saturated fatty acids, said to be harmful for health, while vegetable oils contain unsaturated ones, which should be chosen for cooking.
+    terms: []
+    items: ["3.4.1", "3.4.3"]
+  - key: substitution-reaction
+    concept: Saturated hydrocarbons are fairly unreactive, but in sunlight chlorine replaces their hydrogen atoms one by one, a substitution reaction.
+    terms: [substitution reaction]
+    items: ["3.5.1", "3.5.2"]
+  - key: ethanol-properties-and-uses
+    concept: Ethanol (alcohol) is a liquid that dissolves in water in all proportions and is a good solvent used in medicines; even a little pure ethanol can be lethal and long use of alcohol harms health.
+    terms: [absolute alcohol]
+    items: ["4.1", "4.2.1"]
+  - key: ethanol-with-sodium
+    concept: Ethanol reacts with sodium to give hydrogen and sodium ethoxide.
+    terms: [sodium ethoxide]
+    items: ["4.2.3", "4.2.4", "4.2.5", "4.2.6"]
+  - key: ethanol-dehydration-to-ethene
+    concept: Heating ethanol with excess concentrated sulphuric acid at 443 K removes water and gives ethene; the acid acts as a dehydrating agent.
+    terms: [dehydrating agent]
+    items: ["4.2.7", "4.2.8", "4.2.9"]
+  - key: alcohols-affect-the-body
+    concept: Ethanol slows the body and depresses the nervous system, and even a little methanol can kill or blind; industrial ethanol is made unfit to drink with methanol and dyed blue as denatured alcohol.
+    terms: [denatured alcohol]
+    items: ["4.2.10"]
+  - key: alcohol-as-a-fuel
+    concept: Ethanol from sugarcane is a cleaner fuel added to petrol, giving only carbon dioxide and water on burning in enough air.
+    terms: []
+    items: ["4.2.11"]
+  - key: ethanoic-acid-properties
+    concept: Ethanoic (acetic) acid is a carboxylic acid; its 5–8% solution is vinegar, and pure ethanoic acid freezes in cold weather (glacial acetic acid).
+    terms: [carboxylic acids, vinegar, glacial acetic acid]
+    items: ["4.3.1"]
+  - key: carboxylic-acids-are-weak
+    concept: Carboxylic acids are acidic but weak, unlike mineral acids such as HCl, which ionise completely.
+    terms: []
+    items: ["4.3.2", "4.3.3"]
+  - key: esterification
+    concept: An acid and an alcohol react with an acid catalyst to give an ester, a sweet-smelling substance used in perfumes and flavourings.
+    terms: [esters]
+    items: ["4.3.4", "4.3.5", "4.3.7", "4.3.8", "4.3.9"]
+  - key: saponification
+    concept: Treating an ester with sodium hydroxide gives back the alcohol and the sodium salt of the carboxylic acid; this saponification is used to make soap.
+    terms: [saponification]
+    items: ["4.3.9", "4.3.10"]
+  - key: ethanoic-acid-with-base
+    concept: Ethanoic acid reacts with a base such as sodium hydroxide to give a salt, sodium ethanoate (sodium acetate), and water.
+    terms: [sodium ethanoate]
+    items: ["4.3.11", "4.3.12"]
+  - key: ethanoic-acid-with-carbonates
+    concept: Ethanoic acid reacts with carbonates and hydrogencarbonates to give a salt, carbon dioxide and water.
+    terms: []
+    items: ["4.3.13", "4.3.14", "4.3.15", "4.3.16", "4.3.17"]
+  - key: soap-molecules
+    concept: Soaps are sodium or potassium salts of long-chain carboxylic acids; one end is ionic and hydrophilic, interacting with water, the carbon chain hydrophobic, interacting with oil.
+    terms: [hydrophilic, hydrophobic]
+    items: ["4.3.9", "5.3", "5.5"]
+  - key: micelles-clean
+    concept: In water, soap molecules form micelles with their tails around the oily dirt and their ionic ends outside, so the dirt is pulled out into the water and rinsed away.
+    terms: [micelles]
+    items: ["5.1", "5.2", "5.3", "5.4", "5.5", "5.6"]
+  - key: soap-in-hard-water
+    concept: In hard water, soap reacts with calcium and magnesium salts to form insoluble scum and gives little foam.
+    terms: [scum]
+    items: ["5.7", "5.9"]
+  - key: detergents
+    concept: Detergents, sodium salts of sulphonic acids or ammonium salts, do not form precipitates with calcium and magnesium ions, so they work in hard water and are used in shampoos and cleaning products.
+    terms: [detergents]
+    items: ["5.8", "5.9"]

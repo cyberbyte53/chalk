@@ -1,0 +1,34 @@
+page: 1
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets the drop capital I apart from its word"
+furniture: L1-L2, L14-L16, L46-L48
+blocks:
+  - kind: heading
+    words: L3-L4
+    title: L3-L4
+  - kind: text
+    words: L5-L10
+    read:
+      "L5.1-L6.1": { text: "In" }
+  - kind: activity
+    words: L13, L20-L27
+    number: L13.1-2
+  - kind: table
+    words: L11-L12, L17-L19
+    box: [314, 326, 536, 453]
+    cells: { rows: [["L11-L12", "L17-L18", "L19"], ["", "", ""]] }
+  - kind: text
+    words: L28-L32
+  - kind: text
+    words: L33-L41
+    read:
+      "L37.10-L38.1": { text: "hydrogencarbonates,", cause: broken-across-lines }
+  - kind: section
+    words: L42
+    number: L42.1
+    title: L42.2-8
+  - kind: text
+    words: L43-L45
+    continues: true

@@ -1,0 +1,61 @@
+page: 22
+proofread: true
+furniture: L48-L51, L12-L17, L19-L23
+answers:
+  "read L4.1": "the PDF doubles the े sign (दोनोें); the image prints दोनों"
+  "read L25.5-L26.1": "the PDF's letters with a stray leading space and the split बूँदें joined, as the image prints"
+  "read L26.7-L27.1": "the PDF's letters with a stray leading space and the split बूँदें joined, as the image prints"
+  "read L36.3": "the PDF loses श (�ृं); the image prints शृंखला"
+  "read L36.8": "the PDF loses श (�ृं); the image prints शृंखला"
+  "word परखनलियाँ": "a real word (test tubes), as printed on the page"
+  "word हिलाएँ": "a real word (shake), as printed on the page"
+  "word स्कम": "a real word (scum), as printed on the page"
+  "word सल्फ़ोनिक": "a real word (sulphonic), as printed on the page"
+  "word बोमाइड": "as printed: the page prints बोमाइड (the book's slip for ब्रोमाइड)"
+  "word अपमार्जकों": "a real word (detergents), as printed on the page"
+  "word डिटरजेंट": "a real word (detergent), as printed on the page"
+blocks:
+  - kind: activity
+    number: L1.2
+    words: L1-L11
+    read:
+      L2.1: "अलग-अलग परखनलियों"
+      L4.1: "दोनों"
+      L6.1: "दोनों परखनलियों"
+      L6.7: "उससे बनने"
+      L10.4-5: "सल्फ़ेट"
+      L10.9-10: "कैल्सियम"
+  - kind: activity
+    number: L18.2
+    words: L18, L24-L30
+    read:
+      L24.1: "दो परखनलियाँ लीजिए"
+      L24.7: "जल डालिए।"
+      L25.5-L26.1: "घोल की पाँच बूँदें"
+      L26.7-L27.1: "घोल की पाँच बूँदें"
+      L27.2: डालिए।
+      L28.1: "दोनों परखनलियों"
+      L28.5: "तक हिलाएँ।"
+  - kind: text
+    words: L31-L40
+    read:
+      L32.7: "अघुलनशील पदार्थ (स्कम)"
+      L33.6-7: "कैल्सियम"
+      L36.3: शृंखला
+      L36.5: "सल्फ़ोनिक लवण"
+      L36.8: शृंखला
+      L37.4: "या बोमाइड"
+      L37.12: "आवेशित सिरा"
+      L38.3-4: "कैल्शियम"
+      L39.8: अपमार्जकों
+  - kind: exercise
+    title: L41
+    words: L41
+  - kind: question
+    number: L42.1
+    words: L42, L44
+    read:
+      L44.1: "क्या आप डिटरजेंट"
+  - kind: question
+    number: L43.1
+    words: L43, L45-L47

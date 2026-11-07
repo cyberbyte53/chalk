@@ -1,0 +1,75 @@
+page: 10
+proofread: true
+furniture: L68-L71
+notes:
+  other: "a word the PDF splits with a space (प्रकृ ति, रे खा, एेल्के न), or subscripts it sets as plain digits (CH 3 OH)"
+terms:
+  - "L2.14-15"
+  - "L43.4-5"
+answers:
+  "read L1.7": "the PDF doubles the ं after the comma (हैं,ं); the image prints हैं,"
+  "read L2.2": "the PDF loses श (�ृं); the image prints शृंखला"
+  "read L8.1": "the PDF loses श (�ृं); the image prints शृंखला"
+  "read L23.5": "the PDF loses श (�ृं); the image prints शृंखलाएँ"
+  "read L26.5": "the PDF loses श (�ृं); the image prints शृंखला"
+  "read L41.13": "the PDF loses श (�ृं); the image prints शृंखला"
+  "read L42.3": "the PDF loses श (�ृं); the image prints शृंखला"
+  "word लँबाई": "as printed: the page prints लँबाई (with ँ)"
+  "word संयोजकताएँ": "a real word (valencies), as printed on the page"
+  "word योगिकों": "as printed: the table's heading prints योगिकों (the book's slip for यौगिकों)"
+  "word प्रतिस्थापी": "a real word (substituent), as printed in the table"
+  "word कार्बोक्सिलिक": "a real word (carboxylic), as printed in the table"
+  "word श्रंखलाएँ": "as printed: the page spells it श्रंखलाएँ here"
+  "word श्रंखलाओं": "as printed: the page spells it श्रंखलाओं here"
+blocks:
+  - kind: text
+    words: L1-L8
+    continued: true
+    read:
+      L1.7: "हैं,"
+      L2.2: शृंखला
+      L2.4: लँबाई
+      L2.6-7: { text: "प्रकृति", cause: other }
+      L4.2-3: { text: "रेखा", cause: other }
+      L5.4-L6.2: संयोजकताएँ
+      L7.4-5: अणुओं
+      L8.1: शृंखला
+  - kind: table
+    number: L9.2
+    title: L9.3-8
+    words: L9-L20
+    box: [99, 228, 456, 446]
+    cells: { rows: [["L10.1-2", "L10.3-5", "L10.6-9"], ["L11.1", "L12, L13", "L14, L15"], ["L16.1", "L16.2-3", "L17"], ["", "L18", ""], ["", "L19", ""], ["", "L20", ""]], cause: wrong-cells }
+    read:
+      L10.3: योगिकों
+      L13.1-2: { text: "ऐल्केन", cause: other }
+      L15.4: प्रतिस्थापी)
+      L20.2: कार्बोक्सिलिक
+  - kind: section
+    number: L21.1
+    title: L21.2-3
+    words: L21
+  - kind: text
+    words: L22-L43
+    read:
+      L22.5-6: परमाणुओं
+      L22.14: श्रंखलाएँ
+      L23.5: शृंखलाएँ
+      L23.15-16: श्रंखलाओं
+      L24.4-5: परमाणुओं
+      L26.5: शृंखला
+      L26.12-L28.1: { text: "CH₃OH,", cause: other }
+      L28.2-L32.1: { text: "C₂H₅OH,", cause: other }
+      L32.2-L36.1: { text: "C₃H₇OH", cause: other }
+      L37.2-L41.1: { text: "C₄H₉OH", cause: other }
+      L41.13: शृंखला
+      L42.3: शृंखला
+  - kind: text
+    words: L44-L67
+    read:
+      L46.1-L47.1: { text: "CH₄", cause: other }
+      L48.2-L51.1: { text: "C₂H₆", cause: other }
+      L53.3-L55.1: { text: "–CH₂-", cause: other }
+      L56.1-L59.1: { text: "C₂H₆", cause: other }
+      L60.2-L63.1: { text: "C₃H₈", cause: other }
+      L65.3-L67.1: { text: "–CH₂-", cause: other }

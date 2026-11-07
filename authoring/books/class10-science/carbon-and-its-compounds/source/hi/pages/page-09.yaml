@@ -1,0 +1,82 @@
+page: 9
+proofread: true
+furniture: L47-L50
+notes:
+  other: "subscripts the PDF sets as plain digits (C 4 H 10), a word it splits with a space (के वल, ‘एेल्के न’)"
+terms:
+  - "L46.16-17"
+answers:
+  "read L17.7-8": "the PDF loses श (�ृं); the image prints शृंखलाओं"
+  "read L25.14": "the PDF loses श (�ृं); the image prints शृंखला"
+  "read L26.2": "the PDF loses श (�ृं); the image prints शृंखला"
+  "word संरचाओं": "as printed: the page prints संरचाओं (the book's own slip for संरचनाओं)"
+  "word समावयन": "a real word (isomer), as printed on the page"
+  "word साइक्लोहेक्सेन": "a real word (cyclohexane), as printed on the page"
+  "word ऐल्कीन": "a real word (alkene), as printed on the page"
+  "word ऐल्काइन": "a real word (alkyne), as printed on the page"
+  "word हैलोजेन": "a real word (halogen), as printed on the page"
+  "again L2.1": "meant: the book prints figure 4.8 in two parts, (a) on page 8 and (b) here"
+blocks:
+  - kind: text
+    words: L1
+    continued: true
+  - kind: figure
+    number: L2.2-3
+    words: L2-L8
+    box: [195, 100, 480, 195]
+    read:
+      L2.4-L5.1: { text: "C₄H₁₀", cause: other }
+      L6.4-L7.3: संरचनाओं
+  - kind: text
+    words: L9-L16
+    read:
+      L9.7-8: संरचनाओं
+      L9.13-L12.1: { text: "C₄H₁₀", cause: other }
+      L14.2-L15.3: संरचाओं
+      L16.3: समावयन
+  - kind: text
+    words: L17-L23
+    read:
+      L17.3-4: शाखाओं
+      L17.7-8: शृंखलाओं
+      L18.9: साइक्लोहेक्सेन
+      L18.14-L21.1: { text: "C₆H₁₂", cause: other }
+  - kind: figure
+    number: L24.2
+    words: L24
+    box: [215, 272, 485, 373]
+    read:
+      L24.3: साइक्लोहेक्सेन
+  - kind: text
+    words: L25-L31
+    read:
+      L25.3: साइक्लोहेक्सेन
+      L25.14: शृंखला,
+      L26.2: शृंखला
+      L27.3-L31.1: { text: "(C₆H₆)", cause: other }
+  - kind: figure
+    number: L36.2
+    words: L32-L36
+    box: [215, 415, 420, 530]
+    read:
+      L32.3-L35.1: { text: "C₆H₆", cause: other }
+  - kind: text
+    words: L37-L39
+    read:
+      L37.1-2: { text: "केवल", cause: other }
+      L38.2-3: { text: "‘ऐल्केन’", cause: other }
+      L39.3: ‘ऐल्कीन’
+      L39.11: ‘ऐल्काइन’
+  - kind: section
+    number: L40.1
+    title: L40.2-4
+    words: L40
+  - kind: text
+    words: L41-L46
+    continues: true
+    read:
+      L41.4: तत्व
+      L42.5: तत्वों;
+      L42.7: हैलोजेन,
+      L43.8: तत्व
+      L45.4: तत्वों
