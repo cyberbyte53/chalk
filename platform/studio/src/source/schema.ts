@@ -46,6 +46,8 @@ export const Tool = {
   HindiRepair: "hindi-repair",
   FigureSnap: "figure-snap",
   TableCells: "table-cells",
+  /** The blocks a page file starts from. */
+  StructureDraft: "structure-draft",
 } as const;
 export type Tool = (typeof Tool)[keyof typeof Tool];
 const toolName = z.enum(Object.values(Tool) as [Tool, ...Tool[]]);

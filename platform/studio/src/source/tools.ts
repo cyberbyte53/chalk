@@ -10,4 +10,5 @@ export const TOOL_VERSIONS: Readonly<Record<Tool, number>> = {
   [Tool.HindiRepair]: 1,
   [Tool.FigureSnap]: 1,
   [Tool.TableCells]: 1,
+  [Tool.StructureDraft]: 1,
 };
