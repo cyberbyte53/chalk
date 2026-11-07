@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import type { BuiltPage } from "./build";
-import { buildExtract } from "./check";
 import { draftBook, readStyles } from "./draft";
+import { buildExtract } from "./extract";
 import { chapterOf, extractPaths, extractsIn } from "./files";
 import { cachedObjects } from "./objects";
 import { expand } from "./ranges";

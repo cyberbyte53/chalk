@@ -4,15 +4,10 @@ import { join } from "node:path";
 import { Locale } from "@chalk/content";
 import { afterAll, describe, expect, it } from "vitest";
 import { parse, stringify } from "yaml";
-import { Edit, buildChapter, buildPage } from "./build";
-import {
-  NOT_PROOFREAD,
-  answer,
-  changedPieces,
-  chapterIssues,
-  checkExtract,
-  pageIssues,
-} from "./check";
+import { Edit, buildPage } from "./build";
+import { buildChapter } from "./chapter";
+import { NOT_PROOFREAD, answer, chapterIssues, pageIssues } from "./check";
+import { changedPieces, checkExtract } from "./extract";
 import { feedback } from "./feedback";
 import { sha256 } from "./files";
 import { type DrawnObject, ObjectKind } from "./objects";

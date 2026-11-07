@@ -10,7 +10,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { PNG } from "pngjs";
-import type { Crop } from "./build";
+import type { Crop } from "./chapter";
 import { sha256 } from "./files";
 import { type Word, poppler } from "./read";
 import type { Box } from "./schema";

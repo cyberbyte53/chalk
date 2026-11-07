@@ -1,9 +1,10 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { isDeepStrictEqual } from "node:util";
-import { type Built, buildChapter, buildPage } from "./build";
-import { buildExtract, pageToolsOf } from "./check";
+import { buildPage } from "./build";
+import { type Built, buildChapter } from "./chapter";
 import { draftBook, readStyles } from "./draft";
+import { buildExtract, pageToolsOf } from "./extract";
 import { CACHE, chapterOf, extractPaths, extractsIn, readYaml } from "./files";
 import { cachedObjects } from "./objects";
 import { type Item, SourceFile, itemsSchema } from "./schema";

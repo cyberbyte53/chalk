@@ -5,7 +5,7 @@ import { Locale } from "@chalk/content";
 import { parse as parseYaml } from "yaml";
 import { GUIDE, readComments, waitsOn } from "./comments";
 import { type BoardChange, changesUnder } from "./reviewed";
-import { checkExtract } from "./source/check";
+import { checkExtract } from "./source/extract";
 import { readYaml } from "./source/files";
 import { SourceFile, type Item as SourceItem, itemsSchema } from "./source/schema";
 

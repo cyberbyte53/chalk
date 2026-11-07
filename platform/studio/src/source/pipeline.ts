@@ -2,17 +2,13 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { basename, join, relative } from "node:path";
 import type { Locale } from "@chalk/content";
 import { Document, Scalar, isMap, isScalar, isSeq, stringify, visit } from "yaml";
-import type { Built, BuiltPage } from "./build";
-import {
-  type ExtractReport,
-  buildExtract,
-  changedTools,
-  checkExtract,
-  citedChanges,
-  issueLine,
-} from "./check";
+import type { BuiltPage } from "./build";
+import type { Built } from "./chapter";
+import { issueLine } from "./check";
+import { citedChanges } from "./cited";
 import { cropFigures } from "./crop";
 import { type PageStyles, draftPages, readStyles } from "./draft";
+import { type ExtractReport, buildExtract, changedTools, checkExtract } from "./extract";
 import {
   PAGE_PREFIX,
   type SourcePaths,

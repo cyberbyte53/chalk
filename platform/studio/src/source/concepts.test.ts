@@ -1,6 +1,6 @@
 import { Locale } from "@chalk/content";
 import { describe, expect, it } from "vitest";
-import { trimTerm } from "./build";
+import { trimTerm } from "./chapter";
 import { checkAttached, checkMain, suggestAttached } from "./concepts";
 import { Cause, type Item, ItemKind, type MainConcepts } from "./schema";
 

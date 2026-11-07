@@ -3,16 +3,11 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Locale } from "@chalk/content";
 import { describe, expect, it } from "vitest";
-import { type BuiltPage, buildChapter, buildPage, positionalIds } from "./build";
-import {
-  answer,
-  chapterIssues,
-  checkExtract,
-  citedIn,
-  isSameBlock,
-  pageIssues,
-  readingQuestion,
-} from "./check";
+import { type BuiltPage, buildPage } from "./build";
+import { buildChapter, positionalIds } from "./chapter";
+import { answer, chapterIssues, pageIssues, readingQuestion } from "./check";
+import { citedIn, isSameBlock } from "./cited";
+import { checkExtract } from "./extract";
 import { expand } from "./ranges";
 import { type NumberedPage, type Word, numberPage, wordsFile } from "./read";
 import { Cause, type Item, ItemKind, type PageBlock, type PageFile } from "./schema";

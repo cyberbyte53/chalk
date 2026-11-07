@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { isMap, parseDocument, visit } from "yaml";
-import { buildExtract } from "./check";
+import { buildExtract } from "./extract";
 import type { Extract } from "./files";
 import { SourceFile, pageFileName } from "./schema";
 
