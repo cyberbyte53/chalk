@@ -1,7 +1,14 @@
 import { Locale } from "@chalk/content";
 import { describe, expect, it } from "vitest";
 import { place } from "./boxes";
-import { checkFigures, checkIds, checkNumbers, checkReading, checkTerms } from "./checks";
+import {
+  checkFigures,
+  checkIds,
+  checkMatch,
+  checkNumbers,
+  checkReading,
+  checkTerms,
+} from "./checks";
 import { positionalIds } from "./ids";
 import { lettersOnly } from "./letters";
 import { parseNumber, scanNumbers } from "./numbers";
@@ -228,5 +235,31 @@ describe("figures exist", () => {
   it("fails a figure with no picture, or no box", () => {
     expect(checkFigures([fig], () => false)[0]).toMatch(/no figures\/1\.3\.png/);
     expect(checkFigures([item("1.4", ItemKind.Table, "")], () => true)[0]).toMatch(/no crop box/);
+  });
+});
+
+describe("checkMatch", () => {
+  const english = [
+    item("1", ItemKind.Section, "Introduction", { number: "3.1" }),
+    item("1.1", ItemKind.Figure, "", { number: "Fig. 3.1" }),
+    item("1.2", ItemKind.Exercise, "", { number: "EXERCISE 3.1" }),
+    item("1.2.1", ItemKind.Question, "Q", { number: "Q1" }),
+  ];
+  const hindi = [
+    item("1", ItemKind.Section, "भूमिका", { number: "3.1" }),
+    item("1.1", ItemKind.Figure, "", { number: "आकृति 3.1" }),
+    item("1.2", ItemKind.Exercise, "", { number: "प्रश्नावली 3.1" }),
+    item("1.2.1", ItemKind.Question, "प्र", { number: "Q1" }),
+  ];
+  it("matches by kind and digits, not words", () => {
+    expect(checkMatch(Locale.Hi, hindi, english, {})).toEqual([]);
+  });
+  it("finds what one book numbers and the other doesn't, unless listed with why", () => {
+    const less = hindi.filter((i) => i.id !== "1.1");
+    expect(checkMatch(Locale.Hi, less, english, {})).toHaveLength(1);
+    expect(checkMatch(Locale.Hi, less, english, { "figure 3.1": "drawn in the text" })).toEqual([]);
+  });
+  it("refuses an unmatched entry both books have", () => {
+    expect(checkMatch(Locale.Hi, hindi, english, { "figure 3.1": "?" })).toHaveLength(1);
   });
 });

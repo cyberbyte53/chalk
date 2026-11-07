@@ -1,4 +1,4 @@
-import type { Locale } from "@chalk/content";
+import { Locale } from "@chalk/content";
 import { place, runningWords } from "./boxes";
 import { positionalIds } from "./ids";
 import { lettersOnly } from "./letters";
@@ -182,4 +182,52 @@ export function checkFigures(items: readonly Item[], has: (id: string) => boolea
       ...(i.crop === undefined ? [`${i.id}: a ${i.kind} with no crop box`] : []),
       ...(has(i.id) ? [] : [`${i.id}: no figures/${i.id}.png (run pnpm source again)`]),
     ]);
+}
+
+/**
+ * The numbered things of one language's book, by kind and digits (`figure 3.11`); a question's
+ * under its exercise's (`question 3.2 1`). What languages are matched by.
+ */
+export function numberedKeys(lang: Locale, items: readonly Item[]): Map<string, Item> {
+  const out = new Map<string, Item>();
+  let exercise = "";
+  for (const item of items) {
+    const n = item.number === undefined ? undefined : parseNumber(lang, item.number);
+    if (n === undefined) continue;
+    if (n.kind === ItemKind.Exercise) exercise = n.digits;
+    out.set(
+      n.kind === ItemKind.Question ? `${numberKey(n)} of exercise ${exercise}` : numberKey(n),
+      item,
+    );
+  }
+  return out;
+}
+
+/**
+ * The languages match: every numbered thing of the English book is in this one and the other way
+ * round, or is in book.yaml's `unmatched` with why; and nothing is listed there that does match.
+ */
+export function checkMatch(
+  lang: Locale,
+  items: readonly Item[],
+  english: readonly Item[],
+  unmatched: Readonly<Record<string, string>>,
+): string[] {
+  const ours = numberedKeys(lang, items);
+  const theirs = numberedKeys(Locale.En, english);
+  const problems: string[] = [];
+  for (const [key, item] of theirs)
+    if (!ours.has(key) && unmatched[key] === undefined)
+      problems.push(
+        `the English book has ${key} (${item.id}) and this one doesn't: find it, or list it in book.yaml's unmatched with why`,
+      );
+  for (const [key, item] of ours)
+    if (!theirs.has(key) && unmatched[key] === undefined)
+      problems.push(
+        `this book has ${key} (${item.id}) and the English one doesn't: list it in book.yaml's unmatched with why`,
+      );
+  for (const key of Object.keys(unmatched))
+    if (ours.has(key) && theirs.has(key))
+      problems.push(`book.yaml lists ${key} as unmatched, but both books have it`);
+  return problems;
 }

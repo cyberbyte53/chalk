@@ -124,6 +124,8 @@ pages whose image changed.
    `items.yaml` (`platform/studio/src/pipeline.ts`, `platform/studio/src/mcp/look.ts`,
    `platform/studio/src/mcp/tools.ts`, `picture.ts`, `platform/editor/src/planning.ts`,
    `platform/editor/src/threads.ts`, `platform/editor/src/extension.ts`, the plan-chapter skill).
-3. Hindi: the legacy-font conversion, extraction proved on the Hindi book; matching and its check.
+3. Hindi: the legacy-font conversion (`platform/studio/src/source/chanakya.ts`), extraction proved on the
+   Hindi book; matching and its check. Done 7 Nov 2026: 86 items, 19 terms; all 36 numbered things
+   match, none unmatched.
 4. The terms check on the lessons; chapter 1's threads filed.
 5. `pnpm new chapter` uses it; docs and skills say it (full paths).

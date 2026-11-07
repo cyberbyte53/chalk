@@ -1,0 +1,42 @@
+# What the book defines, in its spelling, each by the item it is defined in (platform/docs/plans/sources.md).
+# This book sets a defined term in bold followed by its English in brackets (मूलबिन्दु (origin)); the
+# terms of 2.8 are in italics with their English, and x-अक्ष, y-अक्ष in neither: each is here because
+# the sentence defines it.
+- term: निर्देशांक ज्यामिति
+  item: "1.10"
+- term: कार्तीय पद्धति
+  item: "1.11"
+- term: मूल-बिन्दु
+  item: "2.1"
+- term: x-अक्ष
+  item: "2.7"
+- term: y-अक्ष
+  item: "2.7"
+- term: मूलबिन्दु
+  item: "2.7"
+- term: धनात्मक दिशाएँ
+  item: "2.7"
+- term: ऋणात्मक दिशाएँ
+  item: "2.7"
+- term: चतुर्थांश
+  item: "2.8"
+- term: कार्तीय तल
+  item: "2.8"
+- term: निर्देशांक तल
+  item: "2.8"
+- term: xy-तल
+  item: "2.8"
+- term: निर्देशांक अक्ष
+  item: "2.8"
+- term: x-निर्देशांक
+  item: "2.16"
+- term: भुज
+  item: "2.16"
+- term: y-निर्देशांक
+  item: "2.17"
+- term: कोटि
+  item: "2.17"
+- term: बिन्दु का आलेखन
+  item: "3.1"
+- term: क्रमित युग्म
+  item: "3.7"

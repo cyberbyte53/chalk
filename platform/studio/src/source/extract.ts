@@ -4,7 +4,14 @@ import { join, relative } from "node:path";
 import { Locale } from "@chalk/content";
 import { parse as parseYaml } from "yaml";
 import type { z } from "zod";
-import { checkFigures, checkIds, checkNumbers, checkReading, checkTerms } from "./checks";
+import {
+  checkFigures,
+  checkIds,
+  checkMatch,
+  checkNumbers,
+  checkReading,
+  checkTerms,
+} from "./checks";
 import { lettersOnly } from "./letters";
 import {
   type Book,
@@ -116,5 +123,11 @@ export function checkExtract(x: Extract): ExtractReport {
     ...checkTerms(terms.value ?? [], list),
     ...checkFigures(list, (id) => existsSync(join(x.dir, SourceFile.Figures, `${id}.png`))),
   );
+  // Another language: matched to the English book by its numbers.
+  if (x.lang !== Locale.En) {
+    const english = readYaml(join(x.dir, "..", Locale.En, SourceFile.Items), itemsSchema);
+    if (english.value === undefined) problems.push("no English items.yaml to match against");
+    else problems.push(...checkMatch(x.lang, list, english.value, book.value.unmatched ?? {}));
+  }
   return report;
 }
