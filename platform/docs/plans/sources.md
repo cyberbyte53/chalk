@@ -113,7 +113,42 @@ and checks the two agree. Ids are positions (`2.4`: section 2's fourth block) un
 then they never change (a later split keeps the id on its first part and gives the rest `2.4b`): the
 check fails when a cited id would change.
 
-## Who made every piece: the machine first, the agent for the rest, nothing unaccounted for
+## Tools suggest, the agent decides, every correction is feedback
+
+**The loop, for every piece in every language:**
+1. **The tools suggest everything** a tool can: words and repairs, figure boxes, table cells, running
+   heads, maths, and a draft of the structure (which words make each block, from signals any PDF has:
+   gaps, indents, font size and bold, numbering; kinds only where numbering or font says so: section,
+   question, exercise, caption; box, activity and equation are the agent's call). A suggestion is
+   never final. The structure draft is written as a pre-filled page file.
+2. **The agent decides**, on one side-by-side sheet per page (below): it accepts, corrects, or adds
+   what the tools missed, by short edits applied to the page file (`merge 4 5`, `split 7 at L12.3`, `kind
+   9 box "Think It Over"`, `read L17.4 वस्तु`, `add figure around L30-L33`; a clean page is `accept`).
+   The page file holds the decided structure whole: a later change to the structure tool can't move a
+   block the agent accepted.
+3. **Every override is feedback.** The build works out each edit (merge, split, move words, change
+   kind, a reading over a suggested one, a box moved, an addition the tools didn't flag); the agent gives
+   its cause from a closed list (`LinesRunTogether`, `SideColumn`, `CaptionAway`, `BrokenAcrossLines`,
+   …, an enum), with an optional note, once per cause per page; a whole page can be "draft discarded:
+   why". Filling a gap a tool flagged needs no reason (the tool's own "why left" is the record). The
+   overrides and causes live in the page files; `pnpm source feedback` gathers them across chapters
+   (tool, version, page, range, edit, suggested, decided, cause). When a tool changes and an override
+   now equals the new suggestion, it is an issue: "now matches the tool, drop it". That is the measure
+   of a fix (see "How a tool is proved").
+
+**The side-by-side sheet.** One image per page, everything the agent needs: on the left the PDF page as
+printed, each block outlined and numbered and each figure's and table's box drawn; on the right our
+version of the page, rebuilt from the suggestions or decisions, block by block with the same numbers,
+its kind, its text, figures as their crops, tables as their grids; what a tool changed highlighted, what
+is open in red. Before deciding it shows the suggestions; after the build, the decisions coloured by
+who made them. Drawn as HTML and photographed by headless Chrome (ImageMagick can't shape Hindi); as
+HTML it is also the person's view, a block lit on both sides when hovered.
+
+**So the agent works on the tenth that needs it.** Each suggestion carries whether the tool is sure (one
+clean answer, no issue: a word with exactly one real reading, a figure snapped with nothing cut, a block
+whose draft matches the geometry cleanly) or not; sure ones are drawn faint, the rest listed first. A
+page with nothing flagged is a glance and `accept`; a page with flags gets a careful read. A page whose
+PDF and tools haven't changed keeps its decisions; after a tool change only what changed comes back.
 
 **From first principles.** What we keep is only as good as what we can trace. For every word, block,
 box and cell, three questions must have one answer, readable by the agent, the person and the machine:
@@ -121,9 +156,9 @@ box and cell, three questions must have one answer, readable by the agent, the p
 is ambiguous, a wrong piece leads straight to the tool or the reading that made it, and a better tool
 shows exactly what it would change.
 
-**Two kinds of making.** *Structure* (which words make a piece, and what kind of piece it is) is always
-the agent's. *Content* (a piece's letters, a figure's edges, a table's cells) is the PDF's as it is, a
-tool's, or the agent's. So a snapped figure is "chosen by the agent, edges by figure-snap"; a block's
+**Two kinds of making.** *Structure* (which words make a piece, and what kind of piece it is) is
+suggested by the structure tool and decided by the agent. *Content* (a piece's letters, a figure's
+edges, a table's cells) is the PDF's as it is, a tool's, or the agent's. So a snapped figure is "chosen by the agent, edges by figure-snap"; a block's
 words are the PDF's except the spans a tool or the agent changed.
 
 **Where it is recorded.** The tools are deterministic (the PDF in, and for snapping the agent's rough
@@ -132,7 +167,7 @@ box), so their proposals are not stored: they are made again at every build. Eac
 PDF as it is: `made: [{ words: L17.16, by: hindi-repair }, { words: L56.5-L57.3, by: agent }, { box,
 by: figure-snap }]`. `book.yaml` records the tools' versions the chapter was built with, the reader's
 among them. The agent's page file, `pages/page-NN.yaml`, holds the structure and, against the tools,
-only where it differs: a reading over a word range (it replaces every proposal the range touches, and
+only where it differs, each difference with its one line of why: a reading over a word range (it replaces every proposal the range touches, and
 must cover each one whole; a partial overlap is an issue), an addition, an answer. A proposal the
 agent doesn't override is accepted: the page file is the agent's word that it checked every repair,
 box and grid on that page against the image. A block's `number` and `title` are word ranges of the
@@ -169,6 +204,10 @@ about the same as reading everything, since looking at each page and writing its
 the gain is in retyping and mistakes, and structure proposals are what would save time, to be tested.
 
 ## How a tool is proved
+
+A later agent reads the overrides and their causes across chapters (`pnpm source feedback`), finds
+where a tool keeps falling short, and proposes the fix; the fix is a tool change, proved as below, and
+measured by the overrides it makes unnecessary.
 
 Each tool's claim is a test kept in the repo: it is shaped on development books (science chapter 2,
 maths chapter 1), then run on a book none of it was shaped on, and only then used. Once a fix is made
@@ -246,8 +285,8 @@ the ideas; matching is a section of the same skill, run once both books are extr
 image and vector objects are read with pdf.js (Apache-2.0; PyMuPDF does the same but is AGPL).
 
 **Tools considered and not used:** Docling (tested: 8 of 17 captions, a section missed, 7 minutes a
-chapter), MinerU and Marker (layout drafts: structure was never the cost, and a weak draft costs more to
-correct than to write), PyMuPDF (AGPL; and it reads the Kokila Hindi worse than poppler), pdffigures2
+chapter), MinerU and Marker (heavy general layout models, weak on these books; our structure draft uses only
+the PDF's own signals and is a suggestion the agent proofreads), PyMuPDF (AGPL; and it reads the Kokila Hindi worse than poppler), pdffigures2
 (papers only, unmaintained), Camelot (tables from rules is a few lines here).
 
 ## Trial (7 Nov 2026)
@@ -291,6 +330,10 @@ ids kept, as the regression test.
    test from the proof's readings; then, in the order they save most: the Hindi repair and the word
    list; numbered page images and column splits; figure snapping and table cells; review sheets; then
    `ideas.yaml` and the match step. Maths from position and furniture proposals with a maths chapter.
+   Then the reader's column split (a line running across two columns is two lines); then the structure
+   draft, the side-by-side sheet, short edits and `pnpm source feedback`, proved first by a proof of
+   concept on a few pages (agent time and tokens, accuracy, pages accepted at a glance), then on
+   development and unseen books.
 3. The measure above, on science chapter 2; then chapter 1 converted.
 4. The lessons' terms check (self-review, from `match.yaml`); chapter 1's threads filed.
 5. `pnpm new chapter` runs it; docs and skills say it (full paths).
