@@ -544,3 +544,37 @@ describe("a number the PDF glued to its next word with a tab", () => {
     expect([b?.number, b?.title, b?.text]).toEqual(["2.4", "लवण का pH", "2.4 लवण का pH"]);
   });
 });
+
+describe("readings an agent made apart that together spell a tool's", () => {
+  // "Na" and its raised "+", numbered as two lines; a lone "3" elsewhere on the second line.
+  const page = numberPage({
+    page: 1,
+    width: 500,
+    height: 700,
+    words: [
+      { text: "Na", x0: 10, x1: 24, y0: 92.5, y1: 102 },
+      { text: "+", x0: 24, x1: 28, y0: 90, y1: 96.5 },
+      { text: "3", x0: 200, x1: 204, y0: 90, y1: 96.5 },
+    ],
+  });
+  const texts = [
+    { str: "Na", x0: 10, x1: 24, top: 90, baseline: 100, size: 10 },
+    { str: "+", x0: 24, x1: 28, top: 90, baseline: 96, size: 6 },
+    { str: "3", x0: 200, x1: 204, top: 90, baseline: 96, size: 6 },
+  ];
+  const issues = (read: Record<string, string>) =>
+    buildPage(
+      { page: 1, proofread: true, blocks: [{ kind: "text", words: "L1-L2", read }] } as never,
+      page,
+      { texts },
+    ).raised.map((r) => r.id);
+  it("match the tool, each to drop", () => {
+    expect(issues({ "L1.1": "Na", "L2.1": "⁺" }).filter((id) => id.startsWith("matches"))).toEqual([
+      "matches L1.1",
+      "matches L2.1",
+    ]);
+  });
+  it("don't, when one also blanks a word outside the tool's run (the stray digit stays the agent's)", () => {
+    expect(issues({ "L1.1": "Na⁺", L2: "" }).filter((id) => id.startsWith("matches"))).toEqual([]);
+  });
+});

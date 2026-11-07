@@ -62,6 +62,32 @@ export const NO_CAUSE = "no cause ";
 /** A question the build raises on a page: its id and what it asks. */
 export type Raised = { id: string; question: string };
 
+/** The agent's piece is what the tool gives now: the page file's copy can go (`--tidy` takes it). */
+function raiseMatch(at: BlockContext, id: string, what: string, tool: Tool): void {
+  at.raised.push({
+    id: `matches ${id}`,
+    question: `${what} is what ${tool} gives: now matches the tool, drop it`,
+  });
+}
+
+/**
+ * The agent replaced a tool's piece: the override recorded (`pnpm source feedback` gathers them), and
+ * its cause asked for if neither the piece nor the page gives one.
+ */
+function recordOverride(
+  at: BlockContext,
+  id: string,
+  what: string,
+  o: Omit<Override, "version" | "page">,
+): void {
+  if (o.cause === undefined)
+    at.raised.push({
+      id: `${NO_CAUSE}${id}`,
+      question: `${what} replaces ${o.tool}'s "${o.suggested}": give its cause, here or for the page`,
+    });
+  at.overrides.push({ ...o, version: TOOL_VERSIONS[o.tool], page: at.page });
+}
+
 /** What the page's tools have to work from, beyond its words. */
 export type PageTools = {
   /** The PDF's drawn objects on this page. */
@@ -254,6 +280,65 @@ type BlockContext = {
   overrides: Override[];
 };
 
+/** An agent's reading as the page file gives it: its range, its words (when the range is real), text. */
+type Entry = { span: string; ids: string[]; text: string };
+
+/**
+ * The agent's readings that, read apart, together spell a tool's suggestion exactly, spacing aside
+ * ("Na" and "⁺" read on their own lines where the scripts tool reads "Na⁺"): those now match the tool.
+ * Readings and the suggestions they touch form groups; a group goes whole or not at all: every
+ * suggestion in it spelled by its readings in order, every word of each reading inside one of them (an
+ * empty reading blanking more, a stray digit too, keeps the group).
+ */
+function spelledTogether(
+  entries: readonly Entry[],
+  suggestions: readonly WordSuggestion[],
+  words: NumberedPage,
+): Set<string> {
+  const runs = suggestions.filter((s) => s.reading !== undefined);
+  const touching = (e: Entry, s: WordSuggestion) => e.ids.some((id) => s.ids.includes(id));
+  const spells = (s: WordSuggestion) => {
+    const parts = entries.filter((e) => touching(e, s));
+    if (!parts.every((e) => e.text === "" || e.ids.every((id) => s.ids.includes(id)))) return false;
+    const at = (e: Entry) =>
+      Math.min(...e.ids.map((id) => s.ids.indexOf(id)).filter((k) => k >= 0));
+    const covered = new Set(parts.flatMap((e) => e.ids));
+    const uncovered = s.ids.filter(
+      (id) => !covered.has(id) && (words.words.get(id)?.text ?? "") !== "",
+    );
+    const spelled = [...parts]
+      .sort((x, y) => at(x) - at(y))
+      .map((e) => e.text)
+      .join("");
+    const bare = (t: string) => plain(t).replace(/\s/g, "");
+    return uncovered.length === 0 && bare(spelled) === bare(s.reading ?? "");
+  };
+  const whole = new Set<string>();
+  const seen = new Set<Entry>();
+  for (const first of entries) {
+    if (seen.has(first)) continue;
+    // The group: readings linked through the suggestions they touch.
+    const group = [first];
+    const groupRuns = new Set<WordSuggestion>();
+    for (let k = 0; k < group.length; k += 1) {
+      const e = group[k] as Entry;
+      seen.add(e);
+      for (const s of runs.filter((r) => touching(e, r))) {
+        groupRuns.add(s);
+        for (const other of entries) if (!seen.has(other) && touching(other, s)) group.push(other);
+      }
+    }
+    const inRuns = new Set([...groupRuns].flatMap((s) => s.ids));
+    if (
+      group.length >= 2 &&
+      [...groupRuns].every(spells) &&
+      group.every((e) => e.ids.every((id) => inRuns.has(id)))
+    )
+      for (const e of group) whole.add(e.span);
+  }
+  return whole;
+}
+
 /** The agent's readings over this block's words, each worked out against the tools' suggestions. */
 function agentReadings(
   b: PageBlock,
@@ -261,80 +346,27 @@ function agentReadings(
   ids: readonly string[],
   at: BlockContext,
 ): Reading[] {
-  const { words, suggestions, problems, raised, overrides, page } = at;
+  const { words, suggestions, problems, raised } = at;
   const readings: Reading[] = [];
-  // The agent's readings that together spell a tool's span exactly, spaces aside ("Na" and "⁺" read
-  // apart where the scripts tool reads "Na⁺"): each now matches the tool.
-  const whole = new Set<string>();
-  const entries = Object.entries(b.read ?? {}).map(([span, value]) => ({
+  const entries: (Entry & { value: string | { text: string; cause?: Cause } })[] = Object.entries(
+    b.read ?? {},
+  ).map(([span, value]) => ({
     span,
-    ids: (() => {
-      try {
-        return expand(span, words.words);
-      } catch {
-        return [];
-      }
-    })(),
+    value,
+    ids: tryExpand(span, words, problems, `${where}, read "${span}"`) ?? [],
     text: typeof value === "string" ? value : value.text,
   }));
-  // An empty reading may blank pieces of several spans (the "+" and "–" of two formulas, one line).
-  // A span's readings are dropped together or not at all: each spelling it exactly, every word of
-  // each inside spans spelled so.
-  const spelledRuns: { parts: string[]; ids: Set<string> }[] = [];
-  const touchedBy = new Map<string, number>();
-  for (const s of suggestions) {
-    if (s.reading === undefined) continue;
-    const parts = entries.filter((e) => e.ids.some((id) => s.ids.includes(id)));
-    if (parts.length < 2) continue;
-    for (const e of parts) touchedBy.set(e.span, (touchedBy.get(e.span) ?? 0) + 1);
-    const inside = (e: (typeof parts)[number]) =>
-      e.text === "" || e.ids.every((id) => s.ids.includes(id));
-    const covered = new Set(parts.flatMap((e) => e.ids));
-    const order = (e: (typeof parts)[number]) =>
-      Math.min(...e.ids.map((id) => s.ids.indexOf(id)).filter((k) => k >= 0));
-    const spelled = [...parts]
-      .sort((x, y) => order(x) - order(y))
-      .map((e) => e.text)
-      .join("");
-    const rest = s.ids
-      .filter((id) => !covered.has(id))
-      .map((id) => words.words.get(id)?.text ?? "");
-    if (
-      parts.every(inside) &&
-      rest.every((t) => t === "") &&
-      plain(spelled).replace(/\s/g, "") === plain(s.reading).replace(/\s/g, "")
-    )
-      spelledRuns.push({ parts: parts.map((e) => e.span), ids: new Set(s.ids) });
-  }
-  for (const r of spelledRuns) for (const span of r.parts) whole.add(span);
-  for (let changed = true; changed; ) {
-    changed = false;
-    for (const e of entries) {
-      if (!whole.has(e.span)) continue;
-      const mine = spelledRuns.filter((r) => r.parts.includes(e.span));
-      const allSpelled = mine.length === touchedBy.get(e.span);
-      const allInside = e.ids.every((id) => mine.some((r) => r.ids.has(id)));
-      if (!allSpelled || !allInside) {
-        whole.delete(e.span);
-        changed = true;
-      }
-    }
-    for (const r of spelledRuns)
-      if (r.parts.some((p) => !whole.has(p)) && r.parts.some((p) => whole.has(p))) {
-        for (const p of r.parts) whole.delete(p);
-        changed = true;
-      }
-  }
-  for (const [span, value] of Object.entries(b.read ?? {})) {
+  const whole = spelledTogether(entries, suggestions, words);
+  for (const { span, value, ids: spanIds } of entries) {
     if (whole.has(span)) {
       raised.push({
         id: `matches ${span}`,
-        question: `with the agent's other readings it spells what the tool gives: now matches the tool, drop it`,
+        question:
+          "with the agent's other readings it spells what the tool gives: now matches the tool, drop it",
       });
       continue;
     }
-    const spanIds = tryExpand(span, words, problems, `${where}, read "${span}"`);
-    if (spanIds === undefined) continue;
+    if (spanIds.length === 0) continue;
     if (!spanIds.every((id) => ids.includes(id))) {
       problems.push(`${where}, read "${span}": not in the block's words`);
       continue;
@@ -364,22 +396,14 @@ function agentReadings(
       : pdf.some(hasHindi)
         ? Tool.HindiRepair
         : Tool.Reader;
-    if (plain(text) === plain(suggested)) {
-      raised.push({
-        id: `matches ${span}`,
-        question: `"${text}" is what ${tool} gives: now matches the tool, drop it`,
-      });
+    // Only a reading over whole suggestions can be dropped: over part of one, the tool's is never applied.
+    const isWhole = touched.every((s) => s.ids.every((id) => inSpan.has(id)));
+    if (isWhole && plain(text) === plain(suggested)) {
+      raiseMatch(at, span, `"${text}"`, tool);
       continue;
     }
-    if (cause === undefined)
-      raised.push({
-        id: `${NO_CAUSE}${span}`,
-        question: `this reading replaces ${tool}'s "${suggested}": give its cause, here or for the page`,
-      });
-    overrides.push({
+    recordOverride(at, span, "this reading", {
       tool,
-      version: TOOL_VERSIONS[tool],
-      page,
       range: span,
       edit: touched.length > 0 ? Edit.Reading : Edit.Addition,
       suggested,
@@ -456,7 +480,7 @@ const sameBox = (a: Box, b: Box) => a.every((v, i) => Math.abs(v - (b[i] ?? 0)) 
 
 /** A figure's or table's box decided: snapped from the rough one, or the agent's over it. */
 function decideBox(b: PageBlock, handle: string, ids: readonly string[], at: BlockContext) {
-  const { words, tools, raised, overrides, page } = at;
+  const { words, tools, raised } = at;
   const made: Made[] = [];
   if (!CROPPED.includes(b.kind) || b.box === undefined || !isInside(b.box, words))
     return { made, ...(b.box === undefined ? {} : { box: b.box }) };
@@ -492,22 +516,12 @@ function decideBox(b: PageBlock, handle: string, ids: readonly string[], at: Blo
     if (!found) return { made, box: b.crop.box };
     const suggested = clamp(tool.box);
     if (sameBox(suggested, b.crop.box)) {
-      raised.push({
-        id: `matches box ${handle}`,
-        question: `[${b.crop.box.join(", ")}] is what ${Tool.FigureSnap} gives: now matches the tool, drop it`,
-      });
+      raiseMatch(at, `box ${handle}`, `[${b.crop.box.join(", ")}]`, Tool.FigureSnap);
       return { made, box: b.crop.box };
     }
     const cause = b.crop.cause ?? at.cause;
-    if (cause === undefined)
-      raised.push({
-        id: `${NO_CAUSE}box ${handle}`,
-        question: `this box replaces ${Tool.FigureSnap}'s: give its cause, here or for the page`,
-      });
-    overrides.push({
+    recordOverride(at, `box ${handle}`, "this box", {
       tool: Tool.FigureSnap,
-      version: TOOL_VERSIONS[Tool.FigureSnap],
-      page,
       range: handle,
       edit: Edit.Box,
       suggested: suggested.join(", "),
@@ -539,7 +553,7 @@ function decideCells(
   box: Box | undefined,
   at: BlockContext,
 ): { rows?: string[][]; made: Made[] } {
-  const { words, raised, overrides, problems, page } = at;
+  const { words, raised, problems } = at;
   if (b.kind !== ItemKind.Table || box === undefined || !isInside(box, words)) return { made: [] };
   const decided = decidedWords(readings);
   const placed = ids.flatMap((id) => {
@@ -569,22 +583,12 @@ function decideCells(
   const made: Made[] = [{ cells: true, by: Maker.Agent }];
   if (suggested === undefined) return { rows, made };
   if (isDeepStrictEqual(rows, suggested)) {
-    raised.push({
-      id: `matches cells ${handle}`,
-      question: `these rows are what ${Tool.TableCells} gives: now matches the tool, drop them`,
-    });
+    raiseMatch(at, `cells ${handle}`, "these rows", Tool.TableCells);
     return { rows, made };
   }
   const cause = b.cells.cause ?? at.cause;
-  if (cause === undefined)
-    raised.push({
-      id: `${NO_CAUSE}cells ${handle}`,
-      question: `these cells replace ${Tool.TableCells}'s: give their cause, here or for the page`,
-    });
-  overrides.push({
+  recordOverride(at, `cells ${handle}`, "these cells", {
     tool: Tool.TableCells,
-    version: TOOL_VERSIONS[Tool.TableCells],
-    page,
     range: handle,
     edit: Edit.Cells,
     suggested: suggested.map((r) => r.join(" | ")).join(" / "),

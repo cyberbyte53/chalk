@@ -33,8 +33,10 @@ export function tidy(x: Extract): Tidied {
       edits.set(file, e);
       return e;
     };
+    // A reading's match only: a box's or cells' ("matches box L3.1") is the agent's to drop.
     for (const i of b.issues)
-      if (i.id.startsWith("matches ")) of(pageFileName(i.page)).readings.add(i.id.slice(8));
+      if (/^matches (?!box |cells )/.test(i.id))
+        of(pageFileName(i.page)).readings.add(i.id.slice("matches ".length));
     for (const p of b.problems) {
       const answer = STALE_ANSWER.exec(p);
       if (answer?.[1] !== undefined && answer[2] !== undefined)
