@@ -10,6 +10,9 @@
 //   pnpm source attach <book>/<chapter>          the main book's concepts checked; each attached
 //                                                book's sheet written and its concepts checked
 //   pnpm source term <book>/<chapter> <term>     the concept with that term, in every language, and where
+//   pnpm source measure [<book>/<chapter>] [--save <file>] [--against <file>]
+//                                                each proofread book built from the tools alone against
+//                                                as decided, block by block; diffed against an earlier run
 //
 // It takes the PDF in and records it in book.yaml (refusing a book whose sha256 differs from the
 // one recorded, unless --new-edition), and writes each page's image and numbered words for the
@@ -22,10 +25,11 @@ import { findUp } from "./find-up";
 import { attachChapter, lookUp } from "./source/concepts";
 import { feedback } from "./source/feedback";
 import { matchChapter } from "./source/match";
+import { measure } from "./source/measure";
 import { type SourceResult, runSource } from "./source/pipeline";
 
 const USAGE =
-  "usage: pnpm source <book>/<chapter> <en|hi> [<pdf file or address>] [--answers <pdf>] [--address <url>] [--title <as printed>] [--edition <as printed, or none>] [--new-edition]\n       pnpm source match <book>/<chapter>\n       pnpm source feedback [<book>/<chapter>]\n       pnpm source attach <book>/<chapter>\n       pnpm source term <book>/<chapter> <term>";
+  "usage: pnpm source <book>/<chapter> <en|hi> [<pdf file or address>] [--answers <pdf>] [--address <url>] [--title <as printed>] [--edition <as printed, or none>] [--new-edition]\n       pnpm source match <book>/<chapter>\n       pnpm source feedback [<book>/<chapter>]\n       pnpm source attach <book>/<chapter>\n       pnpm source term <book>/<chapter> <term>\n       pnpm source measure [<book>/<chapter>] [--save <file>] [--against <file>]";
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -36,6 +40,8 @@ const { values, positionals } = parseArgs({
     title: { type: "string" },
     edition: { type: "string" },
     "new-edition": { type: "boolean" },
+    save: { type: "string" },
+    against: { type: "string" },
   },
 });
 // `--root`: another tree than this repo, to try the pipeline on a throwaway copy.
@@ -63,6 +69,17 @@ function dispatch(): Promise<SourceResult> | undefined {
   if (first === "feedback") {
     if (third !== undefined || (second !== undefined && !CHAPTER.test(second))) return undefined;
     return Promise.resolve(feedback(root, second));
+  }
+  if (first === "measure") {
+    if (third !== undefined || (second !== undefined && !CHAPTER.test(second))) return undefined;
+    return Promise.resolve(
+      measure({
+        root,
+        ...(second === undefined ? {} : { chapter: second }),
+        ...(values.save === undefined ? {} : { save: values.save }),
+        ...(values.against === undefined ? {} : { against: values.against }),
+      }),
+    );
   }
   const langs: readonly string[] = Object.values(Locale);
   if (

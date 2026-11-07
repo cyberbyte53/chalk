@@ -268,7 +268,7 @@ export function changedPieces(
 const CHANGED = "changed ";
 
 /** The page's tools, from its PDF: its drawn objects, and its image for what an object shows. */
-function pageToolsOf(pdf: string, cache: string) {
+export function pageToolsOf(pdf: string, cache: string) {
   const objects = cachedObjects(pdf, cache);
   const images = renderPages(pdf, cache, PAGE_PREFIX).images;
   const loaded = new Map<number, PNG>();

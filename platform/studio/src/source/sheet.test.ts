@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { PNG } from "pngjs";
@@ -6,7 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { ObjectKind } from "./objects";
 import { type NumberedPage, type Word, numberPage } from "./read";
 import { ItemKind, type PageFile, Tool } from "./schema";
-import { Maker, SheetMode, type SheetPage, sheetHtml } from "./sheet";
+import { Maker, SheetMode, type SheetPage, renderSheet, sheetHtml } from "./sheet";
 import type { WordSuggestion } from "./suggest";
 
 function pageOf(rows: readonly (readonly [number, number, string])[]): NumberedPage {
@@ -184,4 +184,30 @@ describe("sheetHtml", () => {
     expect(sheet()).toContain("mouseover");
     expect(sheet()).toContain("<!DOCTYPE html>");
   });
+});
+
+const hasBrowser = process.env.CI !== "true";
+
+describe("a sheet photographed", () => {
+  it.skipIf(!hasBrowser)(
+    "shows a page image over 2 MiB (a full page 1 photo), which Chrome drops from a custom property",
+    async () => {
+      // Noise doesn't compress: 900 × 900 RGBA is about 3.2 MB, over 4 MB as base64.
+      const big = new PNG({ width: 900, height: 900 });
+      for (let i = 0; i < big.data.length; i += 4) {
+        const v = Math.floor(Math.random() * 128);
+        big.data.set([v, (v * 7) % 128, (v * 13) % 128, 255], i);
+      }
+      const photo = join(dir, "big.png");
+      writeFileSync(photo, PNG.sync.write(big));
+      expect(readFileSync(photo).toString("base64").length).toBeGreaterThan(2 * 1024 * 1024);
+      const out = join(dir, "big.sheet.png");
+      await renderSheet(sheet({ image: photo, ids: false }), out);
+      const shot = PNG.sync.read(readFileSync(out));
+      // A point inside the page, away from every outline: dark, as the noise is, not the page's white.
+      const at = (shot.width * 40 + 360) * 4;
+      expect(shot.data[at]).toBeLessThan(140);
+    },
+    60_000,
+  );
 });

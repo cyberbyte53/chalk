@@ -255,7 +255,7 @@ const STYLE = `
   body { margin: 0; background: #fff; color: #1a1a1a;
     font: 13.5px/1.45 "Noto Serif", "Kohinoor Devanagari", "Noto Serif Devanagari", "Devanagari Sangam MN", Georgia, serif; }
   .sheet { display: flex; gap: 12px; padding: 8px; align-items: flex-start; }
-  .left { position: relative; flex: none; border: 1px solid #bbb; background-image: var(--page);
+  .left { position: relative; flex: none; border: 1px solid #bbb;
     background-repeat: no-repeat; background-size: 100% 100%; }
   .right { flex: none; }
   .out { position: absolute; border: 1.5px solid #1565c0; background: rgba(21,101,192,.04); }
@@ -275,7 +275,7 @@ const STYLE = `
     font: 9px/15px Helvetica, sans-serif; color: #444; vertical-align: baseline; }
   .none em { font-style: normal; margin-left: 3px; }
   .block-none { display: block; margin: 3px 0; padding: 6px; text-align: center; }
-  .crop { background-image: var(--page); background-repeat: no-repeat; border: 1px solid #ccc; margin: 3px 0; }
+  .crop { background-repeat: no-repeat; border: 1px solid #ccc; margin: 3px 0; }
   .grid { border-collapse: collapse; margin: 3px 0; font-size: 12px; }
   .grid td { border: 1px solid #777; padding: 1px 5px; vertical-align: top; }
   .by-tool { color: #0b6e4f; background: #e3f4ee; }
@@ -292,6 +292,13 @@ const SCRIPT = `
     if (el) document.querySelectorAll('[data-b="' + el.dataset.b + '"]').forEach((x) => x.classList.add('lit'));
   });
 `;
+
+/**
+ * The page's image behind the page and every crop, written once. Not a custom property: Chrome drops
+ * one whose value is over 2 MiB, and a full page 1 photo is more (base64 of a 1.7 MB PNG).
+ */
+export const pageImage = (base64: string): string =>
+  `.left, .crop { background-image: url("data:image/png;base64,${base64}"); }`;
 
 /** A page's sheet, as a page of its own: its image is in the page, so the file can go anywhere. */
 export function sheetHtml(sheet: SheetPage): string {
@@ -358,7 +365,7 @@ export function sheetHtml(sheet: SheetPage): string {
       : "";
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><title>Page ${page.page}</title>
-<style>:root { --page: url("data:image/png;base64,${png}"); }${STYLE}
+<style>${pageImage(png)}${STYLE}
 .right { width: ${width}px; }
 </style></head>
 <body><div class="sheet">
