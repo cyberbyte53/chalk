@@ -10,9 +10,10 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { PNG } from "pngjs";
-import { type PageText, type Word, poppler } from "../read";
-import { type Box, CROPPED, type Item } from "../schema";
-import { place } from "./boxes";
+import type { Crop } from "./build";
+import { sha256 } from "./files";
+import { type Word, poppler } from "./read";
+import type { Box } from "./schema";
 
 /** A cropped figure's pixels per point (216 dpi). */
 export const CROP_SCALE = 3;
@@ -36,8 +37,8 @@ export function maskWatermark(png: PNG): void {
 }
 
 /**
- * Crops a box from a PDF's page to a PNG: the watermark masked, and the page's running text that the
- * box takes in (`blank`: words' boxes) made white, so the picture is the figure alone.
+ * Crops a box from a PDF's page to a PNG: the watermark masked, and the words of other blocks that
+ * the box takes in (`blank`) made white, so the picture is the figure alone.
  */
 export function cropFigure(
   pdf: string,
@@ -78,35 +79,30 @@ export function cropFigure(
 }
 
 /**
- * Crops each figure and table whose page image, box or picture changed into `figures/<id>.png`, and
- * drops the pictures of items gone; the files it made, for the model to look at.
+ * Crops each figure and table into `figures/<id>.png`, those whose PDF, page, box or blanked words
+ * changed since the last run, and drops the pictures of items gone; the files it made, to look at.
  */
 export function cropFigures(
   pdf: string,
-  items: readonly Item[],
-  pages: readonly PageText[],
+  crops: readonly Crop[],
   figures: string,
   cache: string,
-  changed: readonly number[],
 ): string[] {
   mkdirSync(figures, { recursive: true });
+  mkdirSync(cache, { recursive: true });
   const stateFile = join(cache, "crops.json");
   const before = existsSync(stateFile)
     ? (JSON.parse(readFileSync(stateFile, "utf8")) as Record<string, string>)
     : {};
+  const sha = sha256(readFileSync(pdf));
   const after: Record<string, string> = {};
   const made: string[] = [];
-  for (const item of items) {
-    const page = pages[item.page - 1];
-    if (!CROPPED.includes(item.kind) || page === undefined) continue;
-    const placed = place(item, page, items);
-    if (placed === undefined) continue;
-    const { box, running: blank } = placed;
-    const out = join(figures, `${item.id}.png`);
-    const key = JSON.stringify({ page: item.page, box, blank: blank.length });
-    after[item.id] = key;
-    if (before[item.id] === key && existsSync(out) && !changed.includes(item.page)) continue;
-    cropFigure(pdf, item.page, box, blank, out);
+  for (const c of crops) {
+    const out = join(figures, `${c.id}.png`);
+    const key = JSON.stringify({ sha, page: c.page, box: c.box, blank: c.blank });
+    after[c.id] = key;
+    if (before[c.id] === key && existsSync(out)) continue;
+    cropFigure(pdf, c.page, c.box, c.blank, out);
     made.push(out);
   }
   for (const f of readdirSync(figures))

@@ -9,7 +9,7 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 import { sha256 } from "../files";
-import { type PageText, poppler } from "./pages";
+import { poppler } from "./pages";
 
 /** Page images are rendered at this many pixels per point (144 dpi): a box's points are pixels ÷ 2. */
 export const PAGE_SCALE = 2;
@@ -44,27 +44,4 @@ export function renderPages(
   const changed = hashes.flatMap((h, i) => (before?.pages[i] === h ? [] : [i + 1]));
   writeFileSync(manifestFile, JSON.stringify({ sha256: sha, pages: hashes }, null, 2));
   return { images, changed };
-}
-
-/** The book's page numbers: each page's running head's number, the missing ones from their neighbours. */
-export function printedPages(pages: readonly PageText[]): number[] {
-  const seen = pages.map((p) => {
-    const n = p.head.find((w) => /^\d+$/.test(w.text));
-    return n === undefined ? undefined : Number(n.text);
-  });
-  const known = seen.findIndex((n) => n !== undefined);
-  return pages.map((_, i) => (known < 0 ? i + 1 : (seen[known] as number) - known + i));
-}
-
-/** The edition the pages print in their footers: the most common footer. */
-export function editionOf(pages: readonly PageText[]): string {
-  const counts = new Map<string, number>();
-  for (const p of pages) {
-    const foot = p.foot
-      .map((w) => w.text)
-      .join(" ")
-      .trim();
-    if (foot !== "") counts.set(foot, (counts.get(foot) ?? 0) + 1);
-  }
-  return [...counts].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "unknown";
 }

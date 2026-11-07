@@ -60,24 +60,24 @@ taken from the PDF wherever its text is sound.
    U+FFFD, a joiner, a mark standing alone). One file per page: its image and its words. Lines are only
    a convenience: the PDF's lines can run across a side column and the body, so a block cites word
    ranges (`L12.1-6`, `L12.7-L14`).
-2. **Read** (an agent per language, the pages in order, so it knows what an earlier page left open):
+2. **Read** (the session running the `extract-chapter` skill, the pages in order, so it knows what an
+   earlier page left open):
    for each page, from its image and lines, a structure file: the blocks in reading order, each its
    word ranges, kind and number (as printed), and whether it continues from the page before or onto
    the next; each figure's and table's box and caption; the words that are the page's running head,
    footer or decoration; a reading for any span it reads from the image (Hindi whose letters the PDF
    broke, marked or not; maths); the terms the page defines (a span). Words inside a figure (axis labels)
    are the figure's; a reference ("Fig. 7.2", "(7.1)" in a sentence) is text, not a figure or an
-   equation. A book too long for one agent is split into page ranges, one agent each, and the seams
-   checked.
+   equation. 
 3. **Build and check** (`pnpm source` again, the machine): `items.yaml` built from the words and
    readings (a block that continues joined with the next page's continued block, taking its number
    from where it starts), ids positional; figures cropped; terms listed; then the checks. A page with
    issues goes back to its agent with them, each to fix or answer. The agent then looks at every crop.
 4. **Match** (once both languages hold): the machine pairs them by their numbers.
 
-**Who does what.** The orchestrator (the session running the `extract-chapter` skill) runs the machine
-steps, starts the two language agents in parallel (neither sees the other's book), sends failures back,
-looks at the whole chapter (sections in order, every number once, pages joined) and runs the match.
+**One run is one PDF.** The `extract-chapter` skill takes one language's PDF; both languages are two
+runs (in parallel if wanted), neither seeing the other's book. The match is part of a non-English
+book's check, once English is extracted.
 
 **The record** is the agents' page files (`pages/page-NN.yaml`, in git): what was decided, from which
 PDF words, with every reading and every answer. `items.yaml` is built from them and the PDF, so

@@ -216,15 +216,20 @@ export function uncovered(items: readonly SourceItem[], covered: ReadonlySet<str
 const sourceChecked = new Map<string, { key: string; problems: string[] }>();
 
 /**
- * What is wrong with a chapter's English extract (source/extract.ts), worked out again only when
+ * What is wrong with a chapter's English extract (source/check.ts), worked out again only when
  * one of its files changed: the checks read the book's PDF.
  */
 export function sourceProblems(root: string, dir: string): string[] {
   const abs = join(root, dir, SOURCE_DIR);
   if (!existsSync(join(abs, SourceFile.Book)))
     return ["not extracted yet (pnpm source <book>/<chapter> en <pdf>)"];
-  const key = Object.values(SourceFile)
-    .map((f) => (existsSync(join(abs, f)) ? statSync(join(abs, f)).mtimeMs : 0))
+  // The page files too: editing one changes no folder's time.
+  const pages = join(abs, SourceFile.Pages);
+  const key = [
+    ...Object.values(SourceFile).map((f) => join(abs, f)),
+    ...(existsSync(pages) ? readdirSync(pages).map((f) => join(pages, f)) : []),
+  ]
+    .map((f) => (existsSync(f) ? statSync(f).mtimeMs : 0))
     .join(",");
   const known = sourceChecked.get(abs);
   if (known?.key === key) return known.problems;

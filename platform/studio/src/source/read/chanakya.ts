@@ -1,4 +1,4 @@
-import { type PageText, type Word, attr, decode, poppler, splitPage } from "./pages";
+import { type PageText, type Word, attr, decode, poppler } from "./pages";
 
 /**
  * The `chanakya` reader: a PDF set in the Walkman-Chanakya font's text as Unicode. NCERT's Hindi books are set in it: each glyph has an
@@ -170,8 +170,7 @@ const MARKS_BELOW = 0.15;
 
 /**
  * `pdftohtml -xml -zoom 1`'s pages, each run of text read by its font (a legacy Hindi font's code
- * converted): its words (placed across the run by their share of its letters) in reading order, the
- * head and foot apart, and the runs set in a bold font.
+ * converted): its words (placed across the run by their share of its letters) in reading order.
  */
 export function pagesFromXml(xml: string): PageText[] {
   // A font is declared on the first page that uses it, and used by later pages by its id.
@@ -183,13 +182,10 @@ export function pagesFromXml(xml: string): PageText[] {
       for (const m of chunk.matchAll(/<fontspec id="(\d+)"[^>]*family="([^"]*)"/g))
         fonts.set(m[1], m[2] ?? "");
       const words: Word[] = [];
-      const bold: string[] = [];
-      let open = false;
       for (const m of chunk.matchAll(/<text ([^>]*)>(.*?)<\/text>/g)) {
         const tag = m[1] ?? "";
         const font = fonts.get(/font="(\d+)"/.exec(tag)?.[1]) ?? "";
         const raw = decode((m[2] ?? "").replace(/<[^>]+>/g, ""));
-        const text = isChanakya(font) ? fromChanakya(raw) : raw;
         const [top, left, width, height] = ["top", "left", "width", "height"].map((a) =>
           attr(tag, a),
         ) as [number, number, number, number];
@@ -210,14 +206,8 @@ export function pagesFromXml(xml: string): PageText[] {
           });
           from = at;
         }
-        const isBold = /bold/i.test(font) || /<b>/.test(m[2] ?? "");
-        if (isBold && text.trim() !== "") {
-          if (open && bold.length > 0) bold[bold.length - 1] = `${bold.at(-1)} ${text.trim()}`;
-          else bold.push(text.trim());
-        }
-        open = isBold;
       }
-      return { ...splitPage(i + 1, attr(chunk, "width"), attr(chunk, "height"), words), bold };
+      return { page: i + 1, width: attr(chunk, "width"), height: attr(chunk, "height"), words };
     });
 }
 

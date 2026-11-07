@@ -4,15 +4,18 @@ import { checkSources } from "./source/pipeline";
 
 /**
  * `pnpm check`'s sources step: every language's extract of a chapter's book (source/<lang>/ with a
- * book.yaml) passes its checks (platform/studio/src/source/checks.ts).
+ * book.yaml) is built again from its page files and holds (platform/studio/src/source/check.ts):
+ * no unanswered issue, and its items.yaml and terms.yaml are what the page files build.
  */
 const root = join(findUp("pnpm-workspace.yaml", import.meta.dirname), "..");
 let failed = 0;
 const extracts = checkSources(root);
 for (const x of extracts) {
-  const { problems, items, terms } = x.report;
+  const { problems, notes, issues, items, terms } = x.report;
+  const answered = issues.filter((i) => i.answer !== undefined).length;
+  const counts = `${items.length} items, ${terms.length} terms${answered > 0 ? `, ${answered} issues answered` : ""}`;
   if (problems.length === 0) {
-    console.log(`  ✓ ${x.rel}: ${items.length} items, ${terms.length} terms`);
+    console.log(`  ✓ ${x.rel}: ${counts}${notes.length > 0 ? ` (${notes.join("; ")})` : ""}`);
     continue;
   }
   failed += 1;

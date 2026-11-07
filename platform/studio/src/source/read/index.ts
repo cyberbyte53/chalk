@@ -1,20 +1,13 @@
+import { Reader } from "../schema";
 import { readChanakya } from "./chanakya";
 import { type PageText, poppler } from "./pages";
 import { readText } from "./text";
 
 /**
- * Stage 1, reading (platform/docs/plans/sources.md): a PDF's pages as words, by the reader its kind
- * of book needs. Every later stage sees only the pages, never the reader. A new kind of book (a scan:
- * OCR) is one more reader here.
+ * Reading a PDF (platform/docs/plans/sources.md, "The stages"): its pages' words, by the reader its
+ * kind of book needs. Every later stage sees only the words, never the reader. A new kind of book (a
+ * scan: OCR) is one more reader here.
  */
-
-export const Reader = {
-  /** A PDF whose text layer is Unicode. */
-  Text: "text",
-  /** A PDF set in the old Walkman-Chanakya Hindi font: its text layer converted by the font's table. */
-  Chanakya: "chanakya",
-} as const;
-export type Reader = (typeof Reader)[keyof typeof Reader];
 
 const READERS: Readonly<Record<Reader, (pdf: string) => PageText[]>> = {
   [Reader.Text]: readText,
@@ -29,5 +22,6 @@ export function readerFor(pdf: string): Reader {
 /** A PDF's pages, read by its reader. */
 export const readPages = (pdf: string, reader: Reader): PageText[] => READERS[reader](pdf);
 
-export { type PageText, type Word, pageText, poppler } from "./pages";
-export { PAGE_SCALE, editionOf, printedPages, renderPages } from "./images";
+export { type PageText, type Word, poppler } from "./pages";
+export { type NumberedPage, boundsOf, looksBroken, numberPage, wordsFile } from "./lines";
+export { PAGE_SCALE, renderPages } from "./images";
