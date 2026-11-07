@@ -5,6 +5,7 @@
 //       [--address <where the file came from>] [--title <the chapter's title>]
 //       [--edition <as printed>] [--new-edition]
 //   pnpm source <book>/<chapter> <lang>          again, once the agents wrote pages/: builds and checks
+//       [--tidy]                                 first removing what a tool's improvement left behind
 //   pnpm source match <book>/<chapter>           the two books paired, into source/match.yaml
 //   pnpm source feedback [<book>/<chapter>]      every override of a tool, across chapters
 //   pnpm source attach <book>/<chapter>          the main book's concepts checked; each attached
@@ -29,7 +30,7 @@ import { measure } from "./source/measure";
 import { type SourceResult, runSource } from "./source/pipeline";
 
 const USAGE =
-  "usage: pnpm source <book>/<chapter> <en|hi> [<pdf file or address>] [--answers <pdf>] [--address <url>] [--title <as printed>] [--edition <as printed, or none>] [--new-edition]\n       pnpm source match <book>/<chapter>\n       pnpm source feedback [<book>/<chapter>]\n       pnpm source attach <book>/<chapter>\n       pnpm source term <book>/<chapter> <term>\n       pnpm source measure [<book>/<chapter>] [--save <file>] [--against <file>]";
+  "usage: pnpm source <book>/<chapter> <en|hi> [<pdf file or address>] [--answers <pdf>] [--address <url>] [--title <as printed>] [--edition <as printed, or none>] [--new-edition] [--tidy]\n       pnpm source match <book>/<chapter>\n       pnpm source feedback [<book>/<chapter>]\n       pnpm source attach <book>/<chapter>\n       pnpm source term <book>/<chapter> <term>\n       pnpm source measure [<book>/<chapter>] [--save <file>] [--against <file>]";
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -40,6 +41,7 @@ const { values, positionals } = parseArgs({
     title: { type: "string" },
     edition: { type: "string" },
     "new-edition": { type: "boolean" },
+    tidy: { type: "boolean" },
     save: { type: "string" },
     against: { type: "string" },
   },
@@ -102,6 +104,7 @@ function dispatch(): Promise<SourceResult> | undefined {
     ...(values.title === undefined ? {} : { title: values.title }),
     ...(values.edition === undefined ? {} : { edition: values.edition }),
     isNewEdition: values["new-edition"] === true,
+    isTidy: values.tidy === true,
   });
 }
 

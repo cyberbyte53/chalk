@@ -38,6 +38,7 @@ import {
 import type { TextPiece } from "./scripts";
 import { type BuiltBlock, Maker as SheetMaker, SheetMode, renderSheets, sheetHtml } from "./sheet";
 import { cachedObjects, suggestionLines, wordSuggestions } from "./suggest";
+import { tidiedLine, tidy } from "./tidy";
 import { TOOL_VERSIONS } from "./tools";
 
 /**
@@ -62,6 +63,8 @@ export type SourceRun = {
   title?: string;
   edition?: string;
   isNewEdition?: boolean;
+  /** Before building, remove what the tools' improvements left in the page files (tidy.ts). */
+  isTidy?: boolean;
 };
 
 /** What a run says (each line for the console) and whether it holds. */
@@ -75,6 +78,10 @@ export async function runSource(run: SourceRun): Promise<SourceResult> {
   const at = sourcePaths(run.root, run.book, run.chapter, run.lang);
   const lines = await prepare(run);
   if (!isAnyProofread(at.pages)) return { lines, problems: [] };
+  if (run.isTidy === true) {
+    const x = { rel: at.rel, dir: at.dir, lang: run.lang };
+    lines.push(tidiedLine(run.root, x, tidy(x)));
+  }
   const { built, ...result } = buildSource(run);
   if (built !== undefined) await writeDecisionSheets(at, built.pages);
   return { lines: [...lines, ...result.lines], problems: result.problems };
