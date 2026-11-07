@@ -1,201 +1,145 @@
-# A chapter's sources: each language's book extracted alone, then matched by its numbers
+# A chapter's sources: the book, as data, made by the machine
 
-Status: plan, agreed with the person and reviewed (6 Nov 2026); "The words come from the book" added and
-reviewed 7 Nov 2026. Replaces the source parts of
-`platform/docs/plans/authoring.md` (step 5's `attach`, step 7's Hindi) and of
-`platform/docs/plans/languages.md` (attaching a language by aligned extraction).
+Status: plan, rewritten from first principles and reviewed 7 Nov 2026 (replaces this file's earlier
+versions; the decisions that held are kept).
 
-**In short.** Each language's book is extracted on its own, the same way: the book's exact words, item by
-item, its figures cropped, its terms as it defines them, every reading checked by the machine against the
-book's own text. Ids are ours, positional (`2.4`: section 2's fourth block); languages are matched only by what both books number (sections, figures, tables,
-examples, exercises, questions). The plan cites the English items; a lesson's words in any language are
-checked against that language's terms.
+**In short.** `pnpm source <book>/<chapter> <lang> <pdf>` turns a chapter's PDF into data with no typing:
+its words, its blocks (sections, paragraphs, figures, examples, exercises, questions), its figures
+cropped, its terms, and, for a second language, its pairing with the English book. A model then looks
+once at a sheet of each page with the blocks drawn on it and fixes only what is wrong. Every chapter of
+every book starts here.
 
-## What the source is for
+## What it is for
 
-1. **Coverage:** the lessons miss nothing the book has (each item covered by an objective or skipped).
-2. **Grounding:** the book's text, examples, exercises and answers, in its own words.
-3. **Language:** each language's terms exactly as its book defines them.
-4. **Figures:** what the book drew, to build from and to compare against.
+1. **Coverage:** the lessons miss nothing the book has (each block cited in `boards.md` or skipped).
+2. **Grounding:** the book's own words, examples and exercises.
+3. **Language:** each language's terms as its book defines them.
+4. **Figures:** what the book drew.
 
-## Principles
+## First principles
 
-- **The PDF is the truth; everything else is an index into it.** An item holds the book's own words, never
-  a paraphrase (today's `says:` summaries go), and the machine checks every item against the book.
-- **One process for every language.** Extracting a book knows nothing of another language's book.
-- **Matching never assumes one-to-one.** Only what both books number is paired, by its number; anything
-  numbered in one and not the other is flagged with a reason.
-- **The machine does what can be checked; a model does only the structure** (and the crop boxes).
-- **Record exactly which book:** the edition the file says (this Hindi file's footer: 2021-22), the address
-  it came from, its sha256. An address can start serving another book (NCERT's class 9 maths did).
+- **The PDF's text layer is the book.** It is what the publisher typeset, letter for letter. Words are
+  taken from it, never typed and never recognised from a picture when the PDF has them.
+- **Generic: geometry and repetition, never one book's words.** Books differ (maths 2020: "आकृति 3.1"
+  under a figure, "EXERCISE 3.1"; science 2026: a side column of "Think It Over", "Fig. 7.2: Lifting
+  bags…" inline, "Eq. 7.2", Hindi "चित्र 7.2 (क)"). What every book has is a page's geometry (lines,
+  columns, gaps, indents, bold and size) and its own repetition (a running head on every page, the same
+  word before many numbers). Rules use only those. The words a book numbers things with are found in
+  the book, not written in code.
+- **A figure is the drawing between its caption and the block above it.** Its box is found on the page
+  image: the ink that isn't the text layer's words, the watermark, a frame or a long rule.
+- **A model only reviews.** It looks at what the machine made, drawn over each page, and fixes the few
+  blocks the rules got wrong, and picks the terms. It types no words.
+- **Rules are NCERT's, not one chapter's.** A fix stays in that chapter's `items.yaml`; it becomes a rule
+  only when the same fix is needed in a second book.
+- **Each language alone, then matched by numbers.** A book's extraction knows nothing of another
+  language's. Languages are paired only by what both number (`figure 3.11`), never assumed one to one;
+  what one has and the other doesn't is listed with why.
+- **Record exactly which book:** the edition its pages print, the address, the sha256. An address can
+  start serving another book (NCERT's class 9 maths did).
 
 ## The stages
 
-Extraction is four stages, each with one input and one output, so a part can be swapped without touching
-the rest:
+One command runs them in order; each has one input and one output.
 
-1. **Read:** the PDF → each page's image and its words, with where each word is and which are bold. One
-   *reader* per kind of book, named in `book.yaml` (`reader:`): `text` (a PDF with a Unicode text layer),
-   `chanakya` (an old Hindi font, its text layer converted by the font's table), and later `ocr` (a scan,
-   no text layer: the words recognised from the image). Everything after this stage sees only words.
-2. **Draft:** the words → `items.yaml`, once (below).
-3. **Structure:** the model fixes the draft's blocks, kinds, numbers and boxes, and writes the terms.
-4. **Check:** the items against the words (below), the figures cropped, the languages matched.
+1. **Read** the PDF into pages of words: each word, its place, bold or italic; and each page's image.
+   One *reader* per kind of book, found from its fonts and recorded in `book.yaml`: `text` (a Unicode text
+   layer, with the repairs some fonts need: the 2026 Hindi science books' Kokila doubles letters,
+   "विस््थथापन" for विस्थापन) or `chanakya` (the old Hindi font, converted by its table). Each is proven
+   once on a book's pages, its cases kept as tests. A scanned book would be one more reader (`ocr`, Docling or Tesseract, its words then
+   confirmed by the model) when one comes; nothing after this stage changes.
+2. **Lay out** the words into blocks, by rules:
+      - lines: words that overlap vertically, split at a column gap (a figure's labels beside a paragraph);
+   - the running head and footer: lines repeated on three or more pages, digits aside (even and odd
+     pages have different heads);
+   - columns: a page's text in columns by the gaps between them (a side column is its own run of
+     blocks, kept in its place);
+   - headings: a line set larger or bolder than the body, starting with the chapter's number and more
+     (`3.2`, `7.1.2`), in order;
+   - blocks: a new one at a wider gap, a first-line indent, or a numbering word; a block runs on across
+     pages;
+   - **the book's numbering words, found:** the words that come before the chapter's numbers again and
+     again ("Fig." 100 times, "Example" 14, "Eq." 7 in a science chapter; "आकृति", "प्रश्नावली" in a maths
+     one) are listed with their counts; the model says once per book what kind each is (`figure`,
+     `example`, `equation`, …, or none for "of 7.2"), kept in the book's `numbering.yaml`, and every
+     chapter of that book uses it. A frequent word with no kind fails the check;
+   - figures and tables: each caption (its numbering word, its number, any words after it) and the
+     drawing next to it, all its parts together; a word is a label only inside one part's own box;
+   - maths written as the lessons write it, by fixed rules: `−`, a stacked fraction `2/3`.
+3. **Review**: the machine draws a sheet per page (the page image, each block outlined and labelled
+   with its id, kind and number), the pages a check flagged first, and lists the crops and the term
+   candidates (the Hindi book's bracketed English, e.g. **मूलबिन्दु (origin)**, serves both languages;
+   bold and italic phrases). The model makes only these fixes in `items.yaml`: split, join, kind, box;
+   and picks the terms by choosing words from their block.
+4. **Check** (also in `pnpm check`), below, including the languages' match by numbers.
 
-**Trust depends on the reader.** `text` and `chanakya` words are what the publisher typeset, so items
-checked against them are the book. `ocr` words are a recognition, which can be wrong: an `ocr` book also
-needs the model to read each page image against its words and confirm them, and is built only when a
-scanned book comes.
-
-**The code is laid out as the stages** (`platform/studio/src/source/`), so each is found in one place:
-
-```
-pipeline.ts      the stages in order: what both commands call, and nothing else does
-read/            stage 1: a reader per kind of book (text.ts, chanakya.ts and its table; ocr.ts later),
-                 the page images, and what all readers share (head and foot, stacked fractions)
-draft.ts         stage 2: words → items.yaml
-files.ts         a source's files: book.yaml (fingerprint, edition), items, terms; ids and renumbering
-check/           stage 4: words (each used once, in order), numbers, figures and their crops, terms,
-                 languages matched
-```
-
-`platform/studio/src/source-cli.ts` (`pnpm source`) and `platform/studio/src/sources-cli.ts` (the check
-step) only read their arguments and call `pipeline.ts`. Stage 3 is the model's: the command says what to
-fix and where.
+`items.yaml` is made once; after the review it is the record (a later run checks it, never remakes it).
+Ids are positions (`2.4`: section 2's fourth block) until anything cites them (`boards.md`, a comment, a
+review stamp); from then they never change: a later split keeps the id on its first part and gives the
+rest `2.4b`, a join keeps the first id.
 
 ## Files
 
 ```
-authoring/books/<book>/<chapter>/source/
-  en/                      one folder per language, the same shape
-    book.yaml              title, edition as printed, address, sha256, pages, the book's page numbers;
-                           the answers' PDF the same way, when the book has one; unmatched (below)
-    book.pdf               the chapter, as downloaded
-    answers.pdf            the book's answers pages for this chapter, when separate
-    items.yaml             every item in reading order (below)
-    figures/<id>.png       each figure and table, cropped from its page
-    terms.yaml             the book's terms, as it defines them (below)
-  hi/
-    …the same…
+authoring/books/<book>/<chapter>/source/<lang>/
+  book.yaml       title, reader, edition as printed, address, sha256, pages, the book's page numbers;
+                  unmatched (not English: numbered things only one book has, with why)
+  book.pdf        the chapter, as downloaded
+  answers.pdf     the book's answers pages for the chapter, when it has them (optional)
+  items.yaml      every block: { id, kind, page, number?, text, crop?, answer? } (answer: from the
+                  answers pages, read in the review)
+  figures/<id>.png
+  terms.yaml      { term, item, english? } (english: a Hindi term's bracketed English)
 ```
 
-**An item** is one of the book's own blocks: `{ id, kind, page, number?, text }`, where `text` is the book's exact
-words (maths written as in the lessons: `(x, y)`, `−3`, `½`; a figure's or table's text is its caption
-and labels), plus `answer` on a question (from the answers pages) and `crop` on a figure or table.
+Kinds: section, text, figure, table, equation, example, activity, exercise, question (a closed list, in
+code; a book's words map onto it). `authoring/books/<book>/numbering.yaml`: the book's numbering words
+and their kinds, per language. Page images and review
+sheets are in `.chalk-source-pages/` (not in git).
 
-**Kinds**, a const enum, only what the book itself marks: section, text, figure, table, example, activity,
-exercise, question. A figure's parts (a), (b), (c) are one figure.
+## Checks
 
-**Ids are ours, purely positional, one scheme for every book and language**, made by the machine: the
-chapter's sections in order are `1`, `2`, …; a section's blocks in order are `1.1`, `1.2`, …; a subsection
-nests a level (`2.3`, its blocks `2.3.1`, …). Every kind is numbered the same way; nothing depends on how
-the book numbers things.
+- **The blocks are the book:** each page's words, compared letters only, are used by the blocks exactly
+  once and in order (the running head, footer and chapter heading aside). A dropped, repeated or invented
+  word fails.
+- **Nothing numbered is missed:** each number the pages print after a number word is a block's, of
+  that kind, in order.
+- **Figures** each have a box, a crop, and their caption beside the box.
+- **Terms** are in the words of their block.
+- **Languages match**, or the difference is in `unmatched` with why.
+- **The plan:** `plan.md` has no ids (the person reads it); every English block is cited in `boards.md` or
+  skipped there with why; every cite exists. `plan.md` is to check again when a block's letters change or
+  a block is added or removed.
+- **The lessons use the book's terms:** a lesson line whose English has a term and whose Hindi lacks its
+  pair is a "must" on that line; the pair spelt another way the book also uses is a "consider".
 
-**The book's own number is a fact about the item**, as printed: `number: "Fig. 3.11"`, `"आकृति 3.11"`,
-`"Example 2"`, `"Exercise 3.2"`, `"Q1"` (a question's, under its exercise). It is checked against the page
-like the rest of its words, and it is what languages are matched by (the publisher keeps it the same
-across languages): its kind and digits (`figure 3.11`), not its words.
+## The code
 
-**Terms** are what the book defines: a bold word or phrase followed by its English in brackets in the
-Hindi book (**मूल-बिन्दु (origin)**); in the English book, a bold term in a sentence that defines it. Each
-term records the item it is defined in. Bold is read from the font (the Hindi book's bold is its own font).
-The spelling where a term is defined is the book's spelling.
+`platform/studio/src/source/`, self-contained (it imports only libraries and `@chalk/content`'s
+`Locale`; the rest of Chalk only reads its files): `pipeline.ts` (the stages in order), `read/` (a file
+per reader, and what readers share), `layout.ts`, `review.ts` (the sheets and term candidates),
+`check.ts`, `files.ts`, `schema.ts`. `platform/studio/src/source-cli.ts` only parses its arguments
+(`node:util` `parseArgs`). No Python: Docling was tried on chapter 1 (7 minutes for 15 pages; 8 of 17
+captions, a section heading missed) and is kept in mind only as a future `ocr` reader.
 
-**Unmatched:** in a language other than English, `book.yaml` lists each numbered thing found in one book
-and not the other, by its number, with why (`"figure 3.6": "the Hindi book draws (a)-(c) as three
-figures"`).
+What goes from today's code: the model typing items, matching typed words against the page, the
+caption-snapping and box guesses (`boxes.ts`), the head and foot bands.
 
-## The command
+## Proof
 
-`pnpm source <book>/<chapter> <lang> <pdf file or address> [answers pdf]`; run again, it redoes only the
-pages whose image changed.
-1. **Machine:** copies the PDF in, writes `book.yaml` (refusing a fingerprint that differs from the one
-   recorded unless told the edition changed), renders each page to an image, and reads its text layer
-   (an old Hindi font, Chanakya or Kruti Dev, converted to Unicode by its fixed table).
-2. **Machine:** drafts `items.yaml` from the text layer (below): the words are the book's, never typed.
-3. **Model:** looks at each page image beside the draft and fixes only its structure: where a block
-   starts and ends, its kind, its number, each figure's and table's box; then writes the terms.
-4. **Machine:** crops the figures (the watermark and the running text in a box masked) and the model looks
-   at every crop; then the checks below.
-
-`pnpm new chapter` runs it for English. Nothing else adds a source.
-
-## The words come from the book (revised 7 Nov 2026, reviewed)
-
-**Why.** The PDF's text layer is what the publisher typeset, letter for letter: it is the book's
-content. Retyping it from page images and then proving the copy against it was backwards. Only the
-structure needs judgment; the words need none.
-
-**The draft, once.** When a language has no `items.yaml`, the machine drafts it: split at paragraph
-breaks and at printed numbers, the words as the text layer has them. (Lines are grouped by overlap,
-since numbers and Latin sit off the Hindi baseline, and split at column gaps; a block starts at a wider
-gap, a first-line indent, or a number word from `platform/studio/src/source/numbers.ts`, including
-questions' "1." and exercises' headings; blocks run across pages.) After that the file is the record:
-never redrafted, and the checks prove it.
-
-**What the model may change:** where blocks split and join, kinds, numbers, crops, and anything that is
-not a letter (maths notation: `−`, `x-axis`, a fraction as `2/3`, the brackets the text layer gives as
-odd glyphs). Never a letter: the check below compares letters. A figure's or table's `text` is its
-caption and the labels set as text; labels drawn in the picture are in its crop, not typed.
-
-**A font's table** is proven once, against page images, its cases kept as tests
-(`platform/studio/src/source/chanakya.test.ts`).
-
-**Ids.** They are positions, so a split or join moves the ids after it. `pnpm source`, when it
-renumbers, rewrites `boards.md`'s cites by finding each old item's words among the new ones; an old item
-it can't find fails the command. `plan.md` is to check again when any item's letters change or an item
-is added or removed.
-
-## Checks (in `pnpm check`)
-
-- **The items are the book, nothing dropped or added:** each page's words, compared letters only, are
-  used by the items exactly once and in order within a block. Allowed unused: the running head and
-  footer, the chapter's heading ("CHAPTER 3", "अध्याय 3") with its title, and the bracket and fraction
-  glyphs of maths. A dropped line fails, and so does a word read twice or a word not on the page.
-- **Nothing numbered is missed:** every number the pages print after the language's own words, and each
-  is an item's `number` (Fig./
-  आकृति, Table/सारणी, Example/उदाहरण, Activity/क्रियाकलाप, Exercise/प्रश्नावली) has its item, in order.
-- **Languages match:** every number of one language (its kind and digits) is in the other, or in
-  `unmatched` with why.
-- **Terms are real:** each term's words are in the item it names.
-- **Figures exist** for every figure and table.
-- **`plan.md` has no ids:** the person reads it, so it is plain words (its "Skipped" list names items as
-  the book does: "Activity 2, the dice game"). Every citation is in `boards.md`: each board and question
-  family cites the items it uses, and each skipped item is listed there with its id and why.
-- **Coverage:** every English item is cited in `boards.md` or skipped there with why.
-- **Cites hold:** `boards.md` cites English items that exist. When `items.yaml` changes after
-  `plan.md` was approved, `plan.md` is to check again (as today when the source changes).
-- **The lessons use the book's terms:** a lesson line whose English has a term but whose other language
-  doesn't have that term's counterpart is a problem on its line ("must"); the counterpart spelt another
-  way the book also uses (its figure's मूलबिंदु) is a "consider". It reads each language's lines wherever
-  the lessons keep them.
-
-## Chapter 1
-
-1. English re-extracted with `pnpm source` (the same PDF; answers from today's outline checked against the
-   book's answers pages). `boards.md` and the 9 threads that cite old ids re-cited to the new ones (a
-   reading pass by the agent: the old ids were summaries that merged or split paragraphs; the person
-   isn't shown it); `plan.md` loses its id brackets, its Skipped list in the book's words, and is approved
-   again.
-2. Hindi: NCERT's own 2021-22 Hindi chapter 3 (the Wayback Machine's copy of 18 Oct 2021; address and
-   sha256 in `book.yaml`), extracted and matched.
-3. The terms check on the lessons; each difference a thread on its board.
+Chapter 1 shaped the rules, so it can't prove them. The rules are frozen, then one unseen chapter is
+run in both languages: class 9 science's "Work, Energy, and Simple Machines" (2026: a side column,
+inline captions, equations, Hindi's Kokila text layer and चित्र (क)): every check holding, no word typed, and at most 10 review fixes per language, written down
+before the run. Chapter 1 stays as a regression test: the machine's output made into a scratch folder
+matches today's reviewed `items.yaml` (the same blocks, so the same ids; words letter for letter except
+maths written by the rules; figure boxes within a few points). Drawn labels leave chapter 1's figures'
+`text`.
 
 ## Order
 
-1. Extraction and its checks, proved on chapter 1's English (every item found in the text layer, every
-   number found, the crops looked at).
-2. Chapter 1's cites moved; `outline.yaml`, its checks and every reader of it removed or moved to
-   `items.yaml` (`platform/studio/src/pipeline.ts`, `platform/studio/src/mcp/look.ts`,
-   `platform/studio/src/mcp/tools.ts`, `picture.ts`, `platform/editor/src/planning.ts`,
-   `platform/editor/src/threads.ts`, `platform/editor/src/extension.ts`, the plan-chapter skill).
-3. Hindi: the legacy-font conversion (`platform/studio/src/source/chanakya.ts`), extraction proved on the
-   Hindi book; matching and its check. Done 7 Nov 2026: 86 items, 19 terms; all 36 numbered things
-   match, none unmatched.
-4. The code moved into the stages' layout first, nothing else changed (every check still holding);
-   then the draft and the one check above. Chapter 1 is not re-extracted: the drafter is run into a scratch
-   file and compared with today's items (the words should agree letter for letter; each difference is a
-   rule to fix); drawn labels leave the figures' `text`; the check holds on English and Hindi; the cites'
-   rewrite is tested.
-5. The terms check on the lessons; chapter 1's threads filed.
-6. `pnpm new chapter` uses it; docs and skills say it (full paths).
+1. Done: English and Hindi extracted by hand-checked reading; Hindi matched (36 of 36 numbers).
+2. The machine's stages (read, lay out, review sheets, check) and the one blocks check; chapter 1 as a
+   regression test; today's code removed as it is replaced.
+3. The proof on an unseen science chapter, both languages.
+4. The terms check on the lessons; chapter 1's threads filed.
+5. `pnpm new chapter` runs it; docs and skills say it (full paths).
