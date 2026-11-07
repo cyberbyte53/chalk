@@ -23,6 +23,7 @@ import {
   takeIn,
 } from "./files";
 import type { PageObjects } from "./objects";
+import { cachedObjects } from "./objects";
 import { type NumberedPage, numberedPages, readerFor, renderPages, wordsFile } from "./read";
 import {
   type Book,
@@ -37,7 +38,7 @@ import {
 } from "./schema";
 import type { TextPiece } from "./scripts";
 import { type BuiltBlock, Maker as SheetMaker, SheetMode, renderSheets, sheetHtml } from "./sheet";
-import { cachedObjects, suggestionLines, wordSuggestions } from "./suggest";
+import { suggestionLines, wordSuggestions } from "./suggest";
 import { tidiedLine, tidy } from "./tidy";
 import { TOOL_VERSIONS } from "./tools";
 

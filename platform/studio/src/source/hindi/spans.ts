@@ -1,5 +1,7 @@
+import { lineAndWord } from "../ranges";
 import type { NumberedPage, Word } from "../read";
 import { type Repair, repair } from "./repair";
+import { DEVANAGARI } from "./script";
 
 /**
  * A page's Hindi spans, found by the machine with no agent: the pieces of a line that touch on the
@@ -14,8 +16,6 @@ export const TOUCH = 0.5;
 
 /** One span of a page: its words' ids (`L12.3`), the PDF's words, and its repair (or why not). */
 export type PageSpan = { ids: string[]; pdf: string[]; repair: Repair };
-
-const DEVANAGARI = /[ऀ-ॿ]/u;
 
 const middle = (w: Word) => (w.y0 + w.y1) / 2;
 /** Two words at one height on the page: the PDF may number one printed line as two. */
@@ -79,22 +79,19 @@ function joinNarrowGaps(
   page: NumberedPage,
   spans: { ids: string[]; pdf: string[] }[],
 ): { ids: string[]; pdf: string[] }[] {
-  const wordOf = (id: string) => {
-    const [l, j] = id.slice(1).split(".").map(Number);
-    return page.lines[(l ?? 0) - 1]?.[(j ?? 0) - 1];
-  };
-  const lineOf = (id: string) => id.slice(1).split(".")[0];
+  const wordOf = (id: string) => page.words.get(id);
+  const lineOf = (id: string) => lineAndWord(id)[0];
   const gapBetween = (a: { ids: string[] }, b: { ids: string[] }) => {
     const [x, y] = [wordOf(a.ids.at(-1) ?? ""), wordOf(b.ids[0] ?? "")];
     const sameLine = lineOf(a.ids.at(-1) ?? "") === lineOf(b.ids[0] ?? "");
     return x === undefined || y === undefined || !sameLine ? undefined : y.x0 - x.x1;
   };
-  const usual = new Map<string, number>();
-  const byLine = new Map<string, number[]>();
+  const usual = new Map<number, number>();
+  const byLine = new Map<number, number[]>();
   spans.forEach((s, i) => {
     const gap = i === 0 ? undefined : gapBetween(spans[i - 1] ?? s, s);
     if (gap !== undefined) {
-      const l = lineOf(s.ids[0] ?? "") ?? "";
+      const l = lineOf(s.ids[0] ?? "");
       byLine.set(l, [...(byLine.get(l) ?? []), gap]);
     }
   });
@@ -105,7 +102,7 @@ function joinNarrowGaps(
   for (const s of spans) {
     const prev = out.at(-1);
     const gap = prev === undefined ? undefined : gapBetween(prev, s);
-    const line = usual.get(lineOf(s.ids[0] ?? "") ?? "");
+    const line = usual.get(lineOf(s.ids[0] ?? ""));
     const [a, b] = [prev?.pdf.join("") ?? "", s.pdf.join("")];
     const joins =
       prev !== undefined &&

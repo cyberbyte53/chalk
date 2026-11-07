@@ -17,6 +17,7 @@ import { feedback } from "./feedback";
 import { sha256 } from "./files";
 import { type DrawnObject, ObjectKind } from "./objects";
 import { buildSource, writeDrafts } from "./pipeline";
+import { rangeOf } from "./ranges";
 import { type NumberedPage, numberPage, numberedPages } from "./read";
 import {
   type Box,
@@ -29,7 +30,7 @@ import {
   itemsSchema,
   pageFileSchema,
 } from "./schema";
-import { rangeOf, wordSuggestions } from "./suggest";
+import { wordSuggestions } from "./suggest";
 import { TOOL_VERSIONS } from "./tools";
 
 /** A page from lines of words: each line 20pt below the last, words 40pt apart. */

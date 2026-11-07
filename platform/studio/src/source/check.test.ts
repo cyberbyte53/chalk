@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Locale } from "@chalk/content";
 import { describe, expect, it } from "vitest";
-import { type BuiltPage, buildChapter, buildPage, expand, positionalIds } from "./build";
+import { type BuiltPage, buildChapter, buildPage, positionalIds } from "./build";
 import {
   answer,
   chapterIssues,
@@ -13,6 +13,7 @@ import {
   pageIssues,
   readingQuestion,
 } from "./check";
+import { expand } from "./ranges";
 import { type NumberedPage, type Word, numberPage, wordsFile } from "./read";
 import { Cause, type Item, ItemKind, type PageBlock, type PageFile } from "./schema";
 

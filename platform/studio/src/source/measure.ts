@@ -5,8 +5,8 @@ import { type Built, buildChapter, buildPage } from "./build";
 import { buildExtract, pageToolsOf } from "./check";
 import { draftPages, readStyles } from "./draft";
 import { extractPaths, extractsIn, readYaml } from "./files";
+import { cachedObjects } from "./objects";
 import { type Item, SourceFile, itemsSchema } from "./schema";
-import { cachedObjects } from "./suggest";
 
 /**
  * `pnpm source measure` (platform/docs/plans/tool-fixes.md, "How each fix is proved"): each proofread

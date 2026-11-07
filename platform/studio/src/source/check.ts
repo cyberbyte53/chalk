@@ -19,6 +19,8 @@ import { showsOn } from "./crop";
 import { type Extract, PAGE_PREFIX, extractPaths, readYaml, sha256 } from "./files";
 import { isCandidate } from "./hindi/candidates";
 import { isKnownWord } from "./hindi/list";
+import { hasHindi } from "./hindi/script";
+import { cachedObjects } from "./objects";
 import { PAGE_SCALE, numberedPages, renderPages } from "./read";
 import {
   type Book,
@@ -36,7 +38,6 @@ import {
   pageFileSchema,
   termsSchema,
 } from "./schema";
-import { cachedObjects, hasHindi } from "./suggest";
 import { TOOL_VERSIONS } from "./tools";
 
 /**

@@ -1,8 +1,12 @@
-import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { OPS, getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
+import { sha256 } from "./files";
 import { poppler } from "./read";
-import type { Box } from "./schema";
+import { type Box, Tool } from "./schema";
 import type { TextPiece } from "./scripts";
+import { TOOL_VERSIONS } from "./tools";
 
 /**
  * A PDF's drawn objects (platform/docs/plans/sources.md, round 2: "each figure's box snapped to the
@@ -320,4 +324,43 @@ export function withoutRepeats(pages: readonly PageObjects[]): PageObjects[] {
   for (const p of pages)
     for (const o of p.objects) if (!isRepeated(o) && counts(o) >= enough) repeated.push(o);
   return pages.map((p) => ({ ...p, objects: p.objects.filter((o) => !isRepeated(o)) }));
+}
+
+const STUDIO = join(import.meta.dirname, "../..");
+const TSX = join(STUDIO, "node_modules/.bin/tsx");
+const TSCONFIG = join(STUDIO, "../../tsconfig.base.json");
+
+const OBJECTS_FILE = "objects.json";
+const objectsKey = (pdf: string) =>
+  `${sha256(readFileSync(pdf))} ${TOOL_VERSIONS[Tool.FigureSnap]} ${TOOL_VERSIONS[Tool.Scripts]}`;
+
+/** Reads a PDF's objects (what repeats across its pages left out) into its pages' cache. */
+export async function writeObjects(pdf: string, cache: string): Promise<void> {
+  const pages = withoutRepeats(await readObjects(pdf));
+  mkdirSync(cache, { recursive: true });
+  writeFileSync(join(cache, OBJECTS_FILE), JSON.stringify({ key: objectsKey(pdf), pages }));
+}
+
+/**
+ * A PDF's drawn objects, read once per PDF and kept in the pages' cache: pdf.js takes seconds, and
+ * only asynchronously, while the checks that build an extract run in step. So a PDF not read yet is
+ * read by a short process of its own, waited for.
+ */
+export function cachedObjects(pdf: string, cache: string): PageObjects[] {
+  const file = join(cache, OBJECTS_FILE);
+  const kept = () =>
+    existsSync(file)
+      ? (JSON.parse(readFileSync(file, "utf8")) as { key: string; pages: PageObjects[] })
+      : undefined;
+  const key = objectsKey(pdf);
+  const have = kept();
+  if (have?.key === key) return have.pages;
+  execFileSync(
+    TSX,
+    ["--tsconfig", TSCONFIG, join(import.meta.dirname, "objects-cli.ts"), pdf, cache],
+    { stdio: ["ignore", "ignore", "inherit"] },
+  );
+  const read = kept();
+  if (read?.key !== key) throw new Error(`${pdf}: its drawn objects weren't read`);
+  return read.pages;
 }

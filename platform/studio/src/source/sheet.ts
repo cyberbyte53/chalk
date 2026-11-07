@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { expand } from "./build";
 import type { DrawnObject } from "./objects";
+import { expand } from "./ranges";
 import { type NumberedPage, type Word, boundsOf } from "./read";
 import { type Box, ItemKind, type PageBlock, type PageFile } from "./schema";
 import { tableCells } from "./snap";

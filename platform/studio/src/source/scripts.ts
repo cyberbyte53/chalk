@@ -1,3 +1,4 @@
+import { DEVANAGARI } from "./hindi/script";
 import type { NumberedPage, Word } from "./read";
 
 /**
@@ -23,8 +24,6 @@ export type TextPiece = {
 const SMALLER = 0.8;
 /** A script's baseline is this share of its base's size off the base's. */
 const SHIFTED = 0.12;
-/** A formula never holds Hindi: a run ends at it. */
-const DEVANAGARI = /[\u0900-\u097F]/u;
 /** Pieces this near (points) touch. */
 const TOUCH = 1.2;
 /** After a script the printer leaves a little more (Na⁺ then (aq): 1.6), still less than a space. */
@@ -107,6 +106,7 @@ export function scriptRuns(page: NumberedPage, pieces: readonly TextPiece[]): Sc
   const used = new Set<string>();
   const runs: ScriptRun[] = [];
   for (const start of all) {
+    // A formula never holds Hindi: a run neither starts nor goes on at it.
     if (used.has(start.id) || start.m === undefined || DEVANAGARI.test(start.word.text)) continue;
     const base = start.m;
     // A run: pieces to the right, each touching the run's right edge, within the base's height.

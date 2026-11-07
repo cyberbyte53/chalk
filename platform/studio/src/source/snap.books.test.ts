@@ -4,9 +4,9 @@ import { join } from "node:path";
 import { PNG } from "pngjs";
 import { afterAll, describe, expect, it } from "vitest";
 import { parse } from "yaml";
-import { expand } from "./build";
 import { showsOn } from "./crop";
 import { type PageObjects, area, intersect, readObjects, withoutRepeats } from "./objects";
+import { expand } from "./ranges";
 import {
   type NumberedPage,
   PAGE_SCALE,

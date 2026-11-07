@@ -330,3 +330,15 @@ export function tableCells(
     .sort((a, b) => a.row - b.row || a.column - b.column);
   return { rows: R, columns: C, cells, outside: inRough.filter((w) => !used.has(w)), issues: [] };
 }
+
+/** A table's rows as text: a merged cell at its first place, empty in the others. */
+export function rowsOf(table: Table): string[][] {
+  const rows = Array.from({ length: table.rows }, () =>
+    Array.from({ length: table.columns }, () => ""),
+  );
+  for (const c of table.cells) {
+    const row = rows[c.row];
+    if (row !== undefined) row[c.column] = c.text;
+  }
+  return rows;
+}

@@ -3,8 +3,10 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { sha256 } from "./files";
 import { Left } from "./hindi/repair";
+import { hasHindi } from "./hindi/script";
 import { pageSpans } from "./hindi/spans";
 import { type PageObjects, readObjects, withoutRepeats } from "./objects";
+import { rangeOf } from "./ranges";
 import type { NumberedPage } from "./read";
 import { Tool } from "./schema";
 import { type TextPiece, scriptRuns } from "./scripts";
@@ -18,10 +20,6 @@ import { TOOL_VERSIONS } from "./tools";
  * tool made none, with its why.
  */
 
-const STUDIO = join(import.meta.dirname, "../..");
-const TSX = join(STUDIO, "node_modules/.bin/tsx");
-const TSCONFIG = join(STUDIO, "../../tsconfig.base.json");
-
 /** A tool's suggestion for some words: a reading, or (`left`) why it made none. */
 export type WordSuggestion = {
   /** Its words' ids (`L12.3`), and the range they make. */
@@ -31,18 +29,6 @@ export type WordSuggestion = {
   pdf: string[];
   by: typeof Tool.HindiRepair | typeof Tool.Scripts;
 } & ({ reading: string; left?: undefined } | { left: string; reading?: undefined });
-
-const DEVANAGARI = /[ऀ-ॿ]/u;
-export const hasHindi = (text: string): boolean => DEVANAGARI.test(text);
-
-/** Word ids in a row as their range: `L5.2`, `L5.2-4`, `L5.2-L6.3`. */
-export function rangeOf(ids: readonly string[]): string {
-  const [first, last] = [ids[0] ?? "", ids.at(-1) ?? ""];
-  if (first === last) return first;
-  const [l1] = first.split(".");
-  const [l2, w2] = last.split(".");
-  return l1 === l2 ? `${first}-${w2}` : `${first}-${last}`;
-}
 
 /**
  * A page's Hindi suggestions: `pageSpans` on the words, a span that has Hindi and that the repair
@@ -103,51 +89,4 @@ export function suggestionLines(list: readonly WordSuggestion[]): string {
       );
     })
     .join("");
-}
-
-/** A table's rows as text: a merged cell at its first place, empty in the others. */
-export function rowsOf(table: Table): string[][] {
-  const rows = Array.from({ length: table.rows }, () =>
-    Array.from({ length: table.columns }, () => ""),
-  );
-  for (const c of table.cells) {
-    const row = rows[c.row];
-    if (row !== undefined) row[c.column] = c.text;
-  }
-  return rows;
-}
-
-const OBJECTS_FILE = "objects.json";
-const objectsKey = (pdf: string) =>
-  `${sha256(readFileSync(pdf))} ${TOOL_VERSIONS[Tool.FigureSnap]} ${TOOL_VERSIONS[Tool.Scripts]}`;
-
-/** Reads a PDF's objects (what repeats across its pages left out) into its pages' cache. */
-export async function writeObjects(pdf: string, cache: string): Promise<void> {
-  const pages = withoutRepeats(await readObjects(pdf));
-  mkdirSync(cache, { recursive: true });
-  writeFileSync(join(cache, OBJECTS_FILE), JSON.stringify({ key: objectsKey(pdf), pages }));
-}
-
-/**
- * A PDF's drawn objects, read once per PDF and kept in the pages' cache: pdf.js takes seconds, and
- * only asynchronously, while the checks that build an extract run in step. So a PDF not read yet is
- * read by a short process of its own, waited for.
- */
-export function cachedObjects(pdf: string, cache: string): PageObjects[] {
-  const file = join(cache, OBJECTS_FILE);
-  const kept = () =>
-    existsSync(file)
-      ? (JSON.parse(readFileSync(file, "utf8")) as { key: string; pages: PageObjects[] })
-      : undefined;
-  const key = objectsKey(pdf);
-  const have = kept();
-  if (have?.key === key) return have.pages;
-  execFileSync(
-    TSX,
-    ["--tsconfig", TSCONFIG, join(import.meta.dirname, "objects-cli.ts"), pdf, cache],
-    { stdio: ["ignore", "ignore", "inherit"] },
-  );
-  const read = kept();
-  if (read?.key !== key) throw new Error(`${pdf}: its drawn objects weren't read`);
-  return read.pages;
 }

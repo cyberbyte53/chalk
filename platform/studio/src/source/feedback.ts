@@ -1,10 +1,11 @@
 import { join } from "node:path";
-import { type BuiltPage, expand } from "./build";
+import type { BuiltPage } from "./build";
 import { buildExtract } from "./check";
 import { draftPages, readStyles } from "./draft";
 import { extractsIn } from "./files";
+import { cachedObjects } from "./objects";
+import { expand } from "./ranges";
 import { type PageFile, SourceFile, Tool } from "./schema";
-import { cachedObjects } from "./suggest";
 import { TOOL_VERSIONS } from "./tools";
 
 /**

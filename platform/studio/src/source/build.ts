@@ -1,7 +1,9 @@
 import { isDeepStrictEqual } from "node:util";
 import { Locale } from "@chalk/content";
 import { plain } from "./hindi/candidates";
+import { hasHindi } from "./hindi/script";
 import type { DrawnObject } from "./objects";
+import { tryExpand } from "./ranges";
 import type { NumberedPage, Word } from "./read";
 import {
   type Box,
@@ -18,7 +20,8 @@ import {
 } from "./schema";
 import type { TextPiece } from "./scripts";
 import { SnapIssue, snap, tableCells } from "./snap";
-import { type WordSuggestion, hasHindi, rowsOf, wordSuggestions } from "./suggest";
+import { rowsOf } from "./snap";
+import { type WordSuggestion, wordSuggestions } from "./suggest";
 import { TOOL_VERSIONS } from "./tools";
 
 /**
@@ -138,56 +141,6 @@ export type BuiltPage = {
   raised: Raised[];
   overrides: Override[];
 };
-
-/** Thrown for a range that isn't on the page: a mistake, never meant. */
-class OffThePage extends Error {}
-
-/**
- * `L6-L14, L16.1-8, L16.9-L18, L20.3` → the word ids, in order. A line alone is all its words;
- * `L16.1-8` is words 1 to 8 of line 16.
- */
-export function expand(ranges: string, words: ReadonlyMap<string, unknown>): string[] {
-  const all = [...words.keys()];
-  const at = new Map(all.map((id, i) => [id, i]));
-  const firstOf = (l: string) => all.find((w) => w.startsWith(`${l}.`));
-  const lastOf = (l: string) => [...all].reverse().find((w) => w.startsWith(`${l}.`));
-  const ids: string[] = [];
-  for (const part of ranges
-    .split(",")
-    .map((s) => s.trim())
-    .filter((s) => s !== "")) {
-    const m = /^(L\d+)(?:\.(\d+))?(?:-(L\d+)?(?:\.?(\d+))?)?$/.exec(part);
-    if (m?.[1] === undefined) throw new OffThePage(`can't read the range "${part}"`);
-    const [, l1, w1, l2, w2] = m;
-    const start = w1 !== undefined ? `${l1}.${w1}` : firstOf(l1);
-    let end: string | undefined;
-    if (!part.includes("-")) end = w1 !== undefined ? `${l1}.${w1}` : lastOf(l1);
-    else if (l2 !== undefined) end = w2 !== undefined ? `${l2}.${w2}` : lastOf(l2);
-    else end = w2 !== undefined ? `${l1}.${w2}` : lastOf(l1);
-    const from = start === undefined ? undefined : at.get(start);
-    const to = end === undefined ? undefined : at.get(end);
-    if (from === undefined || to === undefined || to < from)
-      throw new OffThePage(`the range "${part}" isn't on the page`);
-    ids.push(...all.slice(from, to + 1));
-  }
-  return ids;
-}
-
-/** A range expanded, or the problem with it. */
-function tryExpand(
-  ranges: string,
-  words: NumberedPage,
-  problems: string[],
-  where: string,
-): string[] | undefined {
-  try {
-    return expand(ranges, words.words);
-  } catch (error) {
-    if (!(error instanceof OffThePage)) throw error;
-    problems.push(`${where}: ${error.message}`);
-    return undefined;
-  }
-}
 
 const textOf = (words: NumberedPage, ids: readonly string[]) =>
   ids.map((id) => words.words.get(id)?.text ?? "");

@@ -1,15 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { expand } from "./build";
 import {
   type PageStyles,
   type StyleRun,
   draftFurniture,
   draftPage,
   draftPages,
-  rangesOf,
   stylesFromXml,
 } from "./draft";
 import { ObjectKind, type PageObjects } from "./objects";
+import { expand, rangesOf } from "./ranges";
 import { type NumberedPage, type Word, numberPage } from "./read";
 import { type Box, ItemKind, type PageFile, pageFileSchema } from "./schema";
 

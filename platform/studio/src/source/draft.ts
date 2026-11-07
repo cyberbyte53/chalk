@@ -1,5 +1,5 @@
-import { expand } from "./build";
 import { type DrawnObject, type PageObjects, area, intersect, withoutRepeats } from "./objects";
+import { expand, rangesOf, sortIds } from "./ranges";
 import { type NumberedPage, type Word, boundsOf, poppler } from "./read";
 import { attr, decode } from "./read/pages";
 import { type Box, ItemKind, type PageBlock, type PageFile } from "./schema";
@@ -651,45 +651,6 @@ function markNumbering(drafts: Draft[], before: boolean): void {
   }
 }
 
-const lineAndWord = (id: string): [number, number] => {
-  const m = /^L(\d+)\.(\d+)$/.exec(id);
-  return [Number(m?.[1]), Number(m?.[2])];
-};
-
-/** Word ids as ranges (`L12.3-7, L13-L15, L16.1-4`), in the order given. */
-export function rangesOf(page: NumberedPage, ids: readonly string[]): string {
-  const size = (l: number) => page.lines[l - 1]?.length ?? 0;
-  const next = (l: number, w: number): [number, number] => (w < size(l) ? [l, w + 1] : [l + 1, 1]);
-  const spans: { from: [number, number]; to: [number, number] }[] = [];
-  for (const id of ids) {
-    const at = lineAndWord(id);
-    const span = spans.at(-1);
-    if (span !== undefined) {
-      const n = next(...span.to);
-      if (n[0] === at[0] && n[1] === at[1]) {
-        span.to = at;
-        continue;
-      }
-    }
-    spans.push({ from: at, to: at });
-  }
-  const write = ({
-    from: [l0, w0],
-    to: [l1, w1],
-  }: { from: [number, number]; to: [number, number] }) => {
-    const wholeStart = w0 === 1;
-    const wholeEnd = w1 === size(l1);
-    if (l0 === l1) {
-      if (wholeStart && wholeEnd) return `L${l0}`;
-      return w0 === w1 ? `L${l0}.${w0}` : `L${l0}.${w0}-${w1}`;
-    }
-    const a = wholeStart ? `L${l0}` : `L${l0}.${w0}`;
-    const b = wholeEnd ? `L${l1}` : `L${l1}.${w1}`;
-    return `${a}-${b}`;
-  };
-  return spans.map(write).join(", ");
-}
-
 /** What a page's draft is read from, beside its words and drawn objects. */
 export type DraftSignals = {
   /** The page's fonts (`readStyles`); without them nothing is told by font. */
@@ -771,13 +732,6 @@ export function draftPage(
     blocks,
   };
 }
-
-const sortIds = (ids: readonly string[]): string[] =>
-  [...ids].sort((a, b) => {
-    const [la, wa] = lineAndWord(a);
-    const [lb, wb] = lineAndWord(b);
-    return la - lb || wa - wb;
-  });
 
 /**
  * The page's figures: each caption, the lines of its that follow in its own font (never the body's),

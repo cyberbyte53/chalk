@@ -1,8 +1,9 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
-import { expand } from "../build";
+import { expand } from "../ranges";
 import { type PageFile, pageFileSchema } from "../schema";
+import { DEVANAGARI } from "./script";
 
 /**
  * Makes `proof.fixture.yaml`, what the Hindi repair is proved on (hindi.test.ts): the proof chapter's
@@ -32,8 +33,6 @@ function readWordsFile(text: string): Map<string, string> {
 export type ProofReading = [page: number, span: string, pdf: string[], reading: string];
 /** A Hindi word no reading covers: its page, its id, and the word as the PDF gives it. */
 export type ProofWord = [page: number, id: string, pdf: string];
-
-const DEVANAGARI = /[\u0900-\u097F]/u;
 
 function main() {
   const readings: ProofReading[] = [];
