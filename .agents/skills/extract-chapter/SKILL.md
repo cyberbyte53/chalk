@@ -1,6 +1,6 @@
 ---
 name: extract-chapter
-description: Turn one PDF of a chapter's book (one language) into data - every block with its kind, number and exact words, figures cropped, its terms. The tools pre-fill each page; you proofread it all on a side-by-side sheet. Use when a chapter has no source in a language, when a new edition comes, or when the source check fails. Writes authoring/books/<book>/<chapter>/source/<lang>/. For both languages, run it once per PDF (in parallel if you like), then match them.
+description: Turn one PDF of a chapter's book (one language) into data - every block with its kind, number and exact words, figures cropped, its terms. The tools pre-fill each page; you proofread it all on a side-by-side sheet. Use when a chapter has no source in a language, when a new edition comes, or when the source check fails. Writes authoring/books/<book>/<chapter>/source/<lang>/. For both languages, run it once per PDF (in parallel if you like), then write the concepts and attach the other languages to them.
 ---
 
 # Extract one PDF of a chapter
@@ -44,17 +44,58 @@ Then look over the whole:
 - **Every answer** the command lists: still true on the page?
 - **The chapter:** sections in order, every number once, blocks joined across pages.
 
-## 4. Match, once both languages are extracted
+## 4. Concepts: the main book's (English) summary
+
+Once every page is proofread and the build holds, read your built `items.yaml` whole and write
+`source/en/concepts.yaml`: what the book teaches, one concept per thing, in the book's order.
+
+```yaml
+concepts:
+  - key: solution-is-homogeneous        # short, kebab-case, English: attached books name it by this
+    concept: A solution is a homogeneous mixture of a solute dissolved in a solvent.
+    terms: [solution, solute, solvent]  # exactly as printed (the check finds each in its items)
+    items: ["2.1"]                      # where the book introduces it
+answers:
+  sets-apart term: why it is in no concept   # only when one isn't
+```
+
+A concept is what a student should come away knowing, in one plain line: not a paragraph's summary,
+not an activity's steps. A concept may set apart no term (`terms: []`); a term is written as printed, plural
+if the book prints it so. What a box teaches is a concept like any other; a box that only adds colour
+(a story, a scientist's life) isn't. Every term the book sets apart (`terms.yaml`) belongs to some concept, or is
+answered. Then `npx pnpm@10.28.0 source attach <book>/<chapter>` checks it.
+
+## 5. Attach (an attached language, once its book and the main book's concepts are done)
 
 ```
-npx pnpm@10.28.0 source match <book>/<chapter>
+npx pnpm@10.28.0 source match <book>/<chapter>     # numbered things paired; answer what only one book has
+npx pnpm@10.28.0 source attach <book>/<chapter>
 ```
 
-The machine pairs every numbered thing by kind and digits into `source/match.yaml`. Each thing only one
-book has is an issue: answer it there, under `answers`, with why ("the Hindi book draws Fig. 3.6 (a)–(c)
-as three figures").
+`attach` writes the sheet `.chalk-source-pages/<book>/<chapter>/<lang>/attach.md`: each main concept, its
+items' words, and where the tool suggests this book has it (paired items, sections to look in, terms
+with the main language printed beside them). The suggestion is a start, never marked sure; proofread
+each against this book's `items.yaml` and write `source/<lang>/concepts.yaml`, every main concept once:
 
-## 5. Hand over
+```yaml
+concepts:
+  - key: solution-is-homogeneous
+    concept: विलयन दो या अधिक पदार्थों का समांगी मिश्रण है।   # this book's own line, its words
+    terms: [विलयन, विलेय, विलायक]                            # as this book prints them
+    items: ["2.1"]                                           # where this book introduces it
+  - key: some-key
+    absent: why this book doesn't teach it
+answers:
+  set-apart term: why it is in no concept   # what only this book teaches, said
+```
+
+Leaving out an item or term the tool suggested takes a `cause` (`wrong-place`: it isn't where this
+book has the concept; else `other`) and a `note` saying what was wrong. Quote a line that holds a colon
+(`concept: "…: …"`): YAML reads a bare one as a key. Run `attach` again until it holds. Never translate: every line and term is this book's own.
+`npx pnpm@10.28.0 source term <book>/<chapter> <term>` then answers "what does the other book call it,
+and where".
+
+## 6. Hand over
 
 Run `npx pnpm@10.28.0 check` (exit 0). Commit the source folder alone, naming its files. Tell the person
 in a sentence or two: the book and edition, how many blocks and figures, how much you corrected and why,

@@ -7,6 +7,9 @@
 //   pnpm source <book>/<chapter> <lang>          again, once the agents wrote pages/: builds and checks
 //   pnpm source match <book>/<chapter>           the two books paired, into source/match.yaml
 //   pnpm source feedback [<book>/<chapter>]      every override of a tool, across chapters
+//   pnpm source attach <book>/<chapter>          the main book's concepts checked; each attached
+//                                                book's sheet written and its concepts checked
+//   pnpm source term <book>/<chapter> <term>     the concept with that term, in every language, and where
 //
 // It takes the PDF in and records it in book.yaml (refusing a book whose sha256 differs from the
 // one recorded, unless --new-edition), and writes each page's image and numbered words for the
@@ -16,12 +19,13 @@ import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { Locale } from "@chalk/content";
 import { findUp } from "./find-up";
+import { attachChapter, lookUp } from "./source/concepts";
 import { feedback } from "./source/feedback";
 import { matchChapter } from "./source/match";
 import { type SourceResult, runSource } from "./source/pipeline";
 
 const USAGE =
-  "usage: pnpm source <book>/<chapter> <en|hi> [<pdf file or address>] [--answers <pdf>] [--address <url>] [--title <as printed>] [--edition <as printed, or none>] [--new-edition]\n       pnpm source match <book>/<chapter>\n       pnpm source feedback [<book>/<chapter>]";
+  "usage: pnpm source <book>/<chapter> <en|hi> [<pdf file or address>] [--answers <pdf>] [--address <url>] [--title <as printed>] [--edition <as printed, or none>] [--new-edition]\n       pnpm source match <book>/<chapter>\n       pnpm source feedback [<book>/<chapter>]\n       pnpm source attach <book>/<chapter>\n       pnpm source term <book>/<chapter> <term>";
 
 const { values, positionals } = parseArgs({
   allowPositionals: true,
@@ -45,6 +49,16 @@ function dispatch(): Promise<SourceResult> | undefined {
     if (second === undefined || !CHAPTER.test(second) || third !== undefined) return undefined;
     const [book, chapter] = second.split("/") as [string, string];
     return Promise.resolve(matchChapter(root, book, chapter));
+  }
+  if (first === "attach") {
+    if (second === undefined || !CHAPTER.test(second) || third !== undefined) return undefined;
+    const [book, chapter] = second.split("/") as [string, string];
+    return Promise.resolve(attachChapter(root, book, chapter));
+  }
+  if (first === "term") {
+    if (second === undefined || !CHAPTER.test(second) || third === undefined) return undefined;
+    const [book, chapter] = second.split("/") as [string, string];
+    return Promise.resolve(lookUp(root, book, chapter, positionals.slice(2).join(" ")));
   }
   if (first === "feedback") {
     if (third !== undefined || (second !== undefined && !CHAPTER.test(second))) return undefined;

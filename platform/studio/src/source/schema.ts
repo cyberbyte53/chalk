@@ -74,6 +74,8 @@ export const Cause = {
   WrongReading: "wrong-reading",
   WrongBox: "wrong-box",
   WrongCells: "wrong-cells",
+  /** Attach: a suggested item or term isn't where this book has the concept. */
+  WrongPlace: "wrong-place",
   Other: "other",
 } as const;
 export type Cause = (typeof Cause)[keyof typeof Cause];
@@ -249,6 +251,7 @@ export const SourceFile = {
   Pages: "pages",
   Items: "items.yaml",
   Terms: "terms.yaml",
+  Concepts: "concepts.yaml",
   Figures: "figures",
 } as const;
 export type SourceFile = (typeof SourceFile)[keyof typeof SourceFile];
@@ -274,6 +277,57 @@ export const matchSchema = z
   })
   .strict();
 export type MatchFile = z.infer<typeof matchSchema>;
+
+const key = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+
+/**
+ * The main book's `concepts.yaml`: its summary, what it teaches (platform/docs/plans/sources.md, "Concepts").
+ * Each concept one line, its terms as printed, the items it is introduced in; `answers`: why a term the
+ * book sets apart is in no concept.
+ */
+export const mainConceptsSchema = z
+  .object({
+    concepts: z.array(
+      z
+        .object({
+          /** What the attached books' concepts name it by (`solution-is-homogeneous`). */
+          key,
+          concept: z.string().min(1),
+          terms: z.array(z.string().min(1)),
+          items: z.array(id).min(1),
+        })
+        .strict(),
+    ),
+    answers: z.record(z.string(), z.string().min(1)).optional(),
+  })
+  .strict();
+export type MainConcepts = z.infer<typeof mainConceptsSchema>;
+
+/**
+ * An attached book's `concepts.yaml` ("Attach"): for each main concept, by its key, its line, terms and
+ * items in this book, or `absent` with why. A suggested item or term left out takes a `cause`.
+ */
+export const attachedConceptsSchema = z
+  .object({
+    concepts: z.array(
+      z.union([
+        z
+          .object({
+            key,
+            concept: z.string().min(1),
+            terms: z.array(z.string().min(1)),
+            items: z.array(id).min(1),
+            cause: cause.optional(),
+            note: z.string().min(1).optional(),
+          })
+          .strict(),
+        z.object({ key, absent: z.string().min(1) }).strict(),
+      ]),
+    ),
+    answers: z.record(z.string(), z.string().min(1)).optional(),
+  })
+  .strict();
+export type AttachedConcepts = z.infer<typeof attachedConceptsSchema>;
 
 /** The file beside the languages' folders, in `source/`. */
 export const MATCH_FILE = "match.yaml";

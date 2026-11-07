@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import { findUp } from "./find-up";
+import { checkConcepts } from "./source/concepts";
 import { checkMatches } from "./source/match";
 import { checkSources } from "./source/pipeline";
 
@@ -34,6 +35,15 @@ for (const m of checkMatches(root)) {
   failed += 1;
   console.log(`  ✗ ${m.rel}`);
   for (const p of m.problems) console.log(`      ${p}`);
+}
+for (const c of checkConcepts(root)) {
+  if (c.problems.length === 0) {
+    console.log(`  ✓ ${c.rel}: ${c.concepts} concepts, attached`);
+    continue;
+  }
+  failed += 1;
+  console.log(`  ✗ ${c.rel} concepts`);
+  for (const p of c.problems) console.log(`      ${p}`);
 }
 if (failed > 0) {
   console.error(
