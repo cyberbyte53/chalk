@@ -200,6 +200,21 @@ describe("a page's spans, found from where its pieces sit", () => {
     expect(spans.map((s) => s.ids)).toEqual([["L1.1"], ["L1.2"]]);
     expect(read(line(["पर", 50, 60], ["बल", 62.4, 72]))).toEqual(["पर", "बल"]);
   });
+  it("joins pieces the PDF numbered as two lines when they touch at one height", () => {
+    const w = (text: string, x0: number, x1: number) => ({ text, x0, y0: 100, x1, y1: 112 });
+    const lines = [
+      [w("स", 50, 55), w("त", 55, 60)],
+      [w("ं", 57, 57), w("लित", 60.2, 70), w("ु", 66, 66)],
+    ];
+    const page: NumberedPage = { page: 1, width: 500, height: 700, lines, words: new Map() };
+    expect(read(page)).toEqual(["संतुलित"]);
+    // The next line of a paragraph starts further left, below: never joined.
+    const below = [[w("पर", 50, 60)], [{ ...w("बल", 20, 30), y0: 116, y1: 128 }]];
+    expect(read({ ...page, lines: below })).toEqual(["पर", "बल"]);
+  });
+  it("leaves a word written twice over for the reader, never collapsed to half (प्लेटलेट)", () => {
+    expect("left" in (pageSpans(line(["प्लेटलेट", 50, 80]))[0]?.repair ?? {})).toBe(true);
+  });
   it("keeps a run without Hindi as the PDF gives it", () => {
     expect(pageSpans(line(["(10X,", 50, 70]))).toEqual([
       { ids: ["L1.1"], pdf: ["(10X,"], repair: { reading: "(10X," } },

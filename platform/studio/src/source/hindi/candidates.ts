@@ -55,7 +55,7 @@ const MOST = {
   /** Forms of one word. */
   forms: 512,
   /** The longest run written twice that is collapsed (`््`, `षष`, `्य्य`). */
-  doubled: 3,
+  doubled: 2,
 } as const;
 
 /** A PDF word cleaned of what is never a letter: stray characters gone, letters written as one. */

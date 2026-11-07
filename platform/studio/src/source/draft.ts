@@ -73,6 +73,17 @@ const PART = /^\(?[a-zA-Zivxऀ-ॿ]{1,4}\)$/;
 const FIGURE = /^(?:fig(?:s|ure)?\.?|चित्र|आकृति)$/i;
 const FIGURE_JOINED = new RegExp(`^fig(?:ure)?\\.?\\s*${DIGIT}`, "i");
 const HAS_DIGIT = new RegExp(DIGIT);
+/** What the books print before an activity's or an example's number: the block's kind, where it starts. */
+const LABELLED: readonly [RegExp, ItemKind][] = [
+  [/^(?:activity|क्रियाकलाप|गतिविधि)$/i, ItemKind.Activity],
+  [/^(?:example|उदाहरण)$/i, ItemKind.Example],
+];
+/** The kind a row's first words label (`Activity 5.2`, `उदाहरण 3`), if any. */
+const labelled = (row: Pick<Row, "words"> | undefined): ItemKind | undefined => {
+  const [word, number] = [row?.words[0]?.text ?? "", row?.words[1]?.text ?? ""];
+  if (!HAS_DIGIT.test(number) || !new RegExp(`^${DIGIT}`).test(number)) return undefined;
+  return LABELLED.find(([words]) => words.test(word))?.[1];
+};
 const FIGURE_NUMBER = new RegExp(`^${DIGIT}+(?:\\.${DIGIT}+)*`);
 
 /**
@@ -527,6 +538,7 @@ function blocksOf(flow: Flow, side: boolean, styles: PageStyles | undefined): Ro
           (!sameFont(row, prev) && !runsOn(prev, row, styles)) ||
           SECTION.test(first) ||
           NUMBERED.test(first) ||
+          labelled(row) !== undefined ||
           (!PART.test(first) &&
             (row.box[0] > anchor + INDENT ||
               (row.box[0] < anchor - INDENT && setApart(prev, anchor, left)))));
@@ -572,6 +584,9 @@ function kindOf(rows: readonly Row[], body: Font, side: boolean): Pick<Draft, "k
   const firstId = first?.ids[0] ?? "";
   if (SECTION.test(word) && rows.length <= HEADING_ROWS + 1 && isSet(first, body))
     return { kind: ItemKind.Section, label: { ids: [firstId], as: "number" } };
+  const label = labelled(first);
+  if (label !== undefined)
+    return { kind: label, label: { ids: (first?.ids ?? []).slice(0, 2), as: "number" } };
   if (!side && isHeading(rows, body))
     return { kind: ItemKind.Heading, label: { ids: rows.flatMap((r) => r.ids), as: "title" } };
   return { kind: ItemKind.Text };
@@ -718,6 +733,17 @@ export function draftPage(
   const drafts: Draft[] = inOrder.flatMap((flow) =>
     blocksOf(flow, isSide(flow), signals.styles).map((blockRows): Draft => {
       const side = isSide(flow);
+      if (flow.boxed) {
+        const head = blockRows[0];
+        return {
+          rows: blockRows,
+          side,
+          kind: ItemKind.Box,
+          ...(head !== undefined && isSet(head, body)
+            ? { label: { ids: head.ids, as: "title" as const } }
+            : {}),
+        };
+      }
       return { rows: blockRows, side, ...kindOf(blockRows, body, side) };
     }),
   );
