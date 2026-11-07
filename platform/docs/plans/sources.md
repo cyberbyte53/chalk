@@ -337,6 +337,6 @@ ids kept, as the regression test.
    draft, the side-by-side sheet, short edits and `pnpm source feedback`, proved first by a proof of
    concept on a few pages (agent time and tokens, accuracy, pages accepted at a glance), then on
    development and unseen books.
-3. The measure above, on science chapter 2; then chapter 1 converted.
+3. The measure above, on science chapter 2 (once redone, the check's note for a `book.yaml` with no tool versions goes); then chapter 1 converted.
 4. The lessons' terms check (self-review, from `match.yaml`); chapter 1's threads filed.
 5. `pnpm new chapter` runs it; docs and skills say it (full paths).

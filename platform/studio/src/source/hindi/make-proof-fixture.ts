@@ -47,7 +47,8 @@ function main() {
       for (const [span, reading] of Object.entries(block.read ?? {})) {
         const ids = expand(span, words);
         for (const id of ids) read.add(id);
-        readings.push([file.page, span, ids.map((id) => words.get(id) ?? ""), reading]);
+        const text = typeof reading === "string" ? reading : reading.text;
+        readings.push([file.page, span, ids.map((id) => words.get(id) ?? ""), text]);
       }
     for (const [id, pdf] of words)
       if (!read.has(id) && DEVANAGARI.test(pdf)) unread.push([file.page, id, pdf]);

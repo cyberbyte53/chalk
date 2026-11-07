@@ -10,12 +10,11 @@ import {
   checkExtract,
   citedIn,
   isSameBlock,
-  matchIssues,
   pageIssues,
   readingQuestion,
 } from "./check";
 import { type NumberedPage, type Word, numberPage, wordsFile } from "./read";
-import { type Item, ItemKind, type PageBlock, type PageFile } from "./schema";
+import { Cause, type Item, ItemKind, type PageBlock, type PageFile } from "./schema";
 
 /** A page from lines of words: each line 20pt below the last, words 30pt apart. */
 function words(n: number, lines: readonly string[]): NumberedPage {
@@ -41,16 +40,16 @@ function page(
   blocks: PageBlock[],
   more: Partial<PageFile> = {},
 ): BuiltPage {
-  return buildPage({ page: n, blocks, ...more }, words(n, lines));
+  return buildPage({ page: n, proofread: true, blocks, ...more }, words(n, lines));
 }
 
 const ids = (p: BuiltPage) => pageIssues(p).map((i) => i.id);
 
 describe("numbered words", () => {
-  it("are the PDF's lines, each word numbered, a broken one marked", () => {
+  it("are the PDF's lines, each word numbered, none marked as doubtful", () => {
     const p = words(3, ["कार्य का", "मेें x"]);
     expect([...p.words.keys()]).toEqual(["L1.1", "L1.2", "L2.1", "L2.2"]);
-    expect(wordsFile(p, "book.pdf page 3")).toContain("L2 [50,120,105,130] 1:*मेें 2:x");
+    expect(wordsFile(p, "book.pdf page 3")).toContain("L2 [50,120,105,130] 1:मेें 2:x");
   });
   it("expands ranges of lines and words, in the order written", () => {
     const p = words(1, ["a b c", "d e", "f g h"]);
@@ -70,31 +69,37 @@ describe("numbered words", () => {
 
 describe("readings hold to the PDF's letters", () => {
   it.each([
-    ["श न् ू ्य", "शून्य"],
-    ["स त ं लित ु", "संतुलित"],
-    ["च ँकि ू", "चूँकि"],
-    ["विस््थथापन", "विस्थापन"],
-    ["ॠणात््मक", "ऋणात्मक"],
-    ["s –2", "s⁻²"],
-  ])("%s reads as %s", (pdf, reading) => {
+    [["श", "न्", "ू", "्य"], "शून्य"],
+    [["विस््थथापन"], "विस्थापन"],
+    [["ॠणात््मक"], "ऋणात्मक"],
+    [["s", "–2"], "s⁻²"],
+    [["(a", "b)", "/", "(c)"], "(a b) / (c)"],
+  ])("%j reads as %s", (pdf, reading) => {
     expect(readingQuestion(pdf, reading)).toBeUndefined();
   });
-  it("raises a reading with letters the PDF hasn't, or a doubled sign", () => {
-    expect(readingQuestion("इधन", "ईंधन")).toMatch(/hasn't the PDF's letters/);
-    expect(readingQuestion("मेें", "मेें")).toMatch(/doubled sign/);
-    expect(readingQuestion("वस््ततु", "वस्तू")).toMatch(/hasn't the PDF's letters/);
+  it("raises a Hindi reading that isn't one of its span's candidates, and other letters", () => {
+    expect(readingQuestion(["इधन"], "ईंधन")).toMatch(/hasn't the PDF's letters/);
+    expect(readingQuestion(["मेें"], "मैं")).toMatch(/hasn't the PDF's letters/);
+    expect(readingQuestion(["s", "–2"], "s⁻³")).toMatch(/hasn't the PDF's letters/);
   });
   it("puts the reading in the block's text, a span across a line as one word", () => {
     const p = page(
       1,
       ["उसके भार को स त", "ं लित ु कर इधन"],
-      [block(ItemKind.Text, "L1-L2", { read: { "L1.4-L2.3": "संतुलित", "L2.5": "ईंधन" } })],
+      [
+        block(ItemKind.Text, "L1-L2", {
+          read: {
+            "L1.4-L2.3": { text: "संतुलित", cause: Cause.BrokenAcrossLines },
+            "L2.5": { text: "ईंधन", cause: Cause.WrongReading },
+          },
+        }),
+      ],
       { answers: { "read L2.5": "the PDF lacks ई and ं; the image shows ईंधन" } },
     );
     expect(p.blocks[0]?.text).toBe("उसके भार को संतुलित कर ईंधन");
     const issues = pageIssues(p);
     expect(issues.map((i) => i.id)).toEqual(["read L2.5"]);
-    expect(answer(issues, new Map([[1, p.file.answers ?? {}]]), {})).toEqual([]);
+    expect(answer(issues, new Map([[1, p.file.answers ?? {}]]))).toEqual([]);
     expect(issues[0]?.answer).toMatch(/lacks/);
   });
   it("can't read outside its block: a problem, not an issue", () => {
@@ -123,28 +128,28 @@ describe("every word is used once", () => {
     expect(page(1, ["a"], [block(ItemKind.Text, "L2")]).problems[0]).toMatch(/isn't on the page/);
   });
   it("an answer to no issue is a problem", () => {
-    expect(answer([], new Map([[4, { "unused L1.1": "why" }]]), {})).toEqual([
+    expect(answer([], new Map([[4, { "unused L1.1": "why" }]]))).toEqual([
       'pages/page-04.yaml: an answer to "unused L1.1", which isn\'t an issue',
     ]);
   });
 });
 
 describe("numbers, boxes and terms", () => {
-  it("raises a number not in its block's words", () => {
+  it("raises a number outside its block's words; its text is the range's", () => {
     const p = page(
       1,
-      ["Fig. 7.4 A graph"],
-      [block(ItemKind.Figure, "L1", { number: "Fig. 7.5", box: [10, 10, 200, 200] })],
+      ["Fig. 7.4 A graph", "7.5"],
+      [block(ItemKind.Figure, "L1", { number: "L2.1", box: [10, 10, 200, 200] })],
     );
-    expect(ids(p)).toEqual(["number L1.1"]);
+    expect(ids(p)).toEqual(["unused L2.1", "no drawing L1.1", "number L1.1"]);
   });
   it("raises a figure without a box, or with one outside the page", () => {
     const p = page(
       1,
       ["Fig. 1", "Fig. 2"],
       [
-        block(ItemKind.Figure, "L1", { number: "Fig. 1" }),
-        block(ItemKind.Table, "L2", { number: "Fig. 2", box: [10, 10, 600, 200] }),
+        block(ItemKind.Figure, "L1", { number: "L1" }),
+        block(ItemKind.Table, "L2", { number: "L2", box: [10, 10, 600, 200] }),
       ],
     );
     expect(ids(p)).toEqual(["box L1.1", "box L2.1"]);
@@ -166,10 +171,10 @@ describe("numbers, boxes and terms", () => {
       1,
       ["Fig. 7.2", "Fig. 7.1", "Fig. 7.1", "चित्र 7.3"],
       [
-        block(ItemKind.Figure, "L1", { number: "Fig. 7.2", box: [1, 1, 9, 9] }),
-        block(ItemKind.Figure, "L2", { number: "Fig. 7.1", box: [1, 1, 9, 9] }),
-        block(ItemKind.Figure, "L3", { number: "Fig. 7.1", box: [1, 1, 9, 9] }),
-        block(ItemKind.Figure, "L4", { number: "चित्र 7.3", box: [1, 1, 9, 9] }),
+        block(ItemKind.Figure, "L1", { number: "L1", box: [1, 1, 9, 9] }),
+        block(ItemKind.Figure, "L2", { number: "L2", box: [1, 1, 9, 9] }),
+        block(ItemKind.Figure, "L3", { number: "L3", box: [1, 1, 9, 9] }),
+        block(ItemKind.Figure, "L4", { number: "L4", box: [1, 1, 9, 9] }),
       ],
     );
     expect(chapterIssues(buildChapter(Locale.En, [p], 1)).map((i) => i.id)).toEqual([
@@ -182,11 +187,11 @@ describe("numbers, boxes and terms", () => {
       1,
       ["EXERCISE 3.1", "1. a", "2. b", "Exercises", "1. c"],
       [
-        block(ItemKind.Exercise, "L1", { number: "EXERCISE 3.1" }),
-        block(ItemKind.Question, "L2", { number: "1." }),
-        block(ItemKind.Question, "L3", { number: "2." }),
-        block(ItemKind.Exercise, "L4", { title: "Exercises" }),
-        block(ItemKind.Question, "L5", { number: "1." }),
+        block(ItemKind.Exercise, "L1", { number: "L1" }),
+        block(ItemKind.Question, "L2", { number: "L2.1" }),
+        block(ItemKind.Question, "L3", { number: "L3.1" }),
+        block(ItemKind.Exercise, "L4", { title: "L4" }),
+        block(ItemKind.Question, "L5", { number: "L5.1" }),
       ],
     );
     expect(chapterIssues(buildChapter(Locale.En, [p], 1))).toEqual([]);
@@ -196,9 +201,9 @@ describe("numbers, boxes and terms", () => {
 describe("pages join", () => {
   const first = page(
     3,
-    ["Work is done", "when"],
+    ["7.1 Work", "when"],
     [
-      block(ItemKind.Section, "L1", { number: "7.1" }),
+      block(ItemKind.Section, "L1", { number: "L1.1" }),
       block(ItemKind.Text, "L2", { continues: true }),
     ],
   );
@@ -208,12 +213,12 @@ describe("pages join", () => {
       ["a force moves it.", "2. Find"],
       [
         block(ItemKind.Text, "L1", { continued: true }),
-        block(ItemKind.Question, "L2", { number: "2." }),
+        block(ItemKind.Question, "L2", { number: "L2.1" }),
       ],
     );
     const built = buildChapter(Locale.En, [first, second], 10);
     expect(built.items.map((i) => [i.id, i.page, i.text])).toEqual([
-      ["1", 3, "Work is done"],
+      ["1", 3, "7.1 Work"],
       ["1.1", 3, "when a force moves it."],
       ["1.2", 4, "2. Find"],
     ]);
@@ -234,15 +239,18 @@ describe("pages join", () => {
 });
 
 describe("ids are positions", () => {
-  it("numbers sections, their blocks, subsections (by their number) and an exercise's questions", () => {
+  it("numbers sections, their blocks, subsections (by their number); an exercise holds all up to the next section or exercise", () => {
     const kinds = [
       { kind: ItemKind.Text },
       { kind: ItemKind.Section, number: "7.1" },
       { kind: ItemKind.Text },
       { kind: ItemKind.Exercise },
       { kind: ItemKind.Question },
+      { kind: ItemKind.Figure },
       { kind: ItemKind.Question },
-      { kind: ItemKind.Table },
+      { kind: ItemKind.Heading },
+      { kind: ItemKind.Exercise },
+      { kind: ItemKind.Question },
       { kind: ItemKind.Section, number: "7.2" },
       { kind: ItemKind.Section, number: "7.2.1" },
       { kind: ItemKind.Text },
@@ -254,7 +262,10 @@ describe("ids are positions", () => {
       "1.2",
       "1.2.1",
       "1.2.2",
+      "1.2.3",
+      "1.2.4",
       "1.3",
+      "1.3.1",
       "2",
       "2.1",
       "2.1.1",
@@ -277,46 +288,34 @@ describe("ids are positions", () => {
   });
 });
 
-describe("languages match by kind and digits", () => {
-  const english: Item[] = [
-    { id: "1", kind: ItemKind.Section, page: 1, number: "7.1", text: "7.1 Work" },
-    { id: "1.1", kind: ItemKind.Figure, page: 1, number: "Fig. 7.1", text: "Fig. 7.1" },
-    { id: "1.2", kind: ItemKind.Exercise, page: 2, title: "Exercises", text: "Exercises" },
-    { id: "1.2.1", kind: ItemKind.Question, page: 2, number: "1.", text: "1. Why?" },
-  ];
-  const hindi = page(
-    1,
-    ["7.1 कार्य", "चित्र 7.1", "अभ्यास", "1. क्यों?"],
-    [
-      block(ItemKind.Section, "L1", { number: "7.1" }),
-      block(ItemKind.Figure, "L2", { number: "चित्र 7.1", box: [1, 1, 9, 9] }),
-      block(ItemKind.Exercise, "L3", { title: "अभ्यास" }),
-      block(ItemKind.Question, "L4", { number: "1." }),
-    ],
-  );
-  it("matches, not by words", () => {
-    expect(matchIssues(buildChapter(Locale.Hi, [hindi], 1), english)).toEqual([]);
-  });
-  it("raises what one book has and the other doesn't, answered in book.yaml", () => {
-    const fewer = english.filter((i) => i.kind !== ItemKind.Figure);
-    const issues = matchIssues(buildChapter(Locale.Hi, [hindi], 1), [
-      ...fewer,
-      { id: "1.2.2", kind: ItemKind.Question, page: 2, number: "2.", text: "2. How?" },
-    ]);
-    expect(issues.map((i) => i.id)).toEqual(["match question 2 of exercise 1", "match figure 7.1"]);
-    expect(answer(issues, new Map(), { "match figure 7.1": "drawn in the text" })).toEqual([]);
-    expect(issues.filter((i) => i.answer === undefined)).toHaveLength(1);
-  });
-});
-
 describe("an extract not read by the new pipeline", () => {
   it("is a note, its items.yaml as written", () => {
     const dir = mkdtempSync(join(tmpdir(), "chalk-source-"));
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, "items.yaml"), '- { id: "1", kind: section, page: 1, text: Intro }\n');
-    const report = checkExtract({ dir, rel: "authoring/books/b/c/source/en", lang: Locale.En });
+    const report = checkExtract({
+      dir,
+      rel: "authoring/books/b/c/source/en",
+      lang: Locale.En,
+    });
     expect(report.problems).toEqual([]);
     expect(report.notes[0]).toMatch(/not yet read by the new pipeline/);
     expect(report.items).toHaveLength(1);
+  });
+  it("from before tools were recorded is a note too, not checked: it is to be read again", () => {
+    const dir = mkdtempSync(join(tmpdir(), "chalk-source-"));
+    mkdirSync(join(dir, "pages"), { recursive: true });
+    writeFileSync(join(dir, "book.pdf"), "");
+    writeFileSync(
+      join(dir, "book.yaml"),
+      `address: x\nsha256: "${"0".repeat(64)}"\npages: 1\nreader: text\n`,
+    );
+    const report = checkExtract({
+      dir,
+      rel: "authoring/books/b/c/source/en",
+      lang: Locale.En,
+    });
+    expect(report.problems).toEqual([]);
+    expect(report.notes[0]).toMatch(/to be read again/);
   });
 });

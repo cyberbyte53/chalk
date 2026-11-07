@@ -6,6 +6,9 @@ import { parse as parseYaml } from "yaml";
 import type { z } from "zod";
 import { SourceFile } from "./schema";
 
+/** The file names of a PDF's page images and words: `page-03.png`, `page-03.words.txt`. */
+export const PAGE_PREFIX = "page";
+
 /** A source's files (platform/docs/plans/sources.md, "Files"): where they are, and reading them. */
 
 /** One language's extract of a chapter's book: its folder and what it holds. */
@@ -69,7 +72,10 @@ export function extractsIn(root: string): Extract[] {
 }
 
 /** A YAML file read against its schema; the problem with it, if any. */
-export function readYaml<T>(file: string, schema: z.ZodType<T>): { value?: T; problem?: string } {
+export function readYaml<T>(
+  file: string,
+  schema: z.ZodType<T, z.ZodTypeDef, unknown>,
+): { value?: T; problem?: string } {
   if (!existsSync(file)) return {};
   let raw: unknown;
   try {

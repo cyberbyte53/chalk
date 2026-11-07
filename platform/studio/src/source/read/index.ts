@@ -1,5 +1,6 @@
 import { Reader } from "../schema";
 import { readChanakya } from "./chanakya";
+import { type NumberedPage, numberPage, splitColumns } from "./lines";
 import { type PageText, poppler } from "./pages";
 import { readText } from "./text";
 
@@ -22,6 +23,16 @@ export function readerFor(pdf: string): Reader {
 /** A PDF's pages, read by its reader. */
 export const readPages = (pdf: string, reader: Reader): PageText[] => READERS[reader](pdf);
 
+/** A PDF's pages as the agents and the build number them: its lines, those across two columns split. */
+export const numberedPages = (pdf: string, reader: Reader): NumberedPage[] =>
+  readPages(pdf, reader).map((page) => splitColumns(numberPage(page)));
+
 export { type PageText, type Word, poppler } from "./pages";
-export { type NumberedPage, boundsOf, looksBroken, numberPage, wordsFile } from "./lines";
+export {
+  type NumberedPage,
+  boundsOf,
+  numberPage,
+  splitColumns,
+  wordsFile,
+} from "./lines";
 export { PAGE_SCALE, renderPages } from "./images";

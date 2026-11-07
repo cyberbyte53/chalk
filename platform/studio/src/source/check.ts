@@ -2,78 +2,58 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { isDeepStrictEqual } from "node:util";
 import { Locale } from "@chalk/content";
+import { PNG } from "pngjs";
 import {
   type Block,
   type Built,
   type BuiltPage,
   JoinSide,
+  NO_CAUSE,
+  type PageTools,
   asciiDigits,
   buildChapter,
   buildPage,
   digitsOf,
 } from "./build";
-import { type Extract, readYaml, sha256 } from "./files";
-import { numberPage, readPages } from "./read";
+import { showsOn } from "./crop";
+import { type Extract, PAGE_PREFIX, extractPaths, readYaml, sha256 } from "./files";
+import { isCandidate } from "./hindi/candidates";
+import { inHindiList } from "./hindi/list";
+import { PAGE_SCALE, numberedPages, renderPages } from "./read";
 import {
   type Book,
   CROPPED,
   type Item,
   ItemKind,
+  Maker,
   type PageFile,
   SourceFile,
   type Term,
+  type Tool,
   bookSchema,
   itemsSchema,
   pageFileName,
   pageFileSchema,
   termsSchema,
 } from "./schema";
+import { cachedObjects, hasHindi } from "./suggest";
+import { TOOL_VERSIONS } from "./tools";
 
 /**
  * The checks on one language's extract (platform/docs/plans/sources.md, "Checks"). Each raises
  * issues: an id, its page and a question (a mistake, or meant?). The agent fixes its page file or
- * answers the issue there with why (a match issue: in book.yaml's `unmatched`); an answered issue
- * passes and stays listed. Only what can't be meant is a problem outright: a file that doesn't
+ * answers the issue there with why; an answered issue passes and stays listed. Only what can't be meant is a problem outright: a file that doesn't
  * parse, a range not on the page, an answer to no issue.
  */
 
-/** Something to fix or answer: its id (`read L36.6`), its page (none: book.yaml's), its question. */
-export type Issue = { id: string; page?: number; question: string; answer?: string };
+/** The runs of Hindi letters in a reading: what the word list judges. */
+const HINDI_WORD = /[\u0900-\u0963\u0971-\u097F]+/gu;
 
-/** Devanagari's signs and marks: vowel signs, ं, ँ, ः, ्, nukta. */
-const MARK = /[\u0900-\u0903\u093A-\u094F\u0951-\u0957\u0962\u0963]/u;
-/** The letters a span must keep: its base letters in order, and the set of its marks. */
-export function lettersOf(s: string): { base: string; marks: string } {
-  const t = s
-    .normalize("NFKC")
-    .replace(/\s|\u200C|\u200D|\uFFFD/g, "")
-    .replace(/ॠ/g, "ऋ")
-    .replace(/\u093E\u0945/g, "\u0949")
-    .replace(/[\u2212\u2013-]/g, "-")
-    .replace(/(.)\1+/gu, "$1");
-  const chars = [...t];
-  return {
-    base: chars.filter((c) => !MARK.test(c)).join(""),
-    marks: [...new Set(chars.filter((c) => MARK.test(c)))].sort().join(""),
-  };
-}
+/** The issue of a page the tools wrote and nobody has checked. Only `proofread: true` passes it. */
+export const NOT_PROOFREAD = "not proofread";
 
-/** A reading that itself has a doubled sign (or U+FFFD): never what a page prints. */
-const isDoubled = (s: string) => /््|([ा-ौँ-ः])\1|\uFFFD/.test(s);
-
-/**
- * Whether a reading holds to the PDF's letters: the same consonants and full vowels in order and
- * the same marks as a set, after taking out spaces, joiners and U+FFFD, collapsing doubles, and
- * reading ॠ as ऋ; the question if it doesn't.
- */
-export function readingQuestion(pdf: string, reading: string): string | undefined {
-  if (isDoubled(reading)) return `"${reading}" has a doubled sign: a mistake, or meant?`;
-  const a = lettersOf(pdf);
-  const r = lettersOf(reading);
-  return a.base === r.base && a.marks === r.marks
-    ? undefined
-    : `"${reading}" hasn't the PDF's letters ("${pdf}"): a misreading, or is the PDF missing them?`;
-}
+/** Something to fix or answer: its id (`read L36.6`), its page, its question. */
+export type Issue = { id: string; page: number; question: string; answer?: string };
 
 /** Text compared by letters, marks and digits only. */
 const lettersOnly = (s: string) =>
@@ -81,10 +61,30 @@ const lettersOnly = (s: string) =>
     .replace(/[^\p{L}\p{M}\p{N}]/gu, "")
     .toLowerCase();
 
+/**
+ * Whether a reading holds to the PDF's letters; the question if it doesn't. Hindi: it must be one of
+ * its span's candidates, so nothing can be invented. Anything else (maths): the same letters and
+ * digits in order, its punctuation aside.
+ */
+export function readingQuestion(pdf: readonly string[], reading: string): string | undefined {
+  const given = pdf.join(" ");
+  const holds = hasHindi(given)
+    ? isCandidate(pdf, reading)
+    : lettersOnly(given) === lettersOnly(reading);
+  return holds
+    ? undefined
+    : `"${reading}" hasn't the PDF's letters ("${given}"): a misreading, or is the PDF missing them?`;
+}
+
 /** A page's own issues: every word in one place, readings, numbers in their words, boxes, terms. */
 export function pageIssues(p: BuiltPage): Issue[] {
   const issues: Issue[] = [];
   const raise = (id: string, question: string) => issues.push({ id, page: p.page, question });
+  // The tools wrote it and nobody has looked: what's wrong with it can wait until someone does.
+  if (p.file.proofread !== true) {
+    raise(NOT_PROOFREAD, "not proofread yet: check it against the image, then set proofread: true");
+    return issues;
+  }
   for (const [id, w] of p.words.words) {
     const who = p.holders.get(id) ?? [];
     if (who.length === 0)
@@ -92,16 +92,14 @@ export function pageIssues(p: BuiltPage): Issue[] {
     else if (who.length > 1)
       raise(`twice ${id}`, `"${w.text}" is in ${who.join(" and ")}: a mistake, or meant?`);
   }
+  for (const { id, question } of p.raised) raise(id, question);
   for (const b of p.blocks) {
     for (const r of b.readings) {
+      if (r.by !== Maker.Agent) continue;
       const q = readingQuestion(r.pdf, r.text);
       if (q !== undefined) raise(`read ${r.span}`, q);
     }
-    if (
-      b.number !== undefined &&
-      !b.continued &&
-      !lettersOnly(b.text).includes(lettersOnly(b.number))
-    )
+    if (b.numberIds?.every((id) => b.ids.includes(id)) === false)
       raise(
         `number ${b.handle}`,
         `its number "${b.number}" isn't in its words: a mistake, or meant?`,
@@ -129,13 +127,13 @@ export function pageIssues(p: BuiltPage): Issue[] {
   return issues;
 }
 
-/** A numbered block's key: its kind and digits (`figure 7.4`), a question's within its exercise. */
-export type Numbered = { key: string; kind: ItemKind; digits: number[]; head: Block; item: Item };
+/** A numbered item's key: its kind and digits (`figure 7.4`), a question's within its exercise. */
+export type Numbered = { key: string; kind: ItemKind; digits: number[]; index: number; item: Item };
 
-/** The chapter's numbered items, keyed (a question by its number and which exercise it is in, counted in order). */
-export function numbered(built: Built): Numbered[] {
+/** A chapter's numbered items, keyed (a question by its number and which exercise it is in, counted in order). */
+export function numbered(items: readonly Item[]): Numbered[] {
   let exercises = 0;
-  return built.items.flatMap((item, i) => {
+  return items.flatMap((item, index) => {
     if (item.kind === ItemKind.Exercise) exercises += 1;
     const digits = item.number === undefined ? undefined : digitsOf(item.number);
     if (digits === undefined) return [];
@@ -143,8 +141,7 @@ export function numbered(built: Built): Numbered[] {
       item.kind === ItemKind.Question
         ? `question ${digits} of exercise ${exercises}`
         : `${item.kind} ${digits}`;
-    const head = built.parts[i]?.[0] as Block;
-    return [{ key, kind: item.kind, digits: digits.split(".").map(Number), head, item }];
+    return [{ key, kind: item.kind, digits: digits.split(".").map(Number), index, item }];
   });
 }
 
@@ -157,9 +154,30 @@ const isAfter = (a: readonly number[], b: readonly number[]): boolean => {
   return false;
 };
 
-/** The chapter's issues: pages that don't join, numbers of a kind out of order or twice. */
-export function chapterIssues(built: Built): Issue[] {
+/** Each word of the agent's Hindi readings that the list lacks, once for the whole book. */
+function unknownWords(built: Built): Issue[] {
+  const seen = new Set<string>();
   const issues: Issue[] = [];
+  for (const p of built.pages)
+    for (const b of p.blocks)
+      for (const r of b.readings) {
+        if (r.by !== Maker.Agent) continue;
+        for (const word of r.text.match(HINDI_WORD) ?? []) {
+          if (seen.has(word) || inHindiList(word)) continue;
+          seen.add(word);
+          issues.push({
+            id: `word ${word}`,
+            page: p.page,
+            question: `"${word}" (in the reading of ${r.span}) isn't in the Hindi word list: a misreading, or a real word as printed?`,
+          });
+        }
+      }
+  return issues;
+}
+
+/** The chapter's issues: pages that don't join, numbers of a kind out of order or twice, unknown words. */
+export function chapterIssues(built: Built): Issue[] {
+  const issues: Issue[] = unknownWords(built);
   for (const u of built.unpaired)
     issues.push({
       id: `${u.side} ${u.block.handle}`,
@@ -171,8 +189,9 @@ export function chapterIssues(built: Built): Issue[] {
     });
   const seen = new Map<string, Numbered>();
   const last = new Map<string, Numbered>();
-  for (const n of numbered(built)) {
-    const at = { page: n.head.page };
+  const handleOf = (n: Numbered) => (built.parts[n.index]?.[0] as Block).handle;
+  for (const n of numbered(built.items)) {
+    const at = { page: n.item.page };
     const before = seen.get(n.key);
     // Questions are in order within their exercise; other kinds through the chapter.
     const series =
@@ -180,50 +199,19 @@ export function chapterIssues(built: Built): Issue[] {
     const previous = last.get(series);
     if (before !== undefined)
       issues.push({
-        id: `again ${n.head.handle}`,
+        id: `again ${handleOf(n)}`,
         ...at,
-        question: `"${n.item.number}" again (also on page ${before.head.page}): a mistake, or meant?`,
+        question: `"${n.item.number}" again (also on page ${before.item.page}): a mistake, or meant?`,
       });
     else if (previous !== undefined && !isAfter(n.digits, previous.digits))
       issues.push({
-        id: `order ${n.head.handle}`,
+        id: `order ${handleOf(n)}`,
         ...at,
-        question: `"${n.item.number}" comes after "${previous.item.number}" (page ${previous.head.page}): out of order, or meant?`,
+        question: `"${n.item.number}" comes after "${previous.item.number}" (page ${previous.item.page}): out of order, or meant?`,
       });
     seen.set(n.key, n);
     last.set(series, n);
   }
-  return issues;
-}
-
-/**
- * Another language matched to the English book, by kind and digits: what one has and the other
- * doesn't, each an issue answered in book.yaml's `unmatched`.
- */
-export function matchIssues(built: Built, english: readonly Item[]): Issue[] {
-  const ours = new Map(numbered(built).map((n) => [n.key, n]));
-  const theirs = new Map(
-    numbered({
-      items: [...english],
-      parts: english.map(() => []),
-      unpaired: [],
-      terms: [],
-      crops: [],
-    }).map((n) => [n.key, n.item]),
-  );
-  const issues: Issue[] = [];
-  for (const [key, item] of theirs)
-    if (!ours.has(key))
-      issues.push({
-        id: `match ${key}`,
-        question: `the English book has ${key} ("${item.text.slice(0, 40)}") and this one doesn't: missed, or not in this book?`,
-      });
-  for (const [key, n] of ours)
-    if (!theirs.has(key))
-      issues.push({
-        id: `match ${key}`,
-        question: `this book has ${key} (page ${n.head.page}) and the English one doesn't: a mistake, or only in this book?`,
-      });
   return issues;
 }
 
@@ -236,6 +224,63 @@ export type ExtractBuild = {
   problems: string[];
   notes: string[];
 };
+
+/** The tools whose version isn't the one the chapter was built with: `reader 1 → 2`. */
+export function changedTools(book: Book): string[] {
+  return (Object.entries(TOOL_VERSIONS) as [Tool, number][]).flatMap(([tool, now]) => {
+    const was = book.tools?.[tool];
+    return was === now ? [] : [`${tool} ${was ?? "none"} → ${now}`];
+  });
+}
+
+const contentOf = (i: Item) => ({ text: i.text, crop: i.crop, rows: i.rows });
+const short = (i: Item | undefined) =>
+  i === undefined
+    ? "(nothing)"
+    : `"${i.text.slice(0, 50)}"${i.crop === undefined ? "" : ` [${i.crop.join(", ")}]`}`;
+
+/**
+ * Every piece a tool's change altered, whether the agent had overridden it or accepted it: an issue
+ * on its page, so output the agent never saw is never kept silently.
+ */
+export function changedPieces(
+  was: readonly Item[],
+  now: readonly Item[],
+  tools: readonly string[],
+): Issue[] {
+  const before = new Map(was.map((i) => [i.id, i]));
+  const after = new Map(now.map((i) => [i.id, i]));
+  return [...new Set([...before.keys(), ...after.keys()])].flatMap((id) => {
+    const [a, b] = [before.get(id), after.get(id)];
+    if (a !== undefined && b !== undefined && isDeepStrictEqual(contentOf(a), contentOf(b)))
+      return [];
+    return [
+      {
+        id: `${CHANGED}${id}`,
+        page: (b ?? a)?.page ?? 1,
+        question: `with ${tools.join(", ")}, this piece was ${short(a)}, and is now ${short(b)}: right, against the image?`,
+      },
+    ];
+  });
+}
+
+/** How a tool's change is asked about. Its answers stay as the record once the change is taken in. */
+const CHANGED = "changed ";
+
+/** The page's tools, from its PDF: its drawn objects, and its image for what an object shows. */
+function pageToolsOf(pdf: string, cache: string) {
+  const objects = cachedObjects(pdf, cache);
+  const images = renderPages(pdf, cache, PAGE_PREFIX).images;
+  const loaded = new Map<number, PNG>();
+  return (page: number): PageTools => ({
+    objects: objects[page - 1]?.objects ?? [],
+    shows: (others) => (part) => {
+      const png = loaded.get(page) ?? PNG.sync.read(readFileSync(images[page - 1] as string));
+      loaded.set(page, png);
+      return showsOn(png, PAGE_SCALE, others)(part);
+    },
+  });
+}
 
 /** Builds an extract and raises its issues; the files on disk are not compared (checkExtract does). */
 export function buildExtract(x: Extract): ExtractBuild {
@@ -256,7 +301,18 @@ export function buildExtract(x: Extract): ExtractBuild {
   }
   if (sha256(readFileSync(pdf)) !== book.value.sha256)
     problems.push(`${SourceFile.Pdf} isn't the book book.yaml records (its sha256 differs)`);
-  const words = readPages(pdf, book.value.reader).map(numberPage);
+  if (book.value.tools === undefined) {
+    notes.push(
+      "from the first build (book.yaml records no tools' versions): to be read again, its items.yaml is as it was written",
+    );
+    return { issues: [], problems: [], notes };
+  }
+  for (const flag of ["title", "edition"] as const)
+    if (book.value[flag] === undefined)
+      problems.push(
+        `no ${flag} in book.yaml: read it on page 1, and run again with --${flag} <as printed>`,
+      );
+  const words = numberedPages(pdf, book.value.reader);
   if (words.length !== book.value.pages)
     problems.push(`book.yaml says ${book.value.pages} pages; the PDF has ${words.length}`);
 
@@ -283,53 +339,48 @@ export function buildExtract(x: Extract): ExtractBuild {
     .filter((n) => !files.has(n) && !names.includes(pageFileName(n)));
   if (unread.length > 0)
     problems.push(`pages not read yet (no ${SourceFile.Pages}/page-NN.yaml): ${spans(unread)}`);
+  const root = x.dir.slice(0, -x.rel.length - 1);
+  const { cache } = extractPaths(root, x.dir, x.lang);
+  const toolsOf = pageToolsOf(pdf, cache);
   const pages = [...files]
     .sort((a, b) => a[0] - b[0])
-    .map(([n, file]) => buildPage(file, words[n - 1] as (typeof words)[number]));
+    .map(([n, file]) => buildPage(file, words[n - 1] as (typeof words)[number], toolsOf(n)));
   for (const p of pages)
     problems.push(...p.problems.map((x) => `${SourceFile.Pages}/${pageFileName(p.page)}: ${x}`));
   const built = buildChapter(x.lang, pages, words.length);
 
   // The issues, and their answers.
-  const issues = [...pages.flatMap(pageIssues), ...chapterIssues(built)];
-  if (x.lang !== Locale.En) {
-    const english = readYaml(join(x.dir, "..", Locale.En, SourceFile.Items), itemsSchema);
-    if (english.value === undefined) notes.push("not matched: no English items.yaml yet");
-    else issues.push(...matchIssues(built, english.value));
-  }
-  problems.push(
-    ...answer(
-      issues,
-      new Map([...files].map(([n, f]) => [n, f.answers ?? {}])),
-      book.value.unmatched ?? {},
-    ),
-  );
+  // A page not proofread says only that: its other questions wait until someone has looked.
+  const read = new Set(pages.filter((p) => p.file.proofread === true).map((p) => p.page));
+  const issues = [
+    ...pages.flatMap(pageIssues),
+    ...chapterIssues(built).filter((i) => read.has(i.page)),
+  ];
+  const changed = changedTools(book.value);
+  const was = readYaml(join(x.dir, SourceFile.Items), itemsSchema).value;
+  if (changed.length > 0 && was !== undefined)
+    issues.push(...changedPieces(was, built.items, changed));
+  problems.push(...answer(issues, new Map([...files].map(([n, f]) => [n, f.answers ?? {}]))));
   return { book: book.value, built, issues, problems, notes };
 }
 
-/**
- * Each issue given its answer, if any: a page's from its page file, a match's from book.yaml's
- * `unmatched`. An answer to no issue can't be meant: each is a problem.
- */
+/** Each issue given its answer from its page file, if any. An answer to no issue can't be meant: a problem. */
 export function answer(
   issues: Issue[],
   pages: ReadonlyMap<number, Readonly<Record<string, string>>>,
-  unmatched: Readonly<Record<string, string>>,
 ): string[] {
   for (const issue of issues) {
-    const given = (issue.page === undefined ? unmatched : pages.get(issue.page))?.[issue.id];
-    if (given !== undefined) issue.answer = given;
+    const given = pages.get(issue.page)?.[issue.id];
+    const canBeAnswered = issue.id !== NOT_PROOFREAD && !issue.id.startsWith(NO_CAUSE);
+    if (given !== undefined && canBeAnswered) issue.answer = given;
   }
   const problems: string[] = [];
   for (const [n, answers] of pages)
     for (const id of Object.keys(answers))
-      if (!issues.some((i) => i.page === n && i.id === id))
+      if (!id.startsWith(CHANGED) && !issues.some((i) => i.page === n && i.id === id))
         problems.push(
           `${SourceFile.Pages}/${pageFileName(n)}: an answer to "${id}", which isn't an issue`,
         );
-  for (const id of Object.keys(unmatched))
-    if (!issues.some((i) => i.page === undefined && i.id === id))
-      problems.push(`book.yaml's unmatched answers "${id}", which isn't an issue`);
   return problems;
 }
 
@@ -347,7 +398,7 @@ function spans(ns: readonly number[]): string {
 
 /** An issue as a line: where, its id, its question, and its answer if any. */
 export const issueLine = (i: Issue): string =>
-  `${i.page === undefined ? "book.yaml" : pageFileName(i.page)} "${i.id}": ${i.question}${i.answer === undefined ? "" : ` (answered: ${i.answer})`}`;
+  `${pageFileName(i.page)} "${i.id}": ${i.question}${i.answer === undefined ? "" : ` (answered: ${i.answer})`}`;
 
 /** The ids boards.md cites: a list item's bold id, and each line's last bracketed group. */
 export function citedIn(markdown: string): Set<string> {
@@ -409,7 +460,8 @@ export type ExtractReport = {
 /**
  * Every check on one language's extract: it is built again from its page files and the PDF, its
  * issues raised, and its items.yaml and terms.yaml must be what that builds (the page files are the
- * record). An unanswered issue is a problem. An extract without pages/ is not checked: a note.
+ * record). An unanswered issue is a problem. An extract without pages/, or from before tools were
+ * recorded, is not checked: a note.
  */
 export function checkExtract(x: Extract): ExtractReport {
   const items = readYaml(join(x.dir, SourceFile.Items), itemsSchema);
@@ -428,6 +480,8 @@ export function checkExtract(x: Extract): ExtractReport {
   if (b.built === undefined) return report;
   problems.push(...b.issues.filter((i) => i.answer === undefined).map(issueLine));
   const rerun = `run pnpm source ${x.rel.split("/").slice(2, 4).join("/")} ${x.lang}`;
+  if (b.book !== undefined && changedTools(b.book).length > 0)
+    problems.push(`built with other tools (${changedTools(b.book).join(", ")}): ${rerun}`);
   if (!isDeepStrictEqual(items.value, b.built.items)) {
     problems.push(`${SourceFile.Items} isn't what the page files build: ${rerun}`);
     problems.push(...citedChanges(x, items.value ?? [], b.built.items));
