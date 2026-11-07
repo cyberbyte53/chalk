@@ -1,0 +1,105 @@
+concepts:
+  - key: homogeneous-mixture
+    concept: A homogeneous mixture, or solution, has the same composition throughout.
+    terms: [homogeneous mixture, solution]
+    items: ["1.2"]
+  - key: heterogeneous-mixture
+    concept: A heterogeneous mixture is not uniform; its parts can be seen and may settle.
+    terms: [heterogeneous mixture]
+    items: ["1.3"]
+  - key: solute-and-solvent
+    concept: In a solution, the solute is the substance that dissolves and the solvent is the substance it dissolves in.
+    terms: [solute, solvent]
+    items: ["2.1"]
+  - key: concentration
+    concept: The concentration of a solution is the amount of solute in a given amount of solvent or solution, and the right proportion matters.
+    terms: [concentration]
+    items: ["2.2.4", "2.2.5"]
+  - key: mass-by-mass-percentage
+    concept: Mass by mass percentage is the grams of solute in 100 grams of solution.
+    terms: []
+    items: ["2.3.8", "2.3.10"]
+  - key: mass-by-volume-percentage
+    concept: Mass by volume percentage is the grams of solute in 100 millilitres of solution, used when volume is easier to measure.
+    terms: []
+    items: ["2.3.15", "2.3.17"]
+  - key: volume-by-volume-percentage
+    concept: Volume by volume percentage is the millilitres of a liquid solute in 100 millilitres of solution, used for two miscible liquids.
+    terms: []
+    items: ["2.3.22", "2.3.24"]
+  - key: solubility-and-saturation
+    concept: Solubility is the most solute a fixed amount of solvent can dissolve at a temperature; a saturated solution can dissolve no more.
+    terms: [solubility, saturated solution]
+    items: ["2.4.1"]
+  - key: solubility-changes-with-temperature
+    concept: The solubility of a solid in a liquid generally rises with temperature, while that of a gas falls.
+    terms: []
+    items: ["2.4.1"]
+  - key: solubility-curve
+    concept: A solubility curve graphs a substance's solubility against temperature, so substances can be compared.
+    terms: [solubility curve]
+    items: ["2.4.4"]
+  - key: cooling-a-saturated-solution
+    concept: When a hot saturated solution cools, the solute beyond its new solubility separates out as crystals, solids whose particles form a regular pattern.
+    terms: [crystal]
+    items: ["3.1.1"]
+  - key: crystallization
+    concept: Crystallization forms pure crystals from a saturated solution, separating or purifying a solid by its different solubility at different temperatures.
+    terms: [crystallization]
+    items: ["3.1.3", "3.1.9"]
+  - key: distillation
+    concept: Distillation boils off the lower-boiling liquid and condenses its vapour, separating liquids whose boiling points differ by about 25 °C or more, or a liquid from dissolved solids.
+    terms: [distillation]
+    items: ["3.2.1", "3.2.2"]
+  - key: fractional-distillation
+    concept: Fractional distillation separates components whose boiling points differ by less than 25 °C, as in refining crude oil.
+    terms: [fractional distillation]
+    items: ["3.2.9"]
+  - key: paper-chromatography
+    concept: Paper chromatography separates the components of a mixture as a solvent carries them up paper at different speeds.
+    terms: [paper chromatography]
+    items: ["3.3.4"]
+  - key: separating-immiscible-liquids
+    concept: Immiscible liquids do not mix but form layers, and a separating funnel drains them off one at a time.
+    terms: [immiscible]
+    items: ["4.1.1", "4.1.4"]
+  - key: gas-mixtures
+    concept: Gases mix uniformly, so most mixtures of gases are homogeneous, while smoke, fog and dust in air are heterogeneous.
+    terms: []
+    items: ["4.1.8"]
+  - key: sublimation-and-deposition
+    concept: Sublimation turns a solid straight into vapour and deposition turns the vapour back into a solid, which separates a substance like camphor from sand.
+    terms: [sublimation, deposition]
+    items: ["4.2.3"]
+  - key: alloy
+    concept: An alloy is a homogeneous mixture of metals, or a metal and a non-metal, that physical methods cannot separate.
+    terms: [alloy]
+    items: ["4.2.7"]
+  - key: suspension
+    concept: A suspension is a heterogeneous mixture of undissolved particles, big enough to see, spread through a medium.
+    terms: [suspensions]
+    items: ["4.3.1"]
+  - key: centrifugation
+    concept: Centrifugation spins a mixture fast so the heavier particles move outward and settle, as in separating blood.
+    terms: [centrifugation]
+    items: ["4.3.6", "4.3.10"]
+  - key: coagulation
+    concept: Coagulation adds a coagulant such as alum to make fine particles clump together and settle.
+    terms: [coagulation, coagulant]
+    items: ["4.3.15"]
+  - key: colloid
+    concept: A colloid, like blood or milk, is neither a solution nor a suspension; its particles stay evenly spread and do not settle.
+    terms: [colloid]
+    items: ["4.4.2", "4.4.8"]
+  - key: particle-size-sets-the-kind
+    concept: Solutions, colloids and suspensions differ mainly in particle size, less than 1 nm, 1 to 1000 nm and more than 1000 nm.
+    terms: []
+    items: ["4.4.6"]
+  - key: tyndall-effect
+    concept: Colloids and suspensions scatter a beam of light, the Tyndall effect, while a solution does not.
+    terms: [Tyndall effect]
+    items: ["5.2", "5.4"]
+  - key: dispersed-phase-and-medium
+    concept: A colloid is made of a dispersed phase, its spread-out particles, and the dispersion medium they are spread in.
+    terms: [dispersed phase, dispersion medium]
+    items: ["5.5"]
