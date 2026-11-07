@@ -707,7 +707,8 @@ export function buildChapter(lang: Locale, pages: readonly BuiltPage[], pageCoun
     p.terms.flatMap((t) => {
       const item = t.block === undefined ? undefined : idOf.get(t.block);
       if (t.block === undefined || item === undefined) return [];
-      const term = withReadings(p.words, t.ids, t.block.readings);
+      // A term is its words, not the sentence's punctuation around them ("solution." is "solution").
+      const term = withReadings(p.words, t.ids, t.block.readings).replace(/[\s,.;:!?।)\]]+$/u, "");
       const en = lang === Locale.En ? undefined : bracketedAfter(p.words, t.block, t.ids);
       return [{ term, item, ...(en === undefined ? {} : { en }) }];
     }),

@@ -18,14 +18,6 @@ import type { Box } from "./schema";
 /** A cropped figure's pixels per point (216 dpi). */
 export const CROP_SCALE = 3;
 
-/** A light, colourless pixel: the paper, or NCERT's light grey watermark across it. */
-const isPaper = (d: Buffer, i: number): boolean => {
-  const r = d[i] ?? 0;
-  const g = d[i + 1] ?? 0;
-  const b = d[i + 2] ?? 0;
-  return Math.min(r, g, b) >= 205 && Math.max(r, g, b) - Math.min(r, g, b) <= 8;
-};
-
 /** A pixel clearly drawn: dark in some channel, or coloured (not a photo's near-white noise). */
 const isInk = (d: Buffer, i: number): boolean => {
   const r = d[i] ?? 0;
@@ -33,21 +25,6 @@ const isInk = (d: Buffer, i: number): boolean => {
   const b = d[i + 2] ?? 0;
   return Math.min(r, g, b) < 190 || Math.max(r, g, b) - Math.min(r, g, b) > 40;
 };
-
-/**
- * NCERT's watermark ("© NCERT not to be republished") is a light grey across the page: light,
- * colourless pixels are made white. A figure's own light greys go with it (none in the books so far).
- */
-export function maskWatermark(png: PNG): void {
-  const d = png.data;
-  for (let i = 0; i < d.length; i += 4) {
-    if (isPaper(d, i)) {
-      d[i] = 255;
-      d[i + 1] = 255;
-      d[i + 2] = 255;
-    }
-  }
-}
 
 /**
  * Whether a part of a page (points) shows anything on its image (`scale` pixels a point): a few
@@ -86,7 +63,8 @@ export const showsOn =
   };
 
 /**
- * Crops a box from a PDF's page to a PNG: the watermark masked, and the words of other blocks that
+ * Crops a box from a PDF's page to a PNG, as printed (a faint watermark stays: whitening it also
+ * whitened figures' own light greys): the words of other blocks that
  * the box takes in (`blank`) made white, so the picture is the figure alone.
  */
 export function cropFigure(
@@ -106,7 +84,6 @@ export function cropFigure(
       ...["-png", "-singlefile", pdf, base],
     ]);
     const png = PNG.sync.read(readFileSync(`${base}.png`));
-    maskWatermark(png);
     for (const w of blank) {
       const [l, t, r, b] = [
         w.x0 - 1 - box[0],
