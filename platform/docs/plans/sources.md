@@ -1,6 +1,6 @@
 # A chapter's sources: the book, as data
 
-Status: the first build is done (`01f6e99d`) and proved on an unseen chapter in both languages (below).
+Status (transparency section reviewed 7 Nov 2026 and folded in): the first build is done (`01f6e99d`) and proved on an unseen chapter in both languages (below).
 This revision, round 2, folds in what the proof showed: tools that take the repetitive work off the
 reader, an ideas list per book, and matching as its own step. Reviewed with experiments on the proof's
 pages (folded in); to be built. Earlier
@@ -113,16 +113,60 @@ and checks the two agree. Ids are positions (`2.4`: section 2's fourth block) un
 then they never change (a later split keeps the id on its first part and gives the rest `2.4b`): the
 check fails when a cited id would change.
 
-**The machine first, the agent for the rest.** On every page the machine proposes what it can, each
-proposal marked as the machine's: Hindi words repaired, figures (a caption and the drawing beside it),
-table cells from their rules, running heads. The agent sees each page already marked up (what is
-covered drawn on the image; what is missing listed beside it: words in no block, broken words left with
-their candidates, a caption without a figure, a table without rules), accepts the proposals without
-retyping them, fixes what is wrong and adds what is missing; each block, word and box records who made
-it (machine, machine corrected, agent). After the build the review sheet colours each block by who
-made it, and each chapter has a tally ("Hindi words: 2,163 by the machine, 179 by the agent; figures: 22
-by the machine, 3 corrected, 1 added"). What the agent keeps doing across chapters, and a tool could
-easily do, becomes a tool rule, proved like the others: development books, then an unseen book.
+## Who made every piece: the machine first, the agent for the rest, nothing unaccounted for
+
+**From first principles.** What we keep is only as good as what we can trace. For every word, block,
+box and cell, three questions must have one answer, readable by the agent, the person and the machine:
+*where in the PDF did it come from*, *what changed it*, and *who or what made the change*. Then nothing
+is ambiguous, a wrong piece leads straight to the tool or the reading that made it, and a better tool
+shows exactly what it would change.
+
+**Two kinds of making.** *Structure* (which words make a piece, and what kind of piece it is) is always
+the agent's. *Content* (a piece's letters, a figure's edges, a table's cells) is the PDF's as it is, a
+tool's, or the agent's. So a snapped figure is "chosen by the agent, edges by figure-snap"; a block's
+words are the PDF's except the spans a tool or the agent changed.
+
+**Where it is recorded.** The tools are deterministic (the PDF in, and for snapping the agent's rough
+box), so their proposals are not stored: they are made again at every build. Each built item in
+`items.yaml` (committed, and rebuilt and compared by `pnpm check`) lists only what didn't come from the
+PDF as it is: `made: [{ words: L17.16, by: hindi-repair }, { words: L56.5-L57.3, by: agent }, { box,
+by: figure-snap }]`. `book.yaml` records the tools' versions the chapter was built with, the reader's
+among them. The agent's page file, `pages/page-NN.yaml`, holds the structure and, against the tools,
+only where it differs: a reading over a word range (it replaces every proposal the range touches, and
+must cover each one whole; a partial overlap is an issue), an addition, an answer. A proposal the
+agent doesn't override is accepted: the page file is the agent's word that it checked every repair,
+box and grid on that page against the image. A block's `number` and `title` are word ranges of the
+page, not typed, so they too come from the PDF or a reading.
+
+**The words' numbering is a tool's output too** (lines, columns): the reader's version is fixed per
+chapter in `book.yaml`, and the build fails when a cited range's words are no longer what they were.
+
+**Seeing it.**
+- *Before reading*, the agent gets each page marked up: line numbers on the image; the tools' work
+  drawn on it (the PDF's drawn objects outlined, table grids, repaired words, furniture); and beside it
+  what is open (broken spans left with their candidates, a caption with no figure, a table without
+  rules). The proposals for this view live only in `.chalk-source-pages/`. Figures: objects outlined
+  before reading, snapped from the agent's rough box at the build, crop looked at after.
+- *After the build*, the review sheet colours each piece by its maker (the PDF, a tool, the agent; red
+  for open), and each chapter has a tally by maker and tool ("Hindi words: 400 by hindi-repair, 76 by
+  the agent; figures: 22 snapped, 1 drawn by the agent"). (A `trace` command printing an item word by
+  word is easy to add if wanted; not built now.)
+
+**The agent's instructions say:** the page file is your word that you checked every repair, box and
+grid on the page; override by a word range covering whole proposals; a word broken across two PDF lines
+is one range spanning both; a "nearest" suggestion is a hint, and a reading taken from it is yours;
+never repeat a repair you agree with.
+
+**When a tool changes**, the chapter is rebuilt and every piece whose content changes is an issue on
+its page, whether the agent had overridden it or accepted it: output the agent never saw is never kept
+silently. What the agent keeps doing across chapters and a tool could easily do becomes a tool rule
+(as words broken across two PDF lines, which the proof of concept showed), proved like the others.
+
+**Proved on three Hindi pages (7 Nov 2026):** with the machine first, the tools fixed 400 broken words
+and the agent 76; the final letters were all right; the agent caught every machine mistake that
+mattered (2 wrong, 4 incomplete, 1 missed: all words broken across two PDF lines). Time and tokens were
+about the same as reading everything, since looking at each page and writing its structure dominates:
+the gain is in retyping and mistakes, and structure proposals are what would save time, to be tested.
 
 ## How a tool is proved
 
@@ -138,7 +182,8 @@ figure snapping failed there (a photo filling its box was taken for a panel) and
 
 Every check raises issues the session fixes or answers; none silently passes.
 
-- **Every word is used once:** in exactly one block, figure, table or the page's furniture.
+- **Every word is used once, with one maker:** in exactly one block, figure, table or the page's
+  furniture; its content the PDF's, a tool's or the agent's, never two.
 - **Pages join:** a block that continues is followed by a continued block on the next page.
 - **Readings are the page's:** a Hindi reading must be one of its span's candidates (exact: nothing can
   be invented, and the true reading is always reachable unless the PDF dropped letters, as इधन for
@@ -163,14 +208,17 @@ pipeline's, run by plan-chapter; the check that lessons use the book's terms is 
 ```
 authoring/books/<book>/<chapter>/source/
   <lang>/                one folder per language, the same shape
-    book.yaml            title, reader, edition (as printed, or none), address, sha256, pages;
+    book.yaml            title, reader, edition (as printed, or none), address, sha256, pages, the
+                         tools' versions it was built with;
                          answers (the answers pages' PDF, when the book has one)
     book.pdf             the PDF, as downloaded
-    pages/page-NN.yaml   the session's reading of each page
+    pages/page-NN.yaml   the agent's reading of each page (structure; where it differs from the tools;
+                         answers)
     ideas.yaml           the chapter's key ideas: { idea, terms, items } (replaces the first build's
                          terms.yaml)
     words.yaml           Hindi: the words this book prints that the list lacks, each answered once
-    items.yaml           built: every block { id, kind, page, number?, title?, text, rows?, crop?, answer? }
+    items.yaml           built: every block { id, kind, page, number?, title?, text, rows?, crop?, answer?,
+                         made? (what didn't come from the PDF as it is, and by whom) }
     figures/<id>.png     built
   match.yaml             the two languages paired: numbered things, ideas, terms; and what only one has
 platform/studio/src/source/hindi/   the Hindi word list (LibreOffice hi_IN, GPL, with its licence;
