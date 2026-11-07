@@ -1,0 +1,104 @@
+page: 8
+proofread: true
+furniture: L81-L84, L67-L69, L74
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits (H 2, C 6 H 12 O 6), printed H₂, C₆H₁₂O₆; words the PDF splits with a space (करें गे, फ़े रस, सल्फ़े ट)"
+answers:
+  "word विघटित": "a real word (decomposed), as printed on the page; the list lacks it"
+  "word नाक": "a real word (nose), as printed on the page; the list lacks it"
+  "word फ़ेरस": "a real word (ferrous), as printed on the page; the list lacks it"
+  "word ऊष्माक्षेपी": "a real word (exothermic), as printed on the page; the list lacks it"
+terms:
+  - L14.13-14
+  - L18.4-6
+blocks:
+  - kind: text
+    words: L1-L5
+    read:
+      L1.2-L2.1: "H₂"
+      L3.3-L4.1: "O₂"
+  - kind: equation
+    number: L12.2
+    words: L6-L12
+    read:
+      L6.1-L8.1: "2H₂(g)"
+      L8.3-L10.1: "O₂(g)"
+      L10.3-L12.1: "2H₂O(l)"
+  - kind: text
+    words: L13-L15
+    read:
+      L13.16: (तत्व
+      L14.10-11: अभिक्रियाओं
+  - kind: text
+    words: L16-L18
+    read:
+      L16.15: इससे
+      L17.7-8: अभिक्रियाओं
+      L18.4: ऊष्माक्षेपी
+  - kind: text
+    words: L19
+    read:
+      L19.1: ऊष्माक्षेपी
+      L19.2-3: अभिक्रियाओं
+  - kind: text
+    words: L20
+    read:
+      L20.2-3: प्राकृतिक
+  - kind: equation
+    number: L29.5
+    words: L21-L29
+    read:
+      L21.1-L23.1: "CH₄(g)"
+      L23.3-L24.1: "2O₂"
+      L25.3-L26.1: "CO₂"
+      L27.3-L29.1: "2H₂O"
+  - kind: text
+    words: L30
+    read:
+      L30.9: ऊष्माक्षेपी
+  - kind: text
+    words: L31-L36
+    read:
+      L34.9-10: कोशिकाओं
+      L36.4-5: करेंगे।
+  - kind: equation
+    words: L37-L49
+    read:
+      L37.1-L42.1: "C₆H₁₂O₆"
+      L43.3-L44.1: "6O₂"
+      L45.3-L46.1: "6CO₂"
+      L47.3-L49.1: "6H₂O(1)"
+  - kind: text
+    words: L53-L54
+    read:
+      L53.1: "(iii) शाक-सब्जियों"
+      L53.5: विघटित
+      L53.8: बनना
+      L53.10: ऊष्माक्षेपी
+  - kind: figure
+    number: L70.2
+    words: L50-L52, L59-L65, L70-L73
+    box: [65, 508, 305, 726]
+    read:
+      L51.1: नाक
+      L63.1-2: फ़ेरस
+      L63.3-4: सल्फ़ेट
+      L71.1-2: फ़ेरस
+      L71.3-4: सल्फ़ेट
+  - kind: text
+    words: L55-L57
+  - kind: section
+    number: L58.1
+    title: L58.1-3
+    words: L58
+    read:
+      L58.1: "1.2.2 वियोजन"
+  - kind: activity
+    number: L66.2
+    words: L66, L75-L80
+    read:
+      L75.7-8: फ़ेरस
+      L75.9-10: सल्फ़ेट
+      L77.1-2: फ़ेरस
+      L77.3-4: सल्फ़ेट

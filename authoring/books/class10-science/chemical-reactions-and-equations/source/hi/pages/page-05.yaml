@@ -1,0 +1,97 @@
+page: 5
+proofread: true
+furniture: L96-L99
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (H 2 O, Fe 3 O 4), printed H₂O, Fe₃O₄; a word the PDF splits with a space (के वल)"
+answers:
+  "read L22.2": "the PDF sets the colon after a step's number as the visarga ः; the image prints 4:"
+  "read L54.2": "the PDF sets the colon after a step's number as the visarga ः; the image prints 5:"
+  "read L78.2": "the PDF sets the colon after a step's number as the visarga ः; the image prints 6:"
+  "read L24.16": "the PDF sets the colon closing the sentence as the visarga ः; the image prints हैं:"
+terms:
+  - L93.13-15
+blocks:
+  - kind: text
+    continued: true
+    words: L1-L11
+    read:
+      L1.10-L3.1: "H₂O"
+      L3.6-L6.1: "H₂O₄"
+      L7.2-L10.1: "(H₂O)₄"
+  - kind: equation
+    number: L20.2
+    words: L12-L13, L14.1, L20.1, L14.2-L19, L20.2, L21
+    read:
+      L12.4-L14.1: "H₂O"
+      L14.2-L17.1: "Fe₃O₄"
+      L18.2-L19.1: "H₂"
+  - kind: text
+    words: L22-L24
+    read:
+      L22.2: "4:"
+      L23.11: तत्व
+      L24.16: "हैं:"
+  - kind: text
+    words: L25-L26
+  - kind: table
+    words: L27-L39
+    box: [98, 245, 453, 313]
+    cells: { rows: [["L27.1-3", "L28.1-2", "L28.3-4"], ["L29.1-3", "L32-L34", "L36-L38"], ["L30-L31", "L35.1", "L39.1"]] }
+    read:
+      L28.1: अभिकारकों
+      L32.2-L34.1: "(4H₂O"
+      L36.2-L37.1: "(H₂"
+  - kind: text
+    words: L40
+  - kind: equation
+    number: L51.1
+    words: L41-L43, L50, L44-L49, L51-L53
+    read:
+      L41.4-L43.1: "H₂O"
+      L44.1-L47.1: "Fe₃O₄"
+      L48.3-L49.1: "H₂"
+      L52.1-4: "(आंशिक"
+  - kind: text
+    words: L54-L55
+    read:
+      L54.2: "5:"
+      L54.11: तत्व
+      L55.4: पाएँगे
+      L55.6-7: केवल
+      L55.11: तत्व
+  - kind: table
+    words: L56-L67
+    box: [98, 427, 453, 498]
+    cells: { rows: [["L56.1-4", "L59.1-2", "L59.3-4"], ["L57.1-3", "L60.1-3", "L62-L66"], ["L58.1-4", "L61.1", "L67.1"]] }
+    read:
+      L59.1: अभिकारकों
+      L62.2-L65.1: "(Fe₃O₄"
+  - kind: text
+    words: L68
+  - kind: equation
+    number: L77.1
+    words: L69-L77
+    read:
+      L69.5-L71.1: "H₂O"
+      L71.3-L74.1: "Fe₃O₄"
+      L75.3-L76.1: "H₂"
+  - kind: text
+    words: L78-L80
+    read:
+      L78.2: "6:"
+      L78.18: तत्वों
+      L79.2-5: परमाणुओं
+      L79.7-L80.3: संख्याओं
+  - kind: equation
+    number: L89.1
+    words: L81-L91
+    read:
+      L81.5-L83.1: "H₂O"
+      L83.3-L86.1: "Fe₃O₄"
+      L87.3-L88.1: "H₂"
+  - kind: text
+    words: L92-L95
+    read:
+      L92.7: तत्वों
+      L92.9-12: परमाणुओं

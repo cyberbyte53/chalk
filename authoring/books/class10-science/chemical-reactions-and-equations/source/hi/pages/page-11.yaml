@@ -1,0 +1,57 @@
+page: 11
+proofread: true
+furniture: L46-L49, L14, L17-L22
+cause: other
+notes:
+  other: "words the PDF splits with a space (कै सा, सफ़े दी, सल्फ़े ट)"
+answers:
+  "word ऊष्माशोषी": "a real word (endothermic), as printed on the page; the list lacks it"
+terms:
+  - L3.1-2
+blocks:
+  - kind: text
+    words: L1-L3
+    read:
+      L1.7: अभिकारकों
+      L2.8-9: अभिक्रियाओं
+      L3.1: ऊष्माशोषी
+  - kind: box
+    title: L4
+    words: L4-L7
+    read:
+      L6.12-13: कैसा
+      L6.20: ऊष्माक्षेपी
+      L7.2: ऊष्माशोषी
+  - kind: exercise
+    title: L8
+    words: L8
+  - kind: question
+    number: L9.1
+    words: L9-L11
+    read:
+      L9.8-9: सफ़ेदी
+  - kind: question
+    number: L12.1
+    words: L12-L13
+  - kind: section
+    number: L15.1
+    title: L15.1-2
+    words: L15
+  - kind: activity
+    number: L16.2
+    words: L16, L23-L36
+    read:
+      L23.8-9: रेगमाल
+      L25.9: परखनलियाँ
+      L26.7-8: सल्फ़ेट
+      L28.3-4: सल्फ़ेट
+      L31.8-9: सल्फ़ेट
+      L33.7-8: सल्फ़ेट
+      L35.2-3: सल्फ़ेट
+  - kind: figure
+    number: L44.2-3
+    words: L37-L45
+    box: [356, 450, 570, 724]
+    read:
+      L40.2-3: सल्फ़ेट
+      L45.2-3: सल्फ़ेट

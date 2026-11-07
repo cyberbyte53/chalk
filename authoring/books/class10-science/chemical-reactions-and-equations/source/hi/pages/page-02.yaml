@@ -1,0 +1,50 @@
+page: 2
+proofread: true
+furniture: L58-L61, L5-L7, L26-L29, L39.1-2, L40.1-2, L41.1-2, L42.1-2
+notes:
+  other: "a subscript the PDF sets as a plain digit (H 2), printed H₂; a word the PDF splits with a space (करें गे)"
+answers:
+  "word पाएँगे": "a real word (will find), as printed on the page; the list lacks it"
+  "word सरलतम": "a real word (simplest), as printed on the page; the list lacks it"
+terms:
+  - L56.4
+  - L57.5
+blocks:
+  - kind: text
+    words: L1-L3
+  - kind: activity
+    number: L4.2
+    words: L4, L9-L13
+  - kind: activity
+    number: L8.2
+    words: L8, L30-L35
+  - kind: figure
+    number: L22.2
+    words: L14-L25
+    box: [65, 305, 225, 527]
+    read:
+      L17.1-2: { text: "H₂", cause: other }
+  - kind: text
+    words: L36-L38, L39.3-5, L40.3-5, L41.3-7, L42.3-5
+  - kind: text
+    words: L43-L46
+    read:
+      L43.11: पाएँगे
+      L44.2: विविध
+      L45.5-6: अभिक्रियाओं
+      L46.3-4: { text: "करेंगे।", cause: other }
+  - kind: section
+    number: L47.1
+    title: L47.2-3
+    words: L47
+  - kind: text
+    words: L48-L51
+    read:
+      L51.7: सरलतम
+  - kind: text
+    words: L52
+  - kind: equation
+    number: L53.7
+    words: L53-L54
+  - kind: text
+    words: L55-L57

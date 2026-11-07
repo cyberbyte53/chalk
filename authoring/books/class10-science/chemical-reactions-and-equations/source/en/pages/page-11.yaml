@@ -1,0 +1,62 @@
+page: 11
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF"
+answers:
+  "again L1.1": "the book prints Figure 1.8 in two parts: (a) on page 10 and (b) here, each with its own caption"
+furniture: L36-L39, L72-L74
+blocks:
+  - kind: figure
+    words: L1
+    number: L1.1-2
+    box: [72, 92, 550, 226]
+  - kind: text
+    words: L2-L3
+  - kind: text
+    words: L4
+  - kind: equation
+    words: L5-L7, L9-L11, L8, L12
+    number: L11.4
+    read:
+      "L5.3-L7.1": { text: "CuSO₄(aq)" }
+      "L9.1-L11.1": { text: "FeSO₄(aq)" }
+  - kind: text
+    words: L13-L15
+  - kind: text
+    words: L16
+  - kind: equation
+    words: L17-L22, L27
+    number: L21.4
+    read:
+      "L17.3-L19.1": { text: "CuSO₄(aq)" }
+      "L19.3-L21.1": { text: "ZnSO₄(aq)" }
+  - kind: equation
+    words: L23-L25, L28-L30, L26, L31
+    number: L30.4
+    read:
+      "L23.3-L25.1": { text: "CuCl₂(aq)" }
+      "L28.1-L30.1": { text: "PbCl₂(aq)" }
+  - kind: text
+    words: L32-L33
+  - kind: section
+    words: L34
+    number: L34.1
+    title: L34.2-4
+  - kind: activity
+    words: L35, L40-L45
+    number: L35.1-2
+  - kind: text
+    words: L46-L49
+  - kind: equation
+    words: L50-L58, L65, L59-L64, L70-L71
+    number: L65.1
+    read:
+      "L50.1-L54.1": { text: "Na₂SO₄(aq)" }
+      "L54.3-L56.1": { text: "BaCl₂(aq)" }
+      "L56.3-L58.1": { text: "BaSO₄(s)" }
+  - kind: figure
+    words: L66-L69
+    number: L66.1-2
+    box: [352, 475, 512, 662]
+    crop: { box: [352, 475, 546, 659], cause: wrong-box }

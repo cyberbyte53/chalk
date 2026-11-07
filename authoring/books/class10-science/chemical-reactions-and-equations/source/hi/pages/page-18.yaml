@@ -1,0 +1,44 @@
+page: 18
+proofread: true
+furniture: L21-L24, L14.1-2, L15.1-2, L16.1-2, L17.1-2, L19.1-2
+answers:
+  "word स्पैचुला": "a real word (spatula), as printed on the page; the list lacks it"
+  "word मापकर": "a real word (having measured), as printed on the page; the list lacks it"
+blocks:
+  - kind: question
+    number: L1.1
+    words: L1, L3
+  - kind: question
+    number: L2.1
+    words: L2, L4-L5
+  - kind: question
+    number: L6.1
+    words: L6-L7
+    read:
+      L6.7: तत्व
+      L7.1: तत्व
+  - kind: question
+    number: L8.1
+    words: L8
+    read:
+      L8.4-5: वस्तुओं
+  - kind: question
+    number: L9.1
+    words: L9
+  - kind: question
+    number: L10.1
+    words: L10-L11
+    read:
+      L11.3-4: "(b) विकृतगंधिता"
+  - kind: box
+    title: L12
+    words: L12-L13, L14.3-14, L15.3-20, L16.3-13, L17.3-20, L18, L19.3-12, L20
+    read:
+      L15.16-17: सल्फ़ेट
+      L16.10: मापकर
+      L17.4-5: सल्फ़ेट,
+      L17.10-11: सल्फ़ेट
+      L17.18: स्पैचुला
+      L19.9: मापकर
+      L20.8: ऊष्माक्षेपी
+      L20.13: ऊष्माशोषी

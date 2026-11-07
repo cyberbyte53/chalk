@@ -1,0 +1,79 @@
+page: 12
+proofread: true
+furniture: L66-L69, L55-L57, L60
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits (CuSO 4, CuCl 2), printed CuSO₄, CuCl₂; words the PDF splits with a space (सल्फ़े ट)"
+answers:
+  "again L1.1": "the book prints figure 1.8 in two parts, (a) on page 11 and (b) on page 12, each with its own caption"
+  "word द्विविस्थापन": "a real word (double displacement), as printed on the page; the list lacks it"
+terms:
+  - L28.9-10
+blocks:
+  - kind: figure
+    number: L15.2-3
+    words: L1-L15
+    box: [70, 88, 534, 243]
+    read:
+      L1.2-3: सल्फेट
+      L3.2-3: सल्फ़ेट
+      L15.15-16: सल्फ़ेट
+  - kind: text
+    words: L16-L17
+    read:
+      L16.12-13: सल्फ़ेट
+  - kind: text
+    words: L18
+  - kind: equation
+    number: L25.4
+    words: L19-L21, L23-L25, L22, L26
+    read:
+      L19.3-L20.1: "CuSO₄"
+      L23.1-L24.1: "FeSO₄"
+      L22.2-3: सल्फ़ेट)
+      L26.2-3: सल्फ़ेट)
+  - kind: text
+    words: L27-L28
+    read:
+      L27.8: तत्व
+      L27.12-13: सल्फ़ेट
+      L27.17: विस्थापित
+  - kind: text
+    words: L29
+  - kind: equation
+    number: L39.4
+    words: L30-L32, L37-L39, L33, L40
+    read:
+      L30.3-L31.1: "CuSO₄"
+      L37.1-L38.1: "ZnSO₄"
+      L33.2-3: सल्फ़ेट)
+      L40.2-3: सल्फ़ेट)
+  - kind: equation
+    number: L45.4
+    words: L34-L36, L41, L43-L45, L42, L46
+    read:
+      L34.3-L35.1: "CuCl₂"
+      L43.1-L44.1: "PbCl₂"
+  - kind: text
+    words: L47-L48
+    read:
+      L47.9: तत्व
+      L48.6: विस्थापित
+  - kind: figure
+    number: L58.2
+    words: L49-L52, L58-L59
+    box: [65, 532, 250, 724]
+    read:
+      L49.2-3: सल्फ़ेट
+      L59.2-3: सल्फ़ेट
+  - kind: section
+    number: L53.1
+    title: L53.1-2
+    words: L53
+    read:
+      L53.1: "1.2.4 द्विविस्थापन"
+  - kind: activity
+    number: L54.2
+    words: L54, L61-L65
+    read:
+      L61.7-8: सल्फ़ेट

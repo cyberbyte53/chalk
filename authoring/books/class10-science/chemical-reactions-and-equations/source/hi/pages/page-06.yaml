@@ -1,0 +1,85 @@
+page: 6
+proofread: true
+furniture: L68-L72, L38
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (H 2 O, C 6 H 12 O 6), printed H₂O, C₆H₁₂O₆; words the PDF splits with a space (सल्फ़े ट); a word the PDF lays as an extra line over the question (L61-L62), read whole; the ू of सूर्य set apart above the arrow (L38), read in its word; the arrow's blank glyphs around 340atm"
+answers:
+  "read L21.5": "the PDF puts a � for ह्न; the image shows चिह्न"
+  "read L1.2": "the PDF sets the colon after a step's number as the visarga ः; the image prints 7:"
+  "read L32.1-2": "the PDF sets the ू of सूर्य apart (L38, above the arrow, in furniture); the image prints सूर्य–प्रकाश"
+  "read L60.9-L62.2": "the PDF lays संकेतों के साथ संतुलित as a separate line (L61-L62) over L60 and leaves letters of it in L60; the reading puts those same letters in the image's order"
+  "word ऐलुमीनियम": "a real word (aluminium), as printed on the page; the list lacks it"
+blocks:
+  - kind: text
+    words: L1-L4
+    read:
+      L1.2: "7:"
+      L1.4-5: अवस्थाओं
+      L2.11: अभिकारकों
+      L3.14-15: अवस्थाओं
+  - kind: text
+    words: L5-L8
+    read:
+      L5.9: अभिकारकों
+      L6.15: अभिकारकों
+      L7.7-8: अवस्थाओं
+  - kind: text
+    words: L9
+  - kind: equation
+    number: L18.2
+    words: L10-L18
+    read:
+      L10.3-L12.1: "4H₂O(g)"
+      L12.3-L16.1: "Fe₃O₄(s)"
+      L16.3-L18.1: "4H₂(g)"
+  - kind: text
+    words: L19-L22
+    read:
+      L19.6-L21.1: "H₂O"
+      L21.5: चिह्न
+  - kind: text
+    words: L23-L24
+  - kind: text
+    words: L25-L26
+  - kind: equation
+    words: L27-L31
+    read:
+      L27.3-L29.1: "2H₂(g)"
+      L29.2-4: "340atm"
+      L29.6-L31.1: "CH₃OH(1)"
+  - kind: equation
+    number: L49.2
+    words: L33-L37, L32, L50, L39-L49, L51
+    read:
+      L32.1-2: "सूर्य–प्रकाश"
+      L33.1-L34.1: "6CO₂"
+      L35.3-L37.1: "12H₂O(1)"
+      L39.1-L44.1: "C₆H₁₂O₆"
+      L45.1-L46.1: "(aq)+6O₂"
+      L47.3-L49.1: "6H₂O(1)"
+  - kind: text
+    words: L52-L53
+  - kind: exercise
+    title: L54
+    words: L54
+  - kind: question
+    number: L55.1
+    words: L55
+  - kind: question
+    number: L56.1
+    words: L56-L59
+    read:
+      L56.3-4: अभिक्रियाओं
+      L58.5-8: ऐलुमीनियम
+      L58.9-10: सल्फ़ेट
+      L58.13-14: सल्फ़ेट
+      L58.16-19: ऐलुमीनियम
+  - kind: question
+    number: L60.1
+    words: L60-L67
+    read:
+      L60.2-3: अभिक्रियाओं
+      L60.9-L62.2: "संकेतों के साथ संतुलित रासायनिक समीकरण"
+      L64.7-8: सल्फ़ेट
+      L65.6-7: सल्फ़ेट

@@ -1,0 +1,76 @@
+page: 13
+proofread: true
+furniture: L66-L69, L35-L36
+cause: other
+notes:
+  other: "subscripts and charges the PDF sets as plain digits (Na 2 SO 4, Ba 2+, SO 4 2–), printed Na₂SO₄, Ba²⁺, SO₄²⁻; words the PDF splits with a space (सल्फ़े ट)"
+answers:
+  "read L14.1-2": "the PDF's letters with the space between the halves of सल्फ़ेट taken out; its trailing tabs are only layout"
+  "read L21.8-L22.2": "the sulphate ion: the PDF sets its subscript 4 and charge 2– as plain digits; the image prints SO₄²⁻"
+  "read L64.1-2": "the PDF writes ॉ as ॅ and ा apart (कॅ ापर); the image shows कॉपर"
+  "word अवक्षेपित": "a real word (precipitated), as printed on the page; the list lacks it"
+  "word कलोराइड": "printed so on the page (a misprint of क्लोराइड), kept as printed"
+terms:
+  - L2.4
+  - L3.1-2
+  - L26.12-L27.1
+  - L58.1
+  - L59.4
+blocks:
+  - kind: text
+    words: L1-L3
+  - kind: equation
+    number: L12.4
+    words: L4-L20
+    read:
+      L4.1-L7.1: "Na₂SO₄"
+      L8.3-L9.1: "BaCl₂"
+      L10.3-L11.1: "BaSO₄"
+      L14.1-2: सल्फ़ेट)
+      L18.1-2: सल्फ़ेट)
+  - kind: text
+    words: L21-L27
+    read:
+      L21.5-6: "Ba²⁺"
+      L21.8-L22.2: "SO₄²⁻ की"
+      L22.5-L23.1: "BaSO₄"
+      L25.6: कलोराइड
+      L26.3: अभिकारकों
+      L26.12: द्विविस्थापन
+  - kind: box
+    words: L28-L32
+    read:
+      L30.9: अवक्षेपित
+      L32.5: द्विविस्थापन
+  - kind: section
+    number: L33.1
+    title: L33.2-4
+    words: L33
+  - kind: activity
+    number: L34.2
+    words: L34, L37-L39
+  - kind: figure
+    number: L63.2
+    words: L40-L42, L60-L65
+    box: [362, 416, 570, 584]
+    read:
+      L64.1-2: कॉपर
+  - kind: text
+    words: L43-L44
+  - kind: text
+    words: L45
+  - kind: equation
+    number: L48.3
+    words: L46-L48
+    read:
+      L46.3-L47.1: "O₂"
+  - kind: text
+    words: L49-L51
+  - kind: equation
+    number: L56.2
+    words: L52-L56
+    read:
+      L52.3-L53.1: "H₂"
+      L54.4-L56.1: "H₂O"
+  - kind: text
+    words: L57-L59

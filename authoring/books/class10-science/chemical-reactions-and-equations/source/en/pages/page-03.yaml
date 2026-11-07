@@ -1,0 +1,58 @@
+page: 3
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF"
+furniture: L69-L71
+blocks:
+  - kind: section
+    words: L1
+    number: L1.1
+    title: L1.2-5
+  - kind: text
+    words: L2-L6
+  - kind: equation
+    words: L7-L9
+    number: L9.3
+    read:
+      "L7.3-L8.1": { text: "O₂" }
+  - kind: text
+    words: L10-L16
+  - kind: section
+    words: L17
+    number: L17.1
+    title: L17.2-4
+  - kind: text
+    words: L18-L21
+  - kind: text
+    words: L22-L25
+  - kind: text
+    words: L26
+  - kind: equation
+    words: L27
+  - kind: text
+    words: L28-L29
+  - kind: equation
+    words: L30-L38
+    number: L38.1
+    read:
+      "L30.3-L33.1": { text: "H₂SO₄" }
+      "L34.2-L35.1": { text: "ZnSO₄" }
+      "L36.2-L37.1": { text: "H₂" }
+  - kind: text
+    words: L39-L40
+  - kind: table
+    words: L41-L56
+    box: [78, 553, 368, 640]
+    cells: { rows: [["L41.1", "L41.2-L42.2", "L43-L44"], ["L45", "L49", "L53"], ["L46", "L50", "L54"], ["L47", "L51", "L55"], ["L48", "L52", "L56"]] }
+  - kind: text
+    words: L57-L58
+  - kind: text
+    words: L59
+  - kind: equation
+    words: L60-L68
+    number: L68.1
+    read:
+      "L60.3-L62.1": { text: "H₂O" }
+      "L62.3-L65.1": { text: "Fe₃O₄" }
+      "L66.2-L67.1": { text: "H₂" }

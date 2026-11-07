@@ -1,0 +1,83 @@
+page: 3
+proofread: true
+furniture: L47-L50
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (O 2, H 2 SO 4), printed O₂, H₂SO₄; a space the PDF puts before a danda (करें ।); a word the PDF splits with a space (सल्फ़े ट)"
+answers:
+  "read L2.11": "the PDF puts a � for ह्न; the image shows चिह्न"
+  "read L3.13": "the PDF puts a � for ह्न; the image shows चिह्न"
+  "read L12.5": "the PDF sets the colon closing the sentence as the visarga ः; the image prints है:"
+  "read L35.11": "the PDF sets the colon closing the sentence as the visarga ः; the image prints है:"
+  "word अभिकारकों": "a real word (reactants), as printed on the page; the list lacks it"
+  "word सिरा": "a real word (tip, end), as printed on the page; the list lacks it"
+terms:
+  - L19.8-10
+blocks:
+  - kind: text
+    words: L1-L5
+    read:
+      L1.3: अभिकारकों
+      L2.5: अभिकारकों
+      L2.11: चिह्न
+      L3.13: चिह्न
+      L4.6: सिरा
+  - kind: section
+    number: L6.1
+    title: L6.2-4
+    words: L6
+  - kind: text
+    words: L7-L12
+    read:
+      L7.7: इससे
+      L12.5: "है:"
+  - kind: equation
+    number: L15.3
+    words: L13-L15
+    read:
+      L13.3-L14.1: "O₂"
+  - kind: text
+    words: L16-L20
+    read:
+      L16.10: तत्वों
+      L16.12-13: परमाणुओं
+      L17.2-3: "करें।"
+      L17.7: तत्वों
+      L17.9-10: परमाणुओं
+  - kind: section
+    number: L21.1
+    title: L21.2-9
+    words: L21
+  - kind: text
+    words: L22-L26
+    read:
+      L25.7: तत्वों
+      L25.12: तत्वों
+  - kind: text
+    words: L27-L32
+    read:
+      L27.12: तत्व
+      L27.14-15: परमाणुओं
+  - kind: text
+    words: L33
+  - kind: equation
+    words: L34
+    read:
+      L34.7-8: सल्फ़ेट
+  - kind: text
+    words: L35
+    read:
+      L35.11: "है:"
+  - kind: equation
+    number: L44.1
+    words: L36-L44
+    read:
+      L36.3-L39.1: "H₂SO₄"
+      L40.2-L41.1: "ZnSO₄"
+      L42.2-L43.1: "H₂"
+  - kind: text
+    words: L45-L46
+    read:
+      L45.12: तत्वों
+      L45.14-15: परमाणुओं
+      L46.6-7: "करें।"

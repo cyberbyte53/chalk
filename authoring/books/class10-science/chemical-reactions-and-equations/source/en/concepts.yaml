@@ -1,0 +1,105 @@
+concepts:
+  - key: chemical-reaction-changes-identity
+    concept: Whenever a chemical change occurs, a chemical reaction has taken place and the nature and identity of the starting substances change.
+    terms: [chemical reaction]
+    items: ["0.4"]
+  - key: signs-of-a-reaction
+    concept: A change in state, a change in colour, the evolution of a gas or a change in temperature shows that a chemical reaction has taken place.
+    terms: []
+    items: ["0.12"]
+  - key: word-equation
+    concept: A word-equation writes the reactants on the left and the products on the right, joined by an arrow that points towards the products.
+    terms: [word-equation, reactants, product]
+    items: ["1.1", "1.4", "1.5"]
+  - key: chemical-equation
+    concept: A chemical equation represents a chemical reaction with chemical formulae instead of words.
+    terms: [chemical equation]
+    items: ["1.6.1"]
+  - key: skeletal-equation
+    concept: An equation with different numbers of atoms of an element on its two sides is unbalanced; such an equation is a skeletal chemical equation.
+    terms: [skeletal chemical equation]
+    items: ["1.6.3"]
+  - key: balance-for-conservation-of-mass
+    concept: Mass is neither created nor destroyed in a reaction, so the number of atoms of each element must be the same on both sides of a chemical equation.
+    terms: [law of conservation of mass]
+    items: ["1.7.1", "1.7.2"]
+  - key: hit-and-trial-balancing
+    concept: An equation is balanced by trying the smallest whole-number coefficients in front of the formulae, never changing the formulae, starting from the compound with the most atoms, then counting the atoms on both sides.
+    terms: [hit-and-trial method]
+    items: ["1.7.12", "1.7.16", "1.7.19", "1.7.30", "1.7.32"]
+  - key: state-symbols
+    concept: The state symbols (g), (l), (aq) and (s) show whether each reactant and product is a gas, a liquid, in solution in water or a solid.
+    terms: [aqueous]
+    items: ["1.7.34"]
+  - key: reaction-conditions
+    concept: Reaction conditions such as temperature, pressure or a catalyst are written above or below the arrow.
+    terms: []
+    items: ["1.7.39"]
+  - key: bonds-break-and-form
+    concept: In a reaction no atom changes into another element, appears or disappears; bonds between atoms break and form to make new substances.
+    terms: []
+    items: ["2.1"]
+  - key: combination-reaction
+    concept: In a combination reaction two or more substances combine to form a single product.
+    terms: [combination reaction]
+    items: ["2.2.5", "2.2.13"]
+  - key: whitewash-turns-to-calcium-carbonate
+    concept: Slaked lime used for whitewashing reacts slowly with carbon dioxide in the air to form a shiny layer of calcium carbonate on the walls.
+    terms: []
+    items: ["2.2.6"]
+  - key: exothermic-reaction
+    concept: Reactions in which heat is released along with the products are exothermic, like burning natural gas or the decomposition of vegetable matter into compost.
+    terms: [exothermic chemical reactions]
+    items: ["2.2.14", "2.2.16", "2.2.21"]
+  - key: respiration-is-exothermic
+    concept: Respiration is exothermic; glucose from our food combines with oxygen in the cells of our body and provides energy.
+    terms: [respiration]
+    items: ["2.2.19"]
+  - key: decomposition-reaction
+    concept: In a decomposition reaction a single reactant breaks down to give simpler products.
+    terms: [decomposition reaction]
+    items: ["2.3.5"]
+  - key: thermal-decomposition
+    concept: A decomposition carried out by heating is thermal decomposition, as when limestone gives quick lime and carbon dioxide or lead nitrate gives brown nitrogen dioxide.
+    terms: [thermal decomposition]
+    items: ["2.3.6", "2.3.11"]
+  - key: decomposition-by-electricity
+    concept: Passing an electric current through water decomposes it into hydrogen and oxygen.
+    terms: []
+    items: ["2.3.14"]
+  - key: decomposition-by-light
+    concept: Sunlight decomposes white silver chloride into grey silver and chlorine, and silver bromide in the same way, which is used in black and white photography.
+    terms: []
+    items: ["2.3.18", "2.3.20", "2.3.22"]
+  - key: endothermic-reaction
+    concept: Decomposition needs energy as heat, light or electricity; reactions in which energy is absorbed are endothermic.
+    terms: [endothermic reactions]
+    items: ["2.3.23"]
+  - key: displacement-reaction
+    concept: In a displacement reaction a more reactive element displaces a less reactive one from its compound, as iron, zinc and lead displace copper.
+    terms: [displacement reaction]
+    items: ["2.4.7", "2.4.11"]
+  - key: precipitation-reaction
+    concept: An insoluble substance formed in a reaction is a precipitate, and a reaction that produces one is a precipitation reaction.
+    terms: [precipitate, precipitation reaction]
+    items: ["2.5.2"]
+  - key: double-displacement-reaction
+    concept: In a double displacement reaction the reactants exchange ions.
+    terms: [double displacement reactions]
+    items: ["2.5.5"]
+  - key: oxidation-and-reduction
+    concept: A substance that gains oxygen or loses hydrogen is oxidised; one that loses oxygen or gains hydrogen is reduced.
+    terms: [oxidised, reduced]
+    items: ["2.6.7", "2.6.14"]
+  - key: redox-reaction
+    concept: In a redox reaction one reactant is oxidised while the other is reduced.
+    terms: [oxidation-reduction reactions, redox reactions]
+    items: ["2.6.8"]
+  - key: corrosion
+    concept: A metal attacked by moisture, acids and the like around it corrodes, as iron rusts; corrosion damages metal objects and costs a great deal.
+    terms: [corrosion, rusting]
+    items: ["3.1.1", "3.1.2"]
+  - key: rancidity
+    concept: Oxidised fats and oils turn rancid; antioxidants, air-tight containers and flushing with nitrogen slow the oxidation.
+    terms: [rancid, antioxidants]
+    items: ["3.2.2"]

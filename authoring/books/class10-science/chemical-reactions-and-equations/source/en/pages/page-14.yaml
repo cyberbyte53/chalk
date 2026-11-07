@@ -1,0 +1,27 @@
+page: 14
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF, or a heading's letters spaced out"
+furniture: L2-L11, L57-L59
+blocks:
+  - kind: box
+    words: L1, L12-L31
+    title: L1
+  - kind: exercise
+    words: L32
+    title: L32
+    read:
+      "L32.1-9": { text: "EXERCISES" }
+  - kind: question
+    words: L33-L44
+    number: L33.1
+    read:
+      "L34.7-L36.1": { text: "CO₂(g)" }
+  - kind: question
+    words: L45-L56
+    number: L45.1
+    continues: true
+    read:
+      "L45.2-L48.1": { text: "Fe₂O₃" }
+      "L49.4-L52.1": { text: "Al₂O₃" }

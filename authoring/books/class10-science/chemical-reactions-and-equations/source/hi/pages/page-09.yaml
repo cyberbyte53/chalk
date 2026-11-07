@@ -1,0 +1,89 @@
+page: 9
+proofread: true
+furniture: L91-L94, L55-L57
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits (FeSO 4, Fe 2 O 3), printed FeSO₄, Fe₂O₃; words the PDF splits with a space (फ़े रस, सल्फ़े ट, फ़े रिक, नाइट्रे ट, करें ।)"
+answers:
+  "word हरे": "a real word (green), as printed on the page; the list lacks it"
+  "word फ़ेरिक": "a real word (ferric), as printed on the page; the list lacks it"
+  "read L7.3-4": "the PDF's letters with the space between the halves of सल्फ़ेट taken out; its trailing tabs are only layout"
+  "read L62.8": "the PDF doubles the vowel sign (ै then े); the image prints है"
+  "word अभिकर्मक": "a real word (reagent), as printed on the page; the list lacks it"
+  "word ट्राइऑक्साइड": "a real word (trioxide), as printed on the page; the list lacks it"
+terms:
+  - L19.5
+  - L42.17-L43.1
+blocks:
+  - kind: text
+    words: L1-L3
+    read:
+      L1.6-7: फ़ेरस
+      L1.8-9: सल्फ़ेट
+      L1.12: हरे
+  - kind: equation
+    number: L16.2
+    words: L4-L6, L8-L16, L7, L17
+    read:
+      L4.1-L5.1: "2FeSO₄"
+      L8.1-L11.1: "Fe₂O₃"
+      L12.3-L13.1: "SO₂"
+      L14.3-L15.1: "SO₃"
+      L7.1-2: (फ़ेरस
+      L7.3-4: सल्फ़ेट)
+      L17.1-2: (फ़ेरिक
+  - kind: text
+    words: L18-L38
+    read:
+      L18.10: अभिकर्मक
+      L19.11-12: फ़ेरस
+      L19.13-14: सल्फ़ेट
+      L19.15-L23.1: "(FeSO₄. 7H₂O)"
+      L24.16-17: फ़ेरिक
+      L25.1-L28.1: "(Fe₂O₃"
+      L29.4-L30.1: "(SO₂"
+      L31.4: ट्राइऑक्साइड
+      L31.5-L32.1: "(SO₃"
+      L34.2-3: फ़ेरिक
+      L34.8-L35.1: "SO₂"
+      L36.2-L37.1: "SO₃"
+  - kind: text
+    words: L39-L43
+    read:
+      L39.4-5: कैल्सियम
+      L39.8-9: कैल्सियम
+      L41.1-2: कैल्सियम
+  - kind: equation
+    number: L51.1
+    words: L44-L46, L48-L51, L47, L52
+    read:
+      L44.1-L45.1: "CaCO₃"
+      L48.3-L49.1: "CO₂"
+  - kind: text
+    words: L53
+  - kind: activity
+    number: L54.2
+    words: L54, L58-L63
+    read:
+      L62.8: है
+  - kind: figure
+    number: L86.2
+    words: L81-L84, L86-L89
+    box: [368, 436, 570, 670]
+    read:
+      L87.2-3: नाइट्रेट
+  - kind: text
+    words: L64-L68
+    read:
+      L65.3-L66.1: "(NO₂"
+  - kind: equation
+    number: L85.1
+    words: L69-L77, L85, L78-L80
+    read:
+      L69.1-L72.1: "2Pb(NO₃)₂"
+      L73.5-L74.1: "4NO₂"
+      L75.3-L76.1: "O₂"
+  - kind: text
+    words: L90
+    read:
+      L90.13-14: करें।

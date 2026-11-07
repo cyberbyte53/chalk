@@ -1,0 +1,89 @@
+page: 7
+proofread: true
+furniture: L66-L69, L9-L12
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits (H 2 O, CaCO 3), printed H₂O, CaCO₃; words the PDF splits with a space (करें गे, सफ़े दी, धीरे -धीरे, करें ।)"
+terms:
+  - L43.7-8
+blocks:
+  - kind: section
+    number: L1.1
+    title: L1.2-6
+    words: L1
+    read:
+      L1.3-4: अभिक्रियाओं
+  - kind: text
+    words: L2-L6
+    read:
+      L2.19: तत्व
+      L3.2: तत्व
+      L4.13-16: परमाणुओं
+      L5.13-14: परमाणुओं
+      L6.13-14: करेंगे।
+  - kind: section
+    number: L7.1
+    title: L7.2-3
+    words: L7
+  - kind: activity
+    number: L8.2
+    words: L8, L14-L19
+    read:
+      L14.5-6: कैल्सियम
+      L16.2-3: धीरे-धीरे
+  - kind: figure
+    number: L32.2
+    words: L13, L20-L22, L32-L35
+    box: [322, 240, 570, 412]
+    read:
+      L21.1-2: कैल्सियम
+      L33.4-5: कैल्सियम
+  - kind: text
+    words: L23-L24
+    read:
+      L23.1-2: कैल्सियम
+      L23.20-21: (कैल्सियम
+  - kind: equation
+    number: L30.1
+    words: L25-L31, L36
+    read:
+      L25.3-L27.1: "H₂O(1)"
+      L27.3-L29.1: "Ca(OH)₂(aq)"
+  - kind: text
+    words: L41-L43
+    read:
+      L41.4-5: कैल्सियम
+      L41.12-13: कैल्सियम
+  - kind: box
+    title: L37-L40
+    words: L37-L40, L44-L50
+    read:
+      L44.21-22: सफ़ेदी
+      L45.2-3: कैल्सियम
+      L46.2-3: कैल्सियम
+      L46.12-13: सफ़ेदी
+      L46.19-20: कैल्सियम
+      L47.5: इससे
+      L48.1-L49.1: "CaCO₃"
+  - kind: equation
+    number: L63.1
+    words: L51, L53, L55, L63, L52, L54, L64
+    read:
+      L51.1-2: "Ca(OH)₂"
+      L51.5-6: "CO₂"
+      L53.2-3: "CaCO₃"
+      L55.2-4: "H₂O(1)"
+      L52.1-2: (कैल्सियम
+      L54.1-2: (कैल्सियम)
+  - kind: text
+    words: L56
+    read:
+      L56.10-11: करें।
+  - kind: text
+    words: L57
+  - kind: equation
+    number: L65.1
+    words: L58-L62, L65
+    read:
+      L58.3-L60.1: "O₂(g)"
+      L60.3-L62.1: "CO₂(g)"

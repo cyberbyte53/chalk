@@ -1,0 +1,27 @@
+page: 1
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets the drop capital C apart from the rest of its word"
+furniture: L3-L4, L10-L15, L31-L33, L53
+blocks:
+  - kind: text
+    words: L1-L2
+  - kind: heading
+    words: L5-L6
+    title: L5-L6
+  - kind: text
+    words: L7-L9, L16-L21
+    read:
+      "L7.1-L8.1": { text: "Consider" }
+  - kind: text
+    words: L22-L25
+  - kind: text
+    words: L26-L29
+  - kind: activity
+    words: L30, L34-L49
+    number: L30.1-2
+  - kind: figure
+    words: L50-L52
+    number: L50.1-2
+    box: [270, 512, 550, 712]

@@ -1,0 +1,282 @@
+pairs:
+  - key: activity 1.1
+    en: "0.6"
+    hi: "0.5"
+  - key: figure 1.1
+    en: "0.7"
+    hi: "0.6"
+  - key: activity 1.2
+    en: "0.9"
+    hi: "0.8"
+  - key: activity 1.3
+    en: "0.10"
+    hi: "0.9"
+  - key: figure 1.2
+    en: "0.11"
+    hi: "0.10"
+  - key: section 1.1
+    en: "1"
+    hi: "1"
+  - key: equation 1.1
+    en: "1.3"
+    hi: "1.3"
+  - key: section 1.1.1
+    en: "1.6"
+    hi: "1.6"
+  - key: equation 1.2
+    en: 1.6.2
+    hi: 1.6.2
+  - key: section 1.1.2
+    en: "1.7"
+    hi: "1.7"
+  - key: equation 1.3
+    en: 1.7.6
+    hi: 1.7.6
+  - key: equation 1.4
+    en: 1.7.11
+    hi: 1.7.11
+  - key: equation 1.5
+    en: 1.7.13
+    hi: 1.7.13
+  - key: equation 1.6
+    en: 1.7.20
+    hi: 1.7.20
+  - key: equation 1.7
+    en: 1.7.25
+    hi: 1.7.25
+  - key: equation 1.8
+    en: 1.7.29
+    hi: 1.7.29
+  - key: equation 1.9
+    en: 1.7.31
+    hi: 1.7.31
+  - key: equation 1.10
+    en: 1.7.36
+    hi: 1.7.36
+  - key: equation 1.12
+    en: 1.7.41
+    hi: 1.7.41
+  - key: question 1 of exercise 1
+    en: 1.7.43.1
+    hi: 1.7.43.1
+  - key: question 2 of exercise 1
+    en: 1.7.43.2
+    hi: 1.7.43.2
+  - key: question 3 of exercise 1
+    en: 1.7.43.3
+    hi: 1.7.43.3
+  - key: section 1.2
+    en: "2"
+    hi: "2"
+  - key: section 1.2.1
+    en: "2.2"
+    hi: "2.2"
+  - key: figure 1.3
+    en: 2.2.1
+    hi: 2.2.2
+  - key: activity 1.4
+    en: 2.2.2
+    hi: 2.2.1
+  - key: equation 1.13
+    en: 2.2.4
+    hi: 2.2.4
+  - key: equation 1.14
+    en: 2.2.7
+    hi: 2.2.7
+  - key: equation 1.15
+    en: 2.2.10
+    hi: 2.2.10
+  - key: equation 1.16
+    en: 2.2.12
+    hi: 2.2.12
+  - key: equation 1.17
+    en: 2.2.17
+    hi: 2.2.17
+  - key: section 1.2.2
+    en: "2.3"
+    hi: "2.3"
+  - key: figure 1.4
+    en: 2.3.1
+    hi: 2.2.22
+  - key: activity 1.5
+    en: 2.3.2
+    hi: 2.3.1
+  - key: equation 1.19
+    en: 2.3.4
+    hi: 2.3.3
+  - key: equation 1.20
+    en: 2.3.7
+    hi: 2.3.6
+  - key: figure 1.5
+    en: 2.3.9
+    hi: 2.3.9
+  - key: activity 1.6
+    en: 2.3.10
+    hi: 2.3.8
+  - key: equation 1.21
+    en: 2.3.12
+    hi: 2.3.11
+  - key: activity 1.7
+    en: 2.3.14
+    hi: 2.3.13
+  - key: figure 1.6
+    en: 2.3.15
+    hi: 2.3.14
+  - key: activity 1.8
+    en: 2.3.16
+    hi: 2.3.16
+  - key: figure 1.7
+    en: 2.3.17
+    hi: 2.3.15
+  - key: equation 1.22
+    en: 2.3.19
+    hi: 2.3.18
+  - key: equation 1.23
+    en: 2.3.21
+    hi: 2.3.20
+  - key: question 1 of exercise 2
+    en: 2.3.25.1
+    hi: 2.3.24.1
+  - key: question 2 of exercise 2
+    en: 2.3.25.2
+    hi: 2.3.24.2
+  - key: section 1.2.3
+    en: "2.4"
+    hi: "2.4"
+  - key: figure 1.8
+    en: 2.4.3
+    hi: 2.4.3
+  - key: activity 1.9
+    en: 2.4.2
+    hi: 2.4.1
+  - key: equation 1.24
+    en: 2.4.6
+    hi: 2.4.6
+  - key: equation 1.25
+    en: 2.4.9
+    hi: 2.4.9
+  - key: equation 1.26
+    en: 2.4.10
+    hi: 2.4.10
+  - key: section 1.2.4
+    en: "2.5"
+    hi: "2.5"
+  - key: activity 1.10
+    en: 2.5.1
+    hi: 2.5.1
+  - key: equation 1.27
+    en: 2.5.3
+    hi: 2.5.3
+  - key: figure 1.9
+    en: 2.5.4
+    hi: 2.4.12
+  - key: section 1.2.5
+    en: "2.6"
+    hi: "2.6"
+  - key: figure 1.10
+    en: 2.6.1
+    hi: 2.6.2
+  - key: activity 1.11
+    en: 2.6.2
+    hi: 2.6.1
+  - key: equation 1.28
+    en: 2.6.4
+    hi: 2.6.5
+  - key: equation 1.29
+    en: 2.6.6
+    hi: 2.6.7
+  - key: figure 1.30
+    en: 2.6.9
+    hi: 2.6.10
+  - key: equation 1.31
+    en: 2.6.11
+    hi: 2.6.12
+  - key: equation 1.32
+    en: 2.6.12
+    hi: 2.6.13
+  - key: section 1.3
+    en: "3"
+    hi: "3"
+  - key: section 1.3.1
+    en: "3.1"
+    hi: "3.1"
+  - key: section 1.3.2
+    en: "3.2"
+    hi: "3.2"
+  - key: question 1 of exercise 3
+    en: 3.2.3.1
+    hi: 3.2.3.1
+  - key: question 2 of exercise 3
+    en: 3.2.3.2
+    hi: 3.2.3.2
+  - key: question 3 of exercise 3
+    en: 3.2.3.3
+    hi: 3.2.3.3
+  - key: question 1 of exercise 4
+    en: 3.2.4.1
+    hi: 3.2.4.1
+  - key: question 2 of exercise 4
+    en: 3.2.4.2
+    hi: 3.2.4.2
+  - key: question 3 of exercise 4
+    en: 3.2.4.3
+    hi: 3.2.4.3
+  - key: question 4 of exercise 4
+    en: 3.2.4.4
+    hi: 3.2.4.4
+  - key: question 5 of exercise 4
+    en: 3.2.4.5
+    hi: 3.2.4.5
+  - key: question 6 of exercise 4
+    en: 3.2.4.6
+    hi: 3.2.4.6
+  - key: question 7 of exercise 4
+    en: 3.2.4.7
+    hi: 3.2.4.7
+  - key: question 8 of exercise 4
+    en: 3.2.4.8
+    hi: 3.2.4.8
+  - key: question 9 of exercise 4
+    en: 3.2.4.9
+    hi: 3.2.4.9
+  - key: question 10 of exercise 4
+    en: 3.2.4.10
+    hi: 3.2.4.10
+  - key: question 11 of exercise 4
+    en: 3.2.4.11
+    hi: 3.2.4.11
+  - key: question 12 of exercise 4
+    en: 3.2.4.12
+    hi: 3.2.4.12
+  - key: question 13 of exercise 4
+    en: 3.2.4.13
+    hi: 3.2.4.13
+  - key: question 14 of exercise 4
+    en: 3.2.4.14
+    hi: 3.2.4.14
+  - key: question 15 of exercise 4
+    en: 3.2.4.15
+    hi: 3.2.4.15
+  - key: question 16 of exercise 4
+    en: 3.2.4.16
+    hi: 3.2.4.16
+  - key: question 17 of exercise 4
+    en: 3.2.4.17
+    hi: 3.2.4.17
+  - key: question 18 of exercise 4
+    en: 3.2.4.18
+    hi: 3.2.4.18
+  - key: question 19 of exercise 4
+    en: 3.2.4.19
+    hi: 3.2.4.19
+  - key: question 20 of exercise 4
+    en: 3.2.4.20
+    hi: 3.2.4.20
+answers:
+  only en equation 1.11: "in that book, unnumbered: the Hindi page 6 prints CO(g)
+    + 2H₂(g) 340atm → CH₃OH(1) with no (1.11) beside it (item 1.7.40), then
+    numbers the next one (1.12) as English does"
+  only en equation 1.18: "in that book, unnumbered: the Hindi page 8 prints the
+    respiration equation C₆H₁₂O₆ (aq) + 6O₂ (aq) → 6CO₂ (aq) + 6H₂O(1) + ऊर्जा
+    with no (1.18) beside it (item 2.2.20); its next equation is (1.19) as in
+    English"

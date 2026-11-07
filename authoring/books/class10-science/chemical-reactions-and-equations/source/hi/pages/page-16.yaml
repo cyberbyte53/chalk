@@ -1,0 +1,44 @@
+page: 16
+proofread: true
+furniture: L47-L50, L9, L2.1-2, L3.1-2, L5.1-2, L6.1-2
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits (CO 2, Fe 2 O 3), printed CO₂, Fe₂O₃"
+answers:
+  "read L5.9": "the PDF doubles the vowel sign (ो then े); the image prints होता"
+blocks:
+  - kind: box
+    continued: true
+    words: L1, L2.3-23, L3.3-18, L4, L5.3-10, L6.3-20, L7-L8
+    read:
+      L1.2-3: अभिक्रियाओं
+      L1.11: ऊष्माशोषी
+      L2.6: तत्व
+      L2.11: तत्व
+      L2.16: विस्थापित
+      L3.3: द्विविस्थापन
+      L3.10-11: परमाणुओं
+      L5.9: होता
+  - kind: exercise
+    title: L10
+    words: L10
+  - kind: question
+    number: L11.1
+    words: L11, L14-L26
+    read:
+      L14.6-L15.2: संबंध
+      L16.7-L18.1: "CO₂(g)"
+      L19.3: अपचयित
+      L20.4: उपचयित
+      L21.3: उपचयित
+      L22.4: अपचयित
+  - kind: question
+    number: L12.1
+    words: L12, L27-L41
+    read:
+      L27.1-L30.1: "Fe₂O₃"
+      L31.4-L34.1: "Al₂O₃"
+      L39.1: "(b) द्विविस्थापन"
+  - kind: question
+    number: L13.1
+    words: L13, L42-L46

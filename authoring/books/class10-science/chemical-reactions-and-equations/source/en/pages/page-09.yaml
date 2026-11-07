@@ -1,0 +1,40 @@
+page: 9
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF, or an arrow drawn from private glyphs"
+furniture: L20-L30, L58-L61, L77, L79-L80
+blocks:
+  - kind: equation
+    words: L2-L6.3, L1, L6.4-5, L8-L12, L15, L7, L13-L14, L16
+    number: L15.1
+    read:
+      "L2.1-L6.1": { text: "2Pb(NO₃)₂(s)" }
+      "L6.2-3": { text: "" }
+      "L8.2-L10.1": { text: "4NO₂(g)" }
+      "L10.3-L12.1": { text: "O₂(g)" }
+  - kind: text
+    words: L17-L18
+  - kind: activity
+    words: L19, L31-L54
+    number: L19.1-2
+  - kind: figure
+    words: L55-L56
+    number: L55.1-2
+    box: [332, 180, 555, 335]
+    crop: { box: [334, 183, 553, 340], cause: wrong-box }
+  - kind: activity
+    words: L57, L62-L67
+    number: L57.1-2
+  - kind: figure
+    words: L68, L69.14-17, L70.13-L71
+    number: L68.1-2
+    box: [375, 500, 550, 628]
+  - kind: text
+    words: L69.1-13, L70.1-12, L72
+  - kind: equation
+    words: L74.1, L73, L74.2-L76, L78
+    number: L78.1
+    read:
+      "L74.2-3": { text: "" }
+      "L74.7-L76.1": { text: "Cl₂(g)" }

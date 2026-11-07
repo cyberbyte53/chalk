@@ -1,0 +1,41 @@
+page: 2
+proofread: true
+cause: other
+notes:
+  other: "the PDF splits the heading's words with spaces (CHEMIC AL EQUA TIONS)"
+furniture: L6-L8, L18-L21, L33-L36, L71-L73
+blocks:
+  - kind: text
+    words: L1-L4
+  - kind: activity
+    words: L5, L9-L16
+    number: L5.1-2
+  - kind: activity
+    words: L17, L22-L29
+    number: L17.1-2
+  - kind: figure
+    words: L46-L50
+    number: L46.1-2
+    box: [62, 276, 252, 528]
+  - kind: text
+    words: L30-L32, L37-L40
+  - kind: text
+    words: L41-L45
+  - kind: section
+    words: L51
+    number: L51.1
+    title: L51.2-5
+    read:
+      "L51.2-3": { text: "CHEMICAL" }
+      "L51.4-5": { text: "EQUATIONS" }
+  - kind: text
+    words: L52-L56
+  - kind: text
+    words: L57
+  - kind: equation
+    words: L58, L59, L61, L60
+    number: L60.1
+  - kind: text
+    words: L62-L64
+  - kind: text
+    words: L65-L70

@@ -1,0 +1,81 @@
+page: 17
+proofread: true
+furniture: L77-L80
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits (HNO 3, H 2 SO 4), printed HNO₃, H₂SO₄; words the PDF splits with a space (सल्फ़े ट, कै ल्शियम)"
+answers:
+  "word अभिक्रया": "printed so on the page (a misprint of अभिक्रिया), kept as printed"
+  "word सतुंलित": "printed so on the page (a misprint of संतुलित), kept as printed"
+blocks:
+  - kind: question
+    number: L1.1
+    words: L1, L12
+  - kind: question
+    number: L2.1
+    words: L2, L13-L19
+    read:
+      L16.3-4: सल्फ़ेट
+      L17.2-3: सल्फ़ेट
+  - kind: question
+    number: L3.1
+    words: L3, L20-L55
+    read:
+      L21.2-L22.1: "HNO₃"
+      L23.2-L24.1: "Ca(OH)₂"
+      L25.2-L28.1: "Ca(NO₃)₂"
+      L29.2-L31.1: "H₂O"
+      L32.4-L35.1: "H₂SO₄"
+      L36.2-L39.1: "Na₂SO₄"
+      L40.2-L42.1: "H₂O"
+      L43.4-L44.1: "AgNO₃"
+      L45.4-L46.1: "NaNO₃"
+      L47.2-L48.1: "BaCl₂"
+      L49.2-L52.1: "H₂SO₄"
+      L53.2-L54.1: "BaSO₄"
+  - kind: question
+    number: L4.1
+    words: L4, L56-L60
+    read:
+      L56.1-2: निम्न अभिक्रियाओं
+      L57.2-3: कैल्शियम
+      L57.8-9: कैल्शियम
+      L60.6-7: सल्फ़ेट
+      L60.10-11: सल्फ़ेट
+  - kind: question
+    number: L5.1
+    words: L5, L61-L67
+    read:
+      L61.2-3: अभिक्रियाओं
+      L61.6-9: { text: "सतुंलित", cause: wrong-reading }
+  - kind: question
+    number: L6.1
+    words: L6, L68
+    read:
+      L68.1: ऊष्माक्षेपी
+      L68.3: ऊष्माशोषी
+  - kind: question
+    number: L7.1
+    words: L7, L69
+    read:
+      L69.2: ऊष्माक्षेपी
+      L69.3: अभिक्रया
+  - kind: question
+    number: L8.1
+    words: L8, L70-L71
+    read:
+      L70.9-10: इन अभिक्रियाओं
+  - kind: question
+    number: L9.1
+    words: L9, L72-L73
+    read:
+      L72.1-2: उन वियोजन अभिक्रियाओं
+  - kind: question
+    number: L10.1
+    words: L10, L74
+    read:
+      L74.1-2: विस्थापन एवं द्विविस्थापन अभिक्रियाओं
+      L74.6-7: इन अभिक्रियाओं
+  - kind: question
+    number: L11.1
+    words: L11, L75-L76

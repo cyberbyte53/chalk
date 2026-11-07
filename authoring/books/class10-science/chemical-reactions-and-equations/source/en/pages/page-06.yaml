@@ -1,0 +1,51 @@
+page: 6
+proofread: true
+cause: other
+notes:
+  other: "a subscript set on its own line by the PDF, or a heading's letters spaced out or split by spaces"
+furniture: L13, L26-L29, L53-L55
+blocks:
+  - kind: exercise
+    words: L1
+    title: L1
+    read:
+      "L1.1-9": { text: "QUESTIONS" }
+  - kind: question
+    words: L2
+    number: L2.1
+  - kind: question
+    words: L3-L7
+    number: L3.1
+  - kind: question
+    words: L8-L12, L14-L16
+    number: L8.1
+  - kind: section
+    words: L17
+    number: L17.1
+    title: L17.2-7
+    read:
+      "L17.4-5": { text: "CHEMICAL" }
+      "L17.6-7": { text: "REACTIONS" }
+  - kind: text
+    words: L18-L23
+  - kind: section
+    words: L24
+    number: L24.1
+    title: L24.2-3
+  - kind: figure
+    words: L30-L34
+    number: L30.1-2
+    box: [62, 480, 303, 636]
+  - kind: activity
+    words: L25, L35-L39
+    number: L25.1-2
+  - kind: text
+    words: L40-L41
+  - kind: equation
+    words: L42, L44-L48, L43, L49
+    number: L48.4
+    read:
+      "L44.2-L46.1": { text: "H₂O(l)" }
+      "L46.3-L48.1": { text: "Ca(OH)₂(aq)" }
+  - kind: text
+    words: L50-L52
