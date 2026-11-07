@@ -1,0 +1,65 @@
+page: 22
+proofread: true
+cause: wrong-reading
+furniture: L1, L24, L53, L30.1, L34.1, L37.1, L38.1, L40.1, L42.1, L45.1, L47.1, L49.1
+answers:
+  read L9.3: the PDF holds two tabs in this word; the image shows ऐसीटोन
+  read L31.1: the PDF lacks श (ृंखला); the image shows शृंखला
+  word निकेल: a real word, as printed on the page; the list lacks it
+  word क्षणदीपों: a real word, as printed on the page; the list lacks it
+  word एप्सम: a real word, as printed on the page; the list lacks it
+  word मुखवासों: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: question
+    number: L2.1
+    words: L2-L6, L8-L11.4
+    read:
+      L9.3: ऐसीटोन
+      L10.4-5: रेत—नमक
+      L10.2: ऐसीटोन—ऐल्कोहॉल
+  - kind: figure
+    number: L20.1-2
+    words: L7, L18-L19, L11.5-6, L20
+    box:
+      - 402
+      - 90
+      - 585
+      - 260
+  - kind: table
+    number: L21.1-2
+    title: L21.3-6
+    words: L21-L22, L12, L14, L16, L25, L27, L23, L13, L15, L17, L26, L28
+    box:
+      - 89
+      - 247
+      - 479
+      - 307
+    read:
+      L14.1: ऐसीटोन
+  - kind: heading
+    title: L29
+    words: L29
+  - kind: text
+    words: L30.2-15, L31-L33, L34.2-16, L35-L36, L37.2-16, L38.2-15, L39, L40.2-13, L41, L42.2-23, L43-L44, L45.2-19, L46, L47.2, L48, L49.2, L50
+    read:
+      L31.1: शृंखला
+      L34.10-11: बोरेक्स,
+      L34.12-13: निकेल
+      L41.6: पहचानने
+      L41.15-16: सकें।
+      L43.13-14: वस्तुओं
+      L45.4-5: अवस्थाओं
+      L45.15: जानने
+      L30.3: कोलॉइडों
+      L31.9: कोलॉइडों
+      L33.6: क्षणदीपों
+      L34.7: एप्सम
+      L37.12: वर्णलेखिकी
+      L38.4: वर्णकों
+      L38.11: मुखवासों
+      L39.7: वर्णलेखिकी
+  - kind: box
+    title: L51
+    words: L51-L52
+    read:
+      L52.3-4: कृत्रिम

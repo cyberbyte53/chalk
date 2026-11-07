@@ -1,0 +1,28 @@
+page: 7
+proofread: true
+furniture: L60-L61, L94-L95
+terms:
+  - L10.3
+blocks:
+  - kind: text
+    words: L3-L8
+  - kind: text
+    words: L9-L15
+  - kind: text
+    words: L16
+  - kind: activity
+    words: L18-L21, L27-L28, L66-L93
+    number: L18.1-2
+    title: L18.3-5
+    continues: true
+  - kind: figure
+    words: L1-L2, L22-L26
+    number: L23.1-2
+    box: [57, 80, 151, 371]
+  - kind: figure
+    words: L29-L59
+    number: L59.1-2
+    box: [42, 372, 342, 742]
+  - kind: box
+    words: L17, L62-L65
+    title: L17

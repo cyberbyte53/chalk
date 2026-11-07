@@ -1,0 +1,90 @@
+page: 16
+proofread: true
+cause: wrong-reading
+furniture: L1, L55
+terms:
+  - L2.15
+  - L54.5-6
+answers:
+  read L44.3: the PDF lacks िं (टडल); the image shows टिंडल
+  read L54.5: the PDF lacks िं (टडल); the image shows टिंडल
+  word कोलॉइडों: a real word, as printed on the page; the list lacks it
+  word प्लेटलेट: a real word, as printed on the page; the list lacks it
+  word जोड़ता: a real word, as printed on the page; the list lacks it
+  word प्रकीर्णित: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: text
+    words: L2-L3
+    read:
+      L2.15: कोलॉइड
+      L3.5: कोलॉइडों
+  - kind: box
+    title: L4
+    words: L4-L19
+    read:
+      L11.9: प्लेटलेट,
+      L12.2-3: कणिकाओं
+      L12.10: 5.22)।
+      L15.1: तत्वों,
+      L6.2: जीवनरक्षक
+      L16.2: जोड़ता
+  - kind: figure
+    number: L28.1-2
+    words: L20-L29
+    box:
+      - 377
+      - 147
+      - 558
+      - 362
+    read:
+      L24.1: प्लेटलेट
+      L28.7-8: अपकेंद्रण
+      L29.3-4: अपकेंद्रण
+  - kind: text
+    words: L30
+    read:
+      L30.9: कोलॉइड
+  - kind: text
+    words: L31-L35, L38-L39, L41
+    read:
+      L38.5-6: अपेक्षाकृत
+      L39.13-14: के)
+      L32.12: कोलॉइड
+      L33.6: कोलॉइड
+      L35.13: कोलॉइड
+  - kind: text
+    words: L42-L43
+    read:
+      L43.5-6: फैले
+      L42.4: कोलॉइड
+  - kind: figure
+    number: L40.1-2
+    words: L36-L37, L40
+    box:
+      - 372
+      - 407
+      - 586
+      - 546
+    read:
+      L40.10: कोलॉइड
+  - kind: section
+    number: L44.1
+    title: L44.3-4
+    words: L44
+    read:
+      L44.3: टिंडल
+  - kind: text
+    words: L45-L52
+    read:
+      L46.5-L47.1: किरणपुंज
+      L48.1-L49.1: किरणपुंज
+      L49.15-L50.1: किरणपुंज
+      L51.4: जिससे
+      L50.3: प्रकीर्णित
+      L52.10: प्रकीर्णित
+      L52.16: समांगी
+  - kind: text
+    words: L53-L54
+    continues: true
+    read:
+      L54.5: टिंडल

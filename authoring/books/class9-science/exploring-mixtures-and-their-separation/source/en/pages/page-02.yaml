@@ -1,0 +1,35 @@
+page: 2
+proofread: true
+furniture: L1, L18-L20, L60
+terms:
+  - L7.5-6
+  - L8.2
+  - L15.1-2
+blocks:
+  - kind: section
+    words: L2
+    number: L2.1
+    title: L2.2-6
+  - kind: text
+    words: L3-L4
+  - kind: text
+    words: L5-L11
+  - kind: text
+    words: L12-L17
+  - kind: activity
+    words: L22-L47, L54-L55, L57-L58.1
+    number: L22.1-2
+    title: L22.3-8
+    continues: true
+  - kind: figure
+    words: L21
+    number: L21.1-2
+    box: [429, 92, 560, 244]
+  - kind: figure
+    words: L48
+    number: L48.1-2
+    box: [426, 250, 559, 404]
+  - kind: figure
+    words: L49-L53, L56, L58.2-L59
+    number: L58.2-3
+    box: [300, 411, 560, 750]

@@ -1,0 +1,39 @@
+page: 12
+proofread: true
+furniture: L1, L13-L15, L61.11-12, L62, L64, L66
+terms:
+  - L7.11
+blocks:
+  - kind: section
+    words: L2-L3
+    number: L2.1
+    title: L2.2-L3
+  - kind: section
+    words: L4
+    number: L4.1
+    title: L4.2-6
+  - kind: text
+    words: L5-L9
+  - kind: text
+    words: L10-L11
+  - kind: text
+    words: L12
+  - kind: activity
+    words: L16, L18-L20, L22-L23, L25, L27-L28, L30-L31, L33-L35, L37-L38, L40-L42
+    number: L16.1-2
+    title: L16.3-5
+  - kind: figure
+    words: L17, L21, L24, L26, L29, L32, L36, L39
+    number: L39.1-2
+    box: [345, 276, 558, 503]
+  - kind: text
+    words: L43
+  - kind: text
+    words: L44-L45
+  - kind: text
+    words: L46-L49, L51, L53, L55
+  - kind: text
+    words: L57, L59, L61.1-10, L63, L65
+  - kind: box
+    words: L50, L52, L54, L56, L58, L60
+    title: L50

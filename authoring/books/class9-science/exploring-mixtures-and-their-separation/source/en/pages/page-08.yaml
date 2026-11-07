@@ -1,0 +1,31 @@
+page: 8
+proofread: true
+furniture: L1, L43
+blocks:
+  - kind: activity
+    words: L2-L6
+    continued: true
+  - kind: text
+    words: L7-L10
+  - kind: box
+    words: L11-L15
+    title: L11
+  - kind: box
+    words: L16-L21
+    title: L16
+  - kind: activity
+    words: L22-L24
+    number: L22.1-2
+    title: L22.3-7
+  - kind: figure
+    words: L25-L29
+    number: L29.1-2
+    box: [165, 481, 405, 545]
+  - kind: box
+    words: L30-L40
+    title: L30
+  - kind: figure
+    words: L41-L42
+    number: L42.1-2
+    box: [100, 581, 374, 727]
+    crop: { box: [100, 581, 374, 727], cause: wrong-box }

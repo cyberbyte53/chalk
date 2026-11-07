@@ -1,0 +1,24 @@
+page: 21
+proofread: true
+furniture: L32.1, L33.1, L34.1, L38-L41
+blocks:
+  - kind: question
+    words: L1-L4
+    number: L1.1
+  - kind: figure
+    words: L6.1-3, L5, L6.4-5, L7
+    number: L6.1-2
+    box: [93, 146, 550, 291]
+  - kind: question
+    words: L8-L9
+    number: L8.1
+  - kind: question
+    words: L10-L11, L22-L29
+    number: L10.1
+  - kind: table
+    words: L12-L21
+    number: L12.1-2
+    box: [157, 357, 549, 513]
+  - kind: question
+    words: L30-L31, L32.2-13, L33.2-13, L34.2-13, L35-L37
+    number: L30.1

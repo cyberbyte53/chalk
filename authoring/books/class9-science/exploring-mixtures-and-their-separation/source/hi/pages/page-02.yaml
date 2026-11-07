@@ -1,0 +1,109 @@
+page: 2
+proofread: true
+cause: broken-across-lines
+notes:
+  other: a bracket the PDF sets apart from its letter, printed (क)
+furniture: L1, L52, L56, L4, L5, L6.14-15
+terms:
+  - L8.12-13
+  - L9.6
+  - L15.2-3
+answers:
+  word समांगी: a real word, as printed on the page; the list lacks it
+  word ऐसीटिक: a real word, as printed on the page; the list lacks it
+  word एकरूप: a real word, as printed on the page; the list lacks it
+  word विषमांगी: a real word, as printed on the page; the list lacks it
+  word स्पैचुला: a real word, as printed on the page; the list lacks it
+  word डालिए: a real word, as printed on the page; the list lacks it
+  word भली: a real word, as printed on the page; the list lacks it
+  word अपूर्णीय: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: section
+    words: L2
+    number: L2.1
+    title: L2.2-10
+  - kind: text
+    words: L3, L6.1-13, L7-L12
+    read:
+      L7.2-L8.1: घूँट
+      L8.12: समांगी
+      L10.2: ऐसीटिक
+      L11.3: समांगी
+      L11.12: समांगी
+  - kind: text
+    words: L13-L17
+    read:
+      L13.13: एकरूप
+      L15.2: विषमांगी
+      L16.4: समांगी
+      L16.7: विषमांगी?
+      L16.12: विषमांगी
+  - kind: activity
+    number: L19.1-2
+    title: L19.3-8
+    words: L19-L42, L46-L51
+    continues: true
+    read:
+      L30.2-L31.1: बूँदें
+      L35.4-L36.3: संकेतक
+      L36.7-L37.2: किरणपुंज
+      L39.4: पार्श्व
+      L39.7-L40.1: पुंज
+      L46.4-L47.1: किरणपुंज
+      L48.2: इससे
+      L23.12: स्पैचुला
+      L24.4: डालिए
+      L24.7: भली-भाँति
+      L27.1: स्पैचुला
+      L27.8: भली-भाँति
+      L31.2: डालिए
+      L31.4: भली-भाँति
+      L38.7: डालिए
+      L48.5: अपूर्णीय
+  - kind: figure
+    number: L18.1-2
+    words: L18
+    box:
+      - 435
+      - 92
+      - 566
+      - 243
+    read:
+      L18.4: समांगी
+  - kind: figure
+    number: L43.1-2
+    words: L43
+    box:
+      - 433
+      - 250
+      - 564
+      - 402
+    read:
+      L43.4: विषमांगी
+  - kind: figure
+    number: L54.1-2
+    words: L44-L45, L53-L55
+    box:
+      - 328
+      - 411
+      - 566
+      - 752
+    read:
+      L44:
+        text: (क)
+        cause: other
+      L45:
+        text: (ख)
+        cause: other
+      L53:
+        text: (ग)
+        cause: other
+      L54.4-5:
+        text: (क)
+        cause: other
+      L54.9-10:
+        text: (ख)
+        cause: other
+      L55.1-2:
+        text: (ग)
+        cause: other

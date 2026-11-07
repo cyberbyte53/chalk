@@ -1,0 +1,28 @@
+page: 22
+proofread: true
+notes:
+  other: "the PDF sets a space before the comma of \"adult),\" on the page"
+furniture: L1, L13, L21.1, L25.1, L28.1, L30.1, L33.1, L36.1, L39.1, L41.1, L43.1, L47
+blocks:
+  - kind: question
+    words: L2-L7, L9-L11
+    number: L2.1
+  - kind: figure
+    words: L8, L14-L17
+    number: L17
+    box: [402, 92, 590, 257]
+  - kind: table
+    words: L12, L18-L19
+    number: L12.1-2
+    box: [76, 239, 480, 307]
+    crop: { box: [76, 257, 480, 307], cause: wrong-box }
+  - kind: box
+    words: L20, L21.2-L24, L25.2-L27, L28.2-L29, L30.2-L32, L33.2-L35, L36.2-L38, L39.2-L40, L41.2-L42, L43.2-L44
+    title: L20
+    read:
+      "L24.3-4": { text: "adult),", cause: other }
+      "L41.2-L42.1": { text: "https://phet.colorado.edu/sims/html/states-of-matter-basics/latest/states-of-matter-basics_en.html", cause: broken-across-lines }
+      "L43.2-L44.1": { text: "https://phet.colorado.edu/sims/html/concentration/latest/concentration_all.html", cause: broken-across-lines }
+  - kind: box
+    words: L45-L46
+    title: L45

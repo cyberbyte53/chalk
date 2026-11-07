@@ -1,0 +1,27 @@
+page: 6
+proofread: true
+furniture: L1, L54-L58
+terms:
+  - L5.4-5
+  - L52.4
+blocks:
+  - kind: activity
+    words: L2-L7, L32-L41
+    number: L2.1-2
+    title: L2.3-7
+  - kind: figure
+    words: L8-L31
+    number: L31.1-2
+    box: [109, 183, 459, 394]
+  - kind: text
+    words: L42-L43
+  - kind: section
+    words: L44
+    number: L44.1
+    title: L44.2-7
+  - kind: section
+    words: L45
+    number: L45.1
+    title: L45.2-2
+  - kind: text
+    words: L46-L53

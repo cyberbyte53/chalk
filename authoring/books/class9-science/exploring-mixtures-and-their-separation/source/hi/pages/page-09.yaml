@@ -1,0 +1,55 @@
+page: 9
+proofread: true
+furniture: L55-L58
+terms:
+  - L30.1
+answers:
+  word विलुप्त: a real word, as printed on the page; the list lacks it
+  word त्रुटिवश: a real word, as printed on the page; the list lacks it
+  word ऐसीटोन: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: text
+    words: L18-L21
+    read:
+      L19.5: विलुप्त
+  - kind: text
+    words: L22-L25
+    read:
+      L22.9: त्रुटिवश
+      L23.1: ऐसीटोन
+  - kind: section
+    number: L26.1
+    title: L26.2
+    words: L26
+  - kind: text
+    words: L27-L33
+    read:
+      L29.3: जिससे
+      L29.16: 5.11)।
+      L27.5: समांगी
+  - kind: text
+    words: L34-L40
+    read:
+      L36.13-L37.2: संघनित
+  - kind: box
+    title: L1
+    words: L1-L11
+  - kind: figure
+    number: L17.1-2
+    words: L12-L17
+    box:
+      - 71
+      - 320
+      - 215
+      - 447
+  - kind: figure
+    number: L54.1-2
+    words: L41-L54
+    box:
+      - 50
+      - 472
+      - 536
+      - 753
+    read:
+      L47.1: ऐसीटोन
+      L53.1: ऐसीटोन

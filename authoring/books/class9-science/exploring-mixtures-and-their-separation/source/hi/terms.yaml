@@ -1,0 +1,67 @@
+# Built by pnpm source from pages/ and book.pdf (platform/docs/plans/sources.md): don't edit, edit the page files.
+- term: समांगी मिश्रण
+  item: "1.1"
+  en: homogeneous mixture
+- term: विलयन
+  item: "1.1"
+- term: विषमांगी मिश्रण
+  item: "1.2"
+  en: heterogeneous mixture
+- term: विलेय
+  item: "2.1"
+- term: विलायक
+  item: "2.1"
+- term: सांद्रता
+  item: "2.2.5"
+- term: विलेयता
+  item: "2.4.1"
+- term: संतृप्त
+  item: "2.4.1"
+- term: विलेयता वक्र
+  item: "2.4.4"
+- term: क्रिस्टल
+  item: "3.1.1"
+- term: क्रिस्टलीकरण
+  item: "3.1.4"
+- term: आसवन
+  item: "3.2.1"
+- term: प्रभाजी आसवन
+  item: "3.2.9"
+  en: fractional distillation
+- term: कागज वर्णलेखिकी
+  item: "3.3.3"
+  en: paper chromatography
+- term: अमिश्रणीय
+  item: "4.1.1"
+- term: ऊर्ध्वपातन
+  item: "4.2.2"
+  en: sublimation
+- term: निक्षेपण
+  item: "4.2.2"
+  en: deposition
+- term: मिश्रधातु
+  item: "4.2.6"
+- term: निलंबन
+  item: "4.3.1"
+  en: suspensions
+- term: अपकेंद्रण
+  item: "4.3.6"
+  en: centrifugation
+- term: स्कंदन
+  item: "4.3.13"
+  en: coagulation
+- term: स्कंदक
+  item: "4.3.13"
+  en: coagulant
+- term: कोलॉइड
+  item: "4.4.5"
+  en: colloid
+- term: टिंडल प्रभाव
+  item: "5.2"
+  en: Tyndall effect
+- term: परिक्षिप्त प्रावस्था
+  item: "5.6"
+  en: dispersed phase
+- term: परिक्षेपण माध्यम
+  item: "5.6"
+  en: dispersion medium

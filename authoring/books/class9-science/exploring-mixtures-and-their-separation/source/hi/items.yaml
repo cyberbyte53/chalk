@@ -1,0 +1,4482 @@
+# Built by pnpm source from pages/ and book.pdf (platform/docs/plans/sources.md): don't edit, edit the page files.
+- id: "0.1"
+  kind: heading
+  page: 1
+  title: अध्याय 5
+  text: अध्याय 5
+  made:
+    - {words: L1.1, by: hindi-repair}
+- id: "0.2"
+  kind: heading
+  page: 1
+  title: मिश्रण एवं उनके पृथक्करण का अन्वेषण
+  text: मिश्रण एवं उनके पृथक्करण का अन्वेषण
+  made:
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+- id: "0.3"
+  kind: text
+  page: 1
+  text: क्या आपको कभी आश्चर्य हुआ है कि लंबे, हरे गन्ने के पौधों से चीनी के मीठे और श्वेत क्रिस्टल किस
+    प्रकार प्राप्त किए जाते हैं ? या चिकित्सक रक्त की कुछ बूँदों से ही मलेरिया जैसे रोगों की जाँच
+    किस प्रकार करते हैं? मिश्रणों के पृथक्करण के रोचक विज्ञान पर आधारित तकनीकों के कारण हमारे दैनिक
+    जीवन के अनेक क्रियाकलाप संभव हो पाते हैं।
+  made:
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.9, by: agent}
+    - {words: L18.10, by: hindi-repair}
+    - {words: L18.12, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.5, by: hindi-repair}
+    - {words: L19.8, by: hindi-repair}
+    - {words: L19.11, by: hindi-repair}
+    - {words: L19.12, by: hindi-repair}
+    - {words: L19.15-L20.1, by: agent}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.9, by: hindi-repair}
+    - {words: L21.10, by: hindi-repair}
+    - {words: L21.12, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L23.1, by: agent}
+    - {words: L23.2, by: hindi-repair}
+- id: "0.4"
+  kind: text
+  page: 1
+  text: आप मिश्रणों तथा उनके पृथक्करण की कुछ सरल विधियों के विषय में पहले ही सीख चुके हैं। इस अध्याय
+    में आप मिश्रणों के गुणधर्मों, व्यवहार और उन्हें पृथक करने की विभिन्न विधियों का विस्तारपूर्वक
+    अध्ययन करेंगे। चीनी उत्पादन जैसे औद्योगिक प्रक्रमों से लेकर जीवनरक्षक चिकित्सीय जाँचों तक
+    मिश्रणों का पृथक्करण हमारे दैनिक जीवन में अत्यंत महत्त्वपूर्ण भूमिका का निर्वहन करता है।
+  made:
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.5, by: hindi-repair}
+    - {words: L24.9, by: hindi-repair}
+    - {words: L24.12, by: hindi-repair}
+    - {words: L25.3, by: hindi-repair}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L25.6, by: hindi-repair}
+    - {words: L25.8, by: hindi-repair}
+    - {words: L25.10, by: hindi-repair}
+    - {words: L25.11, by: hindi-repair}
+    - {words: L25.13, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.6, by: hindi-repair}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L29.4, by: hindi-repair}
+    - {words: L29.7, by: agent}
+    - {words: L29.8, by: hindi-repair}
+    - {words: L29.9, by: agent}
+    - {words: L30.2, by: hindi-repair}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L30.8, by: hindi-repair}
+    - {words: L30.9, by: hindi-repair}
+    - {words: L30.10, by: agent}
+    - {words: L31.1, by: hindi-repair}
+- id: "0.5"
+  kind: box
+  page: 1
+  title: चिंतन कीजिए
+  text: चिंतन कीजिए पंकिल जल में निलंबित कण कुछ समय पश्चात तली पर बैठ जाते हैं परंतु दुग्ध में ऐसा
+    नहीं होता है, क्यों? वाष्पीकरण किस प्रकार क्वथन से भिन्न होता है? आपको घने वृक्ष की पत्तियों के
+    मध्य छोटे अंतरालों में से छनकर निकलता हुआ सूर्य का प्रकाश चमकीली किरणों के रूप में क्यों दिखाई
+    देता है?
+  made:
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L4.2-L5.2, by: agent}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.7, by: hindi-repair}
+    - {words: L7.2-5, by: hindi-repair}
+    - {words: L7.6, by: hindi-repair}
+    - {words: L7.8, by: hindi-repair}
+    - {words: L7.11, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.5, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.3-6, by: hindi-repair}
+    - {words: L11.7, by: hindi-repair}
+    - {words: L12.3-6, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+- id: "1"
+  kind: section
+  page: 2
+  number: "5.1"
+  title: हम मिश्रणों का वर्गीकरण किस प्रकार कर सकते हैं?
+  text: 5.1 हम मिश्रणों का वर्गीकरण किस प्रकार कर सकते हैं?
+  made:
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.10, by: hindi-repair}
+- id: "1.1"
+  kind: text
+  page: 2
+  text: आप जानते हैं कि चीनी और जल के मिश्रण का संघटन पूर्णतया एकसमान होता है। जल में घुली चीनी के
+    मिश्रण का स्वाद प्रथम और अंतिम घूँट में समान रूप से मीठा होता है। ऐसे मिश्रण को समांगी मिश्रण
+    (homogeneous mixture) (चित्र 5.1) अथवा विलयन कहते हैं। सिरका (जल में ऐसीटिक अम्ल), वातित पेय
+    (aerated drinks) जैसे सोडा जल (जल में कार्बन डाइऑक्साइड) इत्यादि समांगी मिश्रणों के अन्य उदाहरण
+    हैं। एक विलयन सदैव समांगी होता है।
+  made:
+    - {words: L3.3, by: hindi-repair}
+    - {words: L3.11-14, by: hindi-repair}
+    - {words: L3.15-18, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.11, by: hindi-repair}
+    - {words: L7.2-L8.1, by: agent}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.12, by: agent}
+    - {words: L9.8, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2, by: agent}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.12, by: hindi-repair}
+    - {words: L10.13, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: agent}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.8, by: hindi-repair}
+    - {words: L11.12, by: agent}
+- id: "1.2"
+  kind: text
+  page: 2
+  text: दूसरी ओर, जल और रेत का विलोडित मिश्रण एकरूप नहीं होता है। रेत के कण जल में स्पष्ट दिखाई देते
+    हैं और कुछ समय पश्चात तली पर बैठ जाते हैं। ऐसे मिश्रण को विषमांगी मिश्रण (heterogeneous mixture)
+    (चित्र 5.2) कहते हैं। तेल और जल का मिश्रण समांगी है अथवा विषमांगी? क्या आप कुछ अन्य विषमांगी
+    मिश्रणों के उदाहरणों पर विचार कर सकते हैं?
+  made:
+    - {words: L13.1-4, by: hindi-repair}
+    - {words: L13.8-9, by: hindi-repair}
+    - {words: L13.10, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+    - {words: L13.12, by: hindi-repair}
+    - {words: L13.13, by: agent}
+    - {words: L13.14, by: hindi-repair}
+    - {words: L13.15, by: hindi-repair}
+    - {words: L13.16, by: hindi-repair}
+    - {words: L13.17-18, by: hindi-repair}
+    - {words: L13.19, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L14.8, by: hindi-repair}
+    - {words: L14.10, by: hindi-repair}
+    - {words: L14.11, by: hindi-repair}
+    - {words: L14.13, by: hindi-repair}
+    - {words: L14.14, by: hindi-repair}
+    - {words: L14.15, by: hindi-repair}
+    - {words: L14.16, by: hindi-repair}
+    - {words: L14.17, by: hindi-repair}
+    - {words: L15.1, by: hindi-repair}
+    - {words: L15.2, by: agent}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L15.8, by: hindi-repair}
+    - {words: L15.9, by: hindi-repair}
+    - {words: L15.10, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3, by: hindi-repair}
+    - {words: L16.4, by: agent}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.7, by: agent}
+    - {words: L16.8, by: hindi-repair}
+    - {words: L16.10, by: hindi-repair}
+    - {words: L16.12, by: agent}
+    - {words: L16.13, by: hindi-repair}
+    - {words: L16.14, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.6, by: hindi-repair}
+- id: "1.3"
+  kind: activity
+  page: 2
+  number: क्रियाकलाप 5.1—
+  title: आइए, प्रयोग करें — सामूहिक क्रियाकलाप
+  text: क्रियाकलाप 5.1— आइए, प्रयोग करें — सामूहिक क्रियाकलाप कक्षा को तीन समूहों—‘क’, ‘ख’ और ‘ग’ में
+    विभाजित कीजिए। निम्नलिखित चरणों का पालन करते हुए प्रत्येक समूह एक रंगहीन, पारदर्शी काँच के गिलास
+    अथवा एक 100 mL बीकर में मिश्रण बनाएगा। 1. समूह ‘क’— एक बीकर में 50 mL जल तथा एक स्पैचुला भरकर
+    साधारण नमक डालिए और इसे भली-भाँति विलोडित कीजिए। बीकर पर ‘क’ अंकित कीजिए। 2. समूह ‘ख’— एक बीकर
+    में 50 mL जल तथा एक स्पैचुला भरकर चॉक का चूर्ण लीजिए और भली-भाँति विलोडित कीजिए। बीकर पर ‘ख’
+    अंकित कीजिए। 3. समूह ‘ग’— एक बीकर में 50 mL जल तथा दुग्ध की कुछ बूँदें डालिए और भली-भाँति
+    विलोडित कीजिए। बीकर पर ‘ग’ अंकित कीजिए। 4. क्या आपको प्रत्येक मिश्रण में कण दिखाई दे रहे हैं?
+    अपने अवलोकनों को अभिलेखित कीजिए। 5. किसी लेसर संकेतक से निकले प्रकाश किरणपुंज को एक-एक करके
+    मिश्रणों के पात्रों पर डालिए (चित्र 5.3) और बीकर के पार्श्व से लेसर पुंज की लंबवत दिशा में उसका
+    अवलोकन कीजिए। अपने अवलोकनों को अभिलेखित कीजिए। सुरक्षा सर्वोपरि — लेसर किरणपुंज पर सीधी दृष्टि
+    नहीं डालनी चाहिए। इससे नेत्रों को अपूर्णीय क्षति पहुँच सकती है। 6. अनुमान लगाइए कि यदि इन बीकरों
+    को कुछ क्षणों के लिए स्थिर रखा जाए तो प्रत्येक बीकर में आपको क्या दिखाई देगा? 7. एक निस्यंदन
+    उपकरण व्यवस्थित कीजिए और उसकी सहायता से प्रत्येक मिश्रण का पृथक-पृथक निस्यंदन कीजिए। क्या
+    निस्यंदक पत्र पर कोई अवशेष रहता है? 8. अपने अवलोकनों के आधार पर बताइए कि क्या ये सभी मिश्रण एक
+    ही प्रकार के हैं अथवा भिन्न-भिन्न प्रकार के हैं?
+  made:
+    - {words: L19.5, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L20.3, by: hindi-repair}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.8, by: hindi-repair}
+    - {words: L20.9, by: hindi-repair}
+    - {words: L20.10, by: hindi-repair}
+    - {words: L20.11, by: hindi-repair}
+    - {words: L20.12, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.5, by: hindi-repair}
+    - {words: L21.6, by: hindi-repair}
+    - {words: L21.8-9, by: hindi-repair}
+    - {words: L21.10, by: hindi-repair}
+    - {words: L21.11, by: hindi-repair}
+    - {words: L21.12, by: hindi-repair}
+    - {words: L21.13, by: hindi-repair}
+    - {words: L21.14, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+    - {words: L22.5, by: hindi-repair}
+    - {words: L22.6, by: hindi-repair}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L23.12, by: agent}
+    - {words: L24.4, by: agent}
+    - {words: L24.7, by: agent}
+    - {words: L26.6, by: hindi-repair}
+    - {words: L27.1, by: agent}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.8, by: agent}
+    - {words: L29.6, by: hindi-repair}
+    - {words: L29.11, by: hindi-repair}
+    - {words: L30.2-L31.1, by: agent}
+    - {words: L31.2, by: agent}
+    - {words: L31.4, by: agent}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.6, by: hindi-repair}
+    - {words: L33.11, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L35.4-L36.3, by: agent}
+    - {words: L36.7-L37.2, by: agent}
+    - {words: L38.3, by: hindi-repair}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.7, by: agent}
+    - {words: L39.4, by: agent}
+    - {words: L39.7-L40.1, by: agent}
+    - {words: L41.1, by: hindi-repair}
+    - {words: L41.6, by: hindi-repair}
+    - {words: L46.2, by: hindi-repair}
+    - {words: L46.4-L47.1, by: agent}
+    - {words: L47.4, by: hindi-repair}
+    - {words: L47.5, by: hindi-repair}
+    - {words: L48.2, by: agent}
+    - {words: L48.3, by: hindi-repair}
+    - {words: L48.5, by: agent}
+    - {words: L49.7, by: hindi-repair}
+    - {words: L49.10, by: hindi-repair}
+    - {words: L50.2, by: hindi-repair}
+    - {words: L50.6, by: hindi-repair}
+    - {words: L50.8, by: hindi-repair}
+    - {words: L50.10, by: hindi-repair}
+    - {words: L1.3, page: 3, by: hindi-repair}
+    - {words: L1.5, page: 3, by: hindi-repair}
+    - {words: L1.11, page: 3, by: hindi-repair}
+    - {words: L2.1, page: 3, by: hindi-repair}
+    - {words: L2.3, page: 3, by: hindi-repair}
+    - {words: L2.4, page: 3, by: hindi-repair}
+    - {words: L3.3, page: 3, by: hindi-repair}
+    - {words: L3.9, page: 3, by: hindi-repair}
+    - {words: L3.17, page: 3, by: hindi-repair}
+    - {words: L4.1, page: 3, by: hindi-repair}
+    - {words: L4.4, page: 3, by: hindi-repair}
+- id: "1.4"
+  kind: figure
+  page: 2
+  number: चित्र 5.1
+  text: चित्र 5.1 — समांगी मिश्रण
+  crop: [435.2, 92.2, 565.6, 243.3]
+  made:
+    - {words: L18.4, by: agent}
+    - {box: true, by: figure-snap}
+- id: "1.5"
+  kind: figure
+  page: 2
+  number: चित्र 5.2
+  text: चित्र 5.2 — विषमांगी मिश्रण
+  crop: [432.7, 250.5, 564.5, 401.6]
+  made:
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.4, by: agent}
+    - {words: L43.5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "1.6"
+  kind: figure
+  page: 2
+  number: चित्र 5.3
+  text: (क) (ख) (ग) चित्र 5.3 — (क) नमक और जल, (ख) चॉक चूर्ण और जल तथा (ग) दुग्ध और जल के मिश्रणों में
+    से लेसर प्रकाश का संचरण
+  crop: [328.3, 412.4, 565.5, 750.8]
+  made:
+    - {words: L44, by: agent}
+    - {words: L45, by: agent}
+    - {words: L53, by: agent}
+    - {words: L54.4-5, by: agent}
+    - {words: L54.9-10, by: agent}
+    - {words: L54.12, by: hindi-repair}
+    - {words: L55.1-2, by: agent}
+    - {words: L55.7, by: hindi-repair}
+    - {words: L55.8, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "1.7"
+  kind: text
+  page: 3
+  text: वास्तव में ये भिन्न प्रकार के मिश्रण हैं। कैसे? आइए, इसका अन्वेषण करें!
+  made:
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L5.8, by: hindi-repair}
+    - {words: L5.9-10, by: agent}
+    - {words: L5.13, by: hindi-repair}
+- id: "2"
+  kind: section
+  page: 3
+  number: "5.2"
+  title: विलयन
+  text: 5.2 विलयन
+- id: "2.1"
+  kind: text
+  page: 3
+  text: आपने सीखा है कि विलयन समांगी मिश्रण होते हैं। आपको यह भी ज्ञात है कि विलयन तब बनता है जब कोई
+    विलेय ( वह पदार्थ जो घुलता है) किसी विलायक ( वह पदार्थ जिसमें विलेय घुलता है) में मिश्रित किया
+    जाता है। चीनी और जल के मिश्रण में चीनी विलेय है और जल विलायक है। किसी विलयन में विलेय और विलायक
+    किस अनुपात में उपस्थित होते हैं? क्या इन्हें मात्रात्मक रूप से व्यक्त किया जा सकता है?
+  made:
+    - {words: L10.6, by: agent}
+    - {words: L10.9, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L11.6, by: agent}
+    - {words: L11.10, by: hindi-repair}
+    - {words: L11.11, by: hindi-repair}
+    - {words: L11.12, by: hindi-repair}
+    - {words: L11.14, by: agent}
+    - {words: L11.16, by: hindi-repair}
+    - {words: L12.9, by: hindi-repair}
+    - {words: L12.19, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.9, by: hindi-repair}
+    - {words: L13.10, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+    - {words: L13.14, by: hindi-repair}
+- id: "2.2"
+  kind: section
+  page: 3
+  number: 5.2.1
+  title: विलयन की सांद्रता
+  text: 5.2.1 विलयन की सांद्रता
+- id: "2.2.1"
+  kind: text
+  page: 3
+  text: आपने सीखा है कि ‘ओरल रिहाइड्रेशन सॉल्यूशन’ (ORS) किस प्रकार बनाया जाता है। हम ओरल रिहाइड्रेशन
+    सॉल्यूशन बनाने के लिए नमक और चीनी की नियत मात्राएँ जल की एक निश्चित मात्रा में मिश्रित करते हैं।
+    यदि हम जल के किसी निश्चित आयतन में नमक अथवा चीनी की मात्राओं में परिवर्तन कर देते हैं अथवा नमक
+    एवं चीनी की निर्दिष्ट मात्राओं के लिए जल के आयतन में परिवर्तन कर देते हैं, तो हमें जल में नमक
+    तथा चीनी का विलयन तो प्राप्त होगा परंतु वह ओरल रिहाइड्रेशन सॉल्यूशन नहीं होगा। अन्य शब्दों में,
+    हम ओरल रिहाइड्रेशन सॉल्यूशन बनाने के लिए जल की एक निश्चित मात्रा में नमक तथा चीनी को अनियत
+    मात्रा में मिश्रित नहीं कर सकते हैं।
+  made:
+    - {words: L15.6, by: agent}
+    - {words: L15.7-10, by: agent}
+    - {words: L16.1, by: agent}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.15, by: hindi-repair}
+    - {words: L16.17, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.9, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+    - {words: L17.16-17, by: agent}
+    - {words: L17.18, by: hindi-repair}
+    - {words: L17.19, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.10, by: hindi-repair}
+    - {words: L18.11-12, by: agent}
+    - {words: L18.18, by: hindi-repair}
+    - {words: L18.19, by: hindi-repair}
+    - {words: L18.22, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.3, by: hindi-repair}
+    - {words: L20.10, by: hindi-repair}
+    - {words: L20.15, by: agent}
+    - {words: L20.16, by: hindi-repair}
+    - {words: L20.17, by: hindi-repair}
+    - {words: L21.5, by: hindi-repair}
+    - {words: L21.6, by: hindi-repair}
+    - {words: L21.7, by: hindi-repair}
+    - {words: L21.10, by: agent}
+    - {words: L21.11, by: hindi-repair}
+    - {words: L21.18, by: hindi-repair}
+    - {words: L21.20, by: hindi-repair}
+    - {words: L23.5, by: hindi-repair}
+    - {words: L23.7, by: hindi-repair}
+    - {words: L23.10, by: hindi-repair}
+- id: "2.2.2"
+  kind: text
+  page: 3
+  text: आइए, एक अन्य उदाहरण लेते हैं। जब कृषक अपनी फसलों पर पीड़कनाशियों का छिड़काव करते हैं, तो विलयन
+    बनाने के लिए उन्हें पीड़कनाशी की निश्चित मात्रा को जल की निश्चित मात्रा में मिश्रित करना चाहिए।
+    यदि वे ऐसा नहीं करते हैं तो क्या होगा? पीड़कनाशी की मात्रा यदि बहुत कम होगी तो फसल की रक्षा नहीं
+    हो सकेगी जबकि पीड़कनाशी की अधिक मात्रा से फसलों, मृदा और पर्यावरण को हानि हो सकती है।
+  made:
+    - {words: L25.3, by: hindi-repair}
+    - {words: L25.6, by: hindi-repair}
+    - {words: L25.8-9, by: agent}
+    - {words: L25.11, by: hindi-repair}
+    - {words: L25.13, by: agent}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.7, by: hindi-repair}
+    - {words: L26.8, by: hindi-repair}
+    - {words: L26.10, by: hindi-repair}
+    - {words: L26.15, by: hindi-repair}
+    - {words: L26.17, by: hindi-repair}
+    - {words: L27.6, by: hindi-repair}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.10, by: hindi-repair}
+    - {words: L27.12, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L28.6-7, by: agent}
+    - {words: L28.9, by: hindi-repair}
+    - {words: L28.14, by: hindi-repair}
+    - {words: L30.2, by: hindi-repair}
+- id: "2.2.3"
+  kind: text
+  page: 3
+  text: क्या आप ऐसे अन्य उदाहरणों के विषय में सोच सकते हैं?
+  made:
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.4, by: hindi-repair}
+    - {words: L32.5, by: hindi-repair}
+    - {words: L32.8, by: hindi-repair}
+    - {words: L32.11, by: hindi-repair}
+- id: "2.2.4"
+  kind: text
+  page: 3
+  text: विलयन तैयार करने के लिए पदार्थों को सदैव सही अनुपात में लेना आवश्यक होता है।
+  made:
+    - {words: L35.6, by: hindi-repair}
+    - {words: L35.11, by: hindi-repair}
+    - {words: L35.13, by: hindi-repair}
+- id: "2.2.5"
+  kind: text
+  page: 3
+  text: विलेय की वह मात्रा जो किसी विलायक अथवा विलयन की मात्रा में घुली होती है, विलयन की सांद्रता
+    कहलाती है।
+  made:
+    - {words: L37.12, by: hindi-repair}
+- id: "2.2.6"
+  kind: text
+  page: 3
+  text: सांद्रता को केवल विज्ञान प्रयोगशाला में ही नहीं, अपितु दैनिक जीवन में भी समझना आवश्यक है,
+    जैसे— औषधि, कृषि, खाद्य पदार्थों, प्रसाधन सामग्री में और यहाँ तक कि एक प्याली चाय बनाने में भी!
+  made:
+    - {words: L41.3-4, by: agent}
+    - {words: L41.7, by: hindi-repair}
+    - {words: L41.9, by: hindi-repair}
+    - {words: L41.13, by: hindi-repair}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.5-6, by: agent}
+    - {words: L43.8, by: hindi-repair}
+    - {words: L43.11, by: hindi-repair}
+    - {words: L45.2, by: hindi-repair}
+    - {words: L45.5, by: hindi-repair}
+- id: "2.3"
+  kind: section
+  page: 3
+  number: 5.2.2
+  title: हम सांद्रता को किस प्रकार व्यक्त करते हैं?
+  text: 5.2.2 हम सांद्रता को किस प्रकार व्यक्त करते हैं?
+  made:
+    - {words: L58.7, by: hindi-repair}
+    - {words: L58.9, by: hindi-repair}
+- id: "2.3.1"
+  kind: text
+  page: 3
+  text: आइए, अब हम विलयन की सांद्रता को व्यक्त करने की विभिन्न विधियों का अन्वेषण करें और यह समझें कि
+    प्रत्येक विधि का प्रयोग कहाँ और क्यों अधिक उपयुक्त है।
+  made:
+    - {words: L59.8, by: hindi-repair}
+    - {words: L59.11, by: hindi-repair}
+    - {words: L59.12, by: hindi-repair}
+    - {words: L59.14, by: hindi-repair}
+    - {words: L60.4, by: hindi-repair}
+    - {words: L60.6, by: hindi-repair}
+    - {words: L60.12, by: hindi-repair}
+    - {words: L60.14, by: hindi-repair}
+- id: "2.3.2"
+  kind: text
+  page: 3
+  text: कुछ व्यावसायिक डिब्बा बंद उत्पाद (चित्र 5.4) एकत्रित कीजिए और प्रत्येक उत्पाद पर लिखित जानकारी
+    को अभिलेखित कीजिए।
+  made:
+    - {words: L61.2, by: hindi-repair}
+    - {words: L61.3, by: hindi-repair}
+    - {words: L61.5, by: hindi-repair}
+    - {words: L61.11, by: hindi-repair}
+    - {words: L61.12, by: hindi-repair}
+    - {words: L62.5, by: hindi-repair}
+- id: "2.3.3"
+  kind: box
+  page: 3
+  title: टिप्पणी
+  text: टिप्पणी घर पर तैयार किए गए अथवा बाजार में उपलब्ध सभी मीठे पेय पदार्थ ओ.आर.एस. नहीं होते हैं।
+  made:
+    - {words: L18.1, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.3, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+- id: "2.3.4"
+  kind: box
+  page: 3
+  title: वैज्ञानिक-परिचय
+  text: वैज्ञानिक-परिचय दिलीप महालनोबिस, एक भारतीय शिशुरोग विशेषज्ञ ने अतिसार और हैजा जैसे रोगों से
+    उत्पन्न निर्जलीकरण के उपचार हेतु एक उपाय को विकसित और प्रचलित किया। इन्होंने ओ.आर.एस. का
+    सूत्रीकरण किया परिणामस्वरूप पुनर्जलीकरण उपचार में एक क्रांतिकारी परिवर्तन हुआ। विश्व स्वास्थ्य
+    संगठन (WHO) द्वारा इसे विश्व भर में लोकप्रिय करने के उपरांत इसने लाखों व्यक्तियों के जीवन की
+    रक्षा की।
+  made:
+    - {words: L31.1, by: hindi-repair}
+    - {words: L33.1, by: agent}
+    - {words: L38.2, by: agent}
+    - {words: L40.3, by: hindi-repair}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L46.1, by: hindi-repair}
+    - {words: "L46.4-5, L50.1", by: agent}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.2, by: agent}
+    - {words: L51.4, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.3, by: hindi-repair}
+    - {words: L52.5, by: hindi-repair}
+    - {words: L53.1, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+    - {words: L54.2, by: hindi-repair}
+    - {words: L55.1, by: hindi-repair}
+    - {words: L55.2, by: hindi-repair}
+- id: "2.3.5"
+  kind: figure
+  page: 3
+  text: ""
+  crop: [60, 509.8, 127.6, 590.4]
+  made:
+    - {box: true, by: figure-snap}
+- id: "2.3.6"
+  kind: text
+  page: 4
+  text: विलयन की सांद्रता को कई विधियों द्वारा व्यक्त किया जा सकता है। इनमें से प्रतिशत भी एक सामान्य
+    विधि है जिसकी चर्चा हम यहाँ कर रहे हैं। अन्य विधियों के विषय में आप उच्चतर कक्षाओं में अध्ययन
+    करेंगे।
+  made:
+    - {words: L2.6, by: hindi-repair}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.13, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.10, by: hindi-repair}
+    - {words: L3.11, by: hindi-repair}
+    - {words: L3.12, by: hindi-repair}
+    - {words: L3.15, by: hindi-repair}
+    - {words: L3.17, by: hindi-repair}
+    - {words: L3.18-19, by: agent}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.2, by: hindi-repair}
+- id: "2.3.7"
+  kind: text
+  page: 4
+  text: किसी विलयन की सांद्रता को प्रतिशत के रूप में व्यक्त करने की तीन मुख्य विधियाँ निम्नलिखित हैं।
+  made:
+    - {words: L5.9, by: hindi-repair}
+    - {words: L5.10, by: hindi-repair}
+    - {words: L5.14, by: hindi-repair}
+    - {words: L5.15, by: agent}
+    - {words: L5.16, by: hindi-repair}
+    - {words: L5.17, by: hindi-repair}
+- id: "2.3.8"
+  kind: heading
+  page: 4
+  title: क. द्रव्यमान-द्रव्यमान प्रतिशत (% m/m अथवा % w/w)
+  text: क. द्रव्यमान-द्रव्यमान प्रतिशत (% m/m अथवा % w/w)
+  made:
+    - {words: L10.2, by: hindi-repair}
+- id: "2.3.9"
+  kind: text
+  page: 4
+  text: सामान्यतः यह विधि समांगी मिश्रणों की सांद्रता व्यक्त करने हेतु प्रयुक्त होती है। यह विधि हमें
+    बताती है कि 100 g विलयन में विलेय के कितने ग्राम विद्यमान हैं।
+  made:
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.4, by: agent}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.8, by: hindi-repair}
+    - {words: L11.11, by: hindi-repair}
+    - {words: L11.16, by: hindi-repair}
+    - {words: L12.5, by: hindi-repair}
+    - {words: L12.11, by: hindi-repair}
+- id: "2.3.10"
+  kind: text
+  page: 4
+  text: इसे गणितीय रूप में निम्नलिखित प्रकार से व्यक्त किया जाता है —
+  made:
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.9, by: hindi-repair}
+    - {words: L13.10, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+- id: "2.3.11"
+  kind: equation
+  page: 4
+  number: (5.1)
+  text: "द्रव्यमान- द्रव्यमान प्रतिशत = विलेय का द्रव्यमान विलयन का द्रव्यमान ×100\t\b (5.1)"
+  made:
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.2, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+- id: "2.3.12"
+  kind: text
+  page: 4
+  text: सांद्रता व्यक्त करने की इस विधि का उपयोग विषमांगी मिश्रणों जैसे कि दुग्ध पाउडर (चित्र 5.4 क)
+    और मसालों के मिश्रण के लिए भी किया जाता है। इसका प्रयोग डिब्बाबंद खाद्य पदार्थों के संघटन को
+    व्यक्त करने के लिए भी किया जाता है जिससे यह ज्ञात होता है कि उनमें कितना नमक, चीनी अथवा प्रोटीन
+    विद्यमान है।
+  made:
+    - {words: L18.2, by: hindi-repair}
+    - {words: L18.9, by: agent}
+    - {words: L18.10, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.12-14, by: hindi-repair}
+    - {words: L19.16, by: hindi-repair}
+    - {words: L19.18-21, by: hindi-repair}
+    - {words: L19.23, by: hindi-repair}
+    - {words: L20.7, by: agent}
+    - {words: L20.13, by: hindi-repair}
+- id: "2.3.13"
+  kind: example
+  page: 4
+  number: उदाहरण 5.1—
+  text: उदाहरण 5.1— यदि 90 g जल में 10 g नमक मिश्रित किया गया हो तो प्राप्त विलयन का
+    द्रव्यमान-द्रव्यमान प्रतिशत परिकलित कीजिए।
+  made:
+    - {words: L21.7, by: hindi-repair}
+    - {words: L21.16, by: hindi-repair}
+    - {words: L21.19, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+- id: "2.3.14"
+  kind: text
+  page: 4
+  text: उत्तर — नमक (विलेय) का द्रव्यमान = 10 g जल (विलायक) का द्रव्यमान = 90 g विलयन का कुल द्रव्यमान
+    = विलेय का द्रव्यमान + विलायक का द्रव्यमान = 10 g + 90 g = 100 g द्रव्यमान-द्रव्यमान प्रतिशत =
+    विलेय का द्रव्यमान विलयन का द्रव्यमान × 100 = 10 g 100 g × 100 = 10 % m/m
+  made:
+    - {words: L23.1, by: agent}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L25.8, by: hindi-repair}
+    - {words: L25.12, by: hindi-repair}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+- id: "2.3.15"
+  kind: heading
+  page: 4
+  title: ख. द्रव्यमान-आयतन प्रतिशत (% m/v अथवा % w/v)
+  text: ख. द्रव्यमान-आयतन प्रतिशत (% m/v अथवा % w/v)
+  made:
+    - {words: L34.2, by: hindi-repair}
+- id: "2.3.16"
+  kind: text
+  page: 4
+  text: इस विधि का उपयोग उस स्थिति में किया जाता है जब द्रव को तोलने की तुलना में उसका आयतन मापना अधिक
+    सुगम होता है, उदाहरण के लिए— दवाइयों और प्रयोगशालाओं में। एक सामान्य उदाहरण 5% ग्लूकोस का विलयन
+    है (चित्र 5.4 ख)। यह हमें बताता है कि 100 mL विलयन में विलेय की कितनी मात्रा (ग्राम) विद्यमान
+    है।
+  made:
+    - {words: L37.6, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L37.16-19, by: hindi-repair}
+    - {words: L37.20, by: hindi-repair}
+    - {words: L38.8, by: hindi-repair}
+    - {words: L38.10-11, by: agent}
+    - {words: L38.12, by: hindi-repair}
+    - {words: L38.14, by: hindi-repair}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.9, by: hindi-repair}
+    - {words: L39.10, by: agent}
+    - {words: L39.16, by: hindi-repair}
+- id: "2.3.17"
+  kind: text
+  page: 4
+  text: गणितीय रूप में,
+  made:
+    - {words: L41.3, by: hindi-repair}
+- id: "2.3.18"
+  kind: equation
+  page: 4
+  number: (5.2)
+  text: "द्रव्यमान-आयतन प्रतिशत = विलेय का द्रव्यमान विलयन का आयतन × 100\t\t \b (5.2)"
+  made:
+    - {words: L43.1, by: hindi-repair}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L46.1, by: hindi-repair}
+    - {words: L46.2, by: hindi-repair}
+- id: "2.3.19"
+  kind: example
+  page: 4
+  number: उदाहरण 5.2—
+  text: उदाहरण 5.2— यदि 5 g ग्लूकोस को जल में घोलकर 100 mL विलयन बनाया जाता है तो उसकी सांद्रता
+    द्रव्यमान-आयतन प्रतिशत के रूप में परिकलित कीजिए।
+  made:
+    - {words: L48.6, by: hindi-repair}
+    - {words: L48.9, by: hindi-repair}
+    - {words: L49.2, by: hindi-repair}
+    - {words: L49.6, by: hindi-repair}
+- id: "2.3.20"
+  kind: text
+  page: 4
+  text: उत्तर — ग्लूकोस (विलेय) का द्रव्यमान = 5 g विलयन का आयतन = 100 mL द्रव्यमान-आयतन प्रतिशत =
+    विलेय का द्रव्यमान विलयन का आयतन × 100 = 5 g 100 mL × 100 = 5 % m/v
+  made:
+    - {words: L50.1, by: agent}
+    - {words: L50.3, by: hindi-repair}
+    - {words: L50.6, by: hindi-repair}
+    - {words: L56.1, by: hindi-repair}
+    - {words: L54.1, by: hindi-repair}
+    - {words: L54.2, by: hindi-repair}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L58.1, by: hindi-repair}
+    - {words: L58.2, by: hindi-repair}
+- id: "2.3.21"
+  kind: figure
+  page: 4
+  number: चित्र 5.4
+  text: (क) (ख) श्वेत सिरका 5% v/v ऐसीटिक अम्ल (ग) चित्र 5.4 — कुछ व्यावसायिक डिब्बाबंद उत्पादों का
+    संघटन— (क) दुग्ध पाउडर, (ख) ग्लूकोस का विलयन और (ग) सिरका
+  crop: [484.3, 129.7, 589.2, 751.2]
+  made:
+    - {words: L35, by: agent}
+    - {words: L36, by: agent}
+    - {words: L47.1, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L48.21, by: agent}
+    - {words: L48.22, by: hindi-repair}
+    - {words: L51, by: agent}
+    - {words: L53.5, by: hindi-repair}
+    - {words: L57.1, by: hindi-repair}
+    - {words: L57.2, by: hindi-repair}
+    - {words: L59.2-5, by: hindi-repair}
+    - {words: L59.8, by: hindi-repair}
+    - {words: L63.5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "2.3.22"
+  kind: heading
+  page: 5
+  title: ग. आयतन-आयतन प्रतिशत (% v/v )
+  text: ग. आयतन-आयतन प्रतिशत (% v/v )
+- id: "2.3.23"
+  kind: text
+  page: 5
+  text: यह विधि दो मिश्रणीय द्रवों को मिश्रित करते समय प्रयुक्त की जाती है। उदाहरणार्थ— इत्र, सौंदर्य
+    प्रसाधन एवं सिरका (चित्र 5.4 ग)। आयतन-आयतन प्रतिशत (% v/v) व्यक्त करता है कि 100 mL विलयन में
+    विलेय के कितने mL उपस्थित हैं। गणितीय रूप में,
+  made:
+    - {words: L20.5, by: hindi-repair}
+    - {words: L20.10, by: hindi-repair}
+    - {words: L20.14, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.12, by: hindi-repair}
+    - {words: L22.6, by: hindi-repair}
+    - {words: L22.11, by: hindi-repair}
+    - {words: L22.12, by: hindi-repair}
+    - {words: L22.15, by: hindi-repair}
+- id: "2.3.24"
+  kind: equation
+  page: 5
+  number: (5.3)
+  text: आयतन-आयतन प्रतिशत = विलेय का आयतन विलयन का आयतन × 100 (5.3)
+- id: "2.3.25"
+  kind: example
+  page: 5
+  number: उदाहरण 5.3—
+  text: उदाहरण 5.3— धान की फसल पर छिड़काव के लिए यदि किसी पीड़कनाशी द्रव के 1 mL को पर्याप्त जल में
+    मिश्रित करके 100 mL पीड़कनाशी छिड़काव बनाया गया हो, तो उसका आयतन-आयतन प्रतिशत ज्ञात कीजिए।
+  made:
+    - {words: L27.7, by: hindi-repair}
+    - {words: L27.12, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L28.11, by: hindi-repair}
+    - {words: L28.12, by: hindi-repair}
+- id: "2.3.26"
+  kind: text
+  page: 5
+  text: उत्तर — पीड़कनाशी (विलेय) का आयतन = 1 mL विलयन का कुल आयतन = 100 mL आयतन-आयतन प्रतिशत = विलेय
+    का आयतन विलयन का आयतन × 100 = 1 mL 100 mL × 100 = 1 % v/v
+  made:
+    - {words: L30.1, by: agent}
+    - {words: L30.3, by: hindi-repair}
+- id: "2.3.27"
+  kind: box
+  page: 5
+  title: टिप्पणी
+  text: "टिप्पणी उद्योगों में सामान्यत: भार-भार प्रतिशत (% w/w) का उपयोग प्रचलित है, क्योंकि भार तथा
+    द्रव्यमान का सामान्यत: एक-दूसरे के स्थान पर उपयोग किया जाता है। आंकिक रूप से % m/m तथा % w/w
+    दोनों एक-दूसरे के समान होते हैं।"
+  made:
+    - {words: L40.1, by: hindi-repair}
+    - {words: L41.1, by: hindi-repair}
+    - {words: L41.2, by: hindi-repair}
+    - {words: L41.3, by: hindi-repair}
+    - {words: L41.12, by: hindi-repair}
+    - {words: L41.15, by: hindi-repair}
+    - {words: L41.17, by: hindi-repair}
+    - {words: L41.20, by: hindi-repair}
+    - {words: L42.14, by: hindi-repair}
+    - {words: L42.19, by: hindi-repair}
+- id: "2.3.28"
+  kind: box
+  page: 5
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 1. किसी साधारण प्रसाधन पाउडर (टैल्कम पाउडर) में 4% m/m जिंक ऑक्साइड है, जो एक
+    पूतिरोधी (antiseptic) की भाँति कार्य करता है। 300 g टैल्कम पाउडर में जिंक ऑक्साइड की कितनी
+    मात्रा उपस्थित है? 2. आपकी माँ ने आपको अपने अतिथि मित्रों को परोसने के लिए संतरे के सांद्रित रस
+    की एक बोतल दी है। वे आपको एक गिलास में सांद्र रस के दो बड़े चम्मच जल में मिश्रित करने के लिए
+    कहती हैं। यदि प्रत्येक बड़े चम्मच का माप 15 mL हो और आप प्रत्येक व्यक्ति के लिए 150 mL रस तैयार
+    करते हैं, तो आपके द्वारा बनाए गए मिश्रण में संतरे के सांद्र रस का आयतनानुसार सांद्रता प्रतिशत (%
+    v/v) क्या होगा? 3. सिरका, जिसका उपयोग खाद्य परिरक्षक (preservatives) और योज्य (additives) के रूप
+    में किया जाता है, में 5% v/v ऐसीटिक अम्ल होता है। ध्यान रखिए कि ग्लैशल ऐसीटिक अम्ल एक द्रव है,
+    जो 100% ऐसीटिक अम्ल है। यदि आप ग्लैशल ऐसीटिक अम्ल से सिरका बनाना चाहते हैं तो यह आप किस प्रकार
+    बनाएँगे?
+  made:
+    - {words: L44.6, by: hindi-repair}
+    - {words: L44.8, by: hindi-repair}
+    - {words: L44.12, by: hindi-repair}
+    - {words: L44.20, by: hindi-repair}
+    - {words: L45.5, by: hindi-repair}
+    - {words: L45.7, by: hindi-repair}
+    - {words: L45.9, by: hindi-repair}
+    - {words: L45.13, by: hindi-repair}
+    - {words: L46.8, by: hindi-repair}
+    - {words: L46.26, by: hindi-repair}
+    - {words: L47.5, by: hindi-repair}
+    - {words: L47.6, by: hindi-repair}
+    - {words: L47.8, by: hindi-repair}
+    - {words: L47.14, by: hindi-repair}
+    - {words: L47.16, by: hindi-repair}
+    - {words: L47.17, by: hindi-repair}
+    - {words: L47.18, by: hindi-repair}
+    - {words: L47.26, by: hindi-repair}
+    - {words: L48.1, by: hindi-repair}
+    - {words: L48.9, by: hindi-repair}
+    - {words: L48.16, by: hindi-repair}
+    - {words: L48.22, by: agent}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L50.9, by: hindi-repair}
+    - {words: L50.13, by: hindi-repair}
+    - {words: L50.17, by: hindi-repair}
+    - {words: L50.20, by: agent}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.4, by: hindi-repair}
+    - {words: L51.7, by: agent}
+    - {words: L51.8, by: agent}
+    - {words: L51.9, by: hindi-repair}
+    - {words: L51.15, by: agent}
+    - {words: L51.16, by: hindi-repair}
+    - {words: L51.20, by: agent}
+    - {words: L51.21, by: agent}
+    - {words: L51.22, by: hindi-repair}
+    - {words: L52.3, by: agent}
+    - {words: L52.5, by: hindi-repair}
+- id: "2.4"
+  kind: section
+  page: 5
+  number: 5.2.3
+  title: पदार्थों की विलेयता
+  text: 5.2.3 पदार्थों की विलेयता
+  made:
+    - {words: L53.2, by: hindi-repair}
+    - {words: L53.4, by: agent}
+- id: "2.4.1"
+  kind: text
+  page: 5
+  text: आपने यह सीखा है कि विलेय की वह अधिकतम मात्रा जो किसी निश्चित तापमान पर विलायक की एक निश्चित
+    मात्रा (100 mL अथवा 100 g) में घुलती है, उसकी विलेयता कहलाती है। वह विलयन जो उस तापमान पर और
+    अधिक विलेय को नहीं घोल सकता है, संतृप्त विलयन कहलाता है। हम तापमान का उल्लेख क्यों करते हैं? ऐसा
+    इसलिए है क्योंकि ठोस विलेयों की द्रव विलायक में विलेयता प्रायः तापमान में वृद्धि के साथ-साथ
+    बढ़ती है जबकि दूसरी ओर, गैसों को द्रवों में घोलने पर उनकी विलेयता प्रायः तापमान में वृद्धि के
+    साथ घटती है। विलेयता एक महत्त्वपूर्ण गुणधर्म है जिसका उपयोग मिश्रणों से पदार्थों को पृथक करने के
+    लिए किया जाता है। आइए, इसका और अधिक अन्वेषण करें।
+  made:
+    - {words: L59.13, by: hindi-repair}
+    - {words: L60.1, by: hindi-repair}
+    - {words: L60.8, by: hindi-repair}
+    - {words: L60.9, by: agent}
+    - {words: L60.12, by: agent}
+    - {words: L61.7, by: hindi-repair}
+    - {words: L61.11, by: hindi-repair}
+    - {words: L62.1, by: hindi-repair}
+    - {words: L62.2, by: hindi-repair}
+    - {words: L62.4, by: hindi-repair}
+    - {words: L62.8, by: hindi-repair}
+    - {words: L62.10, by: hindi-repair}
+    - {words: L62.14, by: hindi-repair}
+    - {words: L62.15, by: agent}
+    - {words: L62.18, by: hindi-repair}
+    - {words: L63.4, by: hindi-repair}
+    - {words: L63.9, by: hindi-repair}
+    - {words: L63.11, by: hindi-repair}
+    - {words: L63.12, by: hindi-repair}
+    - {words: L63.16, by: agent}
+    - {words: L64.1, by: hindi-repair}
+    - {words: L64.7, by: agent}
+    - {words: L64.9, by: agent}
+    - {words: L64.10, by: hindi-repair}
+    - {words: L64.14, by: hindi-repair}
+    - {words: L64.16, by: hindi-repair}
+    - {words: L65.11, by: hindi-repair}
+- id: "2.4.2"
+  kind: box
+  page: 5
+  title: जिज्ञासा-सूत्र
+  text: जिज्ञासा-सूत्र चिकित्सालयों में प्रयुक्त लवणीय विलयन प्रायः सोडियम क्लोराइड (साधारण नमक) का जल
+    में 0.9 % m/v विलयन होता है अर्थात इसके 100 mL विलयन में 0.9 g नमक विद्यमान होता है (चित्र 5.5)।
+    0.9% लवणीय विलयन रुधिर के लिए सुरक्षित होता है तथा शरीर से निकले हुए तरल की क्षतिपूर्ति करता है।
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3-6, by: hindi-repair}
+    - {words: L2.7, by: hindi-repair}
+    - {words: L3.4, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L13.2-5, by: hindi-repair}
+    - {words: "L17.1-2, L18.1", by: agent}
+    - {words: L17.4-5, by: hindi-repair}
+- id: "2.4.3"
+  kind: figure
+  page: 5
+  number: चित्र 5.5
+  text: चित्र 5.5 — लवणीय विलयन
+  crop: [133.2, 116.8, 209.3, 330.8]
+  made:
+    - {box: true, by: figure-snap}
+- id: "2.4.4"
+  kind: activity
+  page: 6
+  number: क्रियाकलाप 5.2—
+  title: आइए, विलेयता को ग्राफ के रूप में निरूपित करें
+  text: क्रियाकलाप 5.2— आइए, विलेयता को ग्राफ के रूप में निरूपित करें जल को विलायक और यौगिक ‘क’ तथा
+    ‘ख’ को विलेय मानिए। प्रत्येक पदार्थ की विलेयता भिन्न होती है। तापमान के सापेक्ष विलेयता का
+    ग्राफ, विलेयता वक्र कहलाता है। विलेय के रूप में ‘क’ और ‘ख’ के विलेयता वक्रों को चित्र 5.6 में
+    दर्शाया गया है। x-अक्ष तापमान (°C) प्रदर्शित कर रहा है जबकि y-अक्ष प्रति 100 g जल में विलेय की
+    विलेयता को ग्राम में दर्शा रहा है। उपर्युक्त आलेख से प्राप्त सूचना के आधार पर अनुमान लगाइए कि
+    किसी निश्चित तापमान पर दो यौगिकों ‘क’ और ‘ख’ में से कौन-सा जल की दी हुई मात्रा में अधिक विलेय
+    होगा? चित्र 5.6 का अवलोकन कीजिए और निम्नलिखित रिक्त स्थानों की पूर्ति कीजिए। (i) 20°C पर यौगिक
+    ‘क’ की जल में विलेयता 60°C पर उसकी विलेयता _________ (से कम है / से अधिक है/के समान है)। (ii)
+    20°C पर यौगिक ‘ख’ की विलेयता 60°C पर उसकी विलेयता _________ (से कम है/ से अधिक है / के समान है)।
+    (iii) तापमान में वृद्धि से ____________ की विलेयता में ____________ की अपेक्षा अधिक वृद्धि होती
+    है (यौगिक ‘क’/ यौगिक ‘ख’)।
+  made:
+    - {words: L2.4, by: agent}
+    - {words: L2.9, by: hindi-repair}
+    - {words: L2.11, by: hindi-repair}
+    - {words: L3.11, by: agent}
+    - {words: L3.12, by: hindi-repair}
+    - {words: L3.13, by: hindi-repair}
+    - {words: L3.15, by: agent}
+    - {words: L3.16, by: hindi-repair}
+    - {words: L4.5, by: agent}
+    - {words: L4.8, by: agent}
+    - {words: L4.15, by: hindi-repair}
+    - {words: L5.1, by: agent}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.6, by: hindi-repair}
+    - {words: L5.7, by: hindi-repair}
+    - {words: L5.13, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.8, by: agent}
+    - {words: L6.11, by: hindi-repair}
+    - {words: L6.12, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L35.13, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.5, by: hindi-repair}
+    - {words: L36.13, by: hindi-repair}
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.3, by: hindi-repair}
+    - {words: L37.4, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L37.8, by: hindi-repair}
+    - {words: L37.9, by: hindi-repair}
+    - {words: L37.10, by: hindi-repair}
+    - {words: L37.11, by: hindi-repair}
+    - {words: L37.12, by: hindi-repair}
+    - {words: L38.8, by: hindi-repair}
+    - {words: L38.9, by: agent}
+    - {words: L38.13, by: agent}
+    - {words: L40.7, by: agent}
+    - {words: L40.11, by: agent}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L42.8, by: agent}
+    - {words: L42.9, by: hindi-repair}
+- id: "2.4.5"
+  kind: text
+  page: 6
+  text: यदि आप उच्च तापमान पर एक संतृप्त विलयन बनाते हैं और उसे धीरे-धीरे ठंडा करते हैं, तो विचार
+    कीजिए कि इसका क्या परिणाम होगा? आइए, इसे ज्ञात करते हैं।
+  made:
+    - {words: L44.3, by: hindi-repair}
+    - {words: L44.7-L45.4, by: agent}
+    - {words: L45.7, by: hindi-repair}
+    - {words: L45.10-11, by: agent}
+    - {words: L45.14, by: hindi-repair}
+    - {words: L46.4, by: hindi-repair}
+    - {words: L46.11, by: hindi-repair}
+- id: "3"
+  kind: section
+  page: 6
+  number: "5.3"
+  title: समांगी मिश्रणों के पृथक्करण की विधियाँ
+  text: 5.3 समांगी मिश्रणों के पृथक्करण की विधियाँ
+  made:
+    - {words: L47.2, by: agent}
+    - {words: L47.3, by: hindi-repair}
+    - {words: L47.5, by: hindi-repair}
+    - {words: L47.7, by: agent}
+- id: "3.1"
+  kind: section
+  page: 6
+  number: 5.3.1
+  title: क्रिस्टलीकरण
+  text: 5.3.1 क्रिस्टलीकरण
+  made:
+    - {words: L48.2, by: hindi-repair}
+- id: "3.1.1"
+  kind: text
+  page: 6
+  text: आपने संतृप्त विलयन बनाना सीख लिया है। यदि आप 60°C पर यौगिक ‘ख’ का जल में बना एक संतृप्त विलयन
+    लेते हैं जिसे 100 g जल में यौगिक ‘ख’ के 287 g को घोल कर बनाया गया है, तो विलयन को 40°C तक
+    धीरे-धीरे ठंडा करने पर क्या होगा? चित्र 5.6 के अनुसार 40°C पर यौगिक ‘ख’ की जल में विलेयता 241 g
+    प्रति 100 g है। यह इंगित करता है कि यौगिक ‘ख’ के केवल 241 g ही विलयन में विद्यमान हो सकते हैं और
+    इसका शेष भाग शुद्ध ठोस क्रिस्टलों के रूप में पृथक हो जाएगा। क्रिस्टल एक ऐसा ठोस पदार्थ है, जो
+    कणों की एक नियमित ज्यामितीय प्रतिरूप से निर्मित होता है।
+  made:
+    - {words: L49.2, by: hindi-repair}
+    - {words: L49.4, by: agent}
+    - {words: L49.16, by: hindi-repair}
+    - {words: L49.19, by: hindi-repair}
+    - {words: L50.3, by: hindi-repair}
+    - {words: L50.8, by: hindi-repair}
+    - {words: L51.4-5, by: agent}
+    - {words: L51.9, by: hindi-repair}
+    - {words: L52.1, by: hindi-repair}
+    - {words: L52.2, by: agent}
+    - {words: L52.10-13, by: hindi-repair}
+    - {words: L52.20-21, by: agent}
+    - {words: L52.26, by: hindi-repair}
+    - {words: L53.4, by: hindi-repair}
+    - {words: L53.11, by: hindi-repair}
+    - {words: L53.14, by: hindi-repair}
+    - {words: L53.18, by: hindi-repair}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L54.6, by: hindi-repair}
+    - {words: L54.10, by: hindi-repair}
+    - {words: L54.13, by: hindi-repair}
+- id: "3.1.2"
+  kind: figure
+  page: 6
+  number: चित्र 5.6
+  text: y विलेयता (100 g जल में विलेय की मात्रा ग्राम में) 400 यौगिक ‘ख’ 350 300 287 250 241 200 150
+    100 यौगिक ‘क’ 50 0 x 10 20 30 40 50 60 70 80 तापमान (°C) चित्र 5.6 — जल में यौगिकों ‘क’ और ‘ख’
+    के विलेयता वक्र
+  crop: [108.6, 173.2, 459.3, 386.1]
+  made:
+    - {words: L8.1, by: agent}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L34.11, by: agent}
+    - {box: true, by: figure-snap}
+- id: "3.1.3"
+  kind: text
+  page: 7
+  text: आपने दैनिक जीवन में अनेक प्रकार के क्रिस्टल देखे होंगे, जैसे — सेंधा नमक के क्रिस्टल (चित्र
+    5.7 क) अथवा चीनी के क्रिस्टल (चित्र 5.7 ख), जो मिश्री (कैंडी शुगर) बनाते समय निर्मित होते हैं।
+    हिमकण भी क्रिस्टल होते हैं जो वायु में जलवाष्प के जमने से बनते हैं। यहाँ तक कि खिड़कियों पर
+    तुषार (पाला) की परत भी तब बनती है जब जलवाष्प बर्फ के क्रिस्टलों में परिवर्तित हो जाती है (चित्र
+    5.7 ग)। अब आप समझ गए होंगे कि प्राकृतिक रूप से क्रिस्टल किस प्रकार बनते हैं।
+  made:
+    - {words: L1.4, by: hindi-repair}
+    - {words: L1.8, by: hindi-repair}
+    - {words: L1.10, by: hindi-repair}
+    - {words: L1.13, by: hindi-repair}
+    - {words: L1.16, by: hindi-repair}
+    - {words: L2.7, by: hindi-repair}
+    - {words: L2.13-14, by: agent}
+    - {words: L2.18, by: hindi-repair}
+    - {words: L2.20, by: hindi-repair}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.8, by: hindi-repair}
+    - {words: L3.9, by: agent}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.18, by: hindi-repair}
+    - {words: L3.20-23, by: hindi-repair}
+    - {words: L4.1, by: agent}
+    - {words: L4.9, by: agent}
+    - {words: L4.10, by: hindi-repair}
+    - {words: L4.12, by: hindi-repair}
+    - {words: L4.13, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L5.7-8, by: agent}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L5.15, by: hindi-repair}
+- id: "3.1.4"
+  kind: text
+  page: 7
+  text: प्रयोगशालाओं में किसी संतृप्त विलयन से क्रिस्टल बनाने की प्रक्रिया को क्रिस्टलीकरण कहा जाता
+    है। इस विधि का उपयोग उन घुलनशील ठोस पदार्थों के पृथक्करण के लिए किया जाता है जिनमें से एक पदार्थ
+    की विलेयता एक निश्चित तापमान पर दूसरे पदार्थ की विलेयता से कम होती है। इस विधि का उपयोग ठोस
+    पदार्थों के शुद्धिकरण के लिए भी किया जा सकता है। क्रिस्टलीकरण द्वारा शुद्धिकरण की प्रक्रिया
+    विभिन्न तापमानों पर पदार्थ की विलेयता में भिन्नता के सिद्धांत पर आधारित है।
+  made:
+    - {words: L6.1-2, by: agent}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.5-L7.2, by: agent}
+    - {words: L7.5, by: hindi-repair}
+    - {words: L7.10, by: hindi-repair}
+    - {words: L8.10, by: hindi-repair}
+    - {words: L8.12, by: hindi-repair}
+    - {words: L8.18, by: hindi-repair}
+    - {words: L9.3, by: hindi-repair}
+    - {words: L9.5, by: agent}
+    - {words: L9.7, by: hindi-repair}
+    - {words: L9.11, by: hindi-repair}
+    - {words: L9.13, by: agent}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L10.14, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.7, by: agent}
+    - {words: L11.8, by: hindi-repair}
+    - {words: L11.9, by: hindi-repair}
+    - {words: L11.11, by: hindi-repair}
+- id: "3.1.5"
+  kind: text
+  page: 7
+  text: आप क्रिस्टल बनाने का स्वयं प्रयास कीजिए।
+  made:
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+- id: "3.1.6"
+  kind: activity
+  page: 7
+  number: क्रियाकलाप 5.3
+  title: आइए, क्रिस्टल बनाएँ
+  text: क्रियाकलाप 5.3 — आइए, क्रिस्टल बनाएँ 1. कॉपर सल्फेट (नीला थोथा) का एक प्रतिदर्श लीजिए। यदि
+    कॉपर सल्फेट उपलब्ध न हो, तो आप साधारण नमक का उपयोग भी विकल्प के रूप में कर सकते हैं। सुरक्षा
+    सर्वोपरि— कॉपर सल्फेट अविषालु होता है। यह प्रयोग किसी वयस्क की देखरेख में ही करना चाहिए और ध्यान
+    रखें कि कॉपर सल्फेट को नग्न हाथों से कभी भी स्पर्श न करें। 2. 100 mL के एक बीकर में 1 g कॉपर
+    सल्फेट लीजिए। बीकर में 25 mL जल और तनु सल्फ्यूरिक अम्ल की एक बूँद डालिए। मिश्रण को निरंतर
+    विलोडित करते हुए जल-ऊष्मक पर धीरे-धीरे गर्म कीजिए। सल्फ्यूरिक अम्ल अवांछित अभिक्रियाओं को
+    अवरुद्ध कर शुद्ध क्रिस्टल बनाने में सहायता करता है। सुरक्षा सर्वोपरि— यह सलाह दी जाती है कि
+    सल्फ्यूरिक अम्ल को शिक्षक द्वारा बीकर में डाला जाना चाहिए। सल्फ्यूरिक अम्ल का उपयोग अत्यंत
+    सावधानीपूर्वक कीजिए। 3. धीरे-धीरे कॉपर सल्फेट की कुछ और मात्रा तब तक मिलाइए जब तक कि विलयन
+    संतृप्त न हो जाए (चित्र 5.8 क)। 4. अघुलनशील अशुद्धियों को पृथक करने के लिए गर्म विलयन का
+    निस्यंदन कीजिए (छान लीजिए) (चित्र 5.8 ख)। निस्यंद को एक स्वच्छ बीकर में एकत्रित कीजिए और इसे वॉच
+    ग्लास से ढक दीजिए। 5. इसे स्थिर रखकर धीरे-धीरे ठंडा होने दीजिए (चित्र 5.8 ग)। इससे विलयन में
+    विद्यमान कणों को संगठित होकर नीले रंग के बड़े, चमकदार एवं सुरूपित क्रिस्टल बनने के लिए पर्याप्त
+    समय मिल जाता है। 6. निर्मित क्रिस्टलों को निस्यंदित कर लीजिए। अब इन्हें ठंडे जल से धोइए तथा वॉच
+    ग्लास पर सूखने के लिए रख दीजिए (चित्र 5.8 घ)। आप यह प्रयास भी कर सकते हैं— 1. संतृप्त कॉपर
+    सल्फेट विलयन के 1–2 mL काँच की एक छोटी प्लेट अथवा लेमिनेशन शीट पर रखिए। 2. इसे कुछ समय के लिए
+    छोड़ दीजिए। आप क्या देखते हैं? क्या आपको क्रिस्टल प्राप्त हुए? यदि हाँ, तो क्या यह प्रयोग करने
+    की अच्छी विधि है? व्याख्या कीजिए।
+  made:
+    - {words: L16.5, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.8, by: hindi-repair}
+    - {words: L21.12, by: hindi-repair}
+    - {words: L23.7, by: hindi-repair}
+    - {words: L23.17, by: hindi-repair}
+    - {words: L24.6, by: hindi-repair}
+    - {words: L24.9, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L26.5, by: agent}
+    - {words: L26.11, by: hindi-repair}
+    - {words: L26.13-14, by: agent}
+    - {words: L26.15, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.6, by: hindi-repair}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.13, by: hindi-repair}
+    - {words: L36.7, by: hindi-repair}
+    - {words: L36.11, by: hindi-repair}
+    - {words: L37.3, by: hindi-repair}
+    - {words: L38.1-4, by: agent}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.8-10, by: hindi-repair}
+    - {words: L38.11, by: agent}
+    - {words: L39.6, by: agent}
+    - {words: L40.2-3, by: agent}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L40.6, by: hindi-repair}
+    - {words: L40.7, by: hindi-repair}
+    - {words: L41.2-3, by: agent}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L43.9, by: hindi-repair}
+    - {words: L44.1, by: hindi-repair}
+    - {words: L44.6, by: hindi-repair}
+    - {words: L46.1, by: hindi-repair}
+    - {words: L46.2, by: hindi-repair}
+    - {words: L46.5, by: hindi-repair}
+    - {words: L46.6, by: hindi-repair}
+    - {words: L52.2-3, by: agent}
+    - {words: L52.5, by: hindi-repair}
+    - {words: L53.7, by: hindi-repair}
+    - {words: L56.3, by: hindi-repair}
+    - {words: L58.2, by: hindi-repair}
+    - {words: L58.5, by: hindi-repair}
+    - {words: L60.5, by: hindi-repair}
+    - {words: L60.8, by: hindi-repair}
+    - {words: L62.2, by: hindi-repair}
+    - {words: L62.8, by: hindi-repair}
+    - {words: L66.3, by: hindi-repair}
+    - {words: L66.5-6, by: agent}
+    - {words: L69.4, by: agent}
+    - {words: L69.6, by: hindi-repair}
+    - {words: L69.8, by: hindi-repair}
+    - {words: L2.7, page: 8, by: hindi-repair}
+    - {words: L2.10, page: 8, by: agent}
+    - {words: L2.11, page: 8, by: hindi-repair}
+    - {words: L2.12, page: 8, by: agent}
+    - {words: L2.15, page: 8, by: hindi-repair}
+    - {words: L4.2, page: 8, by: hindi-repair}
+    - {words: L4.3, page: 8, by: hindi-repair}
+    - {words: L4.5, page: 8, by: agent}
+    - {words: L4.9, page: 8, by: hindi-repair}
+    - {words: L4.16, page: 8, by: hindi-repair}
+    - {words: L6.7, page: 8, by: hindi-repair}
+    - {words: L7.2, page: 8, by: hindi-repair}
+    - {words: L7.4, page: 8, by: hindi-repair}
+    - {words: L7.13, page: 8, by: hindi-repair}
+    - {words: L8.7, page: 8, by: hindi-repair}
+    - {words: L8.10, page: 8, by: hindi-repair}
+    - {words: L8.12, page: 8, by: hindi-repair}
+    - {words: L9.1, page: 8, by: hindi-repair}
+    - {words: L9.3, page: 8, by: hindi-repair}
+    - {words: L9.4, page: 8, by: hindi-repair}
+    - {words: L9.9, page: 8, by: hindi-repair}
+    - {words: L9.14, page: 8, by: hindi-repair}
+    - {words: L9.17, page: 8, by: hindi-repair}
+- id: "3.1.7"
+  kind: box
+  page: 7
+  title: टिप्पणी
+  text: टिप्पणी सल्फ्यूरिक अम्ल की आवश्यकता केवल कुछ लवणों के क्रिस्टलीकरण हेतु होती है।
+  made:
+    - {words: L12.1, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.2, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.2-3, by: agent}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+- id: "3.1.8"
+  kind: figure
+  page: 7
+  number: चित्र 5.7
+  text: (क) (ख) (ग) चित्र 5.7 — (क) सेंधा नमक, (ख) मिश्री और (ग) तुषार (पाला) के क्रिस्टल
+  crop: [49.4, 80.1, 146.6, 365.5]
+  made:
+    - {words: L23.5, by: hindi-repair}
+    - {words: L25.1, by: agent}
+    - {words: L25.3, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "3.1.9"
+  kind: figure
+  page: 7
+  number: चित्र 5.8
+  text: काँच की छड़ बीकर जल- ऊष्मक कॉपर सल्फेट का विलयन काँच की छड़ शंक्वाकार कीप प्रयोगशाला स्टैंड
+    त्रिपाद स्टैंड बीकर बर्नर वॉच ग्लास वॉच ग्लास बीकर कॉपर सल्फेट के क्रिस्टल निस्यंद (घ) कॉपर
+    सल्फेट के क्रिस्टल (ग) निस्यंद को ठंडा करना चित्र 5.8 — क्रिस्टलीकरण प्रक्रिया के चरण (क)
+    संतृप्त विलयन बनाना (ख) गर्म संतृप्त विलयन को निस्यंदित करना
+  crop: [40.3, 392, 345, 752.1]
+  made:
+    - {words: L28.1, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L31.1, by: agent}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.2-3, by: agent}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.2, by: hindi-repair}
+    - {words: L45.1, by: hindi-repair}
+    - {words: L45.2, by: hindi-repair}
+    - {words: L48.1, by: hindi-repair}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L50.1, by: hindi-repair}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L55.1, by: hindi-repair}
+    - {words: L55.2, by: hindi-repair}
+    - {words: L57.1, by: hindi-repair}
+    - {words: L57.2, by: hindi-repair}
+    - {words: L59.1, by: hindi-repair}
+    - {words: L61.1, by: hindi-repair}
+    - {words: L61.2-3, by: agent}
+    - {words: L63.1, by: hindi-repair}
+    - {words: L63.2, by: hindi-repair}
+    - {words: L65.1, by: hindi-repair}
+    - {words: L67.2, by: hindi-repair}
+    - {words: L67.3-4, by: agent}
+    - {words: L67.5, by: hindi-repair}
+    - {words: L67.6, by: hindi-repair}
+    - {words: L68.2, by: hindi-repair}
+    - {words: L70.1, by: hindi-repair}
+    - {words: L70.4, by: hindi-repair}
+    - {words: L70.5, by: hindi-repair}
+    - {words: L70.6, by: hindi-repair}
+    - {words: L71.2-L72.2, by: agent}
+    - {words: L72.4, by: agent}
+    - {words: L75.2, by: hindi-repair}
+    - {words: L75.3-L76.2, by: agent}
+    - {words: L76.5, by: agent}
+    - {box: true, by: figure-snap}
+- id: "3.1.10"
+  kind: text
+  page: 8
+  text: क्रिस्टलीकरण, समांगी मिश्रणों से शुद्ध पदार्थों (क्रिस्टलों) को पृथक करने की एक सामान्य तकनीक
+    है। जब नए यौगिक बनाए जाते हैं तो बहुधा उनके साथ अवांछित अशुद्धियाँ भी होती हैं। क्रिस्टलीकरण
+    वांछित शुद्ध पदार्थ को अवांछित अशुद्धियों से पृथक करने में सहायता करता है।
+  made:
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2, by: agent}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L10.7, by: hindi-repair}
+    - {words: L10.13, by: hindi-repair}
+    - {words: L11.7, by: hindi-repair}
+    - {words: L11.16, by: hindi-repair}
+    - {words: L11.17, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.10, by: hindi-repair}
+- id: "3.1.11"
+  kind: box
+  page: 8
+  title: वैज्ञानिक की भाँति सोचिए
+  text: वैज्ञानिक की भाँति सोचिए यदि कॉपर सल्फेट के गर्म संतृप्त विलयन को कक्ष के तापमान पर धीरे-धीरे
+    ठंडा करने की अपेक्षा हिमशीतित जल में तीव्रता से ठंडा किया जाए तो निर्मित होने वाले क्रिस्टल छोटे
+    होंगे तथा भली-भाँति निर्मित नहीं हो पाएँगे। इस परिकल्पना का परीक्षण करने के लिए आप किसी प्रयोग
+    की अभिकल्पना एवं उसका निष्पादन किस प्रकार करेंगे? संकेत— कॉपर सल्फेट का एक गर्म संतृप्त विलयन
+    तैयार कीजिए और उसे दो समान भागों में विभाजित कीजिए।
+  made:
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.6-L15.4, by: agent}
+    - {words: L15.7, by: agent}
+    - {words: L15.11-12, by: agent}
+    - {words: L15.17, by: agent}
+    - {words: L15.19, by: hindi-repair}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.9, by: hindi-repair}
+    - {words: L16.11, by: hindi-repair}
+    - {words: L16.13, by: agent}
+    - {words: L16.14, by: hindi-repair}
+    - {words: L16.15, by: hindi-repair}
+    - {words: L16.17, by: agent}
+    - {words: L16.19, by: hindi-repair}
+    - {words: L17.9, by: hindi-repair}
+    - {words: L17.12, by: hindi-repair}
+    - {words: L18.1-5, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.10, by: hindi-repair}
+    - {words: L18.11-L19.4, by: agent}
+    - {words: L19.12, by: hindi-repair}
+    - {words: L19.13, by: hindi-repair}
+- id: "3.1.12"
+  kind: box
+  page: 8
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 4. क्रियाकलाप 5.2 में दिए गए विलेयता वक्रों का संदर्भ लीजिए। यदि यौगिक ‘क’ और
+    ‘ख’ के गर्म, संतृप्त विलयनों के समान द्रव्यमान को 80°C से 60°C तक ठंडा किया जाए, तो किस विलयन से
+    अधिक ठोस निक्षेपित होने की संभावना है? 5. वाष्पीकरण की दर बढ़ाने अथवा घटाने पर साधारण नमक के
+    क्रिस्टलों के आकार में क्या कोई परिवर्तन होगा? व्याख्या कीजिए।
+  made:
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.3, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.6, by: agent}
+    - {words: L21.7, by: hindi-repair}
+    - {words: L21.9, by: hindi-repair}
+    - {words: L21.17, by: hindi-repair}
+    - {words: L21.18, by: hindi-repair}
+    - {words: L21.19, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L23.4, by: hindi-repair}
+    - {words: L23.11, by: hindi-repair}
+    - {words: L23.14, by: hindi-repair}
+    - {words: L23.15, by: hindi-repair}
+    - {words: L23.17, by: hindi-repair}
+    - {words: L23.19, by: hindi-repair}
+- id: "3.1.13"
+  kind: activity
+  page: 8
+  number: क्रियाकलाप 5.4
+  title: आइए, एक प्रक्रिया का वर्णन करें
+  text: क्रियाकलाप 5.4 — आइए, एक प्रक्रिया का वर्णन करें चित्र 5.9 को ध्यानपूर्वक देखिए। यह दर्शाता है
+    कि समुद्री जल से नमक के क्रिस्टल किस प्रकार प्राप्त किए जाते हैं। इस प्रक्रिया का अपने शब्दों
+    में वर्णन कीजिए।
+  made:
+    - {words: L25.8, by: hindi-repair}
+    - {words: L25.9, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4-7, by: hindi-repair}
+    - {words: L26.8, by: hindi-repair}
+    - {words: L26.10, by: hindi-repair}
+    - {words: L26.11, by: hindi-repair}
+    - {words: L26.12, by: hindi-repair}
+    - {words: L26.13-15, by: hindi-repair}
+    - {words: L26.17, by: hindi-repair}
+    - {words: L26.19, by: hindi-repair}
+    - {words: L26.20, by: hindi-repair}
+    - {words: L26.21, by: hindi-repair}
+    - {words: L26.22, by: hindi-repair}
+    - {words: L26.23, by: hindi-repair}
+    - {words: L26.24, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.4, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.6, by: hindi-repair}
+    - {words: L27.7, by: hindi-repair}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.10, by: hindi-repair}
+- id: "3.1.14"
+  kind: figure
+  page: 8
+  number: चित्र 5.9
+  text: समुद्री जल संतृप्त विलयन नमक के क्रिस्टल चित्र 5.9 — नमक उत्पादन की प्रक्रिया के चरण
+  crop: [161, 540.1, 407, 603.2]
+  made:
+    - {words: L28.1, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L32.5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "3.1.15"
+  kind: box
+  page: 8
+  title: आइए, और आगे विचार करें
+  text: आइए, और आगे विचार करें क्या आपने कभी किसी ऐसे स्थान का भ्रमण किया है जहाँ प्रकृति में
+    बड़े-बड़े क्रिस्टल दिखाई दिए हों? ऐसे क्रिस्टल विभिन्न स्थानों, जैसे— खदानों, गुफाओं और यहाँ तक
+    कि भू-पर्पटी में भी देखे जा सकते हैं। इसका एक उदाहरण सोहरा (चेरापूंजी) में स्थित मावसमाई गुफा है
+    (चित्र 5.10 क) जो अपनी आकर्षक प्राकृतिक संरचनाओं के लिए विख्यात है। स्फटिक (Quartz) (चित्र 5.10
+    ख) भी प्रकृति में पाए जाने वाले सुंदर क्रिस्टलों में से एक है।
+  made:
+    - {words: L33.3, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.5, by: hindi-repair}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L34.12-13, by: agent}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.2, by: hindi-repair}
+    - {words: L35.3, by: hindi-repair}
+    - {words: L35.6, by: hindi-repair}
+    - {words: L35.8, by: hindi-repair}
+    - {words: L35.9, by: hindi-repair}
+    - {words: L35.10, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L36.3-4, by: agent}
+    - {words: L36.9, by: hindi-repair}
+    - {words: L36.10, by: hindi-repair}
+    - {words: L37.2, by: hindi-repair}
+    - {words: L37.7-L38.1, by: agent}
+    - {words: L38.2, by: hindi-repair}
+    - {words: L38.3, by: hindi-repair}
+    - {words: L38.4, by: agent}
+    - {words: L39.8, by: hindi-repair}
+    - {words: L39.9-10, by: agent}
+    - {words: L39.11-12, by: agent}
+    - {words: L40.2, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L40.10-11, by: agent}
+    - {words: L40.12, by: hindi-repair}
+    - {words: L41.4-L42.1, by: agent}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L42.3, by: hindi-repair}
+- id: "3.1.16"
+  kind: figure
+  page: 8
+  number: चित्र 5.10
+  text: (क) (ख) चित्र 5.10 — प्रकृति में पाए जाने वाले क्रिस्टल — (क) गुफाओं में (ख) स्फटिक
+  crop: [83, 635, 277, 752]
+  made:
+    - {words: L43.1-2, by: agent}
+    - {words: L43.3-4, by: agent}
+    - {words: L44.4-5, by: agent}
+    - {words: L44.6, by: hindi-repair}
+    - {words: L44.10, by: hindi-repair}
+    - {words: L44.12-13, by: agent}
+    - {words: L44.14-15, by: agent}
+    - {words: L44.16, by: hindi-repair}
+    - {words: L44.17-18, by: agent}
+    - {words: L44.19, by: hindi-repair}
+    - {box: true, by: agent}
+- id: "3.1.17"
+  kind: text
+  page: 9
+  text: "जब हम किसी विलयन से विलायक को वाष्पित होने देते हैं, तो विलेय शेष रह जाता है तथा विलायक
+    विलुप्त हो जाता है, जैसे— नमक के विलयन से नमक प्राप्त करने की प्रक्रिया। अब विचार कीजिए यदि हम
+    विलायक को भी पुन: प्राप्त करना चाहते हैं तो इसके लिए हमें क्या करना होगा?"
+  made:
+    - {words: L18.8, by: hindi-repair}
+    - {words: L18.11, by: hindi-repair}
+    - {words: L19.5, by: agent}
+    - {words: L19.15, by: hindi-repair}
+    - {words: L20.13, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.6, by: hindi-repair}
+    - {words: L21.7, by: hindi-repair}
+- id: "3.1.18"
+  kind: text
+  page: 9
+  text: प्रयोगशाला में प्रयोग करते समय किसी विद्यार्थी ने त्रुटिवश दो मिश्रणीय द्रवों, ऐसीटोन और जल को
+    मिला दिया। हम इन दो मिश्रणीय द्रवों को किस प्रकार पृथक कर सकते हैं? क्या दो मिश्रणीय द्रवों के
+    मिश्रण को वाष्पीकरण द्वारा पृथक कर दोनों द्रवों को प्राप्त किया जा सकता है?
+  made:
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.9, by: agent}
+    - {words: L22.12, by: hindi-repair}
+    - {words: L23.1, by: agent}
+    - {words: L23.11, by: hindi-repair}
+    - {words: L24.3, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L24.7, by: hindi-repair}
+    - {words: L24.11, by: hindi-repair}
+    - {words: L24.15, by: hindi-repair}
+    - {words: L25.1, by: hindi-repair}
+    - {words: L25.3, by: hindi-repair}
+- id: "3.2"
+  kind: section
+  page: 9
+  number: 5.3.2
+  title: आसवन
+  text: 5.3.2 आसवन
+- id: "3.2.1"
+  kind: text
+  page: 9
+  text: "दो मिश्रणीय द्रवों के समांगी मिश्रण को गर्म करके पृथक किया जा सकता है। गर्म करने पर कम
+    क्वथनांक वाला द्रव वाष्पित हो जाता है। उत्पन्न वाष्प को ठंडा किया जाता है जिससे वह पुनः द्रव में
+    परिवर्तित हो जाती है (चित्र 5.11)। इस प्रक्रिया को आसवन कहते हैं। इस विधि द्वारा विलायक पुन:
+    प्राप्त किया जा सकता है अथवा ऐसे द्रवों को पृथक किया जा सकता है जिनके क्वथनांकों में कम-से-कम 25
+    °C का अंतर हो। इस विधि का उपयोग उस विलयन से द्रव को प्राप्त करने के लिए भी किया जा सकता है
+    जिसमें ठोस घुलनशील पदार्थ हों।"
+  made:
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.5, by: agent}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.15, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L28.7, by: hindi-repair}
+    - {words: L28.11, by: hindi-repair}
+    - {words: L28.12, by: hindi-repair}
+    - {words: L29.3, by: agent}
+    - {words: L29.5-8, by: hindi-repair}
+    - {words: L29.10, by: hindi-repair}
+    - {words: L29.11, by: hindi-repair}
+    - {words: L29.16, by: agent}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L30.9, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L31.11, by: hindi-repair}
+    - {words: L32.12, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.6-9, by: hindi-repair}
+    - {words: L33.10, by: hindi-repair}
+    - {words: L33.11, by: hindi-repair}
+- id: "3.2.2"
+  kind: text
+  page: 9
+  text: इस प्रक्रिया में कम क्वथनांक वाले द्रव की वाष्प को एक संघनित्र (condenser) से प्रवाहित किया
+    जाता है जहाँ उसे सामान्यतः जल की धारा अथवा वायु द्वारा ठंडा किया जाता है और वह शुद्ध द्रव के रूप
+    में संघनित हो जाती है। इस शुद्ध द्रव को एक पृथक पात्र में एकत्रित किया जाता है जबकि मिश्रण में
+    उपस्थित ठोस अथवा अन्य द्रव आसवन फ्लास्क में ही रह जाते हैं। आसवन विधि की व्यवस्था को चित्र 5.12
+    में दर्शाया गया है।
+  made:
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+    - {words: L34.9, by: hindi-repair}
+    - {words: L35.8, by: hindi-repair}
+    - {words: L36.6-8, by: hindi-repair}
+    - {words: L36.12, by: hindi-repair}
+    - {words: L36.13-L37.2, by: agent}
+    - {words: L37.7-9, by: hindi-repair}
+    - {words: L38.3, by: hindi-repair}
+    - {words: L38.10, by: hindi-repair}
+    - {words: L38.11, by: hindi-repair}
+    - {words: L38.14, by: hindi-repair}
+    - {words: L39.3, by: hindi-repair}
+    - {words: L39.4, by: hindi-repair}
+    - {words: L39.8, by: hindi-repair}
+    - {words: L39.12, by: hindi-repair}
+    - {words: L40.1, by: hindi-repair}
+    - {words: L40.2, by: hindi-repair}
+- id: "3.2.3"
+  kind: box
+  page: 9
+  title: भारत का वैज्ञानिक योगदान
+  text: भारत का वैज्ञानिक योगदान नमक का क्रिस्टलीकरण एक प्राचीन प्रक्रिया थी जिसका उपयोग भारत के तटीय
+    क्षेत्रों के स्थानीय समुदायों द्वारा किया जाता था। ‘पांगा’ नमक समुद्र के सांद्र खारे जल को
+    उबालकर प्राप्त किया जाता था जबकि समुद्री जल के वाष्पीकरण द्वारा ‘करकच’ नमक तैयार होता था। इन
+    विधियों द्वारा नमक के भिन्न-भिन्न आकार के क्रिस्टल बनाए जाते थे।
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.6, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.2, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.4, by: hindi-repair}
+    - {words: L4.5, by: hindi-repair}
+    - {words: L4.6, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L5.6, by: hindi-repair}
+    - {words: L6.1, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.6, by: hindi-repair}
+    - {words: L6.7, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.2, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.5, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L9.3, by: hindi-repair}
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.6, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+- id: "3.2.4"
+  kind: figure
+  page: 9
+  number: चित्र 5.11
+  text: द्रव तापन वाष्प शीतलन द्रव (आसुत) चित्र 5.11 — आसवन प्रक्रिया
+  crop: [70.9, 319.8, 215.3, 446.7]
+  made:
+    - {words: L13.1, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L15.1, by: hindi-repair}
+    - {words: L16.2-5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "3.2.5"
+  kind: figure
+  page: 9
+  number: चित्र 5.12
+  text: तापमापी जल निकास प्रयोगशाला स्टैंड जल संघनित्र आसवन फ्लास्क जल प्रवेशिका ऐसीटोन तथा जल का
+    मिश्रण तार की जाली त्रिपाद स्टैंड शंक्वाकार फ्लास्क बर्नर ऐसीटोन चित्र 5.12 — आसवन विधि की
+    व्यवस्था
+  crop: [52.5, 473.8, 533.9, 752.8]
+  made:
+    - {words: L41.1, by: hindi-repair}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L44.2, by: hindi-repair}
+    - {words: L45.2, by: hindi-repair}
+    - {words: L46.2, by: hindi-repair}
+    - {words: L47.1, by: agent}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L47.4, by: hindi-repair}
+    - {words: L47.5, by: hindi-repair}
+    - {words: L48.1, by: hindi-repair}
+    - {words: L48.2, by: hindi-repair}
+    - {words: L48.3, by: hindi-repair}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L49.2, by: hindi-repair}
+    - {words: L50.1, by: hindi-repair}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L52.1, by: hindi-repair}
+    - {words: L53.1, by: agent}
+    - {words: L54.1, by: hindi-repair}
+    - {words: L54.5, by: hindi-repair}
+    - {words: L54.6, by: hindi-repair}
+    - {words: L54.7, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "3.2.6"
+  kind: text
+  page: 10
+  text: ऐसीटोन और जल के मिश्रण को आसवन विधि द्वारा पृथक किया जा सकता है क्योंकि उनके क्वथनांक पर्याप्त
+    रूप से भिन्न हैं। ऐसीटोन 56 °C पर उबलता है और जल 100 °C पर उबलता है। क्वथनांकों में अधिक अंतर
+    होने के कारण एक द्रव पहले वाष्पित हो जाता है जबकि दूसरे द्रव की वाष्प समुचित मात्रा में उसके
+    पश्चात बनती है।
+  made:
+    - {words: L2.1, by: agent}
+    - {words: L2.15, by: hindi-repair}
+    - {words: L2.17, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.6, by: agent}
+    - {words: L3.19, by: hindi-repair}
+    - {words: L3.20, by: hindi-repair}
+    - {words: L4.2-5, by: hindi-repair}
+    - {words: L4.12, by: hindi-repair}
+    - {words: L4.17-20, by: hindi-repair}
+    - {words: L4.23, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+- id: "3.2.7"
+  kind: box
+  page: 10
+  title: भारत का वैज्ञानिक योगदान
+  text: भारत का वैज्ञानिक योगदान आसवन की प्रक्रिया का उपयोग लंबे समय से विभिन्न उद्देश्यों के लिए किया
+    जाता रहा है जिसमें पुष्पों से सुगंधित पदार्थों का निष्कर्षण कर इत्र बनाना भी सम्मिलित है। आपने
+    अवश्य अनुभव किया होगा कि पहली वर्षा के पश्चात मिट्टी से एक सोंधी सुगंध उठती है। उत्तर प्रदेश के
+    कन्नौज शहर, जिसे भारत की इत्र राजधानी कहा जाता है, में इस मनमोहक सुगंध को संकलित कर सोंधी सुगंध
+    वाला ‘मिट्टी का इत्र’ (सोंधी सुगंध) तैयार किया जाता है। यह इत्र एक पारंपरिक आसवन विधि द्वारा
+    बनाया जाता है। इत्र बनाने की इस विधि को ‘देग भापका विधि’ (चित्र 5.13) कहा जाता है। यह विधि
+    कन्नौज में पीढ़ी-दर-पीढ़ी हस्तांतरित होती रही है। इस इत्र की माँग भारत के साथ-साथ संपूर्ण विश्व
+    में बड़े स्तर पर है। कन्नौज स्थित सुगंध एवं स्वाद विकास केंद्र में पुष्पों, पत्तियों तथा पादपों
+    के अन्य भागों से स्वाद एवं सुगंध अवयवों को पृथक करने की सुविधाएँ उपलब्ध हैं। यह केंद्र
+    सुगंध-उत्पादक पादपों की खेती में कृषकों की सहायता करता है तथा इत्र व्यवसाय स्थापित करने के
+    इच्छुक व्यक्तियों को विशेषज्ञों द्वारा मार्गदर्शन प्रदान करता है।
+  made:
+    - {words: L6.1, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.4, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L7.10, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.5-L9.2, by: agent}
+    - {words: L9.4-L10.2, by: agent}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L10.8, by: agent}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L12.8, by: hindi-repair}
+    - {words: L12.10, by: hindi-repair}
+    - {words: L12.11-L13.2, by: agent}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.10, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L15.13, by: hindi-repair}
+    - {words: L16.3-L17.2, by: agent}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L20.3, by: agent}
+    - {words: L20.12, by: hindi-repair}
+    - {words: L20.13, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.13, by: hindi-repair}
+    - {words: L21.14, by: hindi-repair}
+    - {words: L21.15, by: hindi-repair}
+    - {words: L21.16, by: hindi-repair}
+    - {words: L21.17, by: hindi-repair}
+    - {words: L21.20, by: hindi-repair}
+    - {words: L21.21, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.3-4, by: agent}
+    - {words: L22.5, by: hindi-repair}
+    - {words: L22.6, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L22.9, by: hindi-repair}
+    - {words: L22.11, by: hindi-repair}
+    - {words: L22.12, by: hindi-repair}
+    - {words: L22.14, by: hindi-repair}
+    - {words: L22.17, by: hindi-repair}
+    - {words: L22.23, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L23.3-4, by: agent}
+    - {words: L23.5, by: hindi-repair}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L23.9, by: hindi-repair}
+    - {words: L23.10-11, by: agent}
+    - {words: L23.18, by: hindi-repair}
+    - {words: L23.19, by: hindi-repair}
+    - {words: L23.22-23, by: agent}
+    - {words: L23.24, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+- id: "3.2.8"
+  kind: figure
+  page: 10
+  number: चित्र 5.13
+  text: चित्र 5.13 — देग-भापका विधि
+  crop: [377.3, 174.6, 568.2, 313.2]
+  made:
+    - {words: L19.4, by: agent}
+    - {box: true, by: figure-snap}
+- id: "3.2.9"
+  kind: box
+  page: 10
+  title: आइए, और आगे बढ़ें
+  text: आइए, और आगे बढ़ें पेट्रोलियम परिशोधनशाला (refinery) (चित्र 5.14 क) एक औद्योगिक इकाई है जहाँ
+    कच्चे तेल (crude oil) को संसाधित कर विभिन्न उपयोगी पेट्रोलियम उत्पाद प्राप्त किए जाते हैं।
+    पेट्रोलियम उत्पाद उपयोगी गैसों और द्रवों के मिश्रण हैं, जैसे— पेट्रोलियम गैस, पेट्रोल, किरोसिन,
+    डीजल इत्यादि। अपरिष्कृत पेट्रोलियम पृथ्वी की भू-पर्पटी से निकाला जाता है और इसे प्रभाजी आसवन
+    (fractional distillation) की प्रक्रिया द्वारा विभिन्न प्रभाजों में पृथक किया जाता है (चित्र 5.14
+    ख)। प्रभाजी आसवन वह प्रक्रिया है जिसके द्वारा मिश्रण के ऐसे घटकों को पृथक किया जाता है जिनके
+    क्वथनांकों में अपेक्षाकृत कम अंतर (25 °C से कम) होता है। गैसीय प्रभाज को उच्च दाब पर इस्पात के
+    सिलेंडरों में भरा जाता है जहाँ वह द्रवीकृत हो जाती है। इसका उपयोग घरेलू ईंधन के रूप में द्रवीकृत
+    पेट्रोलियम गैस (LPG) के रूप में किया जाता है।
+  made:
+    - {words: L25.4, by: hindi-repair}
+    - {words: L26.2, by: agent}
+    - {words: L26.12, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.6, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.11, by: hindi-repair}
+    - {words: L27.13, by: hindi-repair}
+    - {words: L27.15, by: hindi-repair}
+    - {words: L27.18, by: hindi-repair}
+    - {words: L28.4, by: agent}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L28.7-8, by: agent}
+    - {words: L28.10, by: hindi-repair}
+    - {words: L28.12, by: hindi-repair}
+    - {words: L29.1, by: agent}
+    - {words: L29.8, by: hindi-repair}
+    - {words: L31.1, by: agent}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.10, by: agent}
+    - {words: L32.6, by: hindi-repair}
+    - {words: L32.13, by: hindi-repair}
+    - {words: L32.14, by: hindi-repair}
+    - {words: L34.1-2, by: agent}
+    - {words: L34.12, by: agent}
+    - {words: L34.14, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.3, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L35.10-11, by: agent}
+    - {words: L37.1-2, by: agent}
+    - {words: L37.3, by: agent}
+    - {words: L37.6, by: hindi-repair}
+    - {words: L37.7-8, by: agent}
+    - {words: L37.14, by: hindi-repair}
+- id: "3.2.10"
+  kind: figure
+  page: 10
+  number: चित्र 5.14—
+  text: द्रवीकृत पेट्रोलियम गैस पेट्रोल वैमानिक ईंधन (किरोसीन) डीज़ल अपरिष्कृत तेल स्नेहक तेल भट्टी
+    बिटुमिन (ख) (क) चित्र 5.14— (क) पेट्रोलियम परिशोधनशाला और (ख) अपरिष्कृत पेट्रोलियम के प्रभाजी
+    आसवन से प्राप्त उत्पाद
+  crop: [105.7, 479.7, 580, 738.6]
+  made:
+    - {words: L30.1-2, by: agent}
+    - {words: L36.2, by: agent}
+    - {words: L38.1, by: agent}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L40.1-2, by: agent}
+    - {words: L41.1, by: hindi-repair}
+    - {words: L42.1-2, by: hindi-repair}
+    - {words: L43.1, by: agent}
+    - {words: L44, by: agent}
+    - {words: L46.5, by: agent}
+    - {words: L46.8-9, by: agent}
+    - {words: L46.12, by: agent}
+    - {words: L46.15, by: hindi-repair}
+    - {words: L46.16, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "3.3"
+  kind: section
+  page: 11
+  number: 5.3.3
+  title: कागज वर्णलेखिकी (कागज वर्णलेखन)
+  text: 5.3.3 कागज वर्णलेखिकी (कागज वर्णलेखन)
+  made:
+    - {words: L15.3, by: agent}
+    - {words: L15.5, by: agent}
+- id: "3.3.1"
+  kind: text
+  page: 11
+  text: क्या आपने कभी ध्यान दिया है कि कागज पर स्केच पेन से लिखे हुए शब्दों पर यदि जल की एक बूँद गिर
+    जाए तो क्या होता है? आपने देखा होगा कि रंग फैल जाते हैं। यदि स्केच पेन काले रंग का है तो अलग-अलग
+    रंग फैल सकते हैं। यदि आपने पहले ऐसा नहीं देखा तो इसे करके देखिए।
+  made:
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.4, by: hindi-repair}
+    - {words: L16.10, by: hindi-repair}
+    - {words: L16.15, by: hindi-repair}
+    - {words: L17.4-L18.1, by: agent}
+    - {words: L18.5, by: hindi-repair}
+    - {words: L18.13-14, by: agent}
+    - {words: L18.16, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.11-12, by: agent}
+    - {words: L19.14, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+- id: "3.3.2"
+  kind: activity
+  page: 11
+  number: क्रियाकलाप 5.5
+  title: आइए, जाँच करें
+  text: क्रियाकलाप 5.5 — आइए, जाँच करें (i) वर्णलेखन कागज की एक 3 cm चौड़ी पट्टी लीजिए और उसके निचले
+    सिरे से 2 cm ऊपर पेंसिल से एक क्षैतिज रेखा खींचिए (चित्र 5.15 क)। आप निस्यंदक पत्र (filter
+    paper) की पट्टी का भी विकल्प के रूप में उपयोग कर सकते हैं। 2. इस क्षैतिज रेखा के मध्य में काले
+    रंग के स्केच-पेन से एक बिंदु अंकित कीजिए (चित्र 5.15 ख)। 3. एक गैस जार अथवा मापक सिलेंडर अथवा एक
+    बीकर में इतना जल लीजिए कि तल पर उसकी पतली परत बन जाए। 4. कागज की पट्टी को पात्र में इस प्रकार
+    खड़ा कीजिए कि उसका निचला सिरा जल में डूब जाए। जल-स्तर बिंदु से नीचे ही रहना चाहिए जैसा कि चित्र
+    5.15 (ग) में दर्शाया गया है। 5. जल स्तर का कागज पर ऊपर चढ़ते समय अवलोकन कीजिए। आप क्या देखते
+    हैं? 6. जैसे-जैसे जल ऊपर चढ़ता है तो स्याही भिन्न-भिन्न रंगों के धब्बों के रूप में पृथक हो जाती
+    है। इससे आप क्या निष्कर्ष निकालते हैं?
+  made:
+    - {words: L21.6, by: hindi-repair}
+    - {words: L22.2, by: agent}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.9-10, by: hindi-repair}
+    - {words: L23.4, by: hindi-repair}
+    - {words: L23.8-9, by: agent}
+    - {words: L23.10, by: agent}
+    - {words: L23.15, by: hindi-repair}
+    - {words: L24.4-5, by: hindi-repair}
+    - {words: L24.8, by: hindi-repair}
+    - {words: L24.11, by: hindi-repair}
+    - {words: L24.15, by: hindi-repair}
+    - {words: L25.4-5, by: agent}
+    - {words: L25.7, by: hindi-repair}
+    - {words: L25.8, by: hindi-repair}
+    - {words: L25.12, by: hindi-repair}
+    - {words: L25.16-19, by: hindi-repair}
+    - {words: L27.7, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L32.4-5, by: hindi-repair}
+    - {words: L32.8, by: hindi-repair}
+    - {words: L32.11, by: hindi-repair}
+    - {words: L33.4, by: agent}
+    - {words: L33.6, by: hindi-repair}
+    - {words: L33.9, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L37.3, by: hindi-repair}
+    - {words: L40.3, by: hindi-repair}
+    - {words: L40.5, by: hindi-repair}
+    - {words: L42.5, by: hindi-repair}
+    - {words: L42.8, by: hindi-repair}
+    - {words: L42.9, by: hindi-repair}
+    - {words: L45.1, by: hindi-repair}
+    - {words: L45.3, by: hindi-repair}
+    - {words: L45.6, by: hindi-repair}
+    - {words: L45.11, by: agent}
+    - {words: L47.1, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L47.4, by: hindi-repair}
+- id: "3.3.3"
+  kind: text
+  page: 11
+  text: मिश्रण के घटकों को पृथक करने की इस विधि को कागज वर्णलेखिकी (paper chromatography) कहते हैं। इस
+    विधि में घटकों को पृथक करने हेतु इन घटकों की विलायक तथा कागज के साथ अंतर्क्रिया में अंतर का
+    उपयोग किया जाता है। द्रव (विलायक) पदार्थों को कागज पर ऊपर की ओर ले जाता है और उनकी गति में अंतर
+    के आधार पर इन्हें पृथक कर देता है। आप इस प्रयोग को काली स्याही के स्थान पर हरे खाद्य रंग के साथ
+    भी कर सकते हैं तथा विलायक के रूप में 2% m/v लवण विलयन का उपयोग कर सकते हैं।
+  made:
+    - {words: L48.3, by: hindi-repair}
+    - {words: L48.12, by: agent}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L49.6, by: hindi-repair}
+    - {words: L49.7, by: hindi-repair}
+    - {words: L49.13, by: hindi-repair}
+    - {words: L50.4-7, by: agent}
+    - {words: L50.8, by: hindi-repair}
+    - {words: L50.9-12, by: hindi-repair}
+    - {words: L50.20, by: hindi-repair}
+    - {words: L51.9, by: hindi-repair}
+    - {words: L51.10-13, by: hindi-repair}
+    - {words: L51.17, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.4, by: hindi-repair}
+    - {words: L52.6, by: agent}
+    - {words: L52.14, by: hindi-repair}
+    - {words: L52.19, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+- id: "3.3.4"
+  kind: text
+  page: 11
+  text: इसी प्रकार आप पालक की पत्तियों के हरे सत्व में उपस्थित विभिन्न वर्णकों अथवा पुष्प की
+    पंखुड़ियों के रंगीन वर्णकों को भी पृथक कर सकते हैं। क्या जल प्रत्येक स्थिति में एक विलायक के रूप
+    में कार्य करेगा? कुछ स्थितियों में आपको किसी अन्य विलायक, जैसे — ऐल्कोहॉल अथवा विलायकों के
+    मिश्रण की आवश्यकता हो सकती है।
+  made:
+    - {words: L54.6, by: hindi-repair}
+    - {words: L54.8, by: agent}
+    - {words: L54.9, by: hindi-repair}
+    - {words: L54.10, by: hindi-repair}
+    - {words: L54.11, by: hindi-repair}
+    - {words: L54.12, by: hindi-repair}
+    - {words: L54.13, by: agent}
+    - {words: L54.15, by: hindi-repair}
+    - {words: L55.1, by: hindi-repair}
+    - {words: L55.4, by: agent}
+    - {words: L55.10, by: hindi-repair}
+    - {words: L55.11, by: hindi-repair}
+    - {words: L55.13, by: hindi-repair}
+    - {words: L55.14, by: hindi-repair}
+    - {words: L55.15, by: hindi-repair}
+    - {words: L56.1, by: hindi-repair}
+    - {words: L56.2, by: hindi-repair}
+    - {words: L56.3-4, by: agent}
+    - {words: L56.6, by: hindi-repair}
+    - {words: L56.7, by: hindi-repair}
+    - {words: L56.10, by: hindi-repair}
+    - {words: L56.14, by: hindi-repair}
+    - {words: L56.16, by: agent}
+    - {words: L57.4, by: hindi-repair}
+- id: "3.3.5"
+  kind: box
+  page: 11
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 6. निम्नलिखित कथन सत्य हैं अथवा असत्य। असत्य कथनों को सही भी कीजिए। (i) नमक के
+    विलयन से नमक को वाष्पीकरण अथवा आसवन द्वारा पृथक किया जा सकता है। (ii) आसवन का उपयोग उन दो द्रवों
+    को पृथक करने में भी किया जा सकता है जिनके क्वथनांक समान हों। (iii) कागज वर्णलेखिकी में प्रयोग के
+    आरंभ में विलायक का स्तर प्रतिदर्श बिंदु से ऊपर होना चाहिए। (iv) वाष्पीकरण और क्रिस्टलीकरण समान
+    प्रक्रियाएँ हैं।
+  made:
+    - {words: L59.1, by: hindi-repair}
+    - {words: L59.3, by: hindi-repair}
+    - {words: L59.4, by: hindi-repair}
+    - {words: L59.6, by: hindi-repair}
+    - {words: L59.7, by: hindi-repair}
+    - {words: L59.8, by: hindi-repair}
+    - {words: L60.8, by: hindi-repair}
+    - {words: L61.7, by: hindi-repair}
+    - {words: L61.11, by: hindi-repair}
+    - {words: L61.18, by: hindi-repair}
+    - {words: L61.20, by: hindi-repair}
+    - {words: L62.3, by: agent}
+    - {words: L62.4, by: hindi-repair}
+    - {words: L62.8, by: hindi-repair}
+    - {words: L62.11, by: hindi-repair}
+    - {words: L62.12, by: hindi-repair}
+    - {words: L63.2, by: hindi-repair}
+    - {words: L63.4, by: hindi-repair}
+    - {words: L63.7, by: hindi-repair}
+- id: "3.3.6"
+  kind: box
+  page: 11
+  title: जिज्ञासा-सूत्र
+  text: जिज्ञासा-सूत्र ‘वर्णलेखिकी’ (Chromatography) शब्द दो ग्रीक शब्दों क्रोमा (chroma) तथा ग्रेफीन
+    (graphein) से बना है जिनका अर्थ क्रमशः ‘रंग’ एवं ‘लिखना’ होता है। इसका वास्तविक अर्थ रंग से
+    लिखना है क्योंकि प्रारंभ में इसका उपयोग रंजकों एवं स्याहियों जैसे रंगीन पदार्थों के पृथक्करण के
+    लिए किया गया था।
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L2.1, by: agent}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.5, by: agent}
+    - {words: L4.2, by: agent}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.6, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.6, by: agent}
+    - {words: L9.3, by: hindi-repair}
+    - {words: L9.5, by: hindi-repair}
+- id: "3.3.7"
+  kind: figure
+  page: 11
+  number: चित्र 5.15—
+  text: वर्णलेखन पत्र पेंसिल से खींची रेखा (क) वॉच ग्लास गैस जार जल स्याही बिंदु (ग) (ख) चित्र 5.15—
+    कागज वर्णलेखिकी
+  crop: [47.2, 284, 320.1, 457.9]
+  made:
+    - {words: L11.1, by: agent}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2-3, by: agent}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L46.4, by: agent}
+    - {box: true, by: figure-snap}
+- id: "4"
+  kind: section
+  page: 12
+  number: "5.4"
+  title: हम विषमांगी मिश्रणों के घटकों को किस प्रकार पृथक कर सकते हैं?
+  text: 5.4 हम विषमांगी मिश्रणों के घटकों को किस प्रकार पृथक कर सकते हैं?
+  made:
+    - {words: L2.3, by: agent}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.6, by: hindi-repair}
+    - {words: L2.13-14, by: hindi-repair}
+- id: "4.1"
+  kind: section
+  page: 12
+  number: 5.4.1
+  title: दो अमिश्रणीय द्रवों का पृथक्करण
+  text: 5.4.1 दो अमिश्रणीय द्रवों का पृथक्करण
+  made:
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.6-9, by: hindi-repair}
+- id: "4.1.1"
+  kind: text
+  page: 12
+  text: आप विषमरूप मिश्रणों के विषय में पढ़ चुके हैं। क्या आपने ध्यान दिया है कि तेल के पात्र में जल
+    गिरने पर क्या होता है? तेल और जल पृथक परतें बनाते हैं। वे परस्पर मिश्रित नहीं होते और अमिश्रणीय
+    द्रव कहलाते हैं। इसी प्रकार रेत और जल परस्पर में मिश्रित नहीं होते और न ही लोहे की छीलन तथा गंधक
+    परस्पर मिश्रित होते हैं। ये सभी विषमांगी मिश्रणों के उदाहरण हैं।
+  made:
+    - {words: L4.2, by: agent}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.6, by: hindi-repair}
+    - {words: L4.7, by: hindi-repair}
+    - {words: L4.8-11, by: hindi-repair}
+    - {words: L4.12, by: hindi-repair}
+    - {words: L4.13, by: hindi-repair}
+    - {words: L4.15, by: hindi-repair}
+    - {words: L4.22, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.9, by: hindi-repair}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L5.13, by: hindi-repair}
+    - {words: L5.15, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.5-6, by: agent}
+    - {words: L6.9, by: hindi-repair}
+    - {words: L6.10, by: hindi-repair}
+    - {words: L6.12, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.7, by: agent}
+    - {words: L7.8, by: hindi-repair}
+    - {words: L7.11, by: hindi-repair}
+- id: "4.1.2"
+  kind: text
+  page: 12
+  text: आप दो अमिश्रणीय द्रवों के मिश्रण के घटकों को किस प्रकार पृथक करेंगे?
+  made:
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.8, by: hindi-repair}
+- id: "4.1.3"
+  kind: text
+  page: 12
+  text: आइए, जल से सरसों के तेल को पृथक करने का प्रयास करें।
+  made:
+    - {words: L9.4, by: hindi-repair}
+- id: "4.1.4"
+  kind: activity
+  page: 12
+  number: क्रियाकलाप 5.6
+  title: आइए, पृथक करें
+  text: "क्रियाकलाप 5.6 — आइए, पृथक करें 1. एक 50 mL पृथक्कारी कीप में 5 mL सरसों का तेल और 20 mL जल
+    का मिश्रण लीजिए। 2. इसे प्रयोगशाला स्टैंड पर स्थिर रहने दीजिए। (चित्र 5.16) आप क्या देखते हैं?
+    3. आप सरसों के तेल और जल की दो पृथक परतों को बनते हुए देखेंगे (चित्र 5.16)। पीले रंग का सरसों का
+    तेल ऊपरी परत और जल निचली परत बनाता है। क्या आप समझा सकते हैं कि ऐसा क्यों होता है? 4. पृथक्कारी
+    कीप का स्टॉपकॉक धीरे-धीरे खोलिए और जल की निचली परत को सावधानीपूर्वक एक पात्र में एकत्रित कीजिए।
+    5. जब जल लगभग पूर्ण रूप से निकल जाए तो पृथक्कारी कीप का स्टॉपकॉक बंद कर दीजिए। 6. अब इसके थोड़े
+    से भाग, जिसमें दोनों द्रव मिले हो सकते हैं, को एकत्रित कर लीजिए और इसे अलग रख दीजिए। 7. अब
+    स्टॉपकॉक को पुन: खोल कर तेल की परत को एक अलग पात्र में एकत्रित कीजिए। अब आपके पास दो पृथक द्रव
+    हैं।"
+  made:
+    - {words: L13.5-8, by: hindi-repair}
+    - {words: L13.9, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.7, by: hindi-repair}
+    - {words: L14.10, by: hindi-repair}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.6, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L20.3, by: hindi-repair}
+    - {words: L20.11, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L24.7, by: hindi-repair}
+    - {words: L24.11, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.5, by: agent}
+    - {words: L27.6-7, by: agent}
+    - {words: L29.4-7, by: hindi-repair}
+    - {words: L29.10, by: hindi-repair}
+    - {words: L30.5, by: hindi-repair}
+    - {words: L30.11, by: hindi-repair}
+    - {words: L32.2, by: agent}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L33.8, by: hindi-repair}
+    - {words: L33.13, by: hindi-repair}
+    - {words: L36.3, by: agent}
+    - {words: L36.5-8, by: hindi-repair}
+    - {words: L37.2, by: hindi-repair}
+    - {words: L38.7, by: hindi-repair}
+- id: "4.1.5"
+  kind: text
+  page: 12
+  text: क्या आप ऐसे किसी विषमांगी मिश्रण के विषय में सोच सकते हैं जिसका एक घटक गैस हो?
+  made:
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.5, by: agent}
+    - {words: L39.9, by: hindi-repair}
+    - {words: L39.12, by: hindi-repair}
+- id: "4.1.6"
+  kind: text
+  page: 12
+  text: गैस के कण सभी दिशाओं में गति करने हेतु स्वतंत्र हैं इसलिए वे अन्य गैसों के साथ सरलता एवं समान
+    रूप से मिल जाते हैं। अतः गैसों के अधिकांश मिश्रण समांगी होते हैं, जैसे— हाइड्रोजन और ऑक्सीजन का
+    मिश्रण। इस मिश्रण का उपयोग रॉकेट ईंधन के रूप में किया जाता है। दूसरी ओर धुआँ (वायु में निलंबित
+    ठोस कण), कोहरा (वायु में उपस्थित जल की सूक्ष्म बूँदें) और वायु में धूल के कण कुछ ऐसे विषमांगी
+    मिश्रण हैं जिनका एक घटक गैस है।
+  made:
+    - {words: L43.5-6, by: agent}
+    - {words: L43.7, by: hindi-repair}
+    - {words: L43.11-13, by: hindi-repair}
+    - {words: L43.14, by: hindi-repair}
+    - {words: L43.17, by: hindi-repair}
+    - {words: L43.18, by: hindi-repair}
+    - {words: L45.8, by: hindi-repair}
+    - {words: L45.10, by: hindi-repair}
+    - {words: L45.14, by: agent}
+    - {words: L45.16, by: hindi-repair}
+    - {words: L47.3, by: hindi-repair}
+    - {words: L47.10-11, by: agent}
+    - {words: L47.12, by: agent}
+    - {words: L47.15, by: hindi-repair}
+    - {words: L49.2-5, by: hindi-repair}
+    - {words: L49.9, by: hindi-repair}
+    - {words: L49.15, by: hindi-repair}
+    - {words: L49.16, by: hindi-repair}
+    - {words: L49.19, by: hindi-repair}
+    - {words: L49.20-L50.1, by: agent}
+    - {words: L51.3, by: hindi-repair}
+    - {words: L51.4-6, by: hindi-repair}
+    - {words: L51.11-14, by: agent}
+    - {words: L51.16, by: hindi-repair}
+- id: "4.1.7"
+  kind: text
+  page: 12
+  text: अधिकांशतः ठोस में ठोस पदार्थों के मिश्रण विषमांगी होते हैं। आप ऐसे मिश्रणों को पृथक करने के
+    लिए किसी एक ठोस के गुणधर्म का उपयोग कर सकते हैं। आपने सीखा है कि चुंबक के उपयोग से लोहे की कीलों
+    को लकड़ी के बुरादे से किस प्रकार पृथक किया जाता है। आइए, अब ठोस-ठोस मिश्रणों को पृथक करने की एक
+    अन्य तकनीक का अध्ययन करें।
+  made:
+    - {words: L52.3, by: hindi-repair}
+    - {words: L52.5, by: hindi-repair}
+    - {words: L52.8, by: agent}
+    - {words: L52.10, by: hindi-repair}
+    - {words: L52.13, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+    - {words: L53.11, by: hindi-repair}
+    - {words: L53.16-L54.1, by: agent}
+    - {words: L57.2, by: hindi-repair}
+    - {words: L57.4, by: hindi-repair}
+    - {words: L57.6-9, by: hindi-repair}
+    - {words: L57.20, by: hindi-repair}
+    - {words: L59.5, by: hindi-repair}
+    - {words: L59.8, by: hindi-repair}
+- id: "4.1.8"
+  kind: box
+  page: 12
+  title: क्या होगा यदि…
+  text: क्या होगा यदि… समान घनत्व के दो अमिश्रणीय द्रवों को पृथक्करण कीप में मिलाया जाए तो उसमें परतें
+    कैसे बनेंगी?
+  made:
+    - {words: L40.1, by: hindi-repair}
+    - {words: L40.2, by: hindi-repair}
+    - {words: L40.3, by: hindi-repair}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L44.1, by: hindi-repair}
+    - {words: L44.3, by: hindi-repair}
+    - {words: L44.5, by: hindi-repair}
+    - {words: L46.4, by: hindi-repair}
+    - {words: L46.5, by: hindi-repair}
+    - {words: L48.1-2, by: agent}
+    - {words: L48.3, by: hindi-repair}
+- id: "4.1.9"
+  kind: figure
+  page: 12
+  number: चित्र 5.16
+  text: प्रयोगशाला स्टैंड पृथक्कारी कीप सरसों का तेल जल स्टॉपकॉक शंक्वाकार फ्लास्क काँच की डाट चित्र
+    5.16 — अमिश्रणीय द्रवों का पृथक्करण
+  crop: [350, 276, 551.7, 500.2]
+  made:
+    - {words: L15.1, by: hindi-repair}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L25.1, by: agent}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.4, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L34.7, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.2"
+  kind: section
+  page: 13
+  number: 5.4.2
+  title: ऊर्ध्वपातन
+  text: 5.4.2 ऊर्ध्वपातन
+  made:
+    - {words: L1.2, by: hindi-repair}
+- id: "4.2.1"
+  kind: activity
+  page: 13
+  number: क्रियाकलाप 5.7—
+  title: आइए, अन्वेषण करें
+  text: क्रियाकलाप 5.7— आइए, अन्वेषण करें 1. एक स्पैचुला भरकर पिसे कर्पूर और रेत का मिश्रण लीजिए। इसे
+    स्वच्छ एवं शुष्क चीनी मिट्टी की प्याली में रखिए। इसे तार की जाली (wire gauge) का उपयोग करते हुए
+    त्रिपाद स्टैंड पर रखिए। 2. काँच की एक स्वच्छ एवं शुष्क कीप लीजिए। उसकी नलिका के मुँह को रूई से
+    बंद कर दीजिए। 3. कीप को उल्टा कर चीनी मिट्टी की प्याली पर रखिए और चित्र 5.17 के अनुसार उपकरण को
+    व्यवस्थित कीजिए। 4. बर्नर जलाइए और इसे तार की जाली के नीचे रखिए। 5. चीनी मिट्टी की प्याली को कुछ
+    मिनट तक गर्म कीजिए। 6. कीप की भीतरी दीवार को ध्यान से देखिए। क्या कोई ठोस निक्षेप (deposit)
+    दिखाई देता है?
+  made:
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L3.3, by: agent}
+    - {words: L3.6, by: hindi-repair}
+    - {words: L3.8-9, by: agent}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.16, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.2, by: hindi-repair}
+    - {words: L4.15, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L5.7, by: hindi-repair}
+    - {words: L7.1-L8.1, by: agent}
+    - {words: L9.4, by: hindi-repair}
+    - {words: L9.7-8, by: hindi-repair}
+    - {words: L9.10, by: hindi-repair}
+    - {words: L11.7, by: hindi-repair}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L14.3-4, by: agent}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L14.11, by: hindi-repair}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.10, by: hindi-repair}
+- id: "4.2.2"
+  kind: text
+  page: 13
+  text: आप पाएँगे कि कीप की भीतरी दीवार पर श्वेत ठोस कर्पूर निक्षेपित हो जाता है जबकि रेत चीनी मिट्टी
+    की प्याली में शेष रह जाती है। कर्पूर गर्म करने पर (गलनांक से निम्न ताप पर) द्रव अवस्था में
+    परिवर्तित हुए बिना सीधे ठोस अवस्था से वाष्प अवस्था में परिवर्तित हो जाता है, इस प्रक्रिया को
+    ऊर्ध्वपातन (sublimation) कहते हैं। शीतलन पर वाष्प बिना द्रव बने पुनः ठोस में संघनित हो जाती है,
+    इसे निक्षेपण (deposition) कहते हैं। अतः कर्पूर ऊर्ध्वपातित होकर रेत से पृथक हो जाता है क्योंकि
+    रेत गर्म करने पर ऊर्ध्वपातित नहीं होती।
+  made:
+    - {words: L19.2, by: agent}
+    - {words: L19.9, by: hindi-repair}
+    - {words: L19.11, by: hindi-repair}
+    - {words: L21.5-6, by: hindi-repair}
+    - {words: L21.8-9, by: hindi-repair}
+    - {words: L21.11, by: hindi-repair}
+    - {words: L21.12, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L22.11, by: hindi-repair}
+    - {words: L22.12, by: hindi-repair}
+    - {words: L22.13, by: hindi-repair}
+    - {words: L24.5, by: hindi-repair}
+    - {words: L24.7, by: hindi-repair}
+    - {words: L24.8, by: hindi-repair}
+    - {words: L24.9, by: hindi-repair}
+    - {words: L24.10, by: hindi-repair}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L25.8, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.8, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.5, by: hindi-repair}
+    - {words: L29.6, by: hindi-repair}
+    - {words: L29.8-9, by: agent}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L30.4-5, by: agent}
+    - {words: L30.6, by: hindi-repair}
+    - {words: L30.9, by: hindi-repair}
+    - {words: L30.10, by: hindi-repair}
+- id: "4.2.3"
+  kind: text
+  page: 13
+  text: आप इस क्रियाकलाप में कर्पूर के स्थान पर ऊर्ध्वपातित होने वाले किसी अन्य पदार्थ जैसे नैफ्थलीन
+    का भी उपयोग कर सकते हैं।
+  made:
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.5, by: hindi-repair}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L31.9, by: hindi-repair}
+    - {words: L31.13, by: hindi-repair}
+    - {words: L31.14, by: hindi-repair}
+    - {words: L31.16, by: agent}
+    - {words: L32.6, by: hindi-repair}
+- id: "4.2.4"
+  kind: text
+  page: 13
+  text: इसी प्रकार, ठोस कार्बन डाइऑक्साइड भी ऊर्ध्वपातित होती है। इसे शुष्क बर्फ (dry ice) कहते हैं और
+    इसका उपयोग आइसक्रीम के भंडारण में किया जाता है। क्या आप ऐसे अन्य मिश्रणों के विषय में सोच सकते
+    हैं जिनमें घटकों को पृथक करने के लिए ऊर्ध्वपातन प्रक्रम का उपयोग किया जा सकता है?
+  made:
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.5, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L33.11, by: hindi-repair}
+    - {words: L33.12, by: hindi-repair}
+    - {words: L33.16, by: hindi-repair}
+    - {words: L34.7, by: hindi-repair}
+    - {words: L34.11, by: hindi-repair}
+    - {words: L34.14, by: hindi-repair}
+    - {words: L34.15, by: hindi-repair}
+    - {words: L34.18, by: hindi-repair}
+    - {words: L35.2, by: hindi-repair}
+    - {words: L35.3, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L35.10, by: hindi-repair}
+- id: "4.2.5"
+  kind: text
+  page: 13
+  text: क्या एक धातु को किसी दूसरी धातु में विलेय करना संभव है?
+  made:
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.8, by: hindi-repair}
+- id: "4.2.6"
+  kind: text
+  page: 13
+  text: "सामान्य ताप पर धातुएँ एक-दूसरे में विलेय नहीं होती हैं। तथापि जब धातुओं को उच्च तापमान पर
+    पिघलाया जाता है तो वे आपस में मिलकर एक विलयन बना सकती हैं। जब ऐसी दो अथवा दो से अधिक धातुओं के
+    गर्म मिश्रण को ठंडा किया जाता है तो यह एक नए ठोस पदार्थ में परिवर्तित हो जाता है जो एकल धातु
+    जैसा ही प्रतीत होता है। दो अथवा दो से अधिक धातुओं का अथवा एक धातु और एक अधातु का समांगी मिश्रण
+    मिश्रधातु कहलाता है। भौतिक विधियों द्वारा मिश्रधातु के घटकों को पृथक नहीं किया जा सकता है।
+    इन्हें प्राय: अधिक प्रबल, अधिक दृढ़ अथवा अधिक जंग-रोधी पदार्थों के निर्माण हेतु बनाया जाता है।
+    मिश्रधातुओं के सामान्य उदाहरण हैं— पीतल में लगभग 80% कॉपर और 20% जिंक का मिश्रण; काँसा में लगभग
+    80% ताँबा और 20% टिन का मिश्रण; स्टेनलेस स्टील में सामान्यतः आयरन तथा अन्य तत्वों जैसे कार्बन
+    (लगभग 0.03–0.8%), क्रोमियम (16–18%), निकैल (10.0–14.0%) और मोलिब्डेनम (2.0–3.0%) का मिश्रण।"
+  made:
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.4-7, by: hindi-repair}
+    - {words: L37.8-11, by: hindi-repair}
+    - {words: L37.12, by: hindi-repair}
+    - {words: L37.14, by: hindi-repair}
+    - {words: L37.16, by: hindi-repair}
+    - {words: L37.19-22, by: agent}
+    - {words: L37.24, by: hindi-repair}
+    - {words: L38.1, by: agent}
+    - {words: L38.7, by: hindi-repair}
+    - {words: L38.13, by: hindi-repair}
+    - {words: L39.1-2, by: agent}
+    - {words: L39.4, by: hindi-repair}
+    - {words: L39.16, by: hindi-repair}
+    - {words: L39.17, by: hindi-repair}
+    - {words: L39.18, by: hindi-repair}
+    - {words: L40.13-14, by: agent}
+    - {words: L41.5, by: agent}
+    - {words: L41.11, by: hindi-repair}
+    - {words: L41.15, by: hindi-repair}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L42.7, by: hindi-repair}
+    - {words: L42.12, by: hindi-repair}
+    - {words: L44.2, by: hindi-repair}
+    - {words: L44.4, by: hindi-repair}
+    - {words: L44.9-10, by: agent}
+    - {words: L44.12, by: hindi-repair}
+    - {words: L44.14, by: hindi-repair}
+    - {words: L46.2, by: hindi-repair}
+    - {words: L46.12, by: hindi-repair}
+    - {words: L48.6, by: hindi-repair}
+    - {words: L48.7, by: hindi-repair}
+    - {words: L48.8, by: hindi-repair}
+    - {words: L48.9, by: hindi-repair}
+    - {words: L48.12, by: hindi-repair}
+    - {words: L48.13, by: agent}
+    - {words: L50.1, by: hindi-repair}
+    - {words: L50.6-7, by: agent}
+    - {words: L51.1, by: hindi-repair}
+- id: "4.2.7"
+  kind: box
+  page: 13
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 7. अमिश्रणीय द्रव पृथक्कारी कीप में दो पृथक परतें क्यों बनाते हैं? 8. क्या
+    ऊर्ध्वपातन, वाष्पीकरण से भिन्न है? पुष्टि कीजिए।
+  made:
+    - {words: L41.1, by: hindi-repair}
+    - {words: L41.3, by: hindi-repair}
+    - {words: L43.4, by: hindi-repair}
+    - {words: L45.1, by: hindi-repair}
+    - {words: L45.4, by: hindi-repair}
+    - {words: L45.5, by: hindi-repair}
+    - {words: L45.7, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L47.3, by: hindi-repair}
+    - {words: L47.4, by: hindi-repair}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L49.3-4, by: agent}
+- id: "4.2.8"
+  kind: figure
+  page: 13
+  number: चित्र 5.17
+  text: रुई की डॉट काँच की कीप कर्पूर तथा रेत सहित चीनी मिट्टी की प्याली तार की जाली त्रिपाद स्टैंड
+    बर्नर चित्र 5.17 — कर्पूर का ऊर्ध्वपातन
+  crop: [69.3, 174.6, 280.8, 405.9]
+  made:
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.3, by: agent}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.3-4, by: agent}
+    - {words: L15.1-2, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.2, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.4-L27.1, by: agent}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.3, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.3"
+  kind: section
+  page: 14
+  number: 5.4.3
+  title: निलंबन
+  text: 5.4.3 निलंबन
+- id: "4.3.1"
+  kind: text
+  page: 14
+  text: आइए, चित्र 5.2 में दर्शाए गए पात्र को ध्यानपूर्वक देखें। आप चाहे कितना भी विलोडित करें, रेत के
+    कण स्पष्ट रूप से देखे जा सकते हैं जबकि विलयन में विलेय के कण दिखाई नहीं देते हैं। ऐसे विषमांगी
+    मिश्रण जिनमें ठोस कण (रेत) घुलते नहीं हैं अपितु संपूर्ण माध्यम (जल) में निलंबित रहते हैं, निलंबन
+    (suspensions) कहलाते हैं। निलंबन में अघुलनशील पदार्थ के कणों का आकार विलयन के कणों की अपेक्षा
+    बड़ा होता है। किसी निलंबन के कण नग्न आँखों से दिखाई देते हैं। जल में निलंबित लकड़ी का बुरादा और
+    जल में चाय की पत्तियाँ निलंबन के अन्य उदाहरण हैं।
+  made:
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.9, by: hindi-repair}
+    - {words: L3.10, by: hindi-repair}
+    - {words: L4.1-2, by: agent}
+    - {words: L4.5, by: hindi-repair}
+    - {words: L4.11, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L4.19, by: hindi-repair}
+    - {words: L4.21, by: hindi-repair}
+    - {words: L5.1, by: agent}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.6-7, by: agent}
+    - {words: L5.8-11, by: agent}
+    - {words: L5.12, by: hindi-repair}
+    - {words: L5.13, by: hindi-repair}
+    - {words: L5.15-L6.3, by: agent}
+    - {words: L6.4, by: hindi-repair}
+    - {words: L6.6, by: hindi-repair}
+    - {words: L6.9, by: hindi-repair}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.6, by: hindi-repair}
+    - {words: L7.8, by: hindi-repair}
+    - {words: L7.10, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.12, by: hindi-repair}
+    - {words: L8.16, by: hindi-repair}
+    - {words: L8.18, by: hindi-repair}
+    - {words: L8.20, by: hindi-repair}
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.11, by: hindi-repair}
+    - {words: L9.13, by: hindi-repair}
+- id: "4.3.2"
+  kind: heading
+  page: 14
+  title: हम जल से पंक (कीचड़) को किस प्रकार पृथक कर सकते हैं?
+  text: हम जल से पंक (कीचड़) को किस प्रकार पृथक कर सकते हैं?
+  made:
+    - {words: L10.9-12, by: hindi-repair}
+    - {words: L10.15, by: hindi-repair}
+- id: "4.3.3"
+  kind: text
+  page: 14
+  text: "यदि आप पंकिल जल के पात्र को स्थिर रख दें तो पंक के भारी कण नीचे बैठ जाते हैं और इसके पश्चात
+    भी जल धुँधला दिखाई दे सकता है। आप इस पंकिल जल को सूती कपड़े अथवा निस्यंदक पत्र से छान सकते हैं।
+    इससे कुछ बड़े कण तो हट जाएँगे परंतु जल प्राय: धुँधला ही रहता है। यह दर्शाता है कि सूक्ष्म कणों
+    को पृथक करने के लिए निस्यंदन सदैव पर्याप्त नहीं होता है। यदि कुछ समय रखने के पश्चात भी पंकिल जल
+    साफ न हो तो इसे किस प्रकार साफ किया जाए? ऐसी स्थिति में हम अपकेंद्रण और/अथवा स्कंदन जैसी तकनीकों
+    का उपयोग करते हैं।"
+  made:
+    - {words: L11.3-L12.2, by: agent}
+    - {words: L12.7, by: hindi-repair}
+    - {words: L12.9, by: hindi-repair}
+    - {words: L12.11-L13.1, by: agent}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+    - {words: L14.2-L15.1, by: agent}
+    - {words: L15.11, by: agent}
+    - {words: L15.12, by: hindi-repair}
+    - {words: L15.14, by: hindi-repair}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.2, by: agent}
+    - {words: L16.4, by: hindi-repair}
+    - {words: L16.12-L17.1, by: agent}
+    - {words: L17.6, by: hindi-repair}
+    - {words: L17.9, by: hindi-repair}
+    - {words: L17.10, by: hindi-repair}
+    - {words: L18.5, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.8, by: hindi-repair}
+    - {words: L18.16, by: hindi-repair}
+    - {words: L19.12, by: hindi-repair}
+    - {words: L19.13, by: hindi-repair}
+    - {words: L19.15-16, by: agent}
+    - {words: L19.18, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.5, by: hindi-repair}
+- id: "4.3.4"
+  kind: text
+  page: 14
+  text: आइए, इन प्रक्रमों को समझें।
+  made:
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.5, by: hindi-repair}
+- id: "4.3.5"
+  kind: heading
+  page: 14
+  title: क. अपकेंद्रण
+  text: क. अपकेंद्रण
+  made:
+    - {words: L22.2-3, by: agent}
+- id: "4.3.6"
+  kind: text
+  page: 14
+  text: इसे एक खेल के माध्यम से समझते हैं। आप एक साथी का चयन कीजिए। अब अपनी भुजाओं को क्रॉस करके
+    एक-दूसरे के हाथ पकड़िए, जैसा कि चित्र 5.18 में दर्शाया गया है। अब एकसाथ गोल-गोल घूमिए। क्या आप
+    ऐसा अनुभव करते हैं कि आपको बाहर की ओर खींचा जा रहा है? इसी प्रकार का बल किसी नलिका में रखे
+    मिश्रण को पृथक करने में सहायक होता है, जिसे अपकेंद्रण (centrifugation) कहते हैं। इस प्रक्रिया
+    में मिश्रण को एक नलिका में तीव्र गति से घुमाया जाता है (चित्र 5.19)। अपकेंद्रण के समय नली
+    क्षैतिज हो जाती है और अपकेंद्रीय बल (वृत्तीय गति में घूम रही वस्तु पर बाहर की ओर लगने वाला बल)
+    भारी कणों को बाहर की ओर खींचता है जहाँ वे नलिका में तली पर बैठ जाते हैं जबकि हल्का द्रव ऊपर रह
+    जाता है।
+  made:
+    - {words: L23.5, by: hindi-repair}
+    - {words: L23.8, by: hindi-repair}
+    - {words: L24.1-2, by: agent}
+    - {words: L24.9, by: hindi-repair}
+    - {words: L24.14, by: hindi-repair}
+    - {words: L24.15, by: hindi-repair}
+    - {words: L25.6, by: hindi-repair}
+    - {words: L25.11, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.13, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.7-8, by: agent}
+    - {words: L27.11, by: hindi-repair}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L28.15-16, by: agent}
+    - {words: L29.8-9, by: agent}
+    - {words: L29.13, by: hindi-repair}
+    - {words: L29.16, by: hindi-repair}
+    - {words: L30.7, by: hindi-repair}
+    - {words: L30.12, by: hindi-repair}
+    - {words: L30.17, by: hindi-repair}
+    - {words: L31.5, by: hindi-repair}
+    - {words: L31.7, by: hindi-repair}
+- id: "4.3.7"
+  kind: box
+  page: 14
+  title: जिज्ञासा-सूत्र
+  text: जिज्ञासा-सूत्र चक्रण वाला यह खेल एक लोक नृत्य है जिसे मराठी में ‘फुगड़ी’ और पंजाबी में ‘कीकली’
+    कहते हैं। आपकी स्थानीय भाषा में इसे क्या कहा जाता है?
+  made:
+    - {words: L32.1-3, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L34.4, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L35.6, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L36.4, by: hindi-repair}
+- id: "4.3.8"
+  kind: figure
+  page: 14
+  number: चित्र 5.18
+  text: चित्र 5.18 — चक्रण का खेल
+  crop: [436, 464, 576, 588]
+  made:
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.6, by: hindi-repair}
+    - {box: true, by: agent}
+- id: "4.3.9"
+  kind: figure
+  page: 14
+  number: चित्र 5.19
+  text: (ख) (क) चित्र 5.19 — अपकेंद्रण उपकरण (क) बाह्य चित्रण और (ख) भीतरी चित्रण
+  crop: [109.6, 535.4, 383.6, 699.4]
+  made:
+    - {words: L40.4-5, by: agent}
+    - {box: true, by: figure-snap}
+- id: "4.3.10"
+  kind: text
+  page: 14
+  text: प्रयोगशाला में रक्त के घटकों, जैसे— लाल रक्त कोशिकाओं तथा प्लाज्मा को पृथक करने के लिए तथा
+    अनेक रासायनिक उद्योगों में अपकेंद्रण का व्यापक उपयोग होता है।
+  made:
+    - {words: L41.2, by: hindi-repair}
+    - {words: L41.3, by: hindi-repair}
+    - {words: L41.5, by: hindi-repair}
+    - {words: L41.8, by: hindi-repair}
+    - {words: L41.9-10, by: agent}
+    - {words: L41.12, by: hindi-repair}
+    - {words: L42.4, by: hindi-repair}
+    - {words: L42.5, by: hindi-repair}
+    - {words: L42.6-7, by: agent}
+    - {words: L42.9, by: hindi-repair}
+- id: "4.3.11"
+  kind: activity
+  page: 15
+  number: क्रियाकलाप 5.8—
+  title: आइए, एक प्रतिरूप बनाएँ
+  text: क्रियाकलाप 5.8— आइए, एक प्रतिरूप बनाएँ गत्ते की एक चकती और मोटे धागे की सहायता से आप स्वयं का
+    अपकेंद्रित्र (centrifuge) बनाइए। आप देख पाएँगे कि किस प्रकार भारी कण बाहर की ओर गति करते हैं।
+    पृथक्करण के विज्ञान को समझने की यह एक रोचक एवं स्वयं करके देखने की विधि है। आप इस लघु
+    अपकेंद्रित्र के उपयोग से किस मिश्रण को पृथक करना चाहेंगे?
+  made:
+    - {words: L19.12, by: hindi-repair}
+    - {words: L20.2-3, by: agent}
+    - {words: L20.8, by: agent}
+    - {words: L21.10, by: hindi-repair}
+    - {words: L21.11, by: hindi-repair}
+    - {words: L22.10, by: hindi-repair}
+    - {words: L23.8-9, by: agent}
+    - {words: L24.6, by: hindi-repair}
+- id: "4.3.12"
+  kind: heading
+  page: 15
+  title: ख. स्कंदन
+  text: ख. स्कंदन
+  made:
+    - {words: L27.11, by: hindi-repair}
+- id: "4.3.13"
+  kind: text
+  page: 15
+  text: फिटकरी (alum) के चूर्ण को पंकिल जल से भरे एक बीकर में मिलाया जा सकता है (चित्र 5.21क)। फिटकरी
+    एक श्वेत क्रिस्टलीय रासायनिक पदार्थ है जिसका उपयोग प्रायः जल शुद्धिकरण में किया जाता है। फिटकरी
+    सूक्ष्म निलंबित कणों को एकत्रित (गुच्छों के रूप में) कर देती है। इस प्रक्रिया को स्कंदन
+    (coagulation) कहते हैं तथा फिटकरी एक स्कंदक (coagulant) के रूप में कार्य करती है (चित्र 5.21 ख)।
+    इस प्रकार बने बड़े-बड़े गुच्छे गुरुत्वाकर्षण के कारण तली पर बैठ जाते हैं जिसे अवसादन
+    (sedimentation) कहते हैं जैसा कि चित्र 5.21 ग में दर्शाया गया है। इन्हें जल से निस्तारण
+    (decantation) अथवा निस्यंदन (filtration) द्वारा पृथक किया जा सकता है।
+  made:
+    - {words: L30.4, by: hindi-repair}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.3, by: hindi-repair}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L33.9, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L35.8, by: hindi-repair}
+    - {words: L37.4, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L39.4, by: hindi-repair}
+    - {words: L39.5, by: hindi-repair}
+    - {words: L39.6, by: hindi-repair}
+    - {words: L41.4, by: hindi-repair}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.7, by: hindi-repair}
+    - {words: L42.8, by: hindi-repair}
+    - {words: L42.11, by: hindi-repair}
+    - {words: L42.14, by: hindi-repair}
+    - {words: L42.17, by: hindi-repair}
+- id: "4.3.14"
+  kind: text
+  page: 15
+  text: क्या आप दैनिक जीवन में प्रयुक्त स्कंदन प्रक्रियाओं के अन्य उदाहरणों पर विचार कर सकते हैं?
+  made:
+    - {words: L44.1, by: hindi-repair}
+    - {words: L44.5, by: hindi-repair}
+    - {words: L44.6, by: hindi-repair}
+    - {words: L44.7, by: hindi-repair}
+    - {words: L44.8-9, by: agent}
+    - {words: L44.11, by: hindi-repair}
+    - {words: L44.12, by: hindi-repair}
+    - {words: L44.17, by: hindi-repair}
+- id: "4.3.15"
+  kind: text
+  page: 15
+  text: दुग्ध से पनीर बनाने की प्रक्रिया भी स्कंदन कहलाती है, इसमें अम्ल (नींबू का रस अथवा सिरका) का
+    उपयोग स्कंदक के रूप में किया जाता है। यह दुग्ध के प्रोटीन का स्कंदन कर देता है जिससे पनीर बनता
+    है।
+  made:
+    - {words: L45.1-4, by: hindi-repair}
+    - {words: L45.11, by: hindi-repair}
+    - {words: L45.14, by: hindi-repair}
+    - {words: L45.15, by: hindi-repair}
+    - {words: L45.16, by: hindi-repair}
+    - {words: L46.2, by: hindi-repair}
+    - {words: L46.5, by: hindi-repair}
+    - {words: L46.10, by: hindi-repair}
+    - {words: L46.14, by: hindi-repair}
+    - {words: L46.18, by: agent}
+- id: "4.4"
+  kind: section
+  page: 15
+  number: 5.4.4
+  title: कोलॉइड
+  text: 5.4.4 कोलॉइड
+  made:
+    - {words: L47.2, by: agent}
+- id: "4.4.1"
+  kind: text
+  page: 15
+  text: यदि रक्त के घटकों को अपकेंद्रण (centrifugation) द्वारा पृथक किया जाए और रक्त का स्कंदन हो तो
+    क्या यह निलंबन है? यद्यपि हम रक्त कोशिकाओं को नग्न आँखों से नहीं देख सकते। क्या यह एक विलयन है?
+  made:
+    - {words: L48.2, by: hindi-repair}
+    - {words: L48.4, by: hindi-repair}
+    - {words: L48.6-7, by: agent}
+    - {words: L48.14, by: hindi-repair}
+    - {words: L48.16, by: hindi-repair}
+    - {words: L48.19, by: hindi-repair}
+    - {words: L49.2-5, by: hindi-repair}
+    - {words: L49.9, by: hindi-repair}
+    - {words: L49.10-11, by: agent}
+    - {words: L49.14, by: hindi-repair}
+    - {words: L49.16, by: hindi-repair}
+    - {words: L49.19, by: hindi-repair}
+- id: "4.4.2"
+  kind: box
+  page: 15
+  title: विज्ञान एवं समाज
+  text: "विज्ञान एवं समाज पेपरफ्यूज अपकेंद्रण की प्रक्रिया सामान्यत: विद्युत मशीन के उपयोग द्वारा
+    संपन्न की जाती है किंतु नवीन विचारों को अनुप्रयुक्त कर एक साधारण खिलौना पेपरफ्यूज बनाया जाता है।
+    यह सरल हस्तचालित उपकरण है (चित्र 5.20) और विद्युत के उपयोग के बिना भी इसी प्रक्रिया का निष्पादन
+    कर सकता है। पेपरफ्यूज, रक्त के प्रतिदर्शों को अति तीव्र गति से घुमाकर भारी घटकों से हल्के घटकों
+    को किसी प्रयोगशाला अपकेंद्रित्र (centrifuge) की भाँति ही पृथक कर देता है। यह निम्न लागत का उपकरण
+    दूरस्थ क्षेत्रों में मलेरिया और ऐनीमिया जैसे रोगों की जाँच करने में सहायता कर सकता है। ऐसे सरल
+    तकनीकी आविष्कारों के विषय में और जानकारी प्राप्त करें जो सुदूर क्षेत्रों में चिकित्सा सेवाओं को
+    अधिक सुलभ बनाएँ।"
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L1.2, by: hindi-repair}
+    - {words: L1.3, by: hindi-repair}
+    - {words: L2.1, by: agent}
+    - {words: L3.1-2, by: agent}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.11, by: hindi-repair}
+    - {words: L5.6, by: hindi-repair}
+    - {words: L5.8, by: hindi-repair}
+    - {words: L7.2, by: agent}
+    - {words: L7.8, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.5, by: agent}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L10.8, by: agent}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.11-12, by: agent}
+    - {words: L15.10, by: hindi-repair}
+    - {words: L16.1-4, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.11, by: hindi-repair}
+    - {words: L16.15, by: hindi-repair}
+    - {words: L16.23, by: hindi-repair}
+    - {words: L16.26, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.6-8, by: hindi-repair}
+    - {words: L17.9, by: hindi-repair}
+    - {words: L17.10, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+    - {words: L17.12-13, by: agent}
+- id: "4.4.3"
+  kind: figure
+  page: 15
+  number: चित्र 5.20
+  text: रक्त प्रतिदर्श टेप तार अथवा धागा हत्था गत्ते की चकती चित्र 5.20 — पेपरफ्यूज
+  crop: [339.1, 119.6, 538.1, 239.6]
+  made:
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.2, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L14.4, by: agent}
+    - {box: true, by: figure-snap}
+- id: "4.4.4"
+  kind: figure
+  page: 15
+  number: चित्र 5.21
+  text: फिटकरी का चूर्ण पंकिल जल (क) जल में निलंबित अशुद्धियों में फिटकरी का चूर्ण मिलाना (ख) फिटकरी
+    निलंबित अशुद्धियों को स्कंदित कर देती है। बैठी हुई अशुद्धियाँ (ग) तल पर बैठी हुई अशुद्धियाँ
+    चित्र 5.21 — स्कंदन की प्रक्रिया
+  crop: [43, 292.9, 314.7, 587.9]
+  made:
+    - {words: L25.1, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.3, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L29.4, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L36.3, by: hindi-repair}
+    - {words: L38.4, by: hindi-repair}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.6, by: hindi-repair}
+    - {words: L40.1, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L40.5, by: hindi-repair}
+    - {words: L40.6, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.4.5"
+  kind: text
+  page: 16
+  text: रक्त न तो एक विलयन है और न ही एक वास्तविक निलंबन। यह एक कोलॉइड (colloid) है। दुग्ध, टमाटर सॉस
+    तथा आइसक्रीम कोलॉइडों के कुछ अन्य उदाहरण हैं।
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.11, by: hindi-repair}
+    - {words: L2.15, by: agent}
+    - {words: L2.18, by: hindi-repair}
+    - {words: L3.5, by: agent}
+    - {words: L3.8, by: hindi-repair}
+    - {words: L3.10, by: hindi-repair}
+- id: "4.4.6"
+  kind: box
+  page: 16
+  title: विज्ञान एवं समाज
+  text: विज्ञान एवं समाज रक्तदान करें रक्तदान जीवनरक्षक है। व्यक्तियों को आपातकालीन स्थितियों में,
+    शल्यचिकित्सा के समय अथवा गंभीर रोगों में रक्ताधान की आवश्यकता हो सकती है जिसमें एक स्वस्थ
+    व्यक्ति के शरीर से किसी रोगी व्यक्ति के शरीर में रक्त का स्थानांतरण किया जाता है। दान किए गए
+    रक्त का परीक्षण किया जाता है और रक्त समूह की पहचान कर उसे रक्त के घटकों, जैसे— प्लाज्मा,
+    प्लेटलेट, श्वेत तथा लाल रक्त कणिकाओं में पृथक किया जाता है (चित्र 5.22)। इनका रक्त बैंकों में
+    सुरक्षित भंडारण किया जाता है और आवश्यकता पड़ने पर आपूर्ति की जाती है। अध्याय 3, क्रियाशील ऊतक
+    में आपने अध्ययन किया है कि रक्त पोषक तत्वों, जैसे — गैसों तथा हार्मोनों का परिवहन करके शरीर के
+    विभिन्न भागों को जोड़ता है। शरीर कुछ ही सप्ताहों में दान किए गए रक्त की पूर्ति प्राकृतिक रूप से
+    स्वयं कर लेता है जो रक्तदान को सुरक्षित और सहायक बनाता है। क्या आप अपना रक्त समूह जानते हैं? पता
+    लगाइए!
+  made:
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.2, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L6.1, by: hindi-repair}
+    - {words: L6.2, by: agent}
+    - {words: L6.4, by: hindi-repair}
+    - {words: L6.7, by: hindi-repair}
+    - {words: L6.8, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.6, by: hindi-repair}
+    - {words: L7.7, by: hindi-repair}
+    - {words: L7.8, by: hindi-repair}
+    - {words: L7.10, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L8.5, by: hindi-repair}
+    - {words: L8.6, by: hindi-repair}
+    - {words: L8.12, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L9.4, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L10.11, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.8, by: hindi-repair}
+    - {words: L11.9, by: agent}
+    - {words: L11.10, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.2-3, by: agent}
+    - {words: L12.4, by: hindi-repair}
+    - {words: L12.10, by: agent}
+    - {words: L12.12, by: hindi-repair}
+    - {words: L12.13, by: hindi-repair}
+    - {words: L12.14, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.10, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.7, by: hindi-repair}
+    - {words: L14.11, by: hindi-repair}
+    - {words: L15.1, by: agent}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L15.12, by: hindi-repair}
+    - {words: L15.13, by: hindi-repair}
+    - {words: L16.2, by: agent}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.2, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.6, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.9, by: hindi-repair}
+    - {words: L17.10, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+    - {words: L17.12-13, by: hindi-repair}
+    - {words: L17.15, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.5, by: hindi-repair}
+    - {words: L18.6, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.8, by: hindi-repair}
+    - {words: L18.10, by: hindi-repair}
+    - {words: L18.11, by: hindi-repair}
+    - {words: L18.12, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+    - {words: L19.5-7, by: hindi-repair}
+    - {words: L19.8, by: hindi-repair}
+    - {words: L19.9, by: hindi-repair}
+    - {words: L19.10, by: hindi-repair}
+    - {words: L19.11, by: hindi-repair}
+- id: "4.4.7"
+  kind: figure
+  page: 16
+  number: चित्र 5.22—
+  text: रक्त का प्रतिदर्श परखनली स्टैंड (क) प्लाज्मा प्लेटलेट एवं श्वेत रक्त कणिकाएँ लाल रक्त कणिकाएँ
+    (ख) चित्र 5.22— रक्त के घटक— (क) अपकेंद्रण से पूर्व और (ख) अपकेंद्रण के पश्चात
+  crop: [377.3, 148.8, 556.1, 362]
+  made:
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L20.3, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L24.1, by: agent}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.3, by: hindi-repair}
+    - {words: L25.1, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.2, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L28.7-8, by: agent}
+    - {words: L28.10, by: hindi-repair}
+    - {words: L29.3-4, by: agent}
+    - {words: L29.6, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.4.8"
+  kind: text
+  page: 16
+  text: आइए, यह समझने का प्रयास करते हैं कि कोलॉइड क्या होते हैं?
+  made:
+    - {words: L30.7, by: hindi-repair}
+    - {words: L30.9, by: agent}
+    - {words: L30.10, by: hindi-repair}
+    - {words: L30.12, by: hindi-repair}
+- id: "4.4.9"
+  kind: text
+  page: 16
+  text: ये विलयनों और निलंबनों से किस प्रकार भिन्न होते हैं? क्या आप अन्य किन्हीं ऐसे पदार्थों के विषय
+    में सोच सकते हैं जो कोलॉइड हो सकते हैं? विलयन, निलंबन और कोलॉइड (चित्र 5.23) मुख्यतः घुले हुए
+    अथवा निलंबित कणों के आकार के आधार पर भिन्न होते हैं। विलयन में कणों का आकार सबसे छोटा (1 nm से
+    कम व्यास) होता है। कोलॉइड में कणों का आकार अपेक्षाकृत बड़ा (1 से 1000 nm तक व्यास) होता है जबकि
+    निलंबन में कण अधिक बड़े (1000 nm से अधिक व्यास के) होते हैं।
+  made:
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.8, by: hindi-repair}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L31.11, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.4, by: hindi-repair}
+    - {words: L32.7, by: hindi-repair}
+    - {words: L32.10, by: hindi-repair}
+    - {words: L32.12, by: agent}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.6, by: agent}
+    - {words: L33.9, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.9, by: hindi-repair}
+    - {words: L34.11, by: hindi-repair}
+    - {words: L34.13, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.10, by: hindi-repair}
+    - {words: L35.13, by: agent}
+    - {words: L38.1, by: hindi-repair}
+    - {words: L38.2, by: hindi-repair}
+    - {words: L38.5-6, by: agent}
+    - {words: L38.7, by: hindi-repair}
+    - {words: L38.13, by: hindi-repair}
+    - {words: L39.4, by: hindi-repair}
+    - {words: L39.7, by: hindi-repair}
+    - {words: L39.12, by: hindi-repair}
+    - {words: L39.13-14, by: agent}
+    - {words: L41.2, by: hindi-repair}
+- id: "4.4.10"
+  kind: text
+  page: 16
+  text: निलंबन के विपरीत कोलॉइड में मिश्रण के कण समय के साथ तली पर नहीं बैठते हैं। वे संपूर्ण मिश्रण
+    में समान रूप से फैले रहते हैं जैसा कि किसी विलयन में होता है।
+  made:
+    - {words: L42.4, by: agent}
+    - {words: L42.5, by: hindi-repair}
+    - {words: L42.14, by: hindi-repair}
+    - {words: L42.16, by: hindi-repair}
+    - {words: L42.18, by: hindi-repair}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.5-6, by: agent}
+    - {words: L43.8, by: hindi-repair}
+    - {words: L43.13, by: hindi-repair}
+- id: "4.4.11"
+  kind: figure
+  page: 16
+  number: चित्र 5.23
+  text: (क) (ग) (ख) चित्र 5.23 — (क) विलयन (ख) निलंबन और (ग) कोलॉइड
+  crop: [372, 408, 585.5, 546.4]
+  made:
+    - {words: L40.10, by: agent}
+    - {box: true, by: figure-snap}
+- id: "5"
+  kind: section
+  page: 16
+  number: "5.5"
+  title: टिंडल प्रभाव
+  text: 5.5 — टिंडल प्रभाव
+  made:
+    - {words: L44.3, by: agent}
+- id: "5.1"
+  kind: text
+  page: 16
+  text: आइए, हम पुनः क्रियाकलाप 5.1 पर विचार करते हैं। क्या हुआ था जब मिश्रण वाले बीकरों में से लेसर
+    प्रकाश का एक संकीर्ण किरणपुंज प्रसारित हुआ था? आपने देखा होगा कि विलयन ‘क’ में प्रकाश किरणपुंज
+    का मार्ग दिखाई नहीं दिया था। निलंबन ‘ख’ में विद्यमान कणों ने प्रकाश किरणपुंज को प्रकीर्णित
+    (बिखेर) कर दिया जिससे उसका मार्ग दिखाई देने लगा। मिश्रण ‘ग’ में भी प्रकाश का मार्ग दिखाई दिया जो
+    यह दर्शाता है कि इसके कणों ने प्रकाश को प्रकीर्णित किया यद्यपि मिश्रण देखने में समांगी प्रतीत हो
+    रहा था।
+  made:
+    - {words: L45.9, by: hindi-repair}
+    - {words: L45.10, by: hindi-repair}
+    - {words: L45.16, by: hindi-repair}
+    - {words: L45.17, by: hindi-repair}
+    - {words: L46.4, by: hindi-repair}
+    - {words: L46.5-L47.1, by: agent}
+    - {words: L47.11, by: hindi-repair}
+    - {words: L48.1-L49.1, by: agent}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+    - {words: L49.10, by: hindi-repair}
+    - {words: L49.12, by: hindi-repair}
+    - {words: L49.15-L50.1, by: agent}
+    - {words: L50.3, by: agent}
+    - {words: L51.4, by: agent}
+    - {words: L51.6, by: hindi-repair}
+    - {words: L51.12, by: hindi-repair}
+    - {words: L51.16, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.6, by: hindi-repair}
+    - {words: L52.10, by: agent}
+    - {words: L52.15, by: hindi-repair}
+    - {words: L52.16, by: agent}
+- id: "5.2"
+  kind: text
+  page: 16
+  text: क्या आपने कभी अपने आस-पास कणों द्वारा प्रकाश का प्रकीर्णन देखा है? कणों द्वारा प्रकाश के
+    प्रकीर्णन की घटना को टिंडल प्रभाव (Tyndall effect) कहा जाता है। इसे यह नाम इसलिए दिया गया
+    क्योंकि इसका वर्णन सर्वप्रथम वैज्ञानिक जॉन टिंडल ने किया था। इन्होंने कणों द्वारा प्रकाश के
+    प्रकीर्णन का अध्ययन किया था।
+  made:
+    - {words: L53.1, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+    - {words: L53.10, by: hindi-repair}
+    - {words: L53.13, by: hindi-repair}
+    - {words: L54.1, by: hindi-repair}
+    - {words: L54.5, by: agent}
+    - {words: L1.1, page: 17, by: hindi-repair}
+    - {words: L1.3, page: 17, by: hindi-repair}
+    - {words: L1.4, page: 17, by: hindi-repair}
+    - {words: L1.7, page: 17, by: agent}
+    - {words: L1.11, page: 17, by: hindi-repair}
+    - {words: L1.12, page: 17, by: hindi-repair}
+    - {words: L2.3, page: 17, by: hindi-repair}
+    - {words: L2.5, page: 17, by: hindi-repair}
+- id: "5.3"
+  kind: text
+  page: 17
+  text: यह प्रभाव तब भी देखा जा सकता है जब किसी अंधेरे कक्ष के एक छोटे छिद्र से प्रकाश का संकीर्ण
+    किरणपुंज प्रवेश करता है। ऐसा इसलिए होता है क्योंकि वायु में विद्यमान धूल और धुएँ के कण प्रकाश का
+    प्रकीर्णन कर देते हैं। आपने संभवतः इस परिघटना को किसी खेल स्टेडियम में फ्लड लाइट्स (चित्र 5.24)
+    में भी देखा होगा। इसके अन्य उदाहरण सोचिए!
+  made:
+    - {words: L3.12, by: agent}
+    - {words: L4.4, by: hindi-repair}
+    - {words: L4.5-L5.1, by: agent}
+    - {words: L5.9, by: hindi-repair}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L6.9, by: hindi-repair}
+    - {words: L6.12, by: hindi-repair}
+    - {words: L7.1, by: agent}
+    - {words: L7.5, by: hindi-repair}
+    - {words: L7.6, by: hindi-repair}
+    - {words: L7.7, by: hindi-repair}
+    - {words: L7.8, by: agent}
+    - {words: L7.11, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+- id: "5.4"
+  kind: figure
+  page: 17
+  number: चित्र 5.24
+  text: चित्र 5.24 — खेल स्टेडियम में टिंडल प्रभाव का प्रदर्शन
+  crop: [49.5, 79, 222.8, 234.2]
+  made:
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.6, by: hindi-repair}
+    - {words: L9.7, by: agent}
+    - {words: L10.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "5.5"
+  kind: text
+  page: 17
+  text: जब प्रकाश किसी कोलॉइड अथवा निलंबन से प्रसरित होता है तो उसका प्रकीर्णन होता है परंतु जब वह
+    पारदर्शी विलयन से प्रसरित होता है तो ऐसा नहीं होता।
+  made:
+    - {words: L9.13, by: agent}
+    - {words: L9.22, by: hindi-repair}
+    - {words: L10.15, by: hindi-repair}
+- id: "5.6"
+  kind: text
+  page: 17
+  text: कोलॉइड के घटकों को परिक्षिप्त प्रावस्था और परिक्षेपण माध्यम कहा जाता है। कोलॉइड में विलेय जैसे
+    घटक अथवा परिक्षिप्त कणों को परिक्षिप्त प्रावस्था (dispersed phase) कहते हैं और जिस माध्यम में यह
+    परिक्षिप्त प्रावस्था निलंबित रहती है, उसे परिक्षेपण माध्यम (dispersion medium) कहा जाता है।
+  made:
+    - {words: L11.1, by: agent}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.9, by: hindi-repair}
+    - {words: L11.13, by: agent}
+    - {words: L11.14, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.4, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.7, by: hindi-repair}
+    - {words: L12.11, by: hindi-repair}
+    - {words: L12.14, by: hindi-repair}
+    - {words: L12.15, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.4-7, by: hindi-repair}
+    - {words: L13.12, by: hindi-repair}
+- id: "5.7"
+  kind: box
+  page: 17
+  title: जिज्ञासा-सूत्र
+  text: जिज्ञासा-सूत्र कुछ सामान्य कोलॉइड जिनका हम अपने दैनिक जीवन में प्रयोग करते हैं उनमें
+    परिक्षिप्त प्रावस्था और परिक्षेपण माध्यम दोनों ही द्रव होते हैं। इन्हें पायस (इमल्शन) कहा जाता
+    है। तेल और जल वाले पायसों को परिक्षिप्त प्रावस्था और परिक्षेपण माध्यम की प्रकृति के आधार पर दो
+    प्रकारों में बाँटा जाता है — जल में तेल अथवा तेल में जल। दुग्ध, बॉडी लोशन और वैनिशिंग क्रीम जल
+    में तेल पायस के सामान्य उदाहरण हैं जबकि मक्खन, कोल्ड क्रीम आदि तेल में जल पायस के उदाहरण हैं।
+    कुछ औषधियाँ पायस के रूप में बनाई जाती हैं जिससे इन्हें जल में परिक्षेपित कर सुगम रूप से पीने
+    योग्य बनाया जा सके। इससे द्रव औषधि में चिकनाई जैसा अनुभव भी कम हो जाता है। पायसी कारकों की
+    उपस्थिति पायस को स्थिर करती है। उदाहरणार्थ — दुग्ध और मक्खन में प्रोटीन पायसी कारक का कार्य करता
+    है। आप खाद्य तेल की कुछ बूँदों को साबुन के विलयन की कुछ बूँदों वाले जल में भली-भाँति मिलाकर एक
+    पायस बना सकते हैं।
+  made:
+    - {words: L14.1-3, by: hindi-repair}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.3, by: agent}
+    - {words: L15.9, by: hindi-repair}
+    - {words: L15.12, by: hindi-repair}
+    - {words: L15.13, by: hindi-repair}
+    - {words: L15.14, by: hindi-repair}
+    - {words: L15.15, by: hindi-repair}
+    - {words: L15.18, by: hindi-repair}
+    - {words: L15.19, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.13, by: hindi-repair}
+    - {words: L16.15, by: hindi-repair}
+    - {words: L16.16, by: hindi-repair}
+    - {words: L16.19, by: hindi-repair}
+    - {words: L16.21-22, by: agent}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+    - {words: L17.15, by: hindi-repair}
+    - {words: L17.17-20, by: hindi-repair}
+    - {words: L17.24-26, by: hindi-repair}
+    - {words: L17.29, by: hindi-repair}
+    - {words: L18.2, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.6, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.11, by: hindi-repair}
+    - {words: L18.16, by: hindi-repair}
+    - {words: L18.22, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.3, by: agent}
+    - {words: L19.4, by: hindi-repair}
+    - {words: L19.6, by: hindi-repair}
+    - {words: L19.7, by: agent}
+    - {words: L19.9-12, by: hindi-repair}
+    - {words: L19.19-20, by: agent}
+    - {words: L19.21, by: agent}
+    - {words: L19.24, by: hindi-repair}
+    - {words: L19.27-30, by: hindi-repair}
+    - {words: L21.1, by: agent}
+    - {words: L21.2, by: agent}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.7, by: hindi-repair}
+    - {words: L21.10, by: hindi-repair}
+    - {words: L21.11-14, by: hindi-repair}
+    - {words: L21.16, by: hindi-repair}
+    - {words: L21.17, by: hindi-repair}
+    - {words: L21.19, by: agent}
+    - {words: L21.22, by: hindi-repair}
+    - {words: L22.6-9, by: hindi-repair}
+    - {words: L22.11-13, by: hindi-repair}
+    - {words: L22.18-21, by: hindi-repair}
+    - {words: L22.24, by: hindi-repair}
+    - {words: L22.25, by: agent}
+    - {words: L22.31, by: hindi-repair}
+- id: "5.8"
+  kind: box
+  page: 17
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 9. बादलों का निर्माण वायु में सूक्ष्म जल-बूँदों अथवा वायु में तैरते
+    हिमक्रिस्टलों से होता है। विलयनों, निलंबनों और कोलॉइडों के विषय में अपनी जानकारी के आधार पर
+    बताइए कि बादल किस प्रकार के मिश्रण हैं और क्यों? 10. जिन नगरों की वायु में अधिक धुआँ और धूल होते
+    हैं, वे प्रायः धुँधले क्यों दिखाई देते हैं?
+  made:
+    - {words: L23.1, by: hindi-repair}
+    - {words: L23.3, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L24.6, by: hindi-repair}
+    - {words: L24.7-10, by: hindi-repair}
+    - {words: L24.11-14, by: hindi-repair}
+    - {words: L24.17, by: hindi-repair}
+    - {words: L24.19, by: agent}
+    - {words: L24.23, by: hindi-repair}
+    - {words: L24.24, by: hindi-repair}
+    - {words: L24.26, by: agent}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.15, by: hindi-repair}
+    - {words: L25.17, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.2, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L26.5, by: hindi-repair}
+    - {words: L26.6, by: hindi-repair}
+    - {words: L26.7, by: hindi-repair}
+    - {words: L26.9, by: hindi-repair}
+    - {words: L26.10, by: hindi-repair}
+    - {words: L26.11, by: hindi-repair}
+    - {words: L26.12, by: hindi-repair}
+    - {words: L26.13, by: hindi-repair}
+    - {words: L26.14, by: hindi-repair}
+    - {words: L26.15, by: hindi-repair}
+    - {words: L26.16, by: hindi-repair}
+    - {words: L26.17, by: hindi-repair}
+    - {words: L26.18, by: hindi-repair}
+- id: "5.9"
+  kind: activity
+  page: 17
+  number: क्रियाकलाप 5.9
+  text: क्रियाकलाप 5.9 — तालिका 5.1 को पूर्ण कीजिए और विलयनों, निलंबनों एवं कोलॉइडों के विषय में आपने
+    जो कुछ भी सीखा है उसका पुनरावलोकन कीजिए।
+  made:
+    - {words: L27.7, by: hindi-repair}
+    - {words: L27.10, by: hindi-repair}
+    - {words: L27.11, by: hindi-repair}
+    - {words: L27.13, by: agent}
+    - {words: L27.16, by: hindi-repair}
+- id: "5.10"
+  kind: table
+  page: 17
+  number: तालिका 5.1—
+  title: विभिन्न प्रकार के मिश्रणों के गुणधर्म
+  text: तालिका 5.1— विभिन्न प्रकार के मिश्रणों के गुणधर्म क्रम संख्या गुणधर्म 1. प्रकृति
+    (समांगी/विषमांगी) 2. कणों का आकार 3. दृश्यता 4. निस्यंदन द्वारा पृथक्करण 5. नि:सादन अथवा तलछट 6.
+    टिंडल प्रभाव विलयन निलंबन कोलॉइड
+  rows:
+    - [क्रम संख्या, गुणधर्म, विलयन, निलंबन, कोलॉइड]
+    - ["1.", प्रकृति (समांगी/विषमांगी), "", "", ""]
+    - ["2.", कणों का आकार, "", "", ""]
+    - ["3.", दृश्यता, "", "", ""]
+    - ["4.", निस्यंदन द्वारा पृथक्करण, "", "", ""]
+    - ["5.", नि:सादन अथवा तलछट, "", "", ""]
+    - ["6.", टिंडल प्रभाव, "", "", ""]
+  crop: [75.5, 584.9, 546.5, 737.5]
+  made:
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.6, by: hindi-repair}
+    - {words: L29.8, by: hindi-repair}
+    - {words: L30.2, by: hindi-repair}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L31.2-3, by: agent}
+    - {words: L31.4, by: agent}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.3, by: hindi-repair}
+    - {words: L32.4, by: hindi-repair}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.4, by: hindi-repair}
+    - {words: L35.2, by: hindi-repair}
+    - {words: L35.3, by: hindi-repair}
+    - {words: L36.2, by: agent}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.2, by: hindi-repair}
+    - {words: L39.3, by: agent}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "5.11"
+  kind: text
+  page: 18
+  text: हम कणों के विभिन्न गुणधर्मों यथा आकार, घनत्व और विलेयता का उपयोग मिश्रणों को पृथक करने हेतु
+    करते हैं। परंतु पृथक्करण सदैव सरल नहीं होता। शिंकजी के सभी संघटकों को एक बार मिलाने के पश्चात
+    इन्हें पृथक करने की कल्पना कीजिए। क्या आप ऐसा कर सकते हैं?
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.10, by: agent}
+    - {words: L2.13, by: hindi-repair}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.8, by: hindi-repair}
+    - {words: L3.10, by: agent}
+    - {words: L3.13, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.2, by: hindi-repair}
+    - {words: L4.6, by: hindi-repair}
+    - {words: L4.8, by: hindi-repair}
+    - {words: L4.13, by: hindi-repair}
+- id: "5.12"
+  kind: text
+  page: 18
+  text: क्या आप जानते हैं कि प्रकृति में और हमारे शरीर में भी अपशिष्ट पदार्थों का पृथक्करण होता है?
+    उदाहरणार्थ— हमारे गुर्दे हमारे रक्त से अपशिष्ट पदार्थों को पृथक करते हैं। वर्तमान में हम
+    महासागरों और नदियों से प्लास्टिक कचरा हटाकर उन्हें साफ करने जैसी बड़ी चुनौतियों का सामना कर रहे
+    हैं। इसके साथ ही वाहित मल जल को पर्यावरण में प्रवाहित करने से पूर्व उसका उपचार करना अति आवश्यक
+    है। वाहित मल उपचार में अवसादन, स्कंदन और निस्यंदन जैसी प्रक्रियाएँ सम्मिलित हैं। इस प्रकार
+    प्राप्त स्वच्छ जल को शौचालयों में अथवा पौधों को सींचने के लिए पुनः उपयोग में लाया जा सकता है।
+  made:
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L5.6-7, by: agent}
+    - {words: L5.8, by: hindi-repair}
+    - {words: L5.12, by: hindi-repair}
+    - {words: L5.14, by: hindi-repair}
+    - {words: L5.15, by: hindi-repair}
+    - {words: L5.17, by: hindi-repair}
+    - {words: L6.1, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.7, by: hindi-repair}
+    - {words: L6.8, by: hindi-repair}
+    - {words: L6.12, by: hindi-repair}
+    - {words: L6.13, by: hindi-repair}
+    - {words: L6.14, by: hindi-repair}
+    - {words: L6.16, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L7.4, by: agent}
+    - {words: L7.6, by: hindi-repair}
+    - {words: L7.10, by: hindi-repair}
+    - {words: L7.11, by: hindi-repair}
+    - {words: L7.16, by: hindi-repair}
+    - {words: L8.6, by: hindi-repair}
+    - {words: L8.7, by: hindi-repair}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L8.16, by: hindi-repair}
+    - {words: L9.3, by: hindi-repair}
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.7, by: hindi-repair}
+    - {words: L9.9, by: hindi-repair}
+    - {words: L9.10, by: hindi-repair}
+    - {words: L9.11, by: hindi-repair}
+    - {words: L9.14, by: hindi-repair}
+    - {words: L9.15, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L10.7, by: hindi-repair}
+    - {words: L10.12, by: hindi-repair}
+- id: "5.13"
+  kind: text
+  page: 18
+  text: घर से अपशिष्ट पदार्थों की छँटाई अथवा पृथक्करण करना एक अन्य महत्वपूर्ण कार्य है। सूखा कचरा,
+    जैसे— प्लास्टिक, कागज, काँच और धातु को पुनर्चक्रित किया जा सकता है जबकि गीला कचरा जैसे भोजन के
+    अवशेष, सब्जियों के छिलके इत्यादि को कंपोस्ट बनाने के लिए उपयोग में लाया जा सकता है। शोधकर्ता
+    मोबाइल फोन और लैपटॉप की पुरानी बैटरियों से लीथियम जैसे मूल्यवान पदार्थों को पुनः प्राप्त करने की
+    विधियाँ भी खोज रहे हैं।
+  made:
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6-7, by: agent}
+    - {words: L11.8, by: hindi-repair}
+    - {words: L11.9, by: hindi-repair}
+    - {words: L11.10, by: hindi-repair}
+    - {words: L11.13, by: hindi-repair}
+    - {words: L11.14, by: hindi-repair}
+    - {words: L11.15, by: hindi-repair}
+    - {words: L11.16, by: hindi-repair}
+    - {words: L11.17, by: agent}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.4, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.7, by: hindi-repair}
+    - {words: L12.8, by: agent}
+    - {words: L12.9, by: hindi-repair}
+    - {words: L12.10, by: hindi-repair}
+    - {words: L12.11, by: hindi-repair}
+    - {words: L12.12, by: hindi-repair}
+    - {words: L12.13, by: hindi-repair}
+    - {words: L12.14, by: hindi-repair}
+    - {words: L12.15, by: agent}
+    - {words: L12.16, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.6, by: agent}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.9, by: hindi-repair}
+    - {words: L13.10, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+    - {words: L13.12, by: hindi-repair}
+    - {words: L13.13, by: hindi-repair}
+    - {words: L13.14, by: hindi-repair}
+    - {words: L13.15, by: hindi-repair}
+    - {words: L13.16, by: hindi-repair}
+    - {words: L13.17, by: hindi-repair}
+    - {words: L13.18, by: hindi-repair}
+    - {words: L14.1, by: agent}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L14.7, by: hindi-repair}
+    - {words: L14.8, by: agent}
+    - {words: L14.9, by: hindi-repair}
+    - {words: L14.10, by: agent}
+    - {words: L14.11, by: hindi-repair}
+    - {words: L14.12, by: hindi-repair}
+    - {words: L14.13, by: hindi-repair}
+    - {words: L14.14, by: hindi-repair}
+    - {words: L14.15, by: hindi-repair}
+    - {words: L14.16, by: hindi-repair}
+    - {words: L15.1, by: hindi-repair}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.3, by: agent}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.5, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L15.7, by: hindi-repair}
+- id: "5.14"
+  kind: text
+  page: 18
+  text: कचरे के पृथक्करण और पदार्थों के पुनर्चक्रण की विधियों में सुधार करके आप अपनी पृथ्वी को अधिक
+    स्वच्छ, स्वस्थ और सतत बनाने में सहायता कर सकते हैं।
+  made:
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.8, by: hindi-repair}
+    - {words: L16.9, by: hindi-repair}
+    - {words: L16.10, by: hindi-repair}
+    - {words: L16.11, by: hindi-repair}
+    - {words: L16.12, by: hindi-repair}
+    - {words: L16.14, by: hindi-repair}
+    - {words: L16.15, by: hindi-repair}
+    - {words: L16.16, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.5, by: agent}
+    - {words: L17.6, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.8, by: hindi-repair}
+    - {words: L17.10, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+- id: "5.15"
+  kind: box
+  page: 18
+  title: सारांश
+  text: सारांश मिश्रणों को समांगी अथवा विषमांगी के साथ-साथ विलयनों, निलंबनों और कोलॉइडों के रूप में भी
+    वर्गीकृत किया जाता है। शुद्ध पदार्थ प्राप्त करने के लिए मिश्रणों का पृथक्करण एक महत्वपूर्ण
+    प्रक्रिया है। क्रिस्टलीकरण, किसी शुद्ध ठोस को उसके संतृप्त विलयन से प्राप्त करने की एक तकनीक है।
+    आसवन विधि का उपयोग उन दो मिश्रणीय द्रवों को पृथक करने के लिए किया जाता है जिनके क्वथनांकों में
+    कम से कम 25°C का अंतर हो। इसका उपयोग किसी द्रव और ठोस के मिश्रण से द्रव प्राप्त करने के लिए भी
+    किया जाता है। कागज वर्णलेखिकी का उपयोग कागज पर यौगिकों को उनकी गति के अंतर के आधार पर पृथक करने
+    के लिए किया जाता है। दो भिन्न घनत्वों वाले मिश्रणीय द्रवों को पृथक करने के लिए पृथक्कारी कीप का
+    उपयोग किया जाता है। ठोस का बिना द्रव में परिवर्तित हुए सीधे वाष्प में (उनके गलनांक से निम्न
+    तापमान पर) परिवर्तन ऊर्ध्वपातन कहलाता है। वह प्रक्रिया जिसमें वाष्प ठंडी होकर द्रव में परिवर्तित
+    हुए बिना सीधे ठोस में परिवर्तित हो जाती है, निक्षेपण कहलाती है। अपकेंद्रण में किसी ठोस-द्रव
+    मिश्रण से भारी ठोस कणों को पृथक करने के लिए तीव्र चक्रण का उपयोग किया जाता है। स्कंदन की
+    प्रक्रिया में एक पदार्थ जिसे स्कंदक कहते हैं, मिलाया जाता है जिससे छोटे कण आपस में चिपककर बड़े
+    गुच्छे बना लेते हैं और ठोसों एवं द्रवों के विषमांगी मिश्रण में नि:सादित हो जाते हैं। कोलॉइड अथवा
+    निलंबन में परिक्षिप्त कण प्रकाश का प्रकीर्णन करते हैं जिसे टिंडल प्रभाव कहते हैं।
+  made:
+    - {words: L18.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.4, by: agent}
+    - {words: L19.6, by: agent}
+    - {words: L19.9, by: hindi-repair}
+    - {words: L19.10, by: hindi-repair}
+    - {words: L19.12, by: agent}
+    - {words: L19.15, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.2-3, by: agent}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.5, by: hindi-repair}
+    - {words: L20.6, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.8, by: hindi-repair}
+    - {words: L21.10, by: hindi-repair}
+    - {words: L21.12, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.11, by: hindi-repair}
+    - {words: L23.9, by: hindi-repair}
+    - {words: L24.1, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L26.3, by: agent}
+    - {words: L26.8, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L28.7, by: hindi-repair}
+    - {words: L28.13, by: hindi-repair}
+    - {words: L30.6, by: hindi-repair}
+    - {words: L30.7, by: hindi-repair}
+    - {words: L30.10, by: hindi-repair}
+    - {words: L30.11, by: hindi-repair}
+    - {words: L30.15, by: hindi-repair}
+    - {words: L30.18, by: hindi-repair}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.6, by: hindi-repair}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L31.11, by: hindi-repair}
+    - {words: L31.12, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L33.2-3, by: agent}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.11, by: hindi-repair}
+    - {words: L35.2, by: hindi-repair}
+    - {words: L35.5, by: hindi-repair}
+    - {words: L35.7, by: hindi-repair}
+    - {words: L35.9, by: hindi-repair}
+    - {words: L35.11, by: hindi-repair}
+    - {words: L35.15, by: agent}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.2, by: agent}
+    - {words: L36.3, by: hindi-repair}
+    - {words: L36.4, by: hindi-repair}
+    - {words: L36.7, by: hindi-repair}
+    - {words: L36.9, by: hindi-repair}
+    - {words: L36.11, by: hindi-repair}
+    - {words: L36.13, by: agent}
+    - {words: L36.15, by: hindi-repair}
+    - {words: L36.19, by: hindi-repair}
+    - {words: L37.2, by: agent}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.6, by: hindi-repair}
+    - {words: L37.10, by: hindi-repair}
+    - {words: L37.12, by: hindi-repair}
+    - {words: L38.1, by: hindi-repair}
+    - {words: L38.2, by: hindi-repair}
+- id: "5.16"
+  kind: exercise
+  page: 19
+  title: अभ्यास प्रश्न
+  text: अभ्यास प्रश्न
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L1.2, by: hindi-repair}
+- id: "5.16.1"
+  kind: question
+  page: 19
+  number: "1."
+  text: 1. निम्नलिखित मिश्रणों में से कौन-से मिश्रण सही रूप से समांगी और विषमांगी मिश्रणों के रूप में
+    वर्गीकृत किए गए हैं? सही विकल्प चुनिए। (i) वायु — समांगी, दुग्ध — विषमांगी, चीनी का विलयन —
+    समांगी, धुआँ — समांगी (ii) पीतल — विषमांगी, कोहरा — विषमांगी, सिरका — विषमांगी, पंकिल जल —
+    समांगी (iii) कॉपर सल्फेट का विलयन — समांगी, नमक का विलयन — समांगी, दुग्ध — समांगी, काँसा
+    (Bronze) — समांगी (iv) पंकिल जल — विषमांगी, दुग्ध — विषमांगी, रक्त — विषमांगी, पीतल — समांगी
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.11, by: agent}
+    - {words: L2.13, by: agent}
+    - {words: L2.14, by: hindi-repair}
+    - {words: L2.17, by: hindi-repair}
+    - {words: L3.1-2, by: agent}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.7, by: hindi-repair}
+    - {words: L4.4, by: agent}
+    - {words: L4.5, by: hindi-repair}
+    - {words: L4.7, by: agent}
+    - {words: L4.12, by: agent}
+    - {words: L4.15, by: agent}
+    - {words: L5.4, by: agent}
+    - {words: L5.7, by: agent}
+    - {words: L5.10, by: agent}
+    - {words: L5.14, by: agent}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.7, by: agent}
+    - {words: L6.12, by: agent}
+    - {words: L6.13-16, by: hindi-repair}
+    - {words: L6.18, by: agent}
+    - {words: L7.4, by: agent}
+    - {words: L8.5, by: agent}
+    - {words: L8.6, by: hindi-repair}
+    - {words: L8.8, by: agent}
+    - {words: L8.9, by: hindi-repair}
+    - {words: L8.11, by: agent}
+    - {words: L8.14, by: agent}
+- id: "5.16.2"
+  kind: question
+  page: 19
+  number: "2."
+  text: 2. सही विकल्पों का चयन कीजिए तथा सही और गलत विकल्पों के कारण स्पष्ट कीजिए। निम्नलिखित में से
+    कौन-से मिश्रण टिंडल प्रभाव दर्शाते हैं? (क) वायु और धूल के कणों का मिश्रण (ख) कॉपर सल्फेट और जल
+    का मिश्रण (ग) स्टार्च और जल का मिश्रण (घ) ऐसीटोन और जल का मिश्रण (i) क और ख  (ii) ख और घ  (iii)
+    क और ग  (iv) ग और घ
+  made:
+    - {words: L9.3, by: hindi-repair}
+    - {words: L9.11, by: hindi-repair}
+    - {words: L9.14, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L10.7, by: hindi-repair}
+    - {words: L10.8, by: hindi-repair}
+    - {words: L10.9, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.7, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.2-3, by: agent}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.7, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L14.2, by: agent}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.8, by: hindi-repair}
+    - {words: L15.12, by: hindi-repair}
+- id: "5.16.3"
+  kind: question
+  page: 19
+  number: "3."
+  text: 3. किसी मिश्रण को विलयन, निलंबन अथवा कोलॉइड के रूप में वर्गीकृत किया जा सकता है जिनमें से
+    प्रत्येक के अपने विशिष्ट गुणधर्म होते हैं। बॉक्स में दिए गए शब्दों अथवा वाक्यांशों का उपयोग करके
+    तालिका 5.2 को पूर्ण कीजिए। शब्दों और वाक्यांशों का एक से अधिक बार उपयोग किया जा सकता है।
+  made:
+    - {words: L16.8, by: agent}
+    - {words: L16.11, by: hindi-repair}
+    - {words: L16.12-13, by: agent}
+    - {words: L16.18, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.8, by: hindi-repair}
+    - {words: L17.9, by: hindi-repair}
+    - {words: L17.12, by: hindi-repair}
+    - {words: L17.14, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.6, by: hindi-repair}
+    - {words: L18.8, by: hindi-repair}
+- id: "5.16.4"
+  kind: box
+  page: 19
+  title: शब्द और वाक्यांश
+  text: शब्द और वाक्यांश बड़े आकार के कण; कण समान रूप से वितरित रहते हैं; छोटे आकार के कण (1 nm से कम
+    व्यास); मध्यम आकार के कण (1–1000 nm); स्थिर रखने पर नीचे बैठ जाते हैं (1000 nm से अधिक व्यास);
+    नीचे नहीं बैठते; प्रकाश का प्रकीर्णन करते हैं; निस्यंदन पर पृथक हो जाते हैं; पारदर्शी; नमक का
+    विलयन; दुग्ध; जल में रेत; धुआँ; विषमांगी मिश्रण; निस्यंदन द्वारा पृथक नहीं किए जा सकते; कीचड़;
+    मक्खन; पीतल।
+  made:
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.11, by: hindi-repair}
+    - {words: L20.20, by: hindi-repair}
+    - {words: L20.21, by: hindi-repair}
+    - {words: L21.6, by: hindi-repair}
+    - {words: L21.12, by: hindi-repair}
+    - {words: L21.17, by: hindi-repair}
+    - {words: L21.19, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+    - {words: L22.6, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L22.12, by: hindi-repair}
+    - {words: L22.19, by: hindi-repair}
+    - {words: L23.1-2, by: hindi-repair}
+    - {words: L23.4, by: agent}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L23.9, by: hindi-repair}
+    - {words: L23.14, by: hindi-repair}
+- id: "5.16.5"
+  kind: text
+  page: 19
+  text: तालिका 5.2 पूर्ण कीजिए।
+  made:
+    - {words: L24.3, by: hindi-repair}
+- id: "5.16.6"
+  kind: table
+  page: 19
+  number: तालिका 5.2
+  text: तालिका 5.2 विलयन निलंबन कोलॉइड गुणधर्म गुणधर्म गुणधर्म __________________________
+    __________________________ __________________________ __________________________
+    __________________________ __________________________ उदाहरण उदाहरण उदाहरण
+    __________________________ __________________________ __________________________
+    __________________________ __________________________ __________________________
+  rows:
+    - [विलयन, निलंबन, कोलॉइड]
+    - [
+        गुणधर्म __________________________ __________________________,
+        गुणधर्म __________________________ __________________________,
+        गुणधर्म __________________________ __________________________
+      ]
+    - [
+        उदाहरण __________________________ __________________________,
+        उदाहरण __________________________ __________________________,
+        उदाहरण __________________________ __________________________
+      ]
+  crop: [157.5, 580.4, 547.1, 738.8]
+  made:
+    - {words: L27.1, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L36.1, by: agent}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "5.16.7"
+  kind: question
+  page: 20
+  number: "4."
+  text: 4. निम्नलिखित प्रश्नों को हल कीजिए— (i) केक बनाने की किसी विधि में 420 g मैदा, 75 g चीनी और 5
+    g सोडियम हाइड्रोजनकार्बोनेट का उपयोग सूखी सामग्री के रूप में किया जाता है। उपयुक्त विधि के उपयोग
+    द्वारा मिश्रण के प्रत्येक घटक की सांद्रता व्यक्त कीजिए। (ii) किसी पीतल मिश्रधातु में द्रव्यमान
+    के अनुसार 70% ताँबा (कॉपर) है। 120 g पीतल में उपस्थित कॉपर और जिंक की मात्रा परिकलित कीजिए।
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L3.2-3, by: agent}
+    - {words: L3.8, by: hindi-repair}
+    - {words: L3.19, by: agent}
+    - {words: L4.7, by: hindi-repair}
+    - {words: L4.11, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.6, by: hindi-repair}
+    - {words: L6.16, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+- id: "5.16.8"
+  kind: question
+  page: 20
+  number: "5."
+  text: 5. खाद्य तेल के किसी पैकेट पर एक लीटर (910 g) लिखा है। यदि इस तेल को जल के साथ मिश्रित किया
+    जाए तो क्या यह अलग परत बनाएगा? यदि हाँ, तो कौन-सा पदार्थ ऊपर रहेगा? आप इन दो परतों को किस प्रकार
+    पृथक करेंगे? प्रयुक्त उपकरण का चित्र भी बनाइए।
+  made:
+    - {words: L9.4, by: hindi-repair}
+    - {words: L9.13, by: hindi-repair}
+    - {words: L9.15, by: agent}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.7, by: hindi-repair}
+- id: "5.16.9"
+  kind: question
+  page: 20
+  number: "6."
+  text: "6. नीचे दिए गए अभिकथन एवं कारण को पढ़िए और उनके संबंध में आगे दिए गए विकल्पों में से सही
+    विकल्प का चयन कीजिए। अभिकथन— विलयन टिंडल प्रभाव नहीं दर्शाते हैं। कारण— विलयन के कणों का आकार
+    100 nm से बड़ा होता है, अत: वे प्रकाश का प्रकीर्णन नहीं कर सकते। (i) अभिकथन और कारण दोनों सत्य
+    हैं और कारण अभिकथन की सही व्याख्या है। (ii) अभिकथन और कारण दोनों सत्य हैं और कारण अभिकथन की सही
+    व्याख्या नहीं है। (iii) अभिकथन सत्य है परंतु कारण असत्य है। (iv) अभिकथन असत्य है परंतु कारण सत्य
+    है।"
+  made:
+    - {words: L11.9, by: hindi-repair}
+    - {words: L11.13, by: hindi-repair}
+    - {words: L11.17, by: hindi-repair}
+    - {words: L11.18, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L13.3, by: agent}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L14.10, by: hindi-repair}
+    - {words: L14.17, by: hindi-repair}
+    - {words: L14.18, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.13, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.6, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.13, by: hindi-repair}
+    - {words: L17.14, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.7, by: hindi-repair}
+- id: "5.16.10"
+  kind: question
+  page: 20
+  number: "7."
+  text: 7. तालिका 5.3 में दिए गए मिश्रणों को आप किस प्रकार पृथक करेंगे? अपनी चयनित विधि के कारण का भी
+    उल्लेख कीजिए। यदि किसी मिश्रण को पृथक नहीं किया जा सकता है तो उसके कारण की व्याख्या कीजिए।
+  made:
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.7, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.11, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+- id: "5.16.11"
+  kind: table
+  page: 20
+  number: तालिका 5.3
+  text: तालिका 5.3 मिश्रण पृथक्करण की विधि चयन का कारण पंकिल जल से पंक रक्त प्रतिदर्श में अन्य घटकों
+    से प्लाज्मा नैफ्थलीन और रेत चॉक चूर्ण और साधारण नमक साधारण नमक और जल जल और तेल पुष्प के वर्णक
+  rows:
+    - [मिश्रण, पृथक्करण की विधि, चयन का कारण]
+    - [पंकिल जल से पंक, "", ""]
+    - [रक्त प्रतिदर्श में अन्य घटकों से प्लाज्मा, "", ""]
+    - [नैफ्थलीन और रेत, "", ""]
+    - [चॉक चूर्ण और साधारण नमक, "", ""]
+    - [साधारण नमक और जल, "", ""]
+    - [जल और तेल, "", ""]
+    - [पुष्प के वर्णक, "", ""]
+  crop: [89.5, 446.5, 478.5, 622.7]
+  made:
+    - {words: L24.1, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.3, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L24.6, by: hindi-repair}
+    - {words: L24.7, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.2, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L26.5, by: hindi-repair}
+    - {words: L26.7, by: hindi-repair}
+    - {words: L27.1, by: agent}
+    - {words: L27.3-4, by: agent}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "5.16.12"
+  kind: question
+  page: 20
+  number: "8."
+  text: 8. किसी मिश्रण में दो मिश्रणीय द्रव ‘क’ तथा ‘ख’ उपस्थित हैं। ‘क’ का क्वथनांक 60°C तथा ‘ख’ का
+    क्वथनांक 90°C है। इन्हें पृथक करने की विधि सुझाइए। सुझाई गई विधि का नामांकित चित्र भी बनाइए।
+  made:
+    - {words: L32.4, by: hindi-repair}
+    - {words: L32.11, by: hindi-repair}
+    - {words: L32.12, by: hindi-repair}
+    - {words: L32.15, by: hindi-repair}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+- id: "5.16.13"
+  kind: question
+  page: 20
+  number: "9."
+  text: 9. वाष्पीकरण, क्रिस्टलीकरण और आसवन की तुलना कीजिए। आप किस स्थिति में एक विधि को दूसरी विधियों
+    की अपेक्षा प्राथमिकता देंगे?
+  made:
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.11, by: hindi-repair}
+    - {words: L34.12, by: hindi-repair}
+    - {words: L35.2, by: hindi-repair}
+    - {words: L35.6, by: hindi-repair}
+- id: "5.16.14"
+  kind: question
+  page: 20
+  number: "10."
+  text: 10. रक्त कोलॉइडी मिश्रण का एक उदाहरण है। (i) क्या होगा यदि शरीर में रक्त एक शुद्ध निलंबन की
+    भाँति व्यवहार करे? (ii) रक्त के किसी प्रतिदर्श में परिक्षिप्त प्रावस्था और परिक्षेपण माध्यम की
+    पहचान कीजिए।
+  made:
+    - {words: L36.2, by: hindi-repair}
+    - {words: L36.3, by: agent}
+    - {words: L36.10, by: hindi-repair}
+    - {words: L36.14, by: hindi-repair}
+    - {words: L36.15, by: hindi-repair}
+    - {words: L36.18-21, by: hindi-repair}
+    - {words: L37.2, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.8, by: hindi-repair}
+    - {words: L37.9, by: hindi-repair}
+    - {words: L37.10, by: hindi-repair}
+    - {words: L37.11, by: hindi-repair}
+    - {words: L37.14, by: hindi-repair}
+- id: "5.16.15"
+  kind: question
+  page: 21
+  number: "11."
+  text: 11. आपको रेत, साधारण नमक और नैफ्थलीन का एक मिश्रण दिया गया है (चित्र 5.25 क)। चित्र 5.25 ख इस
+    मिश्रण के घटकों को पृथक करने के विभिन्न चरणों को दर्शा रहा है। पृथक्करण तकनीकों के सही क्रम की
+    पहचान कीजिए और उन्हें लिखिए।
+  made:
+    - {words: L1.3-4, by: agent}
+    - {words: L1.8, by: agent}
+    - {words: L2.7, by: hindi-repair}
+    - {words: L2.12, by: hindi-repair}
+    - {words: L2.13, by: hindi-repair}
+    - {words: L2.15, by: hindi-repair}
+    - {words: L2.18, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.9, by: hindi-repair}
+- id: "5.16.16"
+  kind: figure
+  page: 21
+  number: चित्र 5.25
+  text: चित्र 5.25 — (क) 1 2 3 चित्र 5.25 — (ख)
+  crop: [92.6, 136.3, 548, 276.1]
+  made:
+    - {words: L5.1, by: hindi-repair}
+    - {words: L6.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "5.16.17"
+  kind: question
+  page: 21
+  number: "12."
+  text: 12. जल और ऐसीटोन के मिश्रण को पृथक करने के लिए आसवन एक प्रभावी विधि क्यों है?
+  made:
+    - {words: L7.4, by: agent}
+    - {words: L7.16, by: hindi-repair}
+- id: "5.16.18"
+  kind: question
+  page: 21
+  number: "13."
+  text: 13. तालिका 5.4 में दिए गए आँकड़ों की सहायता से निम्नलिखित प्रश्नों के उत्तर दीजिए। (i) 40°C पर
+    50 g जल में पोटैशियम नाइट्रेट का संतृप्त विलयन बनाने के लिए उसके कितने द्रव्यमान की आवश्यकता
+    होगी? (ii) एक विद्यार्थी 80°C पर पोटैशियम क्लोराइड का जल में संतृप्त विलयन बनाता है और विलयन को
+    कक्ष के तापमान (25°C) पर ठंडा होने के लिए छोड़ देता है। जैसे-जैसे विलयन ठंडा होगा वह क्या अवलोकन
+    करेगा? व्याख्या कीजिए। (iii) लवणों की विलेयता पर तापमान के परिवर्तन का क्या प्रभाव पड़ता है?
+    10°C से 80°C तक तापमान में वृद्धि करने पर दिए गए चार लवणों की विलेयता में होने वाले परिवर्तनों
+    की तुलना भी कीजिए।
+  made:
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L8.12, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L22.11, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L23.3, by: hindi-repair}
+    - {words: L24.7, by: hindi-repair}
+    - {words: L24.10, by: hindi-repair}
+    - {words: L24.11, by: hindi-repair}
+    - {words: L25.3, by: agent}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L26.6-7, by: agent}
+    - {words: L26.8, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.4, by: agent}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.10, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.9, by: hindi-repair}
+    - {words: L28.11, by: agent}
+    - {words: L28.12, by: hindi-repair}
+    - {words: L28.15, by: hindi-repair}
+    - {words: L28.17-20, by: hindi-repair}
+- id: "5.16.19"
+  kind: table
+  page: 21
+  number: तालिका 5.4—
+  title: विभिन्न तापमानों पर विभिन्न लवणों की विलेयता (प्रति 100 g जल में लवण के g)
+  text: तालिका 5.4— विभिन्न तापमानों पर विभिन्न लवणों की विलेयता (प्रति 100 g जल में लवण के g) लवण
+    तापमान (°C) 10 °C 20 °C 30 °C 40 °C 60 °C 80 °C पोटैशियम नाइट्रेट 21 32 45 62 106 167 सोडियम
+    क्लोराइड 36 36 36.3 36.5 37 37 पोटैशियम क्लोराइड 35 35 37.4 40 46 54 अमोनियम क्लोराइड 24 37 41
+    41 55 66
+  rows:
+    - [लवण, तापमान (°C), "", "", "", "", ""]
+    - ["", 10 °C, 20 °C, 30 °C, 40 °C, 60 °C, 80 °C]
+    - [पोटैशियम नाइट्रेट, "21", "32", "45", "62", "106", "167"]
+    - [सोडियम क्लोराइड, "36", "36", "36.3", "36.5", "37", "37"]
+    - [पोटैशियम क्लोराइड, "35", "35", "37.4", "40", "46", "54"]
+    - [अमोनियम क्लोराइड, "24", "37", "41", "41", "55", "66"]
+  crop: [158.6, 320.4, 546.5, 480]
+  made:
+    - {words: L9.3, by: hindi-repair}
+    - {words: L9.4, by: hindi-repair}
+    - {words: L9.6, by: hindi-repair}
+    - {words: L9.7, by: hindi-repair}
+    - {words: L9.9, by: agent}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2-3, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "5.16.20"
+  kind: question
+  page: 21
+  number: "14."
+  text: 14. तीन विद्यार्थी ‘क’, ‘ख’ और ‘ग’ किसी प्रयोग के लिए चीनी का विलयन बना रहे हैं— विद्यार्थी
+    ‘क’ 80 g जल में 20 g चीनी घोलता है। विद्यार्थी ‘ख’ 100 g जल में 20 g चीनी घोलता है। विद्यार्थी
+    ‘ग’ 80 g जल में 30 g चीनी घोलता है। (i) प्रत्येक विद्यार्थी द्वारा बनाए गए विलयन में चीनी की
+    द्रव्यमान प्रतिशत (% m/m) सांद्रता का परिकलन कीजिए। (ii) इनमें से किस विद्यार्थी का विलयन सबसे
+    अधिक सांद्र है? कारण सहित व्याख्या कीजिए।
+  made:
+    - {words: L30.17, by: hindi-repair}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L32.7, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.8, by: hindi-repair}
+    - {words: L34.11, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L36.14, by: hindi-repair}
+- id: "5.16.21"
+  kind: question
+  page: 22
+  number: "15."
+  text: 15. चित्र 5.26 को ध्यानपूर्वक देखिए— (i) ‘स’ द्वारा चिह्नित पृथक्करण तकनीक की पहचान कीजिए।
+    (ii) उपकरण क, ख और ग को नामांकित कीजिए। (iii) निम्नलिखित में से किन मिश्रणों को उपर्युक्त पहचानी
+    गई तकनीक द्वारा पृथक किया जा सकता है? तालिका 5.5 के आँकड़ों का उपयोग कीजिए। मिश्रण हैं— (क) जल—
+    ऐसीटोन (ख) जल—नमक (ग) ऐसीटोन—ऐल्कोहॉल (घ) रेत—नमक (ङ) ऐल्कोहॉल—क्लोरोफॉर्म  (च) ऐल्कोहॉल—बेंजीन
+  made:
+    - {words: L2.5, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.6, by: hindi-repair}
+    - {words: L5.8, by: hindi-repair}
+    - {words: L6.10, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L9.3, by: agent}
+    - {words: L10.2, by: agent}
+    - {words: L10.4-5, by: agent}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+- id: "5.16.22"
+  kind: figure
+  page: 22
+  number: चित्र 5.26
+  text: क ख ग स ........................................... चित्र 5.26
+  crop: [403.1, 89, 582.8, 260.3]
+  made:
+    - {words: L20.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "5.16.23"
+  kind: table
+  page: 22
+  number: तालिका 5.5—
+  title: कुछ यौगिकों के क्वथनांक
+  text: तालिका 5.5— कुछ यौगिकों के क्वथनांक विलायक जल ऐसीटोन ऐल्कोहॉल क्लोरोफॉर्म बेंजीन तापमान (°C)
+    100 °C 56 °C 78 °C 61 °C 80 °C
+  rows:
+    - [विलायक, जल, ऐसीटोन, ऐल्कोहॉल, क्लोरोफॉर्म, बेंजीन]
+    - [तापमान (°C), 100 °C, 56 °C, 78 °C, 61 °C, 80 °C]
+  crop: [89.5, 247.7, 478.5, 307]
+  made:
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.6, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L14.1, by: agent}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L25.1, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "5.16.24"
+  kind: heading
+  page: 22
+  title: परियोजना कार्य
+  text: परियोजना कार्य
+  made:
+    - {words: L29.1, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+- id: "5.16.25"
+  kind: text
+  page: 22
+  text: विभिन्न कोलॉइडों का उपयोग करते हुए टिंडल प्रभाव प्रदर्शित कीजिए। प्रयोगों की एक ऐसी शृंखला
+    बनाइए जो यह दर्शाए कि किस प्रकार कोलॉइडों में प्रकाश का प्रकीर्णन प्रकाश किरण पुँज को दृश्यमान
+    बनाता है। प्रदर्शन के लिए लेसर संकेतक, (सुरक्षा सर्वप्रथम— किसी वयस्क के निरीक्षण में इसका उपयोग
+    करें) क्षणदीपों अथवा अन्य प्रकाश स्रोतों का उपयोग कीजिए। विभिन्न यौगिकों (जैसे— साधारण नमक,
+    एप्सम लवण, चीनी, बोरेक्स, निकेल सल्फेट इत्यादि) के क्रिस्टल बनाइए। उनका किसी आवर्धित लेंस अथवा
+    सूक्ष्मदर्शी से अवलोकन कीजिए। उनके रंगों तथा आकारों को नोट कीजिए। क्या लाल पत्तियों में भी हरित
+    वर्णक होता है? कागज वर्णलेखिकी द्वारा इसकी जाँच कीजिए। आप खाद्य वर्णकों (हरा, नारंगी, पीला
+    इत्यादि) अथवा रंगीन मुखवासों (सौंफ) में उपस्थित संघटकों की संख्या ज्ञात करने के लिए वर्णलेखिकी
+    का प्रयोग कर सकते हैं। ऐसे शैक्षिक खेल की अभिकल्पना कीजिए जिसमें खिलाड़ी पारस्परिक चुनौतियों और
+    व्यावहारिक क्रियाकलापों द्वारा विभिन्न मिश्रणों को पहचानने एवं पृथक्करण करने की तकनीकों का
+    अनुप्रयोग कर सकें। यदि आप किसी खुले स्थान में शिविर लगा रहे हैं और स्वच्छ जल कम पड़ जाए तो आप
+    आसवन विधि द्वारा स्वच्छ जल प्राप्त कर सकते हैं। क्या आप वहाँ उपलब्ध वस्तुओं से ऐसी व्यवस्था
+    बनाने के विषय में सोच सकते हैं? पदार्थ की अवस्थाओं और विलयनों की सांद्रता के विषय में और अधिक
+    जानने के लिए आप नीचे दिए गए लिंक पर देख सकते हैं—
+    https://phet.colorado.edu/sims/html/states-of-matter-basics/latest/
+    states-of-matter-basics_en.html https://phet.colorado.edu/sims/html/concentration/latest/
+    concentration_all.html
+  made:
+    - {words: L30.2, by: hindi-repair}
+    - {words: L30.3, by: agent}
+    - {words: L30.10, by: hindi-repair}
+    - {words: L30.12, by: hindi-repair}
+    - {words: L31.1, by: agent}
+    - {words: L31.5, by: hindi-repair}
+    - {words: L31.9, by: agent}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L31.13, by: hindi-repair}
+    - {words: L31.16-18, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.5, by: hindi-repair}
+    - {words: L32.11, by: hindi-repair}
+    - {words: L32.13, by: hindi-repair}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.6, by: agent}
+    - {words: L33.8, by: hindi-repair}
+    - {words: L33.10, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.7, by: agent}
+    - {words: L34.10-11, by: agent}
+    - {words: L34.12-13, by: agent}
+    - {words: L34.14, by: hindi-repair}
+    - {words: L34.15, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.5, by: hindi-repair}
+    - {words: L35.6, by: hindi-repair}
+    - {words: L35.8, by: hindi-repair}
+    - {words: L35.13, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L37.2, by: hindi-repair}
+    - {words: L37.4, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.8, by: hindi-repair}
+    - {words: L37.12, by: agent}
+    - {words: L38.4, by: agent}
+    - {words: L38.8, by: hindi-repair}
+    - {words: L38.11, by: agent}
+    - {words: L38.12, by: hindi-repair}
+    - {words: L38.13, by: hindi-repair}
+    - {words: L38.14, by: hindi-repair}
+    - {words: L38.15, by: hindi-repair}
+    - {words: L39.2, by: hindi-repair}
+    - {words: L39.7, by: agent}
+    - {words: L39.12, by: hindi-repair}
+    - {words: L40.6, by: hindi-repair}
+    - {words: L40.8, by: hindi-repair}
+    - {words: L40.9, by: hindi-repair}
+    - {words: L40.10, by: hindi-repair}
+    - {words: L40.11, by: hindi-repair}
+    - {words: L40.13, by: hindi-repair}
+    - {words: L41.1, by: hindi-repair}
+    - {words: L41.2, by: hindi-repair}
+    - {words: L41.3, by: hindi-repair}
+    - {words: L41.4, by: hindi-repair}
+    - {words: L41.5, by: hindi-repair}
+    - {words: L41.6, by: agent}
+    - {words: L41.7, by: hindi-repair}
+    - {words: L41.8, by: hindi-repair}
+    - {words: L41.9, by: hindi-repair}
+    - {words: L41.10, by: hindi-repair}
+    - {words: L41.11, by: hindi-repair}
+    - {words: L41.12, by: hindi-repair}
+    - {words: L41.13, by: hindi-repair}
+    - {words: L41.15-16, by: agent}
+    - {words: L42.5-8, by: hindi-repair}
+    - {words: L42.9, by: hindi-repair}
+    - {words: L42.10, by: hindi-repair}
+    - {words: L42.14, by: hindi-repair}
+    - {words: L42.16, by: hindi-repair}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.3, by: hindi-repair}
+    - {words: L43.5, by: hindi-repair}
+    - {words: L43.8, by: hindi-repair}
+    - {words: L43.9, by: hindi-repair}
+    - {words: L43.12, by: hindi-repair}
+    - {words: L43.13-14, by: agent}
+    - {words: L43.17, by: hindi-repair}
+    - {words: L44.3, by: hindi-repair}
+    - {words: L44.6, by: hindi-repair}
+    - {words: L45.2, by: hindi-repair}
+    - {words: L45.4-5, by: agent}
+    - {words: L45.7, by: hindi-repair}
+    - {words: L45.12, by: hindi-repair}
+    - {words: L45.15, by: agent}
+    - {words: L46.7, by: hindi-repair}
+- id: "5.16.26"
+  kind: box
+  page: 22
+  title: खोज जारी है…
+  text: खोज जारी है… क्या ऐसा कृत्रिम रक्त बनाया जा सकता है जो सभी रोगियों के लिए वास्तविक रक्त की
+    भाँति ही कार्य करे?
+  made:
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.2, by: hindi-repair}
+    - {words: L51.3-4, by: hindi-repair}
+    - {words: L52.1, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.3-4, by: agent}
+    - {words: L52.5, by: hindi-repair}
+    - {words: L52.6, by: hindi-repair}
+    - {words: L52.7, by: hindi-repair}
+    - {words: L52.8, by: hindi-repair}
+    - {words: L52.9, by: hindi-repair}
+    - {words: L52.10, by: hindi-repair}
+    - {words: L52.11, by: hindi-repair}
+    - {words: L52.12, by: hindi-repair}
+    - {words: L52.13, by: hindi-repair}
+    - {words: L52.14, by: hindi-repair}
+    - {words: L52.15, by: hindi-repair}
+    - {words: L52.16, by: hindi-repair}
+    - {words: L52.17, by: hindi-repair}
+    - {words: L52.18, by: hindi-repair}
+    - {words: L52.19, by: hindi-repair}
+    - {words: L52.20, by: hindi-repair}
+    - {words: L52.21-22, by: hindi-repair}

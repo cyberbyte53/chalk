@@ -1,0 +1,53 @@
+# Built by pnpm source from pages/ and book.pdf (platform/docs/plans/sources.md): don't edit, edit the page files.
+- term: homogeneous mixture
+  item: "1.2"
+- term: solution
+  item: "1.2"
+- term: heterogeneous mixture
+  item: "1.3"
+- term: solute
+  item: "2.1"
+- term: solvent
+  item: "2.1"
+- term: concentration
+  item: "2.2.5"
+- term: solubility
+  item: "2.4.1"
+- term: saturated solution
+  item: "2.4.1"
+- term: solubility curve
+  item: "2.4.4"
+- term: crystal
+  item: "3.1.1"
+- term: crystallization
+  item: "3.1.3"
+- term: distillation
+  item: "3.2.1"
+- term: fractional distillation
+  item: "3.2.9"
+- term: paper chromatography
+  item: "3.3.4"
+- term: immiscible
+  item: "4.1.1"
+- term: sublimation
+  item: "4.2.3"
+- term: deposition
+  item: "4.2.3"
+- term: alloy
+  item: "4.2.7"
+- term: suspensions
+  item: "4.3.1"
+- term: centrifugation
+  item: "4.3.6"
+- term: coagulation
+  item: "4.3.15"
+- term: coagulant
+  item: "4.3.15"
+- term: colloid
+  item: "4.4.2"
+- term: Tyndall effect
+  item: "5.2"
+- term: dispersed phase
+  item: "5.5"
+- term: dispersion medium
+  item: "5.5"

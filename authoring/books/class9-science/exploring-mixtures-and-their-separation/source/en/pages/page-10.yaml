@@ -1,0 +1,25 @@
+page: 10
+proofread: true
+furniture: L1, L49
+terms:
+  - L31.9-L32.1
+answers:
+  "crosses L30.1": "the paths are the side and the foot of the Ready to Go Beyond frame, not the drawing: the drawing and its caption are all inside the crop"
+blocks:
+  - kind: text
+    words: L2-L6
+  - kind: box
+    words: L7-L19, L21-L24
+    title: L7
+  - kind: figure
+    words: L20
+    number: L20.1-2
+    box: [377, 187, 568, 339]
+  - kind: box
+    words: L25-L29, L31-L33, L35-L37, L39
+    title: L25
+  - kind: figure
+    words: L30, L34, L38, L40-L48
+    number: L48.1-2
+    box: [104, 465, 587, 737]
+    crop: { box: [104, 465, 587, 737], cause: wrong-box }

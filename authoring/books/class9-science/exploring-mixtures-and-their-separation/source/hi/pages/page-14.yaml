@@ -1,0 +1,88 @@
+page: 14
+proofread: true
+cause: wrong-reading
+furniture: L1, L43
+terms:
+  - L7.1
+  - L27.7-8
+answers:
+  crosses L37.1: that path is the frame of the box the figure sits in, not part of the drawing
+  word घुलते: a real word, as printed on the page; the list lacks it
+  word सूती: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: section
+    number: L2.1
+    title: L2.2
+    words: L2
+  - kind: text
+    words: L3-L9
+    read:
+      L4.1-2: रेत
+      L5.6-7: (रेत)
+      L5.8-11: घुलते
+      L5.15-L6.3: संपूर्ण
+      L5.1: विषमांगी
+  - kind: heading
+    words: L10
+    title: L10
+  - kind: text
+    words: L11-L20
+    read:
+      L11.3-L12.2:
+        text: पंकिल
+        cause: broken-across-lines
+      L12.11-L13.1:
+        text: पंक
+        cause: broken-across-lines
+      L14.2-L15.1: धुँधला
+      L16.2: इससे
+      L16.12-L17.1: धुँधला
+      L19.15-16: अपकेंद्रण
+      L15.11: सूती
+  - kind: text
+    words: L21
+  - kind: heading
+    words: L22
+    title: L22
+    read:
+      L22.2-3: अपकेंद्रण
+  - kind: text
+    words: L23-L31
+    read:
+      L24.1-2: भुजाओं
+      L27.7-8: अपकेंद्रण
+      L28.15-16: अपकेंद्रण
+      L29.8-9: अपकेंद्रीय
+  - kind: box
+    title: L32
+    words: L32-L36
+  - kind: figure
+    number: L37.1-2
+    words: L37
+    box:
+      - 421
+      - 462
+      - 585
+      - 591
+    crop:
+      box:
+        - 436
+        - 464
+        - 576
+        - 588
+      cause: wrong-box
+  - kind: figure
+    number: L40.1-2
+    words: L38-L40
+    box:
+      - 110
+      - 535
+      - 385
+      - 699
+    read:
+      L40.4-5: अपकेंद्रण
+  - kind: text
+    words: L41-L42
+    read:
+      L41.9-10: कोशिकाओं
+      L42.6-7: अपकेंद्रण

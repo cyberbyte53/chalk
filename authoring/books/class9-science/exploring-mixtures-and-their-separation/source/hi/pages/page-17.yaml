@@ -1,0 +1,88 @@
+page: 17
+proofread: true
+cause: wrong-reading
+furniture: L37-L38, L40-L41
+terms:
+  - L12.6-7
+  - L13.11-12
+answers:
+  read L1.7: the PDF lacks िं (टडल); the image shows टिंडल
+  read L9.7: the PDF lacks िं (टडल); the image shows टिंडल
+  read L36.2: the PDF lacks िं (टडल); the image shows टिंडल
+  word परिघटना: a real word, as printed on the page; the list lacks it
+  word लाइट्स: a real word, as printed on the page; the list lacks it
+  word परिक्षेपित: a real word, as printed on the page; the list lacks it
+  word पायसी: a real word, as printed on the page; the list lacks it
+  word कारकों: a real word, as printed on the page; the list lacks it
+  word हिमक्रिस्टलों: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: text
+    words: L1-L2
+    continued: true
+    read:
+      L1.7: टिंडल
+  - kind: text
+    words: L3-L8
+    read:
+      L3.12: कक्ष
+      L4.5-L5.1: किरणपुंज
+      L7.1: परिघटना
+      L7.8: लाइट्स
+  - kind: figure
+    number: L9.1-2
+    words: L9.1-9, L10.1
+    box:
+      - 50
+      - 79
+      - 223
+      - 234
+    read:
+      L9.7: टिंडल
+  - kind: text
+    words: L9.10-22, L10.2-16
+    read:
+      L9.13: कोलॉइड
+  - kind: text
+    words: L11-L13
+    read:
+      L11.1: कोलॉइड
+      L11.13: कोलॉइड
+  - kind: box
+    title: L14
+    words: L14-L22
+    read:
+      L16.21-22: प्रकृति
+      L19.3: जिससे
+      L19.19-20: सके।
+      L19.21: इससे
+      L15.3: कोलॉइड
+      L19.7: परिक्षेपित
+      L21.1: पायसी
+      L21.2: कारकों
+      L21.19: पायसी
+      L22.25: भली-भाँति
+  - kind: box
+    title: L23
+    words: L23-L26
+    read:
+      L24.19: हिमक्रिस्टलों
+      L24.26: कोलॉइडों
+  - kind: activity
+    number: L27.1-2
+    words: L27-L28
+    read:
+      L27.13: कोलॉइडों
+  - kind: table
+    number: L29.1-2
+    title: L29.3-8
+    words: L29-L36, L39
+    box:
+      - 75
+      - 585
+      - 548
+      - 738
+    read:
+      L31.2-3: प्रकृति
+      L36.2: टिंडल
+      L31.4: (समांगी/विषमांगी)
+      L39.3: कोलॉइड

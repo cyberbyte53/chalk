@@ -1,0 +1,29 @@
+page: 9
+proofread: true
+furniture: L63-L66
+terms:
+  - L37.4
+blocks:
+  - kind: text
+    words: L23-L26
+  - kind: text
+    words: L27-L31
+  - kind: section
+    words: L32
+    number: L32.1
+    title: L32.2-2
+  - kind: text
+    words: L33-L41
+  - kind: text
+    words: L42-L48
+  - kind: box
+    words: L1-L15
+    title: L1-L2
+  - kind: figure
+    words: L16-L22
+    number: L22.1-2
+    box: [72, 316, 228, 441]
+  - kind: figure
+    words: L49-L62
+    number: L62.1-2
+    box: [46, 460, 548, 740]

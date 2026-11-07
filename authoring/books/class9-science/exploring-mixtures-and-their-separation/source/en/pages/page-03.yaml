@@ -1,0 +1,49 @@
+page: 3
+proofread: true
+furniture: L8-L10, L55-L57, L65-L66, L73-L74
+terms:
+  - L12.8
+  - L13.6
+  - L42.8
+blocks:
+  - kind: activity
+    words: L1-L4
+    continued: true
+  - kind: text
+    words: L5-L6
+  - kind: section
+    words: L7
+    number: L7.1
+    title: L7.2-2
+  - kind: text
+    words: L11-L16
+  - kind: section
+    words: L17
+    number: L17.1
+    title: L17.2-5
+  - kind: text
+    words: L18-L22, L23.2-L24
+  - kind: text
+    words: L27, L29, L30.4-19, L32-L33
+  - kind: text
+    words: L34
+  - kind: text
+    words: L36, L38
+  - kind: text
+    words: L40, L42, L44
+  - kind: text
+    words: L47, L49, L51, L53
+  - kind: section
+    words: L67
+    number: L67.1
+    title: L67.2-6
+  - kind: text
+    words: L68-L70
+  - kind: text
+    words: L71-L72
+  - kind: box
+    words: L23.1, L25-L26, L28, L30.1-3, L31
+    title: L23.1
+  - kind: box
+    words: L35, L37, L39, L41, L43, L45-L46, L48, L50, L52, L54, L58-L64
+    title: L35

@@ -1,0 +1,54 @@
+page: 18
+proofread: true
+cause: wrong-reading
+furniture: L1, L39, L19.1, L21.1, L22.1, L23.1, L26.1, L28.1, L30.1, L33.1, L35.1, L37.1
+answers:
+  word शिंकजी: a real word, as printed on the page; the list lacks it
+  word कचरा: a real word, as printed on the page; the list lacks it
+  word पुनर्चक्रित: a real word, as printed on the page; the list lacks it
+  word छिलके: a real word, as printed on the page; the list lacks it
+  word शोधकर्ता: a real word, as printed on the page; the list lacks it
+  word बैटरियों: a real word, as printed on the page; the list lacks it
+  word लीथियम: a real word, as printed on the page; the list lacks it
+  word चिपककर: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: text
+    words: L2-L4
+    read:
+      L2.10: विलेयता
+      L3.10: शिंकजी
+  - kind: text
+    words: L5-L10
+    read:
+      L5.6-7: प्रकृति
+      L7.4: कचरा
+  - kind: text
+    words: L11-L15
+    read:
+      L11.6-7: छँटाई
+      L11.17: कचरा,
+      L12.8: पुनर्चक्रित
+      L12.15: कचरा
+      L13.6: छिलके
+      L14.1: शोधकर्ता
+      L14.8: बैटरियों
+      L14.10: लीथियम
+      L15.3: विधियाँ
+  - kind: text
+    words: L16-L17
+    read:
+      L17.5: सतत
+  - kind: box
+    title: L18
+    words: L18, L19.2-15, L20, L21.2-14, L22.2-16, L23.2-18, L24-L25, L26.2-17, L27, L28.2-17, L29, L30.2-18, L31-L32, L33.2-19, L34, L35.2-18, L36, L37.2-15, L38
+    read:
+      L20.2-3: वर्गीकृत
+      L33.2-3: अपकेंद्रण
+      L35.15: जिससे
+      L36.2: चिपककर
+      L19.4: समांगी
+      L19.6: विषमांगी
+      L19.12: कोलॉइडों
+      L26.3: वर्णलेखिकी
+      L36.13: विषमांगी
+      L37.2: कोलॉइड

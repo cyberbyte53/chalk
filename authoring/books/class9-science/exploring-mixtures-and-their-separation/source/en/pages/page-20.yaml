@@ -1,0 +1,29 @@
+page: 20
+proofread: true
+furniture: L1, L44
+blocks:
+  - kind: question
+    words: L2-L8
+    number: L2.1
+  - kind: question
+    words: L9-L12
+    number: L9.1
+  - kind: question
+    words: L13-L20
+    number: L13.1
+  - kind: question
+    words: L21-L23
+    number: L21.1
+  - kind: table
+    words: L24-L34
+    number: L24.1-2
+    box: [90, 401, 480, 627]
+  - kind: question
+    words: L35-L38
+    number: L35.1
+  - kind: question
+    words: L39-L40
+    number: L39.1
+  - kind: question
+    words: L41-L43
+    number: L41.1

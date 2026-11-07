@@ -1,0 +1,25 @@
+page: 19
+proofread: true
+furniture: L32-L33, L54-L55
+blocks:
+  - kind: exercise
+    words: L1
+    title: L1
+  - kind: question
+    words: L2-L9
+    number: L2.1
+  - kind: question
+    words: L10-L18
+    number: L10.1
+  - kind: question
+    words: L19-L22
+    number: L19.1
+  - kind: box
+    words: L23-L29
+    title: L23
+  - kind: text
+    words: L30
+  - kind: table
+    words: L31, L34-L53
+    number: L31.1-2
+    box: [157, 580, 548, 750]

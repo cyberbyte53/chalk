@@ -1,0 +1,98 @@
+page: 8
+proofread: true
+cause: wrong-reading
+notes:
+  other: a bracket the PDF sets apart from its letter, printed (क)
+furniture: L1, L45
+answers:
+  word सुरूपित: a real word, as printed on the page; the list lacks it
+  word हिमशीतित: a real word, as printed on the page; the list lacks it
+  word पाएँगे: a real word, as printed on the page; the list lacks it
+  word चेरापूंजी: a real word, as printed on the page; the list lacks it
+  word मावसमाई: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: activity
+    continued: true
+    words: L2-L9
+    read:
+      L2.12: बनने
+      L2.10: सुरूपित
+      L4.5: निस्यंदित
+  - kind: text
+    words: L10-L12
+    read:
+      L10.2: समांगी
+  - kind: box
+    title: L13
+    words: L13-L19
+    read:
+      L14.6-L15.4:
+        text: संतृप्त
+        cause: broken-across-lines
+      L15.7: कक्ष
+      L15.11-12: धीरे-धीरे
+      L18.11-L19.4:
+        text: संतृप्त
+        cause: broken-across-lines
+      L15.17: हिमशीतित
+      L16.13: भली-भाँति
+      L16.17: पाएँगे।
+  - kind: box
+    title: L20
+    words: L20-L24
+    read:
+      L21.6: विलेयता
+  - kind: activity
+    number: L25.1-2
+    title: L25.4-9
+    words: L25-L27
+  - kind: figure
+    number: L32.1-2
+    words: L28-L32
+    box:
+      - 161
+      - 540
+      - 407
+      - 603
+  - kind: box
+    title: L33
+    words: L33-L42
+    read:
+      L34.12-13: प्रकृति
+      L36.3-4: गुफाओं
+      L37.7-L38.1: (चेरापूंजी)
+      L39.9-10: प्राकृतिक
+      L39.11-12: संरचनाओं
+      L40.10-11: प्रकृति
+      L41.4-L42.1: सुंदर
+      L38.4: मावसमाई
+  - kind: figure
+    number: L44.1-2
+    words: L43-L44
+    box:
+      - 83
+      - 635
+      - 366
+      - 768
+    crop:
+      box:
+        - 83
+        - 635
+        - 277
+        - 752
+      cause: wrong-box
+    read:
+      L43.1-2:
+        text: (क)
+        cause: other
+      L43.3-4:
+        text: (ख)
+        cause: other
+      L44.4-5: प्रकृति
+      L44.12-13:
+        text: (क)
+        cause: other
+      L44.14-15: गुफाओं
+      L44.17-18:
+        text: (ख)
+        cause: other

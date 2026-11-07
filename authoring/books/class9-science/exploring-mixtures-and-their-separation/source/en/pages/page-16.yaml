@@ -1,0 +1,35 @@
+page: 16
+proofread: true
+furniture: L1, L59
+terms:
+  - L54.12-L55.1
+blocks:
+  - kind: box
+    words: L2-L18
+    title: L2
+  - kind: figure
+    words: L19-L28
+    number: L27.1-2
+    box: [377, 95, 576, 323]
+    crop: { box: [378, 98, 576, 318], cause: wrong-box }
+  - kind: text
+    words: L29-L32
+  - kind: text
+    words: L33-L37.8, L38, L40-L41
+  - kind: figure
+    words: L37.9-11, L39
+    number: L39.1-2
+    box: [341, 338, 587, 479]
+  - kind: text
+    words: L42-L44
+  - kind: section
+    words: L45
+    number: L45.1
+    title: L45.2-3
+  - kind: text
+    words: L46-L52
+  - kind: text
+    words: L53-L56
+  - kind: text
+    words: L57-L58
+    continues: true

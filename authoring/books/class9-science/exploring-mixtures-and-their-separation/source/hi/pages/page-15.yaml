@@ -1,0 +1,73 @@
+page: 15
+proofread: true
+cause: wrong-reading
+furniture: L50-L53
+terms:
+  - L35.1
+  - L35.8
+answers:
+  word कोलॉइड: a real word, as printed on the page; the list lacks it
+  word पेपरफ्यूज: a real word, as printed on the page; the list lacks it
+  word प्रतिदर्शों: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: activity
+    number: L18.1-2
+    title: L18.3-6
+    words: L18-L24
+    read:
+      L20.2-3: अपकेंद्रित्र
+      L23.8-9: अपकेंद्रित्र
+      L20.8: पाएँगे
+  - kind: heading
+    title: L27.10-11
+    words: L27.10-11
+  - kind: text
+    words: L30-L35, L37, L39, L41-L43
+  - kind: text
+    words: L44
+    read:
+      L44.8-9: प्रक्रियाओं
+  - kind: text
+    words: L45-L46
+    read:
+      L46.18: जिससे
+  - kind: section
+    number: L47.1
+    title: L47.2
+    words: L47
+    read:
+      L47.2: कोलॉइड
+  - kind: text
+    words: L48-L49
+    read:
+      L48.6-7: अपकेंद्रण
+      L49.10-11: कोशिकाओं
+  - kind: box
+    title: L1
+    words: L1-L3, L5, L7, L9-L10, L13, L15-L17
+    read:
+      L3.1-2: अपकेंद्रण
+      L13.11-12: अपकेंद्रित्र
+      L17.12-13: सेवाओं
+      L2.1: पेपरफ्यूज
+      L7.2: पेपरफ्यूज
+      L10.5: पेपरफ्यूज,
+      L10.8: प्रतिदर्शों
+  - kind: figure
+    number: L14.1-2
+    words: L4, L6, L8, L11-L12, L14
+    box:
+      - 339
+      - 119
+      - 540
+      - 240
+    read:
+      L14.4: पेपरफ्यूज
+  - kind: figure
+    number: L40.1-2
+    words: L25-L26, L27.1-5, L29, L27.6-9, L28, L36, L38, L40
+    box:
+      - 42
+      - 292
+      - 316
+      - 588

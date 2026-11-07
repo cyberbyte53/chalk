@@ -1,0 +1,86 @@
+page: 7
+proofread: true
+cause: wrong-reading
+furniture: L73-L74, L77-L78
+terms:
+  - L7.10
+answers:
+  read L38.1-4: the PDF holds this word's letters split and out of order (सल््फ्य र यू िक); the image shows सल्फ्यूरिक
+  word जलवाष्प: a real word, as printed on the page; the list lacks it
+  word पाला: a real word, as printed on the page; the list lacks it
+  word अविषालु: a real word, as printed on the page; the list lacks it
+  word ऊष्मक: a real word, as printed on the page; the list lacks it
+  word निस्यंदित: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: text
+    words: L1-L5
+    read:
+      L2.13-14: (कैंडी
+      L5.7-8: प्राकृतिक
+      L3.9: जलवाष्प
+      L4.1: (पाला)
+      L4.9: जलवाष्प
+  - kind: text
+    words: L6-L11
+    read:
+      L6.1-2: प्रयोगशालाओं
+      L6.5-L7.2:
+        text: संतृप्त
+        cause: broken-across-lines
+      L9.5: विलेयता
+      L9.13: विलेयता
+      L11.7: विलेयता
+  - kind: text
+    words: L13
+  - kind: activity
+    number: L16.1-2
+    title: L16.4-6
+    words: L16, L21, L23.7-19, L24.6-9, L26-L27, L36-L44, L46-L47, L52-L54, L56, L58, L60, L62, L64, L66, L69
+    continues: true
+    read:
+      L26.13-14: देखरेख
+      L38.1-4: सल्फ्यूरिक
+      L40.2-3: धीरे-धीरे
+      L41.2-3: अभिक्रियाओं
+      L52.2-3: धीरे-धीरे
+      L66.5-6: धीरे-धीरे
+      L69.4: इससे
+      L26.5: अविषालु
+      L38.11: डालिए।
+      L39.6: जल-ऊष्मक
+  - kind: box
+    title: L12
+    words: L12, L17-L20
+    read:
+      L18.2-3: केवल
+  - kind: figure
+    number: L23.1-2
+    words: L14-L15, L22, L23.1-6, L24.1-5, L25
+    box:
+      - 49
+      - 80
+      - 146
+      - 366
+    read:
+      L25.1: (पाला)
+  - kind: figure
+    number: L70.1-2
+    words: L28-L35, L45, L48-L51, L55, L57, L59, L61, L63, L65, L67-L68, L70-L72, L75-L76
+    box:
+      - 40
+      - 392
+      - 346
+      - 752
+    read:
+      L32.2-3: सल्फेट
+      L61.2-3: सल्फेट
+      L67.3-4: सल्फेट
+      L71.2-L72.2:
+        text: संतृप्त
+        cause: broken-across-lines
+      L72.4: बनाना
+      L75.3-L76.2:
+        text: संतृप्त
+        cause: broken-across-lines
+      L31.1: ऊष्मक
+      L76.5: निस्यंदित

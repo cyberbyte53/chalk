@@ -1,0 +1,229 @@
+pairs:
+  - key: section 5.1
+    en: "1"
+    hi: "1"
+  - key: activity 5.1
+    en: "1.4"
+    hi: "1.3"
+  - key: figure 5.1
+    en: "1.5"
+    hi: "1.4"
+  - key: figure 5.2
+    en: "1.6"
+    hi: "1.5"
+  - key: figure 5.3
+    en: "1.7"
+    hi: "1.6"
+  - key: section 5.2
+    en: "2"
+    hi: "2"
+  - key: section 5.2.1
+    en: "2.2"
+    hi: "2.2"
+  - key: section 5.2.2
+    en: "2.3"
+    hi: "2.3"
+  - key: equation 5.1
+    en: 2.3.10
+    hi: 2.3.11
+  - key: example 5.1
+    en: 2.3.12
+    hi: 2.3.13
+  - key: equation 5.2
+    en: 2.3.17
+    hi: 2.3.18
+  - key: example 5.2
+    en: 2.3.18
+    hi: 2.3.19
+  - key: figure 5.4
+    en: 2.3.20
+    hi: 2.3.21
+  - key: equation 5.3
+    en: 2.3.24
+    hi: 2.3.24
+  - key: example 5.3
+    en: 2.3.25
+    hi: 2.3.25
+  - key: section 5.2.3
+    en: "2.4"
+    hi: "2.4"
+  - key: figure 5.5
+    en: 2.4.3
+    hi: 2.4.3
+  - key: activity 5.2
+    en: 2.4.4
+    hi: 2.4.4
+  - key: figure 5.6
+    en: 2.4.5
+    hi: 3.1.2
+  - key: section 5.3
+    en: "3"
+    hi: "3"
+  - key: section 5.3.1
+    en: "3.1"
+    hi: "3.1"
+  - key: activity 5.3
+    en: 3.1.5
+    hi: 3.1.6
+  - key: figure 5.7
+    en: 3.1.6
+    hi: 3.1.8
+  - key: figure 5.8
+    en: 3.1.7
+    hi: 3.1.9
+  - key: activity 5.4
+    en: 3.1.12
+    hi: 3.1.13
+  - key: figure 5.9
+    en: 3.1.13
+    hi: 3.1.14
+  - key: figure 5.10
+    en: 3.1.15
+    hi: 3.1.16
+  - key: section 5.3.2
+    en: "3.2"
+    hi: "3.2"
+  - key: figure 5.11
+    en: 3.2.4
+    hi: 3.2.4
+  - key: figure 5.12
+    en: 3.2.5
+    hi: 3.2.5
+  - key: figure 5.13
+    en: 3.2.8
+    hi: 3.2.8
+  - key: figure 5.14
+    en: 3.2.10
+    hi: 3.2.10
+  - key: section 5.3.3
+    en: "3.3"
+    hi: "3.3"
+  - key: activity 5.5
+    en: 3.3.2
+    hi: 3.3.2
+  - key: figure 5.15
+    en: 3.3.3
+    hi: 3.3.7
+  - key: section 5.4
+    en: "4"
+    hi: "4"
+  - key: section 5.4.1
+    en: "4.1"
+    hi: "4.1"
+  - key: activity 5.6
+    en: 4.1.4
+    hi: 4.1.4
+  - key: figure 5.16
+    en: 4.1.5
+    hi: 4.1.9
+  - key: section 5.4.2
+    en: "4.2"
+    hi: "4.2"
+  - key: activity 5.7
+    en: 4.2.1
+    hi: 4.2.1
+  - key: figure 5.17
+    en: 4.2.2
+    hi: 4.2.8
+  - key: section 5.4.3
+    en: "4.3"
+    hi: "4.3"
+  - key: figure 5.18
+    en: 4.3.8
+    hi: 4.3.8
+  - key: figure 5.19
+    en: 4.3.9
+    hi: 4.3.9
+  - key: figure 5.20
+    en: 4.3.12
+    hi: 4.4.3
+  - key: activity 5.8
+    en: 4.3.13
+    hi: 4.3.11
+  - key: figure 5.21
+    en: 4.3.16
+    hi: 4.4.4
+  - key: section 5.4.4
+    en: "4.4"
+    hi: "4.4"
+  - key: figure 5.22
+    en: 4.4.4
+    hi: 4.4.7
+  - key: figure 5.23
+    en: 4.4.7
+    hi: 4.4.11
+  - key: section 5.5
+    en: "5"
+    hi: "5"
+  - key: figure 5.24
+    en: "5.6"
+    hi: "5.4"
+  - key: activity 5.9
+    en: "5.9"
+    hi: "5.9"
+  - key: table 5.1
+    en: "5.10"
+    hi: "5.10"
+  - key: question 1 of exercise 1
+    en: 5.16.1
+    hi: 5.16.1
+  - key: question 2 of exercise 1
+    en: 5.16.2
+    hi: 5.16.2
+  - key: question 3 of exercise 1
+    en: 5.16.3
+    hi: 5.16.3
+  - key: table 5.2
+    en: 5.16.6
+    hi: 5.16.6
+  - key: question 4 of exercise 1
+    en: 5.16.7
+    hi: 5.16.7
+  - key: question 5 of exercise 1
+    en: 5.16.8
+    hi: 5.16.8
+  - key: question 6 of exercise 1
+    en: 5.16.9
+    hi: 5.16.9
+  - key: question 7 of exercise 1
+    en: 5.16.10
+    hi: 5.16.10
+  - key: table 5.3
+    en: 5.16.11
+    hi: 5.16.11
+  - key: question 8 of exercise 1
+    en: 5.16.12
+    hi: 5.16.12
+  - key: question 9 of exercise 1
+    en: 5.16.13
+    hi: 5.16.13
+  - key: question 10 of exercise 1
+    en: 5.16.14
+    hi: 5.16.14
+  - key: question 11 of exercise 1
+    en: 5.16.15
+    hi: 5.16.15
+  - key: figure 5.25
+    en: 5.16.16
+    hi: 5.16.16
+  - key: question 12 of exercise 1
+    en: 5.16.17
+    hi: 5.16.17
+  - key: question 13 of exercise 1
+    en: 5.16.18
+    hi: 5.16.18
+  - key: table 5.4
+    en: 5.16.19
+    hi: 5.16.19
+  - key: question 14 of exercise 1
+    en: 5.16.20
+    hi: 5.16.20
+  - key: question 15 of exercise 1
+    en: 5.16.21
+    hi: 5.16.21
+  - key: figure 5.26
+    en: 5.16.22
+    hi: 5.16.22
+  - key: table 5.5
+    en: 5.16.23
+    hi: 5.16.23

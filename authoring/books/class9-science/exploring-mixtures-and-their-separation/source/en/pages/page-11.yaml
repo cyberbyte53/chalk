@@ -1,0 +1,30 @@
+page: 11
+proofread: true
+furniture: L70-L73
+terms:
+  - L53.1-2
+blocks:
+  - kind: section
+    words: L18
+    number: L18.1
+    title: L18.2-3
+  - kind: text
+    words: L19-L23
+  - kind: activity
+    words: L24-L32, L34, L36-L39, L41-L42, L43.2-9, L45, L47, L49, L50.5-L51
+    number: L24.1-2
+    title: L24.3-5
+  - kind: figure
+    words: L13-L17, L33, L35, L40, L43.1, L44, L46, L48, L50.1-4
+    number: L50.1-2
+    box: [34, 294, 337, 473]
+  - kind: text
+    words: L52-L57
+  - kind: text
+    words: L58-L61
+  - kind: box
+    words: L62-L69
+    title: L62
+  - kind: box
+    words: L1-L12
+    title: L1-L2

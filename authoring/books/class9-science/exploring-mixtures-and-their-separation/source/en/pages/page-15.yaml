@@ -1,0 +1,40 @@
+page: 15
+proofread: true
+furniture: L63-L66
+terms:
+  - L46.3
+  - L47.5
+  - L61.13
+blocks:
+  - kind: box
+    words: L1-L14
+    title: L1
+  - kind: figure
+    words: L15-L20
+    number: L20.1-2
+    box: [337, 121, 535, 248]
+  - kind: activity
+    words: L21-L28
+    number: L21.1-2
+    title: L21.3-7
+  - kind: heading
+    words: L39
+    title: L39
+  - kind: text
+    words: L40-L48, L49.3-L50, L51.7-8
+  - kind: figure
+    words: L29-L38, L49.1-2, L51.1-6, L52.1-5
+    number: L52.1-2
+    box: [50, 296, 312, 597]
+  - kind: text
+    words: L52.6-L53
+  - kind: text
+    words: L54-L56
+  - kind: section
+    words: L57
+    number: L57.1
+    title: L57.2-2
+  - kind: text
+    words: L58-L60
+  - kind: text
+    words: L61-L62

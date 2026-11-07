@@ -1,0 +1,41 @@
+page: 14
+proofread: true
+furniture: L1, L46
+terms:
+  - L7.9
+  - L26.7
+answers:
+  "crosses L40.1": "the path is the corner of the Threads of Curiosity frame, not the drawing: the picture and its caption are all inside the crop"
+blocks:
+  - kind: section
+    words: L2
+    number: L2.1
+    title: L2.2-2
+  - kind: text
+    words: L3-L11
+  - kind: heading
+    words: L12
+    title: L12
+  - kind: text
+    words: L13-L19
+  - kind: text
+    words: L20
+  - kind: heading
+    words: L21
+    title: L21
+  - kind: text
+    words: L22-L32
+  - kind: box
+    words: L33-L39
+    title: L33-L34
+  - kind: figure
+    words: L40
+    number: L40.1-2
+    box: [421, 461, 585, 591]
+    crop: { box: [428, 463, 579, 590], cause: wrong-box }
+  - kind: figure
+    words: L41-L42
+    number: L42.1-2
+    box: [89, 530, 391, 697]
+  - kind: text
+    words: L43-L45

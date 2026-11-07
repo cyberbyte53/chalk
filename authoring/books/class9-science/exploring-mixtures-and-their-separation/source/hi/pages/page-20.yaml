@@ -1,0 +1,51 @@
+page: 20
+proofread: true
+cause: wrong-reading
+furniture: L1, L39
+answers:
+  read L13.3: the PDF lacks िं (टडल); the image shows टिंडल
+  word हाइड्रोजनकार्बोनेट: a real word, as printed on the page; the list lacks it
+  word रहेगा: a real word, as printed on the page; the list lacks it
+  word कोलॉइडी: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: question
+    number: L2.1
+    words: L2-L7
+    read:
+      L3.2-3: केक
+      L3.19: हाइड्रोजनकार्बोनेट
+  - kind: question
+    number: L8.1
+    words: L8-L10
+    read:
+      L9.15: रहेगा?
+  - kind: question
+    number: L11.1
+    words: L11-L19
+    read:
+      L13.3: टिंडल
+  - kind: question
+    number: L20.1
+    words: L20-L22
+  - kind: table
+    number: L23.1-2
+    words: L23-L31
+    box:
+      - 89
+      - 447
+      - 479
+      - 624
+    read:
+      L27.3-4: रेत
+      L27.1: नैफ्थलीन
+  - kind: question
+    number: L32.1
+    words: L32-L33
+  - kind: question
+    number: L34.1
+    words: L34-L35
+  - kind: question
+    number: L36.1
+    words: L36-L38
+    read:
+      L36.3: कोलॉइडी

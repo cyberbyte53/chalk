@@ -1,0 +1,46 @@
+page: 5
+proofread: true
+cause: other
+notes:
+  other: "the PDF spaces the slash of a unit written v/v on the page"
+furniture: L62-L66, L76-L77
+terms:
+  - L68.14
+  - L70.5-6
+blocks:
+  - kind: heading
+    words: L24
+    title: L24
+  - kind: text
+    words: L25-L28
+  - kind: text
+    words: L29
+  - kind: equation
+    words: L30-L31, L33, L32
+    number: L32.3
+  - kind: example
+    words: L34-L36
+    number: L34.1-2
+  - kind: text
+    words: L37-L39, L42, L40, L43, L41, L46, L44, L47, L45
+    read:
+      "L45.6-8": { text: "v/v" }
+  - kind: box
+    words: L48-L50
+    title: L48
+  - kind: box
+    words: L51-L60
+    title: L51
+  - kind: section
+    words: L61
+    number: L61.1
+    title: L61.2-4
+  - kind: text
+    words: L67-L75
+  - kind: box
+    words: L1-L21
+    title: L1-L2
+  - kind: figure
+    words: L22-L23
+    number: L22.1-2
+    box: [124, 153, 208, 378]

@@ -1,0 +1,60 @@
+page: 19
+proofread: true
+cause: wrong-reading
+furniture: L34-L35, L45-L46
+blocks:
+  - kind: exercise
+    title: L1
+    words: L1
+  - kind: question
+    number: L2.1
+    words: L2-L8
+    read:
+      L3.1-2: वर्गीकृत
+      L2.11: समांगी
+      L2.13: विषमांगी
+      L4.4: समांगी,
+      L4.7: विषमांगी,
+      L4.12: समांगी,
+      L4.15: समांगी
+      L5.4: विषमांगी,
+      L5.7: विषमांगी,
+      L5.10: विषमांगी,
+      L5.14: समांगी
+      L6.7: समांगी,
+      L6.12: समांगी,
+      L6.18: समांगी,
+      L7.4: समांगी
+      L8.5: विषमांगी,
+      L8.8: विषमांगी,
+      L8.11: विषमांगी,
+      L8.14: समांगी
+  - kind: question
+    number: L9.1
+    words: L9-L15
+    read:
+      L12.2-3: सल्फेट
+      L14.2: ऐसीटोन
+  - kind: question
+    number: L16.1
+    words: L16-L18
+    read:
+      L16.12-13: वर्गीकृत
+      L16.8: कोलॉइड
+  - kind: box
+    title: L19
+    words: L19-L23
+    read:
+      L23.4: विषमांगी
+  - kind: text
+    words: L24
+  - kind: table
+    number: L25.1-2
+    words: L25, L27, L26, L36, L28, L30-L31, L37-L38, L41-L42, L29, L32-L33, L39-L40, L43-L44
+    box:
+      - 157
+      - 582
+      - 548
+      - 739
+    read:
+      L36.1: कोलॉइड

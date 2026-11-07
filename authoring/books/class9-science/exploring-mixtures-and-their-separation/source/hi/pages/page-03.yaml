@@ -1,0 +1,91 @@
+page: 3
+proofread: true
+cause: wrong-reading
+furniture: L56-L57, L63-L64, L7-L9, L47-L49
+terms:
+  - L11.2
+  - L11.9
+  - L39.3
+answers:
+  read L15.7-10: the PDF holds this word's letters split and out of order (सॉल््य श यू न’); the image shows सॉल्यूशन’
+  word घुलता: a real word, as printed on the page; the list lacks it
+  word रिहाइड्रेशन: a real word, as printed on the page; the list lacks it
+  word पीड़कनाशियों: a real word, as printed on the page; the list lacks it
+  word महालनोबिस: a real word, as printed on the page; the list lacks it
+  word अतिसार: a real word, as printed on the page; the list lacks it
+  word पुनर्जलीकरण: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: activity
+    words: L1-L4
+    continued: true
+  - kind: text
+    words: L5
+    read:
+      L5.9-10: कैसे?
+  - kind: section
+    words: L6
+    number: L6.1
+    title: L6.2
+  - kind: text
+    words: L10-L13
+    read:
+      L10.6: समांगी
+      L11.6: घुलता
+      L11.14: घुलता
+  - kind: section
+    words: L14
+    number: L14.1
+    title: L14.2-4
+  - kind: text
+    words: L15-L17, L18.2-23, L20, L21.5-22, L23
+    read:
+      L15.7-10: सॉल्यूशन’
+      L17.16-17: मात्राओं
+      L18.11-12: मात्राओं
+      L15.6: रिहाइड्रेशन
+      L16.1: रिहाइड्रेशन
+      L20.15: रिहाइड्रेशन
+      L21.10: रिहाइड्रेशन
+  - kind: text
+    words: L25-L28, L30
+    read:
+      L25.8-9: कृषक
+      L28.6-7: सकेगी
+      L25.13: पीड़कनाशियों
+  - kind: text
+    words: L32
+  - kind: text
+    words: L35
+  - kind: text
+    words: L37, L39
+  - kind: text
+    words: L41, L43, L45
+    read:
+      L41.3-4: केवल
+      L43.5-6: कृषि,
+  - kind: section
+    words: L58
+    number: L58.1
+    title: L58.2-9
+  - kind: text
+    words: L59-L60
+  - kind: text
+    words: L61-L62
+  - kind: box
+    title: L18.1
+    words: L18.1, L19, L21.1-4, L22, L24
+  - kind: box
+    title: L29
+    words: L29, L31, L33-L34, L36, L38, L40, L42, L44, L46, L50-L55
+    read:
+      L46.4-5, L50.1: सूत्रीकरण
+      L33.1: महालनोबिस,
+      L38.2: अतिसार
+      L51.2: पुनर्जलीकरण
+  - kind: figure
+    words: ""
+    box:
+      - 58
+      - 508
+      - 129
+      - 592

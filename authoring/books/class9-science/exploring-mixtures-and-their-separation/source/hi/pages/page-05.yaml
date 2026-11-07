@@ -1,0 +1,74 @@
+page: 5
+proofread: true
+cause: wrong-reading
+notes:
+  wrong-reading: the PDF has lost त्त of उत्तर, and the repair doesn't flag it
+furniture: L57-L58, L66-L67, L54-L56
+terms:
+  - L60.12
+  - L61.11
+answers:
+  read L30.1: the PDF lacks त्त (उर); the image shows उत्तर
+  word आयतनानुसार: a real word, as printed on the page; the list lacks it
+  word ग्लैशल: a real word, as printed on the page; the list lacks it
+  word विलेयता: a real word, as printed on the page; the list lacks it
+  word घुलती: a real word, as printed on the page; the list lacks it
+blocks:
+  - kind: heading
+    words: L19
+    title: L19
+  - kind: text
+    words: L20-L22
+  - kind: equation
+    number: L25.3
+    words: L23-L24, L26, L25
+  - kind: example
+    number: L27.1-2
+    words: L27-L29
+  - kind: text
+    words: L30-L33, L35, L34, L36-L37, L39, L38
+    read:
+      L30.1: उत्तर
+  - kind: box
+    title: L40
+    words: L40-L42
+  - kind: box
+    title: L43
+    words: L43-L52
+    read:
+      L52.3: बनाना
+      L48.22: आयतनानुसार
+      L50.20: ऐसीटिक
+      L51.7: ग्लैशल
+      L51.8: ऐसीटिक
+      L51.15: ऐसीटिक
+      L51.20: ग्लैशल
+      L51.21: ऐसीटिक
+  - kind: section
+    number: L53.1
+    title: L53.2-4
+    words: L53
+    read:
+      L53.4: विलेयता
+  - kind: text
+    words: L59-L65
+    read:
+      L64.9: महत्त्वपूर्ण
+      L60.9: घुलती
+      L60.12: विलेयता
+      L62.15: विलेयता
+      L63.16: विलेयता
+      L64.7: विलेयता
+  - kind: box
+    title: L1
+    words: L1-L15, L17, L18.1
+    read:
+      L17.1-2, L18.1: क्षतिपूर्ति
+  - kind: figure
+    number: L16.1-2
+    words: L16, L18.2
+    box:
+      - 137
+      - 116
+      - 210
+      - 331
