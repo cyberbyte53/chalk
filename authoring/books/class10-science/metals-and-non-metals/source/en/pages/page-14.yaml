@@ -1,0 +1,27 @@
+page: 14
+proofread: true
+furniture: L41-L43
+blocks:
+  - kind: text
+    words: L17-L25
+    continued: true
+  - kind: figure
+    words: L1-L16, L33-L35
+    number: L33.1-2
+    box: [44, 82, 182, 374]
+  - kind: text
+    words: L26-L29
+  - kind: text
+    words: L30-L32
+  - kind: figure
+    words: L36
+    number: L36.1-2
+    box: [208, 322, 506, 638]
+    crop: { box: [205, 322, 506, 638], cause: wrong-box }
+  - kind: section
+    words: L37
+    number: L37.1
+    title: L37.2-4
+  - kind: text
+    words: L38-L40
+    continues: true

@@ -1,0 +1,247 @@
+pairs:
+  - key: section 3.1
+    en: "1"
+    hi: "1"
+  - key: section 3.1.1
+    en: "1.1"
+    hi: "1.1"
+  - key: activity 3.1
+    en: 1.1.2
+    hi: 1.1.2
+  - key: activity 3.2
+    en: 1.1.4
+    hi: 1.1.4
+  - key: activity 3.3
+    en: 1.1.6
+    hi: 1.1.6
+  - key: activity 3.4
+    en: 1.1.8
+    hi: 1.1.8
+  - key: activity 3.5
+    en: 1.1.12
+    hi: 1.1.12
+  - key: figure 3.1
+    en: 1.1.13
+    hi: 1.1.13
+  - key: activity 3.6
+    en: 1.1.16
+    hi: 1.1.16
+  - key: figure 3.2
+    en: 1.1.17
+    hi: 1.1.17
+  - key: section 3.1.2
+    en: "1.2"
+    hi: "1.2"
+  - key: activity 3.7
+    en: 1.2.3
+    hi: 1.2.2
+  - key: table 3.1
+    en: 1.2.5
+    hi: 1.2.4
+  - key: activity 3.8
+    en: 1.2.8
+    hi: 1.2.7
+  - key: question 1 of exercise 1
+    en: 1.2.10.1
+    hi: 1.2.9.1
+  - key: question 2 of exercise 1
+    en: 1.2.10.2
+    hi: 1.2.9.2
+  - key: section 3.2
+    en: "2"
+    hi: "2"
+  - key: section 3.2.1
+    en: "2.2"
+    hi: "2.2"
+  - key: activity 3.9
+    en: 2.2.2
+    hi: 2.2.2
+  - key: section 3.2.2
+    en: "2.3"
+    hi: "2.3"
+  - key: activity 3.10
+    en: 2.3.1
+    hi: 2.3.1
+  - key: figure 3.3
+    en: 2.3.2
+    hi: 2.3.2
+  - key: section 3.2.3
+    en: "2.4"
+    hi: "2.4"
+  - key: activity 3.11
+    en: 2.4.4
+    hi: 2.4.4
+  - key: section 3.2.4
+    en: "2.5"
+    hi: "2.5"
+  - key: activity 3.12
+    en: 2.5.1
+    hi: 2.5.1
+  - key: figure 3.4
+    en: 2.5.4
+    hi: 2.5.2
+  - key: section 3.2.5
+    en: "2.6"
+    hi: "2.6"
+  - key: table 3.2
+    en: 2.6.2
+    hi: 2.6.2
+  - key: question 1 of exercise 2
+    en: 2.6.3.1
+    hi: 2.6.3.1
+  - key: question 2 of exercise 2
+    en: 2.6.3.2
+    hi: 2.6.3.2
+  - key: question 3 of exercise 2
+    en: 2.6.3.3
+    hi: 2.6.3.3
+  - key: question 4 of exercise 2
+    en: 2.6.3.5
+    hi: 2.6.3.5
+  - key: question 5 of exercise 2
+    en: 2.6.3.6
+    hi: 2.6.3.6
+  - key: section 3.3
+    en: "3"
+    hi: "3"
+  - key: table 3.3
+    en: "3.4"
+    hi: "3.4"
+  - key: figure 3.5
+    en: "3.7"
+    hi: "3.8"
+  - key: figure 3.6
+    en: "3.12"
+    hi: "3.12"
+  - key: section 3.3.1
+    en: "3.14"
+    hi: "3.14"
+  - key: activity 3.13
+    en: 3.14.2
+    hi: 3.14.2
+  - key: figure 3.7
+    en: 3.14.3
+    hi: 3.14.3
+  - key: figure 3.8
+    en: 3.14.4
+    hi: 3.14.4
+  - key: table 3.4
+    en: 3.14.5
+    hi: 3.14.5
+  - key: question 1 of exercise 3
+    en: 3.14.7.1
+    hi: 3.14.7.1
+  - key: question 2 of exercise 3
+    en: 3.14.7.2
+    hi: 3.14.7.2
+  - key: section 3.4
+    en: "4"
+    hi: "4"
+  - key: section 3.4.1
+    en: "4.2"
+    hi: "4.2"
+  - key: figure 3.9
+    en: 4.2.2
+    hi: 4.2.4
+  - key: figure 3.10
+    en: 4.2.5
+    hi: 4.3.2
+  - key: section 3.4.2
+    en: "4.3"
+    hi: "4.3"
+  - key: section 3.4.3
+    en: "4.4"
+    hi: "4.4"
+  - key: section 3.4.4
+    en: "4.5"
+    hi: "4.5"
+  - key: figure 3.11
+    en: 4.5.14
+    hi: 4.5.12
+  - key: section 3.4.5
+    en: "4.6"
+    hi: "4.6"
+  - key: section 3.4.6
+    en: "4.7"
+    hi: "4.7"
+  - key: figure 3.12
+    en: 4.7.2
+    hi: 4.7.3
+  - key: question 1 of exercise 4
+    en: 4.7.4.1
+    hi: 5.2.1
+  - key: question 2 of exercise 4
+    en: 4.7.4.2
+    hi: 5.2.2
+  - key: question 3 of exercise 4
+    en: 4.7.4.3
+    hi: 5.2.3
+  - key: section 3.5
+    en: "5"
+    hi: "5"
+  - key: activity 3.14
+    en: "5.2"
+    hi: 5.2.5
+  - key: figure 3.13
+    en: "5.3"
+    hi: 5.2.6
+  - key: section 3.5.1
+    en: "5.5"
+    hi: "5.3"
+  - key: question 1 of exercise 5
+    en: 5.5.8.1
+    hi: 5.3.8.1
+  - key: question 2 of exercise 5
+    en: 5.5.8.3
+    hi: 5.3.8.3
+  - key: question 3 of exercise 5
+    en: 5.5.8.4
+    hi: 5.3.8.4
+  - key: question 1 of exercise 6
+    en: 5.5.9.1
+    hi: 5.3.9.1
+  - key: question 2 of exercise 6
+    en: 5.5.9.2
+    hi: 5.3.9.2
+  - key: question 3 of exercise 6
+    en: 5.5.9.3
+    hi: 5.3.9.3
+  - key: question 4 of exercise 6
+    en: 5.5.9.4
+    hi: 5.3.9.4
+  - key: question 5 of exercise 6
+    en: 5.5.9.5
+    hi: 5.3.9.5
+  - key: question 6 of exercise 6
+    en: 5.5.9.6
+    hi: 5.3.9.6
+  - key: question 7 of exercise 6
+    en: 5.5.9.7
+    hi: 5.3.9.7
+  - key: question 8 of exercise 6
+    en: 5.5.9.8
+    hi: 5.3.9.8
+  - key: question 9 of exercise 6
+    en: 5.5.9.9
+    hi: 5.3.9.9
+  - key: question 10 of exercise 6
+    en: 5.5.9.11
+    hi: 5.3.9.11
+  - key: question 11 of exercise 6
+    en: 5.5.9.12
+    hi: 5.3.9.12
+  - key: question 12 of exercise 6
+    en: 5.5.9.13
+    hi: 5.3.9.13
+  - key: question 13 of exercise 6
+    en: 5.5.9.14
+    hi: 5.3.9.14
+  - key: question 14 of exercise 6
+    en: 5.5.9.15
+    hi: 5.3.9.15
+  - key: question 15 of exercise 6
+    en: 5.5.9.16
+    hi: 5.3.9.16
+  - key: question 16 of exercise 6
+    en: 5.5.9.17
+    hi: 5.3.9.17

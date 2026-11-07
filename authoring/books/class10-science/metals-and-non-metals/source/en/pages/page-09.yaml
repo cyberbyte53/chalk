@@ -1,0 +1,32 @@
+page: 9
+proofread: true
+furniture: L1-L5, L70-L72
+blocks:
+  - kind: activity
+    words: L6-L13
+    continued: true
+  - kind: text
+    words: L14-L16
+  - kind: text
+    words: L17-L28
+  - kind: figure
+    words: L30-L32
+    number: L30.1-2
+    box: [284, 196, 545, 400]
+    crop: { box: [286, 194, 548, 400], cause: wrong-box }
+  - kind: equation
+    words: L29
+  - kind: text
+    words: L33-L34
+  - kind: section
+    words: L35
+    number: L35.1
+    title: L35.2-4
+  - kind: text
+    words: L36-L39
+  - kind: table
+    words: L40-L69
+    number: L40.1-2
+    title: L40.3-9
+    box: [76, 541, 366, 710]
+    cells: { rows: [["L41", "L54", "L67"], ["L42", "L55", ""], ["L43", "L56", ""], ["L44", "L57", ""], ["L45", "L58", ""], ["L46", "L59", "L68"], ["L47", "L60", ""], ["L48", "L61", ""], ["L49", "L62", ""], ["L50", "L63", ""], ["L51", "L64", ""], ["L52", "L65", ""], ["L53", "L66", "L69"]], cause: wrong-cells }

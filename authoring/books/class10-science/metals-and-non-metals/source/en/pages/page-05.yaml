@@ -1,0 +1,59 @@
+page: 5
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets a formula's subscripts apart as their own lines"
+furniture: L6-L13, L81-L83
+blocks:
+  - kind: section
+    words: L1
+    number: L1.1
+    title: L1.2-9
+  - kind: text
+    words: L2-L4
+  - kind: activity
+    words: L5, L14-L25
+    number: L5.1-2
+  - kind: text
+    words: L26
+  - kind: equation
+    words: L27
+  - kind: text
+    words: L28-L29
+  - kind: equation
+    words: L30-L33
+    read:
+      "L30.3-L31.1": { text: "O₂" }
+  - kind: text
+    words: L34
+  - kind: equation
+    words: L35-L41
+    read:
+      "L35.3-L36.1": { text: "3O₂" }
+      "L37.2-L40.1": { text: "2Al₂O₃" }
+  - kind: text
+    words: L42-L47
+  - kind: equation
+    words: L48-L56
+    read:
+      "L48.1-L51.1": { text: "Al₂O₃" }
+      "L52.4-L53.1": { text: "2AlCl₃" }
+      "L54.2-L56.1": { text: "3H₂O" }
+  - kind: equation
+    words: L57-L67
+    read:
+      "L57.1-L60.1": { text: "Al₂O₃" }
+      "L61.4-L62.1": { text: "2NaAlO₂" }
+      "L63.2-L65.1": { text: "H₂O" }
+  - kind: text
+    words: L68-L70
+  - kind: equation
+    words: L71-L75
+    read:
+      "L71.1-L73.1": { text: "Na₂O(s)" }
+      "L73.3-L75.1": { text: "H₂O(l)" }
+  - kind: equation
+    words: L76-L80
+    read:
+      "L76.1-L78.1": { text: "K₂O(s)" }
+      "L78.3-L80.1": { text: "H₂O(l)" }

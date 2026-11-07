@@ -1,0 +1,27 @@
+page: 18
+proofread: true
+furniture: L47-L49
+blocks:
+  - kind: section
+    words: L1
+    number: L1.1
+    title: L1.2-4
+  - kind: text
+    words: L5-L6
+  - kind: text
+    words: L7-L10
+  - kind: text
+    words: L11-L24
+    read:
+      "L21.13-L22.1": { text: "non-metal.", cause: broken-across-lines }
+  - kind: box
+    title: L2-L4
+    words: L2-L4, L25-L28
+  - kind: text
+    words: L33-L39
+  - kind: figure
+    words: L29
+    box: [62, 526, 174, 710]
+  - kind: box
+    title: L30-L32
+    words: L30-L32, L40-L46

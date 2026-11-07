@@ -1,0 +1,35 @@
+page: 21
+proofread: true
+furniture: L39-L41
+blocks:
+  - kind: question
+    words: L1-L2
+    number: L1.1
+  - kind: question
+    words: L3-L10
+    number: L3.1
+  - kind: figure
+    words: L24
+    box: [306, 174, 530, 414]
+    crop: { box: [306, 174, 534, 414], cause: wrong-box }
+  - kind: question
+    words: L11-L12
+    number: L11.1
+  - kind: question
+    words: L13-L14
+    number: L13.1
+  - kind: question
+    words: L15-L23, L25-L27
+    number: L15.1
+  - kind: question
+    words: L28-L29
+    number: L28.1
+  - kind: question
+    words: L30
+    number: L30.1
+  - kind: question
+    words: L31-L36
+    number: L31.1
+  - kind: question
+    words: L37-L38
+    number: L37.1

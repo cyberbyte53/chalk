@@ -1,0 +1,42 @@
+page: 17
+proofread: true
+cause: other
+notes:
+  other: "the PDF spaces out a heading's letters, and splits a word with a space (hav e, ou t)"
+furniture: L9, L21-L23, L26-L29, L55-L57
+blocks:
+  - kind: text
+    words: L1-L3
+    continued: true
+  - kind: exercise
+    words: L4
+    title: L4
+    read:
+      "L4.1-9": { text: "QUESTIONS" }
+  - kind: question
+    words: L5, L8
+    number: L5.1
+  - kind: question
+    words: L6
+    number: L6.1
+  - kind: question
+    words: L7
+    number: L7.1
+  - kind: section
+    words: L10
+    number: L10.1
+    title: L10.2
+  - kind: text
+    words: L11-L20
+    read:
+      "L11.2-3": { text: "have" }
+      "L20.4-5": { text: "out" }
+  - kind: activity
+    words: L25, L30-L42
+    number: L25.1-2
+  - kind: figure
+    words: L24, L50-L54
+    number: L50.1-2
+    box: [368, 413, 550, 702]
+  - kind: text
+    words: L43-L49

@@ -1,0 +1,49 @@
+page: 12
+proofread: true
+cause: other
+notes:
+  other: "charges the PDF sets as plain signs (Cl –, Na + , e –), printed Cl⁻, Na⁺, e⁻; a word the PDF splits with a space (उत्कृ ष्ट, कै ल्सियम)"
+answers:
+  "word निऑन": "an element's name (neon), as printed on the page; the list lacks it"
+  "word धनआयन": "a real word (cation), as printed on the page; the list lacks it"
+  "word ऋणआयन": "a real word (anion), as printed on the page; the list lacks it"
+furniture: L92-L95
+blocks:
+  - kind: text
+    continued: true
+    words: L1-L5
+    read:
+      L3.18: इससे
+      L4.2-3: "Cl⁻"
+      L4.10: तत्वों
+  - kind: table
+    number: L6.2
+    words: L6-L82
+    box: [183, 205, 540, 533]
+    read:
+      L6.4: तत्वों
+      L7.1: तत्वों
+      L8.1-2: उत्कृष्ट
+      L11.1: अधातुएँ
+      L12.1: तत्व
+      L18.1: निऑन
+      L32.1-2: कैल्सियम
+    cells: { rows: [["L7", "L12", "L13-L14", "L15", "", "", ""], ["", "", "", "L16.1", "L16.2", "L16.3", "L80"], ["L8-L9", "L17", "L20", "L23", "", "", ""], ["", "L18", "L21", "L24", "L26", "", ""], ["", "L19", "L22", "L25", "L27.1", "L27.2", ""], ["L10", "L28", "L33", "L38", "L43", "L48", ""], ["", "L29", "L34", "L39", "L44", "L49", ""], ["", "L30", "L35", "L40", "L45", "L50", ""], ["", "L31", "L36", "L41", "L46", "L51", "L81"], ["", "L32", "L37", "L42", "L47", "L52", "L82"], ["L11", "L53", "L59", "L65", "L71", "", ""], ["", "L54", "L60", "L66", "L72", "", ""], ["", "L55", "L61", "L67", "L73", "", ""], ["", "L56", "L62", "L68", "L74", "L77", ""], ["", "L57", "L63", "L69", "L75", "L78", ""], ["", "L58", "L64", "L70", "L76", "L79", ""]] }
+  - kind: text
+    words: L83-L86
+  - kind: equation
+    words: L88, L89.1-2, L90.1-2
+    read:
+      L88.3-4: "Na⁺"
+      L88.6-7: "e⁻"
+      L90.2: धनआयन)
+  - kind: equation
+    words: L87, L89.3-4, L90.3-4
+    read:
+      L87.3-4: "e⁻"
+      L87.6-7: "Cl⁻"
+      L90.4: ऋणआयन)
+  - kind: figure
+    number: L91.2
+    words: L91
+    box: [288, 664, 432, 724]

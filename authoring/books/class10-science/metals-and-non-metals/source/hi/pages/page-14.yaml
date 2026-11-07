@@ -1,0 +1,35 @@
+page: 14
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits (CaCl 2, MgCl 2, Na2O), printed CaCl₂, MgCl₂, Na₂O; a word the PDF splits with a space (प्रकृ ति)"
+answers:
+  "word विलायकों": "a real word (solvents), as printed on the page; the list lacks it"
+furniture: L46-L49, L45
+blocks:
+  - kind: table
+    number: L1.2
+    words: L1-L19
+    box: [183, 112, 537, 238]
+    read:
+      L5.1-L6.1: "CaCl₂"
+      L8.1-L9.1: "MgCl₂"
+    cells: { rows: [["L2.1", "L2.2-3", "L2.4-5"], ["L3", "L10", "L15"], ["L4", "L11", "L16"], ["L5-L6", "L12", "L17"], ["L7", "L13", "L18"], ["L8-L9", "L14", "L19"]] }
+  - kind: text
+    words: L20-L37
+    read:
+      L21.3-4: "प्रकृति—"
+      L27.11: किरोसिन,
+      L28.4: विलायकों
+      L31.16: इलैक्ट्रोड
+  - kind: exercise
+    title: L38
+    words: L38
+  - kind: question
+    number: L39.1
+    words: L39, L41-L43
+    read:
+      L42.7: "Na₂O"
+  - kind: question
+    number: L40.1
+    words: L40, L44

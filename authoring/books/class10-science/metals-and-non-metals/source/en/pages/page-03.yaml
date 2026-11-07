@@ -1,0 +1,36 @@
+page: 3
+proofread: true
+furniture: L2-L4, L26-L27, L44-L46
+blocks:
+  - kind: activity
+    words: L1, L5-L8
+    number: L1.1-2
+  - kind: figure
+    words: L11.10-L12, L14.12-14
+    number: L11.10-11
+    box: [360, 84, 550, 245]
+  - kind: text
+    words: L9-L11.9, L13
+  - kind: text
+    words: L14.1-11, L15-L17
+  - kind: section
+    words: L18
+    number: L18.1
+    title: L18.2
+  - kind: text
+    words: L19-L22
+  - kind: text
+    words: L23-L24
+  - kind: activity
+    words: L25, L28-L30
+    number: L25.1-2
+  - kind: text
+    words: L31
+  - kind: table
+    words: L32-L37
+    number: L32.1-2
+    box: [76, 530, 548, 616]
+    cells: { rows: [["L33.1", "L33.2", "L33.3-4, L34", "L33.5", "L35.1", "L35.2", "L35.3-L36", "L37"], ["", "", "", "", "", "", "", ""]] }
+  - kind: text
+    words: L38-L43
+    continues: true

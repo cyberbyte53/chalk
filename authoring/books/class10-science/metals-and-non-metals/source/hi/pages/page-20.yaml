@@ -1,0 +1,59 @@
+page: 20
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space (निकै ल, शीतलीकृ त, कै रट, उपय क्‍त, विद् त यु), or sets with its ु twice, once on the line before (श द्ध ु … ु)"
+answers:
+  "word यशदलेपित": "a real word (galvanised), as printed on the page; the list lacks it"
+  "word मिश्रात्वन": "a real word (alloying), as printed on the page; the list lacks it"
+  "word समांगी": "a real word (homogeneous), as printed on the page; the list lacks it"
+  "word अमलगम": "a real word (amalgam), printed in bold on the page; the list lacks it"
+  "word जंगता": "as printed on the page; the list lacks it"
+  "word जानिए": "a real word (know), as printed on the page; the list lacks it"
+  "read L22.24-25": "the PDF lacks the ु of उपयुक्त (उपय क्‍त); the image prints उपयुक्त"
+  "read L31.18-20": "the PDF sets the ु of विद्युत after त (विद् त यु); the image prints विद्युत"
+  "read L33.16-18": "the PDF sets the ु of विद्युत after त (विद् त यु); the image prints विद्युत"
+furniture: L41-L44
+terms:
+  - L5.4
+  - L18.11
+  - L29.11
+blocks:
+  - kind: text
+    words: L4-L7
+    read:
+      L5.4: यशदलेपन
+      L5.16: यशदलेपित
+  - kind: text
+    words: L8-L20
+    read:
+      L8.13: मिश्रात्वन
+      L9.1-2: धातुओं
+      L13.8-9: निकैल
+      L18.5-6: धातुओं
+      L18.8: समांगी
+      L19.18: तत्वों
+      L20.13-14: शीतलीकृत
+  - kind: box
+    title: L1, L2, L3
+    words: L1, L2, L3, L21.1-3, L22, L21.4, L23-L25
+    read:
+      "L21.1-3, L22.1": "शुद्ध"
+      L22.5-6: कैरट
+      L22.24-25: उपयुक्त
+      L24.3-4: कैरट
+  - kind: text
+    words: L29-L34
+    read:
+      L29.11: अमलगम
+      L31.18-20: विद्युत
+      L33.16-18: विद्युत
+  - kind: box
+    title: L26, L27, L28
+    words: L26, L27, L28, L35-L39
+    read:
+      L28.1: जानिए!
+      L37.16: जंगता
+  - kind: figure
+    words: L40
+    box: [70, 548, 174, 724]

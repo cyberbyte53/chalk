@@ -1,0 +1,80 @@
+page: 17
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (3O 2, ZnCO 3, Fe 2 O 3), printed 3O₂, ZnCO₃, Fe₂O₃; a word the PDF splits with a space (प्रकृ ति, कै ल्सियम, रे ल)"
+answers:
+  "read L5.13": "the PDF lacks the last त (परिवर्ति); the image prints परिवर्तित"
+  "read L8.9": "the PDF lacks the last त (परिवर्ति); the image prints परिवर्तित"
+  "word थर्मिट": "a real word (thermit), printed in bold on the page; the list lacks it"
+furniture: L63-L66
+terms:
+  - L49.16-L50.1
+blocks:
+  - kind: section
+    number: L1.1
+    title: L1.2-7
+    words: L1
+    read:
+      L1.5-6: धातुओं
+  - kind: text
+    words: L2-L9
+    read:
+      L2.14: अभिक्रियाशीलता
+      L3.4-5: प्रकृति
+      L5.13: { text: "परिवर्तित", cause: wrong-reading }
+      L8.9: { text: "परिवर्तित", cause: wrong-reading }
+  - kind: equation
+    words: L10-L15
+    read:
+      L11.3-L13.1: "3O₂(g)"
+      L13.5-L15.1: "2SO₂(g)"
+  - kind: equation
+    words: L16-L21
+    read:
+      L17.1-L19.1: "ZnCO₃(s)"
+      L19.5-L21.1: "CO₂(g)"
+  - kind: text
+    words: L22-L24
+    read:
+      L24.5: अपचयित
+  - kind: equation
+    words: L25
+  - kind: text
+    words: L26-L27
+    read:
+      L27.1-4: धातुओं
+  - kind: text
+    words: L28-L33
+    read:
+      L29.11: अभिक्रियाशील
+      L30.2-3: "कैल्सियम,"
+      L31.4: अभिक्रियाशीलता
+      L31.6-9: धातुओं
+      L31.14: विस्थापित
+  - kind: equation
+    words: L34-L40
+    read:
+      L34.1-L36.1: "3MnO₂(s)"
+      L36.7-L40.1: "2Al₂O₃(s)"
+  - kind: text
+    words: L41
+  - kind: text
+    words: L42-L50
+    read:
+      L42.5: ऊष्माक्षेपी
+      L44.3-L48.1: "(Fe₂O₃)"
+      L48.9-10: रेल
+      L49.16: थर्मिट
+  - kind: equation
+    words: L51-L59
+    read:
+      L51.1-L55.1: "Fe₂O₃(s)"
+      L55.7-L59.1: "Al₂O₃(s)"
+  - kind: figure
+    number: L60.2
+    words: L60-L62
+    box: [436, 530, 572, 704]
+    read:
+      L61.1-2: रेल
+      L62.4: थर्मिट

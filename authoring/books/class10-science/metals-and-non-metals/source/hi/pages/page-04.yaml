@@ -1,0 +1,64 @@
+page: 4
+proofread: true
+notes:
+  other: "a word the PDF splits with a space (के वल, मर्क री, प्राकृ तिक, वर्गीकृ त)"
+answers:
+  "word सीज़ियम": "an element's name (caesium), as printed on the page; the list lacks it"
+  "word अपररूप": "a real word (allotrope), printed in bold on the page; the list lacks it"
+  "word लीथियम": "an element's name (lithium), as printed on the page; the list lacks it"
+  "word काटा": "a real word (cut), as printed on the page; the list lacks it"
+  "word क्षारकीय": "a real word (basic), as printed on the page; the list lacks it"
+  "read L12.1": "the PDF has a � for ह्न; the image prints चिह्न (symbol)"
+furniture: L48-L51, L2-L3, L37-L41
+terms:
+  - L28.16
+blocks:
+  - kind: activity
+    number: L1.2
+    words: L1, L9-L11
+    read:
+      L10.2-3: अधातुओं
+  - kind: text
+    words: L4-L6
+    read:
+      L4.1-4: धातुओं
+      L4.6-9: अधातुओं
+      L4.11-L5.2: संबंधित
+  - kind: table
+    number: L7.2
+    words: L7-L8, L12-L18
+    box: [67, 180, 540, 272]
+    read:
+      L8.1: तत्व
+      L12.1: चिह्न
+    cells: { rows: [["L8.1", "L12.1", "L13-L14", "L15.1", "L15.2", "L15.3", "L16-L17", "L18.1"], ["", "", "", "", "", "", "", ""]] }
+  - kind: text
+    words: L19-L33
+    read:
+      L19.12-13: धातुओं
+      L19.15-16: अधातुओं
+      L20.15-16: { text: "केवल", cause: other }
+      L21.7: तत्वों
+      L23.2-3: { text: "मर्करी", cause: other }
+      L24.6-7: धातुओं
+      L24.16: सीज़ियम
+      L25.13-14: धातुओं
+      L28.16: { text: "अपररूप", cause: wrong-reading }
+      L29.7: { text: "अपररूप", cause: wrong-reading }
+      L29.12-13: { text: "प्राकृतिक", cause: other }
+      L30.13: { text: "अपररूप", cause: wrong-reading }
+      L32.3: (लीथियम,
+      L33.2: काटा
+  - kind: text
+    words: L34-L35
+    read:
+      L34.1: तत्वों
+      L34.12-13: धातुओं
+      L34.15-16: अधातुओं
+      L35.2-3: { text: "वर्गीकृत", cause: other }
+  - kind: activity
+    number: L36.2
+    words: L36, L42-L47
+    continues: true
+    read:
+      L45.13: क्षारकीय?

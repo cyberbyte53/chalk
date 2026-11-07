@@ -1,0 +1,74 @@
+page: 6
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (O 2, Al 2 O 3), printed O₂, Al₂O₃; a word the PDF splits with a space (कै से, प्रकृ ति)"
+answers:
+  "word उभयधर्मी": "a real word (amphoteric), printed in bold on the page; the list lacks it"
+  "word किरोसिन": "a real word (kerosene), as printed on the page; the list lacks it"
+  "word ऐलुमिनेट": "a name (aluminate), as printed on the page; the list lacks it"
+furniture: L65-L68
+terms:
+  - L21.7-8
+blocks:
+  - kind: text
+    words: L1
+  - kind: equation
+    words: L2
+  - kind: text
+    words: L3-L4
+  - kind: equation
+    words: L5-L8
+    read:
+      L5.3-L6.1: "O₂"
+      L8.2: "[कॉपर(II)"
+  - kind: text
+    words: L9
+  - kind: equation
+    words: L10-L16
+    read:
+      L10.3-L11.1: "3O₂"
+      L12.2-L15.1: "2Al₂O₃"
+  - kind: text
+    words: L17-L22
+    read:
+      L17.12-13: कैसे
+      L18.10-11: प्रकृति
+      L18.12: क्षारकीय
+      L19.10: क्षारकीय
+      L21.7: उभयधर्मी
+  - kind: equation
+    words: L23-L31
+    read:
+      L23.1-L26.1: "Al₂O₃"
+      L27.4-L28.1: "2AlCl₃"
+      L29.2-L31.1: "3H₂O"
+  - kind: equation
+    words: L32-L41
+    read:
+      L32.1-L35.1: "Al₂O₃"
+      L36.4-L37.1: "2NaAlO₂"
+      L38.2-L40.1: "H₂O"
+      L41.2-5: "ऐलुमिनेट)"
+  - kind: text
+    words: L42-L44
+    read:
+      L42.14: घुलकर
+      L44.2: घुलकर
+  - kind: equation
+    words: L45-L49
+    read:
+      L45.1-L47.1: "Na₂O(s)"
+      L47.3-L49.1: "H₂O(l)"
+  - kind: equation
+    words: L50-L54
+    read:
+      L50.1-L52.1: "K₂O(s)"
+      L52.3-L54.1: "H₂O(l)"
+  - kind: text
+    words: L55-L64
+    read:
+      L56.10: अभिक्रियाशीलता
+      L59.1: किरोसिन
+      L60.3-4: धातुओं
+      L61.1-2: धातुओं

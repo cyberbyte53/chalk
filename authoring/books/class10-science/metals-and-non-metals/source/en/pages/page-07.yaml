@@ -1,0 +1,64 @@
+page: 7
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets a formula's subscripts apart as their own lines"
+furniture: L58-L60
+blocks:
+  - kind: figure
+    words: L1
+    number: L1.1-2
+    box: [78, 87, 550, 301]
+    crop: { box: [78, 87, 560, 303], cause: wrong-box }
+  - kind: text
+    words: L2-L4
+  - kind: equation
+    words: L5
+  - kind: equation
+    words: L6
+  - kind: text
+    words: L7-L9
+  - kind: equation
+    words: L10-L14
+    read:
+      "L10.3-L12.1": { text: "2H₂O(l)" }
+      "L12.5-L14.1": { text: "H₂(g)" }
+  - kind: equation
+    words: L15-L19
+    read:
+      "L15.3-L17.1": { text: "2H₂O(l)" }
+      "L17.5-L19.1": { text: "H₂(g)" }
+  - kind: text
+    words: L20-L21
+  - kind: equation
+    words: L22-L28
+    read:
+      "L22.3-L24.1": { text: "2H₂O(l)" }
+      "L24.3-L26.1": { text: "Ca(OH)₂(aq)" }
+      "L26.3-L28.1": { text: "H₂(g)" }
+  - kind: text
+    words: L29-L30
+  - kind: text
+    words: L31-L33
+  - kind: text
+    words: L34-L35
+  - kind: equation
+    words: L36-L44
+    read:
+      "L36.3-L38.1": { text: "3H₂O(g)" }
+      "L38.3-L42.1": { text: "Al₂O₃(s)" }
+      "L42.3-L44.1": { text: "3H₂(g)" }
+  - kind: equation
+    words: L45-L53
+    read:
+      "L45.3-L47.1": { text: "4H₂O(g)" }
+      "L47.3-L51.1": { text: "Fe₃O₄(s)" }
+      "L51.3-L53.1": { text: "4H₂(g)" }
+  - kind: text
+    words: L54
+  - kind: section
+    words: L55
+    number: L55.1
+    title: L55.2-8
+  - kind: text
+    words: L56-L57

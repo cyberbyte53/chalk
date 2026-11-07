@@ -1,0 +1,53 @@
+page: 22
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (MgCl 2, FeSO 4, AgNO 3), printed MgCl₂, FeSO₄, AgNO₃; a word the PDF splits with a space (कै ल्सियम, कै से)"
+answers:
+  "word उपयोगिताओं": "a real word (usefulness), as printed on the page; the list lacks it"
+furniture: L41-L44, L6, L3.1-2, L4.1-2
+blocks:
+  - kind: box
+    continued: true
+    words: L1-L2, L3.3-12, L4.3-L5
+    read:
+      L1.1: अधातुएँ
+      L1.4: तत्व
+      L1.8-9: धातुओं
+      L3.3: अधातुएँ
+      L4.3: अधातुएँ
+  - kind: exercise
+    title: L7
+    words: L7
+  - kind: question
+    number: L8.1
+    words: L8-L18
+    read:
+      L10.2-L11.1: "MgCl₂"
+      L13.2-L14.1: "FeSO₄"
+      L16.2-L17.1: "AgNO₃"
+  - kind: question
+    number: L19.1
+    words: L19-L24
+  - kind: question
+    number: L25.1
+    words: L25-L30
+    read:
+      L26.5: तत्व
+      L27.2-3: कैल्सियम
+  - kind: question
+    number: L31.1
+    words: L31-L37
+    read:
+      L36.3: अभिक्रियाशील
+      L37.6: अभिक्रियाशील
+  - kind: question
+    number: L38.1
+    words: L38-L40
+    read:
+      L39.5-6: धातुओं
+      L39.8-9: अधातुओं
+      L39.16-17: कैसे
+      L40.2-5: धातुओं
+      L40.7-10: अधातुओं
+      L40.18-19: उपयोगिताओं

@@ -1,0 +1,40 @@
+page: 20
+proofread: true
+cause: other
+notes:
+  other: "the PDF spaces out a heading's letters and sets a formula's subscripts apart"
+furniture: L1-L3, L55-L57
+blocks:
+  - kind: box
+    words: L4-L8
+    continued: true
+  - kind: exercise
+    words: L9
+    title: L9
+    read:
+      "L9.1-9": { text: "EXERCISES" }
+  - kind: question
+    words: L10-L11, L14, L12, L15-L17, L13, L18-L23
+    number: L10.1
+    read:
+      "L15.1-L16.1": { text: "MgCl₂" }
+      "L18.1-L19.1": { text: "FeSO₄" }
+      "L21.2-L22.1": { text: "AgNO₃" }
+  - kind: question
+    words: L24-L26, L28, L27, L29-L31
+    number: L24.1
+  - kind: question
+    words: L32-L34, L36, L35, L37-L38, L40, L39, L41
+    number: L32.1
+  - kind: question
+    words: L42-L46
+    number: L42.1
+  - kind: question
+    words: L47-L51
+    number: L47.1
+  - kind: question
+    words: L52
+    number: L52.1
+  - kind: question
+    words: L53-L54
+    number: L53.1

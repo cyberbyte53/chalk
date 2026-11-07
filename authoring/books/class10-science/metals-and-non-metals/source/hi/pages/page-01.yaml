@@ -1,0 +1,50 @@
+page: 1
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space (करें गे, कै सा, रे ग माल, वर्गीकृ त), a drop cap set apart from the rest of its word (नौ वीं), or a sign the PDF misplaces (मैग्नीश्यिम)"
+answers:
+  "read L19.5": "the PDF has श्यि, a ि where the ि of शि is lost; the image prints मैग्नीशियम, as in L16"
+furniture: L1, L26-L27, L7.1-2, L8.1-2, L9.1-2, L23
+terms:
+  - L24.16-17
+blocks:
+  - kind: heading
+    words: L2-L3
+    title: L2-L3
+  - kind: text
+    words: L4-L6
+    read:
+      "L4.1, L5.1": "नौवीं"
+      L5.6: तत्वों
+      L5.17: तत्वों
+      L6.10-11: वर्गीकृत
+  - kind: text
+    words: L7.3-14, L8.3-18, L9.3-L11
+    read:
+      L8.9: तत्वों
+      L8.15-16: वर्गीकृत
+      L9.11: तत्वों
+      L9.15-L10.2: संबंधित
+      L11.4-5: करेंगे।
+  - kind: section
+    number: L12.1
+    title: L12.2-3
+    words: L12
+  - kind: section
+    number: L13.1
+    title: L13.2
+    words: L13
+  - kind: text
+    words: L14-L17
+    read:
+      L17.11-12: धातुओं
+  - kind: activity
+    number: L18.2
+    words: L18-L22
+    read:
+      L19.5: मैग्नीशियम
+      L19.17-18: कैसा
+      L21.3-5: रेगमाल
+  - kind: text
+    words: L24-L25

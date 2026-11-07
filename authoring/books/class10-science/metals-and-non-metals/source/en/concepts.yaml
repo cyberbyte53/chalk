@@ -1,0 +1,181 @@
+concepts:
+  - key: elements-are-metals-or-non-metals
+    concept: Elements can be classified as metals or non-metals on the basis of their properties.
+    terms: []
+    items: ["0.2"]
+  - key: metallic-lustre
+    concept: Metals in their pure state have a shining surface, called metallic lustre.
+    terms: [metallic lustre]
+    items: ["1.1.2", "1.1.3"]
+  - key: metals-are-generally-hard
+    concept: Metals are generally hard, and the hardness varies from metal to metal.
+    terms: []
+    items: ["1.1.4", "1.1.5"]
+  - key: malleability
+    concept: Many metals can be beaten into thin sheets (malleability); gold and silver are the most malleable.
+    terms: [malleability]
+    items: ["1.1.6", "1.1.7"]
+  - key: ductility
+    concept: Metals can be drawn into thin wires (ductility); gold is the most ductile, and malleability and ductility let metals be shaped to our needs.
+    terms: [ductility]
+    items: ["1.1.8", "1.1.9", "1.1.10"]
+  - key: metals-conduct-heat
+    concept: Metals are good conductors of heat and have high melting points; silver and copper conduct heat best, lead and mercury poorly.
+    terms: []
+    items: ["1.1.11", "1.1.12", "1.1.14"]
+  - key: metals-conduct-electricity
+    concept: Metals conduct electricity, which is why electric wires are metal coated with an insulating material like PVC or rubber.
+    terms: []
+    items: ["1.1.15", "1.1.16", "1.1.18"]
+  - key: metals-are-sonorous
+    concept: Metals that produce a sound on striking a hard surface are sonorous, which is why school bells are made of metal.
+    terms: [sonorous]
+    items: ["1.1.19"]
+  - key: non-metals-physical-properties
+    concept: There are few non-metals, such as carbon, sulphur, iodine, oxygen and hydrogen; they are solids or gases except bromine, a liquid, and lack the physical properties of metals.
+    terms: []
+    items: ["1.2.1", "1.2.3", "1.2.6"]
+  - key: physical-properties-have-exceptions
+    concept: Physical properties alone cannot group elements because of exceptions; mercury is a liquid metal, gallium and caesium melt on the palm, iodine is a lustrous non-metal, and alkali metals are soft with low densities and melting points.
+    terms: []
+    items: ["1.2.6"]
+  - key: carbon-allotropes
+    concept: Carbon exists in different forms called allotropes; diamond is the hardest natural substance, and graphite conducts electricity.
+    terms: [allotrope]
+    items: ["1.2.6"]
+  - key: oxides-sort-metals-and-non-metals
+    concept: Elements are more clearly classified by chemical properties; most metals form basic oxides and most non-metals form acidic oxides.
+    terms: []
+    items: ["1.2.7", "1.2.8", "1.2.9"]
+  - key: metals-burn-to-oxides
+    concept: Almost all metals combine with oxygen to form metal oxides, as copper forms black copper(II) oxide and aluminium forms aluminium oxide.
+    terms: []
+    items: ["2.2.2", "2.2.3", "2.2.4", "2.2.5", "2.2.6", "2.2.7", "2.2.8"]
+  - key: amphoteric-oxides
+    concept: Some metal oxides, such as aluminium oxide and zinc oxide, react with both acids and bases to give salt and water; they are amphoteric oxides.
+    terms: [amphoteric oxides]
+    items: ["2.2.9", "2.2.10", "2.2.11"]
+  - key: soluble-oxides-form-alkalis
+    concept: Most metal oxides are insoluble in water, but some, like sodium oxide and potassium oxide, dissolve to form alkalis.
+    terms: []
+    items: ["2.2.12", "2.2.13", "2.2.14"]
+  - key: reactivity-with-oxygen-differs
+    concept: Metals react with oxygen at different rates; potassium and sodium catch fire in the open and are kept in kerosene, magnesium, aluminium, zinc and lead get a protective oxide layer, copper is coated black on heating, and silver and gold do not react.
+    terms: []
+    items: ["2.2.15", "2.2.17"]
+  - key: anodising
+    concept: Anodising makes aluminium's protective oxide layer thicker by electrolysing it as the anode in dilute sulphuric acid.
+    terms: [Anodising]
+    items: ["2.2.16"]
+  - key: metals-with-water
+    concept: Metals react with water to give a metal oxide and hydrogen, and a soluble metal oxide then forms a metal hydroxide.
+    terms: []
+    items: ["2.3.3", "2.3.4", "2.3.5"]
+  - key: metals-differ-with-water
+    concept: Potassium and sodium react violently with cold water, calcium less so, magnesium only with hot water, aluminium, iron and zinc only with steam, and lead, copper, silver and gold not at all.
+    terms: []
+    items: ["2.3.1", "2.3.6", "2.3.9", "2.3.11", "2.3.12", "2.3.13", "2.3.16"]
+  - key: metals-with-dilute-acids
+    concept: Metals react with dilute acids to give a salt and hydrogen at different rates, Mg > Al > Zn > Fe, while copper does not react with dilute hydrochloric acid.
+    terms: []
+    items: ["2.4.1", "2.4.2", "2.4.4", "2.4.7"]
+  - key: nitric-acid-gives-no-hydrogen
+    concept: Metals give no hydrogen with nitric acid, a strong oxidising agent that turns the hydrogen into water, except magnesium and manganese with very dilute nitric acid.
+    terms: []
+    items: ["2.4.6"]
+  - key: aqua-regia
+    concept: Aqua regia, a 3:1 mixture of concentrated hydrochloric and nitric acids, can dissolve gold and platinum.
+    terms: [Aqua regia]
+    items: ["2.4.8"]
+  - key: displacement-shows-reactivity
+    concept: A more reactive metal displaces a less reactive metal from its salt solution, which shows which of two metals is more reactive.
+    terms: []
+    items: ["2.5.1", "2.5.2", "2.5.3", "2.5.5"]
+  - key: reactivity-series
+    concept: The reactivity series lists metals in order of decreasing reactivity, from potassium at the top to gold at the bottom, with hydrogen between lead and copper.
+    terms: [reactivity series, activity series]
+    items: ["2.6.1", "2.6.2"]
+  - key: reactivity-is-reaching-a-full-shell
+    concept: Noble gases, with a completely filled valence shell, show little chemical activity, so the reactivity of elements is their tendency to attain a filled valence shell.
+    terms: []
+    items: ["3.1"]
+  - key: ions-by-electron-transfer
+    concept: A sodium atom loses its one outer electron to become a positive sodium cation, and a chlorine atom gains one electron to become a negative chloride anion, each with a stable octet.
+    terms: [cation, anion]
+    items: ["3.3", "3.4", "3.5", "3.6"]
+  - key: ionic-compounds
+    concept: Compounds formed by the transfer of electrons from a metal to a non-metal are ionic compounds, held together by electrostatic attraction between oppositely charged ions rather than existing as molecules.
+    terms: [ionic compounds, electrovalent compounds]
+    items: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+  - key: properties-of-ionic-compounds
+    concept: Ionic compounds are hard, brittle solids with high melting and boiling points, soluble in water but not in kerosene or petrol, and conduct electricity when molten or in solution but not as solids.
+    terms: []
+    items: ["3.14.2", "3.14.5", "3.14.6"]
+  - key: minerals-and-ores
+    concept: Metals come mainly from the earth's crust as minerals; a mineral from which a metal can be profitably extracted is an ore.
+    terms: [minerals, ores]
+    items: ["4.1"]
+  - key: occurrence-follows-reactivity
+    concept: Metals low in the reactivity series are found free in nature, those in the middle mainly as oxides, sulphides or carbonates, and those at the top never free.
+    terms: []
+    items: ["4.2.1", "4.2.2"]
+  - key: extraction-depends-on-reactivity
+    concept: Metals of low, medium and high reactivity are extracted by different techniques, in a series of steps from ore to pure metal.
+    terms: []
+    items: ["4.2.3", "4.2.4", "4.2.5"]
+  - key: enrichment-removes-gangue
+    concept: Ores are contaminated with impurities like soil and sand, called gangue, which are removed before the metal is extracted.
+    terms: [gangue]
+    items: ["4.3.1"]
+  - key: low-reactivity-metals-by-heating
+    concept: Metals low in the activity series, like mercury from cinnabar and copper from Cu₂S, are obtained from their ores by heating alone.
+    terms: []
+    items: ["4.4.1", "4.4.2", "4.4.3", "4.4.4", "4.4.5", "4.4.6"]
+  - key: roasting-and-calcination
+    concept: Before reduction, sulphide ores are turned into oxides by heating strongly in excess air (roasting) and carbonate ores by heating strongly in limited air (calcination).
+    terms: [roasting, calcination]
+    items: ["4.5.1", "4.5.2", "4.5.3", "4.5.4", "4.5.5"]
+  - key: reduction-with-carbon
+    concept: Metal oxides in the middle of the series are reduced to the metal with a reducing agent such as carbon, as zinc oxide gives zinc.
+    terms: []
+    items: ["4.5.6", "4.5.7", "4.5.8"]
+  - key: reduction-by-displacement
+    concept: Highly reactive metals like aluminium can also reduce metal oxides in very exothermic displacement reactions; the thermit reaction of iron(III) oxide with aluminium joins railway tracks.
+    terms: [thermit reaction]
+    items: ["4.5.9", "4.5.10", "4.5.12", "4.5.13", "4.5.14"]
+  - key: electrolytic-reduction
+    concept: Metals high in the series, such as sodium, magnesium, calcium and aluminium, are obtained by electrolysis of their molten compounds, the metal depositing at the cathode.
+    terms: []
+    items: ["4.6.1", "4.6.2", "4.6.3", "4.6.4"]
+  - key: electrolytic-refining
+    concept: Impure metals are refined by electrolysis with the impure metal as anode and pure metal as cathode; pure metal deposits on the cathode and insoluble impurities settle as anode mud.
+    terms: [electrolytic refining, anode mud]
+    items: ["4.7.1", "4.7.2", "4.7.3"]
+  - key: corrosion
+    concept: Metals corrode on exposure to air and moisture; silver turns black, copper gains a green coat, and iron acquires brown rust.
+    terms: [rust]
+    items: ["5.1"]
+  - key: rusting-needs-air-and-water
+    concept: Iron rusts only when both air and water are present.
+    terms: []
+    items: ["5.2", "5.3", "5.4"]
+  - key: preventing-rusting
+    concept: Rusting is prevented by painting, oiling, greasing, galvanising, chrome plating, anodising or making alloys; galvanisation coats iron with zinc, which protects it even when broken.
+    terms: [Galvanisation]
+    items: ["5.5.1", "5.5.2"]
+  - key: alloys
+    concept: An alloy is a homogeneous mixture of a metal with other metals or a non-metal, made to change its properties, as iron with carbon becomes hard and with nickel and chromium becomes stainless steel.
+    terms: [alloy]
+    items: ["5.5.3"]
+  - key: gold-alloyed-for-jewellery
+    concept: Pure 24 carat gold is too soft for jewellery, so 22 carat gold is alloyed with silver or copper.
+    terms: []
+    items: ["5.5.4"]
+  - key: properties-of-alloys
+    concept: An alloy with mercury is an amalgam; alloys conduct electricity less and melt lower than pure metals, so brass and bronze are poor conductors and solder is used for welding wires.
+    terms: [amalgam]
+    items: ["5.5.5"]
+  - key: non-metals-chemical-properties
+    concept: Non-metals form negative ions by gaining electrons, form acidic or neutral oxides, and do not displace hydrogen from dilute acids but react with hydrogen to form hydrides.
+    terms: []
+    items: ["5.5.8.5"]

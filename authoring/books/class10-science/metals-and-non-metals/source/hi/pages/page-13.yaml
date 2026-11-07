@@ -1,0 +1,61 @@
+page: 13
+proofread: true
+cause: other
+notes:
+  other: "charges and subscripts the PDF sets as plain characters (Mg 2+, e –, Cl –, MgCl 2), printed Mg²⁺, e⁻, Cl⁻, MgCl₂; a word the PDF splits with a space (प्रकृ ति)"
+answers:
+  "word स्पैचुला": "a real word (spatula), as printed on the page; the list lacks it"
+  "word इलैक्ट्रोड": "a real word (electrode), as printed on the page; the list lacks it"
+  "word ग्रैफ़ाइट": "a real word (graphite), as printed on the page; the list lacks it"
+furniture: L53-L56, L3.2-3, L6.5-6, L25-L31
+blocks:
+  - kind: text
+    words: L1-L2
+  - kind: equation
+    words: L3.1, L3.4-10, L4-L5
+    read:
+      L3.5-6: "Mg²⁺"
+      L3.8-10: "2e⁻"
+  - kind: equation
+    words: L6.1-4, L6.7-9, L7-L8
+    read:
+      L6.3-4: "e⁻"
+      L6.8-9: "Cl⁻"
+  - kind: figure
+    number: L9.2
+    words: L9
+    box: [189, 233, 364, 306]
+    crop: { box: [189, 231, 370, 307], cause: wrong-box }
+  - kind: text
+    words: L13-L17
+    read:
+      L14.11-L15.1: "MgCl₂"
+  - kind: section
+    number: L19.1
+    title: L19.2-4
+    words: L19
+  - kind: text
+    words: L20-L21
+    read:
+      L20.11: जानने
+  - kind: activity
+    number: L24.2
+    words: L24, L32-L44
+    read:
+      L35.3: स्पैचुला
+      L39.9: किरोसिन
+      L42.2: इलैक्ट्रोड
+      L44.4-5: प्रकृति
+  - kind: figure
+    number: L22.2
+    words: L10-L12, L18, L22-L23
+    box: [400, 290, 560, 490]
+    read:
+      L12.1: स्पैचुला
+      L23.1-4: स्पैचुला
+  - kind: figure
+    number: L51.2
+    words: L45-L52
+    box: [400, 520, 572, 712]
+    read:
+      L48.1: ग्रैफ़ाइट

@@ -1,0 +1,36 @@
+page: 1
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets the drop capital I apart from its word, splits PHYSICAL with a space"
+furniture: L1-L2, L8.1, L9.1, L11.1, L21-L22, L30-L33, L42
+blocks:
+  - kind: heading
+    words: L3
+    title: L3
+  - kind: text
+    words: L4-L7
+    read:
+      "L4.1-L5.1": { text: "In" }
+  - kind: text
+    words: L8.2-13, L9.2-L10, L11.2-12, L12
+  - kind: section
+    words: L13
+    number: L13.1
+    title: L13.2-4
+    read:
+      "L13.2-3": { text: "PHYSICAL" }
+  - kind: section
+    words: L14
+    number: L14.1
+    title: L14.2
+  - kind: text
+    words: L15-L19
+  - kind: activity
+    words: L20, L23-L26
+    number: L20.1-2
+  - kind: text
+    words: L27-L28
+  - kind: activity
+    words: L29, L34-L41
+    number: L29.1-2

@@ -1,0 +1,71 @@
+page: 19
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space (प्रकृ ति, धीरे -धीरे, कै ल्सियम, के वल)"
+answers:
+  "word पत्रकी": "a real word (flaky), as printed on the page; the list lacks it"
+  "word लगेगा": "a real word (will begin), as printed on the page; the list lacks it"
+  "word रोकता": "a real word (stops), as printed on the page; the list lacks it"
+  "word यशदलेपन": "a real word (galvanisation), as printed on the page; the list lacks it"
+  "word हरे": "a real word (green), as printed on the page; the list lacks it"
+furniture: L68-L71, L2, L13, L10.1-2, L16-L19
+blocks:
+  - kind: exercise
+    title: L1
+    words: L1
+  - kind: question
+    number: L3.1
+    words: L3-L4
+  - kind: question
+    number: L5.1
+    words: L5
+    read:
+      L5.3-4: धातुओं
+      L5.9-10: प्रकृति
+  - kind: question
+    number: L6.1
+    words: L6
+  - kind: text
+    continued: true
+    words: L7-L9, L10.3-21, L11
+    read:
+      L7.13: जिससे
+      L8.8-9: धीरे-धीरे
+      L8.17: हरे
+      L10.16: पत्रकी
+  - kind: text
+    words: L12
+  - kind: activity
+    number: L15.2
+    words: L15, L20-L30
+    read:
+      L22.2: परखनलियों
+      L26.1: लगेगा
+      L27.6-7: कैल्सियम
+      L28.6-7: कैल्सियम
+      L29.4: परखनलियों
+  - kind: figure
+    number: L59.2
+    words: L14, L37, L46, L38-L45, L47-L63
+    box: [380, 318, 572, 640]
+    read:
+      L54.1: रोकता
+      L56.2-3: कैल्सियम
+  - kind: text
+    words: L31-L36
+    read:
+      L34.1-2: केवल
+      L35.5: इससे
+      L35.8-9: वस्तुओं
+      L35.14-15: अवस्थाओं
+  - kind: section
+    number: L64.1
+    title: L64.2-4
+    words: L64
+  - kind: text
+    words: L65-L67
+    read:
+      L65.8: यशदलेपन
+      L65.11-12: वस्तुओं
+      L66.3: ऐनोडीकरण

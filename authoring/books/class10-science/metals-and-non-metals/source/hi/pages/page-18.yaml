@@ -1,0 +1,92 @@
+page: 18
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space (कै ल्सियम, कै थोड, विद् त यु, निकै ल, अम्लीकृ त, सल्फ़े ट, कॅ ापर); charges and a subscript the PDF sets as plain characters (Na +, e –, Cl 2), printed Na⁺, e⁻, Cl₂"
+answers:
+  "read L14.6-8": "the PDF sets the ु of विद्युत after त (विद् त यु); the image prints विद्युत"
+  "read L33.1-3": "the PDF sets the ु of विद्युत after त (विद् त यु); the image prints विद्युत"
+  "read L28.1-4": "the PDF splits the ॉ of कॉपर into ॅ and ा (कॅ ापर); the image prints कॉपर सल्फ़ेट"
+  "word प्रकम": "as printed on the page (प्रकम, for प्रक्रम); the list lacks it"
+  "word अम्लीकृत": "a real word (acidified), as printed on the page; the list lacks it"
+  "word निकैल": "an element's name (nickel), as printed on the page; the list lacks it"
+furniture: L51-L54, L48.1-2
+terms:
+  - L22.1-2
+  - L37.3-4
+blocks:
+  - kind: section
+    number: L1.1
+    title: L1.2-7
+    words: L1
+    read:
+      L1.5-6: ऊपर स्थित धातुओं
+  - kind: text
+    words: L2-L9
+    read:
+      L2.1: अभिक्रियाशीलता
+      L2.9: अभिक्रियाशील
+      L4.4-5: "कैल्सियम,"
+      L5.1-2: धातुओं
+      L5.11-12: धातुओं
+      L6.7-8: धातुओं
+      L7.7-8: कैल्सियम
+      L8.7-8: कैथोड
+      L8.11: इलैक्ट्रोड)
+      L9.6: इलैक्ट्रोड)
+  - kind: equation
+    words: L10
+    read:
+      L10.1-2: कैथोड
+      L10.4-5: "Na⁺"
+      L10.7-8: "e⁻"
+  - kind: equation
+    words: L11-L13
+    read:
+      L11.3-4: "2Cl⁻"
+      L11.6-L12.1: "Cl₂"
+      L13.2-3: "2e⁻"
+  - kind: text
+    words: L14-L15
+    read:
+      L14.6-8: विद्युत
+  - kind: section
+    number: L16.1
+    title: L16.2-5
+    words: L16
+    read:
+      L16.2-3: धातुओं
+  - kind: text
+    words: L19-L21
+    read:
+      L20.13-14: धातुओं
+  - kind: text
+    words: L22-L24, L25.2-14, L27, L29, L31, L33, L35, L37
+    read:
+      L22.9-10: "निकैल,"
+      L23.4-5: धातुओं
+      L24.3: प्रकम
+      L25.2-3: कैथोड
+      L33.1-3: विद्युत
+      L33.6-7: कैथोड
+  - kind: figure
+    number: L38.2
+    words: L17, L18, L25.1, L26, L28, L30, L32, L34, L36, L38-L44
+    box: [65, 425, 262, 702]
+    read:
+      L18.1-2: कैथोड
+      L26.1-2: अम्लीकृत
+      L28.1-4: "कॉपर सल्फ़ेट"
+      L39.6-7: अम्लीकृत
+      L40.2-3: सल्फेट
+      L42.1-2: कैथोड
+      L43.7-8: कैथोड
+  - kind: section
+    number: L45.1
+    title: L45.2-5
+    words: L45
+  - kind: text
+    words: L46-L47, L48.3-15, L49-L50
+    continues: true
+    read:
+      L50.6: बनने

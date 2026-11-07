@@ -1,0 +1,63 @@
+page: 16
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets a formula's subscripts apart and an ion's charge on the line"
+furniture: L75-L77
+blocks:
+  - kind: text
+    words: L1-L3
+    continued: true
+  - kind: equation
+    words: L4-L10
+    read:
+      "L4.1-L6.1": { text: "3MnO₂(s)" }
+      "L6.7-L10.1": { text: "2Al₂O₃(s)" }
+  - kind: text
+    words: L11-L12
+  - kind: text
+    words: L13-L21
+    read:
+      "L15.12-L19.1": { text: "(Fe₂O₃)" }
+  - kind: equation
+    words: L22-L30
+    read:
+      "L22.1-L26.1": { text: "Fe₂O₃(s)" }
+      "L26.7-L30.1": { text: "Al₂O₃(s)" }
+  - kind: figure
+    words: L31-L33
+    number: L31.1-2
+    box: [62, 152, 214, 333]
+  - kind: section
+    words: L34-L35
+    number: L34.1
+    title: L34.2-8, L35
+  - kind: text
+    words: L36-L45
+  - kind: equation
+    words: L46, L48
+    read:
+      "L48.1": { text: "Na⁺" }
+      "L48.3": { text: "e⁻" }
+  - kind: equation
+    words: L47, L49-L51
+    read:
+      "L49.1": { text: "2Cl⁻" }
+      "L49.3-L50.1": { text: "Cl₂" }
+      "L51.2": { text: "2e⁻" }
+  - kind: text
+    words: L52-L53
+  - kind: section
+    words: L54
+    number: L54.1
+    title: L54.2-4
+  - kind: text
+    words: L55-L59
+  - kind: figure
+    words: L60-L66
+    number: L60.1-2
+    box: [60, 500, 238, 712]
+    crop: { box: [58, 500, 251, 711], cause: wrong-box }
+  - kind: text
+    words: L67-L74
+    continues: true

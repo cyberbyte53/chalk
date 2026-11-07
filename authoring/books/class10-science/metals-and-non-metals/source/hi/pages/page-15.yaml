@@ -1,0 +1,68 @@
+page: 15
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space (प्राकृ तिक, कै से, रे त)"
+answers:
+  "word समृद्धीकरण": "a real word (enrichment), as printed on the page; the list lacks it"
+furniture: L49-L52
+blocks:
+  - kind: section
+    number: L1.1
+    title: L1.2-4
+    words: L1
+    read:
+      L1.2-3: धातुओं
+  - kind: text
+    words: L2-L6
+    read:
+      L2.4-5: धातुओं
+      L3.14-15: प्राकृतिक
+      L4.6: तत्वों
+  - kind: section
+    number: L7.1
+    title: L7.2-4
+    words: L7
+    read:
+      L7.2-3: धातुओं
+  - kind: text
+    words: L8-L19
+    read:
+      L8.1-2: धातुओं
+      L9.8-9: कैसे
+      L11.3: अभिक्रियाशील
+      L14.19: अभिक्रियाशील
+      L15.8: तत्व
+      L16.5: अभिक्रियाशीलता
+      L17.15-16: धातुओं
+      L18.7: अभिक्रियाशीलता
+  - kind: text
+    words: L21, L23, L25, L26.1-14, L27.1-5
+    read:
+      L21.3: अभिक्रियाशीलता
+      L21.8-9: धातुओं
+      L23.13: अभिक्रियाशील
+      L25.4: अभिक्रियाशील
+      L25.8: अभिक्रियाशील
+      L26.6-7: धातुओं
+  - kind: text
+    words: L28, L30, L32
+  - kind: figure
+    number: L46.2
+    words: L20, L22, L24, L26.15, L27.6, L29, L31, L33, L40-L48
+    box: [425, 440, 560, 728]
+    read:
+      L45.1-2: प्राकृतिक
+      L47.4-L48.2: संबंधित
+  - kind: section
+    number: L34.1
+    title: L34.2-4
+    words: L34
+    read:
+      L34.4: समृद्धीकरण
+  - kind: text
+    words: L35-L39
+    read:
+      L35.7-8: रेत
+      L36.5-8: धातुओं
+      L37.13-14: प्रक्रियाओं

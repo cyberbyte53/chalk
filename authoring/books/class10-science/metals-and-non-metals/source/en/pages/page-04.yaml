@@ -1,0 +1,41 @@
+page: 4
+proofread: true
+cause: other
+notes:
+  other: "the PDF spaces out or splits a heading's letters"
+furniture: L15-L23, L47, L52-L54
+answers:
+  "read L38.1": "the PDF sets the spaced-out heading QUESTIONS as two lines (Q, then U E S T I O N S) with the question number 1. between them; the whole word is read on the second part"
+  "read L40.1-8": "the rest of the spaced-out heading QUESTIONS, whose Q the PDF sets on a line of its own"
+blocks:
+  - kind: text
+    words: L1-L11
+    continued: true
+  - kind: text
+    words: L12-L13
+  - kind: activity
+    words: L14, L24-L34
+    number: L14.1-2
+  - kind: text
+    words: L35-L37
+  - kind: exercise
+    words: L38, L40
+    title: L38, L40
+    read:
+      "L38.1": { text: "" }
+      "L40.1-8": { text: "QUESTIONS" }
+  - kind: question
+    words: L39, L41-L45
+    number: L39.1
+  - kind: question
+    words: L46
+    number: L46.1
+  - kind: section
+    words: L48
+    number: L48.1
+    title: L48.2-7
+    read:
+      "L48.2-3": { text: "CHEMICAL" }
+      "L48.6-7": { text: "METALS" }
+  - kind: text
+    words: L49-L51

@@ -1,0 +1,66 @@
+page: 16
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (3O 2, Cu 2 S), printed 3O₂, Cu₂S; a word the PDF splits with a space (के वल, मर्क री, प्राकृ तिक, विद् त यु)"
+answers:
+  "read L8.4-6": "the PDF sets the ु of विद्युत after त (विद् त यु); the image prints विद्युत"
+  "word सांद्रण": "a real word (concentration), as printed on the page; the list lacks it"
+  "word अनभिक्रिय": "a real word (unreactive), as printed on the page; the list lacks it"
+  "word सिनाबार": "a mineral's name (cinnabar), as printed on the page; the list lacks it"
+furniture: L55-L58
+blocks:
+  - kind: figure
+    number: L18.2
+    words: L1, L2, L3-L4, L5.1-3, L5.4-L6, L8, L10, L9.1-2, L9.3-4, L11, L14, L16, L17, L7, L12, L13, L15, L18
+    box: [180, 82, 530, 425]
+    read:
+      L2.3: सांद्रण
+      L3.2: अभिक्रियाशील
+      L5.2: अभिक्रियाशील
+      L5.5: अभिक्रियाशील
+      L8.4-6: विद्युत
+  - kind: section
+    number: L19.1
+    title: L19.2-9
+    words: L19
+    read:
+      L19.7-8: धातुओं
+  - kind: text
+    words: L20-L24
+    read:
+      L20.9: अनभिक्रिय
+      L20.13-14: धातुओं
+      L21.2-3: केवल
+      L21.17: सिनाबार
+      L22.1-2: मर्करी
+      L23.13-14: मर्करी
+      L24.1: अपचयित
+  - kind: equation
+    words: L25-L27, L29-L31
+    read:
+      L25.3-L27.1: "3O₂(g)"
+      L29.4-L31.1: "2SO₂(g)"
+  - kind: equation
+    words: L28, L32-L34
+    read:
+      L32.3-L34.1: "O₂(g)"
+  - kind: text
+    words: L35-L38
+    read:
+      L35.3-4: प्राकृतिक
+      L35.7-L37.1: "Cu₂S"
+      L37.9-10: केवल
+  - kind: equation
+    words: L39-L47
+    read:
+      L39.1-L41.1: "2Cu₂S"
+      L41.3-L43.1: "3O₂(g)"
+      L43.3-L45.1: "2Cu₂O(s)"
+      L45.3-L47.1: "2SO₂(g)"
+  - kind: equation
+    words: L48-L54
+    read:
+      L48.1-L50.1: "2Cu₂O"
+      L50.3-L52.1: "Cu₂S"
+      L52.5-L54.1: "So₂(g)"

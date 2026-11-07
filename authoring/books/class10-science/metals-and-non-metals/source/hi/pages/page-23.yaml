@@ -1,0 +1,71 @@
+page: 23
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space (कै थोड, कै सा, प्रकृ ति, तर्क -वितर्क), or sets with a sign doubled (चांँदी)"
+answers:
+  "read L33.4": "the PDF adds a stray ं beside the ँ (चांँदी); the image prints चाँदी"
+furniture: L48-L51
+blocks:
+  - kind: question
+    number: L1.1
+    words: L1, L12
+    read:
+      L12.1: उभयधर्मी
+      L12.7: उभयधर्मी
+  - kind: question
+    number: L2.1
+    words: L2, L13-L14
+    read:
+      L13.2-3: धातुओं
+      L13.13: विस्थापित
+  - kind: question
+    number: L3.1
+    words: L3, L15
+    read:
+      L15.11-12: कैथोड
+  - kind: question
+    number: L4.1
+    words: L4, L16, L18.1-10, L19-L20, L22, L23.1-5, L25, L27
+    read:
+      L16.6: स्पैचुला
+      L25.4-5: अभिक्रियाओं
+  - kind: figure
+    words: L17, L18.11-12, L21, L23.6-9, L24, L26, L31
+    box: [380, 175, 552, 380]
+    read:
+      L24.2: स्पैचुला
+  - kind: question
+    number: L5.1
+    words: L5, L28
+  - kind: question
+    number: L6.1
+    words: L6, L29-L30
+    read:
+      L29.6: अधातुएँ
+      L29.7-8: कैसा
+  - kind: question
+    number: L7.1
+    words: L7, L32-L37
+    read:
+      L33.4: चाँदी
+      L34.5: लीथियम
+      L35.4: अभिक्रियाशील
+  - kind: question
+    number: L8.1
+    words: L8, L38-L39
+  - kind: question
+    number: L9.1
+    words: L9, L40
+    read:
+      L40.6-7: धातुओं
+      L40.9-10: अधातुओं
+  - kind: question
+    number: L10.1
+    words: L10, L41-L45
+    read:
+      L44.9-10: तर्क-वितर्क
+      L45.7-8: प्रकृति
+  - kind: question
+    number: L11.1
+    words: L11, L46-L47

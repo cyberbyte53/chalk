@@ -1,0 +1,1558 @@
+# Built by pnpm source from pages/ and book.pdf (platform/docs/plans/sources.md): don't edit, edit the page files.
+- id: "0.1"
+  kind: heading
+  page: 1
+  title: Metals and Non-metals
+  text: Metals and Non-metals
+- id: "0.2"
+  kind: text
+  page: 1
+  text: In Class IX you have learnt about various elements. You have seen that elements can be
+    classified as metals or non-metals on the basis of their properties.
+  made:
+    - {words: L4.1-L5.1, by: agent}
+- id: "0.3"
+  kind: text
+  page: 1
+  text: Think of some uses of metals and non-metals in your daily life. What properties did you think
+    of while categorising elements as metals or non-metals? How are these properties related to the
+    uses of these elements? Let us look at some of these properties in detail.
+- id: "1"
+  kind: section
+  page: 1
+  number: "3.1"
+  title: PHYSICAL PROPERTIES
+  text: 3.1 PHYSICAL PROPERTIES
+  made:
+    - {words: L13.2-3, by: agent}
+- id: "1.1"
+  kind: section
+  page: 1
+  number: 3.1.1
+  title: Metals
+  text: 3.1.1 Metals
+- id: "1.1.1"
+  kind: text
+  page: 1
+  text: The easiest way to start grouping substances is by comparing their physical properties. Let us
+    study this with the help of the following activities. For performing Activities 3.1 to 3.6,
+    collect the samples of following metals – iron, copper, aluminium, magnesium, sodium, lead, zinc
+    and any other metal that is easily available.
+- id: "1.1.2"
+  kind: activity
+  page: 1
+  number: Activity 3.1
+  text: Activity 3.1 Take samples of iron, copper, aluminium and magnesium. Note the appearance of
+    each sample. Clean the surface of each sample by rubbing them with sand paper and note their
+    appearance again.
+- id: "1.1.3"
+  kind: text
+  page: 1
+  text: Metals, in their pure state, have a shining surface. This property is called metallic lustre.
+- id: "1.1.4"
+  kind: activity
+  page: 1
+  number: Activity 3.2
+  text: "Activity 3.2 Take small pieces of iron, copper, aluminium, and magnesium. Try to cut these
+    metals with a sharp knife and note your observations. Hold a piece of sodium metal with a pair
+    of tongs. CAUTION: Always handle sodium metal with care. Dry it by pressing between the folds of
+    a filter paper. Put it on a watch-glass and try to cut it with a knife. What do you observe?"
+- id: "1.1.5"
+  kind: text
+  page: 2
+  text: You will find that metals are generally hard. The hardness varies from metal to metal.
+- id: "1.1.6"
+  kind: activity
+  page: 2
+  number: Activity 3.3
+  text: Activity 3.3 Take pieces of iron, zinc, lead and copper. Place any one metal on a block of
+    iron and strike it four or five times with a hammer. What do you observe? Repeat with other
+    metals. Record the change in the shape of these metals.
+- id: "1.1.7"
+  kind: text
+  page: 2
+  text: You will find that some metals can be beaten into thin sheets. This property is called
+    malleability. Did you know that gold and silver are the most malleable metals?
+- id: "1.1.8"
+  kind: activity
+  page: 2
+  number: Activity 3.4
+  text: Activity 3.4 List the metals whose wires you have seen in daily life.
+- id: "1.1.9"
+  kind: text
+  page: 2
+  text: The ability of metals to be drawn into thin wires is called ductility. Gold is the most
+    ductile metal. You will be surprised to know that a wire of about 2 km length can be drawn from
+    one gram of gold.
+- id: "1.1.10"
+  kind: text
+  page: 2
+  text: It is because of their malleability and ductility that metals can be given different shapes
+    according to our needs.
+- id: "1.1.11"
+  kind: text
+  page: 2
+  text: Can you name some metals that are used for making cooking vessels? Do you know why these
+    metals are used for making vessels? Let us do the following Activity to find out the answer.
+- id: "1.1.12"
+  kind: activity
+  page: 2
+  number: Activity 3.5
+  text: Activity 3.5 Take an aluminium or copper wire. Clamp this wire on a stand, as shown in Fig.
+    3.1. Fix a pin to the free end of the wire using wax. Heat the wire with a spirit lamp, candle
+    or a burner near the place where it is clamped. What do you observe after some time? Note your
+    observations. Does the metal wire melt?
+- id: "1.1.13"
+  kind: figure
+  page: 2
+  number: Figure 3.1
+  text: Figure 3.1 Metals are good conductors of heat.
+  crop: [58, 452, 335, 668]
+  made:
+    - {box: true, by: agent}
+- id: "1.1.14"
+  kind: text
+  page: 2
+  text: The above activity shows that metals are good conductors of heat and have high melting points.
+    The best conductors of heat are silver and copper. Lead and mercury are comparatively poor
+    conductors of heat.
+- id: "1.1.15"
+  kind: text
+  page: 2
+  text: Do metals also conduct electricity? Let us find out.
+- id: "1.1.16"
+  kind: activity
+  page: 3
+  number: Activity 3.6
+  text: Activity 3.6 Set up an electric circuit as shown in Fig. 3.2. Place the metal to be tested in
+    the circuit between terminals A and B as shown. Does the bulb glow? What does this indicate?
+- id: "1.1.17"
+  kind: figure
+  page: 3
+  number: Figure 3.2
+  text: Figure 3.2 Metals are good conductors of electricity.
+  crop: [368.3, 90.2, 546.9, 238.6]
+  made:
+    - {box: true, by: figure-snap}
+- id: "1.1.18"
+  kind: text
+  page: 3
+  text: You must have seen that the wires that carry current in your homes have a coating of
+    polyvinylchloride (PVC) or a rubber-like material. Why are electric wires coated with such
+    substances?
+- id: "1.1.19"
+  kind: text
+  page: 3
+  text: What happens when metals strike a hard surface? Do they produce a sound? The metals that
+    produce a sound on striking a hard surface are said to be sonorous. Can you now say why school
+    bells are made of metals?
+- id: "1.2"
+  kind: section
+  page: 3
+  number: 3.1.2
+  title: Non-metals
+  text: 3.1.2 Non-metals
+- id: "1.2.1"
+  kind: text
+  page: 3
+  text: In the previous Class you have learnt that there are very few non-metals as compared to
+    metals. Some of the examples of non-metals are carbon, sulphur, iodine, oxygen, hydrogen, etc.
+    The non-metals are either solids or gases except bromine which is a liquid.
+- id: "1.2.2"
+  kind: text
+  page: 3
+  text: Do non-metals also have physical properties similar to that of metals? Let us find out.
+- id: "1.2.3"
+  kind: activity
+  page: 3
+  number: Activity 3.7
+  text: Activity 3.7 Collect samples of carbon (coal or graphite), sulphur and iodine. Carry out the
+    Activities 3.1 to 3.4 and 3.6 with these non-metals and record your observations.
+- id: "1.2.4"
+  kind: text
+  page: 3
+  text: Compile your observations regarding metals and non-metals in Table 3.1.
+- id: "1.2.5"
+  kind: table
+  page: 3
+  number: Table 3.1
+  text: Table 3.1 Element Symbol Type of Hardness surface Malleability Ductility Conducts Electricity
+    Sonority
+  rows:
+    - [
+        Element,
+        Symbol,
+        Type of surface,
+        Hardness,
+        Malleability,
+        Ductility,
+        Conducts Electricity,
+        Sonority
+      ]
+    - ["", "", "", "", "", "", "", ""]
+  crop: [77.9, 532.6, 548.2, 616.1]
+  made:
+    - {box: true, by: figure-snap}
+    - {cells: true, by: agent}
+- id: "1.2.6"
+  kind: text
+  page: 3
+  text: On the bases of the observations recorded in Table 3.1, discuss the general physical
+    properties of metals and non-metals in the class. You must have concluded that we cannot group
+    elements according to their physical properties alone, as there are many exceptions. For example
+    – (i) All metals except mercury exist as solids at room temperature. In Activity 3.5, you have
+    observed that metals have high melting points but gallium and caesium have very low melting
+    points. These two metals will melt if you keep them on your palm. (ii) Iodine is a non-metal but
+    it is lustrous. (iii) Carbon is a non-metal that can exist in different forms. Each form is
+    called an allotrope. Diamond, an allotrope of carbon, is the hardest natural substance known and
+    has a very high melting and boiling point. Graphite, another allotrope of carbon, is a conductor
+    of electricity. (iv) Alkali metals (lithium, sodium, potassium) are so soft that they can be cut
+    with a knife. They have low densities and low melting points.
+- id: "1.2.7"
+  kind: text
+  page: 4
+  text: Elements can be more clearly classified as metals and non-metals on the basis of their
+    chemical properties.
+- id: "1.2.8"
+  kind: activity
+  page: 4
+  number: Activity 3.8
+  text: Activity 3.8 Take a magnesium ribbon and some sulphur powder. Burn the magnesium ribbon.
+    Collect the ashes formed and dissolve them in water. Test the resultant solution with both red
+    and blue litmus paper. Is the product formed on burning magnesium acidic or basic? Now burn
+    sulphur powder. Place a test tube over the burning sulphur to collect the fumes produced. Add
+    some water to the above test tube and shake. Test this solution with blue and red litmus paper.
+    Is the product formed on burning sulphur acidic or basic? Can you write equations for these
+    reactions?
+- id: "1.2.9"
+  kind: text
+  page: 4
+  text: Most non-metals produce acidic oxides when dissolve in water. On the other hand, most metals,
+    give rise to basic oxides. You will be learning more about these metal oxides in the next
+    section.
+- id: "1.2.10"
+  kind: exercise
+  page: 4
+  title: QUESTIONS
+  text: QUESTIONS
+  made:
+    - {words: L38.1, by: agent}
+    - {words: L40.1-8, by: agent}
+- id: "1.2.10.1"
+  kind: question
+  page: 4
+  number: "1."
+  text: 1. Give an example of a metal which (i) is a liquid at room temperature. (ii) can be easily
+    cut with a knife. (iii) is the best conductor of heat. (iv) is a poor conductor of heat.
+- id: "1.2.10.2"
+  kind: question
+  page: 4
+  number: "2."
+  text: 2. Explain the meanings of malleable and ductile.
+- id: "2"
+  kind: section
+  page: 4
+  number: "3.2"
+  title: CHEMICAL PROPERTIES OF METALS
+  text: 3.2 CHEMICAL PROPERTIES OF METALS
+  made:
+    - {words: L48.2-3, by: agent}
+    - {words: L48.6-7, by: agent}
+- id: "2.1"
+  kind: text
+  page: 4
+  text: We will learn about the chemical properties of metals in the following Sections 3.2.1 to
+    3.2.4. For this, collect the samples of following metals – aluminium, copper, iron, lead,
+    magnesium, zinc and sodium.
+- id: "2.2"
+  kind: section
+  page: 5
+  number: 3.2.1
+  title: What happens when Metals are burnt in Air?
+  text: 3.2.1 What happens when Metals are burnt in Air?
+- id: "2.2.1"
+  kind: text
+  page: 5
+  text: You have seen in Activity 3.8 that magnesium burns in air with a dazzling white flame. Do all
+    metals react in the same manner? Let us check by performing the following Activity.
+- id: "2.2.2"
+  kind: activity
+  page: 5
+  number: Activity 3.9
+  text: "Activity 3.9 CAUTION: The following activity needs the teacher’s assistance. It would be
+    better if students wear eye protection. Hold any of the samples taken above with a pair of tongs
+    and try burning over a flame. Repeat with the other metal samples. Collect the product if
+    formed. Let the products and the metal surface cool down. Which metals burn easily? What flame
+    colour did you observe when the metal burnt? How does the metal surface appear after burning?
+    Arrange the metals in the decreasing order of their reactivity towards oxygen. Are the products
+    soluble in water?"
+- id: "2.2.3"
+  kind: text
+  page: 5
+  text: Almost all metals combine with oxygen to form metal oxides.
+- id: "2.2.4"
+  kind: equation
+  page: 5
+  text: Metal + Oxygen → Metal oxide
+- id: "2.2.5"
+  kind: text
+  page: 5
+  text: For example, when copper is heated in air, it combines with oxygen to form copper(II) oxide, a
+    black oxide.
+- id: "2.2.6"
+  kind: equation
+  page: 5
+  text: 2Cu + O₂ → 2CuO (Copper) (Copper(II) oxide)
+  made:
+    - {words: L30.3-L31.1, by: agent}
+- id: "2.2.7"
+  kind: text
+  page: 5
+  text: Similarly, aluminium forms aluminium oxide.
+- id: "2.2.8"
+  kind: equation
+  page: 5
+  text: 4Al + 3O₂ → 2Al₂O₃ (Aluminium) (Aluminium oxide)
+  made:
+    - {words: L35.3-L36.1, by: agent}
+    - {words: L37.2-L40.1, by: agent}
+- id: "2.2.9"
+  kind: text
+  page: 5
+  text: Recall from Chapter 2, how copper oxide reacts with hydrochloric acid. We have learnt that
+    metal oxides are basic in nature. But some metal oxides, such as aluminium oxide, zinc oxide
+    show both acidic as well as basic behaviour. Such metal oxides which react with both acids as
+    well as bases to produce salts and water are known as amphoteric oxides. Aluminium oxide reacts
+    in the following manner with acids and bases –
+- id: "2.2.10"
+  kind: equation
+  page: 5
+  text: Al₂O₃ + 6HCl → 2AlCl₃ + 3H₂O
+  made:
+    - {words: L48.1-L51.1, by: agent}
+    - {words: L52.4-L53.1, by: agent}
+    - {words: L54.2-L56.1, by: agent}
+- id: "2.2.11"
+  kind: equation
+  page: 5
+  text: Al₂O₃ + 2NaOH → 2NaAlO₂ + H₂O (Sodium aluminate)
+  made:
+    - {words: L57.1-L60.1, by: agent}
+    - {words: L61.4-L62.1, by: agent}
+    - {words: L63.2-L65.1, by: agent}
+- id: "2.2.12"
+  kind: text
+  page: 5
+  text: Most metal oxides are insoluble in water but some of these dissolve in water to form alkalis.
+    Sodium oxide and potassium oxide dissolve in water to produce alkalis as follows –
+- id: "2.2.13"
+  kind: equation
+  page: 5
+  text: Na₂O(s) + H₂O(l) → 2NaOH(aq)
+  made:
+    - {words: L71.1-L73.1, by: agent}
+    - {words: L73.3-L75.1, by: agent}
+- id: "2.2.14"
+  kind: equation
+  page: 5
+  text: K₂O(s) + H₂O(l) → 2KOH(aq)
+  made:
+    - {words: L76.1-L78.1, by: agent}
+    - {words: L78.3-L80.1, by: agent}
+- id: "2.2.15"
+  kind: text
+  page: 6
+  text: We have observed in Activity 3.9 that all metals do not react with oxygen at the same rate.
+    Different metals show different reactivities towards oxygen. Metals such as potassium and sodium
+    react so vigorously that they catch fire if kept in the open. Hence, to protect them and to
+    prevent accidental fires, they are kept immersed in kerosene oil. At ordinary temperature, the
+    surfaces of metals such as magnesium, aluminium, zinc, lead, etc., are covered with a thin layer
+    of oxide. The protective oxide layer prevents the metal from further oxidation. Iron does not
+    burn on heating but iron filings burn vigorously when sprinkled in the flame of the burner.
+    Copper does not burn, but the hot metal is coated with a black coloured layer of copper(II)
+    oxide. Silver and gold do not react with oxygen even at high temperatures.
+- id: "2.2.16"
+  kind: box
+  page: 6
+  title: Do You Know?
+  text: Do You Know? Anodising is a process of forming a thick oxide layer of aluminium. Aluminium
+    develops a thin oxide layer when exposed to air. This aluminium oxide coat makes it resistant to
+    further corrosion. The resistance can be improved further by making the oxide layer thicker.
+    During anodising, a clean aluminium article is made the anode and is electrolysed with dilute
+    sulphuric acid. The oxygen gas evolved at the anode reacts with aluminium to make a thicker
+    protective oxide layer. This oxide layer can be dyed easily to give aluminium articles an
+    attractive finish.
+- id: "2.2.17"
+  kind: text
+  page: 6
+  text: After performing Activity 3.9, you must have observed that sodium is the most reactive of the
+    samples of metals taken here. The reaction of magnesium is less vigorous implying that it is not
+    as reactive as sodium. But burning in oxygen does not help us to decide about the reactivity of
+    zinc, iron, copper or lead. Let us see some more reactions to arrive at a conclusion about the
+    order of reactivity of these metals.
+- id: "2.3"
+  kind: section
+  page: 6
+  number: 3.2.2
+  title: What happens when Metals react with Water?
+  text: 3.2.2 What happens when Metals react with Water?
+- id: "2.3.1"
+  kind: activity
+  page: 6
+  number: Activity 3.10
+  text: "Activity 3.10 CAUTION: This Activity needs the teacher’s assistance. Collect the samples of
+    the same metals as in Activity 3.9. Put small pieces of the samples separately in beakers
+    half-filled with cold water. Which metals reacted with cold water? Arrange them in the
+    increasing order of their reactivity with cold water. Did any metal produce fire on water? Does
+    any metal start floating after some time? Put the metals that did not react with cold water in
+    beakers half-filled with hot water. For the metals that did not react with hot water, arrange
+    the apparatus as shown in Fig. 3.3 and observe their reaction with steam. Which metals did not
+    react even with steam? Arrange the metals in the decreasing order of reactivity with water."
+- id: "2.3.2"
+  kind: figure
+  page: 7
+  number: Figure 3.3
+  text: Figure 3.3 Action of steam on a metal
+  crop: [78, 87, 560, 303]
+  made:
+    - {box: true, by: agent}
+- id: "2.3.3"
+  kind: text
+  page: 7
+  text: Metals react with water and produce a metal oxide and hydrogen gas. Metal oxides that are
+    soluble in water dissolve in it to further form metal hydroxide. But all metals do not react
+    with water.
+- id: "2.3.4"
+  kind: equation
+  page: 7
+  text: Metal + Water → Metal oxide + Hydrogen
+- id: "2.3.5"
+  kind: equation
+  page: 7
+  text: Metal oxide + Water → Metal hydroxide
+- id: "2.3.6"
+  kind: text
+  page: 7
+  text: Metals like potassium and sodium react violently with cold water. In case of sodium and
+    potassium, the reaction is so violent and exothermic that the evolved hydrogen immediately
+    catches fire.
+- id: "2.3.7"
+  kind: equation
+  page: 7
+  text: 2K(s) + 2H₂O(l) → 2KOH(aq) + H₂(g) + heat energy
+  made:
+    - {words: L10.3-L12.1, by: agent}
+    - {words: L12.5-L14.1, by: agent}
+- id: "2.3.8"
+  kind: equation
+  page: 7
+  text: 2Na(s) + 2H₂O(l) → 2NaOH(aq) + H₂(g) + heat energy
+  made:
+    - {words: L15.3-L17.1, by: agent}
+    - {words: L17.5-L19.1, by: agent}
+- id: "2.3.9"
+  kind: text
+  page: 7
+  text: The reaction of calcium with water is less violent. The heat evolved is not sufficient for the
+    hydrogen to catch fire.
+- id: "2.3.10"
+  kind: equation
+  page: 7
+  text: Ca(s) + 2H₂O(l) → Ca(OH)₂(aq) + H₂(g)
+  made:
+    - {words: L22.3-L24.1, by: agent}
+    - {words: L24.3-L26.1, by: agent}
+    - {words: L26.3-L28.1, by: agent}
+- id: "2.3.11"
+  kind: text
+  page: 7
+  text: Calcium starts floating because the bubbles of hydrogen gas formed stick to the surface of the
+    metal.
+- id: "2.3.12"
+  kind: text
+  page: 7
+  text: Magnesium does not react with cold water. It reacts with hot water to form magnesium hydroxide
+    and hydrogen. It also starts floating due to the bubbles of hydrogen gas sticking to its
+    surface.
+- id: "2.3.13"
+  kind: text
+  page: 7
+  text: Metals like aluminium, iron and zinc do not react either with cold or hot water. But they
+    react with steam to form the metal oxide and hydrogen.
+- id: "2.3.14"
+  kind: equation
+  page: 7
+  text: 2Al(s) + 3H₂O(g) → Al₂O₃(s) + 3H₂(g)
+  made:
+    - {words: L36.3-L38.1, by: agent}
+    - {words: L38.3-L42.1, by: agent}
+    - {words: L42.3-L44.1, by: agent}
+- id: "2.3.15"
+  kind: equation
+  page: 7
+  text: 3Fe(s) + 4H₂O(g) → Fe₃O₄(s) + 4H₂(g)
+  made:
+    - {words: L45.3-L47.1, by: agent}
+    - {words: L47.3-L51.1, by: agent}
+    - {words: L51.3-L53.1, by: agent}
+- id: "2.3.16"
+  kind: text
+  page: 7
+  text: Metals such as lead, copper, silver and gold do not react with water at all.
+- id: "2.4"
+  kind: section
+  page: 7
+  number: 3.2.3
+  title: What happens when Metals react with Acids?
+  text: 3.2.3 What happens when Metals react with Acids?
+- id: "2.4.1"
+  kind: text
+  page: 7
+  text: You have already learnt that metals react with acids to give a salt and hydrogen gas.
+- id: "2.4.2"
+  kind: equation
+  page: 8
+  text: Metal + Dilute acid → Salt + Hydrogen
+- id: "2.4.3"
+  kind: text
+  page: 8
+  text: But do all metals react in the same manner? Let us find out.
+- id: "2.4.4"
+  kind: activity
+  page: 8
+  number: Activity 3.11
+  text: "Activity 3.11 Collect all the metal samples except sodium and potassium again. If the samples
+    are tarnished, rub them clean with sand paper. CAUTION: Do not take sodium and potassium as they
+    react vigorously even with cold water. Put the samples separately in test tubes containing
+    dilute hydrochloric acid. Suspend thermometers in the test tubes, so that their bulbs are dipped
+    in the acid. Observe the rate of formation of bubbles carefully. Which metals reacted vigorously
+    with dilute hydrochloric acid? With which metal did you record the highest temperature? Arrange
+    the metals in the decreasing order of reactivity with dilute acids."
+- id: "2.4.5"
+  kind: text
+  page: 8
+  text: Write equations for the reactions of magnesium, aluminium, zinc and iron with dilute
+    hydrochloric acid.
+- id: "2.4.6"
+  kind: text
+  page: 8
+  text: Hydrogen gas is not evolved when a metal reacts with nitric acid. It is because HNO₃ is a
+    strong oxidising agent. It oxidises the H₂ produced to water and itself gets reduced to any of
+    the nitrogen oxides (N₂O, NO, NO₂). But magnesium (Mg) and manganese (Mn) react with very dilute
+    HNO₃ to evolve H₂ gas.
+  made:
+    - {words: L30.2-L31.1, by: agent}
+    - {words: L32.9-L33.1, by: agent}
+    - {words: L35.12-L37.1, by: agent}
+    - {words: L38.1-L40.1, by: agent}
+    - {words: L41.1-L42.1, by: agent}
+    - {words: L43.3-L44.1, by: agent}
+- id: "2.4.7"
+  kind: text
+  page: 8
+  text: You must have observed in Activity 3.11, that the rate of formation of bubbles was the fastest
+    in the case of magnesium. The reaction was also the most exothermic in this case. The reactivity
+    decreases in the order Mg > Al > Zn > Fe. In the case of copper, no bubbles were seen and the
+    temperature also remained unchanged. This shows that copper does not react with dilute HCl.
+- id: "2.4.8"
+  kind: box
+  page: 8
+  title: Do You Know?
+  text: Do You Know? Aqua regia, (Latin for ‘royal water’) is a freshly prepared mixture of
+    concentrated hydrochloric acid and concentrated nitric acid in the ratio of 3:1. It can dissolve
+    gold, even though neither of these acids can do so alone. Aqua regia is a highly corrosive,
+    fuming liquid. It is one of the few reagents that is able to dissolve gold and platinum.
+- id: "2.5"
+  kind: section
+  page: 8
+  number: 3.2.4
+  title: How do Metals react with Solutions of other Metal Salts?
+  text: 3.2.4 How do Metals react with Solutions of other Metal Salts?
+- id: "2.5.1"
+  kind: activity
+  page: 8
+  number: Activity 3.12
+  text: Activity 3.12 Take a clean wire of copper and an iron nail. Put the copper wire in a solution
+    of iron sulphate and the iron nail in a solution of copper sulphate taken in test tubes (Fig.
+    3.4). Record your observations after 20 minutes. In which test tube did you find that a reaction
+    has occurred? On what basis can you say that a reaction has actually taken place? Can you
+    correlate your observations for the Activities 3.9, 3.10 and 3.11? Write a balanced chemical
+    equation for the reaction that has taken place. Name the type of reaction.
+- id: "2.5.2"
+  kind: text
+  page: 9
+  text: Reactive metals can displace less reactive metals from their compounds in solution or molten
+    form.
+- id: "2.5.3"
+  kind: text
+  page: 9
+  text: We have seen in the previous sections that all metals are not equally reactive. We checked the
+    reactivity of various metals with oxygen, water and acids. But all metals do not react with
+    these reagents. So we were not able to put all the metal samples we had collected in decreasing
+    order of their reactivity. Displacement reactions studied in Chapter 1 give better evidence
+    about the reactivity of metals. It is simple and easy if metal A displaces metal B from its
+    solution, it is more reactive than B.
+- id: "2.5.4"
+  kind: figure
+  page: 9
+  number: Figure 3.4
+  text: Figure 3.4 Reaction of metals with salt solutions
+  crop: [286, 194, 548, 400]
+  made:
+    - {box: true, by: agent}
+- id: "2.5.5"
+  kind: equation
+  page: 9
+  text: Metal A + Salt solution of B → Salt solution of A + Metal B
+- id: "2.5.6"
+  kind: text
+  page: 9
+  text: Which metal, copper or iron, is more reactive according to your observations in Activity 3.12?
+- id: "2.6"
+  kind: section
+  page: 9
+  number: 3.2.5
+  title: The Reactivity Series
+  text: 3.2.5 The Reactivity Series
+- id: "2.6.1"
+  kind: text
+  page: 9
+  text: The reactivity series is a list of metals arranged in the order of their decreasing
+    activities. After performing displacement experiments (Activities 1.9 and 3.12), the following
+    series, (Table 3.2) known as the reactivity or activity series has been developed.
+- id: "2.6.2"
+  kind: table
+  page: 9
+  number: Table 3.2
+  title: "Activity series : Relative reactivities of metals"
+  text: "Table 3.2 Activity series : Relative reactivities of metals K Na Ca Mg Al Zn Fe Pb [H] Cu Hg
+    Ag Au Potassium Sodium Calcium Magnesium Aluminium Zinc Iron Lead [Hydrogen] Copper Mercury
+    Silver Gold Most reactive Reactivity decreases Least reactive"
+  rows:
+    - [K, Potassium, Most reactive]
+    - [Na, Sodium, ""]
+    - [Ca, Calcium, ""]
+    - [Mg, Magnesium, ""]
+    - [Al, Aluminium, ""]
+    - [Zn, Zinc, Reactivity decreases]
+    - [Fe, Iron, ""]
+    - [Pb, Lead, ""]
+    - ["[H]", "[Hydrogen]", ""]
+    - [Cu, Copper, ""]
+    - [Hg, Mercury, ""]
+    - [Ag, Silver, ""]
+    - [Au, Gold, Least reactive]
+  crop: [77.9, 543.3, 366.1, 710.3]
+  made:
+    - {box: true, by: figure-snap}
+    - {cells: true, by: agent}
+- id: "2.6.3"
+  kind: exercise
+  page: 10
+  title: QUESTIONS
+  text: QUESTIONS
+  made:
+    - {words: L1.1-6, by: agent}
+    - {words: L4.1-3, by: agent}
+- id: "2.6.3.1"
+  kind: question
+  page: 10
+  number: "1."
+  text: 1. Why is sodium kept immersed in kerosene oil?
+- id: "2.6.3.2"
+  kind: question
+  page: 10
+  number: "2."
+  text: 2. Write equations for the reactions of (i) iron with steam (ii) calcium and potassium with water
+- id: "2.6.3.3"
+  kind: question
+  page: 10
+  number: "3."
+  text: 3. Samples of four metals A, B, C and D were taken and added to the following solution one by
+    one. The results obtained have been tabulated as follows. Use the Table above to answer the
+    following questions about metals A, B, C and D. (i) Which is the most reactive metal? (ii) What
+    would you observe if B is added to a solution of Copper(II) sulphate? (iii) Arrange the metals
+    A, B, C and D in the order of decreasing reactivity.
+- id: "2.6.3.4"
+  kind: table
+  page: 10
+  text: Zinc sulphate Metal Iron(II) sulphate Copper(II) sulphate Silver nitrate A No reaction
+    Displacement B Displacement C No reaction No reaction No reaction Displacement D No reaction No
+    reaction No reaction No reaction No reaction
+  rows:
+    - [Metal, Iron(II) sulphate, Copper(II) sulphate, Zinc sulphate, Silver nitrate]
+    - [A, No reaction, Displacement, "", ""]
+    - [B, Displacement, "", No reaction, ""]
+    - [C, No reaction, No reaction, No reaction, Displacement]
+    - [D, No reaction, No reaction, No reaction, No reaction]
+  crop: [79.7, 229.3, 525.2, 317.9]
+  made:
+    - {box: true, by: figure-snap}
+    - {cells: true, by: agent}
+- id: "2.6.3.5"
+  kind: question
+  page: 10
+  number: "4."
+  text: 4. Which gas is produced when dilute hydrochloric acid is added to a reactive metal? Write the
+    chemical reaction when iron reacts with dilute H₂SO₄.
+  made:
+    - {words: L32.1-L36.1, by: agent}
+- id: "2.6.3.6"
+  kind: question
+  page: 10
+  number: "5."
+  text: 5. What would you observe when zinc is added to a solution of iron(II) sulphate? Write the
+    chemical reaction that takes place.
+- id: "3"
+  kind: section
+  page: 10
+  number: "3.3"
+  title: HOW DO METALS AND NON-METALS REACT?
+  text: 3.3 HOW DO METALS AND NON-METALS REACT?
+  made:
+    - {words: L39.4-5, by: agent}
+    - {words: L39.7-8, by: agent}
+    - {words: L39.9-10, by: agent}
+- id: "3.1"
+  kind: text
+  page: 10
+  text: In the above activities, you saw the reactions of metals with a number of reagents. Why do
+    metals react in this manner? Let us recall what we learnt about the electronic configuration of
+    elements in Class IX. We learnt that noble gases, which have a completely filled valence shell,
+    show little chemical activity. We, therefore, explain the reactivity of elements as a tendency
+    to attain a completely filled valence shell.
+- id: "3.2"
+  kind: text
+  page: 10
+  text: Let us have a look at the electronic configuration of noble gases and some metals and non-metals.
+- id: "3.3"
+  kind: text
+  page: 10
+  text: We can see from Table 3.3 that a sodium atom has one electron in its outermost shell. If it
+    loses the electron from its M shell then its L shell now becomes the outermost shell and that
+    has a stable octet. The nucleus of this atom still has 11 protons but the number of electrons
+    has become 10, so there is a net positive charge giving us a sodium cation Na⁺. On the other
+    hand chlorine has seven electrons in its outermost shell and it requires one more electron to
+    complete its octet. If sodium and chlorine were to react, the electron lost by sodium could be
+    taken up by chlorine. After gaining an electron, the chlorine atom gets a unit negative charge,
+    because its nucleus has 17 protons and there are 18 electrons in its K, L and M shells. This
+    gives us a chloride anion C1⁻. So both these elements can have a give-and-take relation between
+    them as follows (Fig. 3.5).
+  made:
+    - {words: L53.1-3, by: agent}
+    - {words: L42.10-12, page: 11, by: agent}
+- id: "3.4"
+  kind: table
+  page: 11
+  number: Table 3.3
+  title: Electronic configurations of some elements
+  text: Table 3.3 Electronic configurations of some elements Type of element Element Atomic number
+    Number of electrons in shells K Noble gases Metals Non-metals L M N Helium (He) 2 2 Neon (Ne) 10
+    2 8 Argon (Ar) 18 2 8 8 Sodium (Na) 11 2 8 1 Magnesium (Mg) 12 2 8 2 Aluminium (Al) 13 2 8 3
+    Potassium (K) 19 2 8 8 1 Calcium (Ca) 20 2 8 8 2 Nitrogen (N) 7 2 5 Oxygen (O) 8 2 6 Fluorine
+    (F) 9 2 7 Phosphorus (P) 15 2 8 5 Sulphur (S) 16 2 8 6 Chlorine (Cl) 17 2 8 7
+  rows:
+    - [Type of element, Element, Atomic number, Number of electrons in shells, "", "", ""]
+    - ["", "", "", K, L, M, N]
+    - [Noble gases, Helium (He), "2", "2", "", "", ""]
+    - ["", Neon (Ne), "10", "2", "8", "", ""]
+    - ["", Argon (Ar), "18", "2", "8", "8", ""]
+    - [Metals, Sodium (Na), "11", "2", "8", "1", ""]
+    - ["", Magnesium (Mg), "12", "2", "8", "2", ""]
+    - ["", Aluminium (Al), "13", "2", "8", "3", ""]
+    - ["", Potassium (K), "19", "2", "8", "8", "1"]
+    - ["", Calcium (Ca), "20", "2", "8", "8", "2"]
+    - [Non-metals, Nitrogen (N), "7", "2", "5", "", ""]
+    - ["", Oxygen (O), "8", "2", "6", "", ""]
+    - ["", Fluorine (F), "9", "2", "7", "", ""]
+    - ["", Phosphorus (P), "15", "2", "8", "5", ""]
+    - ["", Sulphur (S), "16", "2", "8", "6", ""]
+    - ["", Chlorine (Cl), "17", "2", "8", "7", ""]
+  crop: [77.9, 101.2, 432.4, 401.1]
+  made:
+    - {box: true, by: figure-snap}
+    - {cells: true, by: agent}
+- id: "3.5"
+  kind: equation
+  page: 11
+  text: Na → Na⁺ + e⁻ 2,8,1 2,8 (Sodium cation)
+  made:
+    - {words: L44.3-4, by: agent}
+    - {words: L44.6-7, by: agent}
+- id: "3.6"
+  kind: equation
+  page: 11
+  text: Cl + e⁻ → Cl⁻ 2,8,7 2,8,8 (Chloride anion)
+  made:
+    - {words: L47.2-3, by: agent}
+    - {words: L47.5-6, by: agent}
+- id: "3.7"
+  kind: figure
+  page: 11
+  number: Figure 3.5
+  text: Figure 3.5 Formation of sodium chloride
+  crop: [168.1, 578.6, 342.2, 630]
+  made:
+    - {box: true, by: figure-snap}
+- id: "3.8"
+  kind: text
+  page: 11
+  text: Sodium and chloride ions, being oppositely charged, attract each other and are held by strong
+    electrostatic forces of attraction to exist as sodium chloride (NaCl). It should be noted that
+    sodium chloride does not exist as molecules but aggregates of oppositely charged ions.
+- id: "3.9"
+  kind: text
+  page: 11
+  text: Let us see the formation of one more ionic compound, magnesium chloride (Fig. 3.6).
+- id: "3.10"
+  kind: equation
+  page: 12
+  text: Mg → Mg²⁺ + 2e⁻ 2,8,2 2,8 (Magnesium cation)
+  made:
+    - {words: L1.2-4, by: agent}
+    - {words: L1.5-6, by: agent}
+    - {words: L1.7-10, by: agent}
+    - {words: L2.1-5, by: agent}
+    - {words: L2.6-8, by: agent}
+- id: "3.11"
+  kind: equation
+  page: 12
+  text: Cl + e⁻ → Cl⁻ 2,8,7 2,8,8 (Chloride anion)
+  made:
+    - {words: L4.2-3, by: agent}
+    - {words: L4.4-6, by: agent}
+    - {words: L4.7-8, by: agent}
+- id: "3.12"
+  kind: figure
+  page: 12
+  number: Figure 3.6
+  text: Figure 3.6 Formation of magnesium chloride
+  crop: [261, 170.1, 453.1, 235.4]
+  made:
+    - {box: true, by: figure-snap}
+- id: "3.13"
+  kind: text
+  page: 12
+  text: The compounds formed in this manner by the transfer of electrons from a metal to a non-metal
+    are known as ionic compounds or electrovalent compounds. Can you name the cation and anion
+    present in MgCl₂?
+  made:
+    - {words: L11.2-L13.1, by: agent}
+- id: "3.14"
+  kind: section
+  page: 12
+  number: 3.3.1
+  title: Properties of Ionic Compounds
+  text: 3.3.1 Properties of Ionic Compounds
+- id: "3.14.1"
+  kind: text
+  page: 12
+  text: "To learn about the properties of ionic compounds, let us perform the following Activity:"
+- id: "3.14.2"
+  kind: activity
+  page: 12
+  number: Activity 3.13
+  text: Activity 3.13 Take samples of sodium chloride, potassium iodide, barium chloride or any other
+    salt from the science laboratory. What is the physical state of these salts? Take a small amount
+    of a sample on a metal spatula and heat directly on the flame (Fig. 3.7). Repeat with other
+    samples. What did you observe? Did the samples impart any colour to the flame? Do these
+    compounds melt? Try to dissolve the samples in water, petrol and kerosene. Are they soluble?
+    Make a circuit as shown in Fig. 3.8 and insert the electrodes into a solution of one salt. What
+    did you observe? Test the other salt samples too in this manner. What is your inference about
+    the nature of these compounds?
+- id: "3.14.3"
+  kind: figure
+  page: 12
+  number: Figure 3.7
+  text: Figure 3.7 Heating a salt sample on a spatula
+  crop: [63.2, 355.1, 212.1, 524]
+  made:
+    - {box: true, by: figure-snap}
+- id: "3.14.4"
+  kind: figure
+  page: 12
+  number: Figure 3.8
+  text: Figure 3.8 Testing the conductivity of a salt solution
+  crop: [64.4, 531.3, 218.4, 710.2]
+  made:
+    - {box: true, by: figure-snap}
+- id: "3.14.5"
+  kind: table
+  page: 12
+  number: Table 3.4
+  title: Melting and boiling points of some ionic compounds
+  text: Table 3.4 Melting and boiling points of some ionic compounds Ionic compound Melting point (K)
+    Boiling point (K) NaCl 1074 1686 LiCl 887 1600 CaCl₂ 1045 1900 CaO 2850 3120 MgCl₂ 981 1685
+  rows:
+    - [Ionic compound, Melting point (K), Boiling point (K)]
+    - [NaCl, "1074", "1686"]
+    - [LiCl, "887", "1600"]
+    - [CaCl₂, "1045", "1900"]
+    - [CaO, "2850", "3120"]
+    - [MgCl₂, "981", "1685"]
+  crop: [234.4, 586.8, 534, 710.4]
+  made:
+    - {words: L46.1-2, by: agent}
+    - {words: L56.1-L57.1, by: agent}
+    - {words: L61.1-L62.1, by: agent}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: agent}
+- id: "3.14.6"
+  kind: text
+  page: 13
+  text: "You may have observed the following general properties for ionic compounds— (i) Physical
+    nature: Ionic compounds are solids and are somewhat hard because of the strong force of
+    attraction between the positive and negative ions. These compounds are generally brittle and
+    break into pieces when pressure is applied. (ii) Melting and Boiling points: Ionic compounds
+    have high melting and boiling points (see Table 3.4). This is because a considerable amount of
+    energy is required to break the strong inter-ionic attraction. (iii) Solubility: Electrovalent
+    compounds are generally soluble in water and insoluble in solvents such as kerosene, petrol,
+    etc. (iv) Conduction of Electricity: The conduction of electricity through a solution involves
+    the movement of charged particles. A solution of an ionic compound in water contains ions, which
+    move to the opposite electrodes when electricity is passed through the solution. Ionic compounds
+    in the solid state do not conduct electricity because movement of ions in the solid is not
+    possible due to their rigid structure. But ionic compounds conduct electricity in the molten
+    state. This is possible in the molten state since the elecrostatic forces of attraction between
+    the oppositely charged ions are overcome due to the heat. Thus, the ions move freely and conduct
+    electricity."
+- id: "3.14.7"
+  kind: exercise
+  page: 13
+  title: QUESTIONS
+  text: QUESTIONS
+  made:
+    - {words: L24.1, by: agent}
+    - {words: L27.1-8, by: agent}
+- id: "3.14.7.1"
+  kind: question
+  page: 13
+  number: "1."
+  text: 1. (i) Write the electron-dot structures for sodium, oxygen and magnesium. (ii) Show the
+    formation of Na₂O and MgO by the transfer of electrons. (iii) What are the ions present in these
+    compounds?
+  made:
+    - {words: L28.4-5, by: agent}
+    - {words: L30.6-L32.1, by: agent}
+- id: "3.14.7.2"
+  kind: question
+  page: 13
+  number: "2."
+  text: 2. Why do ionic compounds have high melting points?
+- id: "4"
+  kind: section
+  page: 13
+  number: "3.4"
+  title: OCCURRENCE OF METALS
+  text: 3.4 OCCURRENCE OF METALS
+  made:
+    - {words: L36.1-3, by: agent}
+    - {words: L36.6-7, by: agent}
+- id: "4.1"
+  kind: text
+  page: 13
+  text: The earth’s crust is the major source of metals. Seawater also contains some soluble salts
+    such as sodium chloride, magnesium chloride, etc. The elements or compounds, which occur
+    naturally in the earth’s crust, are known as minerals. At some places, minerals contain a very
+    high percentage of a particular metal and the metal can be profitably extracted from it. These
+    minerals are called ores.
+- id: "4.2"
+  kind: section
+  page: 13
+  number: 3.4.1
+  title: Extraction of Metals
+  text: 3.4.1 Extraction of Metals
+- id: "4.2.1"
+  kind: text
+  page: 13
+  text: You have learnt about the reactivity series of metals. Having this knowledge, you can easily
+    understand how a metal is extracted from its ore. Some metals are found in the earth’s crust in
+    the free state. Some are found in the form of their compounds. The metals at the bottom of the
+    activity series are the least reactive. They are often found in a free state. For example, gold,
+    silver, platinum and copper are found in the free state. Copper and silver are also found in the
+    combined state as their sulphide or oxide ores. The metals at the top of the activity series (K,
+    Na, Ca, Mg and Al) are so reactive that they are never found in nature as free elements. The
+    metals in the middle of the activity series (Zn, Fe, Pb, etc.) are moderately reactive. They are
+    found in the earth’s crust mainly as oxides, sulphides or carbonates. You will find that the
+    ores of many metals are oxides. This is because oxygen is a very reactive element and is very
+    abundant on the earth.
+- id: "4.2.2"
+  kind: figure
+  page: 14
+  number: Figure 3.9
+  text: K Na Ca Electrolysis Mg Al Zn Fe Reduction using carbon Pb Cu Ag Au Found in native state
+    Figure 3.9 Activity series and related metallurgy
+  crop: [62.2, 87.1, 178.8, 371.3]
+  made:
+    - {box: true, by: figure-snap}
+- id: "4.2.3"
+  kind: text
+  page: 14
+  text: Thus on the basis of reactivity, we can group the metals into the following three categories
+    (Fig. 3.9) – (i) Metals of low reactivity; (ii) Metals of medium reactivity; (iii) Metals of
+    high reactivity. Different techniques are to be used for obtaining the metals falling in each
+    category.
+- id: "4.2.4"
+  kind: text
+  page: 14
+  text: Several steps are involved in the extraction of pure metal from ores. A summary of these steps
+    is given in Fig.3.10. Each step is explained in detail in the following sections.
+- id: "4.2.5"
+  kind: figure
+  page: 14
+  number: Figure 3.10
+  text: Figure 3.10 Steps involved in the extraction of metals from ores
+  crop: [205, 322, 506, 638]
+  made:
+    - {box: true, by: agent}
+- id: "4.3"
+  kind: section
+  page: 14
+  number: 3.4.2
+  title: Enrichment of Ores
+  text: 3.4.2 Enrichment of Ores
+- id: "4.3.1"
+  kind: text
+  page: 14
+  text: Ores mined from the earth are usually contaminated with large amounts of impurities such as
+    soil, sand, etc., called gangue. The impurities must be removed from the ore prior to the
+    extraction of the metal. The processes used for removing the gangue from the ore are based on
+    the differences between the physical or chemical properties of the gangue and the ore. Different
+    separation techniques are accordingly employed.
+- id: "4.4"
+  kind: section
+  page: 15
+  number: 3.4.3
+  title: Extracting Metals Low in the Activity Series
+  text: 3.4.3 Extracting Metals Low in the Activity Series
+- id: "4.4.1"
+  kind: text
+  page: 15
+  text: Metals low in the activity series are very unreactive. The oxides of these metals can be
+    reduced to metals by heating alone. For example, cinnabar (HgS) is an ore of mercury. When it is
+    heated in air, it is first converted into mercuric oxide (HgO). Mercuric oxide is then reduced
+    to mercury on further heating.
+- id: "4.4.2"
+  kind: equation
+  page: 15
+  text: 2HgS(s) + 3O₂(g) Heat → 2HgO(s) + 2SO₂(g)
+  made:
+    - {words: L10.3-5, by: agent}
+    - {words: L10.6, by: agent}
+    - {words: L12.1, by: agent}
+    - {words: L12.5-7, by: agent}
+- id: "4.4.3"
+  kind: equation
+  page: 15
+  text: 2HgO(s) Heat → 2Hg(l) + O₂(g)
+  made:
+    - {words: L13.2, by: agent}
+    - {words: L15.1, by: agent}
+    - {words: L15.5-7, by: agent}
+- id: "4.4.4"
+  kind: text
+  page: 15
+  text: Similarly, copper which is found as Cu₂S in nature can be obtained from its ore by just
+    heating in air.
+  made:
+    - {words: L16.7-L18.1, by: agent}
+- id: "4.4.5"
+  kind: equation
+  page: 15
+  text: 2Cu₂S + 3O₂(g) Heat → 2Cu₂O(s) + 2SO₂(g)
+  made:
+    - {words: L20.1-3, by: agent}
+    - {words: L20.5-7, by: agent}
+    - {words: L20.8, by: agent}
+    - {words: L22.1, by: agent}
+    - {words: L22.3-5, by: agent}
+    - {words: L22.7-9, by: agent}
+- id: "4.4.6"
+  kind: equation
+  page: 15
+  text: 2Cu₂O + Cu₂S Heat → 6Cu(s) + SO₂(g)
+  made:
+    - {words: L23.1-3, by: agent}
+    - {words: L23.5-7, by: agent}
+    - {words: L23.8, by: agent}
+    - {words: L25.1-2, by: agent}
+    - {words: L25.6-8, by: agent}
+- id: "4.5"
+  kind: section
+  page: 15
+  number: 3.4.4
+  title: Extracting Metals in the Middle of the Activity Series
+  text: 3.4.4 Extracting Metals in the Middle of the Activity Series
+- id: "4.5.1"
+  kind: text
+  page: 15
+  text: The metals in the middle of the activity series such as iron, zinc, lead, copper, are
+    moderately reactive. These are usually present as sulphides or carbonates in nature. It is
+    easier to obtain a metal from its oxide, as compared to its sulphides and carbonates. Therefore,
+    prior to reduction, the metal sulphides and carbonates must be converted into metal oxides. The
+    sulphide ores are converted into oxides by heating strongly in the presence of excess air. This
+    process is known as roasting. The carbonate ores are changed into oxides by heating strongly in
+    limited air. This process is known as calcination. The chemical reaction that takes place during
+    roasting and calcination of zinc ores can be shown as follows –
+- id: "4.5.2"
+  kind: heading
+  page: 15
+  title: Roasting
+  text: Roasting
+- id: "4.5.3"
+  kind: equation
+  page: 15
+  text: 2ZnS(s) + 3O₂(g) Heat → 2ZnO(s) + 2SO₂(g)
+  made:
+    - {words: L39.3-5, by: agent}
+    - {words: L39.6, by: agent}
+    - {words: L41.1, by: agent}
+    - {words: L41.5-7, by: agent}
+- id: "4.5.4"
+  kind: heading
+  page: 15
+  title: Calcination
+  text: Calcination
+- id: "4.5.5"
+  kind: equation
+  page: 15
+  text: ZnCO₃(s) Heat → ZnO(s) + CO₂(g)
+  made:
+    - {words: L43.1-3, by: agent}
+    - {words: L43.4, by: agent}
+    - {words: L45.1, by: agent}
+    - {words: L45.5-7, by: agent}
+- id: "4.5.6"
+  kind: text
+  page: 15
+  text: The metal oxides are then reduced to the corresponding metals by using suitable reducing
+    agents such as carbon. For example, when zinc oxide is heated with carbon, it is reduced to
+    metallic zinc.
+- id: "4.5.7"
+  kind: equation
+  page: 15
+  text: ZnO(s) + C(s) → Zn(s) + CO(g)
+- id: "4.5.8"
+  kind: text
+  page: 15
+  text: You are already familiar with the process of oxidation and reduction explained in the first
+    Chapter. Obtaining metals from their compounds is also a reduction process.
+- id: "4.5.9"
+  kind: text
+  page: 15
+  text: Besides using carbon (coke) to reduce metal oxides to metals, sometimes displacement reactions
+    can also be used. The highly reactive metals such as sodium, calcium, aluminium, etc., are used
+    as reducing agents because they can displace metals of lower reactivity from their compounds.
+    For example, when manganese dioxide is heated with aluminium powder, the following reaction
+    takes place –
+- id: "4.5.10"
+  kind: equation
+  page: 16
+  text: 3MnO₂(s) + 4Al(s) → 3Mn(l) + 2Al₂O₃(s) + Heat
+  made:
+    - {words: L4.1-L6.1, by: agent}
+    - {words: L6.7-L10.1, by: agent}
+- id: "4.5.11"
+  kind: text
+  page: 16
+  text: Can you identify the substances that are getting oxidised and reduced?
+- id: "4.5.12"
+  kind: text
+  page: 16
+  text: These displacement reactions are highly exothermic. The amount of heat evolved is so large
+    that the metals are produced in the molten state. In fact, the reaction of iron(III) oxide
+    (Fe₂O₃) with aluminium is used to join railway tracks or cracked machine parts. This reaction is
+    known as the thermit reaction.
+  made:
+    - {words: L15.12-L19.1, by: agent}
+- id: "4.5.13"
+  kind: equation
+  page: 16
+  text: Fe₂O₃(s) + 2Al(s) → 2Fe(l) + Al₂O₃(s) + Heat
+  made:
+    - {words: L22.1-L26.1, by: agent}
+    - {words: L26.7-L30.1, by: agent}
+- id: "4.5.14"
+  kind: figure
+  page: 16
+  number: Figure 3.11
+  text: Figure 3.11 Thermit process for joining railway tracks
+  crop: [63.2, 154.3, 212.5, 330.8]
+  made:
+    - {box: true, by: figure-snap}
+- id: "4.6"
+  kind: section
+  page: 16
+  number: 3.4.5
+  title: Extracting Metals towards the Top of the Activity Series
+  text: 3.4.5 Extracting Metals towards the Top of the Activity Series
+- id: "4.6.1"
+  kind: text
+  page: 16
+  text: The metals high up in the reactivity series are very reactive. They cannot be obtained from
+    their compounds by heating with carbon. For example, carbon cannot reduce the oxides of sodium,
+    magnesium, calcium, aluminium, etc., to the respective metals. This is because these metals have
+    more affinity for oxygen than carbon. These metals are obtained by electrolytic reduction. For
+    example, sodium, magnesium and calcium are obtained by the electrolysis of their molten
+    chlorides. The metals are deposited at the cathode (the negatively charged electrode), whereas,
+    chlorine is liberated at the anode (the positively charged electrode). The reactions are –
+- id: "4.6.2"
+  kind: equation
+  page: 16
+  text: At cathode Na⁺ + e⁻ → Na
+  made:
+    - {words: L48.1, by: agent}
+    - {words: L48.3, by: agent}
+- id: "4.6.3"
+  kind: equation
+  page: 16
+  text: At anode 2Cl⁻ → Cl₂ + 2e⁻
+  made:
+    - {words: L49.1, by: agent}
+    - {words: L49.3-L50.1, by: agent}
+    - {words: L51.2, by: agent}
+- id: "4.6.4"
+  kind: text
+  page: 16
+  text: Similarly, aluminium is obtained by the electrolytic reduction of aluminium oxide.
+- id: "4.7"
+  kind: section
+  page: 16
+  number: 3.4.6
+  title: Refining of Metals
+  text: 3.4.6 Refining of Metals
+- id: "4.7.1"
+  kind: text
+  page: 16
+  text: The metals produced by various reduction processes described above are not very pure. They
+    contain impurities, which must be removed to obtain pure metals. The most widely used method for
+    refining impure metals is electrolytic refining.
+- id: "4.7.2"
+  kind: figure
+  page: 16
+  number: Figure 3.12
+  text: Figure 3.12 Electrolytic refining of copper. The electrolyte is a solution of acidified copper
+    sulphate. The anode is impure copper, whereas, the cathode is a strip of pure copper. On passing
+    electric current, pure copper is deposited on the cathode.
+  crop: [58, 500, 251, 711]
+  made:
+    - {box: true, by: agent}
+- id: "4.7.3"
+  kind: text
+  page: 16
+  text: "Electrolytic Refining: Many metals, such as copper, zinc, tin, nickel, silver, gold, etc.,
+    are refined electrolytically. In this process, the impure metal is made the anode and a thin
+    strip of pure metal is made the cathode. A solution of the metal salt is used as an electrolyte.
+    The apparatus is set up as shown in Fig. 3.12. On passing the current through the electrolyte,
+    the pure metal from the anode dissolves into the electrolyte. An equivalent amount of pure metal
+    from the electrolyte is deposited on the cathode. The soluble impurities go into the solution,
+    whereas, the insoluble impurities settle down at the bottom of the anode and are known as anode
+    mud."
+- id: "4.7.4"
+  kind: exercise
+  page: 17
+  title: QUESTIONS
+  text: QUESTIONS
+  made:
+    - {words: L4.1-9, by: agent}
+- id: "4.7.4.1"
+  kind: question
+  page: 17
+  number: "1."
+  text: 1. Define the following terms. (i) Mineral (ii) Ore (iii) Gangue
+- id: "4.7.4.2"
+  kind: question
+  page: 17
+  number: "2."
+  text: 2. Name two metals which are found in nature in the free state.
+- id: "4.7.4.3"
+  kind: question
+  page: 17
+  number: "3."
+  text: 3. What chemical process is used for obtaining a metal from its oxide?
+- id: "5"
+  kind: section
+  page: 17
+  number: "3.5"
+  title: CORROSION
+  text: 3.5 CORROSION
+- id: "5.1"
+  kind: text
+  page: 17
+  text: You have learnt the following about corrosion in Chapter 1 – Silver articles become black
+    after some time when exposed to air. This is because it reacts with sulphur in the air to form a
+    coating of silver sulphide. Copper reacts with moist carbon dioxide in the air and slowly loses
+    its shiny brown surface and gains a green coat. This green substance is basic copper carbonate.
+    Iron when exposed to moist air for a long time acquires a coating of a brown flaky substance
+    called rust. Let us find out the conditions under which iron rusts.
+  made:
+    - {words: L11.2-3, by: agent}
+    - {words: L20.4-5, by: agent}
+- id: "5.2"
+  kind: activity
+  page: 17
+  number: Activity 3.14
+  text: Activity 3.14 Take three test tubes and place clean iron nails in each of them. Label these
+    test tubes A, B and C. Pour some water in test tube A and cork it. Pour boiled distilled water
+    in test tube B, add about 1 mL of oil and cork it. The oil will float on water and prevent the
+    air from dissolving in the water. Put some anhydrous calcium chloride in test tube C and cork
+    it. Anhydrous calcium chloride will absorb the moisture, if any, from the air. Leave these test
+    tubes for a few days and then observe (Fig. 3.13).
+- id: "5.3"
+  kind: figure
+  page: 17
+  number: Figure 3.13
+  text: A B C Figure 3.13 Investigating the conditions under which iron rusts. In tube A, both air and
+    water are present. In tube B, there is no air dissolved in the water. In tube C, the air is dry.
+  crop: [369.8, 415.2, 548.2, 699.4]
+  made:
+    - {box: true, by: figure-snap}
+- id: "5.4"
+  kind: text
+  page: 17
+  text: You will observe that iron nails rust in test tube A, but they do not rust in test tubes B and
+    C. In the test tube A, the nails are exposed to both air and water. In the test tube B, the
+    nails are exposed to only water, and the nails in test tube C are exposed to dry air. What does
+    this tell us about the conditions under which iron articles rust?
+- id: "5.5"
+  kind: section
+  page: 18
+  number: 3.5.1
+  title: Prevention of Corrosion
+  text: 3.5.1 Prevention of Corrosion
+- id: "5.5.1"
+  kind: text
+  page: 18
+  text: The rusting of iron can be prevented by painting, oiling, greasing, galvanising, chrome
+    plating, anodising or making alloys.
+- id: "5.5.2"
+  kind: text
+  page: 18
+  text: Galvanisation is a method of protecting steel and iron from rusting by coating them with a
+    thin layer of zinc. The galvanised article is protected against rusting even if the zinc coating
+    is broken. Can you reason this out?
+- id: "5.5.3"
+  kind: text
+  page: 18
+  text: Alloying is a very good method of improving the properties of a metal. We can get the desired
+    properties by this method. For example, iron is the most widely used metal. But it is never used
+    in its pure state. This is because pure iron is very soft and stretches easily when hot. But, if
+    it is mixed with a small amount of carbon (about 0.05 %), it becomes hard and strong. When iron
+    is mixed with nickel and chromium, we get stainless steel, which is hard and does not rust.
+    Thus, if iron is mixed with some other substance, its properties change. In fact, the properties
+    of any metal can be changed if it is mixed with some other substance. The substance added may be
+    a metal or a non-metal. An alloy is a homogeneous mixture of two or more metals, or a metal and
+    a non-metal. It is prepared by first melting the primary metal, and then, dissolving the other
+    elements in it in definite proportions. It is then cooled to room temperature.
+  made:
+    - {words: L21.13-L22.1, by: agent}
+- id: "5.5.4"
+  kind: box
+  page: 18
+  title: Do You Know?
+  text: Do You Know? Pure gold, known as 24 carat gold, is very soft. It is, therefore, not suitable
+    for making jewellery. It is alloyed with either silver or copper to make it hard. Generally, in
+    India, 22 carat gold is used for making ornaments. It means that 22 parts of pure gold is
+    alloyed with 2 parts of either copper or silver.
+- id: "5.5.5"
+  kind: text
+  page: 18
+  text: If one of the metals is mercury, then the alloy is known as an amalgam. The electrical
+    conductivity and melting point of an alloy is less than that of pure metals. For example, brass,
+    an alloy of copper and zinc (Cu and Zn), and bronze, an alloy of copper and tin (Cu and Sn), are
+    not good conductors of electricity whereas copper is used for making electrical circuits.
+    Solder, an alloy of lead and tin (Pb and Sn), has a low melting point and is used for welding
+    electrical wires together.
+- id: "5.5.6"
+  kind: figure
+  page: 18
+  text: Iron pillar at Delhi
+  crop: [64.3, 528.5, 172.8, 708.1]
+  made:
+    - {box: true, by: figure-snap}
+- id: "5.5.7"
+  kind: box
+  page: 18
+  title: More to Know!
+  text: More to Know! The wonder of ancient Indian metallurgy The iron pillar near the Qutub Minar in
+    Delhi was built more than 1600 years ago by the iron workers of India. They had developed a
+    process which prevented iron from rusting. For its quality of rust resistance it has been
+    examined by scientists from all parts of the world. The iron pillar is 8 m high and weighs 6
+    tonnes (6000 kg).
+- id: "5.5.8"
+  kind: exercise
+  page: 19
+  title: QUESTIONS
+  text: QUESTIONS
+  made:
+    - {words: L1.1, by: agent}
+    - {words: L3.1-8, by: agent}
+- id: "5.5.8.1"
+  kind: question
+  page: 19
+  number: "1."
+  text: 1. Metallic oxides of zinc, magnesium and copper were heated with the following metals. In
+    which cases will you find displacement reactions taking place?
+- id: "5.5.8.2"
+  kind: table
+  page: 19
+  text: Metal Zinc Magnesium Copper Zinc oxide Magnesium oxide Copper oxide
+  rows:
+    - [Metal, Zinc, Magnesium, Copper]
+    - [Zinc oxide, "", "", ""]
+    - [Magnesium oxide, "", "", ""]
+    - [Copper oxide, "", "", ""]
+  crop: [117.9, 159.1, 407, 236.2]
+  made:
+    - {box: true, by: figure-snap}
+    - {cells: true, by: agent}
+- id: "5.5.8.3"
+  kind: question
+  page: 19
+  number: "2."
+  text: 2. Which metals do not corrode easily?
+- id: "5.5.8.4"
+  kind: question
+  page: 19
+  number: "3."
+  text: 3. What are alloys?
+- id: "5.5.8.5"
+  kind: box
+  page: 19
+  title: What you have learnt
+  text: What you have learnt Elements can be classified as metals and non-metals. Metals are lustrous,
+    malleable, ductile and are good conductors of heat and electricity. They are solids at room
+    temperature, except mercury which is a liquid. Metals can form positive ions by losing electrons
+    to non-metals. Metals combine with oxygen to form basic oxides. Aluminium oxide and zinc oxide
+    show the properties of both basic as well as acidic oxides. These oxides are known as amphoteric
+    oxides. Different metals have different reactivities with water and dilute acids. A list of
+    common metals arranged in order of their decreasing reactivity is known as an activity series.
+    Metals above hydrogen in the Activity series can displace hydrogen from dilute acids. A more
+    reactive metal displaces a less reactive metal from its salt solution. Metals occur in nature as
+    free elements or in the form of their compounds. The extraction of metals from their ores and
+    then refining them for use is known as metallurgy. An alloy is a homogeneous mixture of two or
+    more metals, or a metal and a non-metal. The surface of some metals, such as iron, is corroded
+    when they are exposed to moist air for a long period of time. This phenomenon is known as
+    corrosion. Non-metals have properties opposite to that of metals. They are neither malleable nor
+    ductile. They are bad conductors of heat and electricity, except for graphite, which conducts
+    electricity. Non-metals form negatively charged ions by gaining electrons when reacting with
+    metals. Non-metals form oxides which are either acidic or neutral. Non-metals do not displace
+    hydrogen from dilute acids. They react with hydrogen to form hydrides.
+- id: "5.5.9"
+  kind: exercise
+  page: 20
+  title: EXERCISES
+  text: EXERCISES
+  made:
+    - {words: L9.1-9, by: agent}
+- id: "5.5.9.1"
+  kind: question
+  page: 20
+  number: "1."
+  text: 1. Which of the following pairs will give displacement reactions? (a) NaCl solution and copper
+    metal (b) MgCl₂ solution and aluminium metal (c) FeSO₄ solution and silver metal (d) AgNO₃
+    solution and copper metal.
+  made:
+    - {words: L15.1-L16.1, by: agent}
+    - {words: L18.1-L19.1, by: agent}
+    - {words: L21.2-L22.1, by: agent}
+- id: "5.5.9.2"
+  kind: question
+  page: 20
+  number: "2."
+  text: 2. Which of the following methods is suitable for preventing an iron frying pan from rusting?
+    (a) Applying grease (b) Applying paint (c) Applying a coating of zinc (d) All of the above.
+- id: "5.5.9.3"
+  kind: question
+  page: 20
+  number: "3."
+  text: 3. An element reacts with oxygen to give a compound with a high melting point. This compound
+    is also soluble in water. The element is likely to be (a) calcium (b) carbon (c) silicon (d)
+    iron.
+- id: "5.5.9.4"
+  kind: question
+  page: 20
+  number: "4."
+  text: 4. Food cans are coated with tin and not with zinc because (a) zinc is costlier than tin. (b)
+    zinc has a higher melting point than tin. (c) zinc is more reactive than tin. (d) zinc is less
+    reactive than tin.
+- id: "5.5.9.5"
+  kind: question
+  page: 20
+  number: "5."
+  text: 5. You are given a hammer, a battery, a bulb, wires and a switch. (a) How could you use them
+    to distinguish between samples of metals and non-metals? (b) Assess the usefulness of these
+    tests in distinguishing between metals and non-metals.
+- id: "5.5.9.6"
+  kind: question
+  page: 20
+  number: "6."
+  text: 6. What are amphoteric oxides? Give two examples of amphoteric oxides.
+- id: "5.5.9.7"
+  kind: question
+  page: 20
+  number: "7."
+  text: 7. Name two metals which will displace hydrogen from dilute acids, and two metals which will not.
+- id: "5.5.9.8"
+  kind: question
+  page: 21
+  number: "8."
+  text: 8. In the electrolytic refining of a metal M, what would you take as the anode, the cathode
+    and the electrolyte?
+- id: "5.5.9.9"
+  kind: question
+  page: 21
+  number: "9."
+  text: 9. Pratyush took sulphur powder on a spatula and heated it. He collected the gas evolved by
+    inverting a test tube over it, as shown in figure below. (a) What will be the action of gas on
+    (i) dry litmus paper? (ii) moist litmus paper? (b) Write a balanced chemical equation for the
+    reaction taking place.
+- id: "5.5.9.10"
+  kind: figure
+  page: 21
+  text: Collection of gas
+  crop: [306, 174, 534, 414]
+  made:
+    - {box: true, by: agent}
+- id: "5.5.9.11"
+  kind: question
+  page: 21
+  number: "10."
+  text: 10. State two ways to prevent the rusting of iron.
+- id: "5.5.9.12"
+  kind: question
+  page: 21
+  number: "11."
+  text: 11. What type of oxides are formed when non-metals combine with oxygen?
+- id: "5.5.9.13"
+  kind: question
+  page: 21
+  number: "12."
+  text: 12. Give reasons (a) Platinum, gold and silver are used to make jewellery. (b) Sodium,
+    potassium and lithium are stored under oil. (c) Aluminium is a highly reactive metal, yet it is
+    used to make utensils for cooking. (d) Carbonate and sulphide ores are usually converted into
+    oxides during the process of extraction.
+- id: "5.5.9.14"
+  kind: question
+  page: 21
+  number: "13."
+  text: 13. You must have seen tarnished copper vessels being cleaned with lemon or tamarind juice.
+    Explain why these sour substances are effective in cleaning the vessels.
+- id: "5.5.9.15"
+  kind: question
+  page: 21
+  number: "14."
+  text: 14. Differentiate between metal and non-metal on the basis of their chemical properties.
+- id: "5.5.9.16"
+  kind: question
+  page: 21
+  number: "15."
+  text: 15. A man went door to door posing as a goldsmith. He promised to bring back the glitter of
+    old and dull gold ornaments. An unsuspecting lady gave a set of gold bangles to him which he
+    dipped in a particular solution. The bangles sparkled like new but their weight was reduced
+    drastically. The lady was upset but after a futile argument the man beat a hasty retreat. Can
+    you play the detective to find out the nature of the solution he had used?
+- id: "5.5.9.17"
+  kind: question
+  page: 21
+  number: "16."
+  text: 16. Give reasons why copper is used to make hot water tanks and not steel (an alloy of iron).

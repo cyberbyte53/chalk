@@ -1,0 +1,40 @@
+page: 8
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets a formula's subscripts apart as their own lines"
+furniture: L4-L10, L60-L62, L67-L69
+terms:
+  - "L52.1-2"
+blocks:
+  - kind: equation
+    words: L1
+  - kind: text
+    words: L2
+  - kind: activity
+    words: L3, L11-L23
+    number: L3.1-2
+  - kind: text
+    words: L27-L28
+  - kind: text
+    words: L29-L45
+    read:
+      "L30.2-L31.1": { text: "HNO₃" }
+      "L32.9-L33.1": { text: "H₂" }
+      "L35.12-L37.1": { text: "(N₂O," }
+      "L38.1-L40.1": { text: "NO₂)." }
+      "L41.1-L42.1": { text: "HNO₃" }
+      "L43.3-L44.1": { text: "H₂" }
+  - kind: text
+    words: L46-L51
+  - kind: box
+    title: L24-L26
+    words: L24-L26, L52-L56
+  - kind: section
+    words: L57-L58
+    number: L57.1
+    title: L57.2-10, L58
+  - kind: activity
+    words: L59, L63-L66
+    number: L59.1-2
+    continues: true

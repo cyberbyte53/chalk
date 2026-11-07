@@ -1,0 +1,67 @@
+page: 3
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space (मर्क री, सर्कि ट, स्कू ल)"
+answers:
+  "word सिरा": "a real word (end), as printed on the page; the list lacks it"
+  "word जलता": "a real word (lights up), as printed on the page; the list lacks it"
+  "word पॉलिवाइनिल": "a name (polyvinyl), as printed on the page; the list lacks it"
+  "word सोनोरस": "a word (sonorous) the book prints in brackets; the list lacks it"
+  "word अधातुओं": "a real word (non-metals), as printed on the page; the list lacks it"
+  "word अधातुएँ": "a real word (non-metals), as printed on the page; the list lacks it"
+furniture: L57-L60, L2-L6, L29-L31
+terms:
+  - L44.15
+blocks:
+  - kind: activity
+    number: L1.2
+    words: L1, L7-L16
+    read:
+      L8.2: मदद
+  - kind: figure
+    number: L22.2
+    words: L17-L22
+    box: [311, 91, 527, 289]
+    crop: { box: [305, 88, 572, 292], cause: wrong-box }
+    read:
+      L18.8: सिरा
+  - kind: text
+    words: L23-L25
+    read:
+      L25.2-3: मर्करी
+  - kind: text
+    words: L26
+  - kind: activity
+    number: L28.2
+    words: L28, L32-L35
+    read:
+      L32.7-8: सर्किट
+      L35.3: जलता
+      L35.5: इससे
+  - kind: figure
+    number: L49.2
+    words: L27, L36-L39, L46-L51
+    box: [375, 380, 572, 552]
+  - kind: text
+    words: L40-L42
+    read:
+      L41.1: पॉलिवाइनिल
+  - kind: text
+    words: L43-L45
+    read:
+      L44.16: (सोनोरस)
+      L45.10-11: स्कूल
+  - kind: section
+    number: L52.1
+    title: L52.2
+    words: L52
+  - kind: text
+    words: L53-L56
+    read:
+      L53.10-11: धातुओं
+      L53.15-16: अधातुओं
+      L54.7-8: अधातुओं
+      L55.11: अधातुएँ
+      L56.2-5: धातुओं
+      L56.8-11: अधातुओं

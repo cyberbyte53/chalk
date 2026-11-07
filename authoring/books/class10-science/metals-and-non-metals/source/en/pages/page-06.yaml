@@ -1,0 +1,18 @@
+page: 6
+proofread: true
+furniture: L32.1, L33.1, L35.1, L37.1, L38.1, L39.1, L41.1, L45-L46, L47-L49
+blocks:
+  - kind: text
+    words: L4-L15
+  - kind: box
+    title: L1-L3
+    words: L1-L3, L16-L22
+  - kind: text
+    words: L23-L28
+  - kind: section
+    words: L29
+    number: L29.1
+    title: L29.2-8
+  - kind: activity
+    words: L30-L31, L32.2-12, L33.2-L34, L35.2-L36, L37.2-8, L38.2-9, L39.2-L40, L41.2-L44
+    number: L30.1-2

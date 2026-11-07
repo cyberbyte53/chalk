@@ -1,0 +1,86 @@
+page: 8
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits on their own lines (H 2 O, Al 2 O 3), printed H₂O, Al₂O₃; a word the PDF splits with a space (कै ल्सियम, बिल्‍कु ल, रे गमाल)"
+answers:
+  "word ऊष्माक्षेपी": "a real word (exothermic), as printed on the page; the list lacks it"
+furniture: L66-L69, L62.1-2
+blocks:
+  - kind: text
+    words: L1-L3
+    read:
+      L2.14-17: घुलकर
+  - kind: equation
+    words: L4
+  - kind: equation
+    words: L5
+  - kind: text
+    words: L6-L8
+    read:
+      L7.7: ऊष्माक्षेपी
+      L7.11: इससे
+      L8.1: प्रज्ज्वलित
+  - kind: equation
+    words: L9-L13
+    read:
+      L9.3-L11.1: "2H₂O(l)"
+      L11.5-L13.1: "H₂(g)"
+  - kind: equation
+    words: L14-L18
+    read:
+      L14.3-L16.1: "2H₂O(l)"
+      L16.5-L18.1: "H₂(g)"
+  - kind: text
+    words: L19-L20
+    read:
+      L19.4-5: कैल्सियम
+      L20.2: प्रज्ज्वलित
+  - kind: equation
+    words: L21-L27
+    read:
+      L21.3-L23.1: "2H₂O(l)"
+      L23.3-L25.1: "Ca(OH)₂(aq)"
+      L25.3-L27.1: "H₂(g)"
+  - kind: text
+    words: L28-L29
+    read:
+      L28.10-11: कैल्सियम
+      L29.6-7: कैल्सियम
+  - kind: text
+    words: L30-L33
+  - kind: text
+    words: L34-L36
+  - kind: equation
+    words: L37-L45
+    read:
+      L37.3-L39.1: "3H₂O(g)"
+      L39.3-L43.1: "Al₂O₃(s)"
+      L43.3-L45.1: "3H₂(g)"
+  - kind: equation
+    words: L46-L54
+    read:
+      L46.3-L48.1: "4H₂O(g)"
+      L48.3-L52.1: "Fe₃O₄(s)"
+      L52.3-L54.1: "4H₂(g)"
+  - kind: text
+    words: L55
+    read:
+      L55.14-15: बिल्कुल
+  - kind: section
+    number: L56.1
+    title: L56.2-11
+    words: L56
+  - kind: text
+    words: L57-L58
+  - kind: equation
+    words: L59
+  - kind: text
+    words: L60
+  - kind: activity
+    number: L61.2
+    words: L61, L62.3-L65
+    continues: true
+    read:
+      L62.10-11: धातुओं
+      L63.4-5: रेगमाल

@@ -1,0 +1,43 @@
+page: 2
+proofread: true
+answers:
+  "word रहिए": "a real word (stay), as printed on the page; the list lacks it"
+furniture: L38-L41, L2-L5, L16-L19, L29.1-2
+terms:
+  - L26.1
+  - L30.12
+blocks:
+  - kind: activity
+    number: L1.2
+    words: L1, L6-L12
+    read:
+      L6.12-13: धातुओं
+      L9.10: रहिए।
+  - kind: text
+    words: L13-L14
+  - kind: activity
+    number: L15.2
+    words: L15, L20-L24
+    read:
+      L23.2-3: धातुओं
+      L24.2-3: धातुओं
+  - kind: text
+    words: L25-L27
+    read:
+      L25.5-6: धातुओं
+  - kind: activity
+    number: L28.2
+    words: L28, L29.3-17
+    read:
+      L29.4-5: धातुओं
+  - kind: text
+    words: L30-L32
+  - kind: text
+    words: L33-L34
+    read:
+      L33.6-7: धातुओं
+  - kind: text
+    words: L35-L37
+    read:
+      L35.4-7: धातुओं
+      L36.11-14: धातुओं
