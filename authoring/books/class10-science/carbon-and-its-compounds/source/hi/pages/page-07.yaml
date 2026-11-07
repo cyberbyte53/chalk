@@ -19,61 +19,47 @@ blocks:
   - kind: figure
     number: L5.2-3
     words: L4-L5
-    box: [270, 135, 510, 208]
+    box: [ 270, 135, 510, 208 ]
     read:
       L5.6-7: परमाणुओं
   - kind: figure
     number: L6.2-3
     words: L6-L7
-    box: [62, 88, 240, 246]
-    read:
-      L7.1: एथेन
+    box: [ 62, 88, 240, 246 ]
   - kind: text
     words: L8-L9
-    read:
-      L8.1: एथेन
   - kind: text
     words: L10-L18
     read:
       L10.15-L13.1: { text: "C₃H₈", cause: other }
       L14.7-8: परमाणुओं
-      L17.14: अभिक्रियाशील
   - kind: text
     words: L19-L24
     read:
       L19.11-L22.1: { text: "C₂H₄", cause: other }
-      L23.3: एथीन
       L24.3-4: { text: "कैसे", cause: other }
   - kind: figure
     words: L25-L26
-    box: [180, 355, 430, 410]
+    box: [ 180, 355, 430, 410 ]
   - kind: figure
     words: L27
-    box: [270, 388, 430, 462]
+    box: [ 270, 388, 430, 462 ]
   - kind: text
     words: L28-L30
     read:
-      L29.12: द्विआबंध
       L29.16: जिससे
   - kind: figure
     words: L31
-    box: [272, 518, 430, 572]
+    box: [ 272, 518, 430, 572 ]
   - kind: text
     words: L32-L33
-    read:
-      L32.4: एथीन
   - kind: figure
     number: L34.2
     words: L34-L35
-    box: [62, 555, 215, 720]
-    read:
-      L35.1: एथीन
+    box: [ 62, 555, 215, 720 ]
   - kind: text
     words: L36-L45
     read:
       L36.10-L39.1: { text: "C₂H₂", cause: other }
-      L40.3: एथाइन
-      L41.4: एथाइन
       L42.9-10: परमाणुओं
       L43.4-7: परमाणुओं
-      L45.1: अभिक्रियाशील

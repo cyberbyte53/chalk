@@ -37,15 +37,12 @@ blocks:
     title: L1-L4
     words: L1-L4, L19-L26
     read:
-      L20.9: चतुःसंयोजकता
       L20.11: शृंखलन
       L21.14-15: शृंखलाओं
       L22.7-8: { text: "प्राकृतिक", cause: other }
       L23.4-5: { text: "केवल", cause: other }
       L24.9-10: फ्रेडरिक
       L24.11: वोहलर
-      L24.16: सायनेट
-      L25.9: कार्बाईड,
   - kind: section
     number: L27.1
     title: L27.2-12
@@ -55,13 +52,10 @@ blocks:
     continues: true
     read:
       L29.16: बनने
-      L30.1: एथेन
       L30.5-L33.1: { text: "C₂H₆", cause: other }
       L35.3-6: परमाणुओं
-      L35.14: जोड़ा
       L36.9-10: परमाणुओं
-      L37.5: एथेन
   - kind: figure
     number: L40.2-3
     words: L39-L40
-    box: [185, 645, 365, 690]
+    box: [ 185, 645, 365, 690 ]

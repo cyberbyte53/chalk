@@ -10,13 +10,8 @@ answers:
 blocks:
   - kind: text
     words: L18-L21
-    read:
-      L19.5: विलुप्त
   - kind: text
     words: L22-L25
-    read:
-      L22.9: त्रुटिवश
-      L23.1: ऐसीटोन
   - kind: section
     number: L26.1
     title: L26.2
@@ -26,7 +21,6 @@ blocks:
     read:
       L29.3: जिससे
       L29.16: 5.11)।
-      L27.5: समांगी
   - kind: text
     words: L34-L40
   - kind: box
@@ -48,6 +42,3 @@ blocks:
       - 472
       - 536
       - 753
-    read:
-      L47.1: ऐसीटोन
-      L53.1: ऐसीटोन

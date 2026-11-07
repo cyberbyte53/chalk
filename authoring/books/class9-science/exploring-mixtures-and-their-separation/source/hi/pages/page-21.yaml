@@ -8,7 +8,6 @@ blocks:
     words: L1-L3
     read:
       L1.3-4: रेत,
-      L1.8: नैफ्थलीन
   - kind: figure
     number: L5.1-2
     words: L5.1-4, L4, L5.5-6, L6
@@ -20,16 +19,12 @@ blocks:
   - kind: question
     number: L7.1
     words: L7
-    read:
-      L7.4: ऐसीटोन
   - kind: question
     number: L8.1
     words: L8, L22-L29
     read:
       L25.3: कक्ष
       L26.6-7: करेगा?
-      L27.4: विलेयता
-      L28.11: विलेयता
   - kind: table
     number: L9.1-2
     title: L9.3-9, L10
@@ -39,8 +34,6 @@ blocks:
       - 320
       - 548
       - 481
-    read:
-      L9.9: विलेयता
   - kind: question
     number: L30.1
     words: L30, L31.2-12, L32.2-12, L33.2-12, L34-L36

@@ -89,7 +89,6 @@
     - {words: L6.12-13, by: agent}
     - {words: L8.7, by: hindi-repair}
     - {words: L8.8, by: hindi-repair}
-    - {words: L9.10, by: agent}
 - id: "1.1.5"
   kind: text
   page: 2
@@ -163,7 +162,6 @@
   crop: [305, 88, 572, 292]
   made:
     - {words: L18.4-7, by: hindi-repair}
-    - {words: L18.8, by: agent}
     - {words: L22.6-9, by: hindi-repair}
     - {box: true, by: agent}
 - id: "1.1.14"
@@ -188,7 +186,6 @@
     गया है। क्या बल्ब जलता है? इससे क्या पता चलता है?
   made:
     - {words: L32.7-8, by: agent}
-    - {words: L35.3, by: agent}
     - {words: L35.5, by: agent}
 - id: "1.1.17"
   kind: figure
@@ -241,7 +238,6 @@
     - {words: L54.4, by: hindi-repair}
     - {words: L54.7-8, by: agent}
     - {words: L55.1, by: hindi-repair}
-    - {words: L55.11, by: agent}
     - {words: L56.2-5, by: agent}
     - {words: L56.8-11, by: agent}
     - {words: L56.15-18, by: hindi-repair}
@@ -309,8 +305,6 @@
     - {words: L30.13, by: agent}
     - {words: L30.14, by: hindi-repair}
     - {words: L32.1, by: hindi-repair}
-    - {words: L32.3, by: agent}
-    - {words: L33.2, by: agent}
 - id: "1.2.6"
   kind: text
   page: 4
@@ -337,10 +331,8 @@
     - {words: L42.6, by: hindi-repair}
     - {words: L42.7, by: hindi-repair}
     - {words: L44.7, by: hindi-repair}
-    - {words: L45.13, by: agent}
     - {words: L46.2, by: hindi-repair}
     - {words: L7.1, page: 5, by: hindi-repair}
-    - {words: L7.10, page: 5, by: agent}
     - {words: L8.4-5, page: 5, by: agent}
 - id: "1.2.8"
   kind: text
@@ -349,10 +341,9 @@
     क्षारकीय ऑक्साइड प्रदान करती हैं। अगले भाग में आपको धातुओं के ऑक्साइडों के बारे में अधिक जानकारी
     प्राप्त होगी।
   made:
-    - {words: L9.2-5, by: agent}
+    - {words: L9.2-5, by: hindi-repair}
     - {words: L9.6, by: hindi-repair}
-    - {words: L9.13-16, by: agent}
-    - {words: L10.3, by: agent}
+    - {words: L9.13-16, by: hindi-repair}
     - {words: L10.4, by: hindi-repair}
     - {words: L10.12-13, by: agent}
     - {words: L10.15, by: hindi-repair}
@@ -373,7 +364,6 @@
   made:
     - {words: L13.2, by: hindi-repair}
     - {words: L14.8, by: hindi-repair}
-    - {words: L19.5, by: agent}
 - id: "1.2.9.2"
   kind: question
   page: 5
@@ -433,7 +423,6 @@
     - {words: L47.7-8, by: agent}
     - {words: L48.1-3, by: agent}
     - {words: L48.4, by: hindi-repair}
-    - {words: L48.7, by: agent}
 - id: "2.2.3"
   kind: text
   page: 6
@@ -495,15 +484,12 @@
     - {words: L17.12-13, by: agent}
     - {words: L18.8, by: hindi-repair}
     - {words: L18.10-11, by: agent}
-    - {words: L18.12, by: agent}
     - {words: L18.16, by: hindi-repair}
     - {words: L19.1, by: hindi-repair}
     - {words: L19.3, by: hindi-repair}
     - {words: L19.7, by: hindi-repair}
-    - {words: L19.10, by: agent}
     - {words: L20.5, by: hindi-repair}
     - {words: L20.7, by: hindi-repair}
-    - {words: L21.7, by: agent}
     - {words: L21.8, by: hindi-repair}
     - {words: L22.1, by: hindi-repair}
     - {words: L22.2, by: hindi-repair}
@@ -532,10 +518,8 @@
     हैं—
   made:
     - {words: L42.3, by: hindi-repair}
-    - {words: L42.14, by: agent}
     - {words: L43.6, by: hindi-repair}
     - {words: L43.9, by: hindi-repair}
-    - {words: L44.2, by: agent}
 - id: "2.2.13"
   kind: equation
   page: 6
@@ -565,10 +549,8 @@
   made:
     - {words: L55.7, by: hindi-repair}
     - {words: L56.6, by: hindi-repair}
-    - {words: L56.10, by: agent}
     - {words: L57.8, by: hindi-repair}
     - {words: L58.3, by: hindi-repair}
-    - {words: L59.1, by: agent}
     - {words: L59.12, by: hindi-repair}
     - {words: L60.3-4, by: agent}
     - {words: L60.8, by: hindi-repair}
@@ -593,14 +575,14 @@
     वस्तुएँ बनाई जा सकती हैं।
   made:
     - {words: L1.1, by: hindi-repair}
-    - {words: L3.2, by: agent}
+    - {words: L3.2, by: hindi-repair}
     - {words: L3.4, by: hindi-repair}
     - {words: L3.7, by: hindi-repair}
     - {words: L4.2, by: hindi-repair}
     - {words: L4.4, by: hindi-repair}
     - {words: L4.12, by: hindi-repair}
     - {words: L4.13, by: hindi-repair}
-    - {words: L5.18, by: agent}
+    - {words: L5.18, by: hindi-repair}
     - {words: L6.1, by: hindi-repair}
     - {words: L6.4, by: hindi-repair}
     - {words: L6.7, by: hindi-repair}
@@ -621,14 +603,10 @@
     है। कुछ और अभिक्रियाओं को देखकर हम इन धातुओं की अभिक्रियाशीलता का क्रम बनाने का प्रयास करते हैं।
   made:
     - {words: L9.11-12, by: agent}
-    - {words: L10.2, by: agent}
-    - {words: L11.2, by: agent}
     - {words: L11.5, by: hindi-repair}
     - {words: L11.11, by: hindi-repair}
-    - {words: L12.2, by: agent}
     - {words: L12.10-11, by: agent}
     - {words: L12.16-17, by: agent}
-    - {words: L13.2, by: agent}
 - id: "2.3"
   kind: section
   page: 7
@@ -652,13 +630,8 @@
     - {words: L34.1-2, by: agent}
     - {words: L36.8-11, by: hindi-repair}
     - {words: L37.2, by: hindi-repair}
-    - {words: L37.5, by: agent}
-    - {words: L40.6, by: agent}
     - {words: L46.1, by: hindi-repair}
-    - {words: L46.10, by: agent}
     - {words: L47.12, by: hindi-repair}
-    - {words: L47.15, by: agent}
-    - {words: L51.4, by: agent}
     - {words: L51.8-9, by: agent}
 - id: "2.3.2"
   kind: figure
@@ -668,7 +641,6 @@
     द्रोणी चित्र 3.3 धातु पर भाप की क्रिया
   crop: [287.3, 392.3, 558.3, 567.3]
   made:
-    - {words: L34.7, by: agent}
     - {box: true, by: figure-snap}
 - id: "2.3.3"
   kind: text
@@ -680,7 +652,7 @@
     - {words: L1.11, by: hindi-repair}
     - {words: L2.4, by: hindi-repair}
     - {words: L2.7-10, by: hindi-repair}
-    - {words: L2.14-17, by: agent}
+    - {words: L2.14-17, by: hindi-repair}
 - id: "2.3.4"
   kind: equation
   page: 8
@@ -702,7 +674,6 @@
   made:
     - {words: L6.10, by: hindi-repair}
     - {words: L7.5, by: hindi-repair}
-    - {words: L7.7, by: agent}
     - {words: L7.11, by: agent}
     - {words: L8.1, by: agent}
 - id: "2.3.7"
@@ -824,12 +795,8 @@
     - {words: L63.9, by: hindi-repair}
     - {words: L64.15, by: hindi-repair}
     - {words: L7.7, page: 9, by: hindi-repair}
-    - {words: L7.8, page: 9, by: agent}
-    - {words: L7.10, page: 9, by: agent}
-    - {words: L8.3, page: 9, by: agent}
     - {words: L9.2, page: 9, by: agent}
     - {words: L10.8, page: 9, by: hindi-repair}
-    - {words: L12.5, page: 9, by: agent}
     - {words: L12.9-10, page: 9, by: agent}
 - id: "2.4.5"
   kind: text
@@ -854,7 +821,6 @@
     - {words: L25.12, by: hindi-repair}
     - {words: L25.14-L27.1, by: agent}
     - {words: L27.3-L28.1, by: agent}
-    - {words: L30.1, by: agent}
     - {words: L30.13-L31.1, by: agent}
     - {words: L33.3-L34.1, by: agent}
 - id: "2.4.7"
@@ -866,8 +832,6 @@
     कि कॉपर तनु HCl के साथ अभिक्रिया नहीं करता है।
   made:
     - {words: L36.8, by: agent}
-    - {words: L37.8, by: agent}
-    - {words: L37.10, by: agent}
     - {words: L38.13-19, by: agent}
     - {words: L39.4, by: agent}
 - id: "2.4.8"
@@ -888,7 +852,6 @@
     - {words: L42.1-2, by: agent}
     - {words: L42.8, by: agent}
     - {words: L42.9-10, by: agent}
-    - {words: L42.21, by: agent}
 - id: "2.5"
   kind: section
   page: 9
@@ -928,10 +891,6 @@
   page: 10
   text: अभिक्रियाशील धातु अपने से कम अभिक्रियाशील धातु को उसके यौगिक के विलयन या गलित अवस्था से
     विस्थापित कर देती है।
-  made:
-    - {words: L1.1, by: agent}
-    - {words: L1.6, by: agent}
-    - {words: L4.1, by: agent}
 - id: "2.5.4"
   kind: text
   page: 10
@@ -943,18 +902,12 @@
     धातु (B) को उसके विलयन से विस्थापित कर देती है तो यह धातु (B) की अपेक्षा अधिक अभिक्रियाशील है।
   made:
     - {words: L6.8-L7.2, by: agent}
-    - {words: L9.7, by: agent}
     - {words: L9.13, by: hindi-repair}
     - {words: L11.7-11, by: agent}
     - {words: L11.12, by: agent}
-    - {words: L12.8, by: agent}
     - {words: L13.8-9, by: agent}
-    - {words: L15.3, by: agent}
     - {words: L16.9-10, by: agent}
     - {words: L17.14-15, by: agent}
-    - {words: L17.17, by: agent}
-    - {words: L19.7, by: agent}
-    - {words: L20.1, by: agent}
 - id: "2.5.5"
   kind: equation
   page: 10
@@ -964,8 +917,6 @@
   page: 10
   text: क्रियाकलाप 3.12 में आपके प्रेक्षणों के आधार पर कॉपर तथा आयरन में से कौन-सी धातु अधिक
     अभिक्रियाशील है?
-  made:
-    - {words: L25.2, by: agent}
 - id: "2.6"
   kind: section
   page: 10
@@ -1006,7 +957,6 @@
   made:
     - {words: L30.5, by: agent}
     - {words: L30.6-7, by: agent}
-    - {words: L30.10, by: agent}
     - {words: L31.2, by: hindi-repair}
     - {words: L33.2-3, by: agent}
     - {words: L35.2, by: hindi-repair}
@@ -1014,9 +964,6 @@
     - {words: L41.2-3, by: agent}
     - {words: L42.1, by: hindi-repair}
     - {words: L43.2, by: hindi-repair}
-    - {words: L44.3, by: agent}
-    - {words: L45.2, by: agent}
-    - {words: L46.3, by: agent}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "2.6.3"
@@ -1031,8 +978,6 @@
   page: 11
   number: "1."
   text: 1. सोडियम को किरोसिन में डुबोकर क्यों रखा जाता हैं?
-  made:
-    - {words: L2.4, by: agent}
 - id: "2.6.3.2"
   kind: question
   page: 11
@@ -1057,10 +1002,8 @@
     - {words: L7.2, by: hindi-repair}
     - {words: L7.11, by: agent}
     - {words: L25.13-L26.2, by: agent}
-    - {words: L27.4, by: agent}
     - {words: L28.5, by: agent}
     - {words: L28.6-7, by: agent}
-    - {words: L29.9, by: agent}
 - id: "2.6.3.4"
   kind: table
   page: 11
@@ -1090,7 +1033,6 @@
   text: 4. अभिक्रियाशील धातु को तनु हाइड्रोक्लोरिक अम्ल में डाला जाता है तो कौन-सी गैस निकलती है? आयरन
     के साथ तनु H₂SO₄ की रासायनिक अभिक्रिया लिखिए।
   made:
-    - {words: L30.2, by: agent}
     - {words: L31.4-L34.1, by: agent}
 - id: "2.6.3.6"
   kind: question
@@ -1107,7 +1049,6 @@
   title: धातुएँ एवं अधातुएँ कैसे अभिक्रिया करती हैं?
   text: 3.3 धातुएँ एवं अधातुएँ कैसे अभिक्रिया करती हैं?
   made:
-    - {words: L37.4, by: agent}
     - {words: L37.5-6, by: agent}
 - id: "3.1"
   kind: text
@@ -1118,12 +1059,10 @@
     की रासायनिक अभिक्रियाएँ बहुत कम होती हैं। इसलिए, हम तत्वों की अभिक्रियाशीलता को, संयोजकता कोश को
     पूर्ण करने की प्रवृत्ति के रूप में समझ सकते हैं।
   made:
-    - {words: L38.7, by: agent}
     - {words: L38.10-11, by: agent}
     - {words: L39.14, by: agent}
     - {words: L40.14-15, by: agent}
     - {words: L41.10, by: agent}
-    - {words: L41.12, by: agent}
 - id: "3.2"
   kind: text
   page: 11
@@ -1187,10 +1126,9 @@
     - {words: L6.4, by: agent}
     - {words: L7.1, by: agent}
     - {words: L8.1-2, by: agent}
-    - {words: L11.1, by: agent}
     - {words: L12.1, by: agent}
     - {words: L15.5-8, by: hindi-repair}
-    - {words: L18.1, by: agent}
+    - {words: L18.1, by: hindi-repair}
     - {words: L19.1, by: hindi-repair}
     - {words: L30.1, by: hindi-repair}
     - {words: L32.1-2, by: agent}
@@ -1212,7 +1150,6 @@
   made:
     - {words: L88.3-4, by: agent}
     - {words: L88.6-7, by: agent}
-    - {words: L90.2, by: agent}
 - id: "3.7"
   kind: equation
   page: 12
@@ -1221,7 +1158,7 @@
     - {words: L87.3-4, by: agent}
     - {words: L87.6-7, by: agent}
     - {words: L90.3, by: hindi-repair}
-    - {words: L90.4, by: agent}
+    - {words: L90.4, by: hindi-repair}
 - id: "3.8"
   kind: figure
   page: 12
@@ -1289,11 +1226,8 @@
     प्रकार अन्य लवण नमूनों की भी जाँच कीजिए। इन यौगिकों की प्रकृति के संबंध में आप क्या निष्कर्ष
     निकालते हैं?
   made:
-    - {words: L35.3, by: agent}
     - {words: L39.1-4, by: hindi-repair}
-    - {words: L39.9, by: agent}
     - {words: L40.1-4, by: hindi-repair}
-    - {words: L42.2, by: agent}
     - {words: L44.4-5, by: agent}
 - id: "3.14.3"
   kind: figure
@@ -1303,8 +1237,7 @@
   crop: [414.9, 308.8, 555.1, 488.3]
   made:
     - {words: L11.1, by: hindi-repair}
-    - {words: L12.1, by: agent}
-    - {words: L23.1-4, by: agent}
+    - {words: L23.1-4, by: hindi-repair}
     - {words: L23.8-11, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "3.14.4"
@@ -1314,7 +1247,7 @@
   text: बैटरी बल्ब स्विच बीकर ग्रैफ़ाइट छड़ जाँच वाला लवण विलयन चित्र 3.8 लवण के विलयन की चालकता की जाँच
   crop: [405, 527.3, 569.4, 709.7]
   made:
-    - {words: L48.1, by: agent}
+    - {words: L48.1, by: hindi-repair}
     - {words: L48.2, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "3.14.5"
@@ -1359,9 +1292,6 @@
     - {words: L23.2, by: hindi-repair}
     - {words: L25.8, by: hindi-repair}
     - {words: L25.13, by: hindi-repair}
-    - {words: L27.11, by: agent}
-    - {words: L28.4, by: agent}
-    - {words: L31.16, by: agent}
     - {words: L33.7, by: hindi-repair}
     - {words: L36.2, by: hindi-repair}
     - {words: L36.3, by: hindi-repair}
@@ -1434,13 +1364,10 @@
     - {words: L8.1-2, by: agent}
     - {words: L8.10, by: hindi-repair}
     - {words: L9.8-9, by: agent}
-    - {words: L11.3, by: agent}
     - {words: L13.3, by: hindi-repair}
     - {words: L13.5, by: hindi-repair}
     - {words: L14.7-10, by: hindi-repair}
-    - {words: L14.19, by: agent}
     - {words: L15.8, by: agent}
-    - {words: L16.5, by: agent}
     - {words: L16.11-14, by: hindi-repair}
     - {words: L16.17-20, by: hindi-repair}
     - {words: L17.1, by: hindi-repair}
@@ -1448,7 +1375,6 @@
     - {words: L17.15-16, by: agent}
     - {words: L18.1, by: hindi-repair}
     - {words: L18.4, by: hindi-repair}
-    - {words: L18.7, by: agent}
     - {words: L18.12-14, by: hindi-repair}
     - {words: L19.6, by: hindi-repair}
 - id: "4.2.2"
@@ -1459,12 +1385,8 @@
     अभिक्रियाशील धातुएँ। प्रत्येक वर्ग में आने वाली धातुओं को प्राप्त करने के लिए विभिन्न तकनीकों का
     उपयोग किया जाता है।
   made:
-    - {words: L21.3, by: agent}
     - {words: L21.8-9, by: agent}
     - {words: L23.5-6, by: hindi-repair}
-    - {words: L23.13, by: agent}
-    - {words: L25.4, by: agent}
-    - {words: L25.8, by: agent}
     - {words: L26.6-7, by: agent}
     - {words: L26.9, by: hindi-repair}
 - id: "4.2.3"
@@ -1490,8 +1412,6 @@
   number: 3.4.2
   title: अयस्कों का समृद्धीकरण
   text: 3.4.2 अयस्कों का समृद्धीकरण
-  made:
-    - {words: L34.4, by: agent}
 - id: "4.3.1"
   kind: text
   page: 15
@@ -1514,11 +1434,7 @@
     धातु निष्कर्षण में प्रयुक्त चरण
   crop: [184.1, 86.4, 524.9, 422.6]
   made:
-    - {words: L2.3, by: agent}
-    - {words: L3.2, by: agent}
     - {words: L4.1-4, by: hindi-repair}
-    - {words: L5.2, by: agent}
-    - {words: L5.5, by: agent}
     - {words: L6.1-4, by: hindi-repair}
     - {words: L8.4-6, by: agent}
     - {words: L10.1-3, by: hindi-repair}
@@ -1542,7 +1458,6 @@
     है और अधिक गर्म करने पर मर्क्यूरिक ऑक्साइड मर्करी (पारद) में अपचयित हो जाता है।
   made:
     - {words: L20.8, by: hindi-repair}
-    - {words: L20.9, by: agent}
     - {words: L20.13-14, by: agent}
     - {words: L20.16, by: hindi-repair}
     - {words: L21.2-3, by: agent}
@@ -1552,7 +1467,6 @@
     - {words: L22.17, by: hindi-repair}
     - {words: L23.12, by: hindi-repair}
     - {words: L23.13-14, by: agent}
-    - {words: L24.1, by: agent}
 - id: "4.4.2"
   kind: equation
   page: 16
@@ -1612,7 +1526,6 @@
     परिवर्तित हो जाता है। इस प्रक्रिया को निस्तापन कहा जाता है। जिंक के अयस्कों के भर्जन एवं
     निस्तापन के समय निम्नलिखित रासायनिक अभिक्रिया होती है—
   made:
-    - {words: L2.14, by: agent}
     - {words: L3.4-5, by: agent}
     - {words: L3.9, by: hindi-repair}
     - {words: L3.18, by: hindi-repair}
@@ -1650,7 +1563,6 @@
     - {words: L22.11, by: hindi-repair}
     - {words: L22.14, by: hindi-repair}
     - {words: L23.9, by: hindi-repair}
-    - {words: L24.5, by: agent}
     - {words: L24.8-9, by: hindi-repair}
 - id: "4.5.5"
   kind: equation
@@ -1675,13 +1587,10 @@
     चूर्ण के साथ गर्म किया जाता है तो निम्नलिखित अभिक्रिया होती है—
   made:
     - {words: L28.8, by: hindi-repair}
-    - {words: L29.11, by: agent}
     - {words: L29.12-15, by: hindi-repair}
     - {words: L30.2-3, by: agent}
     - {words: L30.4, by: hindi-repair}
-    - {words: L31.4, by: agent}
     - {words: L31.6-9, by: agent}
-    - {words: L31.14, by: agent}
     - {words: L32.9, by: hindi-repair}
     - {words: L32.11, by: hindi-repair}
 - id: "4.5.8"
@@ -1705,14 +1614,12 @@
     के साथ एल्युमिनियम की अभिक्रिया का उपयोग रेल की पटरी एवं मशीनी पुर्जों की दरारों को जोड़ने के
     लिए किया जाता है। इस अभिक्रिया को थर्मिट अभिक्रिया कहते हैं।
   made:
-    - {words: L42.5, by: agent}
     - {words: L43.11, by: hindi-repair}
     - {words: L44.2, by: hindi-repair}
     - {words: L44.3-L48.1, by: agent}
     - {words: L48.4, by: hindi-repair}
     - {words: L48.9-10, by: agent}
     - {words: L49.7, by: hindi-repair}
-    - {words: L49.16, by: agent}
 - id: "4.5.11"
   kind: equation
   page: 17
@@ -1729,7 +1636,6 @@
   made:
     - {words: L61.1-2, by: agent}
     - {words: L62.1, by: hindi-repair}
-    - {words: L62.4, by: agent}
     - {box: true, by: figure-snap}
 - id: "4.6"
   kind: section
@@ -1751,8 +1657,6 @@
     इलैक्ट्रोड) पर धातुएँ निक्षेपित हो जाती हैं तथा ऐनोड (धन आवेशित इलैक्ट्रोड) पर क्लोरीन मुक्त
     होती है। अभिक्रियाएँ इस प्रकार हैं—
   made:
-    - {words: L2.1, by: agent}
-    - {words: L2.9, by: agent}
     - {words: L3.8, by: hindi-repair}
     - {words: L4.4-5, by: agent}
     - {words: L4.6, by: hindi-repair}
@@ -1765,9 +1669,7 @@
     - {words: L7.7-8, by: agent}
     - {words: L8.3, by: hindi-repair}
     - {words: L8.7-8, by: agent}
-    - {words: L8.11, by: agent}
     - {words: L9.3, by: hindi-repair}
-    - {words: L9.6, by: agent}
     - {words: L9.9, by: hindi-repair}
 - id: "4.6.2"
   kind: equation
@@ -1889,9 +1791,7 @@
     - {words: L7.7, page: 19, by: hindi-repair}
     - {words: L7.13, page: 19, by: agent}
     - {words: L8.8-9, page: 19, by: agent}
-    - {words: L8.17, page: 19, by: agent}
     - {words: L9.1, page: 19, by: hindi-repair}
-    - {words: L10.16, page: 19, by: agent}
     - {words: L10.20, page: 19, by: hindi-repair}
 - id: "5.2"
   kind: exercise
@@ -1940,14 +1840,11 @@
     कॉर्क से बंद कर दीजिए। निर्जल कैल्सियम क्लोराइड वायु की नमी को सोख लेगा। इन परखनलियों (चित्र
     3.13) को कुछ दिन छोड़ने के बाद उनका प्रेक्षण कीजिए।
   made:
-    - {words: L22.2, by: agent}
     - {words: L22.13, by: hindi-repair}
     - {words: L24.5-6, by: hindi-repair}
-    - {words: L26.1, by: agent}
     - {words: L27.4, by: hindi-repair}
     - {words: L27.6-7, by: agent}
     - {words: L28.6-7, by: agent}
-    - {words: L29.4, by: agent}
     - {words: L29.10, by: hindi-repair}
 - id: "5.2.6"
   kind: figure
@@ -1959,7 +1856,6 @@
     उपस्थित हैं। परखनली B में जल में विलीन वायु नहीं है। परखनली C में शुष्क वायु है।
   crop: [383.8, 324, 569.4, 639.1]
   made:
-    - {words: L54.1, by: agent}
     - {words: L56.2-3, by: agent}
     - {box: true, by: figure-snap}
 - id: "5.2.7"
@@ -1988,10 +1884,9 @@
     क्रोमियम लेपन, ऐनोडीकरण या मिश्रधातु बनाकर लोहे को जंग लगने से बचाया जा सकता है।
   made:
     - {words: L65.6, by: hindi-repair}
-    - {words: L65.8, by: agent}
     - {words: L65.11-12, by: agent}
     - {words: L65.17, by: hindi-repair}
-    - {words: L66.3, by: agent}
+    - {words: L66.3, by: hindi-repair}
     - {words: L66.9-L67.1, by: hindi-repair}
 - id: "5.3.2"
   kind: text
@@ -2001,9 +1896,7 @@
     क्या आप इसका कारण बता सकते हैं?
   made:
     - {words: L4.18, by: hindi-repair}
-    - {words: L5.4, by: agent}
     - {words: L5.10, by: hindi-repair}
-    - {words: L5.16, by: agent}
     - {words: L5.18-L6.1, by: hindi-repair}
 - id: "5.3.3"
   kind: text
@@ -2021,7 +1914,6 @@
     अनुपात में इसमें विलीन किया जाता है। फिर इसे कमरे के ताप पर शीतलीकृत किया जाता है।
   made:
     - {words: L8.3-6, by: hindi-repair}
-    - {words: L8.13, by: agent}
     - {words: L8.19-22, by: hindi-repair}
     - {words: L9.1-2, by: agent}
     - {words: L9.6, by: hindi-repair}
@@ -2033,7 +1925,6 @@
     - {words: L14.8-L15.1, by: hindi-repair}
     - {words: L17.5-8, by: hindi-repair}
     - {words: L18.5-6, by: agent}
-    - {words: L18.8, by: agent}
     - {words: L19.1-3, by: hindi-repair}
     - {words: L19.14-17, by: hindi-repair}
     - {words: L19.18, by: agent}
@@ -2065,7 +1956,6 @@
     का उपयोग विद्युतीय परिपथ बनाने में किया जाता है। सीसा एवं टिन (Pb एवं Sn) की मिश्रातु सोल्डर है,
     जिसका गलनांक बहुत कम होता है। इसका उपयोग विद्युत तारों की परस्पर वेल्डिंग के लिए किया जाता है।
   made:
-    - {words: L29.11, by: agent}
     - {words: L29.14-16, by: hindi-repair}
     - {words: L31.18-20, by: agent}
     - {words: L33.16-18, by: agent}
@@ -2078,7 +1968,6 @@
     की जंगता से प्रतिरोधकता का अवलोकन विश्व के कई वैज्ञानिक कर चुके हैं। यह स्तंभ कुतुबमीनार के निकट
     स्थित है। यह लौह स्तंभ 8 m ऊँचा तथा इसका भार 6 टन (6000 kg) है।
   made:
-    - {words: L28.1, by: agent}
     - {words: L37.16, by: agent}
 - id: "5.3.7"
   kind: figure
@@ -2176,48 +2065,33 @@
     - {words: L18.16-19, by: agent}
     - {words: L19.3, by: hindi-repair}
     - {words: L19.6, by: hindi-repair}
-    - {words: L19.9, by: agent}
     - {words: L19.10, by: hindi-repair}
     - {words: L19.13, by: hindi-repair}
     - {words: L19.14, by: hindi-repair}
     - {words: L20.1, by: hindi-repair}
-    - {words: L20.2, by: agent}
     - {words: L20.3, by: hindi-repair}
     - {words: L20.6, by: hindi-repair}
     - {words: L20.9-12, by: hindi-repair}
     - {words: L20.17, by: hindi-repair}
-    - {words: L21.1, by: agent}
     - {words: L21.2, by: hindi-repair}
     - {words: L22.10-13, by: agent}
-    - {words: L22.15, by: agent}
-    - {words: L23.3, by: agent}
     - {words: L23.12-13, by: agent}
     - {words: L24.10-13, by: hindi-repair}
-    - {words: L24.19, by: agent}
-    - {words: L25.4, by: agent}
-    - {words: L25.9, by: agent}
     - {words: L25.10-11, by: agent}
-    - {words: L25.17, by: agent}
     - {words: L27.3-4, by: agent}
     - {words: L28.17-20, by: hindi-repair}
     - {words: L29.8-9, by: agent}
-    - {words: L29.17, by: agent}
     - {words: "L30.9-10, L31.1-2", by: agent}
     - {words: "L31.9-10, L30.11, L31.11", by: agent}
     - {words: "L30.15-16, L30.12, L31.12", by: agent}
-    - {words: L31.17, by: agent}
     - {words: L33.3-6, by: agent}
     - {words: L33.8-11, by: hindi-repair}
     - {words: L33.12-15, by: agent}
     - {words: L33.30, by: hindi-repair}
-    - {words: L34.2, by: agent}
     - {words: L34.10, by: hindi-repair}
-    - {words: L1.1, page: 22, by: agent}
     - {words: L1.4, page: 22, by: agent}
     - {words: L1.8-9, page: 22, by: agent}
-    - {words: L3.3, page: 22, by: agent}
     - {words: L3.4, page: 22, by: hindi-repair}
-    - {words: L4.3, page: 22, by: agent}
 - id: "5.3.9"
   kind: exercise
   page: 22
@@ -2275,9 +2149,7 @@
     - {words: L34.1, by: hindi-repair}
     - {words: L35.1, by: hindi-repair}
     - {words: L35.4-L36.1, by: hindi-repair}
-    - {words: L36.3, by: agent}
     - {words: L37.1, by: hindi-repair}
-    - {words: L37.6, by: agent}
 - id: "5.3.9.5"
   kind: question
   page: 22
@@ -2299,9 +2171,7 @@
   number: "6."
   text: 6. उभयधर्मी ऑक्साइड क्या होते हैं? दो उभयधर्मी ऑक्साइडों का उदाहरण दीजिए।
   made:
-    - {words: L12.1, by: agent}
     - {words: L12.2, by: hindi-repair}
-    - {words: L12.7, by: agent}
     - {words: L12.8, by: hindi-repair}
 - id: "5.3.9.7"
   kind: question
@@ -2311,7 +2181,6 @@
     नहीं कर सकती हैं।
   made:
     - {words: L13.2-3, by: agent}
-    - {words: L13.13, by: agent}
     - {words: L13.20, by: hindi-repair}
 - id: "5.3.9.8"
   kind: question
@@ -2330,7 +2199,6 @@
     पर? (ii) आर्द्र लिटमस पत्र पर? (b) ऊपर की अभिक्रियाओं के लिए संतुलित रासायनिक अभिक्रिया लिखिए।
   made:
     - {words: L16.3, by: hindi-repair}
-    - {words: L16.6, by: agent}
     - {words: L18.6, by: hindi-repair}
     - {words: L25.4-5, by: agent}
 - id: "5.3.9.10"
@@ -2341,7 +2209,6 @@
   made:
     - {words: L17.2, by: hindi-repair}
     - {words: L23.6, by: hindi-repair}
-    - {words: L24.2, by: agent}
     - {box: true, by: figure-snap}
 - id: "5.3.9.11"
   kind: question
@@ -2356,7 +2223,6 @@
   made:
     - {words: L29.1, by: hindi-repair}
     - {words: L29.4, by: hindi-repair}
-    - {words: L29.6, by: agent}
     - {words: L29.7-8, by: agent}
     - {words: L29.9, by: hindi-repair}
 - id: "5.3.9.13"
@@ -2370,9 +2236,7 @@
   made:
     - {words: L33.1, by: hindi-repair}
     - {words: L33.4, by: agent}
-    - {words: L34.5, by: agent}
     - {words: L35.2, by: hindi-repair}
-    - {words: L35.4, by: agent}
     - {words: L37.1, by: hindi-repair}
     - {words: L37.6, by: hindi-repair}
     - {words: L37.9, by: hindi-repair}

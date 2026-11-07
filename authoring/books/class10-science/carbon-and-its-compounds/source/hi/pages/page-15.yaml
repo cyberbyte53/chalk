@@ -31,7 +31,6 @@ blocks:
     title: L1-L4
     words: L1-L13
     read:
-      L6.6: जैवमात्रा
       L6.15-16: प्रक्रियाओं
       L12.10-11: "फँस"
   - kind: section
@@ -42,16 +41,12 @@ blocks:
     number: L15.2
     words: L15, L20-L25
     read:
-      L20.7: एथेनॉल
-      L20.12: ऊष्मक
       L22.10-L23.1: बूँद
-      L23.3: डालिए।
   - kind: text
     words: L26-L28
     read:
       L26.7-8: अभिक्रियाओं
       L27.6-7: "ऑक्सीकृत"
-      L28.9: कार्बोक्सिलिक
   - kind: equation
     words: L31-L33, L38, L29, L37, L34, L36.1, L39, L36.2, L35, L30, L40
     read:
@@ -77,9 +72,7 @@ blocks:
     words: L43-L45
     read:
       L43.6-7: "अम्लीकृत"
-      L43.11: एल्कोहलों
       L44.3-4: "आक्सीकृत"
-      L44.13: जोड़ते
   - kind: section
     number: L46.1
     title: L46.2-3
@@ -88,6 +81,4 @@ blocks:
     words: L47-L48
     continues: true
     read:
-      L47.1: पैलेडियम
       L47.3-4: "निकैल"
-      L47.6: उत्प्रेरकों

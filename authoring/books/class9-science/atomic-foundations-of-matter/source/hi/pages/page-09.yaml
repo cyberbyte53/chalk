@@ -17,11 +17,10 @@ blocks:
   - kind: figure
     number: L36.1-2
     words: L19-L21, L34-L36
-    box: [215, 172, 550, 294]
+    box: [ 215, 172, 550, 294 ]
   - kind: text
     words: L37-L42
     read:
-      L38.13: सहसंयोजी
       L39.12-L41.1: "(Cl₂)"
   - kind: text
     words: L43
@@ -34,7 +33,7 @@ blocks:
   - kind: figure
     number: L54.1-2
     words: L52-L54
-    box: [235, 450, 525, 548]
+    box: [ 235, 450, 525, 548 ]
   - kind: text
     words: L55-L57
     read:
@@ -65,9 +64,6 @@ blocks:
     title: L22
     words: L22-L33
     read:
-      L22.1: एकता
       L22.3: शक्ति...
-      L23.4: सहसंयोजी
-      L30.1: एकता
       L31.1: जिससे
       L32.4: अंततः

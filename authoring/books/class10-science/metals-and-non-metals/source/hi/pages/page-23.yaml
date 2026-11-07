@@ -10,15 +10,11 @@ blocks:
   - kind: question
     number: L1.1
     words: L1, L12
-    read:
-      L12.1: उभयधर्मी
-      L12.7: उभयधर्मी
   - kind: question
     number: L2.1
     words: L2, L13-L14
     read:
       L13.2-3: धातुओं
-      L13.13: विस्थापित
   - kind: question
     number: L3.1
     words: L3, L15
@@ -28,13 +24,10 @@ blocks:
     number: L4.1
     words: L4, L16, L18.1-10, L19-L20, L22, L23.1-5, L25, L27
     read:
-      L16.6: स्पैचुला
       L25.4-5: अभिक्रियाओं
   - kind: figure
     words: L17, L18.11-12, L21, L23.6-9, L24, L26, L31
-    box: [380, 175, 552, 380]
-    read:
-      L24.2: स्पैचुला
+    box: [ 380, 175, 552, 380 ]
   - kind: question
     number: L5.1
     words: L5, L28
@@ -42,15 +35,12 @@ blocks:
     number: L6.1
     words: L6, L29-L30
     read:
-      L29.6: अधातुएँ
       L29.7-8: कैसा
   - kind: question
     number: L7.1
     words: L7, L32-L37
     read:
       L33.4: चाँदी
-      L34.5: लीथियम
-      L35.4: अभिक्रियाशील
   - kind: question
     number: L8.1
     words: L8, L38-L39

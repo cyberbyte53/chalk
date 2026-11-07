@@ -22,8 +22,6 @@ blocks:
   - kind: text
     words: L13-L14, L15-L17
     read:
-      L13.9: अभिगृहीतों
-      L14.1: अभिगृहीतों
       L17.8: जिससे
   - kind: text
     words: L18.2-5, L19.6-L20, L23.2-L23.14, L25, L27.2-15, L29.2-12, L31, L33.2-12, L35.2-15
@@ -38,7 +36,6 @@ blocks:
     words: L37, L39
     read:
       L37.1-2: परमाणुओं
-      L39.1: अभिगृहीतों
   - kind: text
     words: L40-L44
     read:

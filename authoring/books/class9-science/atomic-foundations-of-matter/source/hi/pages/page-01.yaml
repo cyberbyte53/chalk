@@ -8,7 +8,6 @@ blocks:
   - kind: text
     words: L20-L23, L24, L25.3-16, L27.3-16
     read:
-      L21.2: अवपरमाणुक
       L23.2-5: परमाणुओं
   - kind: text
     words: L28-L30

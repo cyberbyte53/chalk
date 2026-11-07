@@ -33,7 +33,6 @@ blocks:
       L9.6: तत्वों
       L9.13: तत्व
       L11.3: तत्वों
-      L15.16: विघटित
   - kind: text
     words: L18-L19
     read:
@@ -57,7 +56,7 @@ blocks:
   - kind: figure
     number: L48.1-2
     words: L48-L49
-    box: [509, 416, 587, 529]
+    box: [ 509, 416, 587, 529 ]
     read:
       L49.1: सिनेबार
   - kind: example
@@ -70,8 +69,6 @@ blocks:
     words: L54-L61
     read:
       L56.13: जिससे
-      L57.2: मोनोक्सॉइड
-      L57.14: मोनोक्सॉइड
       L59.5-6: केवल
   - kind: box
     title: L21

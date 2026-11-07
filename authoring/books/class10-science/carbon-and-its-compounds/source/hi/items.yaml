@@ -30,7 +30,6 @@
   made:
     - {words: L13.5-6, by: agent}
     - {words: L14.3-4, by: agent}
-    - {words: L15.5, by: agent}
     - {words: L16.2-3, by: agent}
     - {words: L16.11-12, by: agent}
     - {words: L17.7-8, by: agent}
@@ -72,7 +71,6 @@
     - {words: L26.8-9, by: hindi-repair}
     - {words: L27.2, by: agent}
     - {words: L27.9, by: hindi-repair}
-    - {words: L29.4, by: agent}
     - {words: L29.11-12, by: agent}
     - {words: L30.9, by: hindi-repair}
     - {words: L30.12-13, by: agent}
@@ -84,8 +82,6 @@
   number: "4.1"
   title: कार्बन में आबंधन– सहसंयोजी आबंध
   text: 4.1 कार्बन में आबंधन– सहसंयोजी आबंध
-  made:
-    - {words: L33.5, by: agent}
 - id: "1.1"
   kind: text
   page: 1
@@ -129,7 +125,6 @@
   made:
     - {words: L11.3-L13.1, by: agent}
     - {words: L15.15-L17.1, by: agent}
-    - {words: L19.11, by: agent}
     - {words: L19.12-L23.1, by: agent}
     - {words: L25.2-3, by: agent}
     - {words: L27.1, by: agent}
@@ -163,7 +158,6 @@
     - {words: L37.14, by: hindi-repair}
     - {words: L37.18, by: hindi-repair}
     - {words: L38.7, by: agent}
-    - {words: L38.9, by: agent}
     - {words: L39.3, by: agent}
     - {words: L39.9, by: hindi-repair}
     - {words: L39.16, by: hindi-repair}
@@ -223,7 +217,6 @@
     है।
   made:
     - {words: L39.8-9, by: agent}
-    - {words: L39.12, by: agent}
     - {words: L40.9-10, by: agent}
     - {words: L40.14-15, by: agent}
     - {words: L41.2, by: hindi-repair}
@@ -234,7 +227,7 @@
     द्विपरमाणुक अणु, Cl₂ बनाती है। क्या आप इस अणु की इलेक्ट्रॉन बिंदु संरचना बना सकते हैं? याद रखिए
     कि केवल संयोजकता कोश इलेक्ट्रॉन को ही चित्रित करने की आवश्यकता होती है।
   made:
-    - {words: L43.4-6, by: agent}
+    - {words: L43.4-6, by: hindi-repair}
     - {words: L43.7-9, by: hindi-repair}
     - {words: L43.10-L44.1, by: agent}
     - {words: L46.10-11, by: agent}
@@ -251,7 +244,6 @@
   made:
     - {words: L48.1, by: hindi-repair}
     - {words: L48.4-5, by: agent}
-    - {words: L48.8, by: agent}
     - {words: L48.10, by: agent}
     - {words: L49.2, by: hindi-repair}
     - {words: L49.7, by: hindi-repair}
@@ -271,7 +263,7 @@
     - {words: L55.4-6, by: hindi-repair}
     - {words: L55.11, by: hindi-repair}
     - {words: L55.16-17, by: agent}
-    - {words: L56.3-4, by: agent}
+    - {words: L56.3-4, by: hindi-repair}
     - {words: L56.5, by: agent}
 - id: "1.11"
   kind: text
@@ -281,7 +273,6 @@
   made:
     - {words: L57.13, by: hindi-repair}
     - {words: L58.8-9, by: agent}
-    - {words: L59.12, by: agent}
 - id: "1.12"
   kind: text
   page: 3
@@ -291,17 +282,14 @@
     प्राप्त होते हैं। इसे दो परमाणुओं के बीच त्रिआबंध का बनना कहा जाता है। N₂ की इलेक्ट्रॉन बिंदु
     संरचना तथा इसके त्रिआबंध को चित्र 4.4 के अनुसार दर्शाया जा सकता है।
   made:
-    - {words: L60.3, by: agent}
     - {words: L60.6-7, by: agent}
     - {words: L62.2, by: hindi-repair}
     - {words: L62.3, by: hindi-repair}
     - {words: L63.7, by: agent}
     - {words: L64.1, by: hindi-repair}
     - {words: L64.6-7, by: agent}
-    - {words: L64.10, by: agent}
     - {words: L64.12, by: agent}
     - {words: L65.1-L66.1, by: agent}
-    - {words: L67.7, by: agent}
 - id: "1.13"
   kind: figure
   page: 3
@@ -342,7 +330,6 @@
   made:
     - {words: L23.1-L24.1, by: agent}
     - {words: L27.4-7, by: agent}
-    - {words: L28.2, by: agent}
     - {box: true, by: figure-snap}
 - id: "1.17"
   kind: text
@@ -370,7 +357,6 @@
     - {words: L10.12-14, by: hindi-repair}
     - {words: L12.12-14, by: hindi-repair}
     - {words: L12.15-L13.1, by: agent}
-    - {words: L15.7, by: agent}
     - {words: L15.9, by: hindi-repair}
     - {words: L16.3-4, by: agent}
     - {words: L16.10, by: hindi-repair}
@@ -395,15 +381,13 @@
     - {words: L18.4-7, by: agent}
     - {words: L18.13-16, by: hindi-repair}
     - {words: L18.21, by: agent}
-    - {words: L19.2, by: agent}
-    - {words: L19.6, by: agent}
     - {words: L19.9-10, by: agent}
-    - {words: L20.6-11, by: agent}
+    - {words: L20.6-11, by: hindi-repair}
     - {words: L20.13-16, by: hindi-repair}
     - {words: L21.7-L22.1, by: hindi-repair}
     - {words: L22.2-3, by: agent}
     - {words: L23.7, by: hindi-repair}
-    - {words: L23.8-L24.2, by: agent}
+    - {words: L23.8-L24.2, by: hindi-repair}
     - {words: L24.4-6, by: agent}
 - id: "1.21"
   kind: box
@@ -440,7 +424,6 @@
     - {words: L32.5, by: hindi-repair}
     - {words: L32.17-20, by: agent}
     - {words: L33.9, by: agent}
-    - {words: L33.18, by: agent}
     - {words: L34.4-7, by: hindi-repair}
     - {words: L34.8-10, by: hindi-repair}
     - {words: L34.13, by: hindi-repair}
@@ -450,7 +433,6 @@
     - {words: L36.10, by: hindi-repair}
     - {words: L37.2-5, by: hindi-repair}
     - {words: L37.19, by: hindi-repair}
-    - {words: L38.2, by: agent}
     - {words: L38.10-11, by: agent}
     - {words: L39.1, by: hindi-repair}
     - {words: L39.2-4, by: agent}
@@ -458,15 +440,12 @@
     - {words: L1.15, page: 5, by: hindi-repair}
     - {words: L2.3, page: 5, by: hindi-repair}
     - {words: L2.13-14, page: 5, by: agent}
-    - {words: L3.1, page: 5, by: agent}
     - {words: L3.3, page: 5, by: agent}
     - {words: L4.7-L5.1, page: 5, by: hindi-repair}
     - {words: L5.5, page: 5, by: agent}
     - {words: L5.6, page: 5, by: agent}
     - {words: L5.10, page: 5, by: hindi-repair}
-    - {words: L6.3, page: 5, by: agent}
     - {words: L6.4-L7.1, page: 5, by: agent}
-    - {words: L7.10, page: 5, by: agent}
 - id: "1.22"
   kind: figure
   page: 4
@@ -488,7 +467,6 @@
   text: C-60 बकमिंसटरफुलेरीन की संरचना
   crop: [444, 506.8, 556.1, 614.9]
   made:
-    - {words: L35.8, by: agent}
     - {box: true, by: figure-snap}
 - id: "1.25"
   kind: exercise
@@ -549,15 +527,12 @@
     उपस्थित तत्व पर निर्भर करते हैं।
   made:
     - {words: L18.2, by: agent}
-    - {words: L18.11, by: agent}
     - {words: L20.2-3, by: agent}
-    - {words: L21.4, by: agent}
     - {words: L22.8, by: agent}
     - {words: L23.6, by: hindi-repair}
     - {words: L23.11-14, by: hindi-repair}
     - {words: L23.15-16, by: agent}
     - {words: L24.1, by: agent}
-    - {words: L24.4, by: agent}
     - {words: L24.7-8, by: agent}
     - {words: L24.13, by: hindi-repair}
     - {words: L26.8-9, by: agent}
@@ -577,7 +552,6 @@
     - {words: L33.4, by: agent}
     - {words: L34.5-6, by: agent}
     - {words: L34.9, by: agent}
-    - {words: L35.1, by: agent}
     - {words: L5.6-7, page: 6, by: agent}
     - {words: L5.12, page: 6, by: hindi-repair}
     - {words: L6.1, page: 6, by: hindi-repair}
@@ -625,7 +599,6 @@
   made:
     - {words: L20.7, by: hindi-repair}
     - {words: L20.8, by: hindi-repair}
-    - {words: L20.9, by: agent}
     - {words: L20.11, by: agent}
     - {words: L20.13, by: hindi-repair}
     - {words: L21.14-15, by: agent}
@@ -637,8 +610,6 @@
     - {words: L24.4, by: hindi-repair}
     - {words: L24.9-10, by: agent}
     - {words: L24.11, by: agent}
-    - {words: L24.16, by: agent}
-    - {words: L25.9, by: agent}
     - {words: L25.15, by: hindi-repair}
 - id: "2.4"
   kind: section
@@ -662,14 +633,12 @@
     - {words: L28.3-L29.2, by: hindi-repair}
     - {words: L29.7-10, by: hindi-repair}
     - {words: L29.16, by: agent}
-    - {words: L30.1, by: agent}
     - {words: L30.5-L33.1, by: agent}
     - {words: L34.7, by: hindi-repair}
     - {words: L35.3-6, by: agent}
-    - {words: L35.14, by: agent}
+    - {words: L35.14, by: hindi-repair}
     - {words: L36.3, by: hindi-repair}
     - {words: L36.9-10, by: agent}
-    - {words: L37.5, by: agent}
     - {words: L37.7-L38.2, by: hindi-repair}
     - {words: L38.4, by: hindi-repair}
     - {words: L1.7, page: 7, by: hindi-repair}
@@ -702,14 +671,12 @@
   text: चित्र 4.6 (c) एथेन की इलेक्ट्रॉन बिंदु संरचना
   crop: [66.2, 93.4, 235.5, 244]
   made:
-    - {words: L7.1, by: agent}
     - {box: true, by: figure-snap}
 - id: "2.4.5"
   kind: text
   page: 7
   text: एथेन की इलेक्ट्रॉन बिंदु संरचना को चित्र 4.6 (c) में दर्शाया गया है।
   made:
-    - {words: L8.1, by: agent}
     - {words: L8.5-L9.2, by: hindi-repair}
 - id: "2.4.6"
   kind: text
@@ -724,7 +691,6 @@
     - {words: L15.9-L16.2, by: hindi-repair}
     - {words: L17.3, by: hindi-repair}
     - {words: L17.6, by: hindi-repair}
-    - {words: L17.14, by: agent}
 - id: "2.4.7"
   kind: text
   page: 7
@@ -732,7 +698,6 @@
     कैसे चित्रित कर सकते हैं? हम पहले जैसी चरणबद्ध विधि अपनाएँगे।
   made:
     - {words: L19.11-L22.1, by: agent}
-    - {words: L23.3, by: agent}
     - {words: L24.3-4, by: agent}
 - id: "2.4.8"
   kind: figure
@@ -757,7 +722,6 @@
   made:
     - {words: L28.13, by: hindi-repair}
     - {words: L29.2, by: hindi-repair}
-    - {words: L29.12, by: agent}
     - {words: L29.16, by: agent}
     - {words: L30.2, by: hindi-repair}
 - id: "2.4.11"
@@ -772,7 +736,6 @@
   page: 7
   text: चित्र 4.7 में एथीन की इलेक्ट्रॉन बिंदु संरचना दी गई है।
   made:
-    - {words: L32.4, by: agent}
     - {words: L32.8-L33.2, by: hindi-repair}
 - id: "2.4.13"
   kind: figure
@@ -781,7 +744,6 @@
   text: चित्र 4.7 एथीन की संरचना
   crop: [65.8, 592.4, 211, 718]
   made:
-    - {words: L35.1, by: agent}
     - {box: true, by: figure-snap}
 - id: "2.4.14"
   kind: text
@@ -793,13 +755,10 @@
     अभिक्रियाशील होते हैं।
   made:
     - {words: L36.10-L39.1, by: agent}
-    - {words: L40.3, by: agent}
-    - {words: L41.4, by: agent}
     - {words: L42.3, by: hindi-repair}
     - {words: L42.9-10, by: agent}
     - {words: L43.4-7, by: agent}
     - {words: L44.9, by: hindi-repair}
-    - {words: L45.1, by: agent}
 - id: "2.5"
   kind: section
   page: 8
@@ -816,7 +775,6 @@
     हैं। इनमें से छः के नाम तथा संरचना सारणी 4.2 में दिए गए हैं।
   made:
     - {words: L2.11-12, by: agent}
-    - {words: L2.17, by: agent}
     - {words: L3.7-8, by: agent}
     - {words: L3.13-14, by: agent}
 - id: "2.5.2"
@@ -839,13 +797,10 @@
   made:
     - {words: L5.7, by: hindi-repair}
     - {words: L9.3-L10.1, by: agent}
-    - {words: L11.2, by: agent}
     - {words: L11.3-L14.1, by: agent}
     - {words: L15.3-L18.1, by: agent}
     - {words: L19.3-L22.1, by: agent}
-    - {words: L23.2, by: agent}
     - {words: L23.3-L26.1, by: agent}
-    - {words: L27.2, by: agent}
     - {words: L27.3-L30.1, by: agent}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
@@ -888,7 +843,6 @@
     - {words: L14.2-L15.3, by: agent}
     - {words: L15.5, by: hindi-repair}
     - {words: L15.7-L16.2, by: hindi-repair}
-    - {words: L16.3, by: agent}
 - id: "2.5.7"
   kind: text
   page: 9
@@ -898,7 +852,6 @@
     - {words: L17.3-4, by: agent}
     - {words: L17.7-8, by: agent}
     - {words: L17.10, by: hindi-repair}
-    - {words: L18.9, by: agent}
     - {words: L18.11-13, by: hindi-repair}
     - {words: L18.14-L21.1, by: agent}
 - id: "2.5.8"
@@ -908,7 +861,6 @@
   text: चित्र 4.9 साइक्लोहेक्सेन की संरचना (a) कार्बन कंकाल (b) संपूर्ण अणु
   crop: [220.4, 285.3, 477.8, 372.1]
   made:
-    - {words: L24.3, by: agent}
     - {box: true, by: figure-snap}
 - id: "2.5.9"
   kind: text
@@ -917,7 +869,6 @@
     शृंखला तथा चक्रीय कार्बन यौगिक सभी संतृप्त अथवा असंतृप्त यौगिक हो सकते हैं, जैसे– बेन्जीन (C₆H₆)
     की संरचना निम्नलिखित है—
   made:
-    - {words: L25.3, by: agent}
     - {words: L25.14, by: agent}
     - {words: L26.2, by: agent}
     - {words: L26.8, by: hindi-repair}
@@ -945,8 +896,8 @@
     - {words: L38.2-3, by: agent}
     - {words: L38.6, by: hindi-repair}
     - {words: L38.7, by: hindi-repair}
-    - {words: L39.3, by: agent}
-    - {words: L39.11, by: agent}
+    - {words: L39.3, by: hindi-repair}
+    - {words: L39.11, by: hindi-repair}
 - id: "2.6"
   kind: section
   page: 9
@@ -970,7 +921,6 @@
   made:
     - {words: L41.4, by: agent}
     - {words: L42.5, by: agent}
-    - {words: L42.7, by: agent}
     - {words: L42.8, by: hindi-repair}
     - {words: L42.11, by: hindi-repair}
     - {words: L43.8, by: agent}
@@ -987,7 +937,7 @@
     - {words: L4.6-8, page: 10, by: hindi-repair}
     - {words: L4.10-12, page: 10, by: hindi-repair}
     - {words: L4.13-L5.2, page: 10, by: hindi-repair}
-    - {words: L5.4-L6.2, page: 10, by: agent}
+    - {words: L5.4-L6.2, page: 10, by: hindi-repair}
     - {words: L7.4-5, page: 10, by: agent}
     - {words: L8.1, page: 10, by: agent}
     - {words: L8.3-6, page: 10, by: hindi-repair}
@@ -1011,10 +961,8 @@
     - {words: L10.3, by: agent}
     - {words: L10.6, by: hindi-repair}
     - {words: L13.1-2, by: agent}
-    - {words: L15.4, by: agent}
     - {words: L16.1, by: hindi-repair}
     - {words: L18.2, by: hindi-repair}
-    - {words: L20.2, by: agent}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "2.7"
@@ -1084,9 +1032,7 @@
     हम पहले ही अनुभाग 4.2.1 में अध्ययन कर चुके हैं। एथेन का सूत्र क्या है? उत्तरोत्तर सदस्यों के
     सूत्र C₃H₆ , C₄H₈ तथा C₅H₁₀ हैं। क्या इनमें भी -CH₂- इकाई का अंतर है?
   made:
-    - {words: L12.3, by: agent}
-    - {words: L12.13, by: agent}
-    - {words: L13.13, by: agent}
+    - {words: L12.3, by: hindi-repair}
     - {words: L14.2-4, by: hindi-repair}
     - {words: L14.5-L17.1, by: agent}
     - {words: L18.2-L21.1, by: agent}
@@ -1102,11 +1048,11 @@
   made:
     - {words: L29.10-11, by: agent}
     - {words: L30.1-L31.2, by: agent}
-    - {words: L31.6, by: agent}
+    - {words: L31.6, by: hindi-repair}
     - {words: L31.9-11, by: hindi-repair}
     - {words: L31.12-L34.1, by: agent}
     - {words: L36.9-10, by: agent}
-    - {words: L36.12, by: agent}
+    - {words: L36.12, by: hindi-repair}
 - id: "2.7.7"
   kind: text
   page: 11
@@ -1120,7 +1066,6 @@
     - {words: L37.12-15, by: hindi-repair}
     - {words: L38.4, by: hindi-repair}
     - {words: L38.12, by: hindi-repair}
-    - {words: L39.10, by: agent}
     - {words: L39.13-16, by: hindi-repair}
     - {words: L41.2-4, by: hindi-repair}
 - id: "2.7.8"
@@ -1139,7 +1084,6 @@
     - {words: L54.3-L58.1, by: agent}
     - {words: L58.4-L62.1, by: agent}
     - {words: L62.3-L66.1, by: agent}
-    - {words: L68.10, by: agent}
     - {words: L68.13-14, by: agent}
     - {words: L68.16, by: hindi-repair}
 - id: "2.8"
@@ -1158,11 +1102,7 @@
   made:
     - {words: L74.15-16, by: agent}
     - {words: L75.9-10, by: agent}
-    - {words: L75.13, by: agent}
     - {words: L76.5-8, by: hindi-repair}
-    - {words: L76.18, by: agent}
-    - {words: L77.5, by: agent}
-    - {words: L77.6, by: agent}
 - id: "2.8.2"
   kind: text
   page: 11
@@ -1180,20 +1120,15 @@
     - {words: L79.5-6, by: agent}
     - {words: L79.8-L80.2, by: hindi-repair}
     - {words: L82.1, by: agent}
-    - {words: L82.7, by: agent}
     - {words: L1.4, page: 12, by: agent}
     - {words: L2.2-4, page: 12, by: hindi-repair}
     - {words: L3.1, page: 12, by: agent}
     - {words: L4.4-L5.2, page: 12, by: hindi-repair}
-    - {words: L6.12, page: 12, by: agent}
     - {words: L7.2-L8.2, page: 12, by: hindi-repair}
     - {words: L8.4, page: 12, by: agent}
     - {words: L8.7, page: 12, by: agent}
     - {words: L8.13-16, page: 12, by: hindi-repair}
-    - {words: L9.11, page: 12, by: agent}
     - {words: L10.1, page: 12, by: agent}
-    - {words: L10.2, page: 12, by: agent}
-    - {words: L10.9, page: 12, by: agent}
 - id: "2.8.3"
   kind: table
   page: 12
@@ -1217,22 +1152,11 @@
   crop: [100, 258.4, 568.4, 718.4]
   made:
     - {words: L13.3-4, by: agent}
-    - {words: L14.1, by: agent}
-    - {words: L15.1, by: agent}
-    - {words: L17.1, by: agent}
-    - {words: L18.1, by: agent}
     - {words: L19.3-6, by: hindi-repair}
-    - {words: L19.9, by: agent}
     - {words: L20.2, by: hindi-repair}
-    - {words: L20.6, by: agent}
-    - {words: L21.6, by: agent}
-    - {words: L22.2, by: agent}
-    - {words: L22.8, by: agent}
-    - {words: L23.2, by: agent}
-    - {words: L23.6, by: agent}
-    - {words: L24.2, by: agent}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
     - {words: L24.3-6, by: hindi-repair}
-    - {words: L25.1, by: agent}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "2.8.4"
@@ -1247,9 +1171,6 @@
   page: 13
   number: "1."
   text: 1. पेन्टेन के लिए आप कितने संरचनात्मक समावयवों का चित्रण कर सकते हैं?
-  made:
-    - {words: L4.1, by: agent}
-    - {words: L4.7, by: agent}
 - id: "2.8.4.2"
   kind: question
   page: 13
@@ -1261,23 +1182,16 @@
   page: 13
   number: "3."
   text: 3. साइक्लोपेन्टेन का सूत्र तथा इलेक्ट्रॉन बिंदु संरचना क्या होंगे?
-  made:
-    - {words: L7.2, by: agent}
 - id: "2.8.4.4"
   kind: question
   page: 13
   number: 4. निम्नलिखित
   text: 4. निम्नलिखित यौगिकों की संरचनाएँ चित्रित कीजिए— (i) एथेनॉइक अम्ल  (ii) ब्रोमोपेन्टेन* (iii)
-    ब्यूटेनोन (iv) हेक्सेनैल *क्या ब्रोमोपेन्टेन के संरचनात्मक समावयव संभव हैं?
+    ब्यूटेनोन  (iv) हेक्सेनैल *क्या ब्रोमोपेन्टेन के संरचनात्मक समावयव संभव हैं?
   made:
     - {words: L8.1, by: hindi-repair}
-    - {words: L9.2, by: agent}
     - {words: L9.3, by: hindi-repair}
-    - {words: L9.5, by: agent}
-    - {words: L10.2, by: agent}
-    - {words: L10.4, by: agent}
-    - {words: L11.2, by: agent}
-    - {words: L11.5, by: agent}
+    - {words: L10.2, by: hindi-repair}
 - id: "2.8.4.5"
   kind: question
   page: 13
@@ -1326,7 +1240,6 @@
     देता है। दहन पर अधिकांश कार्बन यौगिक भी प्रचुर मात्रा में ऊष्मा एवं प्रकाश को मुक्त करते हैं।
     निम्नलिखित वे ऑक्सीकरण अभिक्रियाएँ हैं, जिनका अध्ययन आपने पहले अध्याय में किया था—
   made:
-    - {words: L26.3, by: agent}
     - {words: L26.6, by: hindi-repair}
     - {words: L26.10, by: hindi-repair}
     - {words: L27.1, by: hindi-repair}
@@ -1379,8 +1292,6 @@
     प्रेक्षण कीजिए तथा लिखिए कि धुआँ उत्पन्न हुआ या नहीं। ज्वाला के ऊपर धातु की एक तश्तरी रखिए।
     इनमें से किसी भी यौगिक के कारण क्या तश्तरी पर कोई निक्षेपण हुआ?
   made:
-    - {words: L58.4, by: agent}
-    - {words: L58.11, by: agent}
     - {words: L58.12-13, by: agent}
     - {words: L3.3-4, page: 14, by: agent}
 - id: "3.2.7"
@@ -1420,7 +1331,6 @@
     सल्फ़र होती हैं। इनके दहन के फलस्वरूप सल्फ़र तथा नाइट्रोजन के ऑक्साइड का निर्माण होता है, जो
     पर्यावरण में प्रमुख प्रदूषक हैं।
   made:
-    - {words: L24.5, by: agent}
     - {words: L25.3-5, by: hindi-repair}
     - {words: L25.8, by: agent}
     - {words: L25.16-18, by: hindi-repair}
@@ -1445,10 +1355,8 @@
     अपूर्ण दहन से कज्जल उत्पन्न होता है, जो कार्बन होता है। इसके आधार पर आप मोमबत्ती की पीले रंग की
     ज्वाला का क्या कारण बताएँगे?
   made:
-    - {words: L28.2, by: agent}
     - {words: L29.6, by: hindi-repair}
     - {words: L30.7, by: hindi-repair}
-    - {words: L31.7, by: agent}
     - {words: L32.10, by: agent}
     - {words: L32.17, by: hindi-repair}
     - {words: L32.20, by: hindi-repair}
@@ -1456,7 +1364,6 @@
     - {words: L33.17, by: hindi-repair}
     - {words: L34.3, by: hindi-repair}
     - {words: L34.5-6, by: agent}
-    - {words: L34.16, by: agent}
     - {words: L35.4-5, by: agent}
     - {words: L35.11, by: hindi-repair}
     - {words: L35.17, by: agent}
@@ -1476,7 +1383,6 @@
     भागों से तेल तथा गैस का रिसाव हुआ और ये पानी में स्पंज की तरह फँस गए। क्या आप अनुमान लगा सकते
     हैं कि कोयले तथा पेट्रोलियम को जीवाश्मी ईंधन क्यों कहते हैं?
   made:
-    - {words: L6.6, by: agent}
     - {words: L6.15-16, by: agent}
     - {words: L7.8, by: hindi-repair}
     - {words: L12.10-11, by: agent}
@@ -1498,10 +1404,8 @@
     क्या पोटैशियम परमैंगनेट का रंग बना रहता है? अधिक मात्रा में डालने पर पोटैशियम परमैंगनेट का रंग
     लुप्त क्यों नहीं होता?
   made:
-    - {words: L20.7, by: agent}
-    - {words: L20.12, by: agent}
+    - {words: L20.12, by: hindi-repair}
     - {words: L22.10-L23.1, by: agent}
-    - {words: L23.3, by: agent}
     - {words: L25.10, by: hindi-repair}
 - id: "3.3.2"
   kind: text
@@ -1516,7 +1420,6 @@
     - {words: L27.14, by: hindi-repair}
     - {words: L27.16, by: hindi-repair}
     - {words: L28.1, by: hindi-repair}
-    - {words: L28.9, by: agent}
 - id: "3.3.3"
   kind: equation
   page: 15
@@ -1555,10 +1458,9 @@
     - {words: L43.2-3, by: hindi-repair}
     - {words: L43.6-7, by: agent}
     - {words: L43.8-9, by: hindi-repair}
-    - {words: L43.11, by: agent}
     - {words: L44.3-4, by: agent}
     - {words: L44.12, by: hindi-repair}
-    - {words: L44.13, by: agent}
+    - {words: L44.13, by: hindi-repair}
     - {words: L45.1, by: hindi-repair}
 - id: "3.4"
   kind: section
@@ -1575,9 +1477,7 @@
     वनस्पति तेलों के हाड्रोजनीकरण में इस अभिक्रिया का उपयोग होता है। वनस्पति तेलों में साधारणतः लंबी
     असंतृप्त कार्बन शृंखलाएँ होती हैं, जबकि जंतु वसा में संतृप्त कार्बन शृंखलाएँ होती हैं।
   made:
-    - {words: L47.1, by: agent}
     - {words: L47.3-4, by: agent}
-    - {words: L47.6, by: agent}
     - {words: L47.10, by: hindi-repair}
     - {words: L47.13, by: hindi-repair}
     - {words: L48.1, by: hindi-repair}
@@ -1614,7 +1514,6 @@
   made:
     - {words: L8.1, by: hindi-repair}
     - {words: L8.4, by: agent}
-    - {words: L8.9, by: agent}
     - {words: L10.11-12, by: agent}
     - {words: L11.14-15, by: agent}
     - {words: L12.11-12, by: agent}
@@ -1642,7 +1541,6 @@
   number: "1."
   text: 1. एथनॉल से एथेनॉइक अम्ल में परिवर्तन को ऑक्सीकरण अभिक्रिया क्यों कहते हैं?
   made:
-    - {words: L18.4, by: agent}
     - {words: L18.9, by: hindi-repair}
 - id: "3.5.3.2"
   kind: question
@@ -1652,23 +1550,18 @@
     एथाइन तथा वायु के मिश्रण का उपयोग क्यों नहीं किया जाता?
   made:
     - {words: L19.2, by: hindi-repair}
-    - {words: L19.4, by: agent}
-    - {words: L20.3, by: agent}
 - id: "4"
   kind: section
   page: 16
   number: "4.4"
   title: कुछ महत्वपूर्ण कार्बन यौगिक— एथनॉल तथा एथेनॉइक अम्ल
   text: 4.4 कुछ महत्वपूर्ण कार्बन यौगिक— एथनॉल तथा एथेनॉइक अम्ल
-  made:
-    - {words: L22.8, by: agent}
 - id: "4.1"
   kind: text
   page: 16
   text: अनेक कार्बन यौगिक हमारे लिए अनमोल होते हैं, किंतु यहाँ हम व्यावसायिक रूप से महत्वपूर्ण दो
     यौगिकों— एथनॉल तथा एथेनॉइक अम्लों के गुणधर्मों का अध्ययन करेंगे।
   made:
-    - {words: L24.5, by: agent}
     - {words: L24.11-12, by: agent}
 - id: "4.2"
   kind: section
@@ -1689,7 +1582,6 @@
     जाती हैं।
   made:
     - {words: L26.2, by: agent}
-    - {words: L27.5, by: agent}
     - {words: L28.8, by: hindi-repair}
     - {words: L1.5, page: 17, by: hindi-repair}
     - {words: L2.4-7, page: 17, by: hindi-repair}
@@ -1709,7 +1601,6 @@
   made:
     - {words: L8.14, by: hindi-repair}
     - {words: L8.17-19, by: hindi-repair}
-    - {words: L9.3, by: agent}
     - {words: L11.6-7, by: agent}
     - {words: L11.9-10, by: agent}
 - id: "4.2.3"
@@ -1729,7 +1620,6 @@
     - {words: L14.3-L18.1, by: agent}
     - {words: L18.3-L22.4, by: agent}
     - {words: L22.6-L23.1, by: agent}
-    - {words: L24.2, by: agent}
 - id: "4.2.6"
   kind: text
   page: 17
@@ -1737,7 +1627,6 @@
     दूसरा उत्पाद सोडियम एथॉक्साइड बनता है। क्या आप बता सकते हैं कि कौन-सा दूसरा पदार्थ धातु से
     अभिक्रिया कर हाइड्रोजन बनाता है?
   made:
-    - {words: L26.6, by: agent}
     - {words: L27.2-5, by: hindi-repair}
 - id: "4.2.7"
   kind: text
@@ -1749,7 +1638,6 @@
     - {words: L28.12, by: hindi-repair}
     - {words: L29.2, by: hindi-repair}
     - {words: L29.11, by: agent}
-    - {words: L29.13, by: agent}
 - id: "4.2.8"
   kind: equation
   page: 17
@@ -1776,7 +1664,6 @@
     देता है।
   made:
     - {words: L45.4, by: hindi-repair}
-    - {words: L45.6, by: agent}
 - id: "4.2.10"
   kind: box
   page: 17
@@ -1807,13 +1694,10 @@
     - {words: L53.22, by: hindi-repair}
     - {words: L54.10-11, by: agent}
     - {words: L54.14-15, by: agent}
-    - {words: L54.17, by: agent}
-    - {words: L54.21, by: agent}
     - {words: L54.22-23, by: agent}
     - {words: L55.1-2, by: agent}
     - {words: L55.12, by: agent}
     - {words: L5.5-8, page: 18, by: hindi-repair}
-    - {words: L5.12, page: 18, by: agent}
     - {words: L5.20, page: 18, by: agent}
     - {words: L5.21, page: 18, by: hindi-repair}
     - {words: L5.22-25, page: 18, by: hindi-repair}
@@ -1831,8 +1715,6 @@
     डाइऑक्साइड एवं जल उत्पन्न करता है।
   made:
     - {words: L9.1-2, by: hindi-repair}
-    - {words: L10.18, by: agent}
-    - {words: L10.19, by: agent}
     - {words: L12.7, by: hindi-repair}
     - {words: L12.16-17, by: hindi-repair}
     - {words: L12.18, by: hindi-repair}
@@ -1845,8 +1727,6 @@
   number: 4.4.2
   title: एथेनॉइक अम्ल के गुणधर्म
   text: 4.4.2 एथेनॉइक अम्ल के गुणधर्म
-  made:
-    - {words: L14.2, by: agent}
 - id: "4.3.1"
   kind: text
   page: 18
@@ -1858,16 +1738,11 @@
     कार्बोक्सिलिक अम्ल दुर्बल अम्ल होते हैं। खनिज अम्ल, जैसे– हाइड्रोक्लोरिक अम्ल पूरी तरह आयनीकृत
     हो जाते हैं।
   made:
-    - {words: L15.1, by: agent}
-    - {words: L15.5, by: agent}
-    - {words: L16.2, by: agent}
-    - {words: L16.8, by: agent}
+    - {words: L15.5, by: hindi-repair}
+    - {words: L16.8, by: hindi-repair}
     - {words: L18.9, by: agent}
-    - {words: L20.8, by: agent}
-    - {words: L20.9, by: agent}
-    - {words: L21.1, by: agent}
+    - {words: L20.9, by: hindi-repair}
     - {words: L21.7, by: agent}
-    - {words: L23.3, by: agent}
     - {words: L23.5-7, by: hindi-repair}
     - {words: L24.6-7, by: agent}
 - id: "4.3.2"
@@ -1878,7 +1753,7 @@
     अम्ल के pH मान की तुलना कीजिए। क्या लिटमस परीक्षण में दोनों अम्ल सूचित होते हैं? सार्वत्रिक सूचक
     से क्या दोनों अम्लों के प्रबल होने का पता चलता है?
   made:
-    - {words: L30.1, by: agent}
+    - {words: L30.1, by: hindi-repair}
 - id: "4.3.3"
   kind: figure
   page: 18
@@ -1899,11 +1774,9 @@
   made:
     - {words: L44.5-8, by: agent}
     - {words: L44.12-15, by: hindi-repair}
-    - {words: L45.3, by: agent}
     - {words: L45.4-6, by: hindi-repair}
-    - {words: L45.9, by: agent}
-    - {words: L46.1, by: agent}
-    - {words: L47.8, by: agent}
+    - {words: L46.1, by: hindi-repair}
+    - {words: L47.8, by: hindi-repair}
     - {words: L49.6, by: hindi-repair}
     - {words: L50.7-L51.1, by: hindi-repair}
 - id: "4.3.5"
@@ -1911,8 +1784,6 @@
   page: 19
   title: एथेनॉइक अम्ल की अभिक्रियाएँ
   text: एथेनॉइक अम्ल की अभिक्रियाएँ
-  made:
-    - {words: L1.1, by: agent}
 - id: "4.3.6"
   kind: text
   page: 19
@@ -1920,9 +1791,7 @@
     एथेनॉइक अम्ल किसी अम्ल उत्प्रेरक की उपस्थिति में परिशुद्ध एथनॉल से अभिक्रिया करके एस्टर बनाते
     हैं—
   made:
-    - {words: L2.2, by: agent}
     - {words: L2.5-8, by: hindi-repair}
-    - {words: L3.4, by: agent}
 - id: "4.3.7"
   kind: text
   page: 19
@@ -1932,10 +1801,8 @@
     क्योंकि इससे साबुन तैयार किया जाता है। साबुन दीर्घ शृंखला वाले कार्बोक्सिलिक अम्लों सोडियम अथवा
     पोटैशियम लवण होते हैं।
   made:
-    - {words: L7.6, by: agent}
     - {words: L8.8, by: agent}
     - {words: L9.3, by: agent}
-    - {words: L9.5, by: agent}
 - id: "4.3.8"
   kind: equation
   page: 19
@@ -1951,9 +1818,7 @@
   text: (ii) क्षारक के साथ अभिक्रिया— खनिज अम्ल की भाँति  एथेनॉइक अम्ल सोडियम हाइड्रोक्सॉइड जैसे
     क्षारक से अभिक्रिया करके  लवण (सोडियम एथेनोएट या सोडियम ऐसीटेट) तथा जल बनाता है।
   made:
-    - {words: L13.9, by: agent}
     - {words: L14.1, by: agent}
-    - {words: L14.9, by: agent}
     - {words: L15.1, by: hindi-repair}
 - id: "4.3.10"
   kind: equation
@@ -1969,7 +1834,6 @@
   title: एथेनॉइक अम्ल कार्बोनेट एवं हाइड्रोजन कार्बोंनेट से कैसे अभिक्रिया करता है?
   text: एथेनॉइक अम्ल कार्बोनेट एवं हाइड्रोजन कार्बोंनेट से कैसे अभिक्रिया करता है?
   made:
-    - {words: L23.1, by: agent}
     - {words: L23.6, by: agent}
     - {words: L23.8-9, by: agent}
 - id: "4.3.12"
@@ -1988,11 +1852,7 @@
     एथेनॉइक अम्ल एवं सोडियम कार्बोनेट की अभिक्रिया से उत्पन्न गैस का पता चल सकता है? अब सोडियम
     कार्बोनेट के स्थान पर सोडियम हाइड्रोजनकार्बोनेट के साथ यह क्रियाकलाप दोहराइए।
   made:
-    - {words: L34.4, by: agent}
-    - {words: L34.12, by: agent}
-    - {words: L37.3, by: agent}
     - {words: L37.12, by: hindi-repair}
-    - {words: L38.6, by: agent}
 - id: "4.3.14"
   kind: text
   page: 19
@@ -2000,9 +1860,6 @@
     हाइड्रोजनकार्बोनेट के साथ अभिक्रिया करके  लवण, कार्बन डाइऑक्साइड एवं जल बनाता है। इस अभिक्रिया
     में उत्पन्न लवण को सोडियम ऐसीटेट कहते हैं।
   made:
-    - {words: L39.4, by: agent}
-    - {words: L39.8, by: agent}
-    - {words: L40.1, by: agent}
     - {words: L40.8, by: hindi-repair}
     - {words: L41.7, by: hindi-repair}
 - id: "4.3.15"
@@ -2038,7 +1895,6 @@
   number: "1."
   text: 1. प्रयोग द्वारा आप एल्कोहल एवं कार्बोक्सिलिक अम्ल में कैसे अंतर कर सकते हैं?
   made:
-    - {words: L4.4, by: agent}
     - {words: L4.7-8, by: agent}
     - {words: L4.9-12, by: hindi-repair}
 - id: "4.3.17.2"
@@ -2064,14 +1920,8 @@
     आप  तेल  एवं जल  की परतों को अलग-अलग देख सकते हैं? कुछ देर तक दोनों परखनलियों को स्थिर रखिए एवं
     फिर उस पर ध्यान दीजिए। क्या तेल की परत अलग हो जाती है? ऐसा किस परखनली में पहले होता है।
   made:
-    - {words: L14.1, by: agent}
     - {words: L15.3-L16.1, by: agent}
-    - {words: L16.4, by: agent}
     - {words: L17.7-L18.1, by: hindi-repair}
-    - {words: L18.2, by: agent}
-    - {words: L19.1, by: agent}
-    - {words: L20.5, by: agent}
-    - {words: L22.4, by: agent}
     - {words: L23.4, by: hindi-repair}
 - id: "5.2"
   kind: figure
@@ -2081,7 +1931,6 @@
   crop: [157.7, 404.4, 392.4, 622.5]
   made:
     - {words: L24.1-3, by: hindi-repair}
-    - {words: L25.3, by: agent}
     - {box: true, by: figure-snap}
 - id: "5.3"
   kind: text
@@ -2091,25 +1940,18 @@
     सोडियम एवं पोटैशियम लवण होते हैं। साबुन का आयनिक भाग जल  से जबकि कार्बन शृंखला तेल  से पारस्परिक
     क्रिया करती है। इस प्रकार साबुन के अणु मिसेली संरचना (चित्र 4.12) तैयार करते हैं, जहाँ अणु का एक
     सिरा तेल कण की ओर तथा आयनिक सिरा बाहर की ओर होता है। इससे पानी में इमल्शन बनता है। इस प्रकार
-    साबुन का मिसेल मैल को पानी बाहर निकलने में मदद करता है और हमारे कपड़े साफ (चित्र 4.13) हो जाते
+    साबुन का मिसेल मैल  को पानी बाहर निकलने में मदद करता है और हमारे कपड़े साफ (चित्र 4.13) हो जाते
     है।
   made:
     - {words: L26.2, by: hindi-repair}
-    - {words: L28.1, by: agent}
     - {words: L29.3, by: agent}
-    - {words: L29.11, by: agent}
-    - {words: L30.10, by: agent}
-    - {words: L1.1, page: 21, by: agent}
     - {words: L1.6, page: 21, by: agent}
-    - {words: L1.12, page: 21, by: agent}
     - {words: L2.3, page: 21, by: agent}
     - {words: L2.8, page: 21, by: hindi-repair}
 - id: "5.4"
   kind: text
   page: 21
-  text: क्या आप मिसेल की संरचना बना सकते हैं, जो साबुन को हाइड्रोकार्बन में घोलने से बनता है?
-  made:
-    - {words: L3.1, by: agent}
+  text: क्या आप मिसेल  की संरचना बना सकते हैं, जो साबुन को हाइड्रोकार्बन में घोलने से बनता है?
 - id: "5.5"
   kind: box
   page: 21
@@ -2120,48 +1962,29 @@
     आयनिक सिरा जल के अंदर होता है जबकि हाइड्रोकार्बन पूँछ (दूसरा छोर) जल के  बाहर होती है। जल के
     अंदर इन अणुओं की एक विशेष व्यवस्था होती है, जिससे इसका हाइड्रोकार्बन सिरा जल के  बाहर बना होता
     है। ऐसा अणुओं का बड़ा गुच्छा बनने के कारण होता है, जिसमें जलविरागी पूँछ गुच्छे  के आंतरिक हिस्से
-    में होती है, जबकि उसका आयनिक सिरा गुच्छे की सतह पर होता है। इस संरचना को मिसेल कहते हैं। मिसेल
+    में होती है, जबकि उसका आयनिक सिरा गुच्छे की सतह पर होता है। इस संरचना को मिसेल  कहते हैं। मिसेल
     के रूप में साबुन स्वच्छ करने में सक्षम होता है, क्योंकि तैलीय मैल मिसेल के केंद्र में एकत्र
     हो  जाते हैं। मिसेल विलयन में कोलॉइड के रूप में बने रहते है तथा आयन-आयन विकर्षण के कारण वे
-    अवक्षेपित नहीं होते। इस प्रकार मिसेल में तैरते मैल आसानी से हटाए जा सकते हैं। साबुन के मिसेल
+    अवक्षेपित नहीं होते। इस प्रकार मिसेल में तैरते मैल आसानी से हटाए जा सकते हैं। साबुन के  मिसेल
     प्रकाश को प्रकीर्णित कर सकते हैं। यही कारण है कि साबुन का घोल बादल जैसा दिखता है।
   made:
-    - {words: L13.1, by: agent}
-    - {words: L5.1, by: agent}
     - {words: L6.4, by: hindi-repair}
-    - {words: L6.13, by: agent}
-    - {words: L7.8, by: agent}
-    - {words: L8.9, by: agent}
     - {words: L15.1-L16.1, by: agent}
     - {words: L16.2-5, by: hindi-repair}
     - {words: L17.6-7, by: agent}
     - {words: L18.2, by: agent}
-    - {words: L18.4, by: agent}
     - {words: L19.5, by: hindi-repair}
     - {words: L19.6-7, by: agent}
     - {words: L19.8, by: hindi-repair}
     - {words: L19.9, by: agent}
     - {words: L19.14-L20.1, by: agent}
-    - {words: L21.6, by: agent}
-    - {words: L21.13, by: agent}
-    - {words: L22.2, by: agent}
-    - {words: L22.11, by: agent}
     - {words: L22.12-13, by: agent}
-    - {words: L23.2, by: agent}
-    - {words: L23.4, by: agent}
-    - {words: L23.10, by: agent}
-    - {words: L23.14, by: agent}
-    - {words: L24.3, by: agent}
-    - {words: L24.13, by: agent}
-    - {words: L24.14, by: agent}
 - id: "5.6"
   kind: figure
   page: 21
   text: जलरागी सिरा जलविरागी सिरा चिकनाई अथवा मैल
   crop: [106.7, 291.2, 521.5, 577.5]
   made:
-    - {words: L9.1, by: agent}
-    - {words: L10.1, by: agent}
     - {box: true, by: figure-snap}
 - id: "5.7"
   kind: activity
@@ -2174,11 +1997,9 @@
     नहीं है तो साधारण जल में हाइड्रोजन कार्बोनेट अथवा सल्फ़ेट अथवा मैग्नीशियम या कैल्सियम के
     क्लोराइड को घोलकर कठोर जल तैयार कीजिए।
   made:
-    - {words: L2.1, by: agent}
     - {words: L2.5-7, by: hindi-repair}
     - {words: L4.1, by: agent}
     - {words: L4.6-L5.1, by: hindi-repair}
-    - {words: L6.1, by: agent}
     - {words: L6.7, by: agent}
     - {words: L8.2, by: hindi-repair}
     - {words: L8.5, by: hindi-repair}
@@ -2192,13 +2013,8 @@
     की पाँच बूँदें तथा दूसरे में अपमार्जक के घोल की पाँच बूँदें डालिए। दोनों परखनलियों को एक ही समय
     तक हिलाएँ। क्या दोनों में झाग की मात्रा समान है? किस परखनली में दही जैसा ठोस पदार्थ बनता है?
   made:
-    - {words: L24.1, by: agent}
-    - {words: L24.7, by: agent}
     - {words: L25.5-L26.1, by: agent}
     - {words: L26.7-L27.1, by: agent}
-    - {words: L27.2, by: agent}
-    - {words: L28.1, by: agent}
-    - {words: L28.5, by: agent}
 - id: "5.9"
   kind: text
   page: 22
@@ -2212,19 +2028,16 @@
     प्रकार वह कठोर जल में भी प्रभावी बने रहते हैं। सामान्यतः अपमार्जकों का उपयोग शैंपू एवं कपड़े
     धोने के उत्पाद बनाने में होता है।
   made:
-    - {words: L32.7, by: agent}
     - {words: L32.10-11, by: hindi-repair}
     - {words: L32.12, by: hindi-repair}
     - {words: L33.6-7, by: agent}
     - {words: L34.2, by: hindi-repair}
     - {words: L34.9, by: hindi-repair}
     - {words: L36.3, by: agent}
-    - {words: L36.5, by: agent}
+    - {words: L36.5, by: hindi-repair}
     - {words: L36.8, by: agent}
     - {words: L37.4, by: agent}
-    - {words: L37.12, by: agent}
     - {words: L38.3-4, by: agent}
-    - {words: L39.8, by: agent}
     - {words: L40.1, by: hindi-repair}
 - id: "5.10"
   kind: exercise
@@ -2238,8 +2051,6 @@
   page: 22
   number: "1."
   text: 1. क्या आप डिटरजेंट का उपयोग कर बता सकते हैं कि कोई जल कठोर है अथवा नहीं?
-  made:
-    - {words: L44.1, by: agent}
 - id: "5.10.2"
   kind: question
   page: 22
@@ -2265,7 +2076,7 @@
     बाहरी कोशों को पूर्ण रूप से भरने के  लिए दो परमाणुओं के  बीच इलेक्ट्रॉनों की साझेदारी से
     सहसंयोजक आबंध बनता है। कार्बन अपने या दूसरे तत्वों; जैसे– हाइड्रोजन, ऑक्सीजन, सल्फ़र, नाइट्रोजन
     एवं क्लोरीन के साथ सहसंयोजक आबंध बनाता है। कार्बन ऐसे यौगिक भी बनाता है, जिसमें कार्बन परमाणुओं
-    के बीच द्वि या त्रिआबंध होते हैं। कार्बन की यह श्रंखला, सीधी, शाखायुक्त या वलीय किसी भी रूप में
+    के  बीच द्वि या त्रिआबंध होते हैं। कार्बन की यह श्रंखला, सीधी, शाखायुक्त या वलीय किसी भी रूप में
     हो सकती है। कार्बन की शृंखला बनाने की क्षमता के कारण यौगिकों की एक समजाती श्रेणी उत्पन्न होती
     है, जिसमें विभिन्न लंबाई वाली कार्बन शृंखला से समान प्रकार्यात्मक समूह जुड़ा होता है। एल्कोहल,
     ऐल्डिहाइड, कीटोन एवं कार्बोक्सिलिक अम्ल जैसे समूह कार्बन यौगिकों का अभिलाक्षणिक गुण प्रदान करते
@@ -2277,37 +2088,30 @@
     - {words: L2.3-6, by: hindi-repair}
     - {words: L2.7, by: agent}
     - {words: L2.16-17, by: agent}
-    - {words: L3.5, by: agent}
     - {words: L3.7-8, by: agent}
     - {words: L3.13, by: hindi-repair}
     - {words: L4.5-8, by: agent}
     - {words: L4.11-14, by: agent}
-    - {words: L4.21-L5.2, by: agent}
+    - {words: L4.21-L5.2, by: hindi-repair}
     - {words: L7.6-9, by: hindi-repair}
     - {words: L7.10, by: agent}
     - {words: L7.13, by: hindi-repair}
     - {words: L7.14, by: hindi-repair}
-    - {words: L7.20-L8.2, by: agent}
+    - {words: L7.20-L8.2, by: hindi-repair}
     - {words: L10.4, by: hindi-repair}
     - {words: L10.7-10, by: agent}
-    - {words: L10.12, by: agent}
     - {words: L10.18-21, by: agent}
     - {words: L11.2, by: hindi-repair}
-    - {words: L11.3, by: agent}
     - {words: L12.5, by: agent}
     - {words: L12.12, by: agent}
     - {words: L13.3, by: agent}
     - {words: L13.7, by: hindi-repair}
     - {words: L14.4, by: hindi-repair}
-    - {words: L14.7, by: agent}
     - {words: L14.10-12, by: hindi-repair}
     - {words: L14.17-20, by: hindi-repair}
     - {words: L15.8-9, by: hindi-repair}
-    - {words: L16.6, by: agent}
     - {words: L16.13, by: hindi-repair}
     - {words: L17.7-8, by: agent}
-    - {words: L17.10, by: agent}
-    - {words: L17.12, by: agent}
     - {words: L18.1, by: agent}
 - id: "5.11"
   kind: exercise
@@ -2321,12 +2125,7 @@
   text: 1. एथेन का आण्विक सूत्र - C₂H₆ है। इसमें— (a) 6 सहसंयोजक आबंध हैं। (b) 7 सहसंयोजक आबंध हैं।
     (c) 8 सहसंयोजक आबंध हैं। (d) 9 सहसंयोजक आबंध हैं।
   made:
-    - {words: L21.2, by: agent}
     - {words: L21.7-L24.1, by: agent}
-    - {words: L26.3, by: agent}
-    - {words: L27.3, by: agent}
-    - {words: L28.3, by: agent}
-    - {words: L29.3, by: agent}
 - id: "5.11.2"
   kind: question
   page: 23
@@ -2336,7 +2135,6 @@
   made:
     - {words: L30.2, by: agent}
     - {words: L30.3, by: agent}
-    - {words: L31.2, by: agent}
     - {words: L31.5, by: hindi-repair}
 - id: "5.11.3"
   kind: question
@@ -2356,7 +2154,6 @@
   text: 4. CH₃Cl में आबंध निर्माण का उपयोग कर सहसंयोजक आबंध की प्रकृति समझाइए।
   made:
     - {words: L1.2-L3.1, by: agent}
-    - {words: L3.8, by: agent}
     - {words: L3.11-12, by: agent}
 - id: "5.11.5"
   kind: question
@@ -2364,9 +2161,8 @@
   number: "5."
   text: 5. इलेक्ट्रॉन बिंदु संरचना बनाइए— (a) एथेनॉइक अम्ल (b) H₂S (c) प्रोपेनोन (d) F₂
   made:
-    - {words: L5.2, by: agent}
     - {words: L6.2-L8.1, by: agent}
-    - {words: L9.1, by: agent}
+    - {words: L9.1, by: hindi-repair}
     - {words: L10.2-L11.1, by: agent}
 - id: "5.11.6"
   kind: question
@@ -2380,7 +2176,6 @@
   text: 7. भौतिक एवं रासायनिक गुणधर्मों के आधार पर एथनॉल एवं एथेनॉइक अम्ल में आप कैसे अंतर करेंगे?
   made:
     - {words: L13.5-8, by: hindi-repair}
-    - {words: L13.14, by: agent}
     - {words: L13.18-19, by: agent}
     - {words: L13.20-23, by: hindi-repair}
     - {words: L13.24-25, by: agent}
@@ -2390,10 +2185,6 @@
   number: "8."
   text: 8. जब साबुन को जल में डाला जाता है तो मिसेल का निर्माण क्यों होता है? क्या एथनॉल जैसे दूसरे
     विलायकों में भी मिसेल का निर्माण होगा।
-  made:
-    - {words: L14.11, by: agent}
-    - {words: L14.21, by: agent}
-    - {words: L15.2, by: agent}
 - id: "5.11.9"
   kind: question
   page: 24
@@ -2460,5 +2251,4 @@
   made:
     - {words: L48.10, by: hindi-repair}
     - {words: L49.6-7, by: agent}
-    - {words: L50.11, by: agent}
     - {words: L50.14, by: hindi-repair}

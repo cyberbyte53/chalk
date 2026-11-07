@@ -22,10 +22,8 @@ blocks:
   - kind: figure
     number: L22.2
     words: L17-L22
-    box: [311, 91, 527, 289]
-    crop: { box: [305, 88, 572, 292], cause: wrong-box }
-    read:
-      L18.8: सिरा
+    box: [ 311, 91, 527, 289 ]
+    crop: { box: [ 305, 88, 572, 292 ], cause: wrong-box }
   - kind: text
     words: L23-L25
     read:
@@ -37,12 +35,11 @@ blocks:
     words: L28, L32-L35
     read:
       L32.7-8: सर्किट
-      L35.3: जलता
       L35.5: इससे
   - kind: figure
     number: L49.2
     words: L27, L36-L39, L46-L51
-    box: [375, 380, 572, 552]
+    box: [ 375, 380, 572, 552 ]
   - kind: text
     words: L40-L42
     read:
@@ -62,6 +59,5 @@ blocks:
       L53.10-11: धातुओं
       L53.15-16: अधातुओं
       L54.7-8: अधातुओं
-      L55.11: अधातुएँ
       L56.2-5: धातुओं
       L56.8-11: अधातुओं

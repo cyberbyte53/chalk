@@ -27,7 +27,6 @@ blocks:
       L3.3: तत्व
       L3.9: तत्व
       L4.10: तत्वों
-      L6.11: विद्युतरूप
       L8.19: तत्व,
       L9.3-4: केवल
       L9.5-6: परमाणुओं
@@ -46,8 +45,6 @@ blocks:
     number: L23.1
     title: L23.2-8
     words: L23
-    read:
-      L23.7: सहसंयोजक
   - kind: heading
     title: L24
     words: L24
@@ -62,10 +59,7 @@ blocks:
     words: L34-L40
     read:
       L34.14-L36.1: "(H₂)"
-      L37.12: सहभाजित
       L38.9-10: परमाणुओं
-      L38.15: सहभाजित
-      L39.3: सहसंयोजी
   - kind: text
     words: L41
     read:
@@ -75,4 +69,4 @@ blocks:
   - kind: figure
     number: L30.10-11
     words: L26.11, L28, L29.9-12, L30.10-15
-    box: [340, 498, 592, 590]
+    box: [ 340, 498, 592, 590 ]

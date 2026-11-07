@@ -30,7 +30,6 @@ blocks:
     words: L8-L13
     read:
       L8.4: अनभिक्रित
-      L8.9: अभिकर्मकों
       L10.11-12: परमाणुओं
       L11.14-15: परमाणुओं
       L12.11-12: "ऐल्केन"
@@ -49,24 +48,16 @@ blocks:
   - kind: question
     number: L18.1
     words: L18
-    read:
-      L18.4: एथेनॉइक
   - kind: question
     number: L19.1
     words: L19-L20
-    read:
-      L19.4: एथाइन
-      L20.3: एथाइन
   - kind: section
     number: L22.1
     title: L22.2-9
     words: L22
-    read:
-      L22.8: एथेनॉइक
   - kind: text
     words: L23-L24
     read:
-      L24.5: एथेनॉइक
       L24.11-12: "करेंगे।"
   - kind: section
     number: L25.1
@@ -77,4 +68,3 @@ blocks:
     continues: true
     read:
       L26.2: कक्ष
-      L27.5: एथेनॉल

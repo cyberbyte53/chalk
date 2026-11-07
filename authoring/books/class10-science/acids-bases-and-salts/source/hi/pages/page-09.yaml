@@ -14,9 +14,7 @@ blocks:
   - kind: text
     words: L1-L7
     read:
-      L1.11: ऊष्माक्षेपी
       L3.1-2: धीरे-धीरे
-      L4.8: आस्फलित
       L6.8-9: कैन
   - kind: text
     words: L8-L11

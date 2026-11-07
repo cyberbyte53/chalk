@@ -13,12 +13,9 @@ blocks:
     words: L2-L7
     read:
       L3.2-3: केक
-      L3.19: हाइड्रोजनकार्बोनेट
   - kind: question
     number: L8.1
     words: L8-L10
-    read:
-      L9.15: रहेगा?
   - kind: question
     number: L11.1
     words: L11-L19
@@ -37,7 +34,6 @@ blocks:
       - 624
     read:
       L27.3-4: रेत
-      L27.1: नैफ्थलीन
   - kind: question
     number: L32.1
     words: L32-L33
@@ -47,5 +43,3 @@ blocks:
   - kind: question
     number: L36.1
     words: L36-L38
-    read:
-      L36.3: कोलॉइडी

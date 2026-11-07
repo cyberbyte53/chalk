@@ -19,8 +19,6 @@ blocks:
     read:
       L4.1-2: रेत
       L5.6-7: (रेत)
-      L5.8-11: घुलते
-      L5.1: विषमांगी
   - kind: heading
     words: L10
     title: L10
@@ -29,7 +27,6 @@ blocks:
     read:
       L16.2: इससे
       L19.15-16: अपकेंद्रण
-      L15.11: सूती
   - kind: text
     words: L21
   - kind: heading

@@ -13,21 +13,13 @@ blocks:
   - kind: heading
     words: L1
     title: L1
-    read:
-      L1.2: रदरफोर्ड
   - kind: text
     words: L2-L3
-    read:
-      L2.5: रदरफोर्ड
   - kind: text
     words: L4.2-L5, L6.2-L7, L8.2-L9
-    read:
-      L4.10: अल्फा
-      L4.16: विक्षेपित
   - kind: text
     words: L10.7-24, L11.5-22, L13-L14
     read:
-      L10.7: रदरफोर्ड
       L10.17-18: 10⁵
       L11.12-13: लगभग10⁻¹⁰
       L11.20-21: 10⁻¹⁵
@@ -35,10 +27,9 @@ blocks:
   - kind: figure
     words: L10.1-6, L11.1-4, L12
     number: L10.1-3
-    box: [40, 105, 200, 280]
+    box: [ 40, 105, 200, 280 ]
     read:
       L10.2-3: 8.5—
-      L10.4: रदरफोर्ड
       L10.5-6: द्वारा
   - kind: box
     words: L15-L24
@@ -65,11 +56,4 @@ blocks:
     words: L31-L36
     title: L31
     read:
-      L32.7: रदरफोर्ड
-      L32.13: अल्फा
-      L32.21: ऋणावेशित
-      L34.1: 5. रदरफोर्ड
-      L34.6: अल्फा
-      L35.6: ‘प्लम
       L35.12-13: कैसे
-      L36.3: रदरफोर्ड

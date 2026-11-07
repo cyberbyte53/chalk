@@ -35,11 +35,9 @@ blocks:
     read:
       L16.15: इससे
       L17.7-8: अभिक्रियाओं
-      L18.4: ऊष्माक्षेपी
   - kind: text
     words: L19
     read:
-      L19.1: ऊष्माक्षेपी
       L19.2-3: अभिक्रियाओं
   - kind: text
     words: L20
@@ -55,8 +53,6 @@ blocks:
       L27.3-L29.1: "2H₂O"
   - kind: text
     words: L30
-    read:
-      L30.9: ऊष्माक्षेपी
   - kind: text
     words: L31-L36
     read:
@@ -73,15 +69,12 @@ blocks:
     words: L53-L54
     read:
       L53.1: "(iii) शाक-सब्जियों"
-      L53.5: विघटित
       L53.8: बनना
-      L53.10: ऊष्माक्षेपी
   - kind: figure
     number: L70.2
     words: L50-L52, L59-L65, L70-L73
-    box: [65, 508, 305, 726]
+    box: [ 65, 508, 305, 726 ]
     read:
-      L51.1: नाक
       L63.1-2: फ़ेरस
       L63.3-4: सल्फ़ेट
       L71.1-2: फ़ेरस

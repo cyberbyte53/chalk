@@ -24,8 +24,8 @@ blocks:
   - kind: figure
     number: L9.2
     words: L9
-    box: [189, 233, 364, 306]
-    crop: { box: [189, 231, 370, 307], cause: wrong-box }
+    box: [ 189, 233, 364, 306 ]
+    crop: { box: [ 189, 231, 370, 307 ], cause: wrong-box }
   - kind: text
     words: L13-L17
     read:
@@ -42,20 +42,12 @@ blocks:
     number: L24.2
     words: L24, L32-L44
     read:
-      L35.3: स्पैचुला
-      L39.9: किरोसिन
-      L42.2: इलैक्ट्रोड
       L44.4-5: प्रकृति
   - kind: figure
     number: L22.2
     words: L10-L12, L18, L22-L23
-    box: [400, 290, 560, 490]
-    read:
-      L12.1: स्पैचुला
-      L23.1-4: स्पैचुला
+    box: [ 400, 290, 560, 490 ]
   - kind: figure
     number: L51.2
     words: L45-L52
-    box: [400, 520, 572, 712]
-    read:
-      L48.1: ग्रैफ़ाइट
+    box: [ 400, 520, 572, 712 ]

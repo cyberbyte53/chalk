@@ -13,48 +13,34 @@ answers:
 blocks:
   - kind: text
     words: L2-L4
-    read:
-      L2.9: रदरफोर्ड
   - kind: heading
     words: L5
     title: L5
-    read:
-      L5.2: रदरफोर्ड
-      L5.5: सीमाएँ
   - kind: text
     words: L25-L26
     read:
       L25.2-3: केंद्रीय
-      L25.13: रदरफोर्ड
   - kind: text
     words: L27-L38
     read:
-      L29.7: ऋणावेशित
       L30.14-15: धीरे-धीरे
       L31.4-6: अंत
-      L31.8: धनावेशित
-      L35.6: रदरफोर्ड
   - kind: text
     words: L39, L41, L43
     read:
       L39.2: इससे
-      L39.7: अवपरमाणुक
       L41.6: जानना
-      L41.10: रदरफोर्ड
   - kind: figure
     words: L40, L42
     number: L40.1-2
-    box: [88, 280, 232, 441]
+    box: [ 88, 280, 232, 441 ]
     read:
       L42.2-3: द्वारा
-      L42.5: सर्पिलाकार
   - kind: heading
     words: L44
     title: L44
   - kind: text
     words: L45-L46
-    read:
-      L45.1: रदरफोर्ड
   - kind: text
     words: L47-L51
   - kind: box
@@ -62,15 +48,12 @@ blocks:
     title: L52
     read:
       L53.12-L54.2: संबंध
-      L56.2: रदरफोर्ड
       L56.12-13: केंद्र
       L57.1-2: केंद्रित
   - kind: box
     words: L7-L24
     title: L7
     read:
-      L9.2: अरनेस्ट
-      L10.1: रदरफोर्ड
       L10.2-3: कैम्ब्रिज
       L17.3: तत्व
       L17.4-5: प्राकृतिक

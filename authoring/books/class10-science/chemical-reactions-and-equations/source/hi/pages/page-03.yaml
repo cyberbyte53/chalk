@@ -17,11 +17,8 @@ blocks:
   - kind: text
     words: L1-L5
     read:
-      L1.3: अभिकारकों
-      L2.5: अभिकारकों
       L2.11: चिह्न
       L3.13: चिह्न
-      L4.6: सिरा
   - kind: section
     number: L6.1
     title: L6.2-4

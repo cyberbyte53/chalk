@@ -21,17 +21,12 @@ terms:
 blocks:
   - kind: text
     words: L4-L7
-    read:
-      L5.4: यशदलेपन
-      L5.16: यशदलेपित
   - kind: text
     words: L8-L20
     read:
-      L8.13: मिश्रात्वन
       L9.1-2: धातुओं
       L13.8-9: निकैल
       L18.5-6: धातुओं
-      L18.8: समांगी
       L19.18: तत्वों
       L20.13-14: शीतलीकृत
   - kind: box
@@ -45,15 +40,13 @@ blocks:
   - kind: text
     words: L29-L34
     read:
-      L29.11: अमलगम
       L31.18-20: विद्युत
       L33.16-18: विद्युत
   - kind: box
     title: L26, L27, L28
     words: L26, L27, L28, L35-L39
     read:
-      L28.1: जानिए!
       L37.16: जंगता
   - kind: figure
     words: L40
-    box: [70, 548, 174, 724]
+    box: [ 70, 548, 174, 724 ]

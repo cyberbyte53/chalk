@@ -12,7 +12,6 @@ blocks:
     words: L1, L6-L12
     read:
       L6.12-13: धातुओं
-      L9.10: रहिए।
   - kind: text
     words: L13-L14
   - kind: activity

@@ -20,7 +20,6 @@ blocks:
   - kind: text
     words: L2-L9
     read:
-      L2.14: अभिक्रियाशीलता
       L3.4-5: प्रकृति
       L5.13: { text: "परिवर्तित", cause: wrong-reading }
       L8.9: { text: "परिवर्तित", cause: wrong-reading }
@@ -36,8 +35,6 @@ blocks:
       L19.5-L21.1: "CO₂(g)"
   - kind: text
     words: L22-L24
-    read:
-      L24.5: अपचयित
   - kind: equation
     words: L25
   - kind: text
@@ -47,11 +44,8 @@ blocks:
   - kind: text
     words: L28-L33
     read:
-      L29.11: अभिक्रियाशील
       L30.2-3: "कैल्सियम,"
-      L31.4: अभिक्रियाशीलता
       L31.6-9: धातुओं
-      L31.14: विस्थापित
   - kind: equation
     words: L34-L40
     read:
@@ -62,10 +56,8 @@ blocks:
   - kind: text
     words: L42-L50
     read:
-      L42.5: ऊष्माक्षेपी
       L44.3-L48.1: "(Fe₂O₃)"
       L48.9-10: रेल
-      L49.16: थर्मिट
   - kind: equation
     words: L51-L59
     read:
@@ -74,7 +66,6 @@ blocks:
   - kind: figure
     number: L60.2
     words: L60-L62
-    box: [436, 530, 572, 704]
+    box: [ 436, 530, 572, 704 ]
     read:
       L61.1-2: रेल
-      L62.4: थर्मिट

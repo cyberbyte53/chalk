@@ -10,9 +10,6 @@ blocks:
   - kind: question
     words: L1-L2
     number: L1.1
-    read:
-      L1.2: रदरफोर्ड
-      L1.16: रदरफोर्ड
   - kind: question
     words: L3
     number: L3.1
@@ -27,7 +24,7 @@ blocks:
   - kind: table
     words: L7-L30
     number: L7.1-2
-    box: [155, 195, 550, 340]
+    box: [ 155, 195, 550, 340 ]
     read:
       L16.1: तत्वों
       L22.2-3: नाइट्रोजन
@@ -35,7 +32,6 @@ blocks:
     words: L31-L40
     number: L31.1
     read:
-      L31.4: सहपाठियों
       L32.4: तत्व
       L34.2: तत्व
       L36.2: तत्व

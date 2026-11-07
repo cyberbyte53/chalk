@@ -26,10 +26,9 @@ blocks:
     words: L20, L24-L34
     read:
       L27.8-9: रेगमाल
-      L30.2: करिए
       L30.4: इससे
       L31.1: { text: "इकट्ठा", cause: other }
   - kind: figure
     number: L42.2
     words: L35-L44
-    box: [345, 540, 572, 726]
+    box: [ 345, 540, 572, 726 ]

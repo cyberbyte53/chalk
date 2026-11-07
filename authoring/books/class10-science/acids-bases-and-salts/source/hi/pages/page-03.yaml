@@ -19,7 +19,6 @@ blocks:
     words: L9-L10
     read:
       L9.6: वैनिला,
-      L9.15: गंधीय
   - kind: text
     words: L11-L12
   - kind: section
@@ -32,12 +31,9 @@ blocks:
     number: L14.2
     words: L14-L28
     read:
-      L17.2: डालिए।
-      L21.3: जलती
-      L21.13: जाइए।
       L23.8-L24.1: "HNO₃"
       L25.2-L27.1: "CH₃COOH"
   - kind: figure
     number: L43.2
     words: L29-L44
-    box: [99, 515, 460, 726]
+    box: [ 99, 515, 460, 726 ]

@@ -35,13 +35,8 @@ blocks:
       L21.8-L22.2: "SO₄²⁻ की"
       L22.5-L23.1: "BaSO₄"
       L25.6: कलोराइड
-      L26.3: अभिकारकों
-      L26.12: द्विविस्थापन
   - kind: box
     words: L28-L32
-    read:
-      L30.9: अवक्षेपित
-      L32.5: द्विविस्थापन
   - kind: section
     number: L33.1
     title: L33.2-4
@@ -52,7 +47,7 @@ blocks:
   - kind: figure
     number: L63.2
     words: L40-L42, L60-L65
-    box: [362, 416, 570, 584]
+    box: [ 362, 416, 570, 584 ]
     read:
       L64.1-2: कॉपर
   - kind: text

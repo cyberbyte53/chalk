@@ -30,14 +30,13 @@ blocks:
       L9.12-13: कैंसर
       L10.1-2: (रेडियोथेरेपी)
       L11.6-7: ¹³¹₅₃I
-      L11.13: थायरॉइड
       L13.1-2: कैंसर
       L14.6-7: ¹⁴₆C
       L14.23-24: कलाकृतियों
   - kind: figure
     words: L12
     number: L12.1-2
-    box: [385, 115, 560, 258]
+    box: [ 385, 115, 560, 258 ]
   - kind: heading
     words: L16
     title: L16
@@ -64,7 +63,6 @@ blocks:
       L30.10-11: ³⁵Cl
       L31.2-3: ³⁷Cl
       L31.15-16: प्राकृतिक
-      L33.12: गुणा
   - kind: text
     words: L35
   - kind: equation

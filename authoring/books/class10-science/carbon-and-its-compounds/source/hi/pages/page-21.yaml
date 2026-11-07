@@ -4,10 +4,6 @@ furniture: L26-L29
 notes:
   other: "a word the PDF splits with a space (कें द्र), or a stray space it adds before a word"
 answers:
-  "read L1.12": "the PDF's letters with a stray space taken out"
-  "read L3.1": "the PDF's letters with a stray space taken out"
-  "read L21.13": "the PDF's letters with a stray space taken out"
-  "read L24.13": "the PDF's letters with a stray space taken out"
   "word जानिए": "a real word (know), as printed in the box's heading यह भी जानिए!"
   "word जलरागी": "a real word (hydrophilic), as printed on the page"
   "word जलविरागी": "a real word (hydrophobic), as printed on the page"
@@ -20,45 +16,21 @@ blocks:
     words: L1-L2
     continued: true
     read:
-      L1.1: "सिरा बाहर"
       L1.6: "इससे पानी"
-      L1.12: "का मिसेल मैल"
       L2.3: मदद
   - kind: text
     words: L3-L4
-    read:
-      L3.1: "क्या आप मिसेल"
   - kind: box
     title: L11-L13
     words: L11-L13, L5-L8, L15-L25
     read:
-      L13.1: जानिए!
-      L5.1: मिसेल
-      L6.13: "को जलरागी"
-      L7.8: "को जलविरागी"
-      L8.9: "आयनिक सिरा"
       L15.1-L16.1: "जबकि हाइड्रोकार्बन पूँछ"
       L17.6-7: अणुओं
       L18.2: "है, जिससे"
-      L18.4: "हाइड्रोकार्बन सिरा"
       L19.6-7: अणुओं
       L19.9: "गुच्छा बनने"
       L19.14-L20.1: "जलविरागी पूँछ"
-      L21.6: "आयनिक सिरा"
-      L21.13: "को मिसेल"
-      L22.2: "हैं। मिसेल के"
-      L22.11: "मैल मिसेल के"
       L22.12-13: { text: "केंद्र", cause: other }
-      L23.2: "हैं। मिसेल विलयन"
-      L23.4: कोलॉइड
-      L23.10: "आयन-आयन विकर्षण"
-      L23.14: अवक्षेपित
-      L24.3: "इस प्रकार मिसेल में"
-      L24.13: "मिसेल प्रकाश"
-      L24.14: "को प्रकीर्णित"
   - kind: figure
     words: L9-L10, L14
-    box: [103, 277, 527, 590]
-    read:
-      L9.1: "जलरागी सिरा"
-      L10.1: "जलविरागी सिरा"
+    box: [ 103, 277, 527, 590 ]

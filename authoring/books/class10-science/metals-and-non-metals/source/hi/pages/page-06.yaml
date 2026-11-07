@@ -34,9 +34,6 @@ blocks:
     read:
       L17.12-13: कैसे
       L18.10-11: प्रकृति
-      L18.12: क्षारकीय
-      L19.10: क्षारकीय
-      L21.7: उभयधर्मी
   - kind: equation
     words: L23-L31
     read:
@@ -52,9 +49,6 @@ blocks:
       L41.2-5: "ऐलुमिनेट)"
   - kind: text
     words: L42-L44
-    read:
-      L42.14: घुलकर
-      L44.2: घुलकर
   - kind: equation
     words: L45-L49
     read:
@@ -68,7 +62,5 @@ blocks:
   - kind: text
     words: L55-L64
     read:
-      L56.10: अभिक्रियाशीलता
-      L59.1: किरोसिन
       L60.3-4: धातुओं
       L61.1-2: धातुओं

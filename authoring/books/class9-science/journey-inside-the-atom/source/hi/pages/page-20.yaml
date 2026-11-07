@@ -12,11 +12,8 @@ blocks:
       L2.14: जिससे
       L3.10-11: कैसे
       L4.15-16: कक्षाओं
-      L6.9: ‘प्लम
-      L8.2: रदरफोर्ड
       L8.9-10: परमाणुओं
       L8.14-15: केंद्रीय
-      L9.2: डाल्टन
       L9.6-7: परमाणुओं
   - kind: question
     words: L10-L11
@@ -26,8 +23,6 @@ blocks:
   - kind: question
     words: L12-L20
     number: L12.1
-    read:
-      L14.2: अवपरमाणुक
   - kind: question
     words: L21-L24
     number: L21.1
@@ -43,4 +38,4 @@ blocks:
   - kind: figure
     words: L35-L36
     number: L36.1-2
-    box: [110, 585, 555, 710]
+    box: [ 110, 585, 555, 710 ]

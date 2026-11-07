@@ -15,17 +15,14 @@ blocks:
   - kind: figure
     number: L18.1-2
     words: L11-L13, L18-L19
-    box: [168, 72, 392, 268]
+    box: [ 168, 72, 392, 268 ]
   - kind: figure
     number: L20.1-2
     words: L14-L17, L20-L21
-    box: [342, 72, 545, 272]
+    box: [ 342, 72, 545, 272 ]
   - kind: text
     continued: true
     words: L22-L25
-    read:
-      L22.12: हाइड्रोजनकार्बोनेट)
-      L24.13: पाठ्यांक
   - kind: box
     title: L26
     words: L26, L36-L39
@@ -33,13 +30,8 @@ blocks:
       L36.12-L37.4: { text: "अंकीय तुला पर रखिए। इससे ऐसी त्रुटियाँ", cause: other }
   - kind: text
     words: L40-L41
-    read:
-      L41.9: पाठ्यांक
   - kind: text
     words: L42-L43
-    read:
-      L42.8: पाठ्यांक
-      L42.10: पाठ्यांक
   - kind: text
     words: L44
   - kind: heading
@@ -50,27 +42,17 @@ blocks:
     words: L46-L52, L54, L56-L57, L59-L60, L63-L65
     read:
       L48.13-16: तुला
-      L48.18-20: पाठ्यांक
-      L50.13: डालिए।
-      L51.11: हाइड्रोजनकार्बोनेट)
-      L51.12: डालिए।
-      L56.8: सोडायुक्त
-      L57.1: पाठ्यांक
       L59.17: जिससे
-      L60.1: हाइड्रोजनकार्बोनेट)
   - kind: box
     title: L1
     words: L1-L10
     read:
       L4.4: अनिश्चितता
-      L6.3: पाठ्यांकों
   - kind: figure
     number: L34.1-2
     words: L27-L35
-    box: [37, 340, 215, 538]
+    box: [ 37, 340, 215, 538 ]
   - kind: figure
     number: L61.1-2
     words: L53, L55, L58, L61-L62
-    box: [37, 545, 225, 740]
-    read:
-      L61.5: सिरकायुक्त
+    box: [ 37, 545, 225, 740 ]

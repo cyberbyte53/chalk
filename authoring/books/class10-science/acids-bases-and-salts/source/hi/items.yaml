@@ -46,10 +46,8 @@
     - {words: L19.14, by: hindi-repair}
     - {words: L20.8, by: hindi-repair}
     - {words: L20.9, by: hindi-repair}
-    - {words: L20.17, by: agent}
     - {words: L20.18-19, by: agent}
     - {words: L21.3, by: hindi-repair}
-    - {words: L21.7, by: agent}
     - {words: L21.15, by: hindi-repair}
     - {words: L22.5, by: hindi-repair}
     - {words: L22.19-L23.2, by: agent}
@@ -85,7 +83,6 @@
     - {words: L30.10, by: hindi-repair}
     - {words: L30.11-13, by: hindi-repair}
     - {words: L30.15, by: agent}
-    - {words: L31.19, by: agent}
     - {words: L32.7-8, by: agent}
     - {words: L32.15, by: agent}
     - {words: L32.16, by: agent}
@@ -109,7 +106,6 @@
     विलयन तथा दूसरे में क्षारीय विलयन है। यदि आपको केवल लाल लिटमस पत्र दिया जाता है तो आप प्रत्येक
     परखनली में रखे गए पदार्थों की पहचान कैसे करेंगे?
   made:
-    - {words: L2.4, by: agent}
     - {words: L3.10-11, by: agent}
     - {words: L4.10-11, by: agent}
     - {words: L4.12-14, by: agent}
@@ -140,7 +136,7 @@
     - {words: L9.10, by: hindi-repair}
     - {words: L9.12-L13.1, by: agent}
     - {words: L14.2-L16.1, by: agent}
-    - {words: L16.2, by: agent}
+    - {words: L16.2, by: hindi-repair}
     - {words: L16.4-L18.1, by: agent}
     - {words: L19.1-2, by: agent}
     - {words: L19.4-L21.1, by: agent}
@@ -174,8 +170,6 @@
   made:
     - {words: L44.19, by: hindi-repair}
     - {words: L45.4-L46.1, by: hindi-repair}
-    - {words: L46.4, by: agent}
-    - {words: L46.12, by: agent}
 - id: "1.1.4"
   kind: activity
   page: 2
@@ -200,7 +194,6 @@
     - {words: L53.11, by: hindi-repair}
     - {words: L53.18-L54.1, by: hindi-repair}
     - {words: L55.6-L56.1, by: hindi-repair}
-    - {words: L56.2, by: agent}
     - {words: L57.4, by: hindi-repair}
     - {words: L2.4, page: 3, by: hindi-repair}
     - {words: L2.6, page: 3, by: agent}
@@ -215,7 +208,6 @@
     तरह उपयोग किया जा सकता है?
   made:
     - {words: L9.6, by: agent}
-    - {words: L9.15, by: agent}
 - id: "1.1.6"
   kind: text
   page: 3
@@ -241,10 +233,7 @@
   made:
     - {words: L16.10, by: hindi-repair}
     - {words: L17.1, by: hindi-repair}
-    - {words: L17.2, by: agent}
     - {words: L18.6, by: hindi-repair}
-    - {words: L21.3, by: agent}
-    - {words: L21.13, by: agent}
     - {words: L23.8-L24.1, by: agent}
     - {words: L25.2-L27.1, by: agent}
 - id: "1.2.2"
@@ -323,7 +312,6 @@
   title: धातु कार्बोनेट तथा धातु हाइड्रोजनकार्बोनेट अम्ल के साथ कैसे अभिक्रिया करते हैं?
   text: 2.1.3 धातु कार्बोनेट तथा धातु हाइड्रोजनकार्बोनेट अम्ल के साथ कैसे अभिक्रिया करते हैं?
   made:
-    - {words: L21.6, by: agent}
     - {words: L21.10-11, by: agent}
 - id: "1.3.1"
   kind: activity
@@ -335,11 +323,8 @@
     क्या निरीक्षण किया?   चित्र 2.2 के अनुसार प्रत्येक स्थिति में उत्पादित गैस को चूने के पानी
     (कैल्सियम हाइड्रॉक्साइड का विलयन) से प्रवाहित कीजिए एवं अपने निरीक्षणों को अभिलिखित कीजिए।"
   made:
-    - {words: L42.4, by: agent}
     - {words: L45.1-L49.1, by: agent}
-    - {words: L50.2, by: agent}
     - {words: L50.3-L52.1, by: agent}
-    - {words: L53.4, by: agent}
     - {words: L56.6-7, by: agent}
 - id: "1.3.2"
   kind: figure
@@ -351,7 +336,6 @@
   crop: [66, 430.9, 308, 646.4]
   made:
     - {words: L24.1, by: agent}
-    - {words: L24.2, by: agent}
     - {words: L27.2, by: hindi-repair}
     - {words: L31.1-2, by: agent}
     - {words: L32.1-2, by: hindi-repair}
@@ -419,7 +403,6 @@
     - {words: L15.3-L17.1, by: agent}
     - {words: L17.3-L19.1, by: agent}
     - {words: L19.2-L23.1, by: agent}
-    - {words: L24.3, by: agent}
 - id: "1.3.10"
   kind: text
   page: 5
@@ -430,7 +413,6 @@
     - {words: L25.3, by: hindi-repair}
     - {words: L25.8-9, by: agent}
     - {words: L26.2, by: agent}
-    - {words: L26.9, by: agent}
     - {words: L27.4, by: hindi-repair}
 - id: "1.3.11"
   kind: text
@@ -443,7 +425,6 @@
   page: 5
   text: धातु कार्बोनेट/धातु हाइड्रोजनकार्बोनेट + अम्ल → लवण + कार्बन डाइऑक्साइड + जल
   made:
-    - {words: L29.3, by: agent}
     - {words: L29.5, by: agent}
     - {words: L29.9, by: hindi-repair}
 - id: "1.4"
@@ -466,7 +447,6 @@
   made:
     - {words: L32.15-L33.1, by: hindi-repair}
     - {words: L33.2, by: agent}
-    - {words: L33.4, by: agent}
     - {words: L35.7-L36.1, by: agent}
     - {words: L38.7, by: agent}
     - {words: L39.4, by: hindi-repair}
@@ -497,8 +477,6 @@
     अभिक्रिया कहते हैं। सामान्यतः उदासीनीकरण अभिक्रिया को इस प्रकार लिख सकते हैं—
   made:
     - {words: L47.11, by: hindi-repair}
-    - {words: L48.1, by: agent}
-    - {words: L48.6, by: agent}
 - id: "1.4.5"
   kind: equation
   page: 5
@@ -551,7 +529,6 @@
     - {words: L5.2, by: hindi-repair}
     - {words: L6.7, by: hindi-repair}
     - {words: L7.6, by: hindi-repair}
-    - {words: L7.8, by: agent}
     - {words: L7.9, by: hindi-repair}
 - id: "1.6"
   kind: section
@@ -610,7 +587,6 @@
     क्लोराइड हैं, तो इस अभिक्रिया के लिए संतुलित रासायनिक समीकरण लिखिए।
   made:
     - {words: L20.4, by: agent}
-    - {words: L20.7, by: agent}
     - {words: L21.1-2, by: agent}
 - id: "2"
   kind: section
@@ -645,13 +621,11 @@
   made:
     - {words: L30.3, by: hindi-repair}
     - {words: L30.4, by: hindi-repair}
-    - {words: L1.10, page: 7, by: agent}
     - {words: L5.10, page: 7, by: hindi-repair}
     - {words: L6.6, page: 7, by: hindi-repair}
     - {words: L7.7-10, page: 7, by: agent}
     - {words: L9.6, page: 7, by: hindi-repair}
     - {words: L9.8, page: 7, by: hindi-repair}
-    - {words: L11.8, page: 7, by: agent}
 - id: "2.3"
   kind: figure
   page: 7
@@ -660,7 +634,6 @@
     विलयन विद्युत चालन करता है
   crop: [392.6, 85.7, 563.2, 260.2]
   made:
-    - {words: L4.2, by: agent}
     - {words: L18.6-8, by: agent}
     - {box: true, by: figure-snap}
 - id: "2.4"
@@ -727,7 +700,6 @@
   made:
     - {words: L48.6-9, by: hindi-repair}
     - {words: L52.9-12, by: agent}
-    - {words: L52.14, by: agent}
     - {words: L58.8-11, by: hindi-repair}
     - {words: L64.3, by: hindi-repair}
     - {words: L64.12-14, by: hindi-repair}
@@ -841,7 +813,6 @@
   made:
     - {words: L47.10-11, by: agent}
     - {words: L47.16-17, by: agent}
-    - {words: L48.6, by: agent}
     - {words: L48.12, by: hindi-repair}
 - id: "2.7.15"
   kind: equation
@@ -875,8 +846,6 @@
     - {words: L60.5-L61.1, by: hindi-repair}
     - {words: L61.5-L65.1, by: agent}
     - {words: L65.5-6, by: agent}
-    - {words: L68.6, by: agent}
-    - {words: L68.8, by: agent}
     - {words: L69.3, by: hindi-repair}
 - id: "2.7.20"
   kind: figure
@@ -896,10 +865,8 @@
     में उपयोग किया जा रहा काँच का पात्र भी टूट सकता है। सांद्र सल्फ़्यूरिक अम्ल के कैन (डिब्बा) तथा
     सोडियम हाइड्रॉक्साइड की बोतल पर चेतावनी के चिह्न (चित्र 2.5 में प्रदर्शित) पर ध्यान दीजिए।
   made:
-    - {words: L1.11, by: agent}
     - {words: L2.3, by: hindi-repair}
     - {words: L3.1-2, by: agent}
-    - {words: L4.8, by: agent}
     - {words: L6.5, by: hindi-repair}
     - {words: L6.8-9, by: agent}
 - id: "2.7.22"
@@ -1008,7 +975,6 @@
     - {words: L44.10, by: hindi-repair}
     - {words: L44.13-14, by: agent}
     - {words: L46.4, by: hindi-repair}
-    - {words: L1.1, page: 10, by: agent}
     - {words: L1.5, page: 10, by: agent}
 - id: "3.4"
   kind: text
@@ -1024,7 +990,7 @@
     - {words: L5.16, by: hindi-repair}
     - {words: L5.19, by: hindi-repair}
     - {words: L6.6-9, by: hindi-repair}
-    - {words: L6.10-13, by: agent}
+    - {words: L6.10-13, by: hindi-repair}
 - id: "3.5"
   kind: figure
   page: 10
@@ -1071,7 +1037,6 @@
     - ["10", 1M HCl, "", "", ""]
   crop: [240.1, 334.6, 536.8, 569.5]
   made:
-    - {words: L29.2, by: agent}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "3.8"
@@ -1101,8 +1066,7 @@
     - {words: L1.10-11, by: agent}
     - {words: L1.14-15, by: agent}
     - {words: L2.1-L3.2, by: hindi-repair}
-    - {words: L3.15, by: agent}
-    - {words: L4.3, by: agent}
+    - {words: L3.15, by: hindi-repair}
     - {words: L4.15-16, by: agent}
     - {words: L5.1-L6.2, by: hindi-repair}
     - {words: L6.4-5, by: agent}
@@ -1131,7 +1095,6 @@
     - {words: L15.12-13, by: hindi-repair}
     - {words: L15.16-17, by: agent}
     - {words: L18.16, by: hindi-repair}
-    - {words: L18.20, by: agent}
 - id: "3.10.3"
   kind: box
   page: 11
@@ -1211,13 +1174,10 @@
     को उदासीन किया जा सकता है, जिसके परिणामस्वरूप दंत क्षय को रोका जा सकता है।
   made:
     - {words: L10.1-L11.1, by: agent}
-    - {words: L11.20, by: agent}
-    - {words: L11.21, by: agent}
     - {words: L12.1-2, by: agent}
     - {words: L12.3, by: agent}
     - {words: L12.4-5, by: agent}
     - {words: L12.6-7, by: agent}
-    - {words: L13.11, by: agent}
     - {words: L13.13-L14.1, by: agent}
     - {words: L15.8-L16.1, by: agent}
     - {words: L16.7, by: hindi-repair}
@@ -1229,8 +1189,6 @@
     - {words: L20.3, by: agent}
     - {words: L20.9-L21.1, by: agent}
     - {words: L21.3, by: hindi-repair}
-    - {words: L21.6, by: agent}
-    - {words: L23.3, by: agent}
 - id: "3.10.11"
   kind: heading
   page: 12
@@ -1266,10 +1224,9 @@
     पर चढ़ते हुए गलती से नेटल पौधे के छू जाने पर आपको क्या करना होगा? क्या आप ऐसे ही पारंपरिक इलाज
     जानते हैं, जो डंक लगने पर प्रभावी हों?
   made:
-    - {words: L33.2, by: agent}
     - {words: L34.1, by: agent}
     - {words: L34.7-L35.2, by: hindi-repair}
-    - {words: L35.9-12, by: agent}
+    - {words: L35.9-12, by: hindi-repair}
     - {words: L36.10, by: agent}
     - {words: L37.11, by: hindi-repair}
     - {words: L38.7, by: agent}
@@ -1295,7 +1252,7 @@
   crop: [99.5, 111, 568.9, 234.1]
   made:
     - {words: L1.4-5, by: agent}
-    - {words: L3.2, by: agent}
+    - {words: L3.2, by: hindi-repair}
     - {words: L3.4-5, by: hindi-repair}
     - {words: L3.6-8, by: hindi-repair}
     - {words: L5.7, by: agent}
@@ -1317,8 +1274,6 @@
   number: "1."
   text: 1. आपके पास दो विलयन ‘A’ एवं ‘B’ हैं। विलयन ‘A’ के pH का मान 6 है एवं विलयन ‘B’ के pH का मान 8
     है। किस विलयन में हाइड्रोजन आयन की सांद्रता अधिक है? इनमें से कौन अम्लीय है तथा कौन क्षारकीय?
-  made:
-    - {words: L14.4, by: agent}
 - id: "3.10.15.2"
   kind: question
   page: 13
@@ -1334,9 +1289,7 @@
   number: "3."
   text: 3. क्या क्षारकीय विलयन में H⁺ (aq) आयन होते हैं? अगर हाँ, तो यह क्षारकीय क्यों होते हैं?
   made:
-    - {words: L16.2, by: agent}
     - {words: L16.5-6, by: agent}
-    - {words: L16.15, by: agent}
 - id: "3.10.15.4"
   kind: question
   page: 13
@@ -1418,12 +1371,9 @@
     - {words: L5.2-3, by: agent}
     - {words: L5.5-6, by: agent}
     - {words: L6.2, by: hindi-repair}
-    - {words: L6.7, by: agent}
     - {words: L7.2, by: hindi-repair}
-    - {words: L8.6, by: agent}
     - {words: L8.10-11, by: agent}
     - {words: L9.14-15, by: hindi-repair}
-    - {words: L11.7, by: agent}
 - id: "4.3.2"
   kind: table
   page: 14
@@ -1444,8 +1394,6 @@
   text: प्रबल अम्ल एवं प्रबल क्षारक के लवण के pH का मान 7 होता है तथा ये उदासीन होते हैं, जबकि प्रबल
     अम्ल एवं दुर्बल क्षारक के लवण के pH का मान 7 से कम होता है तथा ये अम्लीय होते हैं। प्रबल क्षारक
     एवं दुर्बल अम्ल के लवण के pH का मान 7 से अधिक होता है तथा ये क्षारकीय होते हैं।
-  made:
-    - {words: L19.1, by: agent}
 - id: "4.4"
   kind: section
   page: 14
@@ -1500,9 +1448,7 @@
     हाइड्रॉक्साइड उत्पन्न करता है। इस प्रक्रिया को क्लोर-क्षार प्रक्रिया कहते हैं, क्योंकि इससे
     निर्मित उत्पाद— क्लोरीन (क्लोर) एवं सोडियम हाइड्रॉक्साइड (क्षार) होते हैं।
   made:
-    - {words: L7.10, by: agent}
     - {words: L8.2, by: agent}
-    - {words: L8.6, by: agent}
 - id: "4.4.8"
   kind: equation
   page: 15
@@ -1546,7 +1492,6 @@
     - {words: L32.4, by: hindi-repair}
     - {words: L34.2, by: hindi-repair}
     - {words: L35.4-5, by: agent}
-    - {words: L37.3, by: agent}
     - {box: true, by: figure-snap}
 - id: "4.4.12"
   kind: heading
@@ -1589,14 +1534,12 @@
     एवं, (iii) पीने वाले जल को जीवाणुओं से मुक्त करने के लिए।
   made:
     - {words: L21.2, by: hindi-repair}
-    - {words: L21.5, by: agent}
     - {words: L21.12, by: hindi-repair}
     - {words: L21.14-15, by: agent}
     - {words: L21.17, by: hindi-repair}
     - {words: L22.4, by: hindi-repair}
     - {words: L22.5, by: hindi-repair}
     - {words: L23.1, by: agent}
-    - {words: L23.6, by: agent}
     - {words: L24.6-9, by: agent}
     - {words: L24.11, by: hindi-repair}
 - id: "4.4.17"
@@ -1614,7 +1557,6 @@
   made:
     - {words: L26.9, by: hindi-repair}
     - {words: L26.11, by: hindi-repair}
-    - {words: L28.7, by: agent}
     - {words: L28.8-L30.1, by: agent}
 - id: "4.4.19"
   kind: equation
@@ -1626,7 +1568,6 @@
     - {words: L36.2-L37.1, by: agent}
     - {words: L38.2-L40.1, by: agent}
     - {words: L40.3-L41.1, by: agent}
-    - {words: L45.1, by: agent}
 - id: "4.4.20"
   kind: text
   page: 16
@@ -1634,8 +1575,7 @@
     संबंध स्थापित कर सकते हैं कि— क्यों इसका उपयोग एक अम्ल को उदासीन करने में किया जाता है? यह एक
     दुर्बल असंक्षारक क्षारीय लवण है। खाना पकाते समय इसे गर्म करने पर निम्न अभिक्रिया होती है—
   made:
-    - {words: L46.7, by: agent}
-    - {words: L48.9-L49.2, by: agent}
+    - {words: L48.9-L49.2, by: hindi-repair}
 - id: "4.4.21"
   kind: equation
   page: 16
@@ -1651,8 +1591,6 @@
   kind: text
   page: 16
   text: सोडियम हाइड्रोजनकार्बोनेट का उपयोग हमारे घरों में अनेक प्रकार से किया जाता है।
-  made:
-    - {words: L64.2, by: agent}
 - id: "4.4.23"
   kind: heading
   page: 16
@@ -1664,8 +1602,6 @@
   text: (i) बेकिंग पाउडर, बेकिंग सोडा (सोडियम हाइड्रोजनकार्बोनेट) तथा टार्टरिक अम्ल (एक मंद खाद्य
     अम्ल) का मिश्रण है। जब बेकिंग पाउडर को गर्म किया जाता है या जल में मिलाया जाता है तो निम्न
     अभिक्रिया होती है—
-  made:
-    - {words: L66.7, by: agent}
 - id: "4.4.25"
   kind: equation
   page: 16
@@ -1685,7 +1621,6 @@
     - {words: L1.11-12, by: agent}
     - {words: L2.5, by: agent}
     - {words: L2.7-8, by: hindi-repair}
-    - {words: L2.10, by: agent}
 - id: "4.4.27"
   kind: text
   page: 17
@@ -1693,7 +1628,6 @@
     अम्ल की अधिकता को उदासीन करके राहत पहुँचाता है। (iii) इसका उपयोग सोडा-अम्ल अग्निशामक में भी किया
     जाता है।
   made:
-    - {words: L3.3, by: agent}
     - {words: L3.5, by: agent}
 - id: "4.4.28"
   kind: heading
@@ -1711,7 +1645,6 @@
     - {words: L13.12, by: hindi-repair}
     - {words: L14.17, by: hindi-repair}
     - {words: L15.14, by: hindi-repair}
-    - {words: L16.4, by: agent}
 - id: "4.4.30"
   kind: equation
   page: 17
@@ -1734,7 +1667,6 @@
   text: सोडियम कार्बोनेट एवं सोडियम हाइड्रोजनकार्बोनेट, कई औद्योगिक प्रक्रियाओं के लिए भी उपयोगी रसायन
     है।
   made:
-    - {words: L39.5, by: agent}
     - {words: L39.8-9, by: agent}
 - id: "4.4.33"
   kind: heading
@@ -1776,7 +1708,6 @@
     - {words: L53.9-10, by: agent}
     - {words: L53.12-15, by: hindi-repair}
     - {words: L54.5-L55.1, by: hindi-repair}
-    - {words: L55.2, by: agent}
     - {words: L56.10-11, by: agent}
 - id: "4.5.2"
   kind: figure
@@ -1841,7 +1772,6 @@
     - {words: L26.12-13, by: agent}
     - {words: L26.17-18, by: agent}
     - {words: L26.19-20, by: agent}
-    - {words: L27.1, by: agent}
     - {words: L27.3, by: agent}
     - {words: "L27.4-6, L28.1, L29.1-3, L30.1-3", by: agent}
     - {words: L29.8, by: hindi-repair}
@@ -1876,7 +1806,6 @@
     - {words: L43.5, by: hindi-repair}
     - {words: L44.12-13, by: agent}
     - {words: L44.14-15, by: agent}
-    - {words: L44.16, by: agent}
     - {words: L45.1, by: hindi-repair}
 - id: "4.5.12"
   kind: exercise
@@ -1910,8 +1839,6 @@
   number: "4."
   text: 4. सोडियम हाइड्रोजनकार्बोनेट के विलयन को गर्म करने पर क्या होगा? इस अभिक्रिया के लिए समीकरण
     लिखिए।
-  made:
-    - {words: L52.3, by: agent}
 - id: "4.5.12.5"
   kind: question
   page: 18
@@ -1948,13 +1875,9 @@
     - {words: L9.6, by: hindi-repair}
     - {words: L9.8-9, by: agent}
     - {words: L9.11-L10.2, by: hindi-repair}
-    - {words: L11.7, by: agent}
     - {words: L11.17, by: hindi-repair}
-    - {words: L13.7, by: agent}
     - {words: L15.10-11, by: agent}
-    - {words: L17.23, by: agent}
     - {words: L19.11, by: hindi-repair}
-    - {words: L20.12, by: agent}
     - {words: L22.11, by: hindi-repair}
     - {words: L22.12-13, by: agent}
     - {words: L22.15-L23.2, by: hindi-repair}
@@ -1996,7 +1919,7 @@
     (प्रतिजैविक) (b) ऐनालजेसिक (पीड़ाहरी) (c) ऐन्टैसिड (d) एंटीसेप्टिक (प्रतिरोधी)
   made:
     - {words: L10.2, by: agent}
-    - {words: L10.3, by: agent}
+    - {words: L10.3, by: hindi-repair}
     - {words: L11.2, by: agent}
     - {words: L12.2, by: agent}
 - id: "4.5.13.5"
@@ -2057,7 +1980,6 @@
     - {words: L30.17, by: hindi-repair}
     - {words: L31.6, by: agent}
     - {words: L31.7-L33.1, by: agent}
-    - {words: L33.2, by: agent}
     - {words: L34.5, by: hindi-repair}
     - {words: L34.10, by: hindi-repair}
 - id: "4.5.13.11"
@@ -2096,8 +2018,6 @@
   page: 21
   number: "14."
   text: 14. उदासीनीकरण अभिक्रिया क्या है? दो उदाहरण दीजिए।
-  made:
-    - {words: L6.2, by: agent}
 - id: "4.5.13.15"
   kind: question
   page: 21
@@ -2131,10 +2051,7 @@
     - {words: L11.8, by: hindi-repair}
     - {words: L12.4-5, by: agent}
     - {words: L12.7, by: hindi-repair}
-    - {words: L14.7, by: agent}
-    - {words: L15.1, by: agent}
     - {words: L15.12, by: agent}
-    - {words: L15.16, by: agent}
     - {words: L16.7, by: hindi-repair}
     - {words: L16.9, by: hindi-repair}
     - {words: L16.13-L17.1, by: hindi-repair}
@@ -2145,18 +2062,13 @@
     - {words: L21.6-7, by: agent}
     - {words: L21.10, by: hindi-repair}
     - {words: L23.4, by: hindi-repair}
-    - {words: L23.11, by: agent}
-    - {words: L25.8, by: agent}
     - {words: L25.9-L27.1, by: agent}
     - {words: L28.4, by: hindi-repair}
     - {words: L29.6-L30.1, by: agent}
     - {words: L31.9-12, by: hindi-repair}
     - {words: L31.13, by: agent}
-    - {words: L31.20, by: agent}
     - {words: L33.6, by: hindi-repair}
     - {words: L33.7-L34.1, by: agent}
-    - {words: L1.5, page: 22, by: agent}
-    - {words: L1.10, page: 22, by: agent}
 - id: "4.5.13.17"
   kind: figure
   page: 22
@@ -2170,8 +2082,6 @@
     - {words: L2.2-L3.1, by: agent}
     - {words: L4.1-7, by: hindi-repair}
     - {words: L8.2, by: hindi-repair}
-    - {words: L9.2, by: agent}
-    - {words: L12.5, by: agent}
     - {words: L12.12, by: hindi-repair}
     - {words: L13.2, by: hindi-repair}
     - {box: true, by: figure-snap}

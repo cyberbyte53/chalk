@@ -16,15 +16,11 @@ blocks:
       L3.18-19: कक्षाओं
   - kind: text
     words: L5
-    read:
-      L5.15: विधियाँ
   - kind: heading
     words: L10
     title: L10
   - kind: text
     words: L11-L12
-    read:
-      L11.4: समांगी
   - kind: text
     words: L13
   - kind: equation
@@ -34,7 +30,6 @@ blocks:
     words: L18-L20
     read:
       L20.7: जिससे
-      L18.9: विषमांगी
   - kind: example
     number: L21.1-2
     words: L21-L22
@@ -80,4 +75,3 @@ blocks:
       L51:
         text: (ग)
         cause: other
-      L48.21: ऐसीटिक

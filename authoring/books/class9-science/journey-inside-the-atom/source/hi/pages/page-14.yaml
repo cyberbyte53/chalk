@@ -39,8 +39,6 @@ blocks:
     words: L24-L28
     read:
       L25.6: तत्वों
-      L26.9: अभिक्रियाशील
-      L27.7: अभिक्रियाशील
       L27.11: तत्व
   - kind: text
     words: L29-L40
@@ -60,7 +58,6 @@ blocks:
   - kind: text
     words: L45-L46
     read:
-      L45.10: जोड़िए
       L45.13: तत्व
   - kind: text
     words: L47-L53

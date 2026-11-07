@@ -51,14 +51,10 @@ blocks:
   - kind: question
     number: L6.1
     words: L6, L68
-    read:
-      L68.1: ऊष्माक्षेपी
-      L68.3: ऊष्माशोषी
   - kind: question
     number: L7.1
     words: L7, L69
     read:
-      L69.2: ऊष्माक्षेपी
       L69.3: अभिक्रया
   - kind: question
     number: L8.1

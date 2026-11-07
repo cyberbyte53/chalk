@@ -13,8 +13,6 @@ blocks:
     number: L2.1
     title: L2.2-14
     words: L2
-    read:
-      L2.3: विषमांगी
   - kind: section
     number: L3.1
     title: L3.2-9
@@ -23,8 +21,6 @@ blocks:
     words: L4-L7
     read:
       L6.5-6: रेत
-      L4.2: विषमरूप
-      L7.7: विषमांगी
   - kind: text
     words: L8
   - kind: text
@@ -35,26 +31,18 @@ blocks:
     words: L13-L14, L16-L18, L20, L22, L24, L26-L27, L29-L30, L32-L33, L35-L38
     read:
       L27.6-7: धीरे-धीरे
-      L27.5: स्टॉपकॉक
-      L32.2: स्टॉपकॉक
-      L36.3: स्टॉपकॉक
   - kind: text
     words: L39, L41
-    read:
-      L39.5: विषमांगी
   - kind: text
     words: L43, L45, L47, L49-L51
     read:
       L43.5-6: दिशाओं
       L47.10-11: रॉकेट
       L47.12: ईंधन
-      L51.11-14: विषमांगी
-      L45.14: समांगी
   - kind: text
     words: L52-L54, L57, L59
     read:
       L53.16-L54.1: चुंबक
-      L52.8: विषमांगी
   - kind: box
     title: L40
     words: L40, L42, L44, L46, L48
@@ -68,5 +56,3 @@ blocks:
       - 276
       - 553
       - 500
-    read:
-      L25.1: स्टॉपकॉक

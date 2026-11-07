@@ -17,16 +17,8 @@ blocks:
   - kind: text
     continued: true
     words: L2-L3
-    read:
-      L2.3: पाठ्यांक
-      L3.9: पाठ्यांक
   - kind: text
     words: L4-L9
-    read:
-      L4.5: पाठ्यांक,
-      L4.7: पाठ्यांक
-      L5.11: हाइड्रोजनकार्बोनेट)
-      L9.6: पाठ्यांकों
   - kind: section
     number: L16.1
     title: L16.2-8
@@ -53,27 +45,21 @@ blocks:
     words: L45-L60
     read:
       L47.5: चिह्नित
-      L48.12: पाठ्यांक
       L49.9-10: सल्फेट
-      L52.4: फ्लास्कों,
-      L57.11: फ्लास्कों
-      L58.6: पाठ्यांक
-      L59.10: पाठ्यांक
   - kind: figure
     number: L21.18-19
     words: L10-L15, L18, L21.18-23, L20, L22
-    box: [425, 105, 600, 305]
+    box: [ 425, 105, 600, 305 ]
     read:
       L21.22-23: अंतिम
       L20.1: ""
   - kind: figure
     number: L62.1-2
     words: L32-L40, L43-L44, L62-L63
-    box: [419, 334, 600, 548]
+    box: [ 419, 334, 600, 548 ]
     read:
       L39.1-2: सल्फेट
-      L63.2: (अभिकारकों)
   - kind: figure
     number: L70.1-2
     words: L64-L71
-    box: [427, 555, 600, 748]
+    box: [ 427, 555, 600, 748 ]

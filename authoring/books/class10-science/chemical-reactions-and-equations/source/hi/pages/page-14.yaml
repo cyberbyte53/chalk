@@ -16,15 +16,11 @@ blocks:
   - kind: text
     words: L1-L4
     read:
-      L2.1: अपचयित
-      L2.14: उपचयित
-      L3.7: उपचयित
-      L3.11: अपचयित
       L4.3-4: अभिक्रियाओं
   - kind: figure
     number: L5.1
     words: L5
-    box: [198, 160, 540, 226]
+    box: [ 198, 160, 540, 226 ]
   - kind: text
     words: L6
     read:
@@ -44,16 +40,12 @@ blocks:
     words: L17-L18
     read:
       L17.4: कार्बन
-      L17.5: उपचयित
-      L17.10: अपचयित
   - kind: text
     words: L19-L26
     read:
       L19.5-L20.1: "Cl₂"
-      L21.2: उपचयित
       L21.4-L23.1: "MnO₂,"
       L23.2-L24.1: "MnCl₂"
-      L25.2: अपचयित
   - kind: text
     words: L27-L29
   - kind: box

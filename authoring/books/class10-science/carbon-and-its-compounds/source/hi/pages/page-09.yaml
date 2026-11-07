@@ -23,7 +23,7 @@ blocks:
   - kind: figure
     number: L2.2-3
     words: L2-L8
-    box: [195, 100, 480, 195]
+    box: [ 195, 100, 480, 195 ]
     read:
       L2.4-L5.1: { text: "C₄H₁₀", cause: other }
       L6.4-L7.3: संरचनाओं
@@ -33,31 +33,26 @@ blocks:
       L9.7-8: संरचनाओं
       L9.13-L12.1: { text: "C₄H₁₀", cause: other }
       L14.2-L15.3: संरचाओं
-      L16.3: समावयन
   - kind: text
     words: L17-L23
     read:
       L17.3-4: शाखाओं
       L17.7-8: शृंखलाओं
-      L18.9: साइक्लोहेक्सेन
       L18.14-L21.1: { text: "C₆H₁₂", cause: other }
   - kind: figure
     number: L24.2
     words: L24
-    box: [215, 272, 485, 373]
-    read:
-      L24.3: साइक्लोहेक्सेन
+    box: [ 215, 272, 485, 373 ]
   - kind: text
     words: L25-L31
     read:
-      L25.3: साइक्लोहेक्सेन
       L25.14: शृंखला,
       L26.2: शृंखला
       L27.3-L31.1: { text: "(C₆H₆)", cause: other }
   - kind: figure
     number: L36.2
     words: L32-L36
-    box: [215, 415, 420, 530]
+    box: [ 215, 415, 420, 530 ]
     read:
       L32.3-L35.1: { text: "C₆H₆", cause: other }
   - kind: text
@@ -65,8 +60,6 @@ blocks:
     read:
       L37.1-2: { text: "केवल", cause: other }
       L38.2-3: { text: "‘ऐल्केन’", cause: other }
-      L39.3: ‘ऐल्कीन’
-      L39.11: ‘ऐल्काइन’
   - kind: section
     number: L40.1
     title: L40.2-4
@@ -77,6 +70,5 @@ blocks:
     read:
       L41.4: तत्व
       L42.5: तत्वों;
-      L42.7: हैलोजेन,
       L43.8: तत्व
       L45.4: तत्वों

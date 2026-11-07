@@ -9,8 +9,6 @@ furniture: L66-L69, L62.1-2
 blocks:
   - kind: text
     words: L1-L3
-    read:
-      L2.14-17: घुलकर
   - kind: equation
     words: L4
   - kind: equation
@@ -18,7 +16,6 @@ blocks:
   - kind: text
     words: L6-L8
     read:
-      L7.7: ऊष्माक्षेपी
       L7.11: इससे
       L8.1: प्रज्ज्वलित
   - kind: equation

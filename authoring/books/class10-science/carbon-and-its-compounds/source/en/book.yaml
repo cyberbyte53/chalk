@@ -1,12 +1,12 @@
-title: Carbon and its Compounds
-reader: text
-edition: 2026-27
 address: https://ncert.nic.in/textbook/pdf/jesc104.pdf
 sha256: efbb053ea8cedf29bc6891834613fdbcc17772e369f6b35405f3bb4701c41abe
 pages: 21
+title: Carbon and its Compounds
+reader: text
+edition: 2026-27
 tools:
   reader: 1
-  hindi-repair: 2
+  hindi-repair: 3
   figure-snap: 1
   table-cells: 1
   structure-draft: 2

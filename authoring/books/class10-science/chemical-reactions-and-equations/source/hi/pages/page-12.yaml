@@ -13,7 +13,7 @@ blocks:
   - kind: figure
     number: L15.2-3
     words: L1-L15
-    box: [70, 88, 534, 243]
+    box: [ 70, 88, 534, 243 ]
     read:
       L1.2-3: सल्फेट
       L3.2-3: सल्फ़ेट
@@ -37,7 +37,6 @@ blocks:
     read:
       L27.8: तत्व
       L27.12-13: सल्फ़ेट
-      L27.17: विस्थापित
   - kind: text
     words: L29
   - kind: equation
@@ -58,11 +57,10 @@ blocks:
     words: L47-L48
     read:
       L47.9: तत्व
-      L48.6: विस्थापित
   - kind: figure
     number: L58.2
     words: L49-L52, L58-L59
-    box: [65, 532, 250, 724]
+    box: [ 65, 532, 250, 724 ]
     read:
       L49.2-3: सल्फ़ेट
       L59.2-3: सल्फ़ेट
@@ -70,8 +68,6 @@ blocks:
     number: L53.1
     title: L53.1-2
     words: L53
-    read:
-      L53.1: "1.2.4 द्विविस्थापन"
   - kind: activity
     number: L54.2
     words: L54, L61-L65

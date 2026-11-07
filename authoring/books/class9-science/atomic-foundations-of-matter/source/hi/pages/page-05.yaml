@@ -34,10 +34,7 @@ blocks:
     words: L52-L61
     read:
       L52.3-4: कैल्सियम
-      L54.1: अभिकारकों
       L57.1-2: कैल्सियम
-      L59.1: अभिकारकों
-      L60.1: अभिकारकों
   - kind: example
     number: L62.1-2
     words: L62-L66
@@ -55,11 +52,8 @@ blocks:
   - kind: box
     title: L1
     words: L1, L2.2-L8, L9.2-4, L10-L13
-    read:
-      L2.4: फ्लास्कों
   - kind: box
     title: L14
     words: L14-L30
     read:
-      L16.4: एथेनॉल
       L19.6: इससे

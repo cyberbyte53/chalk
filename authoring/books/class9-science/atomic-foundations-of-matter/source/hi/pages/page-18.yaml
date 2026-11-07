@@ -10,8 +10,6 @@ terms:
 blocks:
   - kind: text
     words: L2-L3
-    read:
-      L3.4: सहसंयोजी
   - kind: box
     title: L4
     words: L4-L11
@@ -19,12 +17,9 @@ blocks:
     number: L12.1
     title: L12.2-6
     words: L12
-    read:
-      L12.2: सहसंयोजी
   - kind: text
     words: L13-L14
     read:
-      L13.2: सहसंयोजी
       L13.10-11: अणुओं
       L13.15: उपस्थित
       L13.16-17: परमाणुओं
@@ -60,8 +55,6 @@ blocks:
     words: L48
   - kind: text
     words: L49-L52
-    read:
-      L49.6: सरलतम
   - kind: example
     number: L53.1-2
     words: L53-L57
@@ -70,7 +63,4 @@ blocks:
   - kind: figure
     number: L37.1-2
     words: L34-L39
-    box: [487, 267, 588, 514]
-    read:
-      L36.2: नैफ्थलीन
-      L37.3-L38.2: सहसंयोजी
+    box: [ 487, 267, 588, 514 ]

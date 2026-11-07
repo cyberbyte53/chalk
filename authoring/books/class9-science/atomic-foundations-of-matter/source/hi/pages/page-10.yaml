@@ -21,12 +21,11 @@ blocks:
   - kind: figure
     number: L7.1-2
     words: L5-L7
-    box: [113, 136, 410, 240]
+    box: [ 113, 136, 410, 240 ]
   - kind: text
     words: L9-L11, L12.1-6, L13
     read:
       L11.3: अतःयह
-      L11.5: सहसंयोजी
   - kind: text
     words: L15, L17, L19, L23, L25, L29
     read:
@@ -35,7 +34,7 @@ blocks:
   - kind: figure
     number: L35.1-2
     words: L33-L36
-    box: [105, 388, 420, 488]
+    box: [ 105, 388, 420, 488 ]
   - kind: text
     words: L37-L40
     read:
@@ -55,8 +54,6 @@ blocks:
   - kind: heading
     title: L55
     words: L55
-    read:
-      L55.2: सहसंयोजी
   - kind: text
     words: L56-L61
     continues: true

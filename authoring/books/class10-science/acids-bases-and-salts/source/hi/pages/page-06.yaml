@@ -19,8 +19,6 @@ blocks:
       L4.4: "अम्ल →"
   - kind: text
     words: L5-L7
-    read:
-      L7.8: क्षारकीय
   - kind: section
     number: L8.1
     title: L8.2-8
@@ -48,7 +46,6 @@ blocks:
     words: L19-L21
     read:
       L20.4: इससे
-      L20.7: जलती
       L21.1-2: कैल्सियम
   - kind: section
     number: L23.1

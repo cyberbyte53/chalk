@@ -32,25 +32,19 @@ blocks:
     read:
       L7.13: जिससे
       L8.8-9: धीरे-धीरे
-      L8.17: हरे
-      L10.16: पत्रकी
   - kind: text
     words: L12
   - kind: activity
     number: L15.2
     words: L15, L20-L30
     read:
-      L22.2: परखनलियों
-      L26.1: लगेगा
       L27.6-7: कैल्सियम
       L28.6-7: कैल्सियम
-      L29.4: परखनलियों
   - kind: figure
     number: L59.2
     words: L14, L37, L46, L38-L45, L47-L63
-    box: [380, 318, 572, 640]
+    box: [ 380, 318, 572, 640 ]
     read:
-      L54.1: रोकता
       L56.2-3: कैल्सियम
   - kind: text
     words: L31-L36
@@ -66,6 +60,4 @@ blocks:
   - kind: text
     words: L65-L67
     read:
-      L65.8: यशदलेपन
       L65.11-12: वस्तुओं
-      L66.3: ऐनोडीकरण

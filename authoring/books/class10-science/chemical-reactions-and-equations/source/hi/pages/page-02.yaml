@@ -21,7 +21,7 @@ blocks:
   - kind: figure
     number: L22.2
     words: L14-L25
-    box: [65, 305, 225, 527]
+    box: [ 65, 305, 225, 527 ]
     read:
       L17.1-2: { text: "H₂", cause: other }
   - kind: text
@@ -29,7 +29,6 @@ blocks:
   - kind: text
     words: L43-L46
     read:
-      L43.11: पाएँगे
       L44.2: विविध
       L45.5-6: अभिक्रियाओं
       L46.3-4: { text: "करेंगे।", cause: other }
@@ -39,8 +38,6 @@ blocks:
     words: L47
   - kind: text
     words: L48-L51
-    read:
-      L51.7: सरलतम
   - kind: text
     words: L52
   - kind: equation

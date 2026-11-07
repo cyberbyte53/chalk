@@ -15,15 +15,10 @@ blocks:
     title: L16-L17
   - kind: text
     words: L18-L23
-    read:
-      L18.9: हरे
-      L23.1: पाते
   - kind: text
     words: L24-L25, L27.2-11, L29-L31
     read:
       L30.10: महत्त्वपूर्ण
-      L29.7: जीवनरक्षक
-      L29.9: जाँचों
   - kind: box
     title: L3
     words: L3, L4.2-L7, L8.2-L9, L10.2-L14

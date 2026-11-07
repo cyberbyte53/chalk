@@ -8,13 +8,11 @@ blocks:
   - kind: table
     words: L1-L139
     number: L1.1-2
-    box: [92, 84, 550, 545]
+    box: [ 92, 84, 550, 545 ]
     read:
       L1.6: तत्वों
       L1.8-9: परमाणुओं
       L3.1: तत्व
-      L14.1: लीथियम
-      L21.1: निऑन
   - kind: box
     words: L140-L143, L145, L144, L146-L152
     title: L140

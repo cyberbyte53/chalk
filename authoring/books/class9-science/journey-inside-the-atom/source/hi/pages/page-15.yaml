@@ -28,25 +28,19 @@ blocks:
   - kind: text
     words: L3-L9
     read:
-      L3.1: डाल्टन
       L3.7: तत्व
       L4.16: तत्व
       L6.11-L8.2: p⁺ + n⁰)।
-      L9.4: संख्याएँ
   - kind: text
     words: L10-L14
     read:
       L11.2-3: ¹₁H
       L11.6-7: ²₁H
       L11.14-15: ³₁H
-      L11.16: (ट्राइटियम,
-      L13.5: ट्राइटियम
   - kind: figure
     words: L15, L33-L34
     number: L34.1-2
-    box: [180, 300, 532, 425]
-    read:
-      L33.5: ट्राइटियम
+    box: [ 180, 300, 532, 425 ]
   - kind: box
     words: L16-L32
     title: L16
@@ -71,6 +65,6 @@ blocks:
   - kind: figure
     words: L50-L51
     number: L51.1-2
-    box: [224, 575, 552, 712]
+    box: [ 224, 575, 552, 712 ]
   - kind: text
     words: L52

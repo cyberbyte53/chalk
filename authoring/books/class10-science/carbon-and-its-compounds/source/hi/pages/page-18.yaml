@@ -19,7 +19,6 @@ blocks:
     words: L5-L8
     continued: true
     read:
-      L5.12: मेथेनैल
       L5.20: जिससे
       L7.12: जिससे
       L8.15-16: "विकृत"
@@ -27,44 +26,26 @@ blocks:
     title: L1-L4
     words: L1-L4, L9-L13
     read:
-      L10.18: मोलेसस
-      L10.19: (सिरा)
       L13.2-3: "केवल"
   - kind: section
     number: L14.1
     title: L14.2-5
     words: L14
-    read:
-      L14.2: एथेनॉइक
   - kind: text
     words: L15-L24
     read:
-      L15.1: एथेनॉइक
-      L15.5: ऐसीटिक
-      L16.2: कार्बोक्सिलिक
-      L16.8: ऐसीटिक
       L18.9: एथनॉइक
-      L20.8: ग्लैशल
-      L20.9: ऐसीटिक
-      L21.1: कार्बोक्सिलिक
       L21.7: "यौगिकों"
-      L23.3: कार्बोक्सिलिक
       L24.6-7: "आयनीकृत"
   - kind: activity
     number: L25.2
     words: L25, L29-L34
-    read:
-      L30.1: ऐसीटिक
   - kind: figure
     number: L55.2
     words: L35-L39, L52-L55
-    box: [352, 490, 567, 716]
+    box: [ 352, 490, 567, 716 ]
   - kind: activity
     number: L40.2
     words: L40, L44-L51
     read:
       L44.5-8: सल्फ़्यूरिक
-      L45.3: एथेनॉल
-      L45.9: ग्लैशल
-      L46.1: ऐसीटिक
-      L47.8: ऊष्मक

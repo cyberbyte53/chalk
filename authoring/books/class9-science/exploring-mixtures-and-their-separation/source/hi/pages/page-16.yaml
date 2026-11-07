@@ -15,19 +15,13 @@ answers:
 blocks:
   - kind: text
     words: L2-L3
-    read:
-      L2.15: कोलॉइड
-      L3.5: कोलॉइडों
   - kind: box
     title: L4
     words: L4-L19
     read:
-      L11.9: प्लेटलेट,
       L12.2-3: कणिकाओं
       L12.10: 5.22)।
       L15.1: तत्वों,
-      L6.2: जीवनरक्षक
-      L16.2: जोड़ता
   - kind: figure
     number: L28.1-2
     words: L20-L29
@@ -37,26 +31,19 @@ blocks:
       - 558
       - 362
     read:
-      L24.1: प्लेटलेट
       L28.7-8: अपकेंद्रण
       L29.3-4: अपकेंद्रण
   - kind: text
     words: L30
-    read:
-      L30.9: कोलॉइड
   - kind: text
     words: L31-L35, L38-L39, L41
     read:
       L38.5-6: अपेक्षाकृत
       L39.13-14: के)
-      L32.12: कोलॉइड
-      L33.6: कोलॉइड
-      L35.13: कोलॉइड
   - kind: text
     words: L42-L43
     read:
       L43.5-6: फैले
-      L42.4: कोलॉइड
   - kind: figure
     number: L40.1-2
     words: L36-L37, L40
@@ -65,8 +52,6 @@ blocks:
       - 407
       - 586
       - 546
-    read:
-      L40.10: कोलॉइड
   - kind: section
     number: L44.1
     title: L44.3-4
@@ -77,9 +62,6 @@ blocks:
     words: L45-L52
     read:
       L51.4: जिससे
-      L50.3: प्रकीर्णित
-      L52.10: प्रकीर्णित
-      L52.16: समांगी
   - kind: text
     words: L53-L54
     continues: true

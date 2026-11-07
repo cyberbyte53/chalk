@@ -17,7 +17,6 @@ blocks:
     read:
       L20.2-3: अपकेंद्रित्र
       L23.8-9: अपकेंद्रित्र
-      L20.8: पाएँगे
   - kind: heading
     title: L27.10-11
     words: L27.10-11
@@ -35,8 +34,6 @@ blocks:
     number: L47.1
     title: L47.2
     words: L47
-    read:
-      L47.2: कोलॉइड
   - kind: text
     words: L48-L49
     read:
@@ -49,10 +46,6 @@ blocks:
       L3.1-2: अपकेंद्रण
       L13.11-12: अपकेंद्रित्र
       L17.12-13: सेवाओं
-      L2.1: पेपरफ्यूज
-      L7.2: पेपरफ्यूज
-      L10.5: पेपरफ्यूज,
-      L10.8: प्रतिदर्शों
   - kind: figure
     number: L14.1-2
     words: L4, L6, L8, L11-L12, L14
@@ -61,8 +54,6 @@ blocks:
       - 119
       - 540
       - 240
-    read:
-      L14.4: पेपरफ्यूज
   - kind: figure
     number: L40.1-2
     words: L25-L26, L27.1-5, L29, L27.6-9, L28, L36, L38, L40

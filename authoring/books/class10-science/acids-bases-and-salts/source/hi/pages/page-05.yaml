@@ -31,19 +31,16 @@ blocks:
       L15.3-L17.1: "H₂O(l)"
       L17.3-L19.1: "CO₂(g) →"
       L19.2-L23.1: "Ca(HCO₃)₂(aq)"
-      L24.3: "विलयशील)"
   - kind: text
     words: L25-L27
     read:
       L25.8-9: कैल्सियम
       L26.2: विविध
-      L26.9: हाइड्रोजनकार्बोनेट
   - kind: text
     words: L28
   - kind: equation
     words: L29
     read:
-      L29.3: हाइड्रोजनकार्बोनेट
       L29.5: "अम्ल →"
   - kind: section
     number: L30.1
@@ -56,7 +53,6 @@ blocks:
     words: L31-L41
     read:
       L33.2: फीनॉल्फथैलिन
-      L33.4: डालिए।
       L35.7-L36.1: बूँद
       L38.7: फीनॉल्फथैलिन
       L40.4: फीनॉल्फथैलिन
@@ -69,9 +65,6 @@ blocks:
       L44.6-L46.1: "H₂O(l)"
   - kind: text
     words: L47-L49
-    read:
-      L48.1: उदासीनीकरण
-      L48.6: उदासीनीकरण
   - kind: equation
     words: L50
     read:

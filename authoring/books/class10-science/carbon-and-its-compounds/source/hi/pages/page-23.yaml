@@ -3,7 +3,6 @@ proofread: true
 furniture: L38-L41, L19, L3.1-2, L4.1-2, L7.1-2, L10.1-2, L12.1-2, L14.1-2, L15.1-2, L16.1-2, L17.1-2
 answers:
   "read L3.7-8": "the PDF loses श (�ृं); the image prints शृंखलन प्रकृति के"
-  "read L10.12": "the PDF's letters with a stray leading space taken out"
   "read L10.18-21": "the PDF splits the word and moves its letters (श् ख रं ला); the image prints श्रंखला"
   "read L12.5": "the PDF loses श (�ृं); the image prints शृंखला बनाने"
   "read L13.3": "the PDF loses श (�ृं); the image prints शृंखला"
@@ -19,25 +18,16 @@ blocks:
     read:
       L2.7: "तत्व है,"
       L2.16-17: वस्तुओं
-      L3.5: चतुःसंयोजकता
       L3.7-8: "शृंखलन प्रकृति के"
       L4.5-8: "को पूर्ण रूप से भरने"
       L4.11-14: "दो परमाणुओं"
-      L4.21-L5.2: सहसंयोजक
       L7.10: "तत्वों;"
-      L7.20-L8.2: सहसंयोजक
       L10.7-10: "कार्बन परमाणुओं"
-      L10.12: "बीच द्वि या त्रिआबंध"
       L10.18-21: "श्रंखला,"
-      L11.3: "वलीय किसी भी"
       L12.5: "शृंखला बनाने"
       L12.12: समजाती
       L13.3: शृंखला
-      L14.7: कार्बोक्सिलिक
-      L16.6: एथेनॉइक
       L17.7-8: अणुओं
-      L17.10: जलरागी
-      L17.12: जलविरागी
       L18.1: मदद
   - kind: exercise
     title: L20
@@ -46,19 +36,13 @@ blocks:
     number: L21.1
     words: L21-L29
     read:
-      L21.2: एथेन
       L21.7-L24.1: { text: "C₂H₆", cause: other }
-      L26.3: सहसंयोजक
-      L27.3: सहसंयोजक
-      L28.3: सहसंयोजक
-      L29.3: सहसंयोजक
   - kind: question
     number: L30.1
     words: L30-L32
     read:
       L30.2: ब्यूटेनॉन
       L30.3: चर्तु-कार्बन
-      L31.2: कार्बोक्सिलिक
   - kind: question
     number: L33.1
     words: L33-L37

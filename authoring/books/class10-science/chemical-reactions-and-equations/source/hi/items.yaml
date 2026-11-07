@@ -47,7 +47,6 @@
     - {words: L27.8-9, by: agent}
     - {words: L28.1, by: hindi-repair}
     - {words: L29.4, by: hindi-repair}
-    - {words: L30.2, by: agent}
     - {words: L30.4, by: agent}
     - {words: L31.1, by: agent}
 - id: "0.6"
@@ -117,7 +116,6 @@
     रासायनिक अभिक्रियाएँ हो रही हैं। इस अध्याय में हम विभिन्न प्रकार की रासायनिक अभिक्रियाओं और उनके
     प्रतीकात्मक निरूपण का अध्ययन करेंगे।
   made:
-    - {words: L43.11, by: agent}
     - {words: L44.2, by: agent}
     - {words: L45.5-6, by: agent}
     - {words: L46.3-4, by: agent}
@@ -136,7 +134,6 @@
     सबसे सरलतम विधि है।
   made:
     - {words: L50.10, by: hindi-repair}
-    - {words: L51.7, by: agent}
 - id: "1.2"
   kind: text
   page: 2
@@ -167,13 +164,10 @@
     उत्पादों के बीच भी योग (+) का चिह्न लगाकर उन्हें दाईं ओर (RHS) लिखा जाता है। तीर का सिरा उत्पाद
     की ओर होता है तथा यह अभिक्रिया होने की दिशा को दर्शाता है।
   made:
-    - {words: L1.3, by: agent}
-    - {words: L2.5, by: agent}
     - {words: L2.11, by: agent}
     - {words: L2.14, by: hindi-repair}
     - {words: L3.13, by: agent}
     - {words: L3.16, by: hindi-repair}
-    - {words: L4.6, by: agent}
 - id: "1.6"
   kind: section
   page: 3
@@ -298,7 +292,6 @@
   crop: [183, 89.4, 537, 192.5]
   made:
     - {words: L1.1, by: agent}
-    - {words: L6.1, by: agent}
     - {words: L6.3-4, by: agent}
     - {words: L7.2, by: hindi-repair}
     - {words: L12.1, by: hindi-repair}
@@ -371,7 +364,6 @@
   crop: [183, 416.6, 537, 506.3]
   made:
     - {words: L47.1, by: agent}
-    - {words: L51.1, by: agent}
     - {words: L51.3-4, by: agent}
     - {words: L52.2-5, by: hindi-repair}
     - {words: L56.1, by: hindi-repair}
@@ -410,7 +402,6 @@
   crop: [183, 611.7, 537, 678.2]
   made:
     - {words: L70.1, by: agent}
-    - {words: L70.4, by: agent}
     - {words: L70.6, by: hindi-repair}
     - {words: L73.2-L75.1, by: agent}
     - {words: L77.2-L80.1, by: agent}
@@ -468,7 +459,6 @@
     - [(ii) संतुलित करने के लिए, "8", 2×4]
   crop: [98.9, 245.8, 452.6, 312.3]
   made:
-    - {words: L28.1, by: agent}
     - {words: L28.3, by: hindi-repair}
     - {words: L30.2-L31.4, by: hindi-repair}
     - {words: L32.2-L34.1, by: agent}
@@ -499,7 +489,6 @@
     - {words: L54.2, by: agent}
     - {words: L54.11, by: agent}
     - {words: L54.12-14, by: hindi-repair}
-    - {words: L55.4, by: agent}
     - {words: L55.6-7, by: agent}
     - {words: L55.11, by: agent}
 - id: "1.7.27"
@@ -513,7 +502,6 @@
     - [(ii) संतुलन के लिए, 1×3, "3"]
   crop: [98.9, 427.6, 453.6, 497.6]
   made:
-    - {words: L59.1, by: agent}
     - {words: L59.3, by: hindi-repair}
     - {words: L62.2-L65.1, by: agent}
     - {box: true, by: figure-snap}
@@ -572,7 +560,6 @@
   made:
     - {words: L1.2, by: agent}
     - {words: L1.4-5, by: agent}
-    - {words: L2.11, by: agent}
     - {words: L3.14-15, by: agent}
 - id: "1.7.34"
   kind: text
@@ -582,9 +569,7 @@
     अवस्थाओं को क्रमशः (g), (l), (aq) तथा (s) से दर्शाया जाता है। अभिकारक या उत्पाद जब जल में घोल के
     रूप में उपस्थित होते हैं तब हम (aq) लिखते हैं।
   made:
-    - {words: L5.9, by: agent}
     - {words: L6.2-4, by: hindi-repair}
-    - {words: L6.15, by: agent}
     - {words: L7.7-8, by: agent}
 - id: "1.7.35"
   kind: text
@@ -670,10 +655,10 @@
   made:
     - {words: L56.1, by: hindi-repair}
     - {words: L56.3-4, by: agent}
-    - {words: L58.5-8, by: agent}
+    - {words: L58.5-8, by: hindi-repair}
     - {words: L58.9-10, by: agent}
     - {words: L58.13-14, by: agent}
-    - {words: L58.16-19, by: agent}
+    - {words: L58.16-19, by: hindi-repair}
 - id: "1.7.43.3"
   kind: question
   page: 6
@@ -862,13 +847,11 @@
   made:
     - {words: L16.15, by: agent}
     - {words: L17.7-8, by: agent}
-    - {words: L18.4, by: agent}
 - id: "2.2.15"
   kind: text
   page: 8
   text: ऊष्माक्षेपी अभिक्रियाओं के कुछ अन्य उदाहरण हैं—
   made:
-    - {words: L19.1, by: agent}
     - {words: L19.2-3, by: agent}
 - id: "2.2.16"
   kind: text
@@ -893,7 +876,6 @@
   text: (ii) क्या आप जानते हैं कि श्वसन एक ऊष्माक्षेपी अभिक्रिया है?
   made:
     - {words: L30.7, by: hindi-repair}
-    - {words: L30.9, by: agent}
 - id: "2.2.19"
   kind: text
   page: 8
@@ -928,9 +910,7 @@
     उदाहरण है।
   made:
     - {words: L53.1, by: agent}
-    - {words: L53.5, by: agent}
     - {words: L53.8, by: agent}
-    - {words: L53.10, by: agent}
 - id: "2.2.22"
   kind: figure
   page: 8
@@ -940,7 +920,6 @@
     करने तथा गंध सूँघने की सही विधि
   crop: [66.6, 508.6, 302.1, 723.6]
   made:
-    - {words: L51.1, by: agent}
     - {words: L51.4, by: hindi-repair}
     - {words: L60.4, by: hindi-repair}
     - {words: L63.1-2, by: agent}
@@ -983,7 +962,6 @@
   made:
     - {words: L1.6-7, by: agent}
     - {words: L1.8-9, by: agent}
-    - {words: L1.12, by: agent}
     - {words: L1.18, by: hindi-repair}
     - {words: L2.6, by: hindi-repair}
     - {words: L2.11-L3.1, by: hindi-repair}
@@ -1011,7 +989,6 @@
     तथा सल्फ़र ट्राइऑक्साइड (SO₃ ) में वियोजित हो जाता है। फ़ेरिक ऑक्साइड ठोस है, जबकि SO₂ तथा SO₃
     गैसें हैं।
   made:
-    - {words: L18.10, by: agent}
     - {words: L19.11-12, by: agent}
     - {words: L19.13-14, by: agent}
     - {words: L19.15-L23.1, by: agent}
@@ -1022,7 +999,7 @@
     - {words: L29.3, by: hindi-repair}
     - {words: L29.4-L30.1, by: agent}
     - {words: L31.3, by: hindi-repair}
-    - {words: L31.4, by: agent}
+    - {words: L31.4, by: hindi-repair}
     - {words: L31.5-L32.1, by: agent}
     - {words: L34.2-3, by: agent}
     - {words: L34.4, by: hindi-repair}
@@ -1122,22 +1099,13 @@
     उपस्थित है?
   made:
     - {words: L18.2, by: hindi-repair}
-    - {words: L23.5, by: agent}
     - {words: L23.9, by: hindi-repair}
-    - {words: L25.5, by: agent}
     - {words: L26.3, by: hindi-repair}
     - {words: L26.7-L27.1, by: hindi-repair}
-    - {words: L29.6, by: agent}
     - {words: L34.9, by: hindi-repair}
     - {words: L35.3, by: hindi-repair}
-    - {words: L36.16, by: agent}
-    - {words: L37.3, by: agent}
-    - {words: L38.3, by: agent}
-    - {words: L39.2, by: agent}
-    - {words: L39.7, by: agent}
     - {words: L39.9-L40.1, by: agent}
     - {words: L41.7-9, by: hindi-repair}
-    - {words: L43.2, by: agent}
 - id: "2.3.14"
   kind: figure
   page: 10
@@ -1147,11 +1115,10 @@
   crop: [320.1, 95.3, 515.2, 264.6]
   made:
     - {words: L13.1, by: hindi-repair}
-    - {words: L22.1, by: agent}
+    - {words: L22.1, by: hindi-repair}
     - {words: L24.1, by: hindi-repair}
     - {words: L27.4-5, by: agent}
     - {words: L28.1, by: hindi-repair}
-    - {words: L33.5, by: agent}
     - {box: true, by: figure-snap}
 - id: "2.3.15"
   kind: figure
@@ -1219,10 +1186,8 @@
     आवश्यकता होती है। जिन अभिक्रियाओं में ऊर्जा अवशोषित होती है, उन्हें ऊष्माशोषी अभिक्रिया कहते
     हैं।
   made:
-    - {words: L1.7, by: agent}
     - {words: L1.9, by: hindi-repair}
     - {words: L2.8-9, by: agent}
-    - {words: L3.1, by: agent}
 - id: "2.3.23"
   kind: box
   page: 11
@@ -1233,8 +1198,6 @@
   made:
     - {words: L5.18, by: hindi-repair}
     - {words: L6.12-13, by: agent}
-    - {words: L6.20, by: agent}
-    - {words: L7.2, by: agent}
 - id: "2.3.24"
   kind: exercise
   page: 11
@@ -1285,7 +1248,6 @@
     - {words: L23.8-9, by: agent}
     - {words: L23.11, by: hindi-repair}
     - {words: L24.1, by: hindi-repair}
-    - {words: L25.9, by: agent}
     - {words: L26.7-8, by: agent}
     - {words: L28.3-4, by: agent}
     - {words: L31.3, by: hindi-repair}
@@ -1346,7 +1308,6 @@
   made:
     - {words: L27.8, by: agent}
     - {words: L27.12-13, by: agent}
-    - {words: L27.17, by: agent}
 - id: "2.4.8"
   kind: text
   page: 12
@@ -1376,7 +1337,6 @@
     देते हैं।
   made:
     - {words: L47.9, by: agent}
-    - {words: L48.6, by: agent}
 - id: "2.4.12"
   kind: figure
   page: 12
@@ -1397,7 +1357,7 @@
   title: 1.2.4 द्विविस्थापन अभिक्रिया
   text: 1.2.4 द्विविस्थापन अभिक्रिया
   made:
-    - {words: L53.1, by: agent}
+    - {words: L53.1, by: hindi-repair}
 - id: "2.5.1"
   kind: activity
   page: 12
@@ -1441,17 +1401,12 @@
     - {words: L21.8-L22.2, by: agent}
     - {words: L22.5-L23.1, by: agent}
     - {words: L25.6, by: agent}
-    - {words: L26.3, by: agent}
-    - {words: L26.12, by: agent}
 - id: "2.5.5"
   kind: box
   page: 13
   text: क्रियाकलाप 1.2 पर ध्यान दें, जिसमें आपने लेड (II) नाइट्रेट तथा पोटैशियम आयोडाइड के विलयनों को
     मिश्रित किया था। (i) अवक्षेप किस रंग का था? क्या आप अवक्षेपित यौगिक का नाम बता सकते हैं? (ii) इस
     अभिक्रिया के लिए संतुलित रासायनिक समीकरण लिखिए। (iii) क्या यह भी द्विविस्थापन अभिक्रिया है?
-  made:
-    - {words: L30.9, by: agent}
-    - {words: L32.5, by: agent}
 - id: "2.6"
   kind: section
   page: 13
@@ -1531,11 +1486,7 @@
   made:
     - {words: L1.6, by: hindi-repair}
     - {words: L1.8, by: hindi-repair}
-    - {words: L2.1, by: agent}
     - {words: L2.6, by: hindi-repair}
-    - {words: L2.14, by: agent}
-    - {words: L3.7, by: agent}
-    - {words: L3.11, by: agent}
     - {words: L4.3-4, by: agent}
 - id: "2.6.10"
   kind: figure
@@ -1572,18 +1523,14 @@
   text: अभिक्रिया (1.31) में कार्बन उपचयित होकर CO तथा ZnO अपचयित होकर Zn बनता है।
   made:
     - {words: L17.4, by: agent}
-    - {words: L17.5, by: agent}
-    - {words: L17.10, by: agent}
 - id: "2.6.15"
   kind: text
   page: 14
   text: अभिक्रिया (1.32) में HCl, Cl₂ में उपचयित तथा MnO₂, MnCl₂ में अपचयित हुआ है।
   made:
     - {words: L19.5-L20.1, by: agent}
-    - {words: L21.2, by: agent}
     - {words: L21.4-L23.1, by: agent}
     - {words: L23.2-L24.1, by: agent}
-    - {words: L25.2, by: agent}
 - id: "2.6.16"
   kind: text
   page: 14
@@ -1654,7 +1601,7 @@
   title: 1.3.2 विकृतगंधिता
   text: 1.3.2 विकृतगंधिता
   made:
-    - {words: L7.1, by: agent}
+    - {words: L7.1, by: hindi-repair}
 - id: "3.2.1"
   kind: text
   page: 15
@@ -1673,7 +1620,6 @@
     कि चिप्स बनाने वाले चिप्स की थैली में से ऑक्सीजन हटाकर उसमें नाइट्रोजन जैसी कम सक्रिय गैस से
     युक्त कर देते हैं ताकि चिप्स का उपचयन न हो सके।
   made:
-    - {words: L11.1, by: agent}
     - {words: L11.7-8, by: agent}
     - {words: L12.5-7, by: hindi-repair}
     - {words: L12.16, by: hindi-repair}
@@ -1700,8 +1646,6 @@
   page: 15
   number: "2."
   text: 2. क्रियाकलाप 1.10 से भिन्न द्विविस्थापन अभिक्रिया का एक उदाहरण दीजिए।
-  made:
-    - {words: L19.6, by: agent}
 - id: "3.2.3.3"
   kind: question
   page: 15
@@ -1711,8 +1655,6 @@
   made:
     - {words: L20.1, by: hindi-repair}
     - {words: L20.2-3, by: agent}
-    - {words: L20.5, by: agent}
-    - {words: L20.7, by: agent}
     - {words: L20.11, by: agent}
     - {words: L21.4-L23.1, by: agent}
     - {words: L23.3-L25.1, by: agent}
@@ -1739,14 +1681,10 @@
     - {words: L32.2, by: hindi-repair}
     - {words: L35.10, by: agent}
     - {words: L41.4-5, by: agent}
-    - {words: L41.17, by: agent}
     - {words: L1.2-3, page: 16, by: agent}
-    - {words: L1.11, page: 16, by: agent}
     - {words: L2.6, page: 16, by: agent}
     - {words: L2.7-10, page: 16, by: hindi-repair}
     - {words: L2.11, page: 16, by: agent}
-    - {words: L2.16, page: 16, by: agent}
-    - {words: L3.3, page: 16, by: agent}
     - {words: L3.10-11, page: 16, by: agent}
     - {words: L5.8, page: 16, by: hindi-repair}
     - {words: L5.9, page: 16, by: agent}
@@ -1772,12 +1710,8 @@
     - {words: L14.6-L15.2, by: agent}
     - {words: L15.7, by: hindi-repair}
     - {words: L16.7-L18.1, by: agent}
-    - {words: L19.3, by: agent}
     - {words: L20.3, by: hindi-repair}
-    - {words: L20.4, by: agent}
-    - {words: L21.3, by: agent}
     - {words: L22.3, by: hindi-repair}
-    - {words: L22.4, by: agent}
 - id: "3.2.4.2"
   kind: question
   page: 16
@@ -1788,7 +1722,7 @@
     - {words: L27.1-L30.1, by: agent}
     - {words: L31.4-L34.1, by: agent}
     - {words: L37.2-L38.2, by: hindi-repair}
-    - {words: L39.1, by: agent}
+    - {words: L39.1, by: hindi-repair}
     - {words: L40.1, by: hindi-repair}
     - {words: L41.1, by: hindi-repair}
 - id: "3.2.4.3"
@@ -1880,9 +1814,6 @@
   page: 17
   number: "9."
   text: 9. ऊष्माक्षेपी एवं ऊष्माशोषी अभिक्रिया का क्या अर्थ है? उदाहरण दीजिए।
-  made:
-    - {words: L68.1, by: agent}
-    - {words: L68.3, by: agent}
 - id: "3.2.4.10"
   kind: question
   page: 17
@@ -1890,7 +1821,6 @@
   text: 10. श्वसन को ऊष्माक्षेपी अभिक्रया क्यों कहते हैं? वर्णन कीजिए।
   made:
     - {words: L69.1, by: hindi-repair}
-    - {words: L69.2, by: agent}
     - {words: L69.3, by: agent}
 - id: "3.2.4.11"
   kind: question
@@ -1981,10 +1911,5 @@
   made:
     - {words: L13.1, by: hindi-repair}
     - {words: L15.16-17, by: agent}
-    - {words: L16.10, by: agent}
     - {words: L17.4-5, by: agent}
     - {words: L17.10-11, by: agent}
-    - {words: L17.18, by: agent}
-    - {words: L19.9, by: agent}
-    - {words: L20.8, by: agent}
-    - {words: L20.13, by: agent}

@@ -186,8 +186,6 @@
     - {words: L4.17, by: hindi-repair}
     - {words: L5.1, by: hindi-repair}
     - {words: L5.5, by: hindi-repair}
-    - {words: L5.6, by: agent}
-    - {words: L5.8, by: agent}
     - {words: L5.11, by: hindi-repair}
     - {words: L6.1, by: hindi-repair}
     - {words: L6.11, by: agent}
@@ -259,15 +257,11 @@
     अविभाज्य कणों को एटोमॉस (atomos) कहा (ग्रीक में एटोमॉस का अर्थ अविभाज्य है)।
   made:
     - {words: L15.2, by: hindi-repair}
-    - {words: L15.3, by: agent}
-    - {words: L15.5, by: agent}
     - {words: L15.11, by: hindi-repair}
     - {words: L15.13, by: hindi-repair}
     - {words: L15.15, by: hindi-repair}
     - {words: L16.1, by: hindi-repair}
-    - {words: L16.3, by: agent}
     - {words: L16.7, by: hindi-repair}
-    - {words: L16.8, by: agent}
     - {words: L16.10, by: hindi-repair}
     - {words: L16.11, by: hindi-repair}
 - id: "1.4"
@@ -308,7 +302,7 @@
     - {words: L19.3, by: hindi-repair}
     - {words: L19.4, by: hindi-repair}
     - {words: L19.6, by: hindi-repair}
-    - {words: L19.8, by: agent}
+    - {words: L19.8, by: hindi-repair}
     - {words: L19.12, by: hindi-repair}
     - {words: L19.13, by: hindi-repair}
     - {words: L20.4, by: hindi-repair}
@@ -329,7 +323,7 @@
     - {words: L21.21, by: hindi-repair}
     - {words: L22.1, by: hindi-repair}
     - {words: L22.3, by: hindi-repair}
-    - {words: L22.7, by: agent}
+    - {words: L22.7, by: hindi-repair}
     - {words: L22.10, by: hindi-repair}
     - {words: L23.3, by: hindi-repair}
     - {words: L23.10-L24.2, by: hindi-repair}
@@ -342,7 +336,7 @@
   made:
     - {words: L25.3, by: agent}
     - {words: L25.5, by: hindi-repair}
-    - {words: L25.8, by: agent}
+    - {words: L25.8, by: hindi-repair}
     - {words: L25.18, by: hindi-repair}
 - id: "1.7"
   kind: text
@@ -351,7 +345,7 @@
     परमाणु किससे निर्मित होते हैं? यदि हम परमाणुओं को देख सकते तो वे कैसे दिखाई देते? एक तत्व के
     परमाणु किसी अन्य तत्व के परमाणुओं से किस प्रकार भिन्न होते हैं?
   made:
-    - {words: L27.1, by: agent}
+    - {words: L27.1, by: hindi-repair}
     - {words: L27.3, by: hindi-repair}
     - {words: L27.8, by: hindi-repair}
     - {words: L27.9, by: hindi-repair}
@@ -450,7 +444,7 @@
     - {words: L38.17, by: hindi-repair}
     - {words: L38.18, by: hindi-repair}
     - {words: L6.1, page: 3, by: hindi-repair}
-    - {words: L6.3, page: 3, by: agent}
+    - {words: L6.3, page: 3, by: hindi-repair}
     - {words: L6.4, page: 3, by: hindi-repair}
     - {words: L6.5, page: 3, by: hindi-repair}
     - {words: L6.6, page: 3, by: hindi-repair}
@@ -504,12 +498,12 @@
     - {words: L9.1, by: hindi-repair}
     - {words: L9.10, by: hindi-repair}
     - {words: L9.11, by: hindi-repair}
-    - {words: L9.12, by: agent}
+    - {words: L9.12, by: hindi-repair}
     - {words: L10.1, by: hindi-repair}
     - {words: L10.4, by: hindi-repair}
     - {words: L10.5-6, by: agent}
-    - {words: L10.7, by: agent}
-    - {words: L10.11, by: agent}
+    - {words: L10.7, by: hindi-repair}
+    - {words: L10.11, by: hindi-repair}
     - {words: L11.2, by: hindi-repair}
     - {words: L11.5, by: hindi-repair}
     - {words: L11.6-7, by: agent}
@@ -521,11 +515,10 @@
     - {words: L13.1, by: hindi-repair}
     - {words: L13.7, by: hindi-repair}
     - {words: L13.12, by: hindi-repair}
-    - {words: L13.13, by: agent}
+    - {words: L13.13, by: hindi-repair}
     - {words: L13.14, by: hindi-repair}
     - {words: L13.16, by: hindi-repair}
     - {words: L14.1, by: hindi-repair}
-    - {words: L14.7, by: agent}
     - {words: L14.8, by: hindi-repair}
     - {words: L14.10, by: hindi-repair}
     - {words: L14.13, by: hindi-repair}
@@ -533,7 +526,6 @@
     - {words: L14.20, by: hindi-repair}
     - {words: L15.2, by: hindi-repair}
     - {words: L15.11, by: hindi-repair}
-    - {words: L15.12, by: agent}
     - {words: L15.13, by: hindi-repair}
     - {words: L15.15, by: hindi-repair}
     - {words: L15.16, by: hindi-repair}
@@ -545,7 +537,7 @@
     रेखाचित्र
   crop: [266.2, 240.2, 521.6, 428.6]
   made:
-    - {words: L42.2, by: agent}
+    - {words: L42.2, by: hindi-repair}
     - {words: L42.3, by: hindi-repair}
     - {words: L43.1, by: hindi-repair}
     - {words: L44.1-2, by: agent}
@@ -619,9 +611,9 @@
     - {words: L60.2, by: hindi-repair}
     - {words: L60.9-L61.2, by: hindi-repair}
     - {words: L61.3, by: hindi-repair}
-    - {words: L61.6, by: agent}
+    - {words: L61.6, by: hindi-repair}
     - {words: L61.7-L62.2, by: agent}
-    - {words: L63.6, by: agent}
+    - {words: L63.6, by: hindi-repair}
     - {words: L63.12, by: hindi-repair}
     - {words: L63.13, by: hindi-repair}
     - {words: L65.1, by: hindi-repair}
@@ -629,7 +621,6 @@
     - {words: L66.2, by: hindi-repair}
     - {words: L66.4, by: hindi-repair}
     - {words: L66.6, by: hindi-repair}
-    - {words: L67.3, by: agent}
     - {words: L67.6, by: hindi-repair}
     - {words: L67.7, by: hindi-repair}
     - {words: L68.3, by: hindi-repair}
@@ -701,7 +692,6 @@
     - {words: L19.2, by: hindi-repair}
     - {words: L20.1, by: hindi-repair}
     - {words: L20.2, by: hindi-repair}
-    - {words: L23.1, by: agent}
     - {words: L24.4, by: hindi-repair}
     - {words: L25.2, by: hindi-repair}
     - {words: L25.3-4, by: agent}
@@ -719,8 +709,8 @@
     - {words: L31.6-7, by: agent}
     - {words: L32.6, by: hindi-repair}
     - {words: L33.1, by: hindi-repair}
-    - {words: L33.2, by: agent}
-    - {words: L33.3, by: agent}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
     - {words: L34.1, by: hindi-repair}
     - {words: L34.3, by: hindi-repair}
     - {words: L34.5, by: hindi-repair}
@@ -738,7 +728,6 @@
   made:
     - {words: L2.1, by: hindi-repair}
     - {words: L2.3, by: hindi-repair}
-    - {words: L3.8, by: agent}
     - {words: L3.9, by: hindi-repair}
     - {words: L3.13, by: hindi-repair}
     - {words: L3.14, by: hindi-repair}
@@ -759,7 +748,6 @@
     - {words: L5.6, by: hindi-repair}
     - {words: L5.8, by: hindi-repair}
     - {words: L5.11, by: hindi-repair}
-    - {words: L6.2, by: agent}
     - {words: L6.4-5, by: hindi-repair}
     - {words: L6.6, by: hindi-repair}
     - {words: L6.7, by: hindi-repair}
@@ -810,9 +798,9 @@
   made:
     - {words: L12.1, by: hindi-repair}
     - {words: L12.3, by: hindi-repair}
-    - {words: L12.6, by: agent}
-    - {words: L12.8, by: agent}
-    - {words: L12.9, by: agent}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.8, by: hindi-repair}
+    - {words: L12.9, by: hindi-repair}
     - {words: L12.12, by: hindi-repair}
     - {words: L12.13, by: hindi-repair}
     - {words: L13.6, by: hindi-repair}
@@ -820,12 +808,11 @@
     - {words: L13.16, by: hindi-repair}
     - {words: L13.17, by: hindi-repair}
     - {words: L13.18, by: hindi-repair}
-    - {words: L14.1, by: agent}
+    - {words: L14.1, by: hindi-repair}
     - {words: L14.2, by: hindi-repair}
     - {words: L14.4, by: hindi-repair}
     - {words: L14.5-L15.1, by: hindi-repair}
-    - {words: L15.5, by: agent}
-    - {words: L15.10, by: agent}
+    - {words: L15.5, by: hindi-repair}
     - {words: L15.11, by: hindi-repair}
     - {words: L15.14, by: hindi-repair}
     - {words: L16.3-4, by: agent}
@@ -835,7 +822,7 @@
     - {words: L16.11, by: hindi-repair}
     - {words: L16.12, by: hindi-repair}
     - {words: L16.15, by: hindi-repair}
-    - {words: L16.17, by: agent}
+    - {words: L16.17, by: hindi-repair}
     - {words: L16.19, by: hindi-repair}
     - {words: L17.1, by: hindi-repair}
     - {words: L17.5, by: hindi-repair}
@@ -846,16 +833,13 @@
     - {words: L18.3, by: hindi-repair}
     - {words: L18.4, by: hindi-repair}
     - {words: L18.13, by: hindi-repair}
-    - {words: L19.1, by: agent}
+    - {words: L19.1, by: hindi-repair}
     - {words: L19.3, by: hindi-repair}
     - {words: L19.4, by: hindi-repair}
-    - {words: L19.12, by: agent}
     - {words: L19.13, by: hindi-repair}
     - {words: L20.1, by: hindi-repair}
-    - {words: L20.7, by: agent}
     - {words: L20.10, by: hindi-repair}
     - {words: L20.15, by: hindi-repair}
-    - {words: L21.3, by: agent}
     - {words: L21.11-14, by: hindi-repair}
     - {words: L21.20, by: hindi-repair}
     - {words: L22.2, by: hindi-repair}
@@ -901,14 +885,13 @@
     - {words: L28.7, by: hindi-repair}
     - {words: L28.11-12, by: hindi-repair}
     - {words: L28.14, by: hindi-repair}
-    - {words: L28.16, by: agent}
 - id: "2.7.4"
   kind: heading
   page: 5
   title: क. रदरफोर्ड का परमाणु मॉडल
   text: क. रदरफोर्ड का परमाणु मॉडल
   made:
-    - {words: L1.2, by: agent}
+    - {words: L1.2, by: hindi-repair}
     - {words: L1.3, by: hindi-repair}
     - {words: L1.4, by: hindi-repair}
     - {words: L1.5, by: hindi-repair}
@@ -923,7 +906,7 @@
     - {words: L2.2, by: hindi-repair}
     - {words: L2.3, by: hindi-repair}
     - {words: L2.4, by: hindi-repair}
-    - {words: L2.5, by: agent}
+    - {words: L2.5, by: hindi-repair}
     - {words: L2.6, by: hindi-repair}
     - {words: L2.8, by: hindi-repair}
     - {words: L2.9, by: hindi-repair}
@@ -963,8 +946,7 @@
   made:
     - {words: L4.6, by: hindi-repair}
     - {words: L4.8, by: hindi-repair}
-    - {words: L4.10, by: agent}
-    - {words: L4.16, by: agent}
+    - {words: L4.10, by: hindi-repair}
     - {words: L4.18, by: hindi-repair}
     - {words: L5.1, by: hindi-repair}
     - {words: L5.2, by: hindi-repair}
@@ -984,7 +966,7 @@
     सकते हैं कि यदि परमाणु एक क्रिकेट मैदान (लगभग 100 मीटर) जितना बड़ा है तो नाभिक उसके केंद्र में
     काली मिर्च के छोटे दाने (कुछ mm) जितना होगा।
   made:
-    - {words: L10.7, by: agent}
+    - {words: L10.7, by: hindi-repair}
     - {words: L10.8, by: hindi-repair}
     - {words: L10.9, by: hindi-repair}
     - {words: L10.10, by: hindi-repair}
@@ -1047,7 +1029,7 @@
   made:
     - {words: L10.1, by: hindi-repair}
     - {words: L10.2-3, by: agent}
-    - {words: L10.4, by: agent}
+    - {words: L10.4, by: hindi-repair}
     - {words: L10.5-6, by: agent}
     - {words: L11.1, by: hindi-repair}
     - {words: L11.2, by: hindi-repair}
@@ -1164,24 +1146,24 @@
     - {words: L31.3, by: hindi-repair}
     - {words: L32.3, by: hindi-repair}
     - {words: L32.5, by: hindi-repair}
-    - {words: L32.7, by: agent}
+    - {words: L32.7, by: hindi-repair}
     - {words: L32.9, by: hindi-repair}
     - {words: L32.10, by: hindi-repair}
     - {words: L32.12, by: hindi-repair}
-    - {words: L32.13, by: agent}
+    - {words: L32.13, by: hindi-repair}
     - {words: L32.17, by: hindi-repair}
     - {words: L32.19, by: hindi-repair}
-    - {words: L32.21, by: agent}
+    - {words: L32.21, by: hindi-repair}
     - {words: L33.1, by: hindi-repair}
     - {words: L33.7, by: hindi-repair}
-    - {words: L34.1, by: agent}
-    - {words: L34.6, by: agent}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
     - {words: L34.20, by: hindi-repair}
-    - {words: L35.6, by: agent}
+    - {words: L35.6, by: hindi-repair}
     - {words: L35.9, by: hindi-repair}
     - {words: L35.12-13, by: agent}
     - {words: L36.1, by: hindi-repair}
-    - {words: L36.3, by: agent}
+    - {words: L36.3, by: hindi-repair}
     - {words: L36.6, by: hindi-repair}
     - {words: L36.9, by: hindi-repair}
     - {words: L36.11, by: hindi-repair}
@@ -1198,7 +1180,7 @@
     - {words: L2.5, by: hindi-repair}
     - {words: L2.7, by: hindi-repair}
     - {words: L2.8, by: hindi-repair}
-    - {words: L2.9, by: agent}
+    - {words: L2.9, by: hindi-repair}
     - {words: L3.6, by: hindi-repair}
     - {words: L4.1, by: hindi-repair}
     - {words: L4.3, by: hindi-repair}
@@ -1208,8 +1190,7 @@
   title: ख. रदरफोर्ड मॉडल की सीमाएँ
   text: ख. रदरफोर्ड मॉडल की सीमाएँ
   made:
-    - {words: L5.2, by: agent}
-    - {words: L5.5, by: agent}
+    - {words: L5.2, by: hindi-repair}
 - id: "2.7.14"
   kind: text
   page: 6
@@ -1218,7 +1199,7 @@
   made:
     - {words: L25.2-3, by: agent}
     - {words: L25.8, by: hindi-repair}
-    - {words: L25.13, by: agent}
+    - {words: L25.13, by: hindi-repair}
     - {words: L26.1, by: hindi-repair}
     - {words: L26.3, by: hindi-repair}
     - {words: L26.4, by: hindi-repair}
@@ -1243,7 +1224,7 @@
     - {words: L28.11, by: hindi-repair}
     - {words: L28.16, by: hindi-repair}
     - {words: L29.2, by: hindi-repair}
-    - {words: L29.7, by: agent}
+    - {words: L29.7, by: hindi-repair}
     - {words: L29.11, by: hindi-repair}
     - {words: L29.13, by: hindi-repair}
     - {words: L30.2, by: hindi-repair}
@@ -1252,7 +1233,6 @@
     - {words: L30.14-15, by: agent}
     - {words: L31.4-6, by: agent}
     - {words: L31.7, by: hindi-repair}
-    - {words: L31.8, by: agent}
     - {words: L31.10, by: hindi-repair}
     - {words: L31.17, by: hindi-repair}
     - {words: L31.18, by: hindi-repair}
@@ -1266,7 +1246,7 @@
     - {words: L34.6, by: hindi-repair}
     - {words: L34.7, by: hindi-repair}
     - {words: L35.3, by: hindi-repair}
-    - {words: L35.6, by: agent}
+    - {words: L35.6, by: hindi-repair}
     - {words: L35.9-12, by: hindi-repair}
     - {words: L36.1, by: hindi-repair}
     - {words: L36.6, by: hindi-repair}
@@ -1283,11 +1263,10 @@
     - {words: L39.2, by: agent}
     - {words: L39.3, by: hindi-repair}
     - {words: L39.6, by: hindi-repair}
-    - {words: L39.7, by: agent}
     - {words: L41.5, by: hindi-repair}
     - {words: L41.6, by: agent}
     - {words: L41.7, by: hindi-repair}
-    - {words: L41.10, by: agent}
+    - {words: L41.10, by: hindi-repair}
 - id: "2.7.17"
   kind: figure
   page: 6
@@ -1302,7 +1281,7 @@
     - {words: L40.8, by: hindi-repair}
     - {words: L42.2-3, by: agent}
     - {words: L42.4, by: hindi-repair}
-    - {words: L42.5, by: agent}
+    - {words: L42.5, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "2.7.18"
   kind: heading
@@ -1316,7 +1295,7 @@
     होता है। प्रोटॉन का भार इलेक्ट्रॉन से बहुत अधिक होता हैं और इस पर इलेक्ट्रॉन के समान परंतु
     विपरीत आवेश होता है।
   made:
-    - {words: L45.1, by: agent}
+    - {words: L45.1, by: hindi-repair}
     - {words: L45.3, by: hindi-repair}
     - {words: L45.6, by: hindi-repair}
     - {words: L45.7, by: hindi-repair}
@@ -1367,7 +1346,7 @@
     - {words: L54.7, by: hindi-repair}
     - {words: L54.8, by: hindi-repair}
     - {words: L54.11, by: hindi-repair}
-    - {words: L56.2, by: agent}
+    - {words: L56.2, by: hindi-repair}
     - {words: L56.4, by: hindi-repair}
     - {words: L56.10, by: hindi-repair}
     - {words: L56.12-13, by: agent}
@@ -1402,8 +1381,8 @@
     - {words: L8.1, by: hindi-repair}
     - {words: L8.2, by: hindi-repair}
     - {words: L9.1, by: hindi-repair}
-    - {words: L9.2, by: agent}
-    - {words: L10.1, by: agent}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
     - {words: L10.2-3, by: agent}
     - {words: L11.3, by: hindi-repair}
     - {words: L13.3, by: hindi-repair}
@@ -1448,7 +1427,7 @@
   made:
     - {words: L7.1-2, by: agent}
     - {words: L7.4, by: hindi-repair}
-    - {words: L7.9, by: agent}
+    - {words: L7.9, by: hindi-repair}
     - {words: L7.12, by: hindi-repair}
     - {words: L7.14, by: hindi-repair}
     - {words: L8.9-12, by: hindi-repair}
@@ -1566,8 +1545,8 @@
     - {words: L31.5, by: hindi-repair}
     - {words: L31.12, by: hindi-repair}
     - {words: L34.4, by: hindi-repair}
-    - {words: L34.7, by: agent}
-    - {words: L34.11, by: agent}
+    - {words: L34.7, by: hindi-repair}
+    - {words: L34.11, by: hindi-repair}
     - {words: L34.14, by: hindi-repair}
     - {words: L36.1, by: hindi-repair}
     - {words: L36.2, by: hindi-repair}
@@ -1578,14 +1557,12 @@
     - {words: L36.21, by: hindi-repair}
     - {words: L38.3, by: hindi-repair}
     - {words: L38.4-5, by: agent}
-    - {words: L38.10, by: agent}
     - {words: L38.13, by: hindi-repair}
     - {words: L38.14, by: hindi-repair}
     - {words: L39.6, by: hindi-repair}
     - {words: L39.8, by: hindi-repair}
     - {words: L39.11, by: hindi-repair}
     - {words: L39.12, by: hindi-repair}
-    - {words: L39.15, by: agent}
     - {words: L39.20, by: hindi-repair}
     - {words: L40.9, by: hindi-repair}
     - {words: L40.11, by: hindi-repair}
@@ -1604,7 +1581,7 @@
     वर्ष 1922 में नोबेल पुरस्कार प्राप्त हुआ था।
   made:
     - {words: L19.1, by: hindi-repair}
-    - {words: L26.1, by: agent}
+    - {words: L26.1, by: hindi-repair}
     - {words: L26.3, by: hindi-repair}
     - {words: L28.2, by: agent}
     - {words: L30.1, by: hindi-repair}
@@ -1621,7 +1598,7 @@
     - {words: L44.4, by: hindi-repair}
     - {words: L46.1, by: hindi-repair}
     - {words: L47.4, by: hindi-repair}
-    - {words: L48.2, by: agent}
+    - {words: L48.2, by: hindi-repair}
     - {words: L48.5, by: hindi-repair}
     - {words: L49.2, by: hindi-repair}
     - {words: L49.4, by: hindi-repair}
@@ -1665,11 +1642,10 @@
     प्रस्तावित किया गया। इसके विषय में आप उच्च कक्षाओं में अध्ययन करेंगे।
   made:
     - {words: L63.1, by: hindi-repair}
-    - {words: L63.7, by: agent}
     - {words: L63.9, by: hindi-repair}
     - {words: L63.12, by: hindi-repair}
-    - {words: L63.14, by: agent}
-    - {words: L63.15, by: agent}
+    - {words: L63.14, by: hindi-repair}
+    - {words: L63.15, by: hindi-repair}
     - {words: L64.2, by: hindi-repair}
     - {words: L64.7, by: hindi-repair}
     - {words: L64.9, by: hindi-repair}
@@ -1693,7 +1669,7 @@
     नाभिक के चारों ओर गति करते हुए इलेक्ट्रॉन इतने हल्के होते हैं कि उनके द्रव्यमान की लगभग उपेक्षा
     की जा सकती है।
   made:
-    - {words: L3.1, by: agent}
+    - {words: L3.1, by: hindi-repair}
     - {words: L3.4, by: hindi-repair}
     - {words: L3.10, by: hindi-repair}
     - {words: L3.13, by: hindi-repair}
@@ -1802,11 +1778,10 @@
     - {words: L12.3, by: hindi-repair}
     - {words: L12.5, by: hindi-repair}
     - {words: L12.8, by: hindi-repair}
-    - {words: L12.9, by: agent}
-    - {words: L12.13, by: agent}
-    - {words: L12.14, by: agent}
+    - {words: L12.13, by: hindi-repair}
+    - {words: L12.14, by: hindi-repair}
     - {words: L13.2, by: hindi-repair}
-    - {words: L13.5-7, by: agent}
+    - {words: L13.5-7, by: hindi-repair}
     - {words: L13.13, by: hindi-repair}
     - {words: L14.8, by: hindi-repair}
     - {words: L14.14, by: hindi-repair}
@@ -1837,7 +1812,7 @@
   text: तालिका 8.1 अवपरमाणुक कणों के प्रतीकों एवं आपेक्षिक आवेशों को दर्शाती है।
   made:
     - {words: L20.1, by: hindi-repair}
-    - {words: L20.3, by: agent}
+    - {words: L20.3, by: hindi-repair}
     - {words: L20.4, by: hindi-repair}
     - {words: L20.5, by: hindi-repair}
     - {words: L20.6, by: hindi-repair}
@@ -1860,11 +1835,10 @@
     - ["3.", न्यूट्रॉन, n⁰, "0"]
   crop: [89.5, 417.5, 421.6, 515.6]
   made:
-    - {words: L21.3, by: agent}
     - {words: L21.4, by: hindi-repair}
     - {words: L21.8, by: hindi-repair}
     - {words: L22.2, by: hindi-repair}
-    - {words: L26.1, by: agent}
+    - {words: L26.1, by: hindi-repair}
     - {words: L27.1-2, by: agent}
     - {words: L28.1, by: hindi-repair}
     - {words: L29.1, by: hindi-repair}
@@ -1934,7 +1908,6 @@
     - {words: L48.16, by: hindi-repair}
     - {words: L48.18, by: hindi-repair}
     - {words: L49.1, by: hindi-repair}
-    - {words: L49.4, by: agent}
     - {words: L49.6, by: hindi-repair}
     - {words: L49.7, by: hindi-repair}
     - {words: L49.11, by: hindi-repair}
@@ -1942,7 +1915,7 @@
     - {words: L49.14, by: hindi-repair}
     - {words: L49.15-18, by: hindi-repair}
     - {words: L49.19, by: hindi-repair}
-    - {words: L50.1, by: agent}
+    - {words: L50.1, by: hindi-repair}
     - {words: L50.6, by: hindi-repair}
     - {words: L50.11, by: hindi-repair}
     - {words: L50.13, by: hindi-repair}
@@ -2031,12 +2004,11 @@
   made:
     - {words: L72.1, by: hindi-repair}
     - {words: L73.1, by: hindi-repair}
-    - {words: L73.2, by: agent}
     - {words: L74.2-3, by: agent}
     - {words: L75.1, by: agent}
     - {words: L77.1-2, by: agent}
     - {words: L79.1, by: hindi-repair}
-    - {words: L79.2, by: agent}
+    - {words: L79.2, by: hindi-repair}
     - {words: L80.1, by: hindi-repair}
     - {words: L80.2, by: hindi-repair}
     - {words: L80.3, by: hindi-repair}
@@ -2046,7 +2018,6 @@
     - {words: L81.7, by: agent}
     - {words: L83.4, by: hindi-repair}
     - {words: L83.6, by: hindi-repair}
-    - {words: L85.1, by: agent}
     - {words: L85.3, by: hindi-repair}
     - {words: L85.5, by: hindi-repair}
     - {words: L86.3, by: hindi-repair}
@@ -2095,7 +2066,7 @@
     - {words: L6.2, by: hindi-repair}
     - {words: L6.4, by: hindi-repair}
     - {words: L6.7, by: hindi-repair}
-    - {words: L7.1, by: agent}
+    - {words: L7.1, by: hindi-repair}
     - {words: L7.3, by: hindi-repair}
     - {words: L7.5, by: hindi-repair}
     - {words: L8.2-5, by: agent}
@@ -2204,7 +2175,7 @@
     करने की एक मानक विधि होनी चाहिए। इन्होंने ज्ञात तत्वों को दर्शाने के लिए वर्ष 1803 में प्रथम
     चित्रात्मक प्रतीक बनाए। चित्र 8.9 में कुछ प्रतीकों को दर्शाया गया है।
   made:
-    - {words: L18.2, by: agent}
+    - {words: L18.2, by: hindi-repair}
     - {words: L18.15, by: agent}
     - {words: L18.17, by: hindi-repair}
     - {words: L19.9, by: hindi-repair}
@@ -2234,10 +2205,10 @@
     - {words: L23.1, by: hindi-repair}
     - {words: L23.2, by: hindi-repair}
     - {words: L23.3, by: hindi-repair}
-    - {words: L23.4, by: agent}
+    - {words: L23.4, by: hindi-repair}
     - {words: L23.5, by: hindi-repair}
     - {words: L24.1, by: hindi-repair}
-    - {words: L24.3, by: agent}
+    - {words: L24.3, by: hindi-repair}
     - {words: L24.4-5, by: agent}
     - {words: L24.6, by: hindi-repair}
     - {words: L24.8, by: hindi-repair}
@@ -2263,7 +2234,7 @@
     [जर्मन वोल्फ्रॉम (wolfram) से लिया गया] है। सामान्य रूप से उपयोगी कुछ तत्वों के नाम और प्रतीक
     तालिका 8.2 में दर्शाए गए हैं।
   made:
-    - {words: L27.1, by: agent}
+    - {words: L27.1, by: hindi-repair}
     - {words: L27.3, by: hindi-repair}
     - {words: L27.5, by: hindi-repair}
     - {words: L27.10, by: agent}
@@ -2307,10 +2278,8 @@
     - {words: L3.1, page: 10, by: hindi-repair}
     - {words: L3.8-9, page: 10, by: agent}
     - {words: L3.11, page: 10, by: hindi-repair}
-    - {words: L4.1, page: 10, by: agent}
     - {words: L4.4, page: 10, by: hindi-repair}
     - {words: L4.8, page: 10, by: hindi-repair}
-    - {words: L4.9, page: 10, by: agent}
     - {words: L6.2, page: 10, by: hindi-repair}
     - {words: L6.7, page: 10, by: agent}
     - {words: L6.14, page: 10, by: hindi-repair}
@@ -2375,12 +2344,12 @@
     - {words: L19.1, by: hindi-repair}
     - {words: L20.1, by: hindi-repair}
     - {words: L22.1, by: hindi-repair}
-    - {words: L24.1, by: agent}
+    - {words: L24.1, by: hindi-repair}
     - {words: L24.3, by: hindi-repair}
     - {words: L25.1, by: hindi-repair}
     - {words: L26.1, by: hindi-repair}
     - {words: L29.1, by: hindi-repair}
-    - {words: L30.1, by: agent}
+    - {words: L30.1, by: hindi-repair}
     - {words: L33.1-4, by: hindi-repair}
     - {words: L34.1-L35.1, by: hindi-repair}
     - {box: true, by: figure-snap}
@@ -2522,7 +2491,7 @@
   text: चित्र 8.10 का अवलोकन कीजिए। लीथियम के परमाणु में कितने न्यूट्रॉन एवं प्रोटॉन विद्यमान होते हैं
     तथा इसका परमाणु क्रमांक क्या है?
   made:
-    - {words: L39.6, by: agent}
+    - {words: L39.6, by: hindi-repair}
     - {words: L39.9, by: hindi-repair}
     - {words: L39.11, by: hindi-repair}
     - {words: L40.4, by: hindi-repair}
@@ -2563,7 +2532,7 @@
     - {words: L44.5, by: hindi-repair}
     - {words: L44.6, by: hindi-repair}
     - {words: L44.8, by: hindi-repair}
-    - {words: L44.10, by: agent}
+    - {words: L44.10, by: hindi-repair}
 - id: "6.2"
   kind: equation
   page: 11
@@ -2613,7 +2582,6 @@
     - {words: L50.6, by: hindi-repair}
     - {words: L50.7-10, by: hindi-repair}
     - {words: L14.1, by: agent}
-    - {words: L17.1, by: agent}
     - {words: L51.1, by: hindi-repair}
     - {words: L51.2-4, by: agent}
     - {words: L51.5, by: hindi-repair}
@@ -2703,13 +2671,13 @@
     8.10 — नाभिक में न्यूट्रॉन और प्रोटॉन
   crop: [45.2, 84.9, 223.3, 370.7]
   made:
-    - {words: L1.1, by: agent}
+    - {words: L1.1, by: hindi-repair}
     - {words: L1.2, by: hindi-repair}
     - {words: L3.1, by: hindi-repair}
     - {words: L3.2, by: hindi-repair}
-    - {words: L4.1, by: agent}
+    - {words: L4.1, by: hindi-repair}
     - {words: L5.1, by: hindi-repair}
-    - {words: L7.1, by: agent}
+    - {words: L7.1, by: hindi-repair}
     - {words: L8.1, by: hindi-repair}
     - {words: L9.1, by: hindi-repair}
     - {words: L10.1-2, by: agent}
@@ -2735,7 +2703,7 @@
     - {words: L18.1, by: hindi-repair}
     - {words: L18.3, by: hindi-repair}
     - {words: L20.2, by: hindi-repair}
-    - {words: L20.4, by: agent}
+    - {words: L20.4, by: hindi-repair}
     - {words: L20.5, by: hindi-repair}
     - {words: L21.2, by: hindi-repair}
     - {words: L21.3, by: hindi-repair}
@@ -2976,11 +2944,9 @@
     - {words: L10.1, by: hindi-repair}
     - {words: L10.2, by: hindi-repair}
     - {words: L11.1, by: hindi-repair}
-    - {words: L14.1, by: agent}
     - {words: L17.1, by: hindi-repair}
     - {words: L19.1, by: hindi-repair}
     - {words: L20.1, by: hindi-repair}
-    - {words: L21.1, by: agent}
     - {words: L23.1, by: hindi-repair}
     - {words: L26.1, by: hindi-repair}
     - {words: L27.1, by: hindi-repair}
@@ -3131,12 +3097,10 @@
     - {words: L25.17, by: hindi-repair}
     - {words: L26.3, by: hindi-repair}
     - {words: L26.7, by: hindi-repair}
-    - {words: L26.9, by: agent}
     - {words: L26.12, by: hindi-repair}
     - {words: L26.14, by: hindi-repair}
     - {words: L26.15-18, by: hindi-repair}
     - {words: L26.20, by: hindi-repair}
-    - {words: L27.7, by: agent}
     - {words: L27.9, by: hindi-repair}
     - {words: L27.11, by: agent}
     - {words: L27.13, by: hindi-repair}
@@ -3247,7 +3211,7 @@
   text: तालिका 8.4 का अवलोकन कीजिए। इसमें एक कॉलम और जोड़िए और प्रत्येक तत्व की सामान्य संयोजकता लिखिए।
   made:
     - {words: L45.6, by: hindi-repair}
-    - {words: L45.10, by: agent}
+    - {words: L45.10, by: hindi-repair}
     - {words: L45.12, by: hindi-repair}
     - {words: L45.13, by: agent}
     - {words: L45.15, by: hindi-repair}
@@ -3309,7 +3273,7 @@
     जिनके परमाणु क्रमांक समान परंतु द्रव्यमान संख्याएँ भिन्न होती हैं, समस्थानिक (Isotopes) कहलाते
     हैं।
   made:
-    - {words: L3.1, by: agent}
+    - {words: L3.1, by: hindi-repair}
     - {words: L3.3, by: hindi-repair}
     - {words: L3.7, by: agent}
     - {words: L3.14, by: hindi-repair}
@@ -3332,7 +3296,7 @@
     - {words: L8.4-7, by: hindi-repair}
     - {words: L8.8-10, by: hindi-repair}
     - {words: L9.3, by: hindi-repair}
-    - {words: L9.4, by: agent}
+    - {words: L9.4, by: hindi-repair}
     - {words: L9.5, by: hindi-repair}
     - {words: L9.7, by: hindi-repair}
     - {words: L9.8, by: hindi-repair}
@@ -3352,7 +3316,6 @@
     - {words: L11.6-7, by: agent}
     - {words: L11.8-11, by: hindi-repair}
     - {words: L11.14-15, by: agent}
-    - {words: L11.16, by: agent}
     - {words: L11.17, by: hindi-repair}
     - {words: L12.2, by: hindi-repair}
     - {words: L12.9, by: hindi-repair}
@@ -3360,7 +3323,6 @@
     - {words: L12.12, by: hindi-repair}
     - {words: L13.1, by: hindi-repair}
     - {words: L13.3, by: hindi-repair}
-    - {words: L13.5, by: agent}
     - {words: L13.6, by: hindi-repair}
     - {words: L13.8, by: hindi-repair}
     - {words: L13.10, by: hindi-repair}
@@ -3380,7 +3342,7 @@
   made:
     - {words: L15.1, by: hindi-repair}
     - {words: L33.1-4, by: hindi-repair}
-    - {words: L33.5, by: agent}
+    - {words: L33.5, by: hindi-repair}
     - {words: L34.1, by: hindi-repair}
     - {words: L34.3, by: hindi-repair}
     - {words: L34.4, by: hindi-repair}
@@ -3562,7 +3524,6 @@
     - {words: L11.5, by: hindi-repair}
     - {words: L11.6-7, by: agent}
     - {words: L11.10, by: hindi-repair}
-    - {words: L11.13, by: agent}
     - {words: L13.1-2, by: agent}
     - {words: L14.2, by: hindi-repair}
     - {words: L14.5, by: hindi-repair}
@@ -3680,7 +3641,6 @@
     - {words: L33.2, by: hindi-repair}
     - {words: L33.3, by: hindi-repair}
     - {words: L33.5, by: hindi-repair}
-    - {words: L33.12, by: agent}
     - {words: L33.15, by: hindi-repair}
     - {words: L33.16, by: hindi-repair}
 - id: "9.1.16"
@@ -3815,7 +3775,7 @@
     हों? ऐसे परमाणुओं को क्या कहते हैं? आइए, पता लगाएँ!
   made:
     - {words: L56.12, by: hindi-repair}
-    - {words: L57.1, by: agent}
+    - {words: L57.1, by: hindi-repair}
     - {words: L57.2, by: hindi-repair}
     - {words: L57.4, by: hindi-repair}
     - {words: L57.5, by: hindi-repair}
@@ -3856,7 +3816,7 @@
     - {words: L64.12, by: hindi-repair}
     - {words: L64.16-17, by: agent}
     - {words: L65.1, by: hindi-repair}
-    - {words: L65.2, by: agent}
+    - {words: L65.2, by: hindi-repair}
     - {words: L65.5, by: hindi-repair}
     - {words: L65.10, by: hindi-repair}
     - {words: L65.11, by: agent}
@@ -3952,7 +3912,7 @@
     - {words: L14.1, by: hindi-repair}
     - {words: L14.5, by: agent}
     - {words: L14.6, by: hindi-repair}
-    - {words: L15.2, by: agent}
+    - {words: L15.2, by: hindi-repair}
     - {words: L15.3, by: hindi-repair}
     - {words: L16.1, by: agent}
     - {words: L16.4-5, by: agent}
@@ -3969,8 +3929,6 @@
     प्रकार व्यवस्थित होते हैं।
   made:
     - {words: L19.2, by: hindi-repair}
-    - {words: L19.4, by: agent}
-    - {words: L20.1, by: agent}
     - {words: L20.2, by: hindi-repair}
     - {words: L21.3, by: hindi-repair}
     - {words: L22.1, by: hindi-repair}
@@ -3978,11 +3936,9 @@
     - {words: L22.4, by: hindi-repair}
     - {words: L23.1, by: hindi-repair}
     - {words: L23.5, by: hindi-repair}
-    - {words: L24.1, by: agent}
-    - {words: L24.2, by: agent}
-    - {words: L24.3, by: agent}
+    - {words: L24.3, by: hindi-repair}
     - {words: L25.1, by: hindi-repair}
-    - {words: L25.2, by: agent}
+    - {words: L25.2, by: hindi-repair}
     - {words: L25.4, by: hindi-repair}
     - {words: L27.2, by: hindi-repair}
     - {words: L27.4, by: hindi-repair}
@@ -4005,8 +3961,8 @@
     - {words: L31.2, by: hindi-repair}
     - {words: L31.3, by: hindi-repair}
     - {words: L31.4, by: hindi-repair}
-    - {words: L31.5, by: agent}
-    - {words: L32.1-4, by: agent}
+    - {words: L31.5, by: hindi-repair}
+    - {words: L32.1-4, by: hindi-repair}
     - {words: L32.5-8, by: hindi-repair}
     - {words: L32.9, by: hindi-repair}
     - {box: true, by: figure-snap}
@@ -4019,7 +3975,7 @@
     यांत्रिकीय मॉडल अभी भी खोजा जा रहा है चित्र 8.16 — परमाणु मॉडलों के विकास की यात्रा
   crop: [90.6, 98.1, 573.1, 223.9]
   made:
-    - {words: L7.1, by: agent}
+    - {words: L7.1, by: hindi-repair}
     - {words: L10.1, by: hindi-repair}
     - {words: L10.2, by: hindi-repair}
     - {words: L10.3, by: hindi-repair}
@@ -4028,7 +3984,7 @@
     - {words: L14.6, by: hindi-repair}
     - {words: L15.2, by: hindi-repair}
     - {words: L15.4, by: hindi-repair}
-    - {words: L4.1, by: agent}
+    - {words: L4.1, by: hindi-repair}
     - {words: L10.7, by: hindi-repair}
     - {words: L10.8, by: hindi-repair}
     - {words: L10.9, by: hindi-repair}
@@ -4043,7 +3999,7 @@
     - {words: L9.1, by: hindi-repair}
     - {words: L9.2, by: hindi-repair}
     - {words: L11.1, by: hindi-repair}
-    - {words: L11.2, by: agent}
+    - {words: L11.2, by: hindi-repair}
     - {words: L11.3, by: hindi-repair}
     - {words: L2.1, by: hindi-repair}
     - {words: L2.2, by: hindi-repair}
@@ -4092,20 +4048,18 @@
     - {words: L29.8, by: hindi-repair}
     - {words: L30.6, by: hindi-repair}
     - {words: L30.10, by: hindi-repair}
-    - {words: L30.13, by: agent}
     - {words: L30.15, by: hindi-repair}
     - {words: L30.18, by: hindi-repair}
-    - {words: L31.2, by: agent}
+    - {words: L31.2, by: hindi-repair}
     - {words: L31.10, by: hindi-repair}
     - {words: L31.11, by: hindi-repair}
     - {words: L31.14, by: hindi-repair}
     - {words: L31.15, by: hindi-repair}
     - {words: L32.3-4, by: agent}
     - {words: L32.5, by: hindi-repair}
-    - {words: L32.8, by: agent}
     - {words: L32.15, by: hindi-repair}
     - {words: L33.3, by: hindi-repair}
-    - {words: L34.2, by: agent}
+    - {words: L34.2, by: hindi-repair}
     - {words: L34.10, by: hindi-repair}
     - {words: L34.12, by: hindi-repair}
     - {words: L34.13, by: hindi-repair}
@@ -4117,11 +4071,9 @@
     - {words: L36.10, by: hindi-repair}
     - {words: L36.14, by: hindi-repair}
     - {words: L37.2, by: hindi-repair}
-    - {words: L37.3, by: agent}
     - {words: L37.6, by: hindi-repair}
     - {words: L37.7, by: hindi-repair}
     - {words: L37.9, by: hindi-repair}
-    - {words: L38.5, by: agent}
     - {words: L38.10, by: hindi-repair}
     - {words: L38.11, by: hindi-repair}
     - {words: L39.8, by: hindi-repair}
@@ -4129,7 +4081,7 @@
     - {words: L39.11, by: hindi-repair}
     - {words: L39.15, by: hindi-repair}
     - {words: L40.2-5, by: hindi-repair}
-    - {words: L40.6, by: agent}
+    - {words: L40.6, by: hindi-repair}
     - {words: L41.11, by: hindi-repair}
     - {words: L41.14, by: hindi-repair}
     - {words: L42.3, by: hindi-repair}
@@ -4148,7 +4100,7 @@
     - {words: L46.6, by: hindi-repair}
     - {words: L46.9, by: hindi-repair}
     - {words: L46.10, by: hindi-repair}
-    - {words: L46.11, by: agent}
+    - {words: L46.11, by: hindi-repair}
     - {words: L46.12, by: hindi-repair}
     - {words: L47.1, by: hindi-repair}
     - {words: L47.4, by: hindi-repair}
@@ -4156,7 +4108,7 @@
     - {words: L48.5, by: agent}
     - {words: L48.10, by: hindi-repair}
     - {words: L49.1, by: hindi-repair}
-    - {words: L49.2, by: agent}
+    - {words: L49.2, by: hindi-repair}
     - {words: L49.3, by: hindi-repair}
     - {words: L49.5, by: hindi-repair}
     - {words: L50.3, by: agent}
@@ -4168,7 +4120,7 @@
     - {words: L52.4, by: agent}
     - {words: L52.9, by: hindi-repair}
     - {words: L52.11, by: hindi-repair}
-    - {words: L52.12, by: agent}
+    - {words: L52.12, by: hindi-repair}
     - {words: L52.15, by: hindi-repair}
     - {words: L53.4, by: hindi-repair}
     - {words: L53.6, by: hindi-repair}
@@ -4191,8 +4143,8 @@
     है कि परमाणु का अधिकांश द्रव्यमान और धन आवेश एक सूक्ष्म केंद्र में सुसंकुलित है। (iv) जिस प्रकार
     अल्फा कण विक्षेपित हुए उससे यह ज्ञात हुआ कि इलेक्ट्रॉन नाभिक के चारों ओर गति करते हैं।
   made:
-    - {words: L2.2, by: agent}
-    - {words: L2.3, by: agent}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
     - {words: L2.5, by: hindi-repair}
     - {words: L2.6, by: hindi-repair}
     - {words: L2.9, by: hindi-repair}
@@ -4205,7 +4157,7 @@
     - {words: L4.12, by: hindi-repair}
     - {words: L4.14, by: hindi-repair}
     - {words: L5.3, by: hindi-repair}
-    - {words: L5.5, by: agent}
+    - {words: L5.5, by: hindi-repair}
     - {words: L5.16-17, by: agent}
     - {words: L5.18, by: hindi-repair}
     - {words: L6.1, by: hindi-repair}
@@ -4213,16 +4165,15 @@
     - {words: L6.3, by: hindi-repair}
     - {words: L6.4, by: hindi-repair}
     - {words: L6.6, by: hindi-repair}
-    - {words: L7.3, by: agent}
+    - {words: L7.3, by: hindi-repair}
     - {words: L7.4, by: hindi-repair}
     - {words: L7.9, by: hindi-repair}
     - {words: L7.15, by: hindi-repair}
     - {words: L8.4, by: hindi-repair}
     - {words: L8.5-6, by: agent}
     - {words: L8.7, by: hindi-repair}
-    - {words: L8.8-L9.3, by: agent}
-    - {words: L10.4, by: agent}
-    - {words: L10.6, by: agent}
+    - {words: L8.8-L9.3, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
     - {words: L10.8, by: agent}
     - {words: L10.16, by: hindi-repair}
     - {words: L11.1, by: hindi-repair}
@@ -4311,15 +4262,13 @@
     पर विक्षेपित हो गए थे, के आधार पर परमाणु के धनावेशित भाग की अवस्थिति और अभिलक्षणों के विषय में
     क्या निष्कर्ष निकाला?"
   made:
-    - {words: L29.2, by: agent}
+    - {words: L29.2, by: hindi-repair}
     - {words: L29.4, by: hindi-repair}
     - {words: L29.5, by: hindi-repair}
     - {words: L29.7, by: hindi-repair}
-    - {words: L29.10, by: agent}
+    - {words: L29.10, by: hindi-repair}
     - {words: L29.18, by: hindi-repair}
     - {words: L29.19, by: hindi-repair}
-    - {words: L30.1, by: agent}
-    - {words: L30.10, by: agent}
     - {words: L30.13, by: hindi-repair}
     - {words: L30.15, by: hindi-repair}
     - {words: L31.2, by: hindi-repair}
@@ -4355,18 +4304,18 @@
     - {words: L5.5, by: hindi-repair}
     - {words: L5.9, by: hindi-repair}
     - {words: L5.10, by: hindi-repair}
-    - {words: L6.9, by: agent}
+    - {words: L6.9, by: hindi-repair}
     - {words: L6.13, by: hindi-repair}
     - {words: L6.14, by: hindi-repair}
     - {words: L6.16, by: hindi-repair}
     - {words: L7.5, by: hindi-repair}
     - {words: L7.8, by: hindi-repair}
-    - {words: L8.2, by: agent}
+    - {words: L8.2, by: hindi-repair}
     - {words: L8.6, by: hindi-repair}
     - {words: L8.9-10, by: agent}
     - {words: L8.11, by: hindi-repair}
     - {words: L8.14-15, by: agent}
-    - {words: L9.2, by: agent}
+    - {words: L9.2, by: hindi-repair}
     - {words: L9.6-7, by: agent}
     - {words: L9.9, by: hindi-repair}
     - {words: L9.10, by: hindi-repair}
@@ -4404,7 +4353,6 @@
     - {words: L12.17, by: hindi-repair}
     - {words: L12.18, by: hindi-repair}
     - {words: L12.21, by: hindi-repair}
-    - {words: L14.2, by: agent}
     - {words: L14.3, by: hindi-repair}
     - {words: L14.8-L15.2, by: hindi-repair}
     - {words: L15.5, by: hindi-repair}
@@ -4494,12 +4442,12 @@
   text: 10. रदरफोर्ड और बोर दोनों के प्रतिरूपों में इलेक्ट्रॉन नाभिक की परिक्रमा करते हैं परंतु
     रदरफोर्ड का मॉडल, परमाणु के स्थायित्व को समझाने में असफल क्यों रहा जबकि बोर का मॉडल सफल रहा?
   made:
-    - {words: L1.2, by: agent}
+    - {words: L1.2, by: hindi-repair}
     - {words: L1.5, by: hindi-repair}
     - {words: L1.7, by: hindi-repair}
     - {words: L1.8, by: hindi-repair}
     - {words: L1.14, by: hindi-repair}
-    - {words: L1.16, by: agent}
+    - {words: L1.16, by: hindi-repair}
     - {words: L2.4, by: hindi-repair}
     - {words: L2.7, by: hindi-repair}
     - {words: L2.9, by: hindi-repair}
@@ -4596,7 +4544,7 @@
     इसमें कितने संयोजकता इलेक्ट्रॉन हैं? (vi) यदि इसके नाभिक में दो न्यूट्रॉन और जोड़ दिए जाएँ तो
     इसकी द्रव्यमान संख्या क्या होगी? (vii) X का नए परमाणु के साथ क्या संबंध होगा?
   made:
-    - {words: L31.4, by: agent}
+    - {words: L31.4, by: hindi-repair}
     - {words: L31.11, by: hindi-repair}
     - {words: L31.15, by: hindi-repair}
     - {words: L32.1, by: hindi-repair}

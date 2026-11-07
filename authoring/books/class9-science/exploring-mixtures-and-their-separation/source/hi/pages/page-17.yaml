@@ -25,8 +25,6 @@ blocks:
     words: L3-L8
     read:
       L3.12: कक्ष
-      L7.1: परिघटना
-      L7.8: लाइट्स
   - kind: figure
     number: L9.1-2
     words: L9.1-9, L10.1
@@ -39,13 +37,8 @@ blocks:
       L9.7: टिंडल
   - kind: text
     words: L9.10-22, L10.2-16
-    read:
-      L9.13: कोलॉइड
   - kind: text
     words: L11-L13
-    read:
-      L11.1: कोलॉइड
-      L11.13: कोलॉइड
   - kind: box
     title: L14
     words: L14-L22
@@ -54,23 +47,12 @@ blocks:
       L19.3: जिससे
       L19.19-20: सके।
       L19.21: इससे
-      L15.3: कोलॉइड
-      L19.7: परिक्षेपित
-      L21.1: पायसी
-      L21.2: कारकों
-      L21.19: पायसी
-      L22.25: भली-भाँति
   - kind: box
     title: L23
     words: L23-L26
-    read:
-      L24.19: हिमक्रिस्टलों
-      L24.26: कोलॉइडों
   - kind: activity
     number: L27.1-2
     words: L27-L28
-    read:
-      L27.13: कोलॉइडों
   - kind: table
     number: L29.1-2
     title: L29.3-8
@@ -83,5 +65,3 @@ blocks:
     read:
       L31.2-3: प्रकृति
       L36.2: टिंडल
-      L31.4: (समांगी/विषमांगी)
-      L39.3: कोलॉइड

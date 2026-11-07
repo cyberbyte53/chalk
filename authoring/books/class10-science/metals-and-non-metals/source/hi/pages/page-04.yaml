@@ -27,11 +27,11 @@ blocks:
   - kind: table
     number: L7.2
     words: L7-L8, L12-L18
-    box: [67, 180, 540, 272]
+    box: [ 67, 180, 540, 272 ]
     read:
       L8.1: तत्व
       L12.1: चिह्न
-    cells: { rows: [["L8.1", "L12.1", "L13-L14", "L15.1", "L15.2", "L15.3", "L16-L17", "L18.1"], ["", "", "", "", "", "", "", ""]] }
+    cells: { rows: [ [ "L8.1", "L12.1", "L13-L14", "L15.1", "L15.2", "L15.3", "L16-L17", "L18.1" ], [ "", "", "", "", "", "", "", "" ] ] }
   - kind: text
     words: L19-L33
     read:
@@ -47,8 +47,6 @@ blocks:
       L29.7: { text: "अपररूप", cause: wrong-reading }
       L29.12-13: { text: "प्राकृतिक", cause: other }
       L30.13: { text: "अपररूप", cause: wrong-reading }
-      L32.3: (लीथियम,
-      L33.2: काटा
   - kind: text
     words: L34-L35
     read:
@@ -60,5 +58,3 @@ blocks:
     number: L36.2
     words: L36, L42-L47
     continues: true
-    read:
-      L45.13: क्षारकीय?

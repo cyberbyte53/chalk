@@ -36,10 +36,8 @@ blocks:
   - kind: text
     words: L21-L24
     read:
-      L21.5: सूती
       L21.14-15: फैक्ट्री
       L23.1: "(ii) कई"
-      L23.6: उपचायक
       L24.6-9: जीवाणुओं
   - kind: heading
     title: L25
@@ -47,7 +45,6 @@ blocks:
   - kind: text
     words: L26-L31
     read:
-      L28.7: हाइड्रोजनकार्बोनेट
       L28.8-L30.1: "(NaHCO₃)"
   - kind: equation
     words: L32-L45
@@ -57,12 +54,8 @@ blocks:
       L36.2-L37.1: "NH₃"
       L38.2-L40.1: "NH₄Cl"
       L40.3-L41.1: "NaHCO₃"
-      L45.1: "हाइड्रोजनकार्बोनेट)"
   - kind: text
     words: L46-L50
-    read:
-      L46.7: हाइड्रोजनकार्बोनेट
-      L48.9-L49.2: असंक्षारक
   - kind: equation
     words: L52-L53, L51, L54-L63
     read:
@@ -74,15 +67,11 @@ blocks:
       L62.1-L63.1: "(सोडियम हाइड्रोजनकार्बोनेट) (सोडियम कार्बोनेट)"
   - kind: text
     words: L64
-    read:
-      L64.2: हाइड्रोजनकार्बोनेट
   - kind: heading
     title: L65
     words: L65
   - kind: text
     words: L66-L68
-    read:
-      L66.7: "हाइड्रोजनकार्बोनेट)"
   - kind: equation
     words: L69-L78
     read:

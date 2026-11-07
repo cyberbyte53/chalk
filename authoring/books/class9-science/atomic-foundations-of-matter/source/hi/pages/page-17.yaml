@@ -9,50 +9,31 @@ blocks:
   - kind: activity
     continued: true
     words: L30-L41
-    read:
-      L31.12: डालिए।
-      L32.13: जोड़िए
-      L33.7: जोड़िए
-      L40.8: प्रतिदर्शों
   - kind: figure
     number: L9.1-2
     words: L1-L10
-    box: [55, 89, 252, 284]
+    box: [ 55, 89, 252, 284 ]
   - kind: table
     number: L11.1-2
     words: L11-L23
-    box: [52, 305, 548, 510]
+    box: [ 52, 305, 548, 510 ]
     read:
-      L11.3: विलेयता
-      L13.1: विलेयता
-      L14.1: किरोसिन(मिट्टी
       L20.2-3: सल्फेट
-      L22.1: नैफ्थलीन
   - kind: text
     words: L42
   - kind: text
     words: L43-L46
     read:
       L43.11-12: सल्फेट
-      L44.7: किरोसिन
-      L44.11: विलायकों
-      L45.3: सहसंयोजी
-      L45.12: नैफ्थलीन
-      L46.5: किरोसिन
   - kind: text
     words: L47-L53
     read:
       L49.14-15: सल्फेट
-      L50.9-L51.2: सहसंयोजी
-      L52.13: सहसंयोजी
-      L53.1: नैफ्थलीन
   - kind: text
     words: L54-L56
-    read:
-      L54.6-L55.2: सहसंयोजी
   - kind: figure
     number: L26.1
     words: L24-L27
-    box: [50, 527, 150, 750]
+    box: [ 50, 527, 150, 750 ]
     read:
       L25.3-4: सल्फेट

@@ -11,11 +11,8 @@ blocks:
     continued: true
     words: L1-L2, L3.3-12, L4.3-L5
     read:
-      L1.1: अधातुएँ
       L1.4: तत्व
       L1.8-9: धातुओं
-      L3.3: अधातुएँ
-      L4.3: अधातुएँ
   - kind: exercise
     title: L7
     words: L7
@@ -38,9 +35,6 @@ blocks:
   - kind: question
     number: L31.1
     words: L31-L37
-    read:
-      L36.3: अभिक्रियाशील
-      L37.6: अभिक्रियाशील
   - kind: question
     number: L38.1
     words: L38-L40

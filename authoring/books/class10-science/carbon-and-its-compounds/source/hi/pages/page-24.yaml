@@ -12,15 +12,12 @@ blocks:
     words: L1-L3
     read:
       L1.2-L3.1: "CH₃Cl"
-      L3.8: सहसंयोजक
       L3.11-12: "प्रकृति"
   - kind: question
     number: L4.1
     words: L4-L11
     read:
-      L5.2: एथेनॉइक
       L6.2-L8.1: "H₂S"
-      L9.1: "(c) प्रोपेनोन"
       L10.2-L11.1: "F₂"
   - kind: question
     number: L12.1
@@ -29,16 +26,11 @@ blocks:
     number: L13.1
     words: L13
     read:
-      L13.14: एथेनॉइक
       L13.18-19: "कैसे"
       L13.24-25: "करेंगे?"
   - kind: question
     number: L14.1
     words: L14-L15
-    read:
-      L14.11: मिसेल
-      L14.21: विलायकों
-      L15.2: मिसेल
   - kind: question
     number: L16.1
     words: L16
@@ -73,4 +65,3 @@ blocks:
     words: L44, L42, L48, L43, L49-L54
     read:
       L49.6-7: "कैस्टर"
-      L50.11: डालिए।
