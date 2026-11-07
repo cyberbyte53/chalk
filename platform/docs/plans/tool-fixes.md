@@ -49,24 +49,17 @@ tests stay in the repo; the existing proofs hold.
    suggests **one reading per touching run**, as the agents read them ("Fe₃O₄(s)", "(H₃O⁺)."), with each
    smaller, lowered or raised piece written in Unicode script inside it: digits, +, and − (the PDF's en
    dash as minus); a piece holding both, as "3–" in NO₃⁻, split by its glyphs' own baselines; stacked
-   scripts (SO₄²⁻, the 4 numbered lines away from the 2–) ordered subscript first; scripts before their
-   base (¹²₆C) kept before it. A run's words may come from numbered lines far apart: the suggestion
-   takes them by id, not as a range.
+   scripts and scripts before their base (SO₄²⁻ with its parts numbered lines apart, ¹²₆C) are rare
+   and stay the agent's.
 
 6. **A number glued to its first word by a tab** ("2.4\tलवण"). The build takes a block's number from
    the text before the tab and gives the rest to its title or text; tabs inside a line become spaces.
    No word is split, so no numbering changes.
 
-7. **The reader chosen by the body text.** One Chanakya font anywhere (five figure labels) made a whole
-   book Chanakya. The text reader is kept unless most of the page text it gives is not Unicode
-   Devanagari. For books to come (the carbon book already records its reader).
-
-8. **Bullets.** pdf.js gives each piece's font, so a symbol font's bullet that pdftotext gives as a
-   letter ("n") at a line's start is known, not guessed: the draft's furniture. Last; dropped if the
-   font can't be tied to the word reliably.
-
-Left out: joining an English word hyphenated at a line's end (two cases, and with no English word list
-"non-" + "metals" can't be told from "sepa-" + "ration").
+Left to the agent: an English word hyphenated at a line's end (two cases; "non-" + "metals" can't be
+told from "sepa-" + "ration"); the reader's choice (once, fixed in a line, recorded); bullets read as
+"n"; what the PDF lost (dropped letters, private glyphs for arrows and =, old-font labels in figures,
+spaced-out headings); tables with no rules; the draft's rough structure on busy pages.
 
 ## Done when
 
