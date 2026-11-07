@@ -4,6 +4,7 @@ Interactive lessons built from props, and Jugnu, an AI tutor (an agent on the bo
 
 ```bash
 corepack enable pnpm   # once per machine: `pnpm` then runs the version package.json names
+brew install git-lfs && git lfs install   # once per machine: clips, PDFs, zips and authoring images are in Git LFS
 pnpm install
 pnpm dev        # the learner app at http://localhost:5173 (phone width), already signed in
                 # (needs .env from .env.example and Postgres at DATABASE_URL)

@@ -19,6 +19,11 @@ COMMIT="$(git rev-parse HEAD)"
 TREE="$(mktemp -d)"
 trap 'rm -rf "$TREE"' EXIT
 git archive HEAD | tar -x -C "$TREE"
+# Clips, PDFs, zips and authoring images are in Git LFS: the archive holds their pointers, so each
+# is put back as the commit's file.
+git lfs ls-files -n | while IFS= read -r f; do
+  git cat-file blob "HEAD:$f" | git lfs smudge -- "$f" > "$TREE/$f"
+done
 
 echo "→ copying $(git rev-parse --short HEAD) to $HOST"
 rsync -az --delete --exclude-from=platform/deploy/rsync-exclude "$TREE/" "$HOST:chalk/"
