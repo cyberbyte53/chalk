@@ -19,9 +19,19 @@ export type Extract = {
   lang: Locale;
 };
 
+/** The folder of what the pipeline makes for the agents and keeps between runs (not in git). */
+export const CACHE = ".chalk-source-pages";
+
+/** A chapter's `source/`, which holds each language's extract and match.yaml. */
+export const chapterSource = (root: string, book: string, chapter: string): string =>
+  join(root, "authoring", "books", book, chapter, "source");
+
+/** An extract's chapter, as the commands name it: `class9-science/coordinate-geometry`. */
+export const chapterOf = (x: Extract): string => x.rel.split("/").slice(2, 4).join("/");
+
 /** Where one language's extract keeps its files, and its page images (not in git). */
 export function sourcePaths(root: string, book: string, chapter: string, lang: Locale) {
-  const dir = join(root, "authoring", "books", book, chapter, "source", lang);
+  const dir = join(chapterSource(root, book, chapter), lang);
   return {
     dir,
     rel: relative(root, dir),
@@ -33,7 +43,7 @@ export function sourcePaths(root: string, book: string, chapter: string, lang: L
     terms: join(dir, SourceFile.Terms),
     figures: join(dir, SourceFile.Figures),
     // Not in build/: the content build prunes what it didn't make. Ignored by git (.chalk-*).
-    cache: join(root, ".chalk-source-pages", book, chapter, lang),
+    cache: join(root, CACHE, book, chapter, lang),
   };
 }
 export type SourcePaths = ReturnType<typeof sourcePaths>;

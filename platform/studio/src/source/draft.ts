@@ -1,3 +1,4 @@
+import { cachedObjects } from "./objects";
 import { type DrawnObject, type PageObjects, area, intersect, withoutRepeats } from "./objects";
 import { expand, rangesOf, sortIds } from "./ranges";
 import { type NumberedPage, type Word, boundsOf, poppler } from "./read";
@@ -913,6 +914,10 @@ function endsInExercise(file: PageFile, before: boolean): boolean {
  * A book's pages drafted together: furniture by what repeats, the drawn objects without what is
  * drawn on every page, and a sentence running over a page's end joined to the next.
  */
+/** A book's drafts as the tools make them again from its PDF: its drawn objects and fonts read (cached). */
+export const draftBook = (pdf: string, cache: string, pages: readonly NumberedPage[]): PageFile[] =>
+  draftPages(pages, cachedObjects(pdf, cache), readStyles(pdf));
+
 export function draftPages(
   pages: readonly NumberedPage[],
   objects?: readonly PageObjects[],

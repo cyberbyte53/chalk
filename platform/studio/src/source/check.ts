@@ -16,7 +16,7 @@ import {
   digitsOf,
 } from "./build";
 import { showsOn } from "./crop";
-import { type Extract, PAGE_PREFIX, extractPaths, readYaml, sha256 } from "./files";
+import { type Extract, PAGE_PREFIX, chapterOf, extractPaths, readYaml, sha256 } from "./files";
 import { isCandidate } from "./hindi/candidates";
 import { isKnownWord } from "./hindi/list";
 import { hasHindi } from "./hindi/script";
@@ -495,7 +495,7 @@ export function checkExtract(x: Extract): ExtractReport {
   };
   if (b.built === undefined) return report;
   problems.push(...b.issues.filter((i) => i.answer === undefined).map(issueLine));
-  const rerun = `run pnpm source ${x.rel.split("/").slice(2, 4).join("/")} ${x.lang}`;
+  const rerun = `run pnpm source ${chapterOf(x)} ${x.lang}`;
   if (b.book !== undefined && changedTools(b.book).length > 0)
     problems.push(`built with other tools (${changedTools(b.book).join(", ")}): ${rerun}`);
   if (!isDeepStrictEqual(items.value, b.built.items)) {

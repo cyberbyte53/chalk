@@ -3,8 +3,8 @@ import { dirname, join } from "node:path";
 import { isDeepStrictEqual } from "node:util";
 import { type Built, buildChapter, buildPage } from "./build";
 import { buildExtract, pageToolsOf } from "./check";
-import { draftPages, readStyles } from "./draft";
-import { extractPaths, extractsIn, readYaml } from "./files";
+import { draftBook, readStyles } from "./draft";
+import { CACHE, chapterOf, extractPaths, extractsIn, readYaml } from "./files";
 import { cachedObjects } from "./objects";
 import { type Item, SourceFile, itemsSchema } from "./schema";
 
@@ -123,7 +123,7 @@ const tallyLine = (what: string, rows: readonly BlockRow[]) => {
 };
 
 /** The default file a run's rows are written to (not in git). */
-const MEASURE_FILE = join(".chalk-source-pages", "measure.tsv");
+const MEASURE_FILE = join(CACHE, "measure.tsv");
 
 export type MeasureRun = {
   root: string;
@@ -141,10 +141,10 @@ export function measure(run: MeasureRun): { lines: string[]; problems: string[] 
   const problems: string[] = [];
   const rows: BlockRow[] = [];
   const extracts = extractsIn(run.root).filter(
-    (x) => run.chapter === undefined || x.rel.split("/").slice(2, 4).join("/") === run.chapter,
+    (x) => run.chapter === undefined || chapterOf(x) === run.chapter,
   );
   for (const x of extracts) {
-    const name = [...x.rel.split("/").slice(2, 4), x.lang].join("/");
+    const name = `${chapterOf(x)}/${x.lang}`;
     const b = buildExtract(x);
     if (b.built === undefined) {
       lines.push(`not measured: ${name}: ${[...b.notes, ...b.problems].join("; ")}`);
@@ -163,7 +163,7 @@ export function measure(run: MeasureRun): { lines: string[]; problems: string[] 
     const { cache } = extractPaths(run.root, x.dir, x.lang);
     const words = b.built.pages.map((p) => p.words);
     const toolsOf = pageToolsOf(pdf, cache);
-    const drafts = draftPages(words, cachedObjects(pdf, cache), readStyles(pdf));
+    const drafts = draftBook(pdf, cache, words);
     const toolPages = drafts.map((d, i) =>
       buildPage(d, words[i] as (typeof words)[number], toolsOf(d.page)),
     );

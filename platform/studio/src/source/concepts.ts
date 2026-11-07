@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { Locale } from "@chalk/content";
-import { extractsIn, readYaml } from "./files";
+import { chapterSource, extractsIn, readYaml, sourcePaths } from "./files";
 import { matchItems } from "./match";
 import {
   type AttachedConcepts,
@@ -224,11 +224,11 @@ export function attachChapter(
   book: string,
   chapter: string,
 ): { lines: string[]; problems: string[] } {
-  const source = join(root, "authoring", "books", book, chapter, "source");
+  const source = chapterSource(root, book, chapter);
   const r = checkChapter(source);
   const lines: string[] = [];
   for (const a of r.attached) {
-    const file = join(root, ".chalk-source-pages", book, chapter, a.lang, "attach.md");
+    const file = join(sourcePaths(root, book, chapter, a.lang).cache, "attach.md");
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, a.sheet);
     lines.push(
@@ -302,7 +302,7 @@ export function lookUp(
   chapter: string,
   term: string,
 ): { lines: string[]; problems: string[] } {
-  const source = join(root, "authoring", "books", book, chapter, "source");
+  const source = chapterSource(root, book, chapter);
   const langs = Object.values(Locale).filter((l) =>
     existsSync(join(source, l, SourceFile.Concepts)),
   );

@@ -4,7 +4,7 @@ import { isDeepStrictEqual } from "node:util";
 import { Locale } from "@chalk/content";
 import { stringify } from "yaml";
 import { numbered } from "./check";
-import { extractsIn, readYaml } from "./files";
+import { chapterSource, extractsIn, readYaml } from "./files";
 import {
   type Item,
   MATCH_FILE,
@@ -87,7 +87,7 @@ export function matchChapter(
   book: string,
   chapter: string,
 ): { lines: string[]; problems: string[] } {
-  const source = join(root, "authoring", "books", book, chapter, "source");
+  const source = chapterSource(root, book, chapter);
   const { en, hi, problems } = bothBooks(source);
   if (en === undefined || hi === undefined) return { lines: [], problems };
   const file = join(source, MATCH_FILE);

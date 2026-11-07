@@ -1,8 +1,8 @@
 import { join } from "node:path";
 import type { BuiltPage } from "./build";
 import { buildExtract } from "./check";
-import { draftPages, readStyles } from "./draft";
-import { extractsIn } from "./files";
+import { draftBook, readStyles } from "./draft";
+import { chapterOf, extractPaths, extractsIn } from "./files";
 import { cachedObjects } from "./objects";
 import { expand } from "./ranges";
 import { type PageFile, SourceFile, Tool } from "./schema";
@@ -85,11 +85,11 @@ export function feedback(root: string, chapter?: string): { lines: string[]; pro
   const rows: string[] = [];
   const notes: string[] = [];
   const extracts = extractsIn(root).filter((x) => {
-    const where = x.rel.split("/").slice(2, 4).join("/");
+    const where = chapterOf(x);
     return chapter === undefined || where === chapter;
   });
   for (const x of extracts) {
-    const where = x.rel.split("/").slice(2, 4).join("/");
+    const where = chapterOf(x);
     const b = buildExtract(x);
     if (b.built === undefined) {
       notes.push(`${x.rel}: ${b.notes.join("; ") || b.problems.join("; ")}`);
@@ -114,12 +114,12 @@ export function feedback(root: string, chapter?: string): { lines: string[]; pro
         );
     // The structure draft, made again from the PDF, against what was decided.
     const pdf = join(x.dir, SourceFile.Pdf);
-    const cache = join(root, ".chalk-source-pages", ...where.split("/"), x.lang);
+    const { cache } = extractPaths(root, x.dir, x.lang);
     const drafts = new Map(
-      draftPages(
+      draftBook(
+        pdf,
+        cache,
         b.built.pages.map((p) => p.words),
-        cachedObjects(pdf, cache),
-        readStyles(pdf),
       ).map((d) => [d.page, d]),
     );
     for (const p of b.built.pages) {
