@@ -1,12 +1,12 @@
-title: Exploring Mixtures and their Separation
-reader: text
-edition: none
 address: https://ncert.nic.in/textbook/pdf/iesc105.pdf
 sha256: aad4f4a0a9bcfd429f95454daebaba1ecd10c3e73ce2595250120af60b74b396
 pages: 22
+title: Exploring Mixtures and their Separation
+reader: text
+edition: none
 tools:
   reader: 1
-  hindi-repair: 1
+  hindi-repair: 2
   figure-snap: 1
   table-cells: 1
-  structure-draft: 1
+  structure-draft: 2

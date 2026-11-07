@@ -26,14 +26,8 @@ blocks:
     title: L13
     words: L13-L19
     read:
-      L14.6-L15.4:
-        text: संतृप्त
-        cause: broken-across-lines
       L15.7: कक्ष
       L15.11-12: धीरे-धीरे
-      L18.11-L19.4:
-        text: संतृप्त
-        cause: broken-across-lines
       L15.17: हिमशीतित
       L16.13: भली-भाँति
       L16.17: पाएँगे।

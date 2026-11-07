@@ -20,7 +20,6 @@ blocks:
       L4.1-2: रेत
       L5.6-7: (रेत)
       L5.8-11: घुलते
-      L5.15-L6.3: संपूर्ण
       L5.1: विषमांगी
   - kind: heading
     words: L10
@@ -28,15 +27,7 @@ blocks:
   - kind: text
     words: L11-L20
     read:
-      L11.3-L12.2:
-        text: पंकिल
-        cause: broken-across-lines
-      L12.11-L13.1:
-        text: पंक
-        cause: broken-across-lines
-      L14.2-L15.1: धुँधला
       L16.2: इससे
-      L16.12-L17.1: धुँधला
       L19.15-16: अपकेंद्रण
       L15.11: सूती
   - kind: text

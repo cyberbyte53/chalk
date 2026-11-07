@@ -33,7 +33,7 @@
     - {words: L19.8, by: hindi-repair}
     - {words: L19.11, by: hindi-repair}
     - {words: L19.12, by: hindi-repair}
-    - {words: L19.15-L20.1, by: agent}
+    - {words: L19.15-L20.1, by: hindi-repair}
     - {words: L21.3, by: hindi-repair}
     - {words: L21.9, by: hindi-repair}
     - {words: L21.10, by: hindi-repair}
@@ -86,7 +86,7 @@
   made:
     - {words: L3.1, by: hindi-repair}
     - {words: L3.2, by: hindi-repair}
-    - {words: L4.2-L5.2, by: agent}
+    - {words: L4.2-L5.2, by: hindi-repair}
     - {words: L5.4, by: hindi-repair}
     - {words: L6.2, by: hindi-repair}
     - {words: L6.7, by: hindi-repair}
@@ -255,7 +255,7 @@
     - {words: L27.8, by: agent}
     - {words: L29.6, by: hindi-repair}
     - {words: L29.11, by: hindi-repair}
-    - {words: L30.2-L31.1, by: agent}
+    - {words: L30.2-L31.1, by: hindi-repair}
     - {words: L31.2, by: agent}
     - {words: L31.4, by: agent}
     - {words: L33.2, by: hindi-repair}
@@ -263,17 +263,17 @@
     - {words: L33.6, by: hindi-repair}
     - {words: L33.11, by: hindi-repair}
     - {words: L34.2, by: hindi-repair}
-    - {words: L35.4-L36.3, by: agent}
-    - {words: L36.7-L37.2, by: agent}
+    - {words: L35.4-L36.3, by: hindi-repair}
+    - {words: L36.7-L37.2, by: hindi-repair}
     - {words: L38.3, by: hindi-repair}
     - {words: L38.5, by: hindi-repair}
     - {words: L38.7, by: agent}
     - {words: L39.4, by: agent}
-    - {words: L39.7-L40.1, by: agent}
+    - {words: L39.7-L40.1, by: hindi-repair}
     - {words: L41.1, by: hindi-repair}
     - {words: L41.6, by: hindi-repair}
     - {words: L46.2, by: hindi-repair}
-    - {words: L46.4-L47.1, by: agent}
+    - {words: L46.4-L47.1, by: hindi-repair}
     - {words: L47.4, by: hindi-repair}
     - {words: L47.5, by: hindi-repair}
     - {words: L48.2, by: agent}
@@ -1072,7 +1072,7 @@
     कीजिए कि इसका क्या परिणाम होगा? आइए, इसे ज्ञात करते हैं।
   made:
     - {words: L44.3, by: hindi-repair}
-    - {words: L44.7-L45.4, by: agent}
+    - {words: L44.7-L45.4, by: hindi-repair}
     - {words: L45.7, by: hindi-repair}
     - {words: L45.10-11, by: agent}
     - {words: L45.14, by: hindi-repair}
@@ -1190,7 +1190,7 @@
   made:
     - {words: L6.1-2, by: agent}
     - {words: L6.3, by: hindi-repair}
-    - {words: L6.5-L7.2, by: agent}
+    - {words: L6.5-L7.2, by: hindi-repair}
     - {words: L7.5, by: hindi-repair}
     - {words: L7.10, by: hindi-repair}
     - {words: L8.10, by: hindi-repair}
@@ -1393,10 +1393,10 @@
     - {words: L70.4, by: hindi-repair}
     - {words: L70.5, by: hindi-repair}
     - {words: L70.6, by: hindi-repair}
-    - {words: L71.2-L72.2, by: agent}
+    - {words: L71.2-L72.2, by: hindi-repair}
     - {words: L72.4, by: agent}
     - {words: L75.2, by: hindi-repair}
-    - {words: L75.3-L76.2, by: agent}
+    - {words: L75.3-L76.2, by: hindi-repair}
     - {words: L76.5, by: agent}
     - {box: true, by: figure-snap}
 - id: "3.1.10"
@@ -1434,7 +1434,7 @@
     - {words: L13.4, by: hindi-repair}
     - {words: L14.3, by: hindi-repair}
     - {words: L14.5, by: hindi-repair}
-    - {words: L14.6-L15.4, by: agent}
+    - {words: L14.6-L15.4, by: hindi-repair}
     - {words: L15.7, by: agent}
     - {words: L15.11-12, by: agent}
     - {words: L15.17, by: agent}
@@ -1452,7 +1452,7 @@
     - {words: L18.1-5, by: hindi-repair}
     - {words: L18.7, by: hindi-repair}
     - {words: L18.10, by: hindi-repair}
-    - {words: L18.11-L19.4, by: agent}
+    - {words: L18.11-L19.4, by: hindi-repair}
     - {words: L19.12, by: hindi-repair}
     - {words: L19.13, by: hindi-repair}
 - id: "3.1.12"
@@ -1679,7 +1679,7 @@
     - {words: L35.8, by: hindi-repair}
     - {words: L36.6-8, by: hindi-repair}
     - {words: L36.12, by: hindi-repair}
-    - {words: L36.13-L37.2, by: agent}
+    - {words: L36.13-L37.2, by: hindi-repair}
     - {words: L37.7-9, by: hindi-repair}
     - {words: L38.3, by: hindi-repair}
     - {words: L38.10, by: hindi-repair}
@@ -1839,8 +1839,8 @@
     - {words: L7.9, by: hindi-repair}
     - {words: L7.10, by: hindi-repair}
     - {words: L8.4, by: hindi-repair}
-    - {words: L8.5-L9.2, by: agent}
-    - {words: L9.4-L10.2, by: agent}
+    - {words: L8.5-L9.2, by: hindi-repair}
+    - {words: L9.4-L10.2, by: hindi-repair}
     - {words: L10.3, by: hindi-repair}
     - {words: L10.5, by: hindi-repair}
     - {words: L10.8, by: agent}
@@ -1848,12 +1848,12 @@
     - {words: L12.2, by: hindi-repair}
     - {words: L12.8, by: hindi-repair}
     - {words: L12.10, by: hindi-repair}
-    - {words: L12.11-L13.2, by: agent}
+    - {words: L12.11-L13.2, by: hindi-repair}
     - {words: L14.3, by: hindi-repair}
     - {words: L14.10, by: hindi-repair}
     - {words: L15.6, by: hindi-repair}
     - {words: L15.13, by: hindi-repair}
-    - {words: L16.3-L17.2, by: agent}
+    - {words: L16.3-L17.2, by: hindi-repair}
     - {words: L17.5, by: hindi-repair}
     - {words: L20.3, by: agent}
     - {words: L20.12, by: hindi-repair}
@@ -2335,7 +2335,7 @@
     - {words: L49.15, by: hindi-repair}
     - {words: L49.16, by: hindi-repair}
     - {words: L49.19, by: hindi-repair}
-    - {words: L49.20-L50.1, by: agent}
+    - {words: L49.20-L50.1, by: hindi-repair}
     - {words: L51.3, by: hindi-repair}
     - {words: L51.4-6, by: hindi-repair}
     - {words: L51.11-14, by: agent}
@@ -2630,7 +2630,7 @@
     - {words: L20.2, by: hindi-repair}
     - {words: L23.1, by: hindi-repair}
     - {words: L26.1, by: hindi-repair}
-    - {words: L26.4-L27.1, by: agent}
+    - {words: L26.4-L27.1, by: hindi-repair}
     - {words: L27.2, by: hindi-repair}
     - {words: L27.3, by: hindi-repair}
     - {box: true, by: figure-snap}
@@ -2666,7 +2666,7 @@
     - {words: L5.8-11, by: agent}
     - {words: L5.12, by: hindi-repair}
     - {words: L5.13, by: hindi-repair}
-    - {words: L5.15-L6.3, by: agent}
+    - {words: L5.15-L6.3, by: hindi-repair}
     - {words: L6.4, by: hindi-repair}
     - {words: L6.6, by: hindi-repair}
     - {words: L6.9, by: hindi-repair}
@@ -2701,20 +2701,20 @@
     साफ न हो तो इसे किस प्रकार साफ किया जाए? ऐसी स्थिति में हम अपकेंद्रण और/अथवा स्कंदन जैसी तकनीकों
     का उपयोग करते हैं।"
   made:
-    - {words: L11.3-L12.2, by: agent}
+    - {words: L11.3-L12.2, by: hindi-repair}
     - {words: L12.7, by: hindi-repair}
     - {words: L12.9, by: hindi-repair}
-    - {words: L12.11-L13.1, by: agent}
+    - {words: L12.11-L13.1, by: hindi-repair}
     - {words: L13.8, by: hindi-repair}
     - {words: L13.11, by: hindi-repair}
-    - {words: L14.2-L15.1, by: agent}
+    - {words: L14.2-L15.1, by: hindi-repair}
     - {words: L15.11, by: agent}
     - {words: L15.12, by: hindi-repair}
     - {words: L15.14, by: hindi-repair}
     - {words: L16.1, by: hindi-repair}
     - {words: L16.2, by: agent}
     - {words: L16.4, by: hindi-repair}
-    - {words: L16.12-L17.1, by: agent}
+    - {words: L16.12-L17.1, by: hindi-repair}
     - {words: L17.6, by: hindi-repair}
     - {words: L17.9, by: hindi-repair}
     - {words: L17.10, by: hindi-repair}
@@ -3266,14 +3266,14 @@
     - {words: L45.16, by: hindi-repair}
     - {words: L45.17, by: hindi-repair}
     - {words: L46.4, by: hindi-repair}
-    - {words: L46.5-L47.1, by: agent}
+    - {words: L46.5-L47.1, by: hindi-repair}
     - {words: L47.11, by: hindi-repair}
-    - {words: L48.1-L49.1, by: agent}
+    - {words: L48.1-L49.1, by: hindi-repair}
     - {words: L49.3, by: hindi-repair}
     - {words: L49.5, by: hindi-repair}
     - {words: L49.10, by: hindi-repair}
     - {words: L49.12, by: hindi-repair}
-    - {words: L49.15-L50.1, by: agent}
+    - {words: L49.15-L50.1, by: hindi-repair}
     - {words: L50.3, by: agent}
     - {words: L51.4, by: agent}
     - {words: L51.6, by: hindi-repair}
@@ -3316,7 +3316,7 @@
   made:
     - {words: L3.12, by: agent}
     - {words: L4.4, by: hindi-repair}
-    - {words: L4.5-L5.1, by: agent}
+    - {words: L4.5-L5.1, by: hindi-repair}
     - {words: L5.9, by: hindi-repair}
     - {words: L5.11, by: hindi-repair}
     - {words: L6.9, by: hindi-repair}

@@ -6,7 +6,7 @@ sha256: 7ed68d1d1c065b27d2e11d002ba482c3c477aabc0d4e24175b703950fc5f6061
 pages: 22
 tools:
   reader: 1
-  hindi-repair: 1
+  hindi-repair: 2
   figure-snap: 1
   table-cells: 1
-  structure-draft: 1
+  structure-draft: 2

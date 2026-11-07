@@ -25,7 +25,6 @@ blocks:
     words: L3-L8
     read:
       L3.12: कक्ष
-      L4.5-L5.1: किरणपुंज
       L7.1: परिघटना
       L7.8: लाइट्स
   - kind: figure

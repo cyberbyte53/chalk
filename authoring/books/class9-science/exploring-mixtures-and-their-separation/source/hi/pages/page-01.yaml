@@ -16,9 +16,6 @@ blocks:
   - kind: text
     words: L18-L23
     read:
-      L19.15-L20.1:
-        text: बूँदों
-        cause: broken-across-lines
       L18.9: हरे
       L23.1: पाते
   - kind: text
@@ -30,7 +27,3 @@ blocks:
   - kind: box
     title: L3
     words: L3, L4.2-L7, L8.2-L9, L10.2-L14
-    read:
-      L4.2-L5.2:
-        text: पंकिल
-        cause: broken-across-lines

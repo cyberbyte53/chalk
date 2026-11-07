@@ -24,9 +24,6 @@ blocks:
     words: L6-L11
     read:
       L6.1-2: प्रयोगशालाओं
-      L6.5-L7.2:
-        text: संतृप्त
-        cause: broken-across-lines
       L9.5: विलेयता
       L9.13: विलेयता
       L11.7: विलेयता
@@ -75,12 +72,6 @@ blocks:
       L32.2-3: सल्फेट
       L61.2-3: सल्फेट
       L67.3-4: सल्फेट
-      L71.2-L72.2:
-        text: संतृप्त
-        cause: broken-across-lines
       L72.4: बनाना
-      L75.3-L76.2:
-        text: संतृप्त
-        cause: broken-across-lines
       L31.1: ऊष्मक
       L76.5: निस्यंदित

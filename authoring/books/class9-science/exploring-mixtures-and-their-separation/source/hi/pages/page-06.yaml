@@ -28,9 +28,6 @@ blocks:
   - kind: text
     words: L44-L46
     read:
-      L44.7-L45.4:
-        text: संतृप्त
-        cause: broken-across-lines
       L45.10-11: धीरे-धीरे
   - kind: section
     number: L47.1

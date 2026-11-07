@@ -29,8 +29,6 @@ blocks:
       L27.5: समांगी
   - kind: text
     words: L34-L40
-    read:
-      L36.13-L37.2: संघनित
   - kind: box
     title: L1
     words: L1-L11
