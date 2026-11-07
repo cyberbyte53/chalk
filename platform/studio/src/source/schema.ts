@@ -48,8 +48,6 @@ export const bookSchema = pdf
     reader: z.enum(Object.values(Reader) as [Reader, ...Reader[]]),
     /** The edition as the pages print it (NCERT's footer: "2020-21"). */
     edition: z.string().min(1),
-    /** The book's answers pages for this chapter, when separate (`answers.pdf`). */
-    answers: pdf.optional(),
     /** Not English: each number found in one language's book and not the other's, with why. */
     unmatched: z.record(z.string(), z.string()).optional(),
   })
@@ -71,7 +69,7 @@ export const itemSchema = z
     level: z.literal(2).optional(),
     /** The book's exact words (a figure's or table's: its caption and labels, not its number). */
     text: z.string(),
-    /** A question's answer, from the answers pages. */
+    /** A question's answer, where the book gives one. */
     answer: z.string().min(1).optional(),
     /** A figure's or table's box on its page. */
     crop: box.optional(),
@@ -100,7 +98,6 @@ export const termsSchema = z.array(termSchema);
 export const SourceFile = {
   Book: "book.yaml",
   Pdf: "book.pdf",
-  Answers: "answers.pdf",
   Items: "items.yaml",
   Terms: "terms.yaml",
   Figures: "figures",
