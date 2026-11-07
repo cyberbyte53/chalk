@@ -33,10 +33,11 @@ export type SourceRun = {
   chapter: string;
   lang: Locale;
   /** The PDF, a file or an address; absent, the one already there. */
-  input?: string | undefined;
-  address?: string | undefined;
-  title?: string | undefined;
-  isNewEdition: boolean;
+  input?: string;
+  answers?: string;
+  address?: string;
+  title?: string;
+  isNewEdition?: boolean;
 };
 
 /** What a run says (each line for the console) and whether its checks hold. */
@@ -52,25 +53,40 @@ export async function runSource(run: SourceRun): Promise<SourceResult> {
   const recorded = readYaml(at.book, bookSchema);
   if (recorded.problem !== undefined && run.input === undefined) throw new Error(recorded.problem);
   const old = recorded.value;
-  await takeIn(run.input, at.pdf, old, run.isNewEdition);
+  await takeIn(run.input, at.pdf, old, run.isNewEdition ?? false);
+  if (run.answers !== undefined)
+    await takeIn(run.answers, at.answers, old?.answers, run.isNewEdition ?? false);
   const reader = readerFor(at.pdf);
   const pages = readPages(at.pdf, reader);
-  const fromAddress =
-    run.input !== undefined && /^https?:\/\//.test(run.input) ? run.input : undefined;
+  const isAnswers = existsSync(at.answers);
+  const answerPages = isAnswers ? readPages(at.answers, reader) : [];
+  const address = (from: string | undefined, before: string | undefined) =>
+    run.address ?? (from !== undefined && /^https?:\/\//.test(from) ? from : before) ?? from;
   const book: Book = {
     title: run.title ?? old?.title ?? firstLine(pages[0]),
     reader,
     edition: editionOf(pages),
-    address: run.address ?? fromAddress ?? old?.address ?? run.input ?? "",
+    address: address(run.input, old?.address) ?? "",
     sha256: sha256(readFileSync(at.pdf)),
     pages: pages.length,
     printed: printedPages(pages),
+    ...(isAnswers
+      ? {
+          answers: {
+            address: address(run.answers, old?.answers?.address) ?? "",
+            sha256: sha256(readFileSync(at.answers)),
+            pages: answerPages.length,
+            printed: printedPages(answerPages),
+          },
+        }
+      : {}),
     ...(old?.unmatched === undefined ? {} : { unmatched: old.unmatched }),
   };
   if (book.address === "") throw new Error("where did the PDF come from? give --address <url>");
   bookSchema.parse(book);
   writeFileSync(at.book, stringify(book, { lineWidth: 0 }));
   const { images, changed } = renderPages(at.pdf, at.cache, "page");
+  const answerImages = isAnswers ? renderPages(at.answers, at.cache, "answers").images : [];
   pages.forEach((p, i) =>
     writeFileSync(
       join(at.cache, `page-${String(i + 1).padStart(2, "0")}.txt`),
@@ -84,7 +100,7 @@ export async function runSource(run: SourceRun): Promise<SourceResult> {
 
   // 2. Draft, and 3. the model's structure.
   if (!existsSync(at.items)) {
-    lines.push(modelStep(images, at, rel));
+    lines.push(modelStep(images, answerImages, at, rel));
     return { lines, problems: [], isWaitingOnModel: true };
   }
 
@@ -137,17 +153,19 @@ const ITEMS_SHAPE = `- kind: section          # section | text | figure | table 
 - kind: question
   page: 3
   number: Q1
-  text: How will you describe …`;
+  text: How will you describe …
+  answer: …              # from the answers pages`;
 
 /** Stage 3, the model's: what to read and write. */
 function modelStep(
   images: readonly string[],
+  answerImages: readonly string[],
   at: ReturnType<typeof sourcePaths>,
   rel: (p: string) => string,
 ): string {
   return `
 Next, the model's part. Read each page image, in order:
-${images.map((f) => `  ${rel(f)}`).join("\n")}
+${images.map((f) => `  ${rel(f)}`).join("\n")}${answerImages.length > 0 ? `\nand the answers pages:\n${answerImages.map((f) => `  ${rel(f)}`).join("\n")}` : ""}
 (each page's text layer and its bold runs are beside it, page-NN.txt). Write ${rel(at.items)}: every
 block of the book in reading order, its exact words, no ids (the machine numbers them):
 

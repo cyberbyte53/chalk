@@ -24,6 +24,7 @@ export function sourcePaths(root: string, book: string, chapter: string, lang: L
     dir,
     rel: relative(root, dir),
     pdf: join(dir, SourceFile.Pdf),
+    answers: join(dir, SourceFile.Answers),
     book: join(dir, SourceFile.Book),
     items: join(dir, SourceFile.Items),
     terms: join(dir, SourceFile.Terms),
