@@ -68,14 +68,6 @@ tests stay in the repo; the existing proofs hold.
 Left out: joining an English word hyphenated at a line's end (two cases, and with no English word list
 "non-" + "metals" can't be told from "sepa-" + "ration").
 
-## Kept only if it earns its place
-
-The agent exists for what tools can't do well, and each chapter is extracted once: a fix that saves a
-few cases isn't worth a rule that can go wrong elsewhere. A fix is kept only when, on the class 9 books
-it never saw, it **makes no block newly wrong** and saves real work (dozens of readings or blocks, not a
-handful); otherwise it is dropped, whatever it cost to build, and the case stays the agent's. Fixes 6 to
-8 are the likeliest to go.
-
 ## Done when
 
 Each fix: its unit tests; its numbers on the fourteen books (saved, changed and judged, the class 9
