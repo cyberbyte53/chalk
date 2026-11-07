@@ -13,8 +13,8 @@ proposed). The session running the `extract-chapter` skill reads the pages in or
 which block, which drawing is each figure, the words the machine couldn't repair; and at the end the
 book's ideas, each with its terms and where it is introduced. The machine builds the items, snaps each
 figure to its drawing, lays tables into rows, draws a review sheet of each page, and raises issues to fix
-or answer. Matching two languages is a separate step: numbered things pair by number, ideas pair by an
-agent, into one small file. This is document anchoring (as olmOCR does it), with our agents as the model,
+or answer. Another language's book is attached to the main one (English) afterwards: numbered things
+pair by number, and each main idea gets its line, terms and items in that book. This is document anchoring (as olmOCR does it), with our agents as the model,
 the machine doing everything that can be computed, and checks around both.
 
 ## What it is for
@@ -87,9 +87,7 @@ taken from the PDF wherever its text is sound.
    page file, `source/<lang>/pages/page-NN.yaml`: blocks in reading order (their words, kind, number as
    printed, title, whether they continue), each figure's and table's rough box, the furniture, readings
    for what the machine couldn't repair (a reading must be one of the span's candidates; an unreachable
-   span, such as a non-Unicode glyph, is answered with why), and answers to issues. Then, having read the whole chapter,
-   `source/<lang>/ideas.yaml`: the chapter's key ideas (about 15 to 30), each one line in the book's
-   language, its terms exactly as printed, and the items it is introduced in.
+   span, such as a non-Unicode glyph, is answered with why), and answers to issues. Then the ideas (below).
 3. **Build and check** (`pnpm source` again, the machine): items built from the page files; a block
    that continues joined with the next page's continued block (taking its number from where it starts);
    ids positional, an exercise holding everything up to the next section or exercise; each figure's
@@ -101,11 +99,28 @@ taken from the PDF wherever its text is sound.
    and number); then the checks, each raising issues to fix or answer. The session looks at every crop,
    every review sheet and every answer.
 
-**Match** (once both books are extracted; `pnpm source match <book>/<chapter>`): the machine pairs every
-numbered thing by kind and digits (a question by its number and which exercise it is in, counted in
-order); an agent pairs the two ideas lists and their terms. Both go into `source/match.yaml`: the pairs,
-and what one book has and the other doesn't, each with why. The check: every numbered thing and every
-idea on both sides is paired or answered; each term pair's terms belong to their paired ideas.
+**Main and attached languages.** Each book is extracted on its own, in parallel. One is the chapter's
+main language (English unless the book has none, as a Hindi literature book): its ideas are what the
+chapter is planned from. Every other language is attached to it.
+
+**Ideas** (the last step of the main book's extraction, once every page is proofread): the agent reads
+its own built items and writes `source/<main>/ideas.yaml`, the book's summary: one idea per thing it
+teaches, each one line, its terms as word ranges (so exactly as printed), and the items it is introduced
+in. A summary is the agent's alone; the checks ground it (below).
+
+**Attach** (once an attached book is extracted too; `pnpm source attach <book>/<chapter> <lang>`):
+1. The tool pairs every numbered thing by kind and digits, as now (chapter 5: 76 pairs, none wrong).
+2. For each main idea it suggests where the attached book has it: the attached items paired with the
+   idea's numbered items, or in its paired section; and the attached terms there, a bracketed phrase in
+   the main language's script beside one (list markers and abbreviations left out) pointing to which.
+3. The agent proofreads, on a sheet with each idea's main line beside the suggested attached items, and
+   writes `source/<lang>/ideas.yaml`: for each main idea its line in the attached language, its terms as
+   word ranges, its items; or "not in this book", with why. A replaced suggestion takes a cause, as in
+   extraction; nothing is marked more or less sure.
+
+No paragraph is paired with a paragraph: order fails wherever one book joins two paragraphs or moves a
+box (chapter 5: about a third of the unnumbered items would pair wrong), and nothing needs it.
+`pnpm source term <book>/<chapter> <term>` answers "what does the other book call it, and where".
 
 **The record** is the page files, `ideas.yaml` and `match.yaml` (in git): every judgment, with every
 reading and every answer. `items.yaml` is built from them and the PDF, so `pnpm check` builds it again
@@ -236,14 +251,15 @@ Every check raises issues the session fixes or answers; none silently passes.
 - **Figures and tables** each have a box inside the page with its caption, and a crop; an object
   crossing the rough box's edge is an issue (a figure cut off: it found the two crops the proof fixed
   by eye).
-- **Ideas:** each term printed in the items its idea cites (trailing punctuation aside); every bold
-  phrase inside a text block (the PDF's font says bold: activity verbs, box titles and page numbers are
-  outside text blocks) in some idea, or answered.
-- **Match** (its own step), above.
+- **Ideas, in each language:** each term printed in the items its idea cites (trailing punctuation
+  aside); every term the book sets apart (bold, where its PDF uses bold; a book with no bold leaves this
+  to the agent) in some idea, or answered. An attached book's leftover terms are what only it teaches:
+  each answered with why. Every main idea attached or answered "not in this book".
+- **Numbered things:** each paired across the books or answered, above.
 
 The checks on the plan (every block cited or skipped, cites exist, `plan.md` has no ids) are the
 pipeline's, run by plan-chapter; the check that lessons use the book's terms is self-review's, reading
-`match.yaml`'s term pairs.
+each language's `ideas.yaml`.
 
 ## Files
 
@@ -256,13 +272,13 @@ authoring/books/<book>/<chapter>/source/
     book.pdf             the PDF, as downloaded
     pages/page-NN.yaml   the agent's reading of each page (structure; where it differs from the tools;
                          answers)
-    ideas.yaml           the chapter's key ideas: { idea, terms, items } (replaces the first build's
-                         terms.yaml)
+    ideas.yaml           main: the book's ideas { idea, terms, items }; attached: each main idea's
+                         { idea, terms, items } in this book, or not in it with why (replaces terms.yaml)
     words.yaml           Hindi: the words this book prints that the list lacks, each answered once
     items.yaml           built: every block { id, kind, page, number?, title?, text, rows?, crop?, answer?,
                          made? (what didn't come from the PDF as it is, and by whom) }
     figures/<id>.png     built
-  match.yaml             the two languages paired: numbered things, ideas, terms; and what only one has
+  match.yaml             numbered things paired across the books; what only one has, with why
 platform/studio/src/source/hindi/   the Hindi word list (LibreOffice hi_IN, GPL, with its licence;
                                     used only by this authoring tool, never in the app)
 .chalk-source-pages/<book>/<chapter>/<lang>/  not in git: images, numbered images, words, review sheets
