@@ -1,6 +1,7 @@
 # A chapter's sources: each language's book extracted alone, then matched by its numbers
 
-Status: plan, agreed with the person and reviewed (6 Nov 2026). Replaces the source parts of
+Status: plan, agreed with the person and reviewed (6 Nov 2026); "The words come from the book" added and
+reviewed 7 Nov 2026. Replaces the source parts of
 `platform/docs/plans/authoring.md` (step 5's `attach`, step 7's Hindi) and of
 `platform/docs/plans/languages.md` (attaching a language by aligned extraction).
 
@@ -76,17 +77,47 @@ figures"`).
 pages whose image changed.
 1. **Machine:** copies the PDF in, writes `book.yaml` (refusing a fingerprint that differs from the one
    recorded unless told the edition changed), renders each page to an image, and reads its text layer
-   (a legacy Hindi font, Chanakya or Kruti Dev, converted to Unicode by its fixed table).
-2. **Model:** reads each page image and writes the items (exact words, kinds, crop boxes) and the terms.
-3. **Machine:** crops the figures (each box snapped to its caption's place in the text layer, the
-   watermark masked) and the model looks at every crop; then the checks below.
+   (an old Hindi font, Chanakya or Kruti Dev, converted to Unicode by its fixed table).
+2. **Machine:** drafts `items.yaml` from the text layer (below): the words are the book's, never typed.
+3. **Model:** looks at each page image beside the draft and fixes only its structure: where a block
+   starts and ends, its kind, its number, each figure's and table's box; then writes the terms.
+4. **Machine:** crops the figures (the watermark and the running text in a box masked) and the model looks
+   at every crop; then the checks below.
 
 `pnpm new chapter` runs it for English. Nothing else adds a source.
 
+## The words come from the book (revised 7 Nov 2026, reviewed)
+
+**Why.** The PDF's text layer is what the publisher typeset, letter for letter: it is the book's
+content. Retyping it from page images and then proving the copy against it was backwards. Only the
+structure needs judgment; the words need none.
+
+**The draft, once.** When a language has no `items.yaml`, the machine drafts it: split at paragraph
+breaks and at printed numbers, the words as the text layer has them. (Lines are grouped by overlap,
+since numbers and Latin sit off the Hindi baseline, and split at column gaps; a block starts at a wider
+gap, a first-line indent, or a number word from `platform/studio/src/source/numbers.ts`, including
+questions' "1." and exercises' headings; blocks run across pages.) After that the file is the record:
+never redrafted, and the checks prove it.
+
+**What the model may change:** where blocks split and join, kinds, numbers, crops, and anything that is
+not a letter (maths notation: `−`, `x-axis`, a fraction as `2/3`, the brackets the text layer gives as
+odd glyphs). Never a letter: the check below compares letters. A figure's or table's `text` is its
+caption and the labels set as text; labels drawn in the picture are in its crop, not typed.
+
+**A font's table** is proven once, against page images, its cases kept as tests
+(`platform/studio/src/source/chanakya.test.ts`).
+
+**Ids.** They are positions, so a split or join moves the ids after it. `pnpm source`, when it
+renumbers, rewrites `boards.md`'s cites by finding each old item's words among the new ones; an old item
+it can't find fails the command. `plan.md` is to check again when any item's letters change or an item
+is added or removed.
+
 ## Checks (in `pnpm check`)
 
-- **The reading agrees with the book:** every item's text is found in its page's text layer, comparing
-  letters only (spaces, hyphens, dashes and minus signs, line breaks and stacked fractions ignored).
+- **The items are the book, nothing dropped or added:** each page's words, compared letters only, are
+  used by the items exactly once and in order within a block. Allowed unused: the running head and
+  footer, the chapter's heading ("CHAPTER 3", "अध्याय 3") with its title, and the bracket and fraction
+  glyphs of maths. A dropped line fails, and so does a word read twice or a word not on the page.
 - **Nothing numbered is missed:** every number the pages print after the language's own words, and each
   is an item's `number` (Fig./
   आकृति, Table/सारणी, Example/उदाहरण, Activity/क्रियाकलाप, Exercise/प्रश्नावली) has its item, in order.
@@ -127,5 +158,9 @@ pages whose image changed.
 3. Hindi: the legacy-font conversion (`platform/studio/src/source/chanakya.ts`), extraction proved on the
    Hindi book; matching and its check. Done 7 Nov 2026: 86 items, 19 terms; all 36 numbered things
    match, none unmatched.
-4. The terms check on the lessons; chapter 1's threads filed.
-5. `pnpm new chapter` uses it; docs and skills say it (full paths).
+4. The draft and the one check above. Chapter 1 is not re-extracted: the drafter is run into a scratch
+   file and compared with today's items (the words should agree letter for letter; each difference is a
+   rule to fix); drawn labels leave the figures' `text`; the check holds on English and Hindi; the cites'
+   rewrite is tested.
+5. The terms check on the lessons; chapter 1's threads filed.
+6. `pnpm new chapter` uses it; docs and skills say it (full paths).
