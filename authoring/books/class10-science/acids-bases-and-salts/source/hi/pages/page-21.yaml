@@ -1,0 +1,51 @@
+page: 21
+proofread: true
+cause: other
+notes:
+  other: "a subscript the PDF sets as a plain digit on its own line (NaHCO 3), printed NaHCO₃"
+furniture: L35-L38
+answers:
+  "read L15.12": "the PDF doubles the े sign (सोेडा); the image prints सोडा"
+  "word पेटुनिया": "a flower's name (petunia), spelt so on this page as printed; the list lacks it"
+  "word हाइड्रेंजिया": "a flower's name (hydrangea), spelt so on this page as printed; the list lacks it"
+blocks:
+  - kind: question
+    number: L1.1
+    words: L1
+  - kind: question
+    number: L2.1
+    words: L2-L4
+    read:
+      L4.8: बनने
+  - kind: question
+    number: L5.1
+    words: L5
+  - kind: question
+    number: L6.1
+    words: L6
+    read:
+      L6.2: उदासीनीकरण
+  - kind: question
+    number: L7.1
+    words: L7
+  - kind: activity
+    title: L8
+    words: L8-L34
+    continues: true
+    read:
+      L12.4-5: कक्षाओं
+      L14.7: परखनलियों
+      L15.1: परखनलियों
+      L15.12: सोडा
+      L15.16: डालिए।
+      L19.11: पेटुनिया
+      L19.13: हाइड्रेंजिया
+      L19.16: जेरानियम
+      L21.6-7: प्राकृतिक
+      L23.11: हाइड्रोजनकार्बोनेट
+      L25.8: हाइड्रोजनकार्बोनेट
+      L25.9-L27.1: "(NaHCO₃)"
+      L29.6-L30.1: मुँह
+      L31.13: जिससे
+      L31.20: हाइड्रोजनकार्बोनेट
+      L33.7-L34.1: "(तुंड)"

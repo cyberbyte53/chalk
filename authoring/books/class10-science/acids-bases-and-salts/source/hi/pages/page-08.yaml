@@ -1,0 +1,101 @@
+page: 8
+proofread: true
+cause: other
+notes:
+  other: "a subscript or a charge the PDF sets as a plain sign on its own line (H 3 O +), printed H₃O⁺; the PDF has no arrow under the H₂O over an equation's arrow; a word the PDF splits across two lines of its text (अन पस्थिति … ु)"
+furniture: L70-L73
+terms:
+  - L43.1
+answers:
+  "word हाइड्रोनियम": "a name (hydronium), as printed on the page; the list lacks it"
+  "word उष्माक्षेपी": "a real word (exothermic), as printed on the page (with उ); the list lacks it"
+  "word ऊष्माशोषी": "a real word (endothermic), as printed on the page; the list lacks it"
+blocks:
+  - kind: text
+    words: L5-L7
+    read:
+      "L6.5-6, L7.1": अनुपस्थिति
+      "L6.9-10, L7.2-3": अणुओं
+      L7.5-6: "H⁺"
+  - kind: equation
+    words: L8-L12
+    read:
+      L8.3-L10.1: "H₂O"
+      L10.3-L12.2: "H₃O⁺"
+      L12.4-5: "Cl⁻"
+  - kind: text
+    words: L13-L17
+    read:
+      L13.13-14: अणुओं
+      L14.9-10: "H⁺"
+      L14.13: हाइड्रोनियम
+      L14.15-L16.3: "(H₃O⁺)"
+  - kind: equation
+    words: L18-L22
+    read:
+      L18.1-2: "H⁺"
+      L18.4-L20.1: "H₂O"
+      L20.3-L22.2: "H₃O⁺"
+  - kind: text
+    words: L23-L26
+    read:
+      L23.7-L25.2: "H₃O⁺"
+      L25.4-5: "H⁺"
+  - kind: equation
+    words: L30.1, L27-L29, L30.2-8
+    read:
+      L27.1-L29.1: "—H₂O→"
+      L30.2-3: "Na⁺"
+      L30.6-7: "OH⁻"
+  - kind: equation
+    words: L34.1, L31-L33, L34.2-8
+    read:
+      L31.1-L33.1: "—H₂O→"
+      L34.2-3: "K⁺"
+      L34.6-7: "OH⁻"
+  - kind: equation
+    words: L39-L41, L35-L37, L38
+    read:
+      L39.1-L41.1: "Mg(OH)₂(s)"
+      L35.1-L37.1: "—H₂O→"
+      L38.1-2: "Mg²⁺"
+      L38.5-6: "2OH⁻"
+  - kind: text
+    words: L42-L43
+    read:
+      L42.5-7: "(OH⁻)"
+  - kind: box
+    title: L1-L4
+    words: L1-L4, L44-L46
+    read:
+      L45.7-8: प्रकृति
+  - kind: text
+    words: L47-L48
+    read:
+      L47.10-11: "H⁺"
+      L47.16-17: "OH⁻"
+      L48.6: उदासीनीकरण
+  - kind: equation
+    words: L49
+  - kind: equation
+    words: L50
+  - kind: equation
+    words: L51-L53
+    read:
+      L51.1-2: "H⁺"
+      L51.5-6: "OH⁻"
+      L51.9-L53.1: "H₂O(l)"
+  - kind: text
+    words: L54
+  - kind: activity
+    number: L55.2
+    words: L55, L59-L69
+    read:
+      L61.5-L65.1: "(H₂SO₄)"
+      L65.5-6: धीरे-धीरे
+      L68.6: उष्माक्षेपी
+      L68.8: ऊष्माशोषी
+  - kind: figure
+    number: L56.2
+    words: L56-L58
+    box: [62, 576, 200, 720]

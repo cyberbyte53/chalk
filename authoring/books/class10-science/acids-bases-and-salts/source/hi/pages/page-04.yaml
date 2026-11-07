@@ -1,0 +1,97 @@
+page: 4
+proofread: true
+cause: other
+notes:
+  other: "a subscript the PDF sets as a plain digit on its own line (Na 2 ZnO 2), printed Na₂ZnO₂; the PDF has no arrow in an equation; a word the PDF splits with a space (कै से, कै ल्सियम)"
+furniture: L76-L79
+answers:
+  "read L4.3": "the PDF has no arrow in the equation; the image prints → after धातु"
+  "read L60.3": "the PDF writes the colon as a visarga-like sign; the image prints a colon"
+  "read L69.3": "the PDF writes the colon as a visarga-like sign; the image prints a colon"
+  "read L59.13": "the PDF writes the colon as a visarga (हैः); the image prints है:"
+  "word जिंकेट": "a name (zincate), as printed on the page; the list lacks it"
+  "word हाइड्रोजनकार्बोनेट": "a name (hydrogencarbonate), printed as one word on the page; the list lacks it"
+  "word परखनलियों": "a real word (test tubes), as printed on the page; the list lacks it"
+  "word थिसेल": "a name (thistle, of a funnel), as printed on the page; the list lacks it"
+  "word फनेल": "a real word (funnel), as printed on the page; the list lacks it"
+terms:
+  - L2.15
+blocks:
+  - kind: text
+    words: L1-L3
+    read:
+      L1.7-8: अभिक्रियाओं
+      L1.14-15: परमाणुओं
+  - kind: equation
+    words: L4
+    read:
+      L4.3: "धातु →"
+  - kind: text
+    words: L5
+    read:
+      L5.3-4: अभिक्रियाओं
+  - kind: activity
+    number: L6.2
+    words: L6-L9
+    read:
+      L9.8-9: क्रियाओं
+  - kind: text
+    words: L10
+  - kind: equation
+    words: L11-L18
+    read:
+      L11.3: "Zn(s) →"
+      L11.4-L15.1: "Na₂ZnO₂(s)"
+      L15.3-L17.1: "H₂(g)"
+      L18.2: "जिंकेट)"
+  - kind: text
+    words: L19-L20
+    read:
+      L19.14-15: धातुओं
+  - kind: section
+    number: L21.1
+    title: L21.2-L22
+    words: L21-L22
+    read:
+      L21.6: हाइड्रोजनकार्बोनेट
+      L21.10-11: कैसे
+  - kind: activity
+    number: L23.2
+    words: L23, L42-L58
+    read:
+      L42.4: परखनलियाँ
+      L45.1-L49.1: "(Na₂CO₃)"
+      L50.2: हाइड्रोजनकार्बोनेट
+      L50.3-L52.1: "(NaHCO₃)"
+      L53.4: परखनलियों
+      L56.6-7: "(कैल्सियम"
+  - kind: figure
+    number: L30.2
+    words: L24-L41
+    box: [64, 428, 330, 650]
+    read:
+      L24.1: थिसेल
+      L24.2: फनेल
+      L31.1-2: कैल्सियम
+      L39.1-2: कैल्सियम
+  - kind: text
+    words: L59
+    read:
+      L59.6-7: अभिक्रियाओं
+      L59.13: "है:"
+  - kind: equation
+    words: L60-L68
+    read:
+      L60.3: ":"
+      L60.4-L64.1: "Na₂Co₃(s)"
+      L64.3: "2HCl(aq) →"
+      L64.6-L66.1: "H₂O(l)"
+      L66.3-L68.1: "CO₂(g)"
+  - kind: equation
+    words: L69-L75
+    read:
+      L69.3: ":"
+      L69.4-L71.1: "NaHCO₃(s)"
+      L71.3: "HCl(aq) →"
+      L71.6-L73.1: "H₂O(l)"
+      L73.3-L75.1: "CO₂(g)"

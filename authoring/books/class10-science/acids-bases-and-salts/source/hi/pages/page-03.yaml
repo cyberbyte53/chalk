@@ -1,0 +1,43 @@
+page: 3
+proofread: true
+cause: other
+notes:
+  other: "a subscript the PDF sets as a plain digit on its own line (HNO 3), printed HNO₃; a word the PDF splits with a space (कै से)"
+furniture: L45-L48
+answers:
+  "word वैनिला": "a name (vanilla), as printed on the page; the list lacks it"
+  "word जलती": "a real word (burning), as printed on the page; the list lacks it"
+  "word जाइए": "a real word (take, go), as printed on the page; the list lacks it"
+blocks:
+  - kind: activity
+    continued: true
+    words: L1-L8
+    read:
+      L2.6: वैनिला
+      L4.1: वैनिला
+  - kind: text
+    words: L9-L10
+    read:
+      L9.6: वैनिला,
+      L9.15: गंधीय
+  - kind: text
+    words: L11-L12
+  - kind: section
+    words: L13
+    number: L13.1
+    title: L13.2-12
+    read:
+      L13.8-9: कैसे
+  - kind: activity
+    number: L14.2
+    words: L14-L28
+    read:
+      L17.2: डालिए।
+      L21.3: जलती
+      L21.13: जाइए।
+      L23.8-L24.1: "HNO₃"
+      L25.2-L27.1: "CH₃COOH"
+  - kind: figure
+    number: L43.2
+    words: L29-L44
+    box: [99, 515, 460, 726]

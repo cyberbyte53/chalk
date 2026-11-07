@@ -1,0 +1,70 @@
+page: 12
+proofread: true
+furniture: L44-L47
+answers:
+  "read L8.6": "the PDF doubles the े sign (उपयोेग); the image prints उपयोग"
+  "word ऐन्टैसिड": "a name (antacid), as printed on the page; the list lacks it"
+  "word मैगनीशिया": "a name (magnesia), spelt so on this page as printed; the list lacks it"
+  "word इनैमल": "a real word (enamel), as printed on the page; the list lacks it"
+  "word दत्तवल्क": "a real word (enamel, in Hindi), as printed in brackets on the page; the list lacks it"
+  "word हाइड्रोक्सीएपेटाइट": "a name (hydroxyapatite), as printed on the page; the list lacks it"
+  "word घुलता": "a real word (dissolves), as printed on the page; the list lacks it"
+  "word रोका": "a real word (stopped), as printed on the page; the list lacks it"
+  "word नेटल": "a plant's name (nettle), as printed on the page; the list lacks it"
+  "word मेथैनॉइक": "a name (methanoic), as printed on the page; the list lacks it"
+  "word डंकनुमा": "a real word (sting-like), as printed on the page; the list lacks it"
+blocks:
+  - kind: heading
+    title: L1
+    words: L1
+  - kind: text
+    words: L2-L8
+    read:
+      L5.9: ऐन्टैसिड
+      L6.15: ऐन्टैसिड
+      L8.1: "मैगनीशिया)"
+      L8.6: उपयोग
+  - kind: heading
+    title: L9
+    words: L9
+  - kind: text
+    words: L10-L23
+    read:
+      L10.1-L11.1: मुँह
+      L11.20: इनैमल
+      L11.21: "(दत्तवल्क)"
+      L12.1-2: कैल्सियम
+      L12.3: हाइड्रोक्सीएपेटाइट
+      L12.4-5: "(कैल्सियम"
+      L12.6-7: फॉस्फेट
+      L13.11: "घुलता,"
+      L13.13-L14.1: मुँह
+      L15.8-L16.1: मुँह
+      L16.8-L17.1: मुँह
+      L18.1-2: शर्करा
+      L18.16-L19.1: मुँह
+      L20.3: इससे
+      L20.9-L21.1: मुँह
+      L21.6: क्षारकीय
+      L23.3: रोका
+  - kind: heading
+    title: L24
+    words: L24
+    read:
+      L24.1-2: पशुओं
+  - kind: text
+    words: L29-L32
+    read:
+      L31.6: नेटल
+      L31.12: मेथैनॉइक
+  - kind: box
+    title: L25-L28
+    words: L25-L28, L33-L43
+    read:
+      L33.2: उदासीनीकरण
+      L34.1: नेटल
+      L35.9-12: डंकनुमा
+      L36.10: मेथैनॉइक
+      L38.7: नेटल
+      L39.7-8: प्रकृति
+      L41.4: नेटल

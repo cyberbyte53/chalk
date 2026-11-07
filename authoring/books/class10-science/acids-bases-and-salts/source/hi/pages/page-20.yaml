@@ -1,0 +1,48 @@
+page: 20
+proofread: true
+cause: other
+notes:
+  other: "a subscript the PDF sets as a plain digit on its own line (CH 3 COOH), printed CH₃COOH; a word the PDF splits with a space (रे तन)"
+furniture: L35-L38
+answers:
+  "read L31.7-L33.1": "the PDF sets the subscript 3 on its own line; the image prints अम्ल (CH₃COOH)"
+  "word ऐनालजेसिक": "a name (analgesic), as printed on the page; the list lacks it"
+  "word पीड़ाहरी": "a real word (pain reliever), as printed in brackets on the page; the list lacks it"
+  "word एंटीसेप्टिक": "a name (antiseptic), as printed on the page; the list lacks it"
+  "word ऐसिटिक": "a name (acetic), spelt so on this page as printed; the list lacks it"
+blocks:
+  - kind: question
+    number: L1.1
+    words: L1-L7
+  - kind: question
+    number: L8.1
+    words: L8-L12
+    read:
+      L10.2: ऐनालजेसिक
+      L10.3: "(पीड़ाहरी)"
+      L11.2: ऐन्टैसिड
+      L12.2: एंटीसेप्टिक
+  - kind: question
+    number: L13.1
+    words: L13-L17
+    read:
+      L17.6-7: रेतन
+  - kind: question
+    number: L18.1
+    words: L18-L19
+  - kind: question
+    number: L20.1
+    words: L20
+  - kind: question
+    number: L21.1
+    words: L21
+  - kind: question
+    number: L22.1
+    words: L22-L29
+  - kind: question
+    number: L30.1
+    words: L30-L34
+    read:
+      L31.6: ऐसिटिक
+      L31.7-L33.1: "अम्ल (CH₃COOH)"
+      L33.2: डालिए।

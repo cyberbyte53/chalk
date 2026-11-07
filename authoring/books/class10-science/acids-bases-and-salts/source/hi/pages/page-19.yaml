@@ -1,0 +1,34 @@
+page: 19
+proofread: true
+cause: other
+notes:
+  other: "a charge the PDF sets as a plain sign (H +), printed H⁺; a word the PDF splits with a space, its halves in two of its words (प्रकृ | ति अम्लीय, स्के | ल)"
+furniture: L31-L34
+answers:
+  "read L4.20-22": "the PDF sets the charge as a dash apart from OH; the image prints OH⁻(aq)आयन with a raised minus"
+  "read L9.8-9": "the PDF puts a space before the word and sets its ं apart ( परमाणुओ ं); the image prints परमाणुओं"
+blocks:
+  - kind: box
+    title: L1
+    words: L1-L24
+    read:
+      L4.5-6: "H⁺"
+      L4.14-15: "प्रकृति अम्लीय"
+      L4.20-22: "OH⁻(aq)आयन"
+      L5.3-4: "प्रकृति क्षारकीय"
+      L9.8-9: परमाणुओं
+      L11.7: हाइड्रोजनकार्बोनेट
+      L13.7: क्षारकीय
+      L15.10-11: "(0—14) स्केल"
+      L17.23: क्षारकीय
+      L20.12: "अत्यन्त ऊष्माक्षेपी"
+      L22.12-13: अणुओं
+  - kind: exercise
+    title: L25
+    words: L25
+  - kind: question
+    number: L26.1
+    words: L26-L27
+  - kind: question
+    number: L28.1
+    words: L28-L30

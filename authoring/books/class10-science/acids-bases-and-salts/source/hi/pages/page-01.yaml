@@ -1,0 +1,57 @@
+page: 1
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space (कै से, करें गे, के वल), or a drop cap set apart from the rest of its word (आ पने)"
+furniture: L1, L35-L36
+answers:
+  "read L22.19-L23.2": "the PDF adds a stray ं beside the ँ; the image prints जाँच"
+  "word क्षारकीय": "a real word (basic), as printed on the page; the list lacks it"
+  "word धब्बे": "a real word (stain), as printed on the page; the list lacks it"
+  "word फीनॉल्फथेलिन": "a name (phenolphthalein), as printed on the page; the list lacks it"
+  "word लिचेन": "a name (lichen), as printed on the page; the list lacks it"
+  "word हायड्रेंजिया": "a flower's name (hydrangea), as printed on the page; the list lacks it"
+  "word पिटूनिया": "a flower's name (petunia), as printed on the page; the list lacks it"
+  "word जेरानियम": "a flower's name (geranium), as printed on the page; the list lacks it"
+blocks:
+  - kind: heading
+    words: L2-L3
+    title: L2-L3
+  - kind: text
+    words: L4, L9-L12
+    read:
+      "L4.1, L9.1": "आपने"
+      L9.3-4: कक्षाओं
+  - kind: text
+    words: L13-L16
+    read:
+      L16.6-7: कैसे
+  - kind: text
+    words: L17-L25
+    read:
+      L19.3-4: प्राकृतिक
+      L20.17: क्षारकीय
+      L20.18-19: प्रकृति
+      L21.7: धब्बे
+      L22.19-L23.2: जाँच
+      L24.7-8: ऑरेंज
+      L24.12: फीनॉल्फथेलिन
+  - kind: text
+    words: L26-L29
+    read:
+      L26.9-10: अभिक्रियाओं
+      L26.15-16: करेंगे।
+      L27.7-8: कैसे
+      L28.14-15: वस्तुओं
+      L29.2-3: करेंगे।
+  - kind: box
+    title: L5-L8
+    words: L5-L8, L30-L34
+    read:
+      L30.15: लिचेन
+      L31.19: क्षारकीय,
+      L32.7-8: प्राकृतिक
+      L32.15: हायड्रेंजिया,
+      L32.16: पिटूनिया
+      L32.18: जेरानियम
+      L34.7-8: केवल

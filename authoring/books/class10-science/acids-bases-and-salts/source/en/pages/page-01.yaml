@@ -1,0 +1,25 @@
+page: 1
+proofread: true
+cause: other
+notes:
+  other: "the chapter's first word starts with a drop cap the PDF keeps as its own line"
+furniture: L1-L2, L11-L12, L38
+terms:
+  - L37.5-6
+blocks:
+  - kind: heading
+    words: L3-L4
+    title: L3-L4
+  - kind: text
+    words: L5-L10
+    read:
+      "L5.1-L6.1": { text: "You" }
+  - kind: text
+    words: L13-L17
+  - kind: text
+    words: L21-L28
+  - kind: text
+    words: L29-L31
+  - kind: box
+    title: L18-L20
+    words: L18-L20, L32-L37

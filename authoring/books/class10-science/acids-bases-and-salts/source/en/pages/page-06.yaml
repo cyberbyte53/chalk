@@ -1,0 +1,49 @@
+page: 6
+proofread: true
+cause: other
+notes:
+  other: "a heading's letters the PDF spaces into separate words (Q U E S T I O N S, WHA T)"
+answers:
+  "read L10": "the PDF sets the heading's large first letter Q apart from U E S T I O N S; the image prints the one word QUESTIONS, read whole here"
+  "read L14.1-8": "the rest of QUESTIONS, read whole on L10 with its first letter"
+furniture: L24, L33-L39, L42.3, L58-L60
+blocks:
+  - kind: text
+    words: L1-L3
+  - kind: section
+    number: L4.1
+    title: L4.2-8
+    words: L4
+  - kind: text
+    words: L5-L9
+  - kind: exercise
+    title: L10, L14
+    words: L10, L14
+    read:
+      "L10": { text: "QUESTIONS" }
+      "L14.1-8": { text: "" }
+  - kind: question
+    number: L11
+    words: L11, L15-L16
+  - kind: question
+    number: L12
+    words: L12, L17-L19
+  - kind: question
+    number: L13
+    words: L13, L20-L23
+  - kind: section
+    number: L25.1
+    title: L25.2-L26
+    words: L25-L26
+    read:
+      "L25.2-3": { text: "WHAT" }
+      "L25.10-11": { text: "HAVE" }
+  - kind: text
+    words: L27-L31
+  - kind: activity
+    number: L32
+    words: L32, L43-L57
+  - kind: figure
+    number: L40
+    words: L40-L41, L42.1-2
+    box: [62, 524, 292, 706]

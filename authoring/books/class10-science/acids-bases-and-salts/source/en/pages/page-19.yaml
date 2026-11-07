@@ -1,0 +1,37 @@
+page: 19
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets on their own lines (CH 3 COOH), printed CH₃COOH"
+furniture: L26.1, L27.1, L28.1, L29.1, L30.1, L33.1, L35.1, L38-L40
+blocks:
+  - kind: question
+    number: L1.1
+    words: L1
+  - kind: question
+    number: L2.1
+    words: L2-L9
+  - kind: question
+    number: L10.1
+    words: L10-L15
+    read:
+      "L11.12-L13.1": { text: "(CH₃COOH)" }
+  - kind: question
+    number: L16.1
+    words: L16-L17
+  - kind: question
+    number: L18.1
+    words: L18-L20
+  - kind: question
+    number: L21.1
+    words: L21
+  - kind: question
+    number: L22.1
+    words: L22
+  - kind: question
+    number: L23.1
+    words: L23
+  - kind: box
+    title: L24
+    words: L24-L25, L26.2-6, L27.2-8, L28.2-13, L29.2-13, L30.2-18, L31-L32, L33.2-17, L34, L35.2-14, L36-L37
+    continues: true

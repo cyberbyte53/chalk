@@ -1,0 +1,69 @@
+page: 2
+proofread: true
+cause: other
+notes:
+  other: "a subscript the PDF sets as a plain digit on its own line (H 2 SO 4), printed H₂SO₄; a word the PDF splits with a space (के वल, कै से, करें गे)"
+furniture: L6, L58-L61
+answers:
+  "read L51.5": "the PDF adds a stray ं beside the ँ; the image prints जाँच"
+  "word परखनलियाँ": "a real word (test tubes), as printed on the page; the list lacks it"
+  "word ऐसीटिक": "a name (acetic), as printed on the page; the list lacks it"
+  "word फेनॉलप्थेलियन": "a name (phenolphthalein), spelt so on this page as printed; the list lacks it"
+  "word गंधीय": "a real word (olfactory), as printed on the page; the list lacks it"
+  "word डालिए": "a real word (put in), as printed on the page; the list lacks it"
+  "again L48.1": "the book prints क्रियाकलाप 2.1 twice on this page; the second is its misprint for 2.2 (the next is 2.3)"
+terms:
+  - L46.12
+blocks:
+  - kind: exercise
+    words: L1
+    title: L1
+  - kind: question
+    words: L2-L4
+    number: L2.1
+    read:
+      L2.4: परखनलियाँ
+      L3.10-11: केवल
+      L4.10-11: कैसे
+      L4.12-14: करेंगे?
+  - kind: section
+    words: L5
+    number: L5.1
+    title: L5.2-8
+  - kind: section
+    words: L7
+    number: L7.1
+    title: L7.2-6
+  - kind: activity
+    number: L8.2
+    words: L8-L32
+    read:
+      L9.12-L13.1: "(H₂SO₄),"
+      L14.2-L16.1: "(HNO₃),"
+      L16.2: ऐसीटिक
+      L16.4-L18.1: "(CH₃COOH),"
+      L19.1-2: कैल्सियम
+      L19.4-L21.1: "([Ca(OH)₂])]"
+      L22.2-L24.1: "([Mg(OH)₂])"
+      L24.5-L26.1: "(NH₄OH)"
+      L30.7-8: फेनॉलप्थेलियन
+      L30.11-12: ऑरेंज
+  - kind: table
+    number: L33.2
+    words: L33-L43
+    box: [183, 447, 537, 512]
+    cells: { rows: [["L34-L35", "L36-L37", "L38-L39", "L40-L41", "L42-L43"], ["", "", "", "", ""]] }
+    read:
+      L40.1: फीनॉल्फथेलिन
+  - kind: text
+    words: L44-L47
+    read:
+      L46.4: क्षारकीय
+      L46.12: गंधीय
+  - kind: activity
+    number: L48.2
+    continues: true
+    words: L48-L57
+    read:
+      L51.5: जाँच
+      L56.2: डालिए।

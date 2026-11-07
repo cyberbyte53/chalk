@@ -1,0 +1,70 @@
+page: 17
+proofread: true
+cause: other
+notes:
+  other: "a subscript the PDF sets as a plain digit on its own line (Na 2 CO 3), printed Na₂CO₃; a word the PDF splits with a space (के क, बोरे क्स, सल्फ़े ट)"
+furniture: L65-L68
+answers:
+  "word स्पंजी": "a real word (spongy), as printed on the page; the list lacks it"
+blocks:
+  - kind: text
+    words: L1-L2
+    read:
+      L1.11-12: केक
+      L2.5: इससे
+      L2.10: स्पंजी
+  - kind: text
+    words: L3-L5
+    read:
+      L3.3: हाइड्रोजनकार्बोनेट
+      L3.5: ऐन्टैसिड
+  - kind: heading
+    title: L6
+    words: L6
+  - kind: text
+    words: L7-L16
+    read:
+      L7.1-L13.1: "Na₂CO₃.10H₂O"
+      L16.4: क्षारकीय
+  - kind: equation
+    words: L17-L30
+    read:
+      L17.1-L20.1: "Na₂CO₃"
+      L21.2-L23.1: "10H₂O"
+      L23.3-L29.1: "Na₂CO₃.10H₂O"
+  - kind: text
+    words: L31-L38
+    read:
+      L31.1-L33.1: "10H₂O"
+      L33.7-L36.1: "Na₂CO₃"
+  - kind: text
+    words: L39-L40
+    read:
+      L39.5: "हाइड्रोजनकार्बोनेट,"
+      L39.8-9: प्रक्रियाओं
+  - kind: heading
+    title: L41
+    words: L41
+  - kind: text
+    words: L42-L45
+    read:
+      L43.4-5: बोरेक्स
+  - kind: section
+    number: L46.1
+    title: L46.2-9
+    words: L46
+  - kind: activity
+    number: L47.2
+    words: L47-L57
+    read:
+      L48.4-5: सल्फ़ेट
+      L50.8-9: सल्फ़ेट
+      L53.9-10: सल्फ़ेट
+      L55.2: डालिए।
+      L56.10-11: सल्फ़ेट
+  - kind: figure
+    number: L64.2
+    words: L58-L64
+    box: [330, 498, 582, 724]
+    read:
+      L62.2-3: सल्फ़ेट

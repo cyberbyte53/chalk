@@ -1,0 +1,59 @@
+page: 12
+proofread: true
+cause: other
+notes:
+  other: "charges the PDF sets apart (H +), printed H⁺; a heading's letters the PDF spaces into separate words (Q U E S T I O N S, SAL TS)"
+furniture: L29, L36.1, L40-L42
+blocks:
+  - kind: box
+    title: L1-L3
+    words: L1-L12
+  - kind: table
+    number: L13.1-2
+    title: L13.3-6
+    words: L13-L18
+    box: [62, 238, 537, 362]
+    cells:
+      rows:
+        - ["L14.1-2", "L14.3", "L14.4-5", "L14.6"]
+        - ["L15.1", "L15.2-3", "L15.4-6", "L15.7-8"]
+        - ["L16.1", "L16.2-3", "L16.4", "L16.5-6"]
+        - ["L17.1", "L17.2-3", "L17.4-5", "L17.6-7"]
+        - ["L18.1", "L18.2-3", "L18.4-5", "L18.6-7"]
+  - kind: exercise
+    title: L19
+    words: L19
+    read:
+      "L19": { text: "QUESTIONS" }
+  - kind: question
+    number: L20.1
+    words: L20-L22
+  - kind: question
+    number: L23.1
+    words: L23-L24
+    read:
+      "L23.8-10": { text: "H⁺(aq)" }
+  - kind: question
+    number: L25.1
+    words: L25
+    read:
+      "L25.7-9": { text: "H⁺(aq)" }
+  - kind: question
+    number: L26.1
+    words: L26-L28
+  - kind: section
+    number: L30.1
+    title: L30.2-5
+    words: L30
+    read:
+      "L30.4-5": { text: "SALTS" }
+  - kind: text
+    words: L31-L33
+  - kind: section
+    number: L34.1
+    title: L34.2-4
+    words: L34
+  - kind: activity
+    number: L35
+    words: L35, L36.2-L39
+    continues: true

@@ -1,0 +1,41 @@
+page: 13
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets on their own lines (Na 2 SO 4), printed Na₂SO₄"
+furniture: L1-L2, L16-L21, L58-L60
+terms:
+  - L52.2-3
+blocks:
+  - kind: activity
+    continued: true
+    words: L3-L13
+    read:
+      "L6.9-L9": { text: "Na₂SO₄" }
+  - kind: section
+    number: L14.1
+    title: L14.2-4
+    words: L14
+  - kind: activity
+    number: L15
+    words: L15, L22-L31
+  - kind: text
+    words: L32.1-9, L33, L35-L38
+  - kind: table
+    number: L32.10-11
+    words: L32.10-11, L34, L39
+    box: [306, 384, 550, 468]
+    cells:
+      rows:
+        - ["L34", "L39.1", "L39.2-3", "L39.4-5"]
+        - ["", "", "", ""]
+  - kind: section
+    number: L40.1
+    title: L40.2-5
+    words: L40
+  - kind: text
+    words: L41-L46
+  - kind: text
+    words: L47-L54
+  - kind: text
+    words: L55-L57

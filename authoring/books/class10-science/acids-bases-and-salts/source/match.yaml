@@ -1,0 +1,240 @@
+pairs:
+  - key: question 1 of exercise 1
+    en: 0.7.1
+    hi: 0.7.1
+  - key: section 2.1
+    en: "1"
+    hi: "1"
+  - key: section 2.1.1
+    en: "1.1"
+    hi: "1.1"
+  - key: activity 2.1
+    en: 1.1.1
+    hi: 1.1.4
+  - key: table 2.1
+    en: 1.1.2
+    hi: 1.1.2
+  - key: section 2.1.2
+    en: "1.2"
+    hi: "1.2"
+  - key: activity 2.3
+    en: 1.2.1
+    hi: 1.2.1
+  - key: figure 2.1
+    en: 1.2.2
+    hi: 1.2.2
+  - key: activity 2.4
+    en: 1.2.6
+    hi: 1.2.6
+  - key: section 2.1.3
+    en: "1.3"
+    hi: "1.3"
+  - key: activity 2.5
+    en: 1.3.1
+    hi: 1.3.1
+  - key: figure 2.2
+    en: 1.3.2
+    hi: 1.3.2
+  - key: section 2.1.4
+    en: "1.4"
+    hi: "1.4"
+  - key: activity 2.6
+    en: 1.4.1
+    hi: 1.4.1
+  - key: section 2.1.5
+    en: "1.5"
+    hi: "1.5"
+  - key: activity 2.7
+    en: 1.5.1
+    hi: 1.5.1
+  - key: section 2.1.6
+    en: "1.6"
+    hi: "1.6"
+  - key: question 1 of exercise 2
+    en: 1.6.2.1
+    hi: 1.6.2.1
+  - key: question 2 of exercise 2
+    en: 1.6.2.2
+    hi: 1.6.2.2
+  - key: question 3 of exercise 2
+    en: 1.6.2.3
+    hi: 1.6.2.3
+  - key: section 2.2
+    en: "2"
+    hi: "2"
+  - key: activity 2.8
+    en: "2.2"
+    hi: "2.2"
+  - key: figure 2.3
+    en: "2.3"
+    hi: "2.3"
+  - key: section 2.2.1
+    en: "2.7"
+    hi: "2.7"
+  - key: activity 2.9
+    en: 2.7.2
+    hi: 2.7.2
+  - key: figure 2.4
+    en: 2.7.3
+    hi: 2.7.3
+  - key: activity 2.10
+    en: 2.7.20
+    hi: 2.7.19
+  - key: figure 2.5
+    en: 2.7.21
+    hi: 2.7.20
+  - key: question 1 of exercise 3
+    en: 2.7.24.1
+    hi: 2.7.23.1
+  - key: question 2 of exercise 3
+    en: 2.7.24.2
+    hi: 2.7.23.2
+  - key: question 3 of exercise 3
+    en: 2.7.24.3
+    hi: 2.7.23.3
+  - key: question 4 of exercise 3
+    en: 2.7.24.4
+    hi: 2.7.23.4
+  - key: question 5 of exercise 3
+    en: 2.7.24.5
+    hi: 2.7.23.5
+  - key: question 6 of exercise 3
+    en: 2.7.24.6
+    hi: 2.7.23.6
+  - key: section 2.3
+    en: "3"
+    hi: "3"
+  - key: figure 2.6
+    en: "3.5"
+    hi: "3.5"
+  - key: activity 2.11
+    en: "3.6"
+    hi: "3.6"
+  - key: table 2.2
+    en: "3.7"
+    hi: "3.7"
+  - key: figure 2.7
+    en: "3.8"
+    hi: "3.8"
+  - key: section 2.3.1
+    en: "3.10"
+    hi: "3.10"
+  - key: activity 2.12
+    en: 3.10.6
+    hi: 3.10.6
+  - key: table 2.3
+    en: 3.10.14
+    hi: 3.10.14
+  - key: question 1 of exercise 4
+    en: 3.10.15.1
+    hi: 3.10.15.1
+  - key: question 2 of exercise 4
+    en: 3.10.15.2
+    hi: 3.10.15.2
+  - key: question 3 of exercise 4
+    en: 3.10.15.3
+    hi: 3.10.15.3
+  - key: question 4 of exercise 4
+    en: 3.10.15.4
+    hi: 3.10.15.4
+  - key: section 2.4
+    en: "4"
+    hi: "4"
+  - key: section 2.4.1
+    en: "4.2"
+    hi: "4.2"
+  - key: activity 2.13
+    en: 4.2.1
+    hi: 4.2.1
+  - key: section 2.4.2
+    en: "4.3"
+    hi: "4.3"
+  - key: activity 2.14
+    en: 4.3.1
+    hi: 4.3.1
+  - key: table 2.4
+    en: 4.3.3
+    hi: 4.3.2
+  - key: section 2.4.3
+    en: "4.4"
+    hi: "4.4"
+  - key: figure 2.8
+    en: 4.4.10
+    hi: 4.4.11
+  - key: section 2.4.4
+    en: "4.5"
+    hi: "4.5"
+  - key: activity 2.15
+    en: 4.5.1
+    hi: 4.5.1
+  - key: figure 2.9
+    en: 4.5.2
+    hi: 4.5.2
+  - key: question 1 of exercise 5
+    en: 4.5.11.1
+    hi: 4.5.12.1
+  - key: question 2 of exercise 5
+    en: 4.5.11.2
+    hi: 4.5.12.2
+  - key: question 3 of exercise 5
+    en: 4.5.11.3
+    hi: 4.5.12.3
+  - key: question 4 of exercise 5
+    en: 4.5.11.4
+    hi: 4.5.12.4
+  - key: question 5 of exercise 5
+    en: 4.5.11.5
+    hi: 4.5.12.5
+  - key: question 1 of exercise 6
+    en: 4.5.12.1
+    hi: 4.5.13.1
+  - key: question 2 of exercise 6
+    en: 4.5.12.2
+    hi: 4.5.13.2
+  - key: question 3 of exercise 6
+    en: 4.5.12.3
+    hi: 4.5.13.3
+  - key: question 4 of exercise 6
+    en: 4.5.12.4
+    hi: 4.5.13.4
+  - key: question 5 of exercise 6
+    en: 4.5.12.5
+    hi: 4.5.13.5
+  - key: question 6 of exercise 6
+    en: 4.5.12.6
+    hi: 4.5.13.6
+  - key: question 7 of exercise 6
+    en: 4.5.12.7
+    hi: 4.5.13.7
+  - key: question 8 of exercise 6
+    en: 4.5.12.8
+    hi: 4.5.13.8
+  - key: question 9 of exercise 6
+    en: 4.5.12.9
+    hi: 4.5.13.9
+  - key: question 10 of exercise 6
+    en: 4.5.12.10
+    hi: 4.5.13.10
+  - key: question 11 of exercise 6
+    en: 4.5.12.11
+    hi: 4.5.13.11
+  - key: question 12 of exercise 6
+    en: 4.5.12.12
+    hi: 4.5.13.12
+  - key: question 13 of exercise 6
+    en: 4.5.12.13
+    hi: 4.5.13.13
+  - key: question 14 of exercise 6
+    en: 4.5.12.14
+    hi: 4.5.13.14
+  - key: question 15 of exercise 6
+    en: 4.5.12.15
+    hi: 4.5.13.15
+  - key: figure 2.10
+    en: 4.5.12.17
+    hi: 4.5.13.17
+answers:
+  only en activity 2.2: "in the Hindi book too, misprinted: it numbers the
+    onion/vanilla/clove activity क्रियाकलाप 2.1 a second time (hi 1.1.4, page 2;
+    the next is 2.3), so the tool paired English 2.1 with it; the real Hindi 2.1
+    is hi 1.1.1, and English 2.2 (en 1.1.4) is hi 1.1.4"

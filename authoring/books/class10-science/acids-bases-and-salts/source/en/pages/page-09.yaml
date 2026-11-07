@@ -1,0 +1,63 @@
+page: 9
+proofread: true
+cause: other
+notes:
+  other: "subscripts and charges the PDF sets as plain characters, apart or on their own lines (H 3 O +, OH –), printed H₃O⁺, OH⁻; a heading's letters the PDF spaces into separate words (Q U E S T I O N S)"
+furniture: L17, L39-L41
+terms:
+  - L24.10-11
+  - L28.1-2
+blocks:
+  - kind: exercise
+    title: L1
+    words: L1
+    read:
+      "L1": { text: "QUESTIONS" }
+  - kind: question
+    number: L2.1
+    words: L2-L6
+    read:
+      "L2.5-L4.1": { text: "HNO₃," }
+  - kind: question
+    number: L7.1
+    words: L7
+  - kind: question
+    number: L8.1
+    words: L8
+  - kind: question
+    number: L9.1
+    words: L9-L10
+  - kind: question
+    number: L11.1
+    words: L11-L14
+    read:
+      "L11.9-L13.3": { text: "(H₃O⁺)" }
+  - kind: question
+    number: L15.1
+    words: L15-L16
+    read:
+      "L15.9-11": { text: "(OH⁻)" }
+  - kind: section
+    number: L18.1
+    title: L18.2-8
+    words: L18
+  - kind: text
+    words: L19-L23
+    read:
+      "L21.7-8": { text: "H⁺" }
+      "L21.10-11": { text: "OH⁻" }
+  - kind: text
+    words: L24-L26
+  - kind: text
+    words: L27-L32
+  - kind: text
+    words: L33-L37
+    read:
+      "L35.5-6": { text: "OH⁻" }
+  - kind: figure
+    number: L38.1-2
+    words: L38
+    box: [96, 600, 530, 711]
+    read:
+      "L38.12-14": { text: "H⁺(aq)" }
+      "L38.16-18": { text: "OH⁻(aq)" }

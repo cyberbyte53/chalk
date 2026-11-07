@@ -1,0 +1,28 @@
+page: 3
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets on their own lines (HNO 3), printed HNO₃"
+furniture: L1-L5, L23.1, L24.1, L26.1, L27.1, L28.1, L29.1, L30.1, L31.1, L37.1, L40-L42
+blocks:
+  - kind: activity
+    continued: true
+    words: L6-L15
+  - kind: text
+    words: L16-L17
+  - kind: text
+    words: L18-L19
+  - kind: section
+    number: L20.1
+    title: L20.2-9
+    words: L20
+  - kind: activity
+    number: L21
+    words: L21-L22, L23.2-9, L24.2-16, L25, L26.2-11, L27.2-10, L28.2-9, L29.2-10, L30.2-5, L31.2-11, L32-L36, L37.2-12
+    read:
+      "L31.11-L32": { text: "HNO₃" }
+      "L34-L36": { text: "CH₃COOH." }
+  - kind: figure
+    number: L38.1-2
+    words: L38-L39
+    box: [76, 496, 434, 712]

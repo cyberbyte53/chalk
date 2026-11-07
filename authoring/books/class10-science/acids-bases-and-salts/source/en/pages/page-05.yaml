@@ -1,0 +1,52 @@
+page: 5
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits, apart or on their own lines (CaCO 3 ( s )), printed CaCO₃(s)"
+furniture: L11-L18, L40-L41, L51-L53
+terms:
+  - L35.4-5
+blocks:
+  - kind: text
+    words: L1
+  - kind: equation
+    words: L2-L3
+    read:
+      "L2.1-5": { text: "CaCO₃(s)" }
+      "L2.7-9": { text: "H₂O(l)+" }
+      "L2.10-12": { text: "CO₂(g)" }
+      "L2.14-20": { text: "Ca(HCO₃)₂(aq)" }
+  - kind: text
+    words: L4-L6
+  - kind: text
+    words: L7
+  - kind: equation
+    words: L8
+  - kind: section
+    number: L9.1
+    title: L9.2-10
+    words: L9
+  - kind: activity
+    number: L10
+    words: L10, L19-L28
+  - kind: text
+    words: L29-L30
+  - kind: equation
+    words: L31-L33
+    read:
+      "L31.7-L33": { text: "H₂O(l)" }
+  - kind: text
+    words: L34-L36
+  - kind: equation
+    words: L37
+  - kind: section
+    number: L38.1
+    title: L38.2-7
+    words: L38
+  - kind: activity
+    number: L39
+    words: L39, L42-L45
+  - kind: text
+    words: L46-L49
+  - kind: equation
+    words: L50

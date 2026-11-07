@@ -1,0 +1,49 @@
+page: 14
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets on their own lines (Cl 2), printed Cl₂"
+furniture: L45-L47
+terms:
+  - L9.5-6
+blocks:
+  - kind: heading
+    title: L1
+    words: L1
+  - kind: text
+    words: L2-L5
+  - kind: heading
+    title: L6
+    words: L6
+  - kind: text
+    words: L7-L10
+  - kind: equation
+    words: L11-L17
+    read:
+      "L11.3-L13.1": { text: "2H₂O(l)" }
+      "L13.2": { text: "→", cause: wrong-reading }
+      "L13.5-L15.1": { text: "Cl₂(g)" }
+      "L15.3-L17": { text: "H₂(g)" }
+  - kind: text
+    words: L18-L21
+  - kind: figure
+    number: L22.1-2
+    words: L22
+    box: [62, 310, 535, 562]
+  - kind: heading
+    title: L23
+    words: L23
+  - kind: text
+    words: L24-L33
+    read:
+      "L27.10-L29.1": { text: "[Ca(OH)₂]." }
+      "L30.4-L32.1": { text: "Ca(ClO)₂," }
+  - kind: equation
+    words: L34-L44
+    read:
+      "L34-L35": { text: "2Ca(OH)₂" }
+      "L36.2-L37": { text: "2Cl₂" }
+      "L38.1": { text: "→", cause: wrong-reading }
+      "L38.2-L39": { text: "Ca(ClO)₂" }
+      "L40.2-L41": { text: "CaCl₂" }
+      "L42.2-L44": { text: "2H₂O" }

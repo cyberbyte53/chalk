@@ -1,0 +1,36 @@
+page: 18
+proofread: true
+cause: other
+notes:
+  other: "a heading's letters the PDF spaces into separate words (E X E R C I S E S)"
+furniture: L1.1, L3.1, L5.1, L6.1, L7.1, L8.1, L10.1, L35-L37
+blocks:
+  - kind: box
+    continued: true
+    words: L1.2-L2, L3.2-L4, L5.2-13, L6.2-13, L7.2-13, L8.2-L9, L10.2-11
+  - kind: exercise
+    title: L11
+    words: L11
+    read:
+      "L11": { text: "EXERCISES" }
+  - kind: question
+    number: L12.1
+    words: L12-L13
+  - kind: question
+    number: L14.1
+    words: L14-L16
+  - kind: question
+    number: L17.1
+    words: L17-L20
+  - kind: question
+    number: L21.1
+    words: L21-L25
+  - kind: question
+    number: L26.1
+    words: L26-L31
+  - kind: question
+    number: L32.1
+    words: L32-L33
+  - kind: question
+    number: L34.1
+    words: L34

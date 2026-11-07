@@ -1,0 +1,81 @@
+page: 7
+proofread: true
+cause: other
+notes:
+  other: "subscripts and charges the PDF sets as plain characters, apart or on their own lines (H 3 O +, NO 3–), printed H₃O⁺, NO₃⁻"
+answers:
+  "read L18": "the subscript 4 of SO₄²⁻, set by the PDF on a line of its own; read with it on L9.2-3, its place left empty at the block's end"
+  "read L9.2-3": "the image prints SO₄²⁻; the PDF sets its subscript 4 on a line of its own (L18), read here"
+furniture: L30.1, L32.1, L34.1, L36.1, L38.1, L42, L71-L73
+terms:
+  - L56.5-6
+blocks:
+  - kind: text
+    words: L1-L5
+  - kind: text
+    words: L6-L17, L20-L21, L18-L19
+    read:
+      "L6.3-4": { text: "H⁺" }
+      "L6.12-13": { text: "Cl⁻" }
+      "L6.16-17": { text: "NO₃⁻" }
+      "L7-L9.1": { text: "HNO₃," }
+      "L9.2-3": { text: "SO₄²⁻" }
+      "L18": { text: "" }
+      "L9.5-L13.1": { text: "H₂SO₄," }
+      "L13.2-L15.2": { text: "CH₃COO⁻" }
+      "L15.4-L17.1": { text: "CH₃COOH." }
+      "L20.3-4": { text: "H⁺," }
+      "L19": { text: "" }
+      "L20.12-14": { text: "H⁺(aq)," }
+  - kind: text
+    words: L22-L23
+  - kind: section
+    number: L24.1
+    title: L24.2-13
+    words: L24
+  - kind: text
+    words: L25
+  - kind: activity
+    number: L26
+    words: L26-L29, L30.2-7, L31, L32.2-10, L33, L34.2-8, L35, L36.2-9, L37, L38.2-10, L39-L41
+  - kind: figure
+    number: L43.1-2
+    words: L43
+    box: [328, 289, 550, 484]
+  - kind: box
+    title: L44.1-3
+    words: L44-L45
+  - kind: text
+    words: L46-L48
+    read:
+      "L47.9-10": { text: "H⁺" }
+  - kind: equation
+    words: L49-L53
+    read:
+      "L49.3-L51.1": { text: "H₂O" }
+      "L51.3-L53.2": { text: "H₃O⁺" }
+      "L53.4-5": { text: "Cl⁻" }
+  - kind: text
+    words: L54-L58
+    read:
+      "L56.1-3": { text: "H⁺(aq)" }
+      "L56.7-L58.3": { text: "(H₃O⁺)." }
+  - kind: equation
+    words: L59-L63
+    read:
+      "L59.1-2": { text: "H⁺" }
+      "L59.4-L61.1": { text: "H₂O" }
+      "L61.3-L63.2": { text: "H₃O⁺" }
+  - kind: text
+    words: L64-L67
+    read:
+      "L64.7-L66.2": { text: "H₃O⁺" }
+      "L66.4-6": { text: "H⁺(aq)" }
+  - kind: equation
+    words: L70.1, L69, L70.2-9, L68
+    read:
+      "L69": { text: "H₂O" }
+      "L70.2-4": { text: "→" }
+      "L70.5-6": { text: "Na⁺(aq)" }
+      "L70.8-9": { text: "OH⁻(aq)" }
+      "L68": { text: "" }

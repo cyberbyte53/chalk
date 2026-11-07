@@ -1,0 +1,87 @@
+page: 5
+proofread: true
+cause: other
+notes:
+  other: "a subscript the PDF sets as a plain digit on its own line (Ca(OH) 2), printed Ca(OH)₂; the PDF has no arrow in an equation; a word the PDF splits with a space (कै ल्सियम, धीरे -धीरे)"
+furniture: L56-L59
+terms:
+  - L48.1-2
+answers:
+  "read L29.5": "the PDF has no arrow in the word equation; the image prints → after अम्ल"
+  "read L50.3": "the PDF has no arrow in the word equation; the image prints → after अम्ल"
+  "word विलयशील": "a real word (soluble), as printed on the page; the list lacks it"
+  "word फीनॉल्फथैलिन": "a name (phenolphthalein), spelt so on this page as printed; the list lacks it"
+  "word उदासीनीकरण": "a real word (neutralisation), the term the page sets in bold; the list lacks it"
+blocks:
+  - kind: text
+    words: L1
+  - kind: equation
+    words: L2-L11
+    read:
+      L2.1-L4.1: "Ca(OH)₂(aq)"
+      L4.3-L6.1: "CO₂(g) →"
+      L6.2-L8.1: "CaCO₃(s)"
+      L8.3-L10.3: "H₂O(l)"
+  - kind: text
+    words: L12
+  - kind: equation
+    words: L13-L24
+    read:
+      L13.1-L15.1: "CaCO₃(s)"
+      L15.3-L17.1: "H₂O(l)"
+      L17.3-L19.1: "CO₂(g) →"
+      L19.2-L23.1: "Ca(HCO₃)₂(aq)"
+      L24.3: "विलयशील)"
+  - kind: text
+    words: L25-L27
+    read:
+      L25.8-9: कैल्सियम
+      L26.2: विविध
+      L26.9: हाइड्रोजनकार्बोनेट
+  - kind: text
+    words: L28
+  - kind: equation
+    words: L29
+    read:
+      L29.3: हाइड्रोजनकार्बोनेट
+      L29.5: "अम्ल →"
+  - kind: section
+    number: L30.1
+    title: L30.2-10
+    words: L30
+    read:
+      L30.6-7: कैसे
+  - kind: activity
+    number: L31.2
+    words: L31-L41
+    read:
+      L33.2: फीनॉल्फथैलिन
+      L33.4: डालिए।
+      L35.7-L36.1: बूँद
+      L38.7: फीनॉल्फथैलिन
+      L40.4: फीनॉल्फथैलिन
+  - kind: text
+    words: L42-L43
+  - kind: equation
+    words: L44-L46
+    read:
+      L44.3: "HCl(aq) →"
+      L44.6-L46.1: "H₂O(l)"
+  - kind: text
+    words: L47-L49
+    read:
+      L48.1: उदासीनीकरण
+      L48.6: उदासीनीकरण
+  - kind: equation
+    words: L50
+    read:
+      L50.3: "अम्ल →"
+  - kind: section
+    number: L51.1
+    title: L51.2-8
+    words: L51
+  - kind: activity
+    number: L52.2
+    words: L52-L55
+    read:
+      L53.15-16: धीरे-धीरे

@@ -1,0 +1,73 @@
+page: 7
+proofread: true
+cause: other
+notes:
+  other: "a subscript or a charge the PDF sets as a plain sign on its own line (HNO 3 –), printed HNO₃⁻; a word the PDF splits with a space (कै ल्सियम, के वल) or lays out of order (सल्फ् र यू िक, विद् त यु); a colon written as a visarga (हैंः)"
+furniture: L69-L72
+answers:
+  "read L7.7-10": "the PDF stores the letters in printed (visual) order, the ि and ू apart; the image prints सल्फ्यूरिक"
+  "read L52.9-12": "the PDF stores the letters in printed (visual) order, the ि and ू apart; the image prints सल्फ्यूरिक"
+  "read L18.6-8": "the PDF stores the letters out of order (विद् त यु); the image prints विद्युत"
+  "read L20.18-20": "the PDF stores the letters out of order (विद् त यु); the image prints विद्युत"
+  "read L65.8": "the PDF writes the colon as a visarga (हैंः); the image prints हैं:"
+  "word वोल्ट": "a real word (volt), as printed on the page; the list lacks it"
+  "word जलता": "a real word (glows, burns), as printed on the page; the list lacks it"
+blocks:
+  - kind: activity
+    continued: true
+    words: L1, L5-L11
+    read:
+      L1.10: वोल्ट
+      L7.7-10: सल्फ्यूरिक
+      L11.8: जलता
+  - kind: figure
+    number: L17.16
+    words: L2-L4, L12-L16, L17.15-16, L18, L21
+    box: [385, 84, 565, 262]
+    read:
+      L4.2: वोल्ट
+      L18.6-8: विद्युत
+  - kind: text
+    words: L17.1-14, L19-L20, L22
+    read:
+      L20.18-20: विद्युत
+  - kind: text
+    words: L23-L29, L31-L39.1, L30, L39.2-L42
+    read:
+      L23.4-5: "H⁺"
+      L23.11-13: "Cl⁻,"
+      L23.14-L25.2: "HNO₃⁻,"
+      L25.4-L27.2: "NO₃⁻,"
+      L27.3-L29.1: "CH₃COOH"
+      L31.1-L33.3: "CH₃COO⁻,"
+      L33.4-L36.1: "H₂SO₄"
+      "L37.2-L39.1, L30": "SO₄²⁻"
+      L40.6-7: "H⁺"
+      L40.9: इससे
+      L41.8-9: "H⁺"
+  - kind: text
+    words: L43-L44
+    read:
+      L43.3-4: कैल्सियम
+  - kind: section
+    number: L45.1
+    title: L45.2-11
+    words: L45
+  - kind: text
+    words: L46
+    read:
+      L46.3-4: केवल
+  - kind: activity
+    number: L47.2
+    words: L47.1-2, L48.1-16, L50, L52.1-14, L54, L56.1-3, L58, L60, L62, L64.1-14, L65-L68
+    read:
+      L52.9-12: सल्फ्यूरिक
+      L52.14: डालिए।
+      L65.8: "हैं:"
+      L67.18-19: कैल्सियम
+  - kind: figure
+    number: L64.16
+    words: L47.3-5, L48.17-L49, L51, L52.15-18, L53, L55, L56.4-L57, L59, L61, L63, L64.15-20
+    box: [355, 462, 562, 652]
+    read:
+      L61.1-2: कैल्सियम

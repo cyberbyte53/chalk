@@ -1,0 +1,82 @@
+page: 13
+proofread: true
+cause: other
+notes:
+  other: "a subscript or a charge the PDF sets as a plain sign on its own line (Na 2 SO 4), printed Na₂SO₄; a word the PDF splits with a space (कै ल्सियम, सल्फ़े ट, करे गा)"
+furniture: L19, L37-L40
+answers:
+  "word ऑक्सैलिक": "a name (oxalic), as printed on the page; the list lacks it"
+blocks:
+  - kind: table
+    number: L1.2
+    title: L1.3-6
+    words: L1-L6
+    box: [99, 108, 571, 236]
+    cells:
+      rows:
+        - ["L2.1-2", "L2.3", "L2.4-5", "L2.6"]
+        - ["L3.1", "L3.2-3", "L3.4-9", "L3.10-11"]
+        - ["L4.1", "L4.2-3", "L4.4", "L4.5-6"]
+        - ["L5.1", "L5.2-3", "L5.4-6", "L5.7-8"]
+        - ["L6.1", "L6.2-3", "L6.4-6", "L6.7-8"]
+    read:
+      L1.4-5: प्राकृतिक
+      L3.2: ऐसीटिक
+      L5.7: मेथैनॉइक
+      L6.2: ऑक्सैलिक
+      L6.4: नेटल
+      L6.7: मेथैनॉइक
+  - kind: exercise
+    title: L7
+    words: L7
+  - kind: question
+    number: L8.1
+    words: L8, L12-L14
+    read:
+      L14.4: क्षारकीय?
+  - kind: question
+    number: L9.1
+    words: L9, L15
+    read:
+      L15.1-2: "H⁺"
+      L15.10-11: प्रकृति
+  - kind: question
+    number: L10.1
+    words: L10, L16
+    read:
+      L16.2: क्षारकीय
+      L16.5-6: "H⁺"
+      L16.15: क्षारकीय
+  - kind: question
+    number: L11.1
+    words: L11, L17-L18
+    read:
+      L17.14-15: "(कैल्सियम"
+      L18.4-5: "(कैल्सियम"
+      L18.9-10: "(कैल्सियम"
+      L18.14-15: करेगा?
+  - kind: section
+    number: L20.1
+    title: L20.1-6
+    words: L20
+  - kind: text
+    words: L21-L22
+    read:
+      L21.6-7: अभिक्रियाओं
+  - kind: section
+    number: L23.1
+    title: L23.2-3
+    words: L23
+  - kind: activity
+    number: L24.2
+    words: L24-L36
+    read:
+      L26.4-5: "सल्फ़ेट,"
+      L26.7-8: "सल्फ़ेट,"
+      L26.9-10: कैल्सियम
+      L26.11-12: "सल्फ़ेट,"
+      L26.14-15: "सल्फ़ेट,"
+      L26.17-18: "सल्फ़ेट,"
+      L28.10: जिससे
+      L29.7-10: मूलक
+      L30.1-L34.1: "Na₂SO₄,"

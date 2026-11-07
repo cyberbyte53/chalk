@@ -1,0 +1,64 @@
+page: 4
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets as plain digits, apart or on their own lines (Na 2 CO 3), printed Na₂CO₃"
+furniture: L10.1, L12-L13, L28-L32, L62-L64
+blocks:
+  - kind: text
+    words: L1-L3
+  - kind: equation
+    words: L4
+  - kind: text
+    words: L5
+  - kind: activity
+    number: L6
+    words: L6-L9, L10.2-14, L11
+  - kind: text
+    words: L14
+  - kind: equation
+    words: L15-L22
+    read:
+      "L15.5-L19.1": { text: "Na₂ZnO₂(s)" }
+      "L19.3-L21": { text: "H₂(g)" }
+  - kind: text
+    words: L23-L24
+  - kind: section
+    number: L25.1
+    title: L25.2-L26
+    words: L25-L26
+  - kind: activity
+    number: L27
+    words: L27, L37-L55
+    read:
+      "L40-L44.1": { text: "(Na₂CO₃)" }
+      "L46-L48.1": { text: "(NaHCO₃)" }
+  - kind: figure
+    number: L33
+    words: L33-L36
+    box: [60, 415, 320, 614]
+  - kind: text
+    words: L56
+  - kind: equation
+    words: L57
+    read:
+      "L57.4-8": { text: "Na₂CO₃(s)" }
+      "L57.13-15": { text: "2NaCl(aq)" }
+      "L57.17-19": { text: "H₂O(l)" }
+      "L57.21-23": { text: "CO₂(g)" }
+  - kind: equation
+    words: L58
+    read:
+      "L58.4-6": { text: "NaHCO₃(s)" }
+      "L58.10-11": { text: "NaCl(aq)" }
+      "L58.13-15": { text: "H₂O(l)" }
+      "L58.17-19": { text: "CO₂(g)" }
+  - kind: text
+    words: L59
+  - kind: equation
+    words: L60-L61
+    read:
+      "L60.1-3": { text: "Ca(OH)₂(aq)" }
+      "L60.5-7": { text: "CO₂(g)" }
+      "L60.9-13": { text: "CaCO₃(s)" }
+      "L60.15-18": { text: "H₂O(l)" }

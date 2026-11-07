@@ -1,0 +1,145 @@
+concepts:
+  - key: acids-sour-bases-bitter
+    concept: Acids taste sour and turn blue litmus red; bases taste bitter and turn red litmus blue.
+    terms: []
+    items: ["0.4"]
+  - key: indicators-show-acid-or-base
+    concept: An indicator tells whether a substance is acidic or basic by changing colour; litmus and turmeric are natural indicators, methyl orange and phenolphthalein synthetic ones.
+    terms: [acid-base indicators]
+    items: ["0.4", "0.6", "1.1.1"]
+  - key: olfactory-indicators
+    concept: Some substances, such as onion, vanilla and clove oil, change their odour in acidic or basic media and can be used as olfactory indicators.
+    terms: [olfactory indicators]
+    items: ["1.1.3", "1.1.4"]
+  - key: acid-and-metal-give-hydrogen
+    concept: An acid reacts with a metal to give a salt and hydrogen gas, which burns with a pop sound.
+    terms: []
+    items: ["1.2.1", "1.2.3", "1.2.4"]
+  - key: some-metals-react-with-base
+    concept: Some metals, such as zinc, react with a base like sodium hydroxide to give hydrogen and a salt (sodium zincate), but not all metals do.
+    terms: []
+    items: ["1.2.6", "1.2.8", "1.2.9"]
+  - key: carbonates-with-acid-give-carbon-dioxide
+    concept: Metal carbonates and hydrogencarbonates react with acids to give a salt, carbon dioxide and water; the carbon dioxide turns lime water milky.
+    terms: []
+    items: ["1.3.1", "1.3.4", "1.3.7", "1.3.10", "1.3.12"]
+  - key: excess-carbon-dioxide-clears-lime-water
+    concept: Excess carbon dioxide turns the white calcium carbonate into calcium hydrogencarbonate, which dissolves in water.
+    terms: []
+    items: ["1.3.8", "1.3.9"]
+  - key: neutralisation
+    concept: An acid and a base cancel each other's effect, reacting to give a salt and water; this is a neutralisation reaction.
+    terms: [neutralisation reaction]
+    items: ["1.4.1", "1.4.2", "1.4.4", "1.4.5"]
+  - key: metal-oxides-are-basic
+    concept: Metal oxides react with acids to give a salt and water, as a base does, so they are basic oxides.
+    terms: []
+    items: ["1.5.1", "1.5.2", "1.5.3", "1.5.4"]
+  - key: non-metal-oxides-are-acidic
+    concept: Non-metallic oxides, such as carbon dioxide, react with a base to give a salt and water, so they are acidic.
+    terms: []
+    items: ["1.6.1"]
+  - key: acids-give-hydrogen-ions
+    concept: Acids conduct electricity in water because they produce hydrogen ions, H⁺(aq), which give them their acidic properties; glucose and alcohol contain hydrogen but give no such ions and are not acids.
+    terms: []
+    items: ["2.2", "2.4", "2.5"]
+  - key: ions-only-in-water
+    concept: An acid produces hydrogen ions only in water, where they join water molecules as hydronium ions (H₃O⁺); dry HCl gas does not change dry litmus.
+    terms: [hydronium ion]
+    items: ["2.7.2", "2.7.5", "2.7.7", "2.7.8"]
+  - key: bases-give-hydroxide-ions
+    concept: Bases give hydroxide ions (OH⁻) in water; bases that dissolve in water are called alkalis.
+    terms: [alkalis]
+    items: ["2.7.9", "2.7.13", "2.7.14"]
+  - key: neutralisation-forms-water
+    concept: In neutralisation the hydrogen ions of the acid and the hydroxide ions of the base combine to form water.
+    terms: []
+    items: ["2.7.15", "2.7.18"]
+  - key: dissolving-is-exothermic
+    concept: Dissolving an acid or a base in water gives out much heat, so acid must always be added slowly to water, never water to acid.
+    terms: []
+    items: ["2.7.20", "2.7.22"]
+  - key: dilution
+    concept: Mixing an acid or a base with water lowers the concentration of its ions per unit volume; this is dilution.
+    terms: [dilution]
+    items: ["2.7.23"]
+  - key: universal-indicator
+    concept: A universal indicator, a mixture of several indicators, shows different colours at different concentrations of hydrogen ions.
+    terms: [universal indicator]
+    items: ["3.2"]
+  - key: ph-scale
+    concept: The pH scale, from 0 to 14, measures hydrogen ion concentration; the higher the hydronium ion concentration, the lower the pH.
+    terms: [pH scale]
+    items: ["3.3"]
+  - key: ph-of-neutral-acidic-basic
+    concept: A neutral solution has pH 7, an acidic one less than 7, and a basic one more than 7, alkalinity growing as pH rises to 14.
+    terms: []
+    items: ["3.4", "3.6", "3.8"]
+  - key: strong-and-weak-acids
+    concept: Acids that give more hydrogen ions at the same concentration are strong acids, those that give fewer are weak acids; bases are strong or weak in the same way by their hydroxide ions.
+    terms: [strong acids, weak acids]
+    items: ["3.9"]
+  - key: living-things-need-narrow-ph
+    concept: Living things survive only in a narrow pH range; our body works between pH 7.0 and 7.8, and rain below pH 5.6 is acid rain, which harms life in rivers.
+    terms: [acid rain]
+    items: ["3.10.2"]
+  - key: soil-ph-and-plants
+    concept: Plants need a specific soil pH for healthy growth.
+    terms: []
+    items: ["3.10.5", "3.10.6"]
+  - key: antacids-neutralise-stomach-acid
+    concept: The stomach makes hydrochloric acid to digest food; too much causes pain, which mild bases called antacids, such as milk of magnesia, neutralise.
+    terms: [antacids]
+    items: ["3.10.8"]
+  - key: tooth-decay-below-ph-5-5
+    concept: Tooth enamel corrodes when the mouth's pH falls below 5.5, from acids bacteria make out of food left in the mouth; basic toothpaste neutralises the acid.
+    terms: []
+    items: ["3.10.10"]
+  - key: stings-neutralised-by-base
+    concept: Bee and nettle stings inject acid (nettle's is methanoic acid), and a mild base such as baking soda, or the dock leaf, relieves the pain.
+    terms: []
+    items: ["3.10.12", "3.10.13"]
+  - key: naturally-occurring-acids
+    concept: Many natural sources contain acids, such as acetic acid in vinegar, citric acid in lemon and orange, lactic acid in curd and methanoic acid in an ant sting.
+    terms: []
+    items: ["3.10.14"]
+  - key: families-of-salts
+    concept: Salts with the same positive or negative radical belong to one family, such as the sodium salts or the chloride salts.
+    terms: []
+    items: ["4.2.1"]
+  - key: ph-of-salts
+    concept: A salt of a strong acid and a strong base is neutral (pH 7); of a strong acid and a weak base, acidic; of a strong base and a weak acid, basic.
+    terms: []
+    items: ["4.3.1", "4.3.2"]
+  - key: common-salt-sources
+    concept: Common salt (sodium chloride) is a neutral salt obtained from seawater and from deposits of rock salt left by dried-up seas.
+    terms: [rock salt]
+    items: ["4.4.1", "4.4.2"]
+  - key: chlor-alkali-process
+    concept: Passing electricity through brine gives sodium hydroxide, chlorine and hydrogen (the chlor-alkali process), each with many uses.
+    terms: [chlor-alkali process]
+    items: ["4.4.5", "4.4.7", "4.4.8", "4.4.9", "4.4.10"]
+  - key: bleaching-powder
+    concept: Bleaching powder is made by the action of chlorine on dry slaked lime and is used to bleach cloth and paper, as an oxidising agent and to make drinking water free from germs.
+    terms: []
+    items: ["4.4.12", "4.4.13", "4.4.14"]
+  - key: baking-soda
+    concept: Baking soda is sodium hydrogencarbonate, made from sodium chloride; a mild non-corrosive basic salt that gives sodium carbonate, water and carbon dioxide when heated.
+    terms: []
+    items: ["4.4.16", "4.4.17", "4.4.18", "4.4.19"]
+  - key: uses-of-baking-soda
+    concept: Baking powder (baking soda with tartaric acid) gives carbon dioxide that makes bread and cake rise; baking soda is also used in antacids and soda-acid fire extinguishers.
+    terms: [Baking powder]
+    items: ["4.4.22", "4.4.23", "4.4.24", "4.4.25", "4.4.26"]
+  - key: washing-soda
+    concept: Washing soda, Na₂CO₃.10H₂O, is made by recrystallising sodium carbonate; it is a basic salt used in the glass, soap and paper industries, for cleaning and to remove permanent hardness of water.
+    terms: []
+    items: ["4.4.28", "4.4.29", "4.4.33"]
+  - key: water-of-crystallisation
+    concept: Salt crystals that seem dry hold water of crystallisation, a fixed number of water molecules per formula unit (five in blue copper sulphate, which turns white when heated).
+    terms: [Water of crystallisation]
+    items: ["4.5.1", "4.5.3", "4.5.4", "4.5.5"]
+  - key: plaster-of-paris
+    concept: Heating gypsum (CaSO₄.2H₂O) at 373 K gives Plaster of Paris (CaSO₄.½H₂O), which sets back into hard gypsum with water; it is used for setting broken bones, toys and decoration.
+    terms: []
+    items: ["4.5.6", "4.5.8", "4.5.9", "4.5.10"]

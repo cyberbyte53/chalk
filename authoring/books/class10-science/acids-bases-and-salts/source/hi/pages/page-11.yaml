@@ -1,0 +1,47 @@
+page: 11
+proofread: true
+cause: other
+notes:
+  other: "a charge the PDF sets as a plain sign (H +), printed H⁺; a word the PDF splits with a space (करें गे, के वल)"
+furniture: L35-L38
+terms:
+  - L17.9-10
+answers:
+  "word मोलर": "a real word (molar), as printed on the page; the list lacks it"
+  "word जीवधारियों": "a real word (living beings), as printed on the page; the list lacks it"
+blocks:
+  - kind: text
+    words: L1-L8
+    read:
+      L1.10-11: "H⁺"
+      L1.14-15: "OH⁻"
+      L3.15: ऐसीटिक
+      L4.3: "मोलर,"
+      L4.15-16: करेंगे।
+      L6.4-5: "H⁺"
+      L6.17-18: "H⁺"
+  - kind: section
+    number: L9.1
+    title: L9.2-7
+    words: L9
+    read:
+      L9.7: महत्त्व
+  - kind: heading
+    title: L14
+    words: L14
+  - kind: text
+    words: L15-L19
+    read:
+      L15.16-17: केवल
+      L18.20: जीवधारियों
+  - kind: box
+    title: L10-L13
+    words: L10-L13, L20-L22
+  - kind: heading
+    title: L23
+    words: L23
+  - kind: text
+    words: L24-L27
+  - kind: activity
+    number: L28.2
+    words: L28-L34

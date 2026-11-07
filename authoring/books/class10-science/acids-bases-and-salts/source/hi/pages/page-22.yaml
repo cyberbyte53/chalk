@@ -1,0 +1,20 @@
+page: 22
+proofread: true
+furniture: L14-L17
+answers:
+  "word लाइए": "a real word (bring), as printed on the page; the list lacks it"
+blocks:
+  - kind: activity
+    continued: true
+    words: L1
+    read:
+      L1.5: जलती
+      L1.10: लाइए।
+  - kind: figure
+    number: L12.2
+    words: L2-L13
+    box: [75, 128, 500, 362]
+    read:
+      L2.2-L3.1: "(तुंड)"
+      L9.2: हाइड्रोजनकार्बोनेट
+      L12.5: हाइड्रोजनकार्बोनेट

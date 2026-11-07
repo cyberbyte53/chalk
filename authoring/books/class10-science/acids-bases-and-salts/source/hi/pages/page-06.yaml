@@ -1,0 +1,64 @@
+page: 6
+proofread: true
+cause: other
+notes:
+  other: "the PDF has no arrow in an equation, and writes a colon as a visarga (हैंः); a word the PDF splits with a space (कै ल्सियम, कै से, करें गे)"
+furniture: L22, L32-L35
+answers:
+  "read L3.14": "the PDF writes the colon as a visarga (हैंः); the image prints हैं:"
+  "read L4.4": "the PDF has no arrow in the word equation; the image prints → after अम्ल"
+blocks:
+  - kind: text
+    words: L1-L3
+    read:
+      L2.10: बनने
+      L3.14: "हैं:"
+  - kind: equation
+    words: L4
+    read:
+      L4.4: "अम्ल →"
+  - kind: text
+    words: L5-L7
+    read:
+      L7.8: क्षारकीय
+  - kind: section
+    number: L8.1
+    title: L8.2-8
+    words: L8
+  - kind: text
+    words: L9-L14
+    read:
+      L9.8-9: कैल्सियम
+      L10.6-7: कैल्सियम
+      L14.3-4: प्रकृति
+  - kind: exercise
+    title: L15
+    words: L15
+  - kind: question
+    number: L16.1
+    words: L16
+  - kind: question
+    number: L17.1
+    words: L17-L18
+    read:
+      L18.10-11: कैसे
+      L18.12-13: करेंगे?
+  - kind: question
+    number: L19.1
+    words: L19-L21
+    read:
+      L20.4: इससे
+      L20.7: जलती
+      L21.1-2: कैल्सियम
+  - kind: section
+    number: L23.1
+    title: L23.2-9
+    words: L23
+  - kind: text
+    words: L24-L28
+    read:
+      L26.7: इससे
+  - kind: activity
+    number: L29.2
+    words: L29-L31
+    continues: true

@@ -1,0 +1,60 @@
+page: 10
+proofread: true
+cause: other
+notes:
+  other: "charges the PDF sets apart (H +), printed H⁺; a heading's words the PDF splits at its kerning (Impor tance, Ever yday); a column heading hyphenated across lines (Approx- -imate)"
+answers:
+  "read L15.4": "the column heading is hyphenated across lines (Approx- -imate); the image's word is Approximate, read whole here"
+  "read L16.3": "the rest of the column heading Approx- -imate, hyphenated across lines; read whole as Approximate on L15.4"
+furniture: L5-L7, L43-L45
+terms:
+  - L34.5-6
+  - L35.1-2
+  - L40.7-8
+blocks:
+  - kind: activity
+    number: L4
+    words: L4, L8-L14
+  - kind: table
+    number: L1
+    words: L1-L3, L15-L28
+    box: [234, 85, 537, 337]
+    read:
+      "L15.4": { text: "Approximate" }
+      "L16.3": { text: "" }
+    cells:
+      rows:
+        - ["L2-L3", "L15.1", "L15.2-3, L16.1-2", "L15.4, L16.3, L17", "L15.5-6, L16.4"]
+        - ["L18.1", "L18.2-4", "", "", ""]
+        - ["L19.1", "L19.2-4", "", "", ""]
+        - ["L20.1", "L20.2-3", "", "", ""]
+        - ["L21.1", "L21.2-3, L22", "", "", ""]
+        - ["L23.1", "L23.2-3", "", "", ""]
+        - ["L24.1", "L24.2", "", "", ""]
+        - ["L25.1", "L25.2-3", "", "", ""]
+        - ["L26.1", "L26.2-3", "", "", ""]
+        - ["L27.1", "L27.2-3", "", "", ""]
+        - ["L28.1", "L28.2-3", "", "", ""]
+  - kind: figure
+    number: L29.1-2
+    words: L29
+    box: [86, 360, 520, 493]
+  - kind: text
+    words: L30-L35
+    read:
+      "L30.12-13": { text: "H⁺" }
+      "L31.2-3": { text: "OH⁻" }
+      "L33.12-13": { text: "H⁺" }
+      "L34.12-13": { text: "H⁺" }
+  - kind: section
+    number: L36.1
+    title: L36.2-9
+    words: L36
+    read:
+      "L36.2-3": { text: "Importance" }
+      "L36.7-8": { text: "Everyday" }
+  - kind: heading
+    title: L37
+    words: L37
+  - kind: text
+    words: L38-L42

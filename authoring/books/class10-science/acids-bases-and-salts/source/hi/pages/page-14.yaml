@@ -1,0 +1,46 @@
+page: 14
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space (सल्फ़े ट, के वल) or lays out of order (एल्‍ मि यु नियम)"
+furniture: L32-L35
+answers:
+  "read L4.7-10": "the PDF stores the letters out of order (एल्‍ मि यु नियम); the image prints एल्युमिनियम"
+  "word विलेयता": "a real word (solubility), as printed on the page; the list lacks it"
+blocks:
+  - kind: section
+    number: L1.1
+    title: L1.2-4
+    words: L1
+  - kind: activity
+    number: L2.2
+    words: L2-L13
+    read:
+      L4.7-10: एल्युमिनियम
+      L5.2-3: "सल्फ़ेट,"
+      L5.5-6: "सल्फ़ेट,"
+      L6.7: हाइड्रोजनकार्बोनेट
+      L8.6: विलेयता
+      L8.10-11: "(केवल"
+      L11.7: क्षारकीय
+  - kind: table
+    number: L14.2
+    words: L14-L15
+    box: [183, 344, 537, 400]
+    cells: { rows: [["L15.1", "L15.2", "L15.3-4", "L15.5-6"], ["", "", "", ""]] }
+  - kind: text
+    words: L16-L19
+    read:
+      L19.1: क्षारकीय
+  - kind: section
+    number: L20.1
+    title: L20.2-5
+    words: L20
+  - kind: text
+    words: L21-L23
+  - kind: text
+    words: L24-L29
+    read:
+      L29.2: खनन
+  - kind: text
+    words: L30-L31

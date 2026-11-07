@@ -1,0 +1,56 @@
+page: 2
+proofread: true
+cause: other
+notes:
+  other: "subscripts the PDF sets on their own lines (H 2 SO 4), printed H₂SO₄; a heading's letters the PDF spaces into separate words (Q U E S T I O N, UNDERST ANDING)"
+answers:
+  "read L1": "the PDF sets the heading's large first letter Q apart from U E S T I O N; the image prints the one word QUESTION, read whole here"
+  "read L3.1-7": "the rest of QUESTION, read whole on L1 with its first letter"
+furniture: L8, L13-L16, L62-L64, L73-L75
+terms:
+  - L59.8-9
+blocks:
+  - kind: exercise
+    title: L1, L3
+    words: L1, L3
+    read:
+      "L1": { text: "QUESTION" }
+      "L3.1-7": { text: "" }
+  - kind: question
+    number: L2
+    words: L2, L4-L7
+  - kind: section
+    number: L9.1-3
+    title: L9.4-L10
+    words: L9-L10
+    read:
+      "L9.1-3": { text: "2.1" }
+      "L9.4-5": { text: "UNDERSTANDING" }
+      "L9.7-8": { text: "CHEMICAL" }
+  - kind: section
+    number: L11.1
+    title: L11.2-7
+    words: L11
+  - kind: activity
+    number: L12
+    words: L12, L17-L41
+    read:
+      "L18.6-L22.1": { text: "(H₂SO₄)," }
+      "L22.4-L24": { text: "(HNO₃)," }
+      "L25.3-L27.1": { text: "(CH₃COOH)," }
+      "L28.2-L30.1": { text: "[Ca(OH)₂]," }
+      "L31.2-L33.1": { text: "[Mg(OH)₂]," }
+      "L33.5-L35": { text: "(NH₄OH)." }
+  - kind: table
+    number: L42
+    words: L42-L56
+    box: [180, 422, 535, 524]
+    cells: { rows: [["L43-L44", "L45-L47", "L48-L50", "L51-L53", "L54-L56"], ["", "", "", "", ""]] }
+    read:
+      "L51-L52": { text: "Phenolphthalein", cause: broken-across-lines }
+  - kind: text
+    words: L57-L60
+  - kind: activity
+    number: L61
+    words: L61, L65-L72
+    continues: true

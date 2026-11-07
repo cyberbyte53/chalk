@@ -1,0 +1,32 @@
+page: 11
+proofread: true
+furniture: L14-L18, L50-L52
+terms:
+  - L31.1
+blocks:
+  - kind: box
+    title: L1-L3
+    words: L1-L6
+  - kind: heading
+    title: L7
+    words: L7
+  - kind: text
+    words: L8-L12
+  - kind: activity
+    number: L13
+    words: L13, L19-L25
+  - kind: heading
+    title: L26
+    words: L26
+  - kind: text
+    words: L27-L34
+  - kind: heading
+    title: L35
+    words: L35
+  - kind: text
+    words: L36-L44
+  - kind: heading
+    title: L45
+    words: L45
+  - kind: text
+    words: L46-L49

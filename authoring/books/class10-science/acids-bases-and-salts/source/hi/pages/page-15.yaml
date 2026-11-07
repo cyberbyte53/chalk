@@ -1,0 +1,55 @@
+page: 15
+proofread: true
+cause: other
+notes:
+  other: "a subscript the PDF sets as a plain digit on its own line (Cl 2), printed Cl₂; a word the PDF splits with a space (कै से, कै थोड, कृ त्रिम)"
+furniture: L38-L41
+terms:
+  - L7.10
+answers:
+  "word क्लोर": "a real word (chlor, of chlor-alkali), as printed on the page; the list lacks it"
+  "word पीवीसी": "an abbreviation (PVC), as printed on the page; the list lacks it"
+  "word सीएफसी": "an abbreviation (CFC), as printed on the page; the list lacks it"
+  "word मार्गरीन": "a name (margarine), as printed on the page; the list lacks it"
+blocks:
+  - kind: heading
+    title: L1
+    words: L1
+  - kind: text
+    words: L2-L4
+    read:
+      L4.4-5: कैसे
+  - kind: heading
+    title: L5
+    words: L5
+  - kind: text
+    words: L6-L8
+    read:
+      L7.10: क्लोर-क्षार
+      L8.2: इससे
+      L8.6: "(क्लोर)"
+  - kind: equation
+    words: L9-L15
+    read:
+      L9.3-L11.1: "2H₂O(l)"
+      L11.5-L13.1: "Cl₂(g)"
+      L13.3-L15.1: "H₂(g)"
+  - kind: text
+    words: L16-L17
+    read:
+      L16.8-9: कैथोड
+      L16.14-15: कैथोड
+  - kind: text
+    words: L18
+  - kind: figure
+    number: L37.2
+    words: L19-L37
+    box: [90, 383, 565, 672]
+    read:
+      L20.3: "पीवीसी,"
+      L21.2: "सीएफसी,"
+      L23.2-3: कैथोड
+      L24.4: "मार्गरीन,"
+      L32.1-2: "(धातुओं"
+      L35.4-5: कृत्रिम
+      L37.3: क्लोर-क्षार
