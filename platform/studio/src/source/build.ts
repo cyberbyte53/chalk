@@ -644,6 +644,21 @@ export function positionalIds(items: readonly { kind: string; number?: string }[
 /** A figure or table to crop: its page, box, and the words of other blocks inside it, to blank. */
 export type Crop = { id: string; page: number; box: Box; blank: Word[] };
 
+/**
+ * A term without the sentence's punctuation after it ("solution." is "solution"), its own closing
+ * bracket kept: "(Isobar)" stays whole, "x-axis)" loses the bracket it never opened.
+ */
+export function trimTerm(text: string): string {
+  let t = text.replace(/[\s,.;:!?।]+$/u, "");
+  while (/[)\]]$/u.test(t)) {
+    const open = (t.match(/[([]/gu) ?? []).length;
+    const close = (t.match(/[)\]]/gu) ?? []).length;
+    if (close <= open) break;
+    t = t.slice(0, -1).replace(/[\s,.;:!?।]+$/u, "");
+  }
+  return t;
+}
+
 /** The chapter built: its items, terms and crops, and which block each item is made of. */
 export type Built = {
   items: Item[];
@@ -708,7 +723,7 @@ export function buildChapter(lang: Locale, pages: readonly BuiltPage[], pageCoun
       const item = t.block === undefined ? undefined : idOf.get(t.block);
       if (t.block === undefined || item === undefined) return [];
       // A term is its words, not the sentence's punctuation around them ("solution." is "solution").
-      const term = withReadings(p.words, t.ids, t.block.readings).replace(/[\s,.;:!?।)\]]+$/u, "");
+      const term = trimTerm(withReadings(p.words, t.ids, t.block.readings));
       const en = lang === Locale.En ? undefined : bracketedAfter(p.words, t.block, t.ids);
       return [{ term, item, ...(en === undefined ? {} : { en }) }];
     }),

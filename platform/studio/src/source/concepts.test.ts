@@ -1,5 +1,6 @@
 import { Locale } from "@chalk/content";
 import { describe, expect, it } from "vitest";
+import { trimTerm } from "./build";
 import { checkAttached, checkMain, suggest } from "./concepts";
 import { Cause, type Item, ItemKind, type MainConcepts } from "./schema";
 
@@ -95,5 +96,14 @@ describe("attaching a book to the main one", () => {
     expect(checkAttached(absent, main, hi, s)).toEqual([
       `hi: the book sets apart "विलयन", in no concept: add it to one, or answer it under answers with why`,
     ]);
+  });
+});
+
+describe("a term's trailing punctuation", () => {
+  it("goes, but a bracket the term opened stays", () => {
+    expect(trimTerm("solution.")).toBe("solution");
+    expect(trimTerm("समभारिक (Isobar)")).toBe("समभारिक (Isobar)");
+    expect(trimTerm("x-axis),")).toBe("x-axis");
+    expect(trimTerm("विलयन।")).toBe("विलयन");
   });
 });
