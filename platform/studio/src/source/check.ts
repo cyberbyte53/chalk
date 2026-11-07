@@ -233,7 +233,12 @@ export function changedTools(book: Book): string[] {
   });
 }
 
-const contentOf = (i: Item) => ({ text: i.text, crop: i.crop, rows: i.rows });
+/** What a piece says, spacing aside (a tab the PDF put between words is a space). */
+const contentOf = (i: Item) => ({
+  text: i.text.replace(/\s+/g, " "),
+  crop: i.crop,
+  rows: i.rows?.map((r) => r.map((c) => c.replace(/\s+/g, " "))),
+});
 const short = (i: Item | undefined) =>
   i === undefined
     ? "(nothing)"
@@ -274,6 +279,7 @@ export function pageToolsOf(pdf: string, cache: string) {
   const loaded = new Map<number, PNG>();
   return (page: number): PageTools => ({
     objects: objects[page - 1]?.objects ?? [],
+    texts: objects[page - 1]?.texts ?? [],
     shows: (others) => (part) => {
       const png = loaded.get(page) ?? PNG.sync.read(readFileSync(images[page - 1] as string));
       loaded.set(page, png);

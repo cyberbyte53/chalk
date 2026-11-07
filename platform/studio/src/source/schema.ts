@@ -44,6 +44,8 @@ export const Tool = {
   /** The words and their numbering: lines, columns. */
   Reader: "reader",
   HindiRepair: "hindi-repair",
+  /** Subscripts and superscripts, from the PDF's text pieces' sizes and baselines. */
+  Scripts: "scripts",
   FigureSnap: "figure-snap",
   TableCells: "table-cells",
   /** The blocks a page file starts from. */
@@ -55,6 +57,7 @@ const toolName = z.enum(Object.values(Tool) as [Tool, ...Tool[]]);
 /** Who made what didn't come from the PDF as it is: a tool, or the agent. */
 export const Maker = {
   HindiRepair: Tool.HindiRepair,
+  Scripts: Tool.Scripts,
   FigureSnap: Tool.FigureSnap,
   TableCells: Tool.TableCells,
   Agent: "agent",

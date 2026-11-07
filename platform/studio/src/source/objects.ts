@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { OPS, getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 import { poppler } from "./read";
 import type { Box } from "./schema";
+import type { TextPiece } from "./scripts";
 
 /**
  * A PDF's drawn objects (platform/docs/plans/sources.md, round 2: "each figure's box snapped to the
@@ -30,7 +31,14 @@ export type DrawnObject = {
   rules: Rule[];
 };
 
-export type PageObjects = { page: number; width: number; height: number; objects: DrawnObject[] };
+/** A page's drawn objects, and its text's pieces with their sizes and baselines (scripts.ts reads them). */
+export type PageObjects = {
+  page: number;
+  width: number;
+  height: number;
+  objects: DrawnObject[];
+  texts?: TextPiece[];
+};
 
 type Matrix = [number, number, number, number, number, number];
 
@@ -182,11 +190,23 @@ export async function readObjects(pdf: string): Promise<PageObjects[]> {
       const page = await doc.getPage(n);
       const [x0, y0, x1, y1] = media[n - 1] ?? (page.view as Box);
       const list = await page.getOperatorList();
+      const content = await page.getTextContent();
+      const texts = content.items.flatMap((item): TextPiece[] => {
+        if (!("str" in item) || item.str.trim() === "") return [];
+        const [, , c, d, e, f] = item.transform as number[];
+        const size = Math.hypot(c ?? 0, d ?? 0);
+        const baseline = y1 - (f ?? 0);
+        const left = (e ?? 0) - x0;
+        return [
+          { str: item.str, x0: left, x1: left + item.width, top: baseline - size, baseline, size },
+        ];
+      });
       pages.push({
         page: n,
         width: x1 - x0,
         height: y1 - y0,
         objects: objectsOf(list.fnArray, list.argsArray, [1, 0, 0, -1, -x0, y1]),
+        texts,
       });
       page.cleanup();
     }

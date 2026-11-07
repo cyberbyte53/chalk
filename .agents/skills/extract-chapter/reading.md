@@ -195,3 +195,7 @@ answers:
 
 An answer is read by a person checking the chapter, so give the real reason. When a reading now equals
 what a tool gives, the issue says so: drop your reading.
+
+**A drawing with no words in the PDF** (a photo with no caption, an equation printed as a picture) is
+still a block: a `figure` with its `box` and `words: ""`. It is cropped like any figure; nothing of it
+is lost because the PDF holds no text for it.

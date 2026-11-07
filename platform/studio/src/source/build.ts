@@ -16,6 +16,7 @@ import {
   type Term,
   Tool,
 } from "./schema";
+import type { TextPiece } from "./scripts";
 import { SnapIssue, snap, tableCells } from "./snap";
 import { type WordSuggestion, hasHindi, rowsOf, wordSuggestions } from "./suggest";
 import { TOOL_VERSIONS } from "./tools";
@@ -65,6 +66,8 @@ export type Raised = { id: string; question: string };
 export type PageTools = {
   /** The PDF's drawn objects on this page. */
   objects?: readonly DrawnObject[];
+  /** The PDF's text pieces on this page, with their sizes and baselines (the scripts tool reads them). */
+  texts?: readonly TextPiece[];
   /** Whether a part of the page shows anything, the words of other blocks aside (snap asks it). */
   shows?: (others: readonly Word[]) => (part: Box) => boolean;
 };
@@ -176,7 +179,26 @@ function withReadings(words: NumberedPage, ids: readonly string[], readings: rea
   return ids
     .map((id) => replaced.get(id) ?? words.words.get(id)?.text ?? "")
     .filter((w) => w !== "")
-    .join(" ");
+    .join(" ")
+    .replace(/\t+/g, " ");
+}
+
+/**
+ * A number's or title's text where the PDF glued a number to the next word with a tab ("2.4\tलवण",
+ * one word, which a reading may give with a space): the number is the PDF's text before the tab, and
+ * the title is its words without that number.
+ */
+function splitAtTab(
+  words: NumberedPage,
+  ids: readonly string[],
+  readings: readonly Reading[],
+  part: "number" | "title",
+): string {
+  const pdf = words.words.get(ids[0] ?? "")?.text ?? "";
+  const number = pdf.split("\t")[0] ?? "";
+  if (part === "number") return number;
+  const text = withReadings(words, ids, readings);
+  return text.startsWith(number) ? text.slice(number.length).trim() : text;
 }
 
 /** What the tools alone make of some words: their readings in, the rest as the PDF gives them. */
@@ -208,7 +230,7 @@ export function buildPage(file: PageFile, words: NumberedPage, tools: PageTools 
     ...(file.cause === undefined ? {} : { cause: file.cause }),
     words,
     tools,
-    suggestions: wordSuggestions(words),
+    suggestions: wordSuggestions(words, tools.texts),
     problems,
     raised,
     overrides,
@@ -259,7 +281,76 @@ function agentReadings(
 ): Reading[] {
   const { words, suggestions, problems, raised, overrides, page } = at;
   const readings: Reading[] = [];
+  // The agent's readings that together spell a tool's span exactly, spaces aside ("Na" and "⁺" read
+  // apart where the scripts tool reads "Na⁺"): each now matches the tool.
+  const whole = new Set<string>();
+  const entries = Object.entries(b.read ?? {}).map(([span, value]) => ({
+    span,
+    ids: (() => {
+      try {
+        return expand(span, words.words);
+      } catch {
+        return [];
+      }
+    })(),
+    text: typeof value === "string" ? value : value.text,
+  }));
+  // An empty reading may blank pieces of several spans (the "+" and "–" of two formulas, one line).
+  // A span's readings are dropped together or not at all: each spelling it exactly, every word of
+  // each inside spans spelled so.
+  const spelledRuns: { parts: string[]; ids: Set<string> }[] = [];
+  const touchedBy = new Map<string, number>();
+  for (const s of suggestions) {
+    if (s.reading === undefined) continue;
+    const parts = entries.filter((e) => e.ids.some((id) => s.ids.includes(id)));
+    if (parts.length < 2) continue;
+    for (const e of parts) touchedBy.set(e.span, (touchedBy.get(e.span) ?? 0) + 1);
+    const inside = (e: (typeof parts)[number]) =>
+      e.text === "" || e.ids.every((id) => s.ids.includes(id));
+    const covered = new Set(parts.flatMap((e) => e.ids));
+    const order = (e: (typeof parts)[number]) =>
+      Math.min(...e.ids.map((id) => s.ids.indexOf(id)).filter((k) => k >= 0));
+    const spelled = [...parts]
+      .sort((x, y) => order(x) - order(y))
+      .map((e) => e.text)
+      .join("");
+    const rest = s.ids
+      .filter((id) => !covered.has(id))
+      .map((id) => words.words.get(id)?.text ?? "");
+    if (
+      parts.every(inside) &&
+      rest.every((t) => t === "") &&
+      plain(spelled).replace(/\s/g, "") === plain(s.reading).replace(/\s/g, "")
+    )
+      spelledRuns.push({ parts: parts.map((e) => e.span), ids: new Set(s.ids) });
+  }
+  for (const r of spelledRuns) for (const span of r.parts) whole.add(span);
+  for (let changed = true; changed; ) {
+    changed = false;
+    for (const e of entries) {
+      if (!whole.has(e.span)) continue;
+      const mine = spelledRuns.filter((r) => r.parts.includes(e.span));
+      const allSpelled = mine.length === touchedBy.get(e.span);
+      const allInside = e.ids.every((id) => mine.some((r) => r.ids.has(id)));
+      if (!allSpelled || !allInside) {
+        whole.delete(e.span);
+        changed = true;
+      }
+    }
+    for (const r of spelledRuns)
+      if (r.parts.some((p) => !whole.has(p)) && r.parts.some((p) => whole.has(p))) {
+        for (const p of r.parts) whole.delete(p);
+        changed = true;
+      }
+  }
   for (const [span, value] of Object.entries(b.read ?? {})) {
+    if (whole.has(span)) {
+      raised.push({
+        id: `matches ${span}`,
+        question: `with the agent's other readings it spells what the tool gives: now matches the tool, drop it`,
+      });
+      continue;
+    }
     const spanIds = tryExpand(span, words, problems, `${where}, read "${span}"`);
     if (spanIds === undefined) continue;
     if (!spanIds.every((id) => ids.includes(id))) {
@@ -286,7 +377,11 @@ function agentReadings(
     // Filling what a tool left needs no reason: its own why is the record.
     if (touched.length > 0 && touched.every((s) => s.left !== undefined)) continue;
     const suggested = asTheToolsGive(words, spanIds, touched);
-    const tool = pdf.some(hasHindi) ? Tool.HindiRepair : Tool.Reader;
+    const tool = touched.some((s) => s.by === Tool.Scripts)
+      ? Tool.Scripts
+      : pdf.some(hasHindi)
+        ? Tool.HindiRepair
+        : Tool.Reader;
     if (plain(text) === plain(suggested)) {
       raised.push({
         id: `matches ${span}`,
@@ -353,7 +448,13 @@ function labelOf(
 ): { ids: string[]; text: string } | undefined {
   if (range === undefined) return undefined;
   const ids = tryExpand(range, at.words, at.problems, `${where}, its ${name}`);
-  return ids === undefined ? undefined : { ids, text: withReadings(at.words, ids, readings) };
+  if (ids === undefined) return undefined;
+  // A number glued to the next word by a tab: the number before it, a title after it.
+  const glued = at.words.words.get(ids[0] ?? "")?.text.includes("\t") === true;
+  const text = glued
+    ? splitAtTab(at.words, ids, readings, name === "number" ? "number" : "title")
+    : withReadings(at.words, ids, readings);
+  return { ids, text };
 }
 
 const isInside = (box: Box, page: NumberedPage) =>

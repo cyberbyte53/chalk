@@ -35,6 +35,7 @@ import {
   pageFileName,
   pageFileSchema,
 } from "./schema";
+import type { TextPiece } from "./scripts";
 import { type BuiltBlock, Maker as SheetMaker, SheetMode, renderSheets, sheetHtml } from "./sheet";
 import { cachedObjects, suggestionLines, wordSuggestions } from "./suggest";
 import { TOOL_VERSIONS } from "./tools";
@@ -149,7 +150,7 @@ async function writeSuggestionSheets(
       page,
       file,
       image: images[page.page - 1] as string,
-      suggestions: wordSuggestions(page),
+      suggestions: wordSuggestions(page, objects[page.page - 1]?.texts),
       objects: objects[page.page - 1]?.objects ?? [],
     });
     return [
@@ -196,7 +197,7 @@ async function writeDecisionSheets(at: SourcePaths, pages: readonly BuiltPage[])
         page: p.words,
         file: p.file,
         image: images[p.page - 1] as string,
-        suggestions: wordSuggestions(p.words),
+        suggestions: wordSuggestions(p.words, objects[p.page - 1]?.texts),
         objects: objects[p.page - 1]?.objects ?? [],
         built: builtBlocks(p),
       }),
@@ -248,20 +249,25 @@ export async function prepare(run: SourceRun): Promise<string[]> {
   writeFileSync(at.book, stringify(book, { lineWidth: 0 }));
   const images = renderPages(at.pdf, at.cache, PAGE_PREFIX).images;
   const answerImages = isAnswers ? renderPages(at.answers, at.cache, ANSWERS_PREFIX).images : [];
-  const writeWords = (list: readonly NumberedPage[], prefix: string, pdf: string) =>
+  const objects = cachedObjects(at.pdf, at.cache);
+  const writeWords = (
+    list: readonly NumberedPage[],
+    prefix: string,
+    pdf: string,
+    texts: (page: number) => readonly TextPiece[] = () => [],
+  ) =>
     list.map((p) => {
       const file = join(at.cache, `${prefix}-${String(p.page).padStart(2, "0")}.words.txt`);
       writeFileSync(
         file,
         wordsFile(p, `${basename(pdf)} page ${p.page}, read as ${reader}`) +
-          suggestionLines(wordSuggestions(p)),
+          suggestionLines(wordSuggestions(p, texts(p.page))),
       );
       return file;
     });
-  const objects = cachedObjects(at.pdf, at.cache);
   const drafted = writeDrafts(at.pages, pages, objects, readStyles(at.pdf));
   const sheets = await writeSuggestionSheets(at, pages, objects, images);
-  const words = writeWords(pages, PAGE_PREFIX, at.pdf);
+  const words = writeWords(pages, PAGE_PREFIX, at.pdf, (n) => objects[n - 1]?.texts ?? []);
   const answerWords = writeWords(answerPages, ANSWERS_PREFIX, at.answers);
   const pairs = (imgs: readonly string[], txts: readonly string[]) =>
     imgs.map((f, i) => `  ${rel(f)}  ${basename(txts[i] ?? "")}`).join("\n");

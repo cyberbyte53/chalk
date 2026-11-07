@@ -7,6 +7,7 @@ import { pageSpans } from "./hindi/spans";
 import { type PageObjects, readObjects, withoutRepeats } from "./objects";
 import type { NumberedPage } from "./read";
 import { Tool } from "./schema";
+import { type TextPiece, scriptRuns } from "./scripts";
 import type { Table } from "./snap";
 import { TOOL_VERSIONS } from "./tools";
 
@@ -28,7 +29,7 @@ export type WordSuggestion = {
   range: string;
   /** The PDF's words. */
   pdf: string[];
-  by: typeof Tool.HindiRepair;
+  by: typeof Tool.HindiRepair | typeof Tool.Scripts;
 } & ({ reading: string; left?: undefined } | { left: string; reading?: undefined });
 
 const DEVANAGARI = /[ऀ-ॿ]/u;
@@ -47,8 +48,22 @@ export function rangeOf(ids: readonly string[]): string {
  * A page's Hindi suggestions: `pageSpans` on the words, a span that has Hindi and that the repair
  * changes (its reading), or leaves (its why). What the PDF gives as it is suggests nothing.
  */
-export function wordSuggestions(page: NumberedPage): WordSuggestion[] {
-  return pageSpans(page).flatMap((span): WordSuggestion[] => {
+export function wordSuggestions(
+  page: NumberedPage,
+  texts: readonly TextPiece[] = [],
+): WordSuggestion[] {
+  const scripts = scriptRuns(page, texts).map(
+    (r): WordSuggestion => ({
+      ids: r.ids,
+      range: rangeOf(r.ids),
+      pdf: r.pdf,
+      by: Tool.Scripts,
+      reading: r.reading,
+    }),
+  );
+  const taken = new Set(scripts.flatMap((s) => s.ids));
+  const hindi = pageSpans(page).flatMap((span): WordSuggestion[] => {
+    if (span.ids.some((id) => taken.has(id))) return [];
     if (!span.pdf.some((p) => hasHindi(p))) return [];
     const common = { ids: span.ids, range: rangeOf(span.ids), pdf: span.pdf, by: Tool.HindiRepair };
     const r = span.repair;
@@ -66,6 +81,7 @@ export function wordSuggestions(page: NumberedPage): WordSuggestion[] {
       },
     ];
   });
+  return [...scripts, ...hindi];
 }
 
 /** A words file's closing part: every suggestion the same, and where a tool made none. */
@@ -98,7 +114,7 @@ export function rowsOf(table: Table): string[][] {
 
 const OBJECTS_FILE = "objects.json";
 const objectsKey = (pdf: string) =>
-  `${sha256(readFileSync(pdf))} ${TOOL_VERSIONS[Tool.FigureSnap]}`;
+  `${sha256(readFileSync(pdf))} ${TOOL_VERSIONS[Tool.FigureSnap]} texts 2`;
 
 /** Reads a PDF's objects (what repeats across its pages left out) into its pages' cache. */
 export async function writeObjects(pdf: string, cache: string): Promise<void> {

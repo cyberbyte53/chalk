@@ -519,3 +519,28 @@ describe("an extract, from the real PDF, through build, check and feedback", () 
     },
   );
 });
+
+describe("a number the PDF glued to its next word with a tab", () => {
+  const w = (text: string, x0: number) => ({ text, x0, y0: 10, x1: x0 + 20, y1: 20 });
+  const page = numberPage({
+    page: 1,
+    width: 500,
+    height: 700,
+    words: [w("2.4\tलवण", 10), w("का", 40), w("pH", 70)],
+  });
+  it.each([
+    ["as the PDF gives it", {}],
+    ["read with a space, as the repair gives it", { read: { "L1.1": "2.4 लवण" } }],
+  ])("is the number before the tab, the title after it (%s)", (_, extra) => {
+    const built = buildPage(
+      {
+        page: 1,
+        proofread: true,
+        blocks: [{ kind: "section", words: "L1", number: "L1.1", title: "L1.1-3", ...extra }],
+      } as never,
+      page,
+    );
+    const b = built.blocks[0];
+    expect([b?.number, b?.title, b?.text]).toEqual(["2.4", "लवण का pH", "2.4 लवण का pH"]);
+  });
+});
