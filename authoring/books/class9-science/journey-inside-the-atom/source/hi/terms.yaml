@@ -1,0 +1,65 @@
+# Built by pnpm source from pages/ and book.pdf (platform/docs/plans/sources.md): don't edit, edit the page files.
+- term: द्रव्य
+  item: "0.3"
+- term: परमाणु
+  item: "0.3"
+- term: विकिरण
+  item: "2.2"
+- term: रेडियोधर्मिता
+  item: "2.2"
+- term: इलेक्ट्रॉन
+  item: "2.3"
+- term: प्रकीर्णन
+  item: "2.7.1"
+  en: scattering
+- term: α-किरण प्रकीर्णन प्रयोग
+  item: "2.7.1"
+- term: नाभिक
+  item: "2.7.5"
+- term: परमाणु का ग्रहीय मॉडल
+  item: "2.7.6"
+- term: प्रोटॉन
+  item: "2.7.19"
+- term: स्थायी अवस्थाएँ
+  item: "2.8.1"
+- term: कक्षाएँ
+  item: "2.8.1"
+- term: कोश
+  item: "2.8.1"
+  en: shell
+- term: ऊर्जा स्तर
+  item: "2.8.1"
+- term: न्यूट्रॉन
+  item: "3.3.1"
+- term: चित्रात्मक प्रतीक
+  item: "4.1"
+- term: परमाणु क्रमांक
+  item: "5.1"
+- term: द्रव्यमान संख्या
+  item: "6.1"
+- term: न्यूक्लिऑन
+  item: "6.1"
+- term: इलेक्ट्रॉनिक विन्यास
+  item: "7.3.1"
+- term: संयोजन क्षमता
+  item: "8.1"
+- term: संयोजकता कोश
+  item: "8.3"
+  en: valence shell
+- term: संयोजकता इलेक्ट्रॉन
+  item: "8.3"
+- term: अष्टक
+  item: "8.4"
+  en: octet
+- term: ‘संयोजकता’
+  item: "8.5"
+- term: समस्थानिक
+  item: "9.1.1"
+  en: Isotopes
+- term: औसत द्रव्यमान
+  item: "9.1.13"
+- term: भारित औसत परमाणु द्रव्यमान
+  item: "9.1.15"
+- term: समभारिक
+  item: "9.2.1"
+  en: Isobar

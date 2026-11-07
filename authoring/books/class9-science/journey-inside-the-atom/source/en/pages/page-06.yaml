@@ -1,0 +1,32 @@
+page: 6
+proofread: true
+furniture: L1, L7, L71
+terms:
+  - L53.5
+blocks:
+  - kind: text
+    words: L2-L5
+  - kind: heading
+    words: L6
+    title: L6
+  - kind: text
+    words: L31-L32
+  - kind: text
+    words: L33-L48, L49.8-13, L50.6-11
+  - kind: figure
+    words: L49.1-7, L50.1-5
+    number: L49.1-2
+    box: [89, 286, 229, 435]
+  - kind: heading
+    words: L51
+    title: L51
+  - kind: text
+    words: L52-L54
+  - kind: text
+    words: L55-L60
+  - kind: box
+    words: L61-L70
+    title: L61
+  - kind: box
+    words: L8-L30
+    title: L8

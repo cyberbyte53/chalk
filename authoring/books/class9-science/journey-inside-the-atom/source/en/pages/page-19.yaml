@@ -1,0 +1,28 @@
+page: 19
+proofread: true
+cause: other
+notes:
+  other: "the PDF writes fl as the single ligature character ﬂ"
+furniture: L36-L39
+blocks:
+  - kind: exercise
+    words: L1
+    title: L1
+  - kind: question
+    words: L2-L13
+    number: L2.1
+    read:
+      "L9.4": { text: "deflection" }
+      "L12.7": { text: "deflected" }
+  - kind: question
+    words: L14-L23
+    number: L14.1
+  - kind: question
+    words: L24-L25, L29-L31
+    number: L24.1
+  - kind: table
+    words: L26-L28
+    box: [175, 498, 550, 576]
+  - kind: question
+    words: L32-L35
+    number: L32.1

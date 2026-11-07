@@ -1,0 +1,52 @@
+page: 15
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets an isotope's mass number and atomic number (or a particle's charge) as separate words apart from its symbol, some merged into one word"
+furniture: L60-L63
+answers:
+  "read L11.1-L14.1": "the image prints ³₁H after 'and': its mass number 3 and atomic number 1 sit before the H, but the PDF stores them on lines of their own around the deuterium line"
+  "read L44.1-L51.1": "the image prints the three isotopes ¹²₆C, ¹³₆C, ¹⁴₆C after 'isotopes:'; the PDF stores their mass numbers together on a line of their own before the sentence"
+  "read L53.1-L54.1": "the image prints ¹²₆C at the start of the sentence; the PDF stores its atomic number 6 on a line of its own after the sentence's line"
+terms:
+  - L8.9
+blocks:
+  - kind: section
+    words: L1
+    number: L1.1
+    title: L1.2-7
+  - kind: section
+    words: L2
+    number: L2.1
+    title: L2.2
+  - kind: text
+    words: L3-L8
+    read:
+      "L7.6-7": { text: "p⁺" }
+      "L7.9-11": { text: "n⁰)." }
+  - kind: text
+    words: L9-L17
+    read:
+      "L10.8-9": { text: "¹₁H" }
+      "L10.12-13": { text: "²₁H" }
+      "L11.1-L14.1": { text: "(deuterium, ~0.015%), and ³₁H" }
+  - kind: figure
+    words: L18-L19
+    number: L19.1-2
+    box: [180, 300, 525, 415]
+  - kind: text
+    words: L37-L43
+  - kind: text
+    words: L44-L56
+    read:
+      "L44.1-L51.1": { text: "Similarly, carbon has three isotopes: ¹²₆C, ¹³₆C, and ¹⁴₆C" }
+      "L53.1-L54.1": { text: "¹²₆C is the most abundant isotope in nature. You may note that" }
+  - kind: figure
+    words: L57-L58
+    number: L58.1-2
+    box: [220, 590, 545, 712]
+  - kind: text
+    words: L59
+  - kind: box
+    words: L20-L36
+    title: L20

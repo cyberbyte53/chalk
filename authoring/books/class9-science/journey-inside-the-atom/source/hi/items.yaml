@@ -1,0 +1,4809 @@
+# Built by pnpm source from pages/ and book.pdf (platform/docs/plans/sources.md): don't edit, edit the page files.
+- id: "0.1"
+  kind: heading
+  page: 1
+  title: एक यात्रा— परमाणु के भीतर
+  text: एक यात्रा— परमाणु के भीतर
+- id: "0.2"
+  kind: figure
+  page: 1
+  text: मानव शरीर घर P H C कक्ष परमाणु अंग O Si N दीवार ऊतक कोशिका ईंट सिलिकेट प्रोटीन
+  crop: [83.1, 171.1, 546.5, 515.3]
+  made:
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L10.1, by: agent}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L18.1, by: agent}
+    - {words: L19.1-2, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "0.3"
+  kind: text
+  page: 1
+  text: "आप अपने परिवेश में जो कुछ देखते हैं अथवा अवलोकन करते हैं अथवा अनुभव करते हैं, वे सभी द्रव्य
+    हैं। आप अध्ययन कर चुके हैं कि द्रव्य जिन सूक्ष्म कणों से बना होता है वे परमाणु कहलाते हैं।
+    उपर्युक्त चित्र को ध्यानपूर्वक देखिए। आपने क्या अवलोकन किया? क्या आपने ध्यान दिया है कि हमारे
+    जैसे सजीव प्राणी और घर जैसी निर्जीव वस्तुएँ दोनों ही अंतत: परमाणुओं से निर्मित हैं? ये परमाणु
+    इतने सूक्ष्म होते हैं कि इन्हें नग्न आँखों से नहीं देखा जा सकता है।"
+  made:
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.8, by: hindi-repair}
+    - {words: L33.12, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L34.7, by: hindi-repair}
+    - {words: L34.9, by: hindi-repair}
+    - {words: L34.12, by: hindi-repair}
+    - {words: L34.14, by: hindi-repair}
+    - {words: L34.16, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.9, by: hindi-repair}
+    - {words: L35.10, by: hindi-repair}
+    - {words: L35.13, by: hindi-repair}
+    - {words: L36.3, by: hindi-repair}
+    - {words: L36.6, by: hindi-repair}
+    - {words: L36.8, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.6, by: hindi-repair}
+    - {words: L37.8, by: agent}
+    - {words: L37.9-10, by: agent}
+    - {words: L37.12, by: hindi-repair}
+    - {words: L37.13, by: hindi-repair}
+    - {words: L37.17, by: hindi-repair}
+    - {words: L38.2, by: hindi-repair}
+    - {words: L38.4, by: hindi-repair}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.6, by: hindi-repair}
+    - {words: L38.8, by: hindi-repair}
+- id: "0.4"
+  kind: text
+  page: 1
+  text: आप आश्चर्यचकित होंगे कि क्या परमाणु ही वास्तव में द्रव्य की सबसे छोटी इकाई होती है अथवा इसे और
+    भी सूक्ष्म इकाइयों में विभाजित किया जा सकता है ?
+  made:
+    - {words: L39.2, by: hindi-repair}
+    - {words: L39.3, by: hindi-repair}
+    - {words: L39.5, by: hindi-repair}
+    - {words: L39.8, by: hindi-repair}
+    - {words: L39.9, by: hindi-repair}
+    - {words: L39.10, by: hindi-repair}
+    - {words: L40.6, by: hindi-repair}
+    - {words: L40.7, by: hindi-repair}
+    - {words: L40.8, by: hindi-repair}
+- id: "0.5"
+  kind: text
+  page: 1
+  text: वैज्ञानिक भी निरंतर यह जानने का प्रयास करते रहे हैं कि क्या परमाणु विभाज्य हैं। यदि ऐसा है तो
+    परमाणु के घटक कौन-से हैं और वे किस प्रकार व्यवस्थित होते हैं? आइए, जाँच करें कि परमाणु की
+    अवधारणा कैसे उत्पन्न हुई और यह समय के साथ कैसे विकसित हुई।
+  made:
+    - {words: L41.1-2, by: agent}
+    - {words: L41.3, by: hindi-repair}
+    - {words: L41.4, by: hindi-repair}
+    - {words: L41.6, by: agent}
+    - {words: L41.7, by: hindi-repair}
+    - {words: L41.8, by: hindi-repair}
+    - {words: L41.9, by: hindi-repair}
+    - {words: L41.10, by: hindi-repair}
+    - {words: L41.11, by: hindi-repair}
+    - {words: L41.12, by: hindi-repair}
+    - {words: L41.13, by: hindi-repair}
+    - {words: L41.14, by: hindi-repair}
+    - {words: L41.15, by: hindi-repair}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L42.4, by: hindi-repair}
+    - {words: L42.5, by: hindi-repair}
+    - {words: L42.6, by: hindi-repair}
+    - {words: L42.7, by: hindi-repair}
+    - {words: L42.9, by: hindi-repair}
+    - {words: L42.10, by: hindi-repair}
+    - {words: L42.12, by: hindi-repair}
+    - {words: L42.13, by: hindi-repair}
+    - {words: L42.14, by: hindi-repair}
+    - {words: L42.15, by: agent}
+    - {words: L42.16, by: hindi-repair}
+    - {words: L42.17, by: hindi-repair}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L43.3, by: hindi-repair}
+    - {words: L43.4, by: hindi-repair}
+    - {words: L43.5, by: hindi-repair}
+    - {words: L43.6, by: hindi-repair}
+    - {words: L43.7, by: hindi-repair}
+    - {words: L43.8-9, by: agent}
+    - {words: L43.11, by: hindi-repair}
+    - {words: L43.15, by: hindi-repair}
+    - {words: L43.16, by: hindi-repair}
+    - {words: L43.17-18, by: agent}
+    - {words: L44.1, by: hindi-repair}
+    - {words: L44.2, by: hindi-repair}
+- id: "0.6"
+  kind: box
+  page: 1
+  title: चिंतन कीजिए
+  text: चिंतन कीजिए क्या परमाणु सूक्ष्मतम अविभाज्य कण हैं? इलेक्ट्रॉन परमाणु के नाभिक में उपस्थित
+    प्रोटॉनों द्वारा आकर्षित होने पर भी नाभिक में क्यों नहीं गिरते हैं? वैज्ञानिक परमाणु प्रतिरूपों
+    (मॉडलों) में परिवर्तन क्यों करते रहे हैं?
+  made:
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.4-7, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L24.1, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.3, by: agent}
+    - {words: L25.1, by: hindi-repair}
+    - {words: L25.2-3, by: agent}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L26.5, by: hindi-repair}
+    - {words: L26.6, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.4, by: hindi-repair}
+    - {words: L30.3, by: hindi-repair}
+- id: "1"
+  kind: section
+  page: 2
+  number: "8.1"
+  title: "परमाणु सिद्धांत की उत्पत्ति का पुन: अन्वेषण"
+  text: "8.1 परमाणु सिद्धांत की उत्पत्ति का पुन: अन्वेषण"
+  made:
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.8, by: hindi-repair}
+- id: "1.1"
+  kind: text
+  page: 2
+  text: आइए, हम 2,000 वर्ष पूर्व के प्राचीन भारत एवं प्राचीन ग्रीस के बौद्धिक परिदृश्य की यात्रा
+    प्रारंभ करते हैं। इन दोनों दूरस्थ परंतु आश्चर्यजनक रूप से समानांतर सभ्यताओं के महान विचारक,
+    जैसे— भारत में आचार्य कणाद एवं ग्रीस में लियुसीपस तथा डेमोक्रिटस उस मूल प्रश्न पर निरंतर विचार
+    करते रहे जो कई शताब्दियों से मानव खोज को प्रेरित करता रहा है कि अंततःसमस्त वस्तुएँ किससे निर्मित
+    हुईं हैं।
+  made:
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.5-7, by: hindi-repair}
+    - {words: L3.16, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.4, by: hindi-repair}
+    - {words: L4.6, by: hindi-repair}
+    - {words: L4.10-11, by: agent}
+    - {words: L4.17, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L5.6, by: agent}
+    - {words: L5.8, by: agent}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L6.1, by: hindi-repair}
+    - {words: L6.11, by: agent}
+    - {words: L6.12, by: hindi-repair}
+    - {words: L6.13, by: agent}
+    - {words: L6.14, by: hindi-repair}
+    - {words: L6.15, by: hindi-repair}
+    - {words: L6.16, by: hindi-repair}
+- id: "1.2"
+  kind: text
+  page: 2
+  text: आचार्य कणाद ने यह सुझाव दिया कि यदि पदार्थ (द्रव्य) को निरंतर विभाजित किया जाए तो एक ऐसी
+    स्थिति आएगी जिसमें इतने सूक्ष्म कण प्राप्त होंगे कि उन्हें और अधिक विभाजित नहीं किया जा सकेगा।
+    इन्होंने इन कणों को परमाणु कहा। इनके विचार संस्कृत ग्रंथ वैशेषिक सूत्र में उल्लिखित हैं। परमाणु
+    अत्यंत सूक्ष्म कण है और इसे हमारी इंद्रियाँ अनुभव नहीं कर सकती हैं। परमाणु संयोजित होकर द्वय (दो
+    परमाणुओं का समूह) एवं त्रय (तीन परमाणुओं का समूह) इत्यादि बनाते हैं। इन्हीं संयोजनों से संपूर्ण
+    भौतिक ब्रह्मांड के पदार्थ (जिसमें सजीवों की काया भी सम्मिलित हैं, निर्मित होते हैं), यद्यपि दिया
+    गया विवरण यह निर्दिष्ट नहीं करता कि विभिन्न पदार्थों के निर्माण में परमाणुओं के संयोजन का अनुपात
+    क्या होता है।
+  made:
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L7.10, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L8.5, by: hindi-repair}
+    - {words: L8.7, by: hindi-repair}
+    - {words: L8.9, by: hindi-repair}
+    - {words: L8.10, by: hindi-repair}
+    - {words: L8.12, by: hindi-repair}
+    - {words: L8.16, by: hindi-repair}
+    - {words: L9.2-3, by: agent}
+    - {words: L9.4, by: hindi-repair}
+    - {words: L9.6, by: hindi-repair}
+    - {words: L9.12-13, by: agent}
+    - {words: L9.17, by: hindi-repair}
+    - {words: L9.18, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L10.12, by: hindi-repair}
+    - {words: L10.15, by: hindi-repair}
+    - {words: L11.4-5, by: agent}
+    - {words: L11.11-12, by: agent}
+    - {words: L11.15, by: hindi-repair}
+    - {words: L11.17, by: hindi-repair}
+    - {words: L11.18, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.5, by: hindi-repair}
+    - {words: L12.7, by: hindi-repair}
+    - {words: L12.8, by: hindi-repair}
+    - {words: L12.9, by: hindi-repair}
+    - {words: L12.13, by: hindi-repair}
+    - {words: L12.14, by: hindi-repair}
+    - {words: L12.15, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+    - {words: L13.12, by: hindi-repair}
+    - {words: L13.14, by: hindi-repair}
+    - {words: L13.15, by: hindi-repair}
+    - {words: L13.16-17, by: agent}
+    - {words: L14.4, by: hindi-repair}
+- id: "1.3"
+  kind: text
+  page: 2
+  text: ग्रीक दार्शनिक लियुसीपस एवं डेमोक्रिटस ने भी ऐसा ही विचार प्रस्तावित किया। इन्होंने इन
+    अविभाज्य कणों को एटोमॉस (atomos) कहा (ग्रीक में एटोमॉस का अर्थ अविभाज्य है)।
+  made:
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.3, by: agent}
+    - {words: L15.5, by: agent}
+    - {words: L15.11, by: hindi-repair}
+    - {words: L15.13, by: hindi-repair}
+    - {words: L15.15, by: hindi-repair}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.3, by: agent}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.8, by: agent}
+    - {words: L16.10, by: hindi-repair}
+    - {words: L16.11, by: hindi-repair}
+- id: "1.4"
+  kind: text
+  page: 2
+  text: आपको यह स्मरण रखना चाहिए कि ‘परमाणु’ की अवधारणा की उत्पत्ति काल्पनिक विचार से हुई थी न कि
+    प्रायोगिक अवलोकनों से।
+  made:
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.6, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.8, by: hindi-repair}
+    - {words: L17.9, by: hindi-repair}
+    - {words: L17.10, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+    - {words: L17.12, by: hindi-repair}
+    - {words: L17.13, by: hindi-repair}
+    - {words: L17.14, by: hindi-repair}
+    - {words: L17.15, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.5, by: hindi-repair}
+    - {words: L18.6, by: hindi-repair}
+- id: "1.5"
+  kind: text
+  page: 2
+  text: अनेक शताब्दियों पश्चात वर्ष 1808 में जॉन डाल्टन ने अपना परमाणु सिद्धांत प्रस्तुत किया। यह उस
+    समय के वैज्ञानिक प्रयोगों पर आधारित था। इन्होंने प्रस्तावित किया कि सभी द्रव्य अविभाज्य सूक्ष्म
+    कणों से बने हैं जिन्हें परमाणु कहा जाता है अर्थात परमाणु द्रव्य के वे निर्माण मूल खंड हैं
+    जिन्हें और सूक्ष्म कणों में विभाजित नहीं किया जा सकता। डाल्टन का परमाणु सिद्धांत यह ज्ञात करने
+    का प्रथम वैज्ञानिक विवरण था कि द्रव्य किस प्रकार बना है। यह परमाणु संरचना की आधुनिक समझ का
+    आरंभिक बिंदु बना।
+  made:
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+    - {words: L19.6, by: hindi-repair}
+    - {words: L19.8, by: agent}
+    - {words: L19.12, by: hindi-repair}
+    - {words: L19.13, by: hindi-repair}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.8, by: hindi-repair}
+    - {words: L20.9, by: hindi-repair}
+    - {words: L20.13, by: hindi-repair}
+    - {words: L20.14, by: hindi-repair}
+    - {words: L20.15-18, by: hindi-repair}
+    - {words: L20.19, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.9, by: hindi-repair}
+    - {words: L21.11, by: hindi-repair}
+    - {words: L21.14, by: hindi-repair}
+    - {words: L21.17, by: hindi-repair}
+    - {words: L21.18, by: hindi-repair}
+    - {words: L21.20, by: hindi-repair}
+    - {words: L21.21, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.7, by: agent}
+    - {words: L22.10, by: hindi-repair}
+    - {words: L23.3, by: hindi-repair}
+    - {words: L23.10-L24.2, by: hindi-repair}
+    - {words: L24.4-7, by: hindi-repair}
+- id: "1.6"
+  kind: text
+  page: 2
+  text: आपको यह जानने की उत्सुकता होगी कि डाल्टन का विचार परमाणु की संरचना के मॉडल के रूप में किस
+    प्रकार विकसित हुआ।
+  made:
+    - {words: L25.3, by: agent}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L25.8, by: agent}
+    - {words: L25.18, by: hindi-repair}
+- id: "1.7"
+  kind: text
+  page: 2
+  text: डाल्टन के सिद्धांत के आधार पर वैज्ञानिक निम्नलिखित प्रश्नों के उत्तर जानने को उत्सुक थे—
+    परमाणु किससे निर्मित होते हैं? यदि हम परमाणुओं को देख सकते तो वे कैसे दिखाई देते? एक तत्व के
+    परमाणु किसी अन्य तत्व के परमाणुओं से किस प्रकार भिन्न होते हैं?
+  made:
+    - {words: L27.1, by: agent}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.12, by: agent}
+    - {words: L27.14, by: hindi-repair}
+    - {words: L28.3, by: agent}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L29.4-5, by: agent}
+    - {words: L29.11-12, by: agent}
+    - {words: L30.3, by: agent}
+    - {words: L30.7, by: hindi-repair}
+    - {words: L30.8, by: agent}
+    - {words: L30.10-11, by: agent}
+    - {words: L30.15, by: hindi-repair}
+    - {words: L30.17, by: hindi-repair}
+- id: "2"
+  kind: section
+  page: 2
+  number: "8.2"
+  title: परमाणु मॉडलों की एक संक्षिप्त ऐतिहासिक यात्रा
+  text: 8.2 परमाणु मॉडलों की एक संक्षिप्त ऐतिहासिक यात्रा
+  made:
+    - {words: L31.3, by: hindi-repair}
+    - {words: L31.6, by: hindi-repair}
+- id: "2.1"
+  kind: text
+  page: 2
+  text: एक शताब्दी से भी पूर्व, वैज्ञानिक परमाणु संरचना के सरल मॉडल को प्रस्तावित करते रहे एवं यह
+    कल्पना करने का प्रयास करते रहे कि परमाणु कैसे दिखाई देते हैं। जैसे-जैसे नए प्रयोग किए गए और नए
+    प्रमाण प्रकाश में आए, इन मॉडलों में निरंतर परिवर्तन एवं सुधार किया गया। यद्यपि अब हम यह जानते
+    हैं कि प्रारंभिक मॉडल पूर्णतः सही नहीं थे परंतु वर्तमान में भी इनकी महत्ता है क्योंकि ये मॉडल
+    दर्शाते हैं कि जिज्ञासा, प्रश्नों एवं प्रयोगों के द्वारा एक-एक कदम बढ़ाते हुए विज्ञान ने किस
+    प्रकार प्रगति की है।
+  made:
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.5, by: hindi-repair}
+    - {words: L32.13, by: hindi-repair}
+    - {words: L32.18, by: hindi-repair}
+    - {words: L33.8-9, by: agent}
+    - {words: L33.12, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L34.8, by: hindi-repair}
+    - {words: L34.10-13, by: hindi-repair}
+    - {words: L34.21, by: hindi-repair}
+    - {words: L35.3, by: hindi-repair}
+    - {words: L35.5, by: hindi-repair}
+    - {words: L35.8, by: hindi-repair}
+    - {words: L35.9, by: hindi-repair}
+    - {words: L35.14, by: hindi-repair}
+    - {words: L35.17, by: hindi-repair}
+    - {words: L35.18, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L36.4, by: hindi-repair}
+    - {words: L36.9, by: hindi-repair}
+- id: "2.2"
+  kind: text
+  page: 2
+  text: 19 वीं शताब्दी के अंत तक परमाणु को पदार्थ की सबसे छोटी अविभाज्य इकाई माना जाता रहा। यद्यपि
+    वैज्ञानिकों ने खोजा कि कुछ तत्व अदृश्य ऊर्जा एवं कण उत्सर्जित करते हैं जिसे विकिरण कहा जाता है
+    एवं इस परिघटना को रेडियोधर्मिता कहा गया। इससे यह ज्ञात हुआ कि परमाणु निश्चित ही और भी सूक्ष्म
+    कणों से मिलकर बने हैं तथा यह प्रमाणित हुआ कि वे अविभाज्य नहीं हैं जैसा कि पहले समझा जाता था।
+  made:
+    - {words: L37.2, by: hindi-repair}
+    - {words: L37.3, by: hindi-repair}
+    - {words: L37.4, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L37.8, by: hindi-repair}
+    - {words: L37.9, by: hindi-repair}
+    - {words: L37.10, by: hindi-repair}
+    - {words: L37.11, by: hindi-repair}
+    - {words: L37.12, by: hindi-repair}
+    - {words: L37.13, by: hindi-repair}
+    - {words: L37.14, by: hindi-repair}
+    - {words: L37.15, by: hindi-repair}
+    - {words: L37.16, by: hindi-repair}
+    - {words: L37.17, by: hindi-repair}
+    - {words: L37.18, by: hindi-repair}
+    - {words: L38.1, by: hindi-repair}
+    - {words: L38.2, by: hindi-repair}
+    - {words: L38.3, by: hindi-repair}
+    - {words: L38.4, by: hindi-repair}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.6, by: agent}
+    - {words: L38.8, by: hindi-repair}
+    - {words: L38.9, by: hindi-repair}
+    - {words: L38.11, by: hindi-repair}
+    - {words: L38.12, by: hindi-repair}
+    - {words: L38.13, by: hindi-repair}
+    - {words: L38.14, by: hindi-repair}
+    - {words: L38.15, by: hindi-repair}
+    - {words: L38.16, by: hindi-repair}
+    - {words: L38.17, by: hindi-repair}
+    - {words: L38.18, by: hindi-repair}
+    - {words: L6.1, page: 3, by: hindi-repair}
+    - {words: L6.3, page: 3, by: agent}
+    - {words: L6.4, page: 3, by: hindi-repair}
+    - {words: L6.5, page: 3, by: hindi-repair}
+    - {words: L6.6, page: 3, by: hindi-repair}
+    - {words: L6.7, page: 3, by: hindi-repair}
+    - {words: L6.8, page: 3, by: agent}
+    - {words: L6.10-11, page: 3, by: agent}
+    - {words: L6.12, page: 3, by: hindi-repair}
+    - {words: L6.13, page: 3, by: hindi-repair}
+    - {words: L6.14, page: 3, by: hindi-repair}
+    - {words: L6.15, page: 3, by: agent}
+    - {words: L6.16, page: 3, by: hindi-repair}
+    - {words: L6.18, page: 3, by: hindi-repair}
+    - {words: L6.19, page: 3, by: hindi-repair}
+    - {words: L7.1, page: 3, by: hindi-repair}
+    - {words: L7.2, page: 3, by: hindi-repair}
+    - {words: L7.3, page: 3, by: hindi-repair}
+    - {words: L7.4, page: 3, by: hindi-repair}
+    - {words: L7.5, page: 3, by: hindi-repair}
+    - {words: L7.6, page: 3, by: hindi-repair}
+    - {words: L7.8, page: 3, by: hindi-repair}
+    - {words: L7.9, page: 3, by: hindi-repair}
+    - {words: L7.10, page: 3, by: hindi-repair}
+    - {words: L7.11, page: 3, by: hindi-repair}
+    - {words: L7.12, page: 3, by: hindi-repair}
+    - {words: L7.13, page: 3, by: hindi-repair}
+    - {words: L7.14, page: 3, by: hindi-repair}
+    - {words: L7.15, page: 3, by: hindi-repair}
+    - {words: L7.16, page: 3, by: hindi-repair}
+    - {words: L7.17, page: 3, by: hindi-repair}
+    - {words: L7.18, page: 3, by: hindi-repair}
+    - {words: L7.19, page: 3, by: hindi-repair}
+    - {words: L7.20, page: 3, by: hindi-repair}
+- id: "2.3"
+  kind: text
+  page: 3
+  text: वर्ष 1897 में जे. जे. टॉमसन ने अति निम्न दाब पर गैसों में विद्युत धारा के चालन का अध्ययन किया।
+    उन्होंने एक काँच की नलिका का उपयोग किया एवं उसमें उच्च वोल्टता पर विद्युत धारा को प्रवाहित किया।
+    उन्होंने देखा कि किरणें, कैथोड (ऋणावेशित इलेक्ट्रोड) से ऐनोड (धनावेशित इलेक्ट्रोड) की ओर गमन कर
+    रही हैं (चित्र 8.1)। इन्हें कैथोड किरणें कहा गया। विद्युत एवं चुंबकीय क्षेत्र में इन कैथोड
+    किरणों पर किए गए अध्ययन के आधार पर वे इस निष्कर्ष पर पहुँचे कि ये किरणें ऋणावेशित कणों जिनका
+    द्रव्यमान परमाणु के द्रव्यमान से बहुत कम है, की धाराएँ हैं। इन कणों को बाद में इलेक्ट्रॉन कहा
+    गया। परमाणुओं से उत्सर्जित इन कणों ने यह इंगित किया कि परमाणु और भी सूक्ष्म अवपरमाणुक कणों से
+    निर्मित हैं।
+  made:
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L8.9, by: hindi-repair}
+    - {words: L8.12, by: hindi-repair}
+    - {words: L8.13, by: hindi-repair}
+    - {words: L8.19, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.10, by: hindi-repair}
+    - {words: L9.11, by: hindi-repair}
+    - {words: L9.12, by: agent}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L10.5-6, by: agent}
+    - {words: L10.7, by: agent}
+    - {words: L10.11, by: agent}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6-7, by: agent}
+    - {words: L11.8, by: hindi-repair}
+    - {words: L11.13-L12.1, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.5-6, by: agent}
+    - {words: L12.7, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.12, by: hindi-repair}
+    - {words: L13.13, by: agent}
+    - {words: L13.14, by: hindi-repair}
+    - {words: L13.16, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.7, by: agent}
+    - {words: L14.8, by: hindi-repair}
+    - {words: L14.10, by: hindi-repair}
+    - {words: L14.13, by: hindi-repair}
+    - {words: L14.17-18, by: agent}
+    - {words: L14.20, by: hindi-repair}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.11, by: hindi-repair}
+    - {words: L15.12, by: agent}
+    - {words: L15.13, by: hindi-repair}
+    - {words: L15.15, by: hindi-repair}
+    - {words: L15.16, by: hindi-repair}
+- id: "2.4"
+  kind: figure
+  page: 3
+  number: चित्र 8.1
+  text: – + उच्च वोल्टता शक्ति आपूर्ति कैथोड (–) ऐनोड (+) निर्वात पंप चित्र 8.1 — कैथोड किरण नलिका का
+    रेखाचित्र
+  crop: [266.2, 240.2, 521.6, 428.6]
+  made:
+    - {words: L42.2, by: agent}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L44.1-2, by: agent}
+    - {words: L46.1, by: hindi-repair}
+    - {words: L48.1, by: hindi-repair}
+    - {words: L48.2, by: hindi-repair}
+    - {words: L49.4-5, by: agent}
+    - {words: L49.9-10, by: agent}
+    - {box: true, by: figure-snap}
+- id: "2.5"
+  kind: text
+  page: 3
+  text: यह ज्ञात हुआ कि कैथोड किरणों की प्रकृति कैथोड के पदार्थ एवं कैथोड नली में भरी हुई गैस पर
+    निर्भर नहीं करती है। इससे यह प्रमाणित हुआ कि इलेक्ट्रॉन सभी परमाणुओं के मूल घटक हैं जो प्रत्येक
+    तत्व में उपस्थित होते हैं। एक इलेक्ट्रॉन पर (−1.602 x 10⁻¹⁹ C) आवेश होता है जिसे परिपाटी एवं
+    सुविधा हेतु −1 लिया जाता है।
+  made:
+    - {words: L50.5-6, by: agent}
+    - {words: L50.7, by: hindi-repair}
+    - {words: L50.10-11, by: agent}
+    - {words: L50.13, by: hindi-repair}
+    - {words: L50.15-16, by: agent}
+    - {words: L50.18, by: hindi-repair}
+    - {words: L51.4, by: hindi-repair}
+    - {words: L51.5, by: hindi-repair}
+    - {words: L51.8, by: agent}
+    - {words: L51.15-16, by: agent}
+    - {words: L52.1-3, by: hindi-repair}
+    - {words: L52.5, by: hindi-repair}
+    - {words: L52.7, by: hindi-repair}
+    - {words: L52.8, by: agent}
+    - {words: L52.9, by: hindi-repair}
+    - {words: L52.10, by: hindi-repair}
+    - {words: L52.12, by: hindi-repair}
+    - {words: L52.16, by: agent}
+    - {words: L52.18-19, by: agent}
+    - {words: L53.9, by: agent}
+- id: "2.6"
+  kind: section
+  page: 3
+  number: 8.2.1
+  title: टॉमसन का परमाणु मॉडल
+  text: 8.2.1 टॉमसन का परमाणु मॉडल
+  made:
+    - {words: L54.2, by: hindi-repair}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L54.4, by: hindi-repair}
+    - {words: L54.5, by: hindi-repair}
+- id: "2.6.1"
+  kind: text
+  page: 3
+  text: जब जे. जे. टॉमसन ने सूक्ष्म ऋणात्मक कण जिन्हें इलेक्ट्रॉन कहते हैं, की खोज की तो इनके सामने एक
+    पहेली यह थी कि यदि परमाणु उदासीन होते हैं तो इनमें धनात्मक आवेश कहाँ विद्यमान होता है? इसके
+    समाधान हेतु टॉमसन ने प्रस्तावित किया कि परमाणु धनात्मक आवेश का एक गोला होता है जिसमें इलेक्ट्रॉन
+    समान रूप से वितरित होते हैं (चित्र 8.2)। इस मॉडल की तुलना पुडिंग में धँसे हुए प्लम्स (सूखा मेवा,
+    आलूबुखारा) से की गई जिसे ‘प्लम पुडिंग मॉडल’ कहा गया। एक अत्यंत व्यावहारिक उदाहरण तरबूज का लिया
+    जा सकता है (चित्र 8.3) जिसमें लाल गूदा धनात्मक आवेश को और बीज परमाणु में वितरित इलेक्ट्रॉनों को
+    प्रदर्शित करता है। यह सरल चित्र भले ही बाद में परिवर्तित हो गया हो परंतु यह परमाणु में धनावेश
+    एवं ऋणावेश के संतुलन को वर्णित करने का प्रथम सार्थक प्रयास था।
+  made:
+    - {words: L55.6-L56.2, by: hindi-repair}
+    - {words: L56.3, by: hindi-repair}
+    - {words: L56.5, by: hindi-repair}
+    - {words: L56.8, by: hindi-repair}
+    - {words: L57.13, by: hindi-repair}
+    - {words: L57.15, by: hindi-repair}
+    - {words: L57.16, by: hindi-repair}
+    - {words: L58.11, by: hindi-repair}
+    - {words: L59.2, by: hindi-repair}
+    - {words: L59.9, by: hindi-repair}
+    - {words: L60.2, by: hindi-repair}
+    - {words: L60.9-L61.2, by: hindi-repair}
+    - {words: L61.3, by: hindi-repair}
+    - {words: L61.6, by: agent}
+    - {words: L61.7-L62.2, by: agent}
+    - {words: L63.6, by: agent}
+    - {words: L63.12, by: hindi-repair}
+    - {words: L63.13, by: hindi-repair}
+    - {words: L65.1, by: hindi-repair}
+    - {words: L65.4, by: hindi-repair}
+    - {words: L66.2, by: hindi-repair}
+    - {words: L66.4, by: hindi-repair}
+    - {words: L66.6, by: hindi-repair}
+    - {words: L67.3, by: agent}
+    - {words: L67.6, by: hindi-repair}
+    - {words: L67.7, by: hindi-repair}
+    - {words: L68.3, by: hindi-repair}
+    - {words: L68.6, by: hindi-repair}
+    - {words: L69.1, by: hindi-repair}
+    - {words: L69.5, by: hindi-repair}
+- id: "2.6.2"
+  kind: figure
+  page: 3
+  number: चित्र 8.2
+  text: इलेक्ट्रॉन धनात्मक गोला चित्र 8.2 — टॉमसन का परमाणु मॉडल
+  crop: [53.9, 590.5, 206.5, 735.8]
+  made:
+    - {words: L36.1-2, by: agent}
+    - {words: L37.1-2, by: hindi-repair}
+    - {words: L38.1, by: hindi-repair}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.4, by: hindi-repair}
+    - {words: L39.5, by: hindi-repair}
+    - {words: L39.6, by: hindi-repair}
+    - {words: L40.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "2.6.3"
+  kind: figure
+  page: 3
+  number: चित्र 8.3—
+  text: चित्र 8.3— तरबूज
+  crop: [436, 643.8, 565, 750.4]
+  made:
+    - {words: L70.1, by: hindi-repair}
+    - {words: L70.3-5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "2.6.4"
+  kind: box
+  page: 3
+  title: टिप्पणी
+  text: टिप्पणी परमाणुओं का कोई रंग नहीं होता। रेखाचित्रों में प्रदर्शित रंग मात्र चित्रण के उद्देश्य
+    से हैं।
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L2.1-4, by: agent}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.6, by: hindi-repair}
+    - {words: L2.7-8, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L3.3-4, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.2-3, by: hindi-repair}
+    - {words: L4.4, by: hindi-repair}
+    - {words: L4.5, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.4, by: hindi-repair}
+- id: "2.6.5"
+  kind: box
+  page: 3
+  title: वैज्ञानिक–परिचय
+  text: वैज्ञानिक–परिचय जे. जे. टॉमसन का सर्वाधिक उल्लेखनीय कार्य इलेक्ट्रॉन की खोज थी जिसे प्रथम
+    अवपरमाणुक कण के रूप में पहचाना गया और ये समस्त परमाणुओं में विद्यमान होते हैं। इन्हें वर्ष 1906
+    में गैसों की विद्युत चालकता के अपने अध्ययन पर भौतिकी का नोबेल पुरस्कार प्राप्त हुआ। इनके इसी
+    अनुसंधान ने इन्हें इलेक्ट्रॉन की खोज की प्रेरणा दी। कैम्ब्रिज की प्रसिद्ध कैवेंडिश प्रयोगशाला के
+    प्रमुख के रूप में इन्होंने अर्न्स्ट रदरफोर्ड सहित अनेक वैज्ञानिकों का मार्गदर्शन कर उन्हें
+    प्रेरित किया।
+  made:
+    - {words: L17.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L23.1, by: agent}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.3-4, by: agent}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L26.2, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L26.6, by: hindi-repair}
+    - {words: L26.7, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L28.5, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L31.2-3, by: agent}
+    - {words: L31.6-7, by: agent}
+    - {words: L32.6, by: hindi-repair}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.2, by: agent}
+    - {words: L33.3, by: agent}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+- id: "2.6.6"
+  kind: box
+  page: 4
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 1. मान लीजिए कि आपने टॉमसन के विवरणानुसार स्वयं एक ‘परमाणु’ बनाया जिसमें
+    धनात्मक आवेश के लिए मिट्टी और वितरित इलेक्ट्रॉनों के लिए छोटे मोतियों का उपयोग किया। क्या होगा
+    यदि — (i) मिट्टी पर धनावेश उसमें वितरित मोतियों के कुल ऋणावेश से कम हो? (ii) त्रुटिवश यदि मिट्टी
+    में थोड़ा-सा भी ऋणावेश हो तो क्या आपका मॉडल अब भी उदासीन परमाणु को प्रदर्शित करेगा? 2. क्या इसकी
+    तुलना एक संतरे (अथवा एक नींबू जिनके नरम गूदों के मध्य बीज होते हैं) से करना उचित है? यह कहाँ तक
+    टॉमसन के विचार से मेल खाता है और इसमें कहाँ कमी है? 3. टॉमसन ने यह निष्कर्ष क्यों निकाला कि
+    इलेक्ट्रॉन सभी परमाणुओं में उपस्थित होते हैं?
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L3.8, by: agent}
+    - {words: L3.9, by: hindi-repair}
+    - {words: L3.13, by: hindi-repair}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L4.1-2, by: hindi-repair}
+    - {words: L4.4, by: hindi-repair}
+    - {words: L4.5, by: hindi-repair}
+    - {words: L4.6, by: hindi-repair}
+    - {words: L4.7, by: hindi-repair}
+    - {words: L4.8, by: hindi-repair}
+    - {words: L4.9, by: hindi-repair}
+    - {words: L4.10, by: hindi-repair}
+    - {words: L4.11, by: hindi-repair}
+    - {words: L4.12, by: hindi-repair}
+    - {words: L4.13, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L4.15, by: hindi-repair}
+    - {words: L5.2-3, by: hindi-repair}
+    - {words: L5.6, by: hindi-repair}
+    - {words: L5.8, by: hindi-repair}
+    - {words: L5.11, by: hindi-repair}
+    - {words: L6.2, by: agent}
+    - {words: L6.4-5, by: hindi-repair}
+    - {words: L6.6, by: hindi-repair}
+    - {words: L6.7, by: hindi-repair}
+    - {words: L6.9, by: hindi-repair}
+    - {words: L6.12, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.2-3, by: agent}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.9, by: hindi-repair}
+    - {words: L8.12, by: hindi-repair}
+    - {words: L8.14, by: hindi-repair}
+    - {words: L8.17, by: hindi-repair}
+    - {words: L9.10, by: hindi-repair}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L10.11-12, by: agent}
+    - {words: L10.13, by: hindi-repair}
+    - {words: L10.14, by: hindi-repair}
+    - {words: L10.16, by: hindi-repair}
+- id: "2.7"
+  kind: section
+  page: 4
+  number: 8.2.2
+  title: टॉमसन मॉडल का परीक्षण— स्वर्ण पर्णिका प्रयोग
+  text: 8.2.2 टॉमसन मॉडल का परीक्षण— स्वर्ण पर्णिका प्रयोग
+  made:
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.7, by: hindi-repair}
+    - {words: L11.8, by: hindi-repair}
+- id: "2.7.1"
+  kind: text
+  page: 4
+  text: "वर्ष 1911 में गाइगर एवं मार्सडेन जो अर्न्स्ट रदरफोर्ड के निर्देशन में कार्य कर रहे थे, ने
+    टॉमसन के परमाणु मॉडल की जाँच की जो स्वर्ण पर्णिका (gold foil) प्रयोग के नाम से प्रसिद्ध हुआ।
+    इन्होंने स्वर्ण पर्णिका पर अल्फा कणों के संकीर्ण किरणपुंज की बौछार की। अल्फा (प्रतीक α ) कण
+    धनावेशित सूक्ष्म कण होते हैं जो कुछ रेडियोधर्मी तत्वों से उत्सर्जित होते हैं। इस अध्याय में आप
+    आगे जानेंगे कि अल्फा कण वास्तव में हीलियम परमाणु का नाभिक है जिसमें दो प्रोटॉन और दो न्यूट्रॉन
+    उपस्थित होते हैं। टॉमसन मॉडल के अनुसार परमाणु में धनात्मक आवेश समान रूप से वितरित होता है। अत:
+    उन्होंने यह अपेक्षा की थी कि अल्फा कण स्वर्ण पर्णिका के आर-पार हो जाएँगे अथवा बहुत कम विक्षेपित
+    होंगे। परंतु उनके लिए ये आश्चर्यजनक था कि जहाँ अधिकांश कण विक्षेपित हुए बिना पर्णिका से सीधे
+    निकल गए वहीं कुछ कण बहुत अधिक विक्षेपित हुए (चित्र 8.4) और कुछ कण तो पुन: लौट आए। इस प्रकार सीधे
+    मार्ग से विक्षेपण को प्रकीर्णन (scattering) कहा गया। अत: स्वर्ण पर्णिका प्रयोग को α-किरण
+    प्रकीर्णन प्रयोग भी कहा जाता है।"
+  made:
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.6, by: agent}
+    - {words: L12.8, by: agent}
+    - {words: L12.9, by: agent}
+    - {words: L12.12, by: hindi-repair}
+    - {words: L12.13, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.16, by: hindi-repair}
+    - {words: L13.17, by: hindi-repair}
+    - {words: L13.18, by: hindi-repair}
+    - {words: L14.1, by: agent}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L14.5-L15.1, by: hindi-repair}
+    - {words: L15.5, by: agent}
+    - {words: L15.10, by: agent}
+    - {words: L15.11, by: hindi-repair}
+    - {words: L15.14, by: hindi-repair}
+    - {words: L16.3-4, by: agent}
+    - {words: L16.5, by: agent}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.9, by: hindi-repair}
+    - {words: L16.11, by: hindi-repair}
+    - {words: L16.12, by: hindi-repair}
+    - {words: L16.15, by: hindi-repair}
+    - {words: L16.17, by: agent}
+    - {words: L16.19, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.12-15, by: agent}
+    - {words: L17.16, by: hindi-repair}
+    - {words: L17.18, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.13, by: hindi-repair}
+    - {words: L19.1, by: agent}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+    - {words: L19.12, by: agent}
+    - {words: L19.13, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.7, by: agent}
+    - {words: L20.10, by: hindi-repair}
+    - {words: L20.15, by: hindi-repair}
+    - {words: L21.3, by: agent}
+    - {words: L21.11-14, by: hindi-repair}
+    - {words: L21.20, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.11-12, by: hindi-repair}
+    - {words: L22.13, by: hindi-repair}
+- id: "2.7.2"
+  kind: figure
+  page: 4
+  number: चित्र 8.4—
+  text: पतली स्वर्ण पर्णिका α - कणों का पुंज चित्र 8.4— स्वर्ण पर्णिका प्रयोग का व्यवस्थात्मक चित्रण
+  crop: [90.9, 479.3, 475.2, 686.2]
+  made:
+    - {words: L24.1, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.3, by: hindi-repair}
+    - {words: L25.3, by: hindi-repair}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L26.5, by: hindi-repair}
+    - {words: L26.6, by: hindi-repair}
+    - {words: L26.7-8, by: hindi-repair}
+    - {words: L26.9, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "2.7.3"
+  kind: text
+  page: 4
+  text: टॉमसन का मॉडल स्वर्ण पर्णिका के प्रयोग के परिणामों की व्याख्या करने में विफल रहा विशेष रूप से
+    कुछ α-कणों का बड़े कोणों में विक्षेपण तथा अधिकांश α-कणों का पर्णिका से विक्षेपित हुए बिना गमन।
+  made:
+    - {words: L27.4, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.11, by: hindi-repair}
+    - {words: L27.13, by: hindi-repair}
+    - {words: L28.2-3, by: hindi-repair}
+    - {words: L28.5, by: hindi-repair}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L28.7, by: hindi-repair}
+    - {words: L28.11-12, by: hindi-repair}
+    - {words: L28.14, by: hindi-repair}
+    - {words: L28.16, by: agent}
+- id: "2.7.4"
+  kind: heading
+  page: 5
+  title: क. रदरफोर्ड का परमाणु मॉडल
+  text: क. रदरफोर्ड का परमाणु मॉडल
+  made:
+    - {words: L1.2, by: agent}
+    - {words: L1.3, by: hindi-repair}
+    - {words: L1.4, by: hindi-repair}
+    - {words: L1.5, by: hindi-repair}
+- id: "2.7.5"
+  kind: text
+  page: 5
+  text: स्वर्ण पर्णिका प्रयोग से रदरफोर्ड ने यह निष्कर्ष निकाला कि परमाणु का धनावेश पूरे क्षेत्र में
+    वितरित नहीं होता अपितु एक अति सूक्ष्म क्षेत्र में केंद्रित होता है जिसे नाभिक कहते हैं। उन्होंने
+    प्रस्तावित किया कि—
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.5, by: agent}
+    - {words: L2.6, by: hindi-repair}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.9, by: hindi-repair}
+    - {words: L2.10, by: hindi-repair}
+    - {words: L2.11, by: hindi-repair}
+    - {words: L2.12, by: hindi-repair}
+    - {words: L2.13, by: hindi-repair}
+    - {words: L2.14, by: hindi-repair}
+    - {words: L2.15, by: hindi-repair}
+    - {words: L2.16, by: hindi-repair}
+    - {words: L2.17, by: hindi-repair}
+    - {words: L2.18, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.5, by: hindi-repair}
+    - {words: L3.6, by: hindi-repair}
+    - {words: L3.7, by: hindi-repair}
+    - {words: L3.8, by: hindi-repair}
+    - {words: L3.9, by: hindi-repair}
+    - {words: L3.10, by: hindi-repair}
+    - {words: L3.11, by: hindi-repair}
+    - {words: L3.12, by: hindi-repair}
+    - {words: L3.13, by: hindi-repair}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.15, by: hindi-repair}
+    - {words: L3.16, by: hindi-repair}
+    - {words: L3.17, by: hindi-repair}
+    - {words: L3.18, by: hindi-repair}
+- id: "2.7.6"
+  kind: text
+  page: 5
+  text: परमाणु का अधिकांश भाग रिक्त है क्योंकि अधिकतर अल्फा ( α ) कण बिना विक्षेपित हुए पर्णिका के पार
+    निकल गए। नाभिक सघन है जिसमें संपूर्ण धनावेश और परमाणु का अधिकांश द्रव्यमान विद्यमान होता है।
+    इलेक्ट्रॉन नाभिक के चारों ओर घूमते हैं जैसे ग्रह सूर्य की परिक्रमा करते हैं। इसीलिए इस मॉडल को
+    परमाणु का ग्रहीय मॉडल कहा जाता है (चित्र 8.5)।
+  made:
+    - {words: L4.6, by: hindi-repair}
+    - {words: L4.8, by: hindi-repair}
+    - {words: L4.10, by: agent}
+    - {words: L4.16, by: agent}
+    - {words: L4.18, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.6-L7.3, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L8.5, by: hindi-repair}
+    - {words: L8.8, by: hindi-repair}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L8.15, by: hindi-repair}
+- id: "2.7.7"
+  kind: text
+  page: 5
+  text: रदरफोर्ड ने पाया कि नाभिक अति सूक्ष्म, परमाणु से लगभग 10⁵ (एक लाख) गुना छोटा होता है। इन्होंने
+    परिकलित किया कि परमाणु का व्यास लगभग10⁻¹⁰ m और नाभिक का व्यास लगभग 10⁻¹⁵ m होता है। आप कल्पना कर
+    सकते हैं कि यदि परमाणु एक क्रिकेट मैदान (लगभग 100 मीटर) जितना बड़ा है तो नाभिक उसके केंद्र में
+    काली मिर्च के छोटे दाने (कुछ mm) जितना होगा।
+  made:
+    - {words: L10.7, by: agent}
+    - {words: L10.8, by: hindi-repair}
+    - {words: L10.9, by: hindi-repair}
+    - {words: L10.10, by: hindi-repair}
+    - {words: L10.11, by: hindi-repair}
+    - {words: L10.12, by: hindi-repair}
+    - {words: L10.13, by: hindi-repair}
+    - {words: L10.14, by: hindi-repair}
+    - {words: L10.15, by: hindi-repair}
+    - {words: L10.17-18, by: agent}
+    - {words: L10.20, by: hindi-repair}
+    - {words: L10.21, by: hindi-repair}
+    - {words: L10.22, by: hindi-repair}
+    - {words: L10.23, by: hindi-repair}
+    - {words: L10.24, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.7, by: hindi-repair}
+    - {words: L11.8, by: hindi-repair}
+    - {words: L11.9, by: hindi-repair}
+    - {words: L11.10, by: hindi-repair}
+    - {words: L11.11, by: hindi-repair}
+    - {words: L11.12-13, by: agent}
+    - {words: L11.16, by: hindi-repair}
+    - {words: L11.17, by: hindi-repair}
+    - {words: L11.18, by: hindi-repair}
+    - {words: L11.20-21, by: agent}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.9, by: hindi-repair}
+    - {words: L13.10, by: hindi-repair}
+    - {words: L13.12-13, by: hindi-repair}
+    - {words: L13.14, by: hindi-repair}
+    - {words: L13.17, by: hindi-repair}
+    - {words: L13.18, by: hindi-repair}
+    - {words: L13.19, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L14.5-6, by: agent}
+    - {words: L14.7, by: hindi-repair}
+    - {words: L14.8, by: hindi-repair}
+    - {words: L14.9, by: hindi-repair}
+    - {words: L14.10, by: hindi-repair}
+    - {words: L14.11, by: hindi-repair}
+    - {words: L14.12, by: hindi-repair}
+    - {words: L14.13, by: hindi-repair}
+    - {words: L14.15, by: hindi-repair}
+    - {words: L14.16, by: hindi-repair}
+- id: "2.7.8"
+  kind: figure
+  page: 5
+  number: चित्र 8.5—
+  text: चित्र 8.5— रदरफोर्ड द्वारा प्रस्तावित ग्रहीय मॉडल का व्यवस्थात्मक चित्र
+  crop: [45, 112.4, 154.5, 273.5]
+  made:
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2-3, by: agent}
+    - {words: L10.4, by: agent}
+    - {words: L10.5-6, by: agent}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L12.1-2, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "2.7.9"
+  kind: box
+  page: 5
+  title: आइए, और आगे बढ़ें
+  text: आइए, और आगे बढ़ें 0.1 mm मोटाई का कागज का एक पत्रक (जैसा आपकी पाठ्यपुस्तक का एक पृष्ठ) बनाने
+    के लिए कितने परमाणुओं की आवश्यकता होगी? गणना कीजिए। यदि एक परमाणु का व्यास लगभग 10⁻¹⁰ m है और
+    कागज का पत्रक 0.1 mm (10⁻⁴ m) मोटाई का है तो परमाणुओं की संख्या ≈ (10⁻⁴ m) ÷ (10⁻¹⁰ m) = 10⁶
+    होगी। अर्थात यह लगभग 10 लाख परमाणुओं को एक के ऊपर एक रखने जैसा है! जब ये परमाणु साथ जुड़ते हैं
+    तो ठोस पदार्थ बनाते हैं जिन्हें देखा और छुआ जा सकता है। साधारण-सा दिखने वाला पत्रक, वास्तव में
+    सुगमता से व्यवस्थित छोटी-छोटी इकाइयों का एक बहुत बड़ा समूह है। यह आश्चर्यजनक है कि किस प्रकार
+    अदृश्य परमाणुओं का संसार हमारे प्रतिदिन उपयोग में आने वाली वस्तुओं को आकार देता है जिन्हें हम
+    देख सकते हैं।
+  made:
+    - {words: L16.11, by: hindi-repair}
+    - {words: L16.14, by: hindi-repair}
+    - {words: L17.1-2, by: agent}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.5, by: hindi-repair}
+    - {words: L18.7-8, by: agent}
+    - {words: L18.10, by: hindi-repair}
+    - {words: L18.12, by: hindi-repair}
+    - {words: L18.13, by: hindi-repair}
+    - {words: L18.17-18, by: agent}
+    - {words: L18.20, by: hindi-repair}
+    - {words: L18.21, by: hindi-repair}
+    - {words: L18.22, by: hindi-repair}
+    - {words: L18.23, by: hindi-repair}
+    - {words: L19.1-2, by: agent}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+    - {words: L19.6-7, by: agent}
+    - {words: L19.10-11, by: agent}
+    - {words: L19.14-15, by: agent}
+    - {words: L19.16, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.6-9, by: agent}
+    - {words: L20.22-25, by: hindi-repair}
+    - {words: L20.26, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.5, by: hindi-repair}
+    - {words: L21.6, by: hindi-repair}
+    - {words: L21.17, by: hindi-repair}
+    - {words: L21.18, by: hindi-repair}
+    - {words: L21.19-22, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.9-11, by: hindi-repair}
+    - {words: L22.14, by: hindi-repair}
+    - {words: L22.19, by: hindi-repair}
+    - {words: L23.1-4, by: agent}
+    - {words: L23.6-L24.2, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L24.6, by: hindi-repair}
+    - {words: L24.9-10, by: agent}
+    - {words: L24.15, by: hindi-repair}
+    - {words: L24.19, by: hindi-repair}
+- id: "2.7.10"
+  kind: box
+  page: 5
+  title: वैज्ञानिक की भाँति सोचिए
+  text: वैज्ञानिक की भाँति सोचिए चित्र 8.4 में दर्शाए स्वर्ण पर्णिका प्रयोग का अवलोकन कीजिए। उन
+    अवलोकनों का पूर्वानुमान लगाइए जो प्रयोग में अधिक मोटी स्वर्ण पर्णिका का उपयोग करने पर प्राप्त हो
+    सकते हैं? अपने अपेक्षित अवलोकनों को दर्शाने हेतु एक सरल चित्र भी बनाइए। संकेत— पतली पर्णिका एवं
+    मोटी पर्णिका की तुलना कीजिए। पर्णिका की मोटाई α कणों के नाभिक से टकराने की संभावनाओं को कैसे
+    प्रभावित करेगी?
+  made:
+    - {words: L25.1, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.3, by: hindi-repair}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L26.5, by: hindi-repair}
+    - {words: L26.6, by: hindi-repair}
+    - {words: L26.12, by: hindi-repair}
+    - {words: L26.14, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.6, by: hindi-repair}
+    - {words: L27.11, by: hindi-repair}
+    - {words: L27.14, by: hindi-repair}
+    - {words: L27.17, by: hindi-repair}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.6, by: hindi-repair}
+    - {words: L29.10, by: hindi-repair}
+    - {words: L29.14, by: hindi-repair}
+    - {words: L30.2-3, by: agent}
+    - {words: L30.5-6, by: agent}
+    - {words: L30.8-9, by: agent}
+- id: "2.7.11"
+  kind: box
+  page: 5
+  title: सोचिए और बताइए
+  text: "सोचिए और बताइए 4. आप क्या सोचते हैं? यदि रदरफोर्ड के स्वर्ण पर्णिका प्रयोग में अल्फा ( α )
+    कणों के स्थान पर ऋणावेशित कणों का उपयोग किया जाता तो क्या होता? 5. रदरफोर्ड ने पाया कि कुछ अल्फा
+    ( α ) कण तीव्र गति से पुन: लौट आए। मात्र इस एक आश्चर्यजनक परिणाम से टॉमसन का परमाणु ‘प्लम पुडिंग
+    मॉडल’ पूर्ण रूप से कैसे गलत सिद्ध हो गया? 6. यदि आप रदरफोर्ड से उनके कार्य के संबंध में एक
+    प्रश्न पूछ सकते तो वह क्या होता?"
+  made:
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L32.3, by: hindi-repair}
+    - {words: L32.5, by: hindi-repair}
+    - {words: L32.7, by: agent}
+    - {words: L32.9, by: hindi-repair}
+    - {words: L32.10, by: hindi-repair}
+    - {words: L32.12, by: hindi-repair}
+    - {words: L32.13, by: agent}
+    - {words: L32.17, by: hindi-repair}
+    - {words: L32.19, by: hindi-repair}
+    - {words: L32.21, by: agent}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L34.1, by: agent}
+    - {words: L34.6, by: agent}
+    - {words: L34.20, by: hindi-repair}
+    - {words: L35.6, by: agent}
+    - {words: L35.9, by: hindi-repair}
+    - {words: L35.12-13, by: agent}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.3, by: agent}
+    - {words: L36.6, by: hindi-repair}
+    - {words: L36.9, by: hindi-repair}
+    - {words: L36.11, by: hindi-repair}
+    - {words: L36.16, by: hindi-repair}
+- id: "2.7.12"
+  kind: text
+  page: 6
+  text: स्वर्ण पर्णिका प्रयोग के परिणामों की व्याख्या में रदरफोर्ड का परमाणु मॉडल, टॉमसन के परमाणु
+    मॉडल से अधिक श्रेष्ठ था परंतु इस मॉडल की भी एक सीमा थी। यह परमाणु के स्थायित्व को नहीं समझा
+    पाया।
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.7, by: hindi-repair}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.9, by: agent}
+    - {words: L3.6, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+- id: "2.7.13"
+  kind: heading
+  page: 6
+  title: ख. रदरफोर्ड मॉडल की सीमाएँ
+  text: ख. रदरफोर्ड मॉडल की सीमाएँ
+  made:
+    - {words: L5.2, by: agent}
+    - {words: L5.5, by: agent}
+- id: "2.7.14"
+  kind: text
+  page: 6
+  text: यद्यपि केंद्रीय नाभिक का विचार एक बड़ा अग्र चरण था परंतु रदरफोर्ड मॉडल परमाणु के स्थायित्व की
+    व्याख्या नहीं कर सका।
+  made:
+    - {words: L25.2-3, by: agent}
+    - {words: L25.8, by: hindi-repair}
+    - {words: L25.13, by: agent}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+- id: "2.7.15"
+  kind: text
+  page: 6
+  text: "जैसा कि आपने अध्याय 4 ‘अपने परिवेश में गति का वर्णन’ में सीखा कि कोई कण जब वृत्ताकार मार्ग
+    में गति करता है तो उसकी दिशा निरंतर परिवर्तित होती रहती है इसका अर्थ है कि वह त्वरित हो रहा है।
+    यदि ऋणावेशित इलेक्ट्रॉन नाभिक के चारों ओर त्वरित होता रहता है तो इसकी ऊर्जा में निरंतर ह्वास
+    होना चाहिए। ऊर्जा के उत्तरोत्तर क्षय से उसे धीरे-धीरे भीतर की ओर गति करते हुए अंत में धनावेशित
+    नाभिक में गिर जाना चाहिए (चित्र 8.6)। यदि वास्तव में ऐसा होता तो परमाणु नष्ट हो जाता और उसका
+    अस्तित्व समाप्त हो जाता। परंतु वास्तव में परमाणु स्थायी होते हैं और इसलिए हमारे आस-पास द्रव्य
+    अक्षुण्ण रहता है। इसका अर्थ है कि रदरफोर्ड का मॉडल पूर्णत: सही नहीं था और एक नए स्पष्टीकरण की
+    आवश्यकता थी जो यह व्याख्या कर सके कि इलेक्ट्रॉन नाभिक में गिरे बिना किस प्रकार गतिशील रहते हैं?"
+  made:
+    - {words: L27.4, by: hindi-repair}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.11, by: hindi-repair}
+    - {words: L27.12, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L28.11, by: hindi-repair}
+    - {words: L28.16, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L29.7, by: agent}
+    - {words: L29.11, by: hindi-repair}
+    - {words: L29.13, by: hindi-repair}
+    - {words: L30.2, by: hindi-repair}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L30.8, by: hindi-repair}
+    - {words: L30.14-15, by: agent}
+    - {words: L31.4-6, by: agent}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L31.8, by: agent}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L31.17, by: hindi-repair}
+    - {words: L31.18, by: hindi-repair}
+    - {words: L32.4, by: hindi-repair}
+    - {words: L32.9, by: hindi-repair}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.5, by: hindi-repair}
+    - {words: L33.6, by: hindi-repair}
+    - {words: L33.8, by: hindi-repair}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L34.7, by: hindi-repair}
+    - {words: L35.3, by: hindi-repair}
+    - {words: L35.6, by: agent}
+    - {words: L35.9-12, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.6, by: hindi-repair}
+    - {words: L36.8, by: hindi-repair}
+    - {words: L37.4, by: hindi-repair}
+    - {words: L37.10, by: hindi-repair}
+    - {words: L38.7, by: hindi-repair}
+- id: "2.7.16"
+  kind: text
+  page: 6
+  text: परंतु इससे पूर्व आपको एक अन्य अवपरमाणुक कण, प्रोटॉन के विषय में जानना आवश्यक है जिसकी रदरफोर्ड
+    ने खोज की एवं नामकरण किया।
+  made:
+    - {words: L39.2, by: agent}
+    - {words: L39.3, by: hindi-repair}
+    - {words: L39.6, by: hindi-repair}
+    - {words: L39.7, by: agent}
+    - {words: L41.5, by: hindi-repair}
+    - {words: L41.6, by: agent}
+    - {words: L41.7, by: hindi-repair}
+    - {words: L41.10, by: agent}
+- id: "2.7.17"
+  kind: figure
+  page: 6
+  number: चित्र 8.6
+  text: चित्र 8.6 — ऊर्जा के ह्वास पर आवेशित कण द्वारा अनुसरित सर्पिलाकार पथ
+  crop: [88.4, 286.3, 229.3, 441.1]
+  made:
+    - {words: L40.1, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L40.5, by: hindi-repair}
+    - {words: L40.6, by: hindi-repair}
+    - {words: L40.8, by: hindi-repair}
+    - {words: L42.2-3, by: agent}
+    - {words: L42.4, by: hindi-repair}
+    - {words: L42.5, by: agent}
+    - {box: true, by: figure-snap}
+- id: "2.7.18"
+  kind: heading
+  page: 6
+  title: ग. प्रोटॉन की खोज
+  text: ग. प्रोटॉन की खोज
+- id: "2.7.19"
+  kind: text
+  page: 6
+  text: रदरफोर्ड ने दर्शाया कि नाभिक में उपस्थित कणों (जिन्हें प्रोटॉन कहते हैं) के कारण उस पर धनावेश
+    होता है। प्रोटॉन का भार इलेक्ट्रॉन से बहुत अधिक होता हैं और इस पर इलेक्ट्रॉन के समान परंतु
+    विपरीत आवेश होता है।
+  made:
+    - {words: L45.1, by: agent}
+    - {words: L45.3, by: hindi-repair}
+    - {words: L45.6, by: hindi-repair}
+    - {words: L45.7, by: hindi-repair}
+    - {words: L45.8, by: hindi-repair}
+    - {words: L45.9, by: hindi-repair}
+    - {words: L45.12, by: hindi-repair}
+    - {words: L46.9, by: hindi-repair}
+- id: "2.7.20"
+  kind: text
+  page: 6
+  text: एक परमाणु को विद्युत उदासीन होने के लिए उसमें प्रोटॉनों की संख्या इलेक्ट्रॉनों की संख्या के
+    बराबर होनी चाहिए। उदाहरणार्थ— एक हीलियम परमाणु में दो प्रोटॉन और दो इलेक्ट्रॉन होते हैं जबकि
+    सोडियम परमाणु में 11 प्रोटॉन तथा 11 इलेक्ट्रॉन होते हैं। चूँकि कुल धनावेश कुल ऋणावेश के समान है
+    इसलिए हीलियम और सोडियम के परमाणु विद्युत उदासीन हैं। इस प्रकार सभी परमाणु विद्युत उदासीन होते
+    हैं।
+  made:
+    - {words: L47.9, by: hindi-repair}
+    - {words: L47.10, by: hindi-repair}
+    - {words: L47.12, by: hindi-repair}
+    - {words: L47.13, by: hindi-repair}
+    - {words: L47.15, by: hindi-repair}
+    - {words: L48.3, by: hindi-repair}
+    - {words: L48.7, by: hindi-repair}
+    - {words: L48.14, by: hindi-repair}
+    - {words: L49.2, by: hindi-repair}
+    - {words: L49.9, by: hindi-repair}
+    - {words: L49.10-L50.1, by: hindi-repair}
+    - {words: L50.5, by: hindi-repair}
+    - {words: L51.8, by: hindi-repair}
+    - {words: L51.16, by: hindi-repair}
+- id: "2.7.21"
+  kind: box
+  page: 6
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 7. नीचे दिए गए अभिकथन एवं कारण को पढिए और उनके संबंध में आगे दिए गए विकल्पों
+    में से सही विकल्प का चयन कीजिए। अभिकथन— रदरफोर्ड ने निष्कर्ष निकाला कि परमाणु का अधिकांश
+    द्रव्यमान उसके केंद्र में एक छोटे से भाग में केंद्रित होता है जिसे नाभिक कहते हैं । कारण— टॉमसन
+    मॉडल के अनुसार इलेक्ट्रॉन एकसमान रूप से वितरित धनावेश वाले गोले में धँसे हुए रहते हैं। (i)
+    अभिकथन और कारण दोनो सत्य हैं और कारण अभिकथन की सही व्याख्या है। (ii) अभिकथन और कारण दोनों सत्य
+    हैं परंतु कारण अभिकथन की सही व्याख्या नहीं है। (iii) अभिकथन सत्य है परंतु कारण असत्य है। (iv)
+    अभिकथन असत्य है परंतु कारण सत्य है।
+  made:
+    - {words: L52.1, by: hindi-repair}
+    - {words: L52.3, by: hindi-repair}
+    - {words: L53.9, by: hindi-repair}
+    - {words: L53.12-L54.2, by: agent}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L54.7, by: hindi-repair}
+    - {words: L54.8, by: hindi-repair}
+    - {words: L54.11, by: hindi-repair}
+    - {words: L56.2, by: agent}
+    - {words: L56.4, by: hindi-repair}
+    - {words: L56.10, by: hindi-repair}
+    - {words: L56.12-13, by: agent}
+    - {words: L56.14, by: hindi-repair}
+    - {words: L56.19, by: hindi-repair}
+    - {words: L57.1-2, by: agent}
+    - {words: L57.8, by: hindi-repair}
+    - {words: L58.14, by: hindi-repair}
+    - {words: L58.18, by: hindi-repair}
+    - {words: L59.6, by: hindi-repair}
+    - {words: L59.7, by: hindi-repair}
+    - {words: L59.13, by: hindi-repair}
+    - {words: L60.5, by: hindi-repair}
+    - {words: L60.6, by: hindi-repair}
+    - {words: L60.7, by: hindi-repair}
+    - {words: L60.13, by: hindi-repair}
+    - {words: L60.14, by: hindi-repair}
+    - {words: L61.3, by: hindi-repair}
+    - {words: L61.7, by: hindi-repair}
+    - {words: L62.3, by: hindi-repair}
+    - {words: L62.7, by: hindi-repair}
+- id: "2.7.22"
+  kind: box
+  page: 6
+  title: वैज्ञानिक-परिचय
+  text: वैज्ञानिक-परिचय न्यूजीलैंड में जन्मे अरनेस्ट रदरफोर्ड कैम्ब्रिज गए वहाँ इन्होंने जे. जे. टॉमसन
+    के साथ कार्य किया और वे ‘नाभिकीय भौतिकी के जनक’ कहलाए। इन्होंने परमाणु में नाभिक की खोज की और
+    समझाया कि कुछ तत्व प्राकृतिक रूप से कैसे खंडित हो जाते हैं। इस खोज के लिए इन्हें वर्ष 1908 में
+    रसायन विज्ञान के नोबेल पुरस्कार से सम्मानित किया गया। वर्ष 1911 में इन्होंने परमाणु का नाभिकीय
+    मॉडल प्रतिपादित किया। इनका चित्र न्यूजीलैंड के 100 डॉलर के नोट पर छपा हुआ है।
+  made:
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.2, by: agent}
+    - {words: L10.1, by: agent}
+    - {words: L10.2-3, by: agent}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.5, by: hindi-repair}
+    - {words: L17.3, by: agent}
+    - {words: L17.4-5, by: agent}
+    - {words: L17.8-9, by: agent}
+    - {words: L18.1-4, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+    - {words: L20.2-5, by: hindi-repair}
+    - {words: L20.7, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.5, by: hindi-repair}
+    - {words: L23.4, by: hindi-repair}
+- id: "2.8"
+  kind: section
+  page: 7
+  number: 8.2.3
+  title: बोर का परमाणु मॉडल
+  text: 8.2.3 बोर का परमाणु मॉडल
+- id: "2.8.1"
+  kind: text
+  page: 7
+  text: परमाणुओं के स्थायित्व को समझाने के लिए नील्स बोर ने वर्ष 1913 में एक नया परमाणु मॉडल
+    प्रतिपादित किया। बोर के अनुसार — इलेक्ट्रॉन नाभिक के चारों ओर यादृच्छिक रूप से गति नहीं करते
+    अपितु वे निश्चित वृत्ताकार पथ में गति करते हैं जिन्हें स्थायी अवस्थाएँ, कक्षाएँ अथवा कोश (shell)
+    कहा जाता है। प्रत्येक कोश में इलेक्ट्रॉन की ऊर्जा निश्चित होती है इसलिए इन्हें ऊर्जा स्तर भी
+    कहते हैं। इन कोशों को K, L, M, N, ..... अक्षरों से अथवा n = 1, 2, 3, 4, ..... संख्याओं द्वारा
+    प्रदर्शित किया जाता है (चित्र 8.7)। इलेक्ट्रॉन मात्र इन्हीं अनुमत कोशों में गति कर सकते हैं, इन
+    कोशों के मध्य में नहीं। इस निश्चित कोश में गति करते हुए इलेक्ट्रॉन ऊर्जा का क्षय नहीं करता है।
+    प्रथम ऊर्जा स्तर K (n=1) नाभिक के निकटतम होता है और इसकी ऊर्जा सबसे कम होती है। जैसे-जैसे हम
+    नाभिक से दूर जाते हैं, स्तरों की ऊर्जा में वृद्धि होती जाती है, जैसे— L-कोश (n=2) की ऊर्जा,
+    K-कोश (n=1) से अधिक होती है, जो कोश नाभिक से जितना दूर होता है उसकी ऊर्जा उतनी ही अधिक होती है।
+    दो कोशों की ऊर्जा के अंतर के बराबर निश्चित मात्रा में ऊर्जा अवशोषित अथवा उत्सर्जित कर इलेक्ट्रॉन
+    एक कोश से दूसरे कोश में जा सकता है। प्रत्येक कोश में इलेक्ट्रॉनों की एक निश्चित संख्या ही हो
+    सकती है।
+  made:
+    - {words: L7.1-2, by: agent}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.9, by: agent}
+    - {words: L7.12, by: hindi-repair}
+    - {words: L7.14, by: hindi-repair}
+    - {words: L8.9-12, by: hindi-repair}
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.7, by: hindi-repair}
+    - {words: L9.11, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L10.9, by: hindi-repair}
+    - {words: L10.10, by: hindi-repair}
+    - {words: L10.11, by: hindi-repair}
+    - {words: L11.1-2, by: hindi-repair}
+    - {words: L11.10, by: hindi-repair}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L12.5, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.10, by: hindi-repair}
+    - {words: L12.11, by: hindi-repair}
+    - {words: L12.12, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.10, by: hindi-repair}
+    - {words: L17.1-2, by: agent}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.6, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.11, by: hindi-repair}
+    - {words: L18.13, by: hindi-repair}
+    - {words: L18.15, by: hindi-repair}
+    - {words: L18.16, by: hindi-repair}
+    - {words: L18.17, by: hindi-repair}
+    - {words: L18.19, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.6, by: hindi-repair}
+    - {words: L20.9, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.14, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.9, by: hindi-repair}
+    - {words: L22.11, by: hindi-repair}
+    - {words: L22.12, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L23.3, by: hindi-repair}
+    - {words: L23.5, by: hindi-repair}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L23.7, by: hindi-repair}
+    - {words: L23.8, by: hindi-repair}
+    - {words: L23.9, by: hindi-repair}
+    - {words: L23.10, by: hindi-repair}
+    - {words: L23.11, by: hindi-repair}
+    - {words: L23.12, by: hindi-repair}
+    - {words: L23.13, by: hindi-repair}
+    - {words: L23.14-16, by: hindi-repair}
+    - {words: L23.17, by: hindi-repair}
+    - {words: L23.18, by: hindi-repair}
+    - {words: L23.19, by: hindi-repair}
+    - {words: L23.20, by: hindi-repair}
+    - {words: L24.1, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.3, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L24.5, by: hindi-repair}
+    - {words: L25.3, by: hindi-repair}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L25.10, by: hindi-repair}
+    - {words: L25.12, by: hindi-repair}
+    - {words: L25.13, by: hindi-repair}
+    - {words: L25.16, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.4, by: hindi-repair}
+    - {words: L27.5-8, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.10, by: hindi-repair}
+    - {words: L27.11, by: hindi-repair}
+    - {words: L27.12, by: hindi-repair}
+    - {words: L27.13, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L29.4, by: hindi-repair}
+    - {words: L29.5, by: hindi-repair}
+    - {words: L29.8, by: hindi-repair}
+    - {words: L29.9, by: hindi-repair}
+- id: "2.8.2"
+  kind: figure
+  page: 7
+  number: चित्र 8.7—
+  text: N-कोश (n=4) M-कोश (n=3) L-कोश (n=2) K-कोश (n=1) नाभिक चित्र 8.7— एक परमाणु में ऊर्जा स्तर
+  crop: [51.1, 89.5, 257, 248]
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L4.1-3, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L16.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "2.8.3"
+  kind: text
+  page: 7
+  text: आप आश्चर्य कर रहें होंगे कि बोर का मॉडल परमाणु के स्थायित्व को किस प्रकार समझाता है? बोर के
+    मॉडल में भी इलेक्ट्रॉन, रदरफोर्ड मॉडल की भाँति धनावेशित नाभिक के चारों ओर वृत्ताकार पथों में गति
+    करते हैं परंतु इस प्रकार गति करने से ऊर्जा का ह्रास क्यों नहीं होता। बोर ने इसे स्पष्ट करने के
+    लिए स्थायी कक्षाओं (कोश) की अवधारणा को अभिगृहित के रूप में प्रस्तुत किया। इनके अनुसार स्थायी
+    कक्षा में इलेक्ट्रॉन की ऊर्जा स्थिर रहती है भले ही वह नाभिक के चारों ओर गति कर रहा है। बोर का
+    मॉडल अनेक प्रायोगिक अवलोकनों की व्याख्या करने में सफल रहा और यह परमाणु की संरचना को समझने में एक
+    मुख्य चरण था।
+  made:
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.5, by: hindi-repair}
+    - {words: L31.12, by: hindi-repair}
+    - {words: L34.4, by: hindi-repair}
+    - {words: L34.7, by: agent}
+    - {words: L34.11, by: agent}
+    - {words: L34.14, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.2, by: hindi-repair}
+    - {words: L36.5, by: hindi-repair}
+    - {words: L36.12, by: hindi-repair}
+    - {words: L36.15, by: hindi-repair}
+    - {words: L36.16, by: hindi-repair}
+    - {words: L36.21, by: hindi-repair}
+    - {words: L38.3, by: hindi-repair}
+    - {words: L38.4-5, by: agent}
+    - {words: L38.10, by: agent}
+    - {words: L38.13, by: hindi-repair}
+    - {words: L38.14, by: hindi-repair}
+    - {words: L39.6, by: hindi-repair}
+    - {words: L39.8, by: hindi-repair}
+    - {words: L39.11, by: hindi-repair}
+    - {words: L39.12, by: hindi-repair}
+    - {words: L39.15, by: agent}
+    - {words: L39.20, by: hindi-repair}
+    - {words: L40.9, by: hindi-repair}
+    - {words: L40.11, by: hindi-repair}
+    - {words: L40.13, by: hindi-repair}
+    - {words: L40.20-L41.2, by: hindi-repair}
+    - {words: L42.8, by: hindi-repair}
+    - {words: L42.10, by: hindi-repair}
+- id: "2.8.4"
+  kind: box
+  page: 7
+  title: वैज्ञानिक-परिचय
+  text: वैज्ञानिक-परिचय नील्स बोर डेनमार्क के कोपेनहेगेन विश्वविद्यालय में भौतिकी के प्रोफेसर थे। वे
+    इस बात को लेकर उत्सुक थे कि परमाणु का अस्तित्व कैसे होता है क्योंकि पुराने मॉडल यह नहीं समझा सके
+    थे कि इलेक्ट्रॉन नाभिक के चारों ओर गति करते हुए उसमें क्यों नहीं गिरते हैं। परमाणु संरचना पर
+    इनकी व्याख्या ने इस विषय को अधिक स्पष्ट किया। परमाणु संरचना पर अपने कार्य के लिए नील्स बोर को
+    वर्ष 1922 में नोबेल पुरस्कार प्राप्त हुआ था।
+  made:
+    - {words: L19.1, by: hindi-repair}
+    - {words: L26.1, by: agent}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L28.2, by: agent}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.2-3, by: agent}
+    - {words: L37.1, by: hindi-repair}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L42.5, by: hindi-repair}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L43.4, by: hindi-repair}
+    - {words: L44.4, by: hindi-repair}
+    - {words: L46.1, by: hindi-repair}
+    - {words: L47.4, by: hindi-repair}
+    - {words: L48.2, by: agent}
+    - {words: L48.5, by: hindi-repair}
+    - {words: L49.2, by: hindi-repair}
+    - {words: L49.4, by: hindi-repair}
+    - {words: L50.1, by: hindi-repair}
+- id: "2.8.5"
+  kind: box
+  page: 7
+  title: जिज्ञासा-सूत्र
+  text: जिज्ञासा-सूत्र बोर के कोशों (कोश) को K, L, M, N, .... क्यों कहा गया, A, B, C, D, .... क्यों
+    नहीं? भौतिक वैज्ञानिक चार्ल्स बर्कला के प्रारंभिक X-किरण प्रयोगों द्वारा ये नाम रखे गए। इन्होंने
+    सर्वप्रथम देखी गई X-किरण रेखा को K नाम दिया। उन्होंने A से नामकरण इसलिए प्रारंभ नहीं किया कि यदि
+    K से पूर्व किसी शृंखला के खोजें जाने की संभावना हो तो इसके नामकरण हेतु स्थान रहे यद्यपि ऐसी कोई
+    शृंखला नहीं खोजी गई। बोर ने परमाणु कोशों के लिए यही नामकरण अपनाया।
+  made:
+    - {words: L51.1, by: hindi-repair}
+    - {words: L52.3, by: hindi-repair}
+    - {words: L52.11, by: hindi-repair}
+    - {words: L52.19, by: hindi-repair}
+    - {words: L52.20, by: hindi-repair}
+    - {words: L53.2, by: hindi-repair}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.4-5, by: agent}
+    - {words: L53.9, by: hindi-repair}
+    - {words: L53.15, by: hindi-repair}
+    - {words: L53.16, by: hindi-repair}
+    - {words: L54.4-5, by: agent}
+    - {words: L54.10, by: hindi-repair}
+    - {words: L54.16, by: hindi-repair}
+    - {words: L55.2-4, by: hindi-repair}
+    - {words: L55.6, by: agent}
+    - {words: L55.8, by: hindi-repair}
+    - {words: L55.11-L56.2, by: hindi-repair}
+    - {words: L56.8, by: hindi-repair}
+    - {words: L57.1, by: agent}
+    - {words: L57.2, by: hindi-repair}
+    - {words: L57.8, by: hindi-repair}
+- id: "2.8.6"
+  kind: text
+  page: 7
+  text: तत्पश्चात बोर के मॉडल की भी सीमाएँ देखी गईं इसलिए एक अन्य मॉडल क्वाण्टम यांत्रिकीय मॉडल
+    प्रस्तावित किया गया। इसके विषय में आप उच्च कक्षाओं में अध्ययन करेंगे।
+  made:
+    - {words: L63.1, by: hindi-repair}
+    - {words: L63.7, by: agent}
+    - {words: L63.9, by: hindi-repair}
+    - {words: L63.12, by: hindi-repair}
+    - {words: L63.14, by: agent}
+    - {words: L63.15, by: agent}
+    - {words: L64.2, by: hindi-repair}
+    - {words: L64.7, by: hindi-repair}
+    - {words: L64.9, by: hindi-repair}
+    - {words: L64.10-11, by: agent}
+    - {words: L64.12, by: hindi-repair}
+    - {words: L64.13, by: hindi-repair}
+- id: "3"
+  kind: section
+  page: 8
+  number: "8.3"
+  title: परमाणु के द्रव्यमान में कौन-से घटक योगदान देते हैं?
+  text: 8.3 परमाणु के द्रव्यमान में कौन-से घटक योगदान देते हैं?
+  made:
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.10, by: hindi-repair}
+- id: "3.1"
+  kind: text
+  page: 8
+  text: रदरफोर्ड का मॉडल दर्शाता है कि परमाणु का अधिकांश द्रव्यमान उसके नाभिक में केंद्रित होता है।
+    नाभिक के चारों ओर गति करते हुए इलेक्ट्रॉन इतने हल्के होते हैं कि उनके द्रव्यमान की लगभग उपेक्षा
+    की जा सकती है।
+  made:
+    - {words: L3.1, by: agent}
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.10, by: hindi-repair}
+    - {words: L3.13, by: hindi-repair}
+    - {words: L3.14-15, by: agent}
+    - {words: L4.5, by: hindi-repair}
+    - {words: L4.12, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L4.17, by: hindi-repair}
+- id: "3.2"
+  kind: text
+  page: 8
+  text: परंतु 20वीं शताब्दी के प्रारंभ में एक समस्या सामने आई, जैसे कि एक हाइड्रोजन परमाणु में एक
+    प्रोटॉन और हीलियम परमाणु में दो प्रोटॉन होते हैं तथापि हीलियम परमाणु का द्रव्यमान, हाइड्रोजन
+    परमाणु के द्रव्यमान से चार गुना अधिक है, दोगुना नहीं। इसने वैज्ञानिकों को विचार करने के लिए
+    प्रेरित किया कि क्या नाभिक में प्रोटॉन के अतिरिक्त कोई और भी कण है जो आवेश को प्रभावित किए बिना
+    उसके द्रव्यमान में वृद्धि करता है?
+  made:
+    - {words: L6.1-2, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.4, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.6-7, by: hindi-repair}
+    - {words: L6.8, by: hindi-repair}
+    - {words: L6.10, by: hindi-repair}
+    - {words: L6.11, by: hindi-repair}
+    - {words: L6.13, by: hindi-repair}
+    - {words: L6.14, by: hindi-repair}
+    - {words: L6.16, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.2, by: hindi-repair}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.6, by: hindi-repair}
+    - {words: L7.7, by: hindi-repair}
+    - {words: L7.8, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L7.10, by: hindi-repair}
+    - {words: L7.11, by: hindi-repair}
+    - {words: L7.12, by: hindi-repair}
+    - {words: L7.13, by: hindi-repair}
+    - {words: L7.14, by: hindi-repair}
+    - {words: L7.15, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.5, by: hindi-repair}
+    - {words: L8.6, by: hindi-repair}
+    - {words: L8.7, by: hindi-repair}
+    - {words: L8.8, by: hindi-repair}
+    - {words: L8.9, by: hindi-repair}
+    - {words: L8.10, by: hindi-repair}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L8.12, by: hindi-repair}
+    - {words: L8.13, by: hindi-repair}
+    - {words: L8.14, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L9.3, by: hindi-repair}
+    - {words: L9.4, by: hindi-repair}
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.6, by: hindi-repair}
+    - {words: L9.7-8, by: hindi-repair}
+    - {words: L9.9, by: hindi-repair}
+    - {words: L9.10, by: hindi-repair}
+    - {words: L9.11, by: hindi-repair}
+    - {words: L9.12, by: hindi-repair}
+    - {words: L9.13, by: hindi-repair}
+    - {words: L9.14, by: hindi-repair}
+    - {words: L9.15, by: hindi-repair}
+    - {words: L9.16, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L10.7, by: hindi-repair}
+    - {words: L10.8, by: hindi-repair}
+    - {words: L10.9, by: hindi-repair}
+    - {words: L10.10, by: hindi-repair}
+    - {words: L10.11, by: hindi-repair}
+    - {words: L10.12, by: hindi-repair}
+    - {words: L10.13, by: hindi-repair}
+    - {words: L10.14, by: hindi-repair}
+    - {words: L10.15-16, by: agent}
+    - {words: L10.17, by: hindi-repair}
+- id: "3.3"
+  kind: section
+  page: 8
+  number: 8.3.1
+  title: न्यूट्रॉन की खोज
+  text: 8.3.1 न्यूट्रॉन की खोज
+  made:
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+- id: "3.3.1"
+  kind: text
+  page: 8
+  text: वर्ष 1932 में इस समस्या का समाधान जेम्स चैडविक ने किया (वे अरनेस्ट रदरफोर्ड के छात्र थे)।
+    इन्होंने एक नए अवपरमाणुक कण की खोज की जिसका द्रव्यमान लगभग प्रोटॉन के बराबर था परंतु इस पर कोई
+    आवेश नहीं था। इस उदासीन कण को न्यूट्रॉन कहा गया और इसे ‘n’ से दर्शाया गया। न्यूट्रॉन, हाइड्रोजन
+    परमाणु के अतिरिक्त सभी परमाणुओं में पाए जाते हैं। अतः किसी परमाणु का द्रव्यमान मुख्य रूप से
+    प्रोटॉनों और न्यूट्रॉनों के कारण होता है जो नाभिक में संकुलित रहते हैं। इससे यह भी स्पष्ट हुआ कि
+    परमाणु का द्रव्यमान उसमें स्थित कुल प्रोटॉनों के द्रव्यमान से अधिक क्यों होता है।
+  made:
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L12.5, by: hindi-repair}
+    - {words: L12.8, by: hindi-repair}
+    - {words: L12.9, by: agent}
+    - {words: L12.13, by: agent}
+    - {words: L12.14, by: agent}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.5-7, by: agent}
+    - {words: L13.13, by: hindi-repair}
+    - {words: L14.8, by: hindi-repair}
+    - {words: L14.14, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L15.10, by: hindi-repair}
+    - {words: L15.12-13, by: agent}
+    - {words: L15.14, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.8, by: hindi-repair}
+    - {words: L16.11, by: hindi-repair}
+    - {words: L16.13, by: hindi-repair}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.5-L18.2, by: hindi-repair}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.5, by: agent}
+    - {words: L18.8, by: hindi-repair}
+    - {words: L18.13, by: hindi-repair}
+    - {words: L18.14, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.5, by: hindi-repair}
+    - {words: L19.8, by: hindi-repair}
+- id: "3.3.2"
+  kind: text
+  page: 8
+  text: तालिका 8.1 अवपरमाणुक कणों के प्रतीकों एवं आपेक्षिक आवेशों को दर्शाती है।
+  made:
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.3, by: agent}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.5, by: hindi-repair}
+    - {words: L20.6, by: hindi-repair}
+    - {words: L20.7, by: hindi-repair}
+    - {words: L20.8, by: hindi-repair}
+    - {words: L20.9, by: hindi-repair}
+    - {words: L20.10, by: hindi-repair}
+    - {words: L20.11, by: hindi-repair}
+    - {words: L20.12, by: hindi-repair}
+- id: "3.3.3"
+  kind: table
+  page: 8
+  number: तालिका 8.1—
+  text: तालिका 8.1— अवपरमाणुक कणों के प्रतीक एवं आपेक्षिक आवेश क्रम सं. 1. 2. 3. अवपरमाणुक कण
+    इलेक्ट्रॉन प्रोटॉन न्यूट्रॉन प्रतीक e⁻ p⁺ n⁰ आपेक्षिक आवेश −1 +1 0
+  rows:
+    - [क्रम सं., अवपरमाणुक कण, प्रतीक, आपेक्षिक आवेश]
+    - ["1.", इलेक्ट्रॉन, e⁻, −1]
+    - ["2.", प्रोटॉन, p⁺, "+1"]
+    - ["3.", न्यूट्रॉन, n⁰, "0"]
+  crop: [89.5, 417.5, 421.6, 515.6]
+  made:
+    - {words: L21.3, by: agent}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.8, by: hindi-repair}
+    - {words: L22.2, by: hindi-repair}
+    - {words: L26.1, by: agent}
+    - {words: L27.1-2, by: agent}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L31.1-2, by: agent}
+    - {words: L32.1-2, by: agent}
+    - {words: L33.1-2, by: agent}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L35.1, by: agent}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "3.3.4"
+  kind: box
+  page: 8
+  title: जिज्ञासा-सूत्र
+  text: "जिज्ञासा-सूत्र हल्के परमाणुओं में प्रोटॉन और न्यूट्रॉन की संख्या प्रायः समान होती है (जैसे—
+    कार्बन परमाणु में छह प्रोटॉन और छह न्यूट्रॉन, ऑक्सीजन परमाणु में आठ प्रोटॉन और आठ न्यूट्रॉन)।
+    परंतु जैसे-जैसे परमाणु भारी होते जाते हैं उनके नाभिकों में न्यूट्रॉनों की संख्या प्रोटॉनों की
+    संख्या से अधिक होती जाती है। आयरन (लोहा) परमाणु में 26 प्रोटॉन और 30 न्यूट्रॉन होते हैं और जब हम
+    यूरेनियम तक पहुँचते हैं तो उसके नाभिक में 92 प्रोटॉन तथा 146 न्यूट्रॉन होते हैं। आपको आश्चर्य
+    होगा कि जब समान आवेशित प्रोटॉन नाभिक में संकुचित रहते हैं तो वे एक-दूसरे को दूर क्यों नहीं
+    धकेलते? इसको इस प्रकार सोचिए कि नाभिक के भीतर प्रत्येक प्रोटॉन दूसरे को प्रतिकर्षित करते हैं
+    क्योंकि वे सभी धनावेशी होते हैं। न्यूट्रॉन जो उदासीन होते हैं प्रोटॉनों के मध्य दूरी बढ़ाकर
+    प्रतिकर्षण को कम कर देते हैं और इसके साथ ही कणों को परस्पर बाँधें रखने वाला बल जिसे नाभिकीय बल
+    कहते हैं, को प्रबल कर देते हैं। अत: भारी परमाणुओं में अधिक न्यूट्रॉनों की आवश्यकता होती है जिससे
+    वे नाभिक में स्थित सभी कणों को दृढ़ता से बाँधें रख सकें ।"
+  made:
+    - {words: L38.1, by: hindi-repair}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.2-3, by: agent}
+    - {words: L39.4, by: hindi-repair}
+    - {words: L39.7, by: hindi-repair}
+    - {words: L39.9, by: hindi-repair}
+    - {words: L39.15, by: hindi-repair}
+    - {words: L40.1, by: hindi-repair}
+    - {words: L40.6, by: hindi-repair}
+    - {words: L40.7, by: agent}
+    - {words: L40.9, by: hindi-repair}
+    - {words: L40.14, by: hindi-repair}
+    - {words: L41.7, by: hindi-repair}
+    - {words: L41.9, by: hindi-repair}
+    - {words: L41.10, by: hindi-repair}
+    - {words: L41.11, by: hindi-repair}
+    - {words: L41.13, by: hindi-repair}
+    - {words: L41.14, by: hindi-repair}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.10, by: hindi-repair}
+    - {words: L42.15, by: hindi-repair}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L43.6-7, by: agent}
+    - {words: L43.10, by: hindi-repair}
+    - {words: L43.14, by: hindi-repair}
+    - {words: L44.1, by: hindi-repair}
+    - {words: L44.3, by: hindi-repair}
+    - {words: L45.2, by: hindi-repair}
+    - {words: L45.10, by: hindi-repair}
+    - {words: L45.11-L46.3, by: hindi-repair}
+    - {words: L46.5, by: hindi-repair}
+    - {words: L47.1-4, by: hindi-repair}
+    - {words: L47.6-8, by: hindi-repair}
+    - {words: L47.9, by: hindi-repair}
+    - {words: L47.10, by: hindi-repair}
+    - {words: L47.11-12, by: agent}
+    - {words: L48.9, by: hindi-repair}
+    - {words: L48.11-14, by: hindi-repair}
+    - {words: L48.16, by: hindi-repair}
+    - {words: L48.18, by: hindi-repair}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L49.4, by: agent}
+    - {words: L49.6, by: hindi-repair}
+    - {words: L49.7, by: hindi-repair}
+    - {words: L49.11, by: hindi-repair}
+    - {words: L49.12, by: hindi-repair}
+    - {words: L49.14, by: hindi-repair}
+    - {words: L49.15-18, by: hindi-repair}
+    - {words: L49.19, by: hindi-repair}
+    - {words: L50.1, by: agent}
+    - {words: L50.6, by: hindi-repair}
+    - {words: L50.11, by: hindi-repair}
+    - {words: L50.13, by: hindi-repair}
+    - {words: L50.14, by: hindi-repair}
+    - {words: L51.2, by: hindi-repair}
+    - {words: L51.5, by: hindi-repair}
+    - {words: L51.10, by: hindi-repair}
+    - {words: L51.13-14, by: agent}
+    - {words: L51.15, by: hindi-repair}
+    - {words: L51.17, by: hindi-repair}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.5, by: agent}
+    - {words: L52.8, by: hindi-repair}
+    - {words: L52.9, by: hindi-repair}
+    - {words: L52.11, by: hindi-repair}
+    - {words: L52.15, by: hindi-repair}
+    - {words: L52.17, by: hindi-repair}
+- id: "3.3.5"
+  kind: box
+  page: 8
+  title: क्या होगा यदि ...
+  text: क्या होगा यदि ... परमाणु में कोई रिक्त स्थान न हो? इससे विभिन्न वस्तुओं का आकार किस प्रकार
+    प्रभावित हुआ होगा?
+  made:
+    - {words: L55.1, by: hindi-repair}
+    - {words: L56.1, by: hindi-repair}
+    - {words: L56.2, by: hindi-repair}
+    - {words: L56.3, by: hindi-repair}
+    - {words: L56.4, by: hindi-repair}
+    - {words: L56.5, by: hindi-repair}
+    - {words: L56.7, by: hindi-repair}
+    - {words: L57.1, by: agent}
+    - {words: L57.2, by: hindi-repair}
+    - {words: L57.3-4, by: agent}
+    - {words: L57.5, by: hindi-repair}
+    - {words: L57.6, by: hindi-repair}
+    - {words: L58.1, by: hindi-repair}
+    - {words: L58.2, by: hindi-repair}
+    - {words: L58.3, by: hindi-repair}
+    - {words: L58.4, by: hindi-repair}
+    - {words: L58.5, by: hindi-repair}
+- id: "3.3.6"
+  kind: box
+  page: 8
+  title: आइए, और चिंतन करें।
+  text: आइए, और चिंतन करें। न्यूट्रॉन की खोज ने परमाणु भौतिकी में एक नए युग का सूत्रपात किया।
+    न्यूट्रॉन अनावेशित कण होते हैं इसलिए सरलता से परमाणु नाभिक को बेध देते हैं। इस कारण कृत्रिम
+    रेडियोधर्मी तत्व बनाना एवं यूरेनियम के परमाणुओं का खंडन जैसी महत्त्वपूर्ण खोजें संभव हुई। इसके
+    द्वारा ‘परमाणु युग’ की उत्पत्ति हुई जिसके अंतर्गत नाभिकीय शक्ति तथा नाभिकीय हथियारों दोनों का
+    विकास हुआ।
+  made:
+    - {words: L59.3, by: hindi-repair}
+    - {words: L59.4, by: hindi-repair}
+    - {words: L60.1-4, by: agent}
+    - {words: L61.1, by: hindi-repair}
+    - {words: L61.4-6, by: hindi-repair}
+    - {words: L61.8-11, by: hindi-repair}
+    - {words: L62.1-4, by: agent}
+    - {words: L63.1, by: hindi-repair}
+    - {words: L64.5, by: hindi-repair}
+    - {words: L65.1-2, by: agent}
+    - {words: L65.4, by: agent}
+    - {words: L65.5, by: agent}
+    - {words: L66.1-2, by: hindi-repair}
+    - {words: L66.4-7, by: agent}
+    - {words: L66.9-12, by: hindi-repair}
+    - {words: L67.2, by: agent}
+    - {words: L67.3, by: hindi-repair}
+    - {words: L67.4-6, by: hindi-repair}
+    - {words: L68.4-7, by: hindi-repair}
+    - {words: L68.9, by: hindi-repair}
+    - {words: L69.3-6, by: hindi-repair}
+    - {words: L70.1, by: hindi-repair}
+    - {words: L70.4, by: hindi-repair}
+    - {words: L71.1, by: hindi-repair}
+- id: "3.3.7"
+  kind: box
+  page: 8
+  title: वैज्ञानिक-परिचय
+  text: वैज्ञानिक-परिचय जेम्स चैडविक ने कैम्ब्रिज विश्वविद्यालय की प्रसिद्ध कैवेंडिश प्रयोगशाला में
+    रदरफोर्ड के मार्गदर्शन में कार्य करते हुए वर्ष1932 में न्यूट्रॉन की खोज कर एक महत्त्वपूर्ण पहेली
+    का समाधान निकाला। इस खोज से परमाणु द्रव्यमान को स्पष्ट किया जा सका और इसके लिए चैडविक को वर्ष
+    1935 में भौतिकी का नोबेल पुरस्कार प्राप्त हुआ। न्यूट्रॉन की खोज ने अनुसंधान में क्रांतिकारी
+    परिवर्तन किए जिससे वैज्ञानिकों को नाभिक के रहस्यों की खोज करने में सहायता मिली तथा परमाणु ऊर्जा
+    को समझने एवं उसका उपयोग करने हेतु अन्वेषणों की शृंखला को बढ़ावा मिला।
+  made:
+    - {words: L72.1, by: hindi-repair}
+    - {words: L73.1, by: hindi-repair}
+    - {words: L73.2, by: agent}
+    - {words: L74.2-3, by: agent}
+    - {words: L75.1, by: agent}
+    - {words: L77.1-2, by: agent}
+    - {words: L79.1, by: hindi-repair}
+    - {words: L79.2, by: agent}
+    - {words: L80.1, by: hindi-repair}
+    - {words: L80.2, by: hindi-repair}
+    - {words: L80.3, by: hindi-repair}
+    - {words: L80.6, by: hindi-repair}
+    - {words: L81.1, by: hindi-repair}
+    - {words: L81.2, by: hindi-repair}
+    - {words: L81.7, by: agent}
+    - {words: L83.4, by: hindi-repair}
+    - {words: L83.6, by: hindi-repair}
+    - {words: L85.1, by: agent}
+    - {words: L85.3, by: hindi-repair}
+    - {words: L85.5, by: hindi-repair}
+    - {words: L86.3, by: hindi-repair}
+    - {words: L86.4, by: hindi-repair}
+    - {words: L87.1, by: hindi-repair}
+    - {words: L87.6, by: hindi-repair}
+    - {words: L88.1, by: hindi-repair}
+    - {words: L88.2, by: hindi-repair}
+    - {words: L88.4, by: agent}
+    - {words: L89.1, by: hindi-repair}
+    - {words: L89.3, by: hindi-repair}
+    - {words: L89.5, by: hindi-repair}
+    - {words: L90.3, by: hindi-repair}
+    - {words: L91.2, by: hindi-repair}
+    - {words: L92.4, by: hindi-repair}
+    - {words: L93.1-2, by: agent}
+    - {words: L93.4, by: hindi-repair}
+- id: "3.3.8"
+  kind: box
+  page: 9
+  title: भारत का वैज्ञानिक योगदान
+  text: भारत का वैज्ञानिक योगदान मुंबई स्थित भाभा परमाणु अनुसंधान केंद्र (चित्र 8.8) ‘ध्रुव’ जैसे
+    रिएक्टरों का उपयोग कर उन्नत न्यूट्रॉन - प्रकीर्णन प्रयोगों में अग्रणी है। इन प्रयोगों से
+    वैज्ञानिकों को अनेक पदार्थों जैसे अतिचालकों, बैटरी इलेक्ट्रोडों और औषधियों के अणुओं के विषय में
+    महत्त्वपूर्ण सूचना प्राप्त हुई है। इससे श्रेष्ठतर दवाइयों, ऊर्जा भंडारण और सुदृढ़ औद्योगिक मिश्र
+    धातुओं को भारत में ही विकसित करने में सहायता मिली है। ध्रुव के विषय में और अधिक शोध एवं खोज
+    कीजिए!
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L1.2, by: hindi-repair}
+    - {words: L1.3, by: hindi-repair}
+    - {words: L1.4, by: hindi-repair}
+    - {words: L2.1-5, by: agent}
+    - {words: L2.6, by: hindi-repair}
+    - {words: L2.7, by: agent}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.9-L3.2, by: hindi-repair}
+    - {words: L3.3-4, by: agent}
+    - {words: L4.3-6, by: agent}
+    - {words: L4.8, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2-5, by: agent}
+    - {words: L5.7, by: hindi-repair}
+    - {words: L5.8, by: hindi-repair}
+    - {words: L5.9, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.4, by: hindi-repair}
+    - {words: L6.7, by: hindi-repair}
+    - {words: L7.1, by: agent}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L7.5, by: hindi-repair}
+    - {words: L8.2-5, by: agent}
+    - {words: L8.8, by: hindi-repair}
+    - {words: L8.9, by: agent}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L9.3, by: agent}
+    - {words: L9.4, by: hindi-repair}
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.6, by: hindi-repair}
+    - {words: L9.7-10, by: hindi-repair}
+    - {words: L10.1-4, by: hindi-repair}
+    - {words: L10.7-10, by: agent}
+    - {words: L10.13, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L12.4, by: hindi-repair}
+- id: "3.3.9"
+  kind: figure
+  page: 9
+  number: चित्र 8.8
+  text: चित्र 8.8 — भाभा परमाणु अनुसंधान केंद्र
+  crop: [350.4, 98.3, 547, 267.2]
+  made:
+    - {words: L10.18, by: agent}
+    - {words: L10.21-22, by: agent}
+    - {box: true, by: figure-snap}
+- id: "3.3.10"
+  kind: text
+  page: 9
+  text: वर्ष 1869 तक वैज्ञानिक 69 तत्वों के विषय में जानते थे जिनमें से अधिकांश पृथ्वी में प्राकृतिक
+    रूप से पाए गए थे। वर्तमान में हम 118 भिन्न-भिन्न रासायनिक तत्वों के विषय में जानते हैं। इनमें से
+    कुछ तत्व कृत्रिम रूप से बनाए गए हैं और अन्य तत्वों की खोज जारी है।
+  made:
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.6, by: agent}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.9, by: hindi-repair}
+    - {words: L13.10, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+    - {words: L13.12, by: hindi-repair}
+    - {words: L13.13, by: hindi-repair}
+    - {words: L13.14, by: hindi-repair}
+    - {words: L13.15, by: hindi-repair}
+    - {words: L13.16, by: hindi-repair}
+    - {words: L13.17-18, by: agent}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L14.9, by: hindi-repair}
+    - {words: L14.10, by: hindi-repair}
+    - {words: L14.11, by: agent}
+    - {words: L14.12, by: hindi-repair}
+    - {words: L14.13, by: hindi-repair}
+    - {words: L14.14, by: hindi-repair}
+    - {words: L14.15, by: hindi-repair}
+    - {words: L14.16, by: hindi-repair}
+    - {words: L14.17, by: hindi-repair}
+    - {words: L14.18, by: hindi-repair}
+    - {words: L14.19, by: hindi-repair}
+    - {words: L14.20, by: agent}
+    - {words: L15.1-2, by: agent}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.5, by: hindi-repair}
+    - {words: L15.7, by: hindi-repair}
+    - {words: L15.9, by: hindi-repair}
+    - {words: L15.10, by: agent}
+    - {words: L15.11, by: hindi-repair}
+    - {words: L15.12, by: hindi-repair}
+    - {words: L15.13, by: hindi-repair}
+    - {words: L15.14, by: hindi-repair}
+- id: "3.3.11"
+  kind: text
+  page: 9
+  text: आइए, अब हम जानते हैं कि सरलता हेतु तत्वों को निरूपित करने का प्रारंभ किस प्रकार हुआ?
+  made:
+    - {words: L16.4, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.8, by: hindi-repair}
+    - {words: L16.9, by: agent}
+    - {words: L16.10, by: hindi-repair}
+    - {words: L16.11, by: hindi-repair}
+    - {words: L16.12, by: hindi-repair}
+    - {words: L16.13, by: hindi-repair}
+    - {words: L16.14-15, by: hindi-repair}
+    - {words: L16.16, by: hindi-repair}
+    - {words: L16.17, by: hindi-repair}
+    - {words: L16.18, by: hindi-repair}
+- id: "4"
+  kind: section
+  page: 9
+  number: "8.4"
+  title: तत्वों के प्रतीक
+  text: 8.4 तत्वों के प्रतीक
+  made:
+    - {words: L17.2, by: agent}
+- id: "4.1"
+  kind: text
+  page: 9
+  text: जॉन डाल्टन ने यह अनुभव किया कि रसायन विज्ञान को सरल बनाने के लिए तत्वों एवं यौगिकों को निरूपित
+    करने की एक मानक विधि होनी चाहिए। इन्होंने ज्ञात तत्वों को दर्शाने के लिए वर्ष 1803 में प्रथम
+    चित्रात्मक प्रतीक बनाए। चित्र 8.9 में कुछ प्रतीकों को दर्शाया गया है।
+  made:
+    - {words: L18.2, by: agent}
+    - {words: L18.15, by: agent}
+    - {words: L18.17, by: hindi-repair}
+    - {words: L19.9, by: hindi-repair}
+    - {words: L19.11, by: agent}
+    - {words: L19.13, by: hindi-repair}
+    - {words: L19.16, by: hindi-repair}
+    - {words: L19.18, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L20.6, by: hindi-repair}
+    - {words: L20.8, by: hindi-repair}
+    - {words: L20.10, by: hindi-repair}
+- id: "4.2"
+  kind: figure
+  page: 9
+  number: चित्र 8.9—
+  text: हाइड्रोजन कार्बन ऑक्सीजन फॉस्फोरस सल्फर आयरन (लोहा) कॉपर लेड सिल्वर गोल्ड (स्वर्ण) प्लेटिना
+    मर्करी चित्र 8.9— डाल्टन द्वारा बनाए गए कुछ तत्वों के प्रतीक
+  crop: [163.9, 436.4, 512.8, 548.2]
+  made:
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+    - {words: L22.5, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L23.3, by: hindi-repair}
+    - {words: L23.4, by: agent}
+    - {words: L23.5, by: hindi-repair}
+    - {words: L24.1, by: hindi-repair}
+    - {words: L24.3, by: agent}
+    - {words: L24.4-5, by: agent}
+    - {words: L24.6, by: hindi-repair}
+    - {words: L24.8, by: hindi-repair}
+    - {words: L24.9, by: agent}
+    - {words: L24.10, by: hindi-repair}
+    - {words: L24.11, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "4.3"
+  kind: text
+  page: 9
+  text: बर्जेलियस ने वर्ष 1813 में यह सुझाव दिया कि तत्वों के प्रतीक उनके लैटिन नामों से लिए जाने
+    चाहिए। इस प्रकार अक्षरों वाले रासायनिक प्रतीकों का आरंभ हुआ। वर्तमान समय में ‘शुद्ध और
+    अनुप्रयुक्त रसायन विज्ञान का अंतर्राष्ट्रीय संघ’ (International Union of Pure and Applied
+    Chemistry) नामक अंतर्राष्ट्रीय वैज्ञानिक संस्था, तत्वों के नामों और उनके प्रतीकों की स्वीकृति
+    प्रदान करती है। इन प्रतीकों को लिखने के कुछ नियम इस प्रकार हैं— अनेक तत्वों के प्रतीक उनके
+    आई.यू.पी.ए.सी. नाम के प्रथम अक्षर अथवा प्रथम दो अक्षरों से बने होते हैं। प्रतीक के नाम का प्रथम
+    अक्षर सदैव बड़े अक्षर (capital letter) जबकि द्वितीय अक्षर अंग्रेजी भाषा में छोटे अक्षर में लिखा
+    जाता है। उदाहरणार्थ— हाइड्रोजन (H), ऐलुमिनियम (Al) (न कि AL), कोबाल्ट Co (न कि CO) इत्यादि। कुछ
+    तत्वों के प्रतीक उनके नाम के प्रथम अक्षर और द्वितीय अक्षर को छोड़कर किसी अन्य अक्षर से बनते हैं।
+    उदाहरणार्थ— क्लोरीन Cl, जिंक Zn इत्यादि। कुछ तत्वों के प्रतीक उनके अंग्रेजी नाम से नहीं अपितु
+    लैटिन, ग्रीक अथवा जर्मन नामों से लिए गए हैं। उदाहरणार्थ— आयरन का प्रतीक Fe [लैटिन नाम फेरम
+    (ferrum)], मर्करी का प्रतीक Hg [ग्रीक नाम हाइड्रेगेईरोस (hydrargyros)] और टंगस्टन का प्रतीक W
+    [जर्मन वोल्फ्रॉम (wolfram) से लिया गया] है। सामान्य रूप से उपयोगी कुछ तत्वों के नाम और प्रतीक
+    तालिका 8.2 में दर्शाए गए हैं।
+  made:
+    - {words: L27.1, by: agent}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L27.10, by: agent}
+    - {words: L27.15, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L28.7, by: hindi-repair}
+    - {words: L28.11, by: hindi-repair}
+    - {words: L28.13, by: hindi-repair}
+    - {words: L28.16, by: hindi-repair}
+    - {words: L29.4-7, by: hindi-repair}
+    - {words: L29.8-L30.2, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.5, by: agent}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L31.12, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.9, by: hindi-repair}
+    - {words: L33.3, by: agent}
+    - {words: L33.7-10, by: hindi-repair}
+    - {words: L33.18, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L35.9, by: hindi-repair}
+    - {words: L36.1, by: hindi-repair}
+    - {words: L36.4, by: hindi-repair}
+    - {words: L36.8, by: hindi-repair}
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.6, by: hindi-repair}
+    - {words: L38.3, by: agent}
+    - {words: L38.17, by: hindi-repair}
+    - {words: L39.2, by: hindi-repair}
+    - {words: L39.3, by: hindi-repair}
+    - {words: L39.4, by: hindi-repair}
+    - {words: L39.8, by: hindi-repair}
+    - {words: L2.3, page: 10, by: agent}
+    - {words: L2.10, page: 10, by: hindi-repair}
+    - {words: L2.15, page: 10, by: hindi-repair}
+    - {words: L2.16, page: 10, by: hindi-repair}
+    - {words: L2.20, page: 10, by: hindi-repair}
+    - {words: L3.1, page: 10, by: hindi-repair}
+    - {words: L3.8-9, page: 10, by: agent}
+    - {words: L3.11, page: 10, by: hindi-repair}
+    - {words: L4.1, page: 10, by: agent}
+    - {words: L4.4, page: 10, by: hindi-repair}
+    - {words: L4.8, page: 10, by: hindi-repair}
+    - {words: L4.9, page: 10, by: agent}
+    - {words: L6.2, page: 10, by: hindi-repair}
+    - {words: L6.7, page: 10, by: agent}
+    - {words: L6.14, page: 10, by: hindi-repair}
+    - {words: L6.15, page: 10, by: hindi-repair}
+    - {words: L6.17, page: 10, by: hindi-repair}
+- id: "4.4"
+  kind: table
+  page: 10
+  number: तालिका 8.2—
+  text: तालिका 8.2— कुछ सामान्य तत्वों के नाम और उनके प्रतीक तत्व का नाम प्रतीक तत्व का नाम प्रतीक
+    तत्व का नाम प्रतीक ऐलुमिनियम Al कॉपर (Cuprum) Cu नाइट्रोजन N आर्गन Ar फ्लुओरीन F O बेरियम Ba
+    गोल्ड (Aurum) Au बोरॉन B हाइड्रोजन H ब्रोमीन Br आयोडीन I कैल्सियम Ca आयरन (Ferrum) Fe ऑक्सीजन
+    पोटैशियम (Kalium) सिलिकॉन सिल्वर (Argentum) सोडियम (Natrium) कॉर्बन C लेड (Plumbum) Pb सल्फर S
+    क्लोरीन कोबाल्ट Cl Co मैग्नीशियम निऑन Mg Ne यूरेनियम जिंक U Zn K Si Ag Na
+  rows:
+    - [तत्व का नाम, प्रतीक, तत्व का नाम, प्रतीक, तत्व का नाम, प्रतीक]
+    - [ऐलुमिनियम, Al, कॉपर (Cuprum), Cu, नाइट्रोजन, N]
+    - [आर्गन, Ar, फ्लुओरीन, F, ऑक्सीजन, O]
+    - [बेरियम, Ba, गोल्ड (Aurum), Au, पोटैशियम (Kalium), K]
+    - [बोरॉन, B, हाइड्रोजन, H, सिलिकॉन, Si]
+    - [ब्रोमीन, Br, आयोडीन, I, सिल्वर (Argentum), Ag]
+    - [कैल्सियम, Ca, आयरन (Ferrum), Fe, सोडियम (Natrium), Na]
+    - [कॉर्बन, C, लेड (Plumbum), Pb, सल्फर, S]
+    - [क्लोरीन, Cl, मैग्नीशियम, Mg, यूरेनियम, U]
+    - [कोबाल्ट, Co, निऑन, Ne, जिंक, Zn]
+  crop: [90, 177.5, 478, 466.3]
+  made:
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.5, by: agent}
+    - {words: L7.6, by: hindi-repair}
+    - {words: L7.7, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L7.10, by: hindi-repair}
+    - {words: L8.1, by: agent}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.5, by: agent}
+    - {words: L8.6, by: hindi-repair}
+    - {words: L8.7, by: hindi-repair}
+    - {words: L8.8, by: hindi-repair}
+    - {words: L8.9, by: agent}
+    - {words: L8.10, by: hindi-repair}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L8.12, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.3, by: hindi-repair}
+    - {words: L10.1-2, by: agent}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.3-6, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L12.3, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L15.1-2, by: agent}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L24.1, by: agent}
+    - {words: L24.3, by: hindi-repair}
+    - {words: L25.1, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L30.1, by: agent}
+    - {words: L33.1-4, by: hindi-repair}
+    - {words: L34.1-L35.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "4.5"
+  kind: text
+  page: 10
+  text: वैज्ञानिक पूरे नाम के स्थान पर इन प्रतीकों का उपयोग करते हैं क्योंकि ये अंतर्राष्ट्रीय स्तर पर
+    मान्य हैं और समस्त विश्व के वैज्ञानिकों को भाषा की बाधा के बिना सरलता एवं स्पष्टता से संवाद करने
+    में सहायता करते हैं।
+  made:
+    - {words: L42.2-5, by: agent}
+    - {words: L42.8, by: hindi-repair}
+    - {words: L42.11, by: hindi-repair}
+    - {words: L42.15, by: hindi-repair}
+    - {words: L42.16, by: hindi-repair}
+    - {words: L42.18-21, by: hindi-repair}
+    - {words: L42.22, by: hindi-repair}
+    - {words: L42.24, by: hindi-repair}
+    - {words: L42.25, by: hindi-repair}
+    - {words: L43.2, by: hindi-repair}
+    - {words: L43.3, by: hindi-repair}
+    - {words: L43.5, by: hindi-repair}
+    - {words: L43.14, by: hindi-repair}
+    - {words: L43.18, by: hindi-repair}
+    - {words: L44.2, by: hindi-repair}
+- id: "4.6"
+  kind: box
+  page: 10
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 8. कल्पना कीजिए कि आप एक वैज्ञानिक हैं और आपने एक नया तत्व खोजा है। उसका नाम
+    अपने नाम पर रखिए और सिद्ध कीजिए कि आपने उसके लिए जिस प्रतीक का चयन किया वह आई.यू.पी.ए.सी. के
+    नियमों का पालन करता है। 9. यदि सभी वैज्ञानिक एक तत्व के लिए भिन्न-भिन्न प्रतीकों का उपयोग करते
+    तो क्या समस्याएँ उत्पन्न हो सकती थीं?
+  made:
+    - {words: L45.1, by: hindi-repair}
+    - {words: L45.3, by: hindi-repair}
+    - {words: L46.2, by: hindi-repair}
+    - {words: L46.8, by: hindi-repair}
+    - {words: L46.13, by: agent}
+    - {words: L48.4, by: hindi-repair}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L49.2, by: hindi-repair}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L49.5, by: agent}
+    - {words: L49.6, by: hindi-repair}
+    - {words: L49.7, by: hindi-repair}
+    - {words: L49.8, by: hindi-repair}
+    - {words: L49.9, by: hindi-repair}
+    - {words: L49.10, by: hindi-repair}
+    - {words: L49.11, by: hindi-repair}
+    - {words: L49.12, by: hindi-repair}
+    - {words: L49.13, by: hindi-repair}
+    - {words: L49.14, by: hindi-repair}
+    - {words: L49.15, by: hindi-repair}
+    - {words: L50.2, by: hindi-repair}
+    - {words: L50.3, by: hindi-repair}
+    - {words: L50.4, by: hindi-repair}
+- id: "5"
+  kind: section
+  page: 10
+  number: "8.5"
+  title: परमाणु क्रमांक
+  text: 8.5 परमाणु क्रमांक
+- id: "5.1"
+  kind: text
+  page: 10
+  text: आपने पढ़ा है कि किसी एक तत्व के सभी परमाणु एक समान होते हैं परंतु वे दूसरे तत्वों के परमाणुओं
+    से भिन्न होते हैं। यह भिन्नता इनमें उपस्थित इलेक्ट्रॉनों एवं प्रोटॉनों की संख्या के कारण होती
+    है। किसी तत्व के परमाणु के नाभिक में उपस्थित प्रोटॉनों की संख्या को उस तत्व का परमाणु क्रमांक
+    कहते हैं। इसे Z द्वारा दर्शाया जाता है। यही संख्या किसी तत्व की पहचान एवं उसके रासायनिक व्यवहार
+    को निर्धारित करती है।
+  made:
+    - {words: L52.2, by: hindi-repair}
+    - {words: L52.7, by: agent}
+    - {words: L52.14, by: hindi-repair}
+    - {words: L52.17-20, by: hindi-repair}
+    - {words: L52.21, by: agent}
+    - {words: L52.23-26, by: agent}
+    - {words: L53.1, by: hindi-repair}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.5, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+    - {words: L53.7, by: hindi-repair}
+    - {words: L53.8, by: hindi-repair}
+    - {words: L53.10, by: hindi-repair}
+    - {words: L53.12, by: hindi-repair}
+    - {words: L53.18, by: agent}
+    - {words: L54.4, by: hindi-repair}
+    - {words: L54.5, by: hindi-repair}
+    - {words: L54.6, by: hindi-repair}
+    - {words: L54.8, by: hindi-repair}
+    - {words: L54.11, by: agent}
+    - {words: L54.16, by: hindi-repair}
+    - {words: L55.1, by: hindi-repair}
+    - {words: L55.5, by: hindi-repair}
+    - {words: L55.7, by: agent}
+    - {words: L55.13, by: hindi-repair}
+    - {words: L55.15, by: hindi-repair}
+- id: "5.2"
+  kind: text
+  page: 11
+  text: चूँकि परमाणु पूर्ण रूप से उदासीन होता है इसलिए इसमें प्रोटॉनों की संख्या नाभिक की परिक्रमा कर
+    रहे इलेक्ट्रॉनों की संख्या के बराबर होती है। उदाहरणार्थ— हाइड्रोजन परमाणु में एक प्रोटॉन और एक
+    इलेक्ट्रॉन है।अतः इसका परमाणु क्रमांक 1 होगा। हीलियम का परमाणु क्रमांक 2 है तो इसमें 2 प्रोटॉन
+    और 2 इलेक्ट्रॉन होंगे।
+  made:
+    - {words: L1.3-L2.1, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.10, by: hindi-repair}
+    - {words: L2.11, by: hindi-repair}
+    - {words: L2.13, by: hindi-repair}
+    - {words: L3.7, by: hindi-repair}
+    - {words: L3.9, by: hindi-repair}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L35.2, by: hindi-repair}
+    - {words: L36.8, by: hindi-repair}
+    - {words: L36.13, by: hindi-repair}
+    - {words: L36.14, by: hindi-repair}
+- id: "5.3"
+  kind: text
+  page: 11
+  text: क्या अब आप यह कह सकते हैं कि भिन्न-भिन्न परमाणु क्रमांकों के तत्व एक दूसरे से भिन्न होते हैं
+    अर्थात परमाणु क्रमांक किसी तत्व की विशिष्ट पहचान होती है।
+  made:
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L37.9, by: hindi-repair}
+    - {words: L37.11, by: hindi-repair}
+    - {words: L37.13, by: agent}
+    - {words: L38.3, by: hindi-repair}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L38.6, by: hindi-repair}
+    - {words: L38.10, by: agent}
+    - {words: L38.12, by: hindi-repair}
+- id: "5.4"
+  kind: text
+  page: 11
+  text: चित्र 8.10 का अवलोकन कीजिए। लीथियम के परमाणु में कितने न्यूट्रॉन एवं प्रोटॉन विद्यमान होते हैं
+    तथा इसका परमाणु क्रमांक क्या है?
+  made:
+    - {words: L39.6, by: agent}
+    - {words: L39.9, by: hindi-repair}
+    - {words: L39.11, by: hindi-repair}
+    - {words: L40.4, by: hindi-repair}
+    - {words: L40.9, by: hindi-repair}
+- id: "6"
+  kind: section
+  page: 11
+  number: 8.6.
+  title: द्रव्यमान संख्या
+  text: 8.6. द्रव्यमान संख्या
+  made:
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+- id: "6.1"
+  kind: text
+  page: 11
+  text: जैसा कि पूर्व में व्यक्त किया गया है कि हीलियम में दो प्रोटॉन होते हैं परंतु इसका द्रव्यमान
+    प्रोटॉन से लगभग चार गुना अधिक होता है। परमाणु नाभिक में उपस्थित प्रोटॉनों एवं न्यूट्रॉनों की कुल
+    संख्या को द्रव्यमान संख्या कहते हैं और इसे A से दर्शाया जाता है। नाभिक में उपस्थित प्रोटॉनों एव
+    न्यूट्रॉनों को न्यूक्लिऑन कहा जाता है।
+  made:
+    - {words: L41.3, by: hindi-repair}
+    - {words: L41.4, by: hindi-repair}
+    - {words: L41.5, by: hindi-repair}
+    - {words: L41.11, by: hindi-repair}
+    - {words: L41.15, by: hindi-repair}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.12, by: hindi-repair}
+    - {words: L42.13, by: hindi-repair}
+    - {words: L43.1, by: hindi-repair}
+    - {words: L43.3, by: hindi-repair}
+    - {words: L43.6, by: hindi-repair}
+    - {words: L43.8, by: hindi-repair}
+    - {words: L43.9, by: hindi-repair}
+    - {words: L43.11, by: hindi-repair}
+    - {words: L43.16, by: hindi-repair}
+    - {words: L44.4, by: hindi-repair}
+    - {words: L44.5, by: hindi-repair}
+    - {words: L44.6, by: hindi-repair}
+    - {words: L44.8, by: hindi-repair}
+    - {words: L44.10, by: agent}
+- id: "6.2"
+  kind: equation
+  page: 11
+  text: द्रव्यमान संख्या = प्रोटॉनों की संख्या + न्यूट्रॉनों की संख्या
+  made:
+    - {words: L45.1, by: hindi-repair}
+    - {words: L45.2, by: hindi-repair}
+    - {words: L45.4, by: hindi-repair}
+    - {words: L45.6, by: hindi-repair}
+    - {words: L45.8, by: hindi-repair}
+    - {words: L45.10, by: hindi-repair}
+- id: "6.3"
+  kind: text
+  page: 11
+  text: चूँकि न्यूट्रॉन का द्रव्यमान प्रोटॉन के द्रव्यमान के लगभग बराबर होता है इसलिए हीलियम परमाणु के
+    द्रव्यमान की गणना दो प्रोटॉनों और दो न्यूट्रॉनों से की जा सकती है। कुछ उदाहरण तालिका संख्या 8.3
+    में दर्शाए गए हैं।
+  made:
+    - {words: L46.1-L47.1, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L47.4, by: hindi-repair}
+    - {words: L47.7, by: hindi-repair}
+    - {words: L48.4, by: hindi-repair}
+    - {words: L48.8, by: hindi-repair}
+    - {words: L48.11, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+    - {words: L49.7, by: hindi-repair}
+    - {words: L49.8, by: hindi-repair}
+    - {words: L49.10, by: hindi-repair}
+- id: "6.4"
+  kind: table
+  page: 11
+  number: तालिका 8.3—
+  text: तालिका 8.3— विभिन्न तत्वों की द्रव्यमान संख्या तत्व हाइड्रोजन हीलियम लीथियम प्रोटॉन (p⁺)
+    न्यूट्रॉन (n⁰) द्रव्यमान संख्या (A) 1 0 1 2 2 4 3 4 7
+  rows:
+    - [तत्व, प्रोटॉन (p⁺), न्यूट्रॉन (n⁰), द्रव्यमान संख्या (A)]
+    - [हाइड्रोजन, "1", "0", "1"]
+    - [हीलियम, "2", "2", "4"]
+    - [लीथियम, "3", "4", "7"]
+  crop: [157.5, 400.5, 546.5, 500.4]
+  made:
+    - {words: L50.1, by: hindi-repair}
+    - {words: L50.3, by: hindi-repair}
+    - {words: L50.4, by: agent}
+    - {words: L50.5, by: hindi-repair}
+    - {words: L50.6, by: hindi-repair}
+    - {words: L50.7-10, by: hindi-repair}
+    - {words: L14.1, by: agent}
+    - {words: L17.1, by: agent}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.2-4, by: agent}
+    - {words: L51.5, by: hindi-repair}
+    - {words: L51.6-8, by: agent}
+    - {words: L51.9, by: hindi-repair}
+    - {words: L51.10-13, by: hindi-repair}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "6.5"
+  kind: text
+  page: 11
+  text: इलेक्ट्रॉन का द्रव्यमान तुलनात्मक रूप से लगभग नगण्य होता है इसलिए गणना में इसके द्रव्यमान की
+    उपेक्षा की जा सकती है।
+  made:
+    - {words: L55.3, by: hindi-repair}
+    - {words: L55.4, by: hindi-repair}
+    - {words: L55.8, by: hindi-repair}
+    - {words: L56.1, by: hindi-repair}
+    - {words: L56.3, by: hindi-repair}
+- id: "6.6"
+  kind: text
+  page: 11
+  text: एक परमाणु के लिए मानक संकेतन में किसी तत्व के प्रतीक, परमाणु क्रमांक (Z) एवं द्रव्यमान संख्या
+    (A) को निम्नलिखित रूप से लिखा जाता है।
+  made:
+    - {words: L57.7, by: hindi-repair}
+    - {words: L57.9, by: agent}
+    - {words: L58.2, by: hindi-repair}
+    - {words: L58.3, by: hindi-repair}
+    - {words: L58.6, by: hindi-repair}
+- id: "6.7"
+  kind: figure
+  page: 11
+  text: द्रव्यमान संख्या तत्व का प्रतीक परमाणु क्रमांक
+  crop: [302.2, 586.8, 486.5, 633.5]
+  made:
+    - {words: L59.1, by: hindi-repair}
+    - {words: L59.2, by: hindi-repair}
+    - {words: L60.1, by: agent}
+    - {words: L60.2, by: hindi-repair}
+    - {words: L60.3, by: hindi-repair}
+    - {words: L61.1, by: hindi-repair}
+    - {words: L61.2, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "6.8"
+  kind: text
+  page: 11
+  text: उदाहरणस्वरूप — कार्बन का प्रतीक C है, इसका परमाणु क्रमांक 6 और द्रव्यमान संख्या 12 है। संकेत
+    में इसे निम्नलिखित प्रकार से निरूपित किया जाएगा।
+  made:
+    - {words: L62.1, by: hindi-repair}
+    - {words: L62.3, by: hindi-repair}
+    - {words: L62.13, by: hindi-repair}
+    - {words: L63.1, by: hindi-repair}
+    - {words: L63.5, by: hindi-repair}
+    - {words: L63.7, by: hindi-repair}
+- id: "6.9"
+  kind: equation
+  page: 11
+  text: ¹²₆C
+  made:
+    - {words: L64.1-L66.1, by: agent}
+- id: "6.10"
+  kind: text
+  page: 11
+  text: अब तक आप जान चुके हैं कि प्रोटॉन और न्यूट्रॉन किसी परमाणु के नाभिक में स्थित होते हैं जबकि
+    इलेक्ट्रॉन नाभिक के चारों ओर चक्कर लगाते हैं। आइए, अब समझते हैं कि इलेक्ट्रॉन नाभिक के चारों ओर
+    किस प्रकार व्यवस्थित रहते हैं।
+  made:
+    - {words: L67.6, by: hindi-repair}
+    - {words: L67.10, by: hindi-repair}
+    - {words: L67.15, by: hindi-repair}
+    - {words: L68.1, by: hindi-repair}
+    - {words: L68.3, by: hindi-repair}
+    - {words: L68.8, by: hindi-repair}
+    - {words: L68.10, by: hindi-repair}
+    - {words: L68.12, by: hindi-repair}
+    - {words: L69.2, by: hindi-repair}
+    - {words: L69.7, by: hindi-repair}
+    - {words: L69.11, by: hindi-repair}
+    - {words: L69.13, by: hindi-repair}
+- id: "6.11"
+  kind: figure
+  page: 11
+  number: चित्र 8.10
+  text: लीथियम धातु का टुकड़ा लीथियम परमाणु लीथियम परमाणु नाभिक इलेक्ट्रॉन न्यूट्रॉन एवं प्रोटॉन चित्र
+    8.10 — नाभिक में न्यूट्रॉन और प्रोटॉन
+  crop: [45.2, 84.9, 223.3, 370.7]
+  made:
+    - {words: L1.1, by: agent}
+    - {words: L1.2, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L4.1, by: agent}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L7.1, by: agent}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L10.1-2, by: agent}
+    - {words: L11.1-2, by: agent}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.6-7, by: agent}
+    - {words: L13.9, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "6.12"
+  kind: box
+  page: 11
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 10. परमाणु क्रमांक 26 के किसी परमाणु में 56 न्यूक्लिऑन हैं। इसके इलेक्ट्रॉनों,
+    प्रोटॉनों एवं न्यूट्रॉनों की संख्या ज्ञात कीजिए। 11. एक परमाणु के नाभिक में 20 प्रोटॉन हैं। यदि
+    उसकी द्रव्यमान संख्या 41 है तो उसमें न्यूट्रॉनों की संख्या ज्ञात कीजिए। 12. एक परमाणु में 18
+    न्यूट्रॉन हैं और उसका परमाणु क्रमांक 17 है। इसकी द्रव्यमान संख्या क्या होगी? 13. एक परमाणु में
+    11 इलेक्ट्रॉन हैं। इसमें न्यूट्रॉनों की संख्या ज्ञात कीजिए।
+  made:
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.3, by: hindi-repair}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L20.4, by: agent}
+    - {words: L20.5, by: hindi-repair}
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L22.1-4, by: agent}
+    - {words: L22.6-L23.2, by: hindi-repair}
+    - {words: L24.6, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.5, by: hindi-repair}
+    - {words: L26.6, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L28.7, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L30.2, by: hindi-repair}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.7, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.4, by: hindi-repair}
+- id: "7"
+  kind: section
+  page: 12
+  number: "8.7"
+  title: विभिन्न ऊर्जा स्तरों में इलेक्ट्रॉन किस प्रकार वितरित होते हैं?
+  text: 8.7 विभिन्न ऊर्जा स्तरों में इलेक्ट्रॉन किस प्रकार वितरित होते हैं?
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.11, by: hindi-repair}
+- id: "7.1"
+  kind: text
+  page: 12
+  text: इस संदर्भ में बोर और बरी ने निम्नलिखित नियम सुझाए हैं— किसी कोश में उपस्थित इलेक्ट्रॉनों की
+    अधिकतम संख्या 2n² सूत्र से दी जाती है, जहाँ ‘n’ कोश की संख्या है (चित्र 8.7)। अतः K-कोश, (n = 1)
+    2×1² = 2 में, 2 इलेक्ट्रॉन समायोजित हो सकते हैं। L-कोश में (n = 2) 2×2² = 8 इलेक्ट्रॉन और M-कोश
+    में (n = 3) 2×3² = 18 इलेक्ट्रॉन हो सकते हैं। सबसे बाह्यतम कोश में अधिकतम 8 इलेक्ट्रॉन समायोजित
+    हो सकते हैं (प्रथम कोश में अधिकतम दो इलेक्ट्रॉन समायोजित हो सकते हैं)। इन कोशों में इलेक्ट्रॉन
+    क्रम बद्ध रूप से भरे जाते हैं जो नाभिक के निकटतम कोश से आरंभ कर बाहर के कोशों की ओर जाते हैं
+    अर्थात K, L, M, N, … क्रम में। L-कोश तब भरेगा जब K-कोश पूर्ण भर जाएगा और इसी प्रकार आगे भी होता
+    है।
+  made:
+    - {words: L3.2-L4.2, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.8, by: hindi-repair}
+    - {words: L4.10-13, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L5.6, by: hindi-repair}
+    - {words: L5.9, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.14, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L7.3, by: hindi-repair}
+    - {words: L7.13, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.12, by: hindi-repair}
+    - {words: L9.15, by: hindi-repair}
+    - {words: L10.5, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L11.12, by: hindi-repair}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L12.7, by: hindi-repair}
+    - {words: L12.14, by: hindi-repair}
+    - {words: L12.17-18, by: agent}
+    - {words: L12.21, by: hindi-repair}
+- id: "7.2"
+  kind: text
+  page: 12
+  text: परमाणुओं में इलेक्ट्रॉनों के नियोजन को समझने के लिए आइए, हम हाइड्रोजन (परमाणु संख्या 1) से
+    आरंभ करें। इसमें उपस्थित एक इलेक्ट्रॉन K-कोश में ही होना चाहिए। हाइड्रोजन (H) में इलेक्ट्रॉन के
+    वितरण को चित्र 8.11 में दर्शाया गया है। हीलियम परमाणु में दो इलेक्ट्रॉन और नाभिक में दो प्रोटॉन
+    होते हैं। इसके परमाणु कोश में ये दो इलेक्ट्रॉन किस प्रकार व्यवस्थित होंगे?
+  made:
+    - {words: L14.1-2, by: agent}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.4, by: hindi-repair}
+    - {words: L14.15, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.5, by: hindi-repair}
+    - {words: L15.9, by: hindi-repair}
+    - {words: L15.15, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L16.11, by: hindi-repair}
+    - {words: L16.16, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.11, by: hindi-repair}
+    - {words: L17.12, by: hindi-repair}
+- id: "7.3"
+  kind: section
+  page: 12
+  number: 8.7.1
+  title: परमाणुओं का निर्माण प्रक्रम
+  text: 8.7.1 परमाणुओं का निर्माण प्रक्रम
+  made:
+    - {words: L18.2-3, by: agent}
+    - {words: L18.5, by: hindi-repair}
+- id: "7.3.1"
+  kind: text
+  page: 12
+  text: आइए, हम विभिन्न तत्वों की द्वि-आयामी (2-D) परमाणु संरचनाएँ बनाएँ जिनमें जब भी परमाणु क्रमांक
+    में 1 की वृद्धि हो तब उपयुक्त ऊर्जा स्तर में एक इलेक्ट्रॉन जोड़ें। विभिन्न कोशों में
+    इलेक्ट्रॉनों के वितरण को परमाणु का इलेक्ट्रॉनिक विन्यास कहा जाता है (चित्र 8.11)। तालिका 8.4
+    प्रथम अठारह तत्वों के प्रतीकों, परमाणु क्रमांकों प्रोटॉनों की संख्या, न्यूट्रॉनों की संख्या,
+    इलेक्ट्रॉनों की संख्या और कोशों में इलेक्ट्रॉनों के वितरण को सूचीबद्ध करती है।
+  made:
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.4, by: agent}
+    - {words: L19.9-L20.2, by: hindi-repair}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.7, by: hindi-repair}
+    - {words: L21.8, by: hindi-repair}
+    - {words: L21.9, by: hindi-repair}
+    - {words: L21.10, by: hindi-repair}
+    - {words: L21.13, by: hindi-repair}
+    - {words: L21.14, by: hindi-repair}
+    - {words: L21.15, by: hindi-repair}
+    - {words: L21.16, by: hindi-repair}
+    - {words: L21.17, by: hindi-repair}
+    - {words: L22.5, by: hindi-repair}
+    - {words: L22.10, by: agent}
+    - {words: L22.15, by: agent}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L23.4, by: hindi-repair}
+    - {words: L23.5, by: hindi-repair}
+    - {words: L23.7, by: hindi-repair}
+    - {words: L23.8, by: hindi-repair}
+    - {words: L23.10, by: hindi-repair}
+    - {words: L23.11, by: hindi-repair}
+    - {words: L23.13, by: hindi-repair}
+    - {words: L23.15, by: hindi-repair}
+    - {words: L23.16, by: hindi-repair}
+    - {words: L24.1, by: hindi-repair}
+    - {words: L24.5-8, by: hindi-repair}
+- id: "7.3.2"
+  kind: figure
+  page: 12
+  number: चित्र 8.11
+  text: Na Mg Al Si P S Cl Ar चित्र 8.11 — K, L और M कोशों में इलेक्ट्रॉन भरने को दर्शाती प्रथम अठारह
+    तत्वों की व्यवस्थात्मक परमाणु संरचना
+  crop: [90.8, 475.2, 552.5, 727.9]
+  made:
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.8, by: hindi-repair}
+    - {words: L26.9, by: hindi-repair}
+    - {words: L26.10-11, by: agent}
+    - {words: L26.12, by: hindi-repair}
+    - {words: L26.13, by: hindi-repair}
+    - {words: L26.14, by: hindi-repair}
+    - {words: L26.16, by: hindi-repair}
+    - {words: L27.1, by: agent}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.3, by: hindi-repair}
+    - {words: L27.4, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "7.3.3"
+  kind: table
+  page: 13
+  number: तालिका 8.4
+  text: तालिका 8.4 — प्रथम अठारह तत्वों के परमाणुओं के प्रतीक, परमाणु क्रमांक, प्रोटॉनों की संख्या,
+    न्यूट्रॉनों की संख्या, इलेक्ट्रॉनों की संख्या और इलेक्ट्रॉनों का वितरण तत्व का नाम प्रतीक परमाणु
+    क्रमांक प्रोटॉनों की संख्या न्यूट्रॉनों की संख्या इलेक्ट्रॉनों की संख्या हाइड्रोजन हीलियम लीथियम
+    बेरिलियम बोरॉन कार्बन नाइट्रोजन ऑक्सीजन फ्लुओरीन निऑन सोडियम मैग्नीशियम ऐलुमिनियम सिलिकॉन
+    फॉस्फोरस सल्फर क्लोरीन आर्गन H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar 1 2 3 4 5 6 7 8 9 10
+    11 12 13 14 15 16 17 18 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 - 2 4 5 6 6 7 8 10 10 12 12
+    14 14 16 16 18 22 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 इलेक्ट्रॉनों का वितरण K L M N 1 -
+    - - 2 - - - 2 1 - - 2 2 - - 2 3 - - 2 4 - - 2 5 - - 2 6 - - 2 7 - - 2 8 - - 2 8 1 - 2 8 2 - 2 8
+    3 - 2 8 4 - 2 8 5 - 2 8 6 - 2 8 7 - 2 8 8 -
+  rows:
+    - [
+        तत्व का नाम,
+        प्रतीक,
+        परमाणु क्रमांक,
+        प्रोटॉनों की संख्या,
+        न्यूट्रॉनों की संख्या,
+        इलेक्ट्रॉनों की संख्या,
+        इलेक्ट्रॉनों का वितरण,
+        "",
+        "",
+        ""
+      ]
+    - ["", "", "", "", "", "", K, L, M, N]
+    - [हाइड्रोजन, H, "1", "1", "-", "1", "1", "-", "-", "-"]
+    - [हीलियम, He, "2", "2", "2", "2", "2", "-", "-", "-"]
+    - [लीथियम, Li, "3", "3", "4", "3", "2", "1", "-", "-"]
+    - [बेरिलियम, Be, "4", "4", "5", "4", "2", "2", "-", "-"]
+    - [बोरॉन, B, "5", "5", "6", "5", "2", "3", "-", "-"]
+    - [कार्बन, C, "6", "6", "6", "6", "2", "4", "-", "-"]
+    - [नाइट्रोजन, N, "7", "7", "7", "7", "2", "5", "-", "-"]
+    - [ऑक्सीजन, O, "8", "8", "8", "8", "2", "6", "-", "-"]
+    - [फ्लुओरीन, F, "9", "9", "10", "9", "2", "7", "-", "-"]
+    - [निऑन, Ne, "10", "10", "10", "10", "2", "8", "-", "-"]
+    - [सोडियम, Na, "11", "11", "12", "11", "2", "8", "1", "-"]
+    - [मैग्नीशियम, Mg, "12", "12", "12", "12", "2", "8", "2", "-"]
+    - [ऐलुमिनियम, Al, "13", "13", "14", "13", "2", "8", "3", "-"]
+    - [सिलिकॉन, Si, "14", "14", "14", "14", "2", "8", "4", "-"]
+    - [फॉस्फोरस, P, "15", "15", "16", "15", "2", "8", "5", "-"]
+    - [सल्फर, S, "16", "16", "16", "16", "2", "8", "6", "-"]
+    - [क्लोरीन, Cl, "17", "17", "18", "17", "2", "8", "7", "-"]
+    - [आर्गन, Ar, "18", "18", "22", "18", "2", "8", "8", "-"]
+  crop: [92.1, 85.7, 546.5, 539.6]
+  made:
+    - {words: L1.6, by: agent}
+    - {words: L1.8-9, by: agent}
+    - {words: L1.14, by: hindi-repair}
+    - {words: L1.16, by: hindi-repair}
+    - {words: L1.17, by: hindi-repair}
+    - {words: L1.19, by: hindi-repair}
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L3.1, by: agent}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L3.4, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L6.1, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L7.1, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L14.1, by: agent}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L20.1, by: hindi-repair}
+    - {words: L21.1, by: agent}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L27.1, by: hindi-repair}
+    - {words: L28.1, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L120.1, by: hindi-repair}
+    - {words: L120.2, by: hindi-repair}
+    - {words: L120.3, by: hindi-repair}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "7.3.4"
+  kind: box
+  page: 13
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 14. निम्नलिखित तत्वों के बाह्यतम कोश में इलेक्ट्रॉनों की संख्या पहचानिए। (i)
+    ¹²₆C (ii) ¹⁹₉F (iii) ²⁸ ₁₄Si 15. ऐसे तत्वों जिनके परमाणु क्रमांक 12, 16 और 18 हैं, का
+    इलेक्ट्रॉनिक विन्यास लिखिए। 16. इस पहेली को हल कीजिए — मैं एक ऐसा परमाणु हूँ जिसकी द्रव्यमान
+    संख्या 23 और प्रोटॉनों की संख्या 11 है। मैं एक नरम धातु हूँ और जल के साथ तीव्रता से अभिक्रिया
+    करती हूँ। मैं कौन हूँ और मेरे पास कितने न्यूट्रॉन हैं? आप भी इसी प्रकार की एक पहेली बना सकते
+    हैं।
+  made:
+    - {words: L140.1, by: hindi-repair}
+    - {words: L140.3, by: hindi-repair}
+    - {words: L141.1, by: hindi-repair}
+    - {words: L141.2, by: agent}
+    - {words: L141.6, by: hindi-repair}
+    - {words: L141.7, by: hindi-repair}
+    - {words: L141.9, by: hindi-repair}
+    - {words: L142.2-3, by: agent}
+    - {words: L143.2-3, by: agent}
+    - {words: L144.1, by: agent}
+    - {words: L146.1-L147.1, by: agent}
+    - {words: L148.3, by: agent}
+    - {words: L148.11, by: hindi-repair}
+    - {words: L148.14, by: hindi-repair}
+    - {words: L149.8, by: hindi-repair}
+    - {words: L149.14, by: hindi-repair}
+    - {words: L149.15, by: hindi-repair}
+    - {words: L149.18, by: hindi-repair}
+    - {words: L150.1, by: hindi-repair}
+    - {words: L150.4, by: hindi-repair}
+    - {words: L150.18, by: hindi-repair}
+    - {words: L151.3, by: hindi-repair}
+    - {words: L151.4, by: hindi-repair}
+    - {words: L152.2, by: hindi-repair}
+    - {words: L152.3, by: hindi-repair}
+    - {words: L152.4, by: hindi-repair}
+    - {words: L152.5, by: hindi-repair}
+    - {words: L152.7, by: hindi-repair}
+    - {words: L152.8, by: hindi-repair}
+    - {words: L152.9, by: hindi-repair}
+    - {words: L152.10, by: hindi-repair}
+- id: "8"
+  kind: section
+  page: 14
+  number: "8.8"
+  title: परमाणु की संयोजन क्षमता — संयोजकता
+  text: 8.8 परमाणु की संयोजन क्षमता — संयोजकता
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.4-7, by: hindi-repair}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.10-13, by: hindi-repair}
+- id: "8.1"
+  kind: text
+  page: 14
+  text: आपने जाना है कि समान अथवा भिन्न तत्वों के परमाणु मिलकर अणु बनाते हैं। हाइड्रोजन अथवा क्लोरीन
+    के परमाणुओं की वह संख्या जो किसी तत्व के एक परमाणु के साथ संयोजित होकर यौगिक बना सकती है, उसकी
+    संयोजन क्षमता कहलाती है। इसे हाइड्रोजन और क्लोरीन के संदर्भ में इसलिए व्यक्त किया जाता है
+    क्योंकि दोनों की संयोजन क्षमता एक होती है। उदाहरण के लिए— H₂O (जल) में ऑक्सीजन का एक परमाणु
+    हाइड्रोजन के दो परमाणुओं के साथ संयोजन करता है इसलिए ऑक्सीजन की संयोजन क्षमता दो है। NH₃
+    (अमोनिया) और MgCl₂ (मैग्नीशियम क्लोराइड) में नाइट्रोजन और मैग्नीशियम की संयोजन क्षमताएँ क्रमशः
+    क्या होगी? ये उदाहरण दर्शाते हैं कि किस प्रकार तत्वों की संयोजन क्षमता, संयोजित होने वाले
+    हाइड्रोजन अथवा क्लोरीन के परमाणुओं की संख्या से निर्धारित होती है।
+  made:
+    - {words: L3.7, by: hindi-repair}
+    - {words: L3.8, by: agent}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.17, by: hindi-repair}
+    - {words: L4.2-5, by: agent}
+    - {words: L4.8-L5.2, by: hindi-repair}
+    - {words: L5.5, by: agent}
+    - {words: L5.11-L6.2, by: hindi-repair}
+    - {words: L7.10, by: hindi-repair}
+    - {words: L7.12, by: hindi-repair}
+    - {words: L7.13, by: hindi-repair}
+    - {words: L7.14, by: hindi-repair}
+    - {words: L7.15, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L8.13-L10.1, by: agent}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L11.5-6, by: agent}
+    - {words: L11.13, by: hindi-repair}
+    - {words: L12.2-L13.1, by: agent}
+    - {words: L14.3-L15.1, by: agent}
+    - {words: L16.1, by: hindi-repair}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L16.3, by: hindi-repair}
+    - {words: L16.6, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.8, by: hindi-repair}
+    - {words: L17.12, by: agent}
+    - {words: L18.4, by: hindi-repair}
+    - {words: L18.6-9, by: agent}
+    - {words: L18.11-L19.2, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+- id: "8.2"
+  kind: text
+  page: 14
+  text: आइए, जानें कि किसी परमाणु की संयोजन क्षमता उसके इलेक्ट्रॉनिक विन्यास द्वारा किस प्रकार
+    निर्धारित होती है।
+  made:
+    - {words: L20.2, by: hindi-repair}
+    - {words: L20.11, by: hindi-repair}
+    - {words: L21.1, by: hindi-repair}
+- id: "8.3"
+  kind: text
+  page: 14
+  text: परमाणु का बाह्यतम कोश जिसमें इलेक्ट्रॉन होते है उसका संयोजकता कोश (valence shell) कहलाता है।
+    इसमें उपस्थित इलेक्ट्रॉन संयोजकता इलेक्ट्रॉन कहलाते हैं।
+  made:
+    - {words: L22.5, by: hindi-repair}
+    - {words: L22.10-13, by: hindi-repair}
+    - {words: L23.3, by: hindi-repair}
+    - {words: L23.4, by: hindi-repair}
+    - {words: L23.6-9, by: hindi-repair}
+    - {words: L23.12, by: hindi-repair}
+- id: "8.4"
+  kind: text
+  page: 14
+  text: यदि किसी परमाणु के बाह्यतम कोश में 8 इलेक्ट्रॉन हों तो इसे अष्टक (octet) कहा जाता है। यह देखा
+    गया है कि जिन तत्वों के संयोजकता कोश में इलेक्ट्रॉनों का अष्टक (8 इलेक्ट्रॉन) (हीलियम में 2
+    इलेक्ट्रॉन होते हैं) होता है वे सामान्यतः कम अभिक्रियाशील और अधिक स्थायी होते हैं। दूसरी ओर
+    अपूर्ण संयोजकता कोश वाले परमाणु प्रायः अधिक अभिक्रियाशील होते हैं। ऐसे तत्व अपना अष्टक पूर्ण
+    करने हेतु इलेक्ट्रॉनों को त्यागते, ग्रहण करते अथवा साझा करते हैं।
+  made:
+    - {words: L24.7, by: hindi-repair}
+    - {words: L24.10, by: hindi-repair}
+    - {words: L24.13, by: hindi-repair}
+    - {words: L25.6, by: agent}
+    - {words: L25.10, by: hindi-repair}
+    - {words: L25.11, by: hindi-repair}
+    - {words: L25.13, by: hindi-repair}
+    - {words: L25.17, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.7, by: hindi-repair}
+    - {words: L26.9, by: agent}
+    - {words: L26.12, by: hindi-repair}
+    - {words: L26.14, by: hindi-repair}
+    - {words: L26.15-18, by: hindi-repair}
+    - {words: L26.20, by: hindi-repair}
+    - {words: L27.7, by: agent}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.11, by: agent}
+    - {words: L27.13, by: hindi-repair}
+    - {words: L27.14-16, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.4, by: hindi-repair}
+    - {words: L28.10, by: hindi-repair}
+- id: "8.5"
+  kind: text
+  page: 14
+  text: "अष्टक पूर्ण करने हेतु त्यागे गए, ग्रहण किए गए अथवा साझा किए गए इलेक्ट्रॉनों की संख्या को उस
+    तत्व की ‘संयोजकता’ कहते हैं। सामान्यतः यदि किसी तत्व के संयोजकता कोश में चार से कम इलेक्ट्रॉन
+    होते हैं तो वह अष्टक पूर्ण करने और स्थायित्व प्राप्त करने के लिए इलेक्ट्रॉनों का त्याग करता है।
+    दूसरी ओर यदि संयोजकता इलेक्ट्रॉनों की संख्या चार से अधिक होती है तो वह अष्टक पूर्ण करने के लिए
+    इलेक्ट्रॉन ग्रहण करने का प्रयास करता है। उदाहरण के लिए— सोडियम का इलेक्ट्रॉनिक विन्यास 2, 8, 1
+    है। यह एक इलेक्ट्रॉन त्याग कर अष्टक प्राप्त कर सकता है। अतः इसकी संयोजकता अथवा संयोजन क्षमता 1
+    है। दूसरी ओर ऑक्सीजन का इलेक्ट्रॉनिक विन्यास 2, 6 है। इसमें छह संयोजकता इलेक्ट्रॉन होते हैं। अत:
+    यह अष्टक पूर्ण करने के लिए दो इलेक्ट्रॉन ग्रहण कर सकता है और इसकी संयोजकता 2 है। कार्बन का
+    इलेक्ट्रॉनिक विन्यास 2, 4 है। कार्बन में चार संयोजकता इलेक्ट्रॉन हैं और यह सरलता से न तो उनका
+    त्याग कर सकता है और न ही और चार इलेक्ट्रॉन ग्रहण कर सकता है। इसलिए यह अन्य परमाणुओं के साथ चार
+    इलेक्ट्रॉनों की साझेदारी कर अपना अष्टक पूर्ण कर सकता है। अत: कार्बन की संयोजकता 4 है। सामान्यतः
+    कुछ यौगिक संयोजकता नियम का उल्लंघन करते प्रतीत होते हैं जिनके विषय में आप उच्च कक्षाओं में
+    पढ़ेंगे।"
+  made:
+    - {words: L29.1, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L29.5, by: hindi-repair}
+    - {words: L29.14, by: hindi-repair}
+    - {words: L29.16, by: hindi-repair}
+    - {words: L29.19, by: agent}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L30.5, by: hindi-repair}
+    - {words: L30.8, by: agent}
+    - {words: L30.12, by: hindi-repair}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.5, by: hindi-repair}
+    - {words: L31.8, by: hindi-repair}
+    - {words: L31.9, by: hindi-repair}
+    - {words: L31.13, by: hindi-repair}
+    - {words: L31.15, by: hindi-repair}
+    - {words: L31.18-21, by: hindi-repair}
+    - {words: L32.1-4, by: hindi-repair}
+    - {words: L32.5, by: hindi-repair}
+    - {words: L32.7-10, by: hindi-repair}
+    - {words: L32.18, by: hindi-repair}
+    - {words: L32.19-21, by: hindi-repair}
+    - {words: L33.11, by: hindi-repair}
+    - {words: L33.19, by: hindi-repair}
+    - {words: L34.2, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.17, by: hindi-repair}
+    - {words: L35.3, by: hindi-repair}
+    - {words: L35.7, by: hindi-repair}
+    - {words: L35.12, by: hindi-repair}
+    - {words: L35.15, by: hindi-repair}
+    - {words: L35.16, by: hindi-repair}
+    - {words: L36.12, by: hindi-repair}
+    - {words: L36.15, by: hindi-repair}
+    - {words: L36.19, by: hindi-repair}
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.5, by: hindi-repair}
+    - {words: L37.13, by: hindi-repair}
+    - {words: L38.1, by: hindi-repair}
+    - {words: L38.8, by: hindi-repair}
+    - {words: L38.9-10, by: agent}
+    - {words: L38.14, by: hindi-repair}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.2-4, by: hindi-repair}
+    - {words: L39.9, by: hindi-repair}
+    - {words: L39.11-14, by: hindi-repair}
+    - {words: L39.17, by: hindi-repair}
+    - {words: L39.20-23, by: hindi-repair}
+    - {words: L40.1, by: hindi-repair}
+    - {words: L40.5, by: hindi-repair}
+    - {words: L40.8, by: hindi-repair}
+    - {words: L40.10, by: hindi-repair}
+    - {words: L40.11-12, by: agent}
+    - {words: L40.13, by: hindi-repair}
+- id: "8.6"
+  kind: text
+  page: 14
+  text: क्या आप पूर्वानुमान लगा सकते हैं कि उन परमाणुओं के साथ क्या होता है जिनके बाह्यतम कोश में पहले
+    से ही आठ इलेक्ट्रॉन उपस्थित होते हैं (उन तत्वों के परमाणुओं को छोड़कर जिनमें केवल एक ही कोश होता
+    है और उसमें केवल दो इलेक्ट्रॉन ही संभव हैं)? क्या वे तब भी इलेक्ट्रॉन त्यागने अथवा ग्रहण करने का
+    प्रयास करेंगे?
+  made:
+    - {words: L41.1, by: hindi-repair}
+    - {words: L41.3, by: hindi-repair}
+    - {words: L41.6, by: hindi-repair}
+    - {words: L41.9-10, by: agent}
+    - {words: L41.13, by: hindi-repair}
+    - {words: L42.1, by: hindi-repair}
+    - {words: L42.7, by: hindi-repair}
+    - {words: L42.9, by: hindi-repair}
+    - {words: L42.11, by: agent}
+    - {words: L42.13-14, by: agent}
+    - {words: L42.17, by: hindi-repair}
+    - {words: L42.18-19, by: agent}
+    - {words: L43.5, by: hindi-repair}
+    - {words: L43.6-7, by: agent}
+    - {words: L43.12, by: hindi-repair}
+    - {words: L43.13, by: hindi-repair}
+    - {words: L43.18, by: hindi-repair}
+- id: "8.7"
+  kind: text
+  page: 14
+  text: तालिका 8.4 का अवलोकन कीजिए। इसमें एक कॉलम और जोड़िए और प्रत्येक तत्व की सामान्य संयोजकता लिखिए।
+  made:
+    - {words: L45.6, by: hindi-repair}
+    - {words: L45.10, by: agent}
+    - {words: L45.12, by: hindi-repair}
+    - {words: L45.13, by: agent}
+    - {words: L45.15, by: hindi-repair}
+- id: "8.8"
+  kind: text
+  page: 14
+  text: आपने सीखा है कि किसी तत्व के सभी परमाणुओं में इलेक्ट्रॉनों और प्रोटॉनों की संख्या समान होती है
+    जो इसके परमाणु क्रमांक के बराबर है। क्या आप न्यूट्रॉनों की संख्या के संदर्भ में भी यही कह सकते
+    हैं? वैज्ञानिकों ने देखा है कि एक ही तत्व के परमाणुओं में न्यूट्रॉनों की संख्या अलग-अलग हो सकती
+    है। इस भिन्नता का परमाणु के गुणधर्मों पर क्या प्रभाव पड़ता है? आइए, इसे ज्ञात करने का प्रयास
+    करें।
+  made:
+    - {words: L47.6, by: agent}
+    - {words: L47.9-12, by: agent}
+    - {words: L47.13, by: hindi-repair}
+    - {words: L47.14, by: hindi-repair}
+    - {words: L47.16, by: hindi-repair}
+    - {words: L47.18-L48.2, by: hindi-repair}
+    - {words: L49.9, by: hindi-repair}
+    - {words: L49.11-14, by: agent}
+    - {words: L49.16-L50.2, by: hindi-repair}
+    - {words: L50.4-L51.2, by: hindi-repair}
+    - {words: L51.3, by: hindi-repair}
+    - {words: L51.8, by: hindi-repair}
+    - {words: L52.1, by: hindi-repair}
+    - {words: L52.8, by: agent}
+    - {words: L52.10-11, by: agent}
+    - {words: L52.12, by: hindi-repair}
+    - {words: L52.13, by: hindi-repair}
+    - {words: L52.15, by: hindi-repair}
+    - {words: L53.1, by: hindi-repair}
+    - {words: L53.5, by: hindi-repair}
+    - {words: L53.7, by: hindi-repair}
+- id: "9"
+  kind: section
+  page: 15
+  number: "8.9"
+  title: परमाणु संरचना का गहन अध्ययन
+  text: 8.9 परमाणु संरचना का गहन अध्ययन
+  made:
+    - {words: L1.2, by: hindi-repair}
+    - {words: L1.3-6, by: hindi-repair}
+    - {words: L1.7, by: hindi-repair}
+- id: "9.1"
+  kind: section
+  page: 15
+  number: 8.9.1
+  title: समस्थानिक
+  text: 8.9.1 समस्थानिक
+  made:
+    - {words: L2.2, by: hindi-repair}
+- id: "9.1.1"
+  kind: text
+  page: 15
+  text: डाल्टन ने प्रस्तावित किया कि किसी तत्व के सभी परमाणु एक समान होते हैं और उनका परमाणु द्रव्यमान
+    भी एक समान होता है। परंतु वैज्ञानिकों ने कुछ समय पश्चात पाया कि एक ही तत्व के ऐसे परमाणु भी होते
+    हैं जिनमें प्रोटॉनों की संख्या (परमाणु संख्या, Z) समान परंतु न्यूट्रॉनों की संख्या भिन्न-भिन्न
+    हो सकती है और इस कारण से इनके द्रव्यमान भिन्न-भिन्न होते हैं (A = p⁺ + n⁰)। ये ‘युग्म परमाणु’
+    जिनके परमाणु क्रमांक समान परंतु द्रव्यमान संख्याएँ भिन्न होती हैं, समस्थानिक (Isotopes) कहलाते
+    हैं।
+  made:
+    - {words: L3.1, by: agent}
+    - {words: L3.3, by: hindi-repair}
+    - {words: L3.7, by: agent}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.18, by: hindi-repair}
+    - {words: L4.7, by: hindi-repair}
+    - {words: L4.11, by: hindi-repair}
+    - {words: L4.16, by: agent}
+    - {words: L4.22, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L5.2, by: hindi-repair}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L5.6, by: hindi-repair}
+    - {words: L5.10, by: hindi-repair}
+    - {words: L5.12, by: hindi-repair}
+    - {words: L5.13, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L6.6, by: hindi-repair}
+    - {words: L6.8, by: hindi-repair}
+    - {words: L6.11-L8.2, by: agent}
+    - {words: L8.4-7, by: hindi-repair}
+    - {words: L8.8-10, by: hindi-repair}
+    - {words: L9.3, by: hindi-repair}
+    - {words: L9.4, by: agent}
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.7, by: hindi-repair}
+    - {words: L9.8, by: hindi-repair}
+    - {words: L9.11, by: hindi-repair}
+- id: "9.1.2"
+  kind: text
+  page: 15
+  text: आइए, हाइड्रोजन का उदाहरण लेते हैं। प्राकृतिक रूप से पाया जाने वाला हाइड्रोजन तीन अलग-अलग
+    समस्थानिकों; ¹₁H (प्रोटियम, ~99.98%), ²₁H (ड्यूटीरियम, ~0.015%), और ³₁H (ट्राइटियम, अल्प मात्रा
+    में) (चित्र 8.12) का मिश्रण होता है। इनमें से प्रत्येक में एक-एक प्रोटॉन होता है जबकि ड्यूटीरियम
+    में एक न्यूट्रॉन और ट्राइटियम में दो न्यूट्रॉन होते हैं। क्या आप अनुमान लगा सकते हैं कि इनमें से
+    प्रत्येक समस्थानिक में कितने इलेक्ट्रॉन होते हैं?
+  made:
+    - {words: L10.6, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2-3, by: agent}
+    - {words: L11.6-7, by: agent}
+    - {words: L11.8-11, by: hindi-repair}
+    - {words: L11.14-15, by: agent}
+    - {words: L11.16, by: agent}
+    - {words: L11.17, by: hindi-repair}
+    - {words: L12.2, by: hindi-repair}
+    - {words: L12.9, by: hindi-repair}
+    - {words: L12.11, by: hindi-repair}
+    - {words: L12.12, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.5, by: agent}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.10, by: hindi-repair}
+    - {words: L13.11, by: hindi-repair}
+    - {words: L13.16, by: hindi-repair}
+    - {words: L13.18, by: hindi-repair}
+    - {words: L13.20, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.6, by: hindi-repair}
+- id: "9.1.3"
+  kind: figure
+  page: 15
+  number: चित्र 8.12—
+  text: प्रोटियम ड्यूटीरियम ट्राइटियम चित्र 8.12— हाइड्रोजन के समस्थानिकों का व्यवस्थात्मक निरूपण
+  crop: [193, 309.8, 524.9, 424.3]
+  made:
+    - {words: L15.1, by: hindi-repair}
+    - {words: L33.1-4, by: hindi-repair}
+    - {words: L33.5, by: agent}
+    - {words: L34.1, by: hindi-repair}
+    - {words: L34.3, by: hindi-repair}
+    - {words: L34.4, by: hindi-repair}
+    - {words: L34.5, by: hindi-repair}
+    - {words: L34.6, by: hindi-repair}
+    - {words: L34.7, by: hindi-repair}
+    - {words: L34.8, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "9.1.4"
+  kind: box
+  page: 15
+  title: आइए, और आगे बढ़ें
+  text: आइए, और आगे बढ़ें परमाणु इतने सूक्ष्म होते हैं कि उन्हें दैनिक वस्तुओं के समान किलोग्राम अथवा
+    ग्राम में तोला नहीं जा सकता। जिस प्रकार गेहूँ के एक दाने को किलोग्राम के स्थान पर मिलीग्राम में
+    तोलना अधिक सरल होता है उसी प्रकार वैज्ञानिक परमाणुओं का द्रव्यमान मापने के लिए एक विशेष मात्रक
+    का उपयोग करते हैं जिसे ‘एकीकृत परमाणु द्रव्यमान इकाई’ [Unified atomic mass unit (u)] कहते हैं।
+    ऐसा इसलिए है क्योंकि इतने सूक्ष्म कणों के लिए किलोग्राम बहुत बड़ा मात्रक है। पूर्व में परमाणु
+    द्रव्यमान को ‘परमाणु द्रव्यमान इकाई’ (amu) में व्यक्त किया जाता था।
+  made:
+    - {words: L16.4, by: hindi-repair}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L18.2-3, by: agent}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.5, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L23.4-5, by: agent}
+    - {words: L24.1, by: hindi-repair}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L26.1-2, by: agent}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L29.1, by: hindi-repair}
+    - {words: L29.2, by: hindi-repair}
+    - {words: L30.1, by: hindi-repair}
+    - {words: L30.4, by: hindi-repair}
+    - {words: L30.5, by: hindi-repair}
+    - {words: L30.7, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+- id: "9.1.5"
+  kind: text
+  page: 15
+  text: समस्थानिकों के रासायनिक गुणधर्म लगभग समान होते हैं। क्या आप जानते हैं, ऐसा क्यों होता है? ऐसा
+    इसलिए है क्योंकि इनमें इलेक्ट्रॉनों की संख्या और इलेक्ट्रॉनिक विन्यास समान होता है। जैसा कि आप
+    सीख चुके हैं कि रासायनिक गुणधर्म मुख्य रूप से संयोजकता इलेक्ट्रॉनों की संख्या पर निर्भर करते
+    हैं। सभी समस्थानिकों के रासायनिक गुण समान होंगे परंतु इनके भौतिक गुण भिन्न होंगे, उदाहरण के लिए—
+    क्वथनांक एवं गलनांक।
+  made:
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.4-5, by: agent}
+    - {words: L35.9, by: hindi-repair}
+    - {words: L35.10, by: hindi-repair}
+    - {words: L35.13, by: hindi-repair}
+    - {words: L36.1, by: agent}
+    - {words: L37.1, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L37.8, by: hindi-repair}
+    - {words: L37.9, by: hindi-repair}
+    - {words: L37.11, by: hindi-repair}
+    - {words: L37.14, by: hindi-repair}
+    - {words: L38.9, by: hindi-repair}
+    - {words: L38.12, by: hindi-repair}
+    - {words: L38.13, by: hindi-repair}
+    - {words: L39.1, by: hindi-repair}
+    - {words: L39.3, by: hindi-repair}
+    - {words: L39.5, by: hindi-repair}
+    - {words: L39.7, by: hindi-repair}
+    - {words: L39.9, by: hindi-repair}
+    - {words: L39.14, by: hindi-repair}
+    - {words: L40.4-6, by: hindi-repair}
+    - {words: L40.7, by: hindi-repair}
+    - {words: L40.8, by: hindi-repair}
+    - {words: L40.12-14, by: hindi-repair}
+    - {words: L40.16-19, by: hindi-repair}
+- id: "9.1.6"
+  kind: text
+  page: 15
+  text: इसी प्रकार कार्बन के तीन समस्थानिक होते हैं— ¹²₆C, ¹³₆C, और ¹⁴₆C (चित्र 8.13)। इनमें से
+    प्रत्येक में छह प्रोटॉन और छह इलेक्ट्रॉन होते हैं। ¹²₆C प्रकृति में सर्वाधिक पाया जाने वाला
+    समस्थानिक है। आप यह देख सकते हैं कि ये तीनों समस्थानिक उनमें न्यूट्रॉनों की संख्या के आधार पर
+    एक-दूसरे से भिन्न होते हैं।
+  made:
+    - {words: L42.3, by: hindi-repair}
+    - {words: L42.6, by: hindi-repair}
+    - {words: L42.8, by: hindi-repair}
+    - {words: L41.1, by: agent}
+    - {words: L43.1-L44.2, by: agent}
+    - {words: L41.2, by: agent}
+    - {words: L45.1-L46.1, by: agent}
+    - {words: L46.3-4, by: agent}
+    - {words: L47.3, by: hindi-repair}
+    - {words: L47.5, by: hindi-repair}
+    - {words: L47.6, by: hindi-repair}
+    - {words: L47.13, by: hindi-repair}
+    - {words: L47.14-15, by: agent}
+    - {words: L48.1, by: hindi-repair}
+    - {words: L48.2, by: hindi-repair}
+    - {words: L48.6, by: hindi-repair}
+    - {words: L48.12, by: hindi-repair}
+    - {words: L48.15, by: hindi-repair}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L49.2, by: hindi-repair}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+    - {words: L49.11, by: hindi-repair}
+    - {words: L49.13, by: hindi-repair}
+- id: "9.1.7"
+  kind: figure
+  page: 15
+  number: चित्र 8.13—
+  text: कार्बन-12 कार्बन-13 कार्बन-14 चित्र 8.13— कार्बन के समस्थानिकों का व्यवस्थात्मक निरूपण
+  crop: [223.7, 590.9, 547.8, 708.7]
+  made:
+    - {words: L50.1, by: hindi-repair}
+    - {words: L50.2, by: hindi-repair}
+    - {words: L50.3, by: hindi-repair}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.3, by: hindi-repair}
+    - {words: L51.4, by: hindi-repair}
+    - {words: L51.5, by: hindi-repair}
+    - {words: L51.6, by: hindi-repair}
+    - {words: L51.7, by: hindi-repair}
+    - {words: L51.8, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "9.1.8"
+  kind: text
+  page: 15
+  text: आइए, हम अपने दैनिक जीवन में कुछ समस्थानिकों के आवश्यक उपयोगों के विषय में जानें।
+  made:
+    - {words: L52.6, by: hindi-repair}
+    - {words: L52.8, by: hindi-repair}
+    - {words: L52.10, by: hindi-repair}
+    - {words: L52.11, by: hindi-repair}
+    - {words: L52.14, by: hindi-repair}
+    - {words: L52.15, by: hindi-repair}
+- id: "9.1.9"
+  kind: box
+  page: 16
+  title: विज्ञान एवं समाज
+  text: विज्ञान एवं समाज कुछ समस्थानिकों के विशेष गुणधर्म होते हैं जो विभिन्न क्षेत्रों में उपयोगी
+    होते हैं। समस्थानिकों के कुछ अनुप्रयोग इस प्रकार हैं — यूरेनियम के एक समस्थानिक ²³⁵₉₂U का उपयोग
+    नाभिकीय परमाणु संयंत्र में विद्युत उत्पादन के लिए ईंधन के रूप में किया जाता है (चित्र 8.14)।
+    कोबाल्ट के एक रेडियोधर्मी समस्थानिक ⁶⁰₂₇Co का उपयोग कैंसर के उपचार (रेडियोथेरेपी) हेतु किया जाता
+    है। आयोडीन के एक समस्थानिक ¹³¹₅₃I का उपयोग घेंघा रोग और थायरॉइड कैंसर के उपचार हेतु किया जाता
+    है। कार्बन के एक समस्थानिक ¹⁴₆C का उपयोग पुरातत्व और भूविज्ञान में प्राचीन जीवाश्मों और
+    कलाकृतियों की आयु ज्ञात करने के लिए किया जाता है।
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L3.5-8, by: hindi-repair}
+    - {words: L3.10, by: hindi-repair}
+    - {words: L3.12, by: hindi-repair}
+    - {words: L3.13, by: hindi-repair}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.17, by: hindi-repair}
+    - {words: L4.1, by: hindi-repair}
+    - {words: L4.7, by: hindi-repair}
+    - {words: L6.5, by: hindi-repair}
+    - {words: L5.1, by: agent}
+    - {words: L6.6-L7.1, by: agent}
+    - {words: L7.7, by: hindi-repair}
+    - {words: L8.1-3, by: agent}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.7, by: agent}
+    - {words: L8.10, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L9.5-6, by: agent}
+    - {words: L9.7, by: hindi-repair}
+    - {words: L9.8-9, by: agent}
+    - {words: L9.12-13, by: agent}
+    - {words: L10.1-2, by: agent}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6-7, by: agent}
+    - {words: L11.10, by: hindi-repair}
+    - {words: L11.13, by: agent}
+    - {words: L13.1-2, by: agent}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L14.5, by: hindi-repair}
+    - {words: L14.6-7, by: agent}
+    - {words: L14.10-13, by: hindi-repair}
+    - {words: L14.15-18, by: hindi-repair}
+    - {words: L14.19, by: hindi-repair}
+    - {words: L14.21, by: hindi-repair}
+    - {words: L14.23-24, by: agent}
+- id: "9.1.10"
+  kind: figure
+  page: 16
+  number: चित्र 8.14—
+  text: चित्र 8.14— एक नाभिकीय शक्ति संयंत्र
+  crop: [392.3, 120.2, 557, 255.8]
+  made:
+    - {words: L12.5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "9.1.11"
+  kind: heading
+  page: 16
+  title: क. औसत परमाणु द्रव्यमान
+  text: क. औसत परमाणु द्रव्यमान
+  made:
+    - {words: L16.4, by: hindi-repair}
+- id: "9.1.12"
+  kind: text
+  page: 16
+  text: प्रकृति में क्लोरीन दो समस्थानिक रूपों में पाई जाती है। एक समस्थानिक का द्रव्यमान 35 u और
+    दूसरे का द्रव्यमान 37 u होता है। ये 3:1 के अनुपात में पाए जाते हैं। यहाँ एक रोचक प्रश्न उठता है
+    कि हम क्लोरीन परमाणु का द्रव्यमान 35 u लें अथवा 37 u?
+  made:
+    - {words: L17.1-2, by: agent}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.4, by: hindi-repair}
+    - {words: L17.6, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.8, by: hindi-repair}
+    - {words: L17.13, by: hindi-repair}
+    - {words: L17.15, by: hindi-repair}
+    - {words: L17.19-22, by: hindi-repair}
+    - {words: L18.1, by: hindi-repair}
+    - {words: L18.9-12, by: hindi-repair}
+    - {words: L18.13, by: hindi-repair}
+    - {words: L18.16, by: hindi-repair}
+    - {words: L18.20, by: hindi-repair}
+    - {words: L18.25, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.6, by: hindi-repair}
+- id: "9.1.13"
+  kind: text
+  page: 16
+  text: यदि किसी प्राकृतिक तत्व के परमाणु द्रव्यमान को उसके सभी प्राकृतिक रूप से पाए जाने वाले
+    समस्थानिकों के औसत द्रव्यमान के रूप में लिया जाए तो यह उसके समस्थानिकों के द्रव्यमानों का एक
+    साधारण अंकगणितीय माध्य होगा, जिसकी गणना प्रत्येक समस्थानिक की सापेक्ष मात्रा को ध्यान में रखे
+    बिना की जाती है। क्लोरीन जिसके समस्थानिक ³⁵Cl और ³⁷Cl हैं, का साधारण औसत परमाणु द्रव्यमान होगा—
+  made:
+    - {words: L20.3-4, by: agent}
+    - {words: L20.5, by: agent}
+    - {words: L20.8, by: hindi-repair}
+    - {words: L20.12-13, by: agent}
+    - {words: L21.1, by: hindi-repair}
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.7, by: hindi-repair}
+    - {words: L21.13, by: hindi-repair}
+    - {words: L21.15, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.13, by: hindi-repair}
+    - {words: L22.14, by: hindi-repair}
+    - {words: L23.4, by: hindi-repair}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L23.7-8, by: agent}
+    - {words: L23.10-11, by: agent}
+    - {words: L23.12, by: hindi-repair}
+    - {words: L23.17, by: hindi-repair}
+- id: "9.1.14"
+  kind: equation
+  page: 16
+  text: औसत परमाणु द्रव्यमान = ((35 + 37)/2) = 36 u
+  made:
+    - {words: L24.1-L28.3, by: agent}
+- id: "9.1.15"
+  kind: text
+  page: 16
+  text: यद्यपि यह उसकी प्रकृति को सही रूप में नहीं दर्शाता क्योंकि समस्थानिक समान अनुपात में नहीं पाए
+    जाते हैं। अधिक मात्रा में पाए जाने वाला समस्थानिक ³⁵Cl है जो लगभग 75% होता है जबकि दूसरा
+    समस्थानिक ³⁷Cl लगभग 25% होता है। यथार्थ औसत परमाणु द्रव्यमान की गणना उनकी प्राकृतिक प्रचुरता को
+    ध्यान में रखकर की जा सकती है। इसे भारित औसत परमाणु द्रव्यमान कहा जाता है। इसकी गणना प्रत्येक
+    समस्थानिक के द्रव्यमान को उसकी प्रतिशत सापेक्ष प्रचुरता से गुणा करके तथा दोनों मानों को जोड़कर
+    की जा सकती है, जैसा कि नीचे समझाया गया है।
+  made:
+    - {words: L29.4-5, by: agent}
+    - {words: L29.9, by: hindi-repair}
+    - {words: L29.10, by: hindi-repair}
+    - {words: L29.11, by: hindi-repair}
+    - {words: L29.12, by: hindi-repair}
+    - {words: L29.13, by: hindi-repair}
+    - {words: L29.16, by: hindi-repair}
+    - {words: L29.17, by: hindi-repair}
+    - {words: L30.2, by: hindi-repair}
+    - {words: L30.5, by: hindi-repair}
+    - {words: L30.9, by: hindi-repair}
+    - {words: L30.10-11, by: agent}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.2-3, by: agent}
+    - {words: L31.8, by: hindi-repair}
+    - {words: L31.11, by: hindi-repair}
+    - {words: L31.15-16, by: agent}
+    - {words: L32.1-4, by: hindi-repair}
+    - {words: L32.6, by: hindi-repair}
+    - {words: L32.7, by: hindi-repair}
+    - {words: L32.17, by: hindi-repair}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L33.5, by: hindi-repair}
+    - {words: L33.12, by: agent}
+    - {words: L33.15, by: hindi-repair}
+    - {words: L33.16, by: hindi-repair}
+- id: "9.1.16"
+  kind: text
+  page: 16
+  text: गणितीय रूप से,
+- id: "9.1.17"
+  kind: equation
+  page: 16
+  text: = (35 × 75/100 + 37 × 25/100) = (105/4 + 37/4) u = 142/4 u = 35.5 u
+  made:
+    - {words: L36.1-L53.3, by: agent}
+- id: "9.1.18"
+  kind: text
+  page: 17
+  text: इसका अर्थ यह नहीं है कि क्लोरीन के किसी एक परमाणु का आंशिक द्रव्यमान 35.5 u है। इसका अर्थ है
+    कि मान लीजिए यदि आप 1 मिलियन (10 लाख) क्लोरीन परमाणु लेते हैं तो उनमें 7.5 लाख ³⁵₁₇Cl और 2.5 लाख
+    ³⁷₁₇Cl परमाणु होंगे जिनका भारित औसत परमाणु द्रव्यमान 35.5 u होगा।
+  made:
+    - {words: L35.2, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L35.7, by: hindi-repair}
+    - {words: L35.14, by: hindi-repair}
+    - {words: L36.5, by: hindi-repair}
+    - {words: L36.16, by: hindi-repair}
+    - {words: L38.3, by: hindi-repair}
+    - {words: L38.5, by: hindi-repair}
+    - {words: L39.1, by: agent}
+    - {words: L37.1, by: agent}
+    - {words: L40.1, by: agent}
+    - {words: L41.1, by: agent}
+    - {words: L37.2, by: agent}
+    - {words: L42.1, by: agent}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L43.4, by: hindi-repair}
+- id: "9.1.19"
+  kind: text
+  page: 17
+  text: यह तुलना दर्शाती है कि सामान्य औसत द्रव्यमान की गणना में तत्व की प्रकृति में प्रचुरता की
+    उपेक्षा की जाती है जबकि भारित औसत द्रव्यमान, तत्व की प्रकृति में प्रचुरता के आधार पर यथार्थ
+    द्रव्यमान को दर्शाता है।
+  made:
+    - {words: L44.3, by: hindi-repair}
+    - {words: L44.6, by: hindi-repair}
+    - {words: L44.8, by: hindi-repair}
+    - {words: L44.11, by: hindi-repair}
+    - {words: L44.12, by: agent}
+    - {words: L44.14, by: hindi-repair}
+    - {words: L45.1, by: hindi-repair}
+    - {words: L45.11, by: hindi-repair}
+    - {words: L45.12, by: agent}
+    - {words: L45.15, by: hindi-repair}
+    - {words: L46.5, by: hindi-repair}
+    - {words: L46.6, by: hindi-repair}
+    - {words: L46.8, by: hindi-repair}
+- id: "9.1.20"
+  kind: box
+  page: 17
+  title: सोचिए और बताइए
+  text: सोचिए और बताइए 17. आप दो भिन्न परमाणुओं जिसमें से प्रत्येक में 11 प्रोटॉन हैं परंतु एक में 12
+    न्यूट्रॉन हैं और दूसरे में 13 न्यूट्रॉन हैं, के परमाणु क्रमांकों और द्रव्यमान संख्याओं की तुलना
+    किस प्रकार से करेंगें? क्या वे एक ही तत्व के परमाणु हैं अथवा भिन्न तत्वों के ? 18.  यदि ब्रोमीन
+    परमाणु दो समस्थानिकों, ⁷⁹₃₅Br (49.7%) और ⁸¹₃₅Br (50.3%) के रूप में उपलब्ध होता है तो ब्रोमीन
+    परमाणु के भारित औसत द्रव्यमान की गणना कीजिए।
+  made:
+    - {words: L47.1, by: hindi-repair}
+    - {words: L47.3, by: hindi-repair}
+    - {words: L48.3, by: hindi-repair}
+    - {words: L48.4, by: hindi-repair}
+    - {words: L48.5-8, by: agent}
+    - {words: L48.9, by: hindi-repair}
+    - {words: L48.10, by: hindi-repair}
+    - {words: L48.11, by: hindi-repair}
+    - {words: L48.12, by: hindi-repair}
+    - {words: L48.14, by: hindi-repair}
+    - {words: L48.15, by: hindi-repair}
+    - {words: L48.16-17, by: hindi-repair}
+    - {words: L48.19, by: hindi-repair}
+    - {words: L49.1-4, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+    - {words: L49.7-10, by: hindi-repair}
+    - {words: L49.11, by: hindi-repair}
+    - {words: L49.13-16, by: hindi-repair}
+    - {words: L49.17, by: hindi-repair}
+    - {words: L49.18, by: hindi-repair}
+    - {words: L49.19, by: hindi-repair}
+    - {words: L49.20, by: hindi-repair}
+    - {words: L49.22, by: hindi-repair}
+    - {words: L49.23-L50.3, by: agent}
+    - {words: L51.1, by: hindi-repair}
+    - {words: L51.2-5, by: hindi-repair}
+    - {words: L51.6, by: hindi-repair}
+    - {words: L51.7, by: hindi-repair}
+    - {words: L51.8, by: hindi-repair}
+    - {words: L51.9, by: hindi-repair}
+    - {words: L51.10, by: hindi-repair}
+    - {words: L51.11, by: hindi-repair}
+    - {words: L51.13, by: hindi-repair}
+    - {words: L51.14, by: agent}
+    - {words: L51.15, by: hindi-repair}
+    - {words: L51.16, by: hindi-repair}
+    - {words: L51.17, by: hindi-repair}
+    - {words: L51.18, by: hindi-repair}
+    - {words: L51.19, by: hindi-repair}
+    - {words: L52.1, by: agent}
+    - {words: L52.2, by: hindi-repair}
+    - {words: L53.2, by: hindi-repair}
+    - {words: L53.3, by: hindi-repair}
+    - {words: L53.4, by: hindi-repair}
+    - {words: L53.5, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+    - {words: L53.7-8, by: agent}
+    - {words: L53.11-12, by: agent}
+    - {words: L54.1, by: hindi-repair}
+    - {words: L54.3, by: hindi-repair}
+    - {words: L54.5, by: hindi-repair}
+    - {words: L54.6, by: hindi-repair}
+    - {words: L54.7, by: hindi-repair}
+    - {words: L54.8, by: hindi-repair}
+    - {words: L54.9, by: hindi-repair}
+    - {words: L54.10, by: hindi-repair}
+    - {words: L54.11, by: hindi-repair}
+    - {words: L54.13, by: hindi-repair}
+    - {words: L54.14, by: hindi-repair}
+    - {words: L55.1, by: hindi-repair}
+    - {words: L55.2, by: hindi-repair}
+- id: "9.1.21"
+  kind: text
+  page: 17
+  text: आपने सीखा है कि दो परमाणु जिनके परमाणु क्रमांक समान परंतु द्रव्यमान संख्याएँ भिन्न होती हैं,
+    समस्थानिक कहलाते हैं। क्या होगा यदि उनकी द्रव्यमान संख्या समान हो परंतु परमाणु क्रमांक भिन्न
+    हों? ऐसे परमाणुओं को क्या कहते हैं? आइए, पता लगाएँ!
+  made:
+    - {words: L56.12, by: hindi-repair}
+    - {words: L57.1, by: agent}
+    - {words: L57.2, by: hindi-repair}
+    - {words: L57.4, by: hindi-repair}
+    - {words: L57.5, by: hindi-repair}
+    - {words: L57.7, by: hindi-repair}
+    - {words: L57.8, by: hindi-repair}
+    - {words: L57.12, by: hindi-repair}
+    - {words: L57.13, by: hindi-repair}
+    - {words: L58.6, by: hindi-repair}
+    - {words: L58.7, by: hindi-repair}
+    - {words: L58.9-10, by: agent}
+    - {words: L58.12, by: hindi-repair}
+    - {words: L58.14, by: hindi-repair}
+- id: "9.2"
+  kind: section
+  page: 17
+  number: 8.9.2
+  title: समभारिक
+  text: 8.9.2 समभारिक
+- id: "9.2.1"
+  kind: text
+  page: 17
+  text: आइए, तीन तत्वों पर विचार करें—कैल्सियम (परमाणु क्रमांक 20), पोटैशियम (परमाणु क्रमांक 19) और
+    आर्गन (परमाणु क्रमांक 18)। इन तत्वों में प्रोटॉनों की संख्या भिन्न होती है परंतु इन सभी की
+    द्रव्यमान संख्या 40 है। यह दर्शाता है कि इनके परमाणुओं में न्यूक्लिऑनों की कुल संख्या समान है
+    यद्यपि ये भिन्न-भिन्न तत्व हैं। जब विभिन्न तत्वों के परमाणुओं की द्रव्यमान संख्या समान हों परंतु
+    परमाणु क्रमांक भिन्न हों तो उन्हें समभारिक (Isobar) कहा जाता है।
+  made:
+    - {words: L61.3, by: agent}
+    - {words: L61.6-7, by: agent}
+    - {words: L62.4, by: hindi-repair}
+    - {words: L62.9, by: agent}
+    - {words: L62.10, by: hindi-repair}
+    - {words: L62.11, by: hindi-repair}
+    - {words: L62.13-L63.2, by: hindi-repair}
+    - {words: L63.3, by: hindi-repair}
+    - {words: L64.7, by: hindi-repair}
+    - {words: L64.8, by: hindi-repair}
+    - {words: L64.12, by: hindi-repair}
+    - {words: L64.16-17, by: agent}
+    - {words: L65.1, by: hindi-repair}
+    - {words: L65.2, by: agent}
+    - {words: L65.5, by: hindi-repair}
+    - {words: L65.10, by: hindi-repair}
+    - {words: L65.11, by: agent}
+    - {words: L65.12, by: hindi-repair}
+    - {words: L65.14, by: hindi-repair}
+    - {words: L66.1, by: agent}
+    - {words: L66.3-4, by: agent}
+    - {words: L66.6, by: hindi-repair}
+    - {words: L66.7, by: hindi-repair}
+    - {words: L66.9, by: hindi-repair}
+    - {words: L66.13, by: hindi-repair}
+    - {words: L66.14, by: hindi-repair}
+    - {words: L66.16, by: hindi-repair}
+- id: "9.2.2"
+  kind: text
+  page: 17
+  text: अब जब हम परमाणु की संरचना की अपनी यात्रा का समापन कर रहे हैं तो यह जानना महत्त्वपूर्ण है कि
+    कहानी यहीं समाप्त नहीं होती है। परमाणु की संरचना की खोज अभी भी जारी है (चित्र 8.16)। कुछ समय
+    पश्चात वैज्ञानिकों ने पाया कि बोर का मॉडल भी पूर्णरूप से सही नहीं था। बोर की निश्चित कक्षाओं की
+    भाँति, इलेक्ट्रॉन किसी निश्चित पथ पर गति नहीं करते हैं। वर्तमान में हम यह जानते हैं कि
+    इलेक्ट्रॉन नाभिक के चारों ओर ‘इलेक्ट्रॉन अभ्र’ के रूप में रहते हैं। हम उन क्षेत्रों का अनुमान
+    लगा सकते हैं जहाँ उनके होने की संभावना सर्वाधिक होती है परंतु उनकी यथार्थ स्थिति नहीं बता सकते
+    हैं। आप इनका विवरण उच्च कक्षाओं में पढ़ेंगे। परमाणु के रहस्यों की खोज की यात्रा अभी समाप्त नहीं
+    हुई है, आगे अभी और भी रोमांचक खोजें शेष हैं।
+  made:
+    - {words: L68.14, by: hindi-repair}
+    - {words: L69.1, by: agent}
+    - {words: L69.2, by: agent}
+    - {words: L69.6, by: hindi-repair}
+    - {words: L69.7, by: hindi-repair}
+    - {words: L69.8, by: hindi-repair}
+    - {words: L70.9, by: hindi-repair}
+    - {words: L70.10, by: hindi-repair}
+    - {words: L71.3, by: hindi-repair}
+    - {words: L71.6, by: hindi-repair}
+    - {words: L71.10, by: hindi-repair}
+    - {words: L71.11-12, by: agent}
+    - {words: L72.1, by: hindi-repair}
+    - {words: L72.5, by: hindi-repair}
+    - {words: L72.7, by: hindi-repair}
+    - {words: L72.8, by: hindi-repair}
+    - {words: L72.9, by: hindi-repair}
+    - {words: L72.13, by: hindi-repair}
+    - {words: L73.1, by: hindi-repair}
+    - {words: L73.7, by: hindi-repair}
+    - {words: L73.8, by: hindi-repair}
+    - {words: L73.9, by: hindi-repair}
+    - {words: L73.12, by: hindi-repair}
+    - {words: L75.3, by: hindi-repair}
+    - {words: L75.8-L76.2, by: hindi-repair}
+    - {words: L76.3, by: hindi-repair}
+    - {words: L76.8, by: hindi-repair}
+    - {words: L78.1, by: hindi-repair}
+    - {words: L78.2, by: hindi-repair}
+    - {words: L78.5, by: hindi-repair}
+    - {words: L78.9, by: hindi-repair}
+    - {words: L78.10-11, by: agent}
+    - {words: L78.12, by: hindi-repair}
+    - {words: L78.13, by: hindi-repair}
+    - {words: L79.2, by: hindi-repair}
+    - {words: L79.8, by: hindi-repair}
+    - {words: L79.9, by: hindi-repair}
+    - {words: L80.1, by: hindi-repair}
+    - {words: L80.3, by: hindi-repair}
+- id: "9.2.3"
+  kind: box
+  page: 17
+  title: वैज्ञानिक-परिचय
+  text: वैज्ञानिक-परिचय होमी जहाँगीर भाभा (Homi Jehangir Bhabha) एक भारतीय भौतिक वैज्ञानिक थे। इन्हें
+    भारतीय परमाणु कार्यक्रम का जनक माना जाता है। इन्होंने भारत में परमाणु ऊर्जा के विकास में अग्रणी
+    योगदान दिया। इन्होंने परमाणु ऊर्जा के शांतिपूर्ण उपयोगों, जैसे — विद्युत उत्पादन, कृषि कार्यों
+    को प्रोत्साहन दिया। इसके साथ ही इन्होंने उन्नत चिकित्सा उपचार के लिए टाटा इंस्टीट्यूट ऑफ
+    फंडामेंटल रिसर्च (TIFR) और भाभा परमाणु अनुसंधान केंद्र (BARC) जैसे प्रमुख संस्थानों की स्थापना
+    की।
+  made:
+    - {words: L3.1, by: agent}
+    - {words: L6.1, by: hindi-repair}
+    - {words: L7.2, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.5, by: hindi-repair}
+    - {words: L9.4, by: hindi-repair}
+    - {words: L9.6, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.4, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L12.4, by: hindi-repair}
+    - {words: L12.6, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.6, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.5, by: agent}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L15.2, by: agent}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L16.1, by: agent}
+    - {words: L16.4-5, by: agent}
+    - {words: L17.3, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+- id: "9.2.4"
+  kind: box
+  page: 17
+  title: आइए, और आगे बढ़ें
+  text: आइए, और आगे बढ़ें इलेक्ट्रॉन सूक्ष्मदर्शी जैसे क्रमवीक्षण सुरंगन सूक्ष्मदर्शी (STM) और संचरण
+    इलेक्ट्रॉन सूक्ष्मदर्शी (TEM) पदार्थों के परमाण्विक स्तर की विस्तारित छवि बना सकते हैं।
+    क्रमवीक्षण सुरंगन सूक्ष्मदर्शियों द्वारा सामान्यतः सतहों का अध्ययन किया जाता है (चित्र 8.15)
+    जबकि संचरण इलेक्ट्रॉन सूक्ष्मदर्शी यह दर्शाते हैं कि अति सूक्ष्म प्रतिदर्श के भीतर परमाणु किस
+    प्रकार व्यवस्थित होते हैं।
+  made:
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.4, by: agent}
+    - {words: L20.1, by: agent}
+    - {words: L20.2, by: hindi-repair}
+    - {words: L21.3, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.4, by: hindi-repair}
+    - {words: L23.1, by: hindi-repair}
+    - {words: L23.5, by: hindi-repair}
+    - {words: L24.1, by: agent}
+    - {words: L24.2, by: agent}
+    - {words: L24.3, by: agent}
+    - {words: L25.1, by: hindi-repair}
+    - {words: L25.2, by: agent}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.4, by: hindi-repair}
+    - {words: L27.5, by: hindi-repair}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.5, by: hindi-repair}
+- id: "9.2.5"
+  kind: figure
+  page: 17
+  number: चित्र 8.15—
+  text: चित्र 8.15— किसी सतह पर प्रत्येक परमाणु को दर्शाते हुए क्रमवीक्षण सुरंगन सूक्ष्मदर्शी छवि।
+  crop: [72, 583, 201, 720.4]
+  made:
+    - {words: L30.1, by: hindi-repair}
+    - {words: L30.3, by: hindi-repair}
+    - {words: L30.6, by: hindi-repair}
+    - {words: L31.1, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+    - {words: L31.5, by: agent}
+    - {words: L32.1-4, by: agent}
+    - {words: L32.5-8, by: hindi-repair}
+    - {words: L32.9, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "9.2.6"
+  kind: figure
+  page: 18
+  number: चित्र 8.16
+  text: डाल्टन का परमाणु मॉडल परमाणु एक अविभाज्य धन और ऋण आवेश कण के रूप में टॉमसन का परमाणु मॉडल
+    रदरफोर्ड का परमाणु मॉडल नाभिकीय मॉडल बोर का परमाणु मॉडल ऊर्जा स्तर आधुनिक परमाणु मॉडल क्वांटम
+    यांत्रिकीय मॉडल अभी भी खोजा जा रहा है चित्र 8.16 — परमाणु मॉडलों के विकास की यात्रा
+  crop: [90.6, 98.1, 573.1, 223.9]
+  made:
+    - {words: L7.1, by: agent}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L10.2, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L4.1, by: agent}
+    - {words: L10.7, by: hindi-repair}
+    - {words: L10.8, by: hindi-repair}
+    - {words: L10.9, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L5.1, by: hindi-repair}
+    - {words: L10.10, by: hindi-repair}
+    - {words: L10.11, by: hindi-repair}
+    - {words: L10.12, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L3.1, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2, by: agent}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L17.1-3, by: agent}
+    - {words: L18.1-3, by: agent}
+    - {words: L19.1-3, by: agent}
+    - {words: L20.1-4, by: agent}
+    - {words: L21.1-3, by: agent}
+    - {words: L22.1-2, by: agent}
+    - {words: L23.1-3, by: agent}
+    - {words: L24.1-2, by: agent}
+    - {words: L25.1-3, by: agent}
+    - {words: L26.1-3, by: agent}
+    - {words: L27.1-5, by: agent}
+    - {words: L16.5, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "9.2.7"
+  kind: box
+  page: 18
+  title: सारांश
+  text: सारांश परमाणु द्रव्य के निर्माण खंड होते हैं। जे. जे. टॉमसन ने प्रस्तावित किया कि परमाणु में
+    इलेक्ट्रॉन एक धनावेशित गोले में धँसे होते हैं। रदरफोर्ड मॉडल ने परमाणु के अधिकांश भाग को रिक्त
+    स्थान के रूप में वर्णित किया। उनके अनुसार इसके केंद्र में एक सघन, धनावेशित नाभिक होता है और
+    इलेक्ट्रॉन उसके चारों ओर परिक्रमा करते हैं। नील्स बोर मॉडल के अनुसार, इलेक्ट्रॉन नाभिक के चारों
+    ओर निश्चित ऊर्जा स्तरों (कोशों) में गति करते हैं। परमाणु के कोशों को K, L, M, N, इत्यादि नाम दिए
+    गए हैं। जेम्स चैडविक ने परमाणु में न्यूट्रॉन की उपस्थिति की खोज की। परमाणु के तीन अवपरमाणुक कण
+    इलेक्ट्रॉन, प्रोटॉन और न्यूट्रॉन हैं। यदि किसी परमाणु के बाह्यतम कोश में इलेक्ट्रॉनों का अष्टक
+    है तो परमाणु स्थायी तथा लगभग पूर्णतया अनभिक्रिय (unreactive) होता है। संयोजकता किसी परमाणु की
+    संयोजन क्षमता होती है। यह इलेक्ट्रॉनों की उस संख्या के बराबर होती है जिन्हें कोई परमाणु एक
+    स्थायी विन्यास प्राप्त करने के लिए ग्रहण, त्याग अथवा साझा कर सकता है। किसी तत्व का परमाणु
+    क्रमांक उसके नाभिक में उपस्थित प्रोटॉनों की संख्या के बराबर होता है। किसी परमाणु की द्रव्यमान
+    संख्या उसके नाभिक में उपस्थित न्यूक्लिऑनों (प्रोटॉनों और न्यूट्रॉनों) की कुल संख्या के बराबर
+    होती है। समस्थानिक एक ही तत्व के ऐसे परमाणु होते हैं जिनका परमाणु क्रमांक समान होता है परंतु
+    द्रव्यमान संख्याएँ भिन्न-भिन्न होती हैं। किसी तत्व के औसत परमाणु द्रव्यमान की गणना, प्रकृति में
+    उसके समस्थानिकों की सापेक्ष प्रचुरता के आधार पर की जाती है। समभारिक भिन्न-भिन्न तत्वों के ऐसे
+    परमाणु होते हैं जिनकी द्रव्यमान संख्याएँ समान होती हैं परंतु परमाणु क्रमांक भिन्न-भिन्न होते
+    हैं।
+  made:
+    - {words: L28.1, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.5, by: hindi-repair}
+    - {words: L29.8, by: hindi-repair}
+    - {words: L30.6, by: hindi-repair}
+    - {words: L30.10, by: hindi-repair}
+    - {words: L30.13, by: agent}
+    - {words: L30.15, by: hindi-repair}
+    - {words: L30.18, by: hindi-repair}
+    - {words: L31.2, by: agent}
+    - {words: L31.10, by: hindi-repair}
+    - {words: L31.11, by: hindi-repair}
+    - {words: L31.14, by: hindi-repair}
+    - {words: L31.15, by: hindi-repair}
+    - {words: L32.3-4, by: agent}
+    - {words: L32.5, by: hindi-repair}
+    - {words: L32.8, by: agent}
+    - {words: L32.15, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L34.2, by: agent}
+    - {words: L34.10, by: hindi-repair}
+    - {words: L34.12, by: hindi-repair}
+    - {words: L34.13, by: hindi-repair}
+    - {words: L34.14, by: hindi-repair}
+    - {words: L34.15, by: hindi-repair}
+    - {words: L35.1, by: hindi-repair}
+    - {words: L35.4, by: hindi-repair}
+    - {words: L36.4, by: hindi-repair}
+    - {words: L36.10, by: hindi-repair}
+    - {words: L36.14, by: hindi-repair}
+    - {words: L37.2, by: hindi-repair}
+    - {words: L37.3, by: agent}
+    - {words: L37.6, by: hindi-repair}
+    - {words: L37.7, by: hindi-repair}
+    - {words: L37.9, by: hindi-repair}
+    - {words: L38.5, by: agent}
+    - {words: L38.10, by: hindi-repair}
+    - {words: L38.11, by: hindi-repair}
+    - {words: L39.8, by: hindi-repair}
+    - {words: L39.9, by: hindi-repair}
+    - {words: L39.11, by: hindi-repair}
+    - {words: L39.15, by: hindi-repair}
+    - {words: L40.2-5, by: hindi-repair}
+    - {words: L40.6, by: agent}
+    - {words: L41.11, by: hindi-repair}
+    - {words: L41.14, by: hindi-repair}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L42.7, by: hindi-repair}
+    - {words: L42.8, by: hindi-repair}
+    - {words: L42.9, by: hindi-repair}
+    - {words: L42.14, by: hindi-repair}
+    - {words: L44.3, by: agent}
+    - {words: L44.9, by: hindi-repair}
+    - {words: L44.10, by: hindi-repair}
+    - {words: L44.11, by: hindi-repair}
+    - {words: L44.13, by: hindi-repair}
+    - {words: L45.1, by: hindi-repair}
+    - {words: L45.2, by: hindi-repair}
+    - {words: L46.5, by: hindi-repair}
+    - {words: L46.6, by: hindi-repair}
+    - {words: L46.9, by: hindi-repair}
+    - {words: L46.10, by: hindi-repair}
+    - {words: L46.11, by: agent}
+    - {words: L46.12, by: hindi-repair}
+    - {words: L47.1, by: hindi-repair}
+    - {words: L47.4, by: hindi-repair}
+    - {words: L48.2, by: hindi-repair}
+    - {words: L48.5, by: agent}
+    - {words: L48.10, by: hindi-repair}
+    - {words: L49.1, by: hindi-repair}
+    - {words: L49.2, by: agent}
+    - {words: L49.3, by: hindi-repair}
+    - {words: L49.5, by: hindi-repair}
+    - {words: L50.3, by: agent}
+    - {words: L50.7, by: hindi-repair}
+    - {words: L50.11, by: hindi-repair}
+    - {words: L50.13, by: hindi-repair}
+    - {words: L51.1-4, by: hindi-repair}
+    - {words: L52.3, by: hindi-repair}
+    - {words: L52.4, by: agent}
+    - {words: L52.9, by: hindi-repair}
+    - {words: L52.11, by: hindi-repair}
+    - {words: L52.12, by: agent}
+    - {words: L52.15, by: hindi-repair}
+    - {words: L53.4, by: hindi-repair}
+    - {words: L53.6, by: hindi-repair}
+- id: "9.2.8"
+  kind: exercise
+  page: 19
+  title: अभ्यास प्रश्न
+  text: अभ्यास प्रश्न
+  made:
+    - {words: L1.1, by: hindi-repair}
+    - {words: L1.2, by: hindi-repair}
+- id: "9.2.8.1"
+  kind: question
+  page: 19
+  number: "1."
+  text: 1. अरनेस्ट रदरफोर्ड के स्वर्ण पर्णिका प्रयोग के संदर्भ में सही विकल्पों का चयन कीजिए और सही
+    एवं गलत विकल्पों का कारण समझाइए। (i) इस प्रयोग ने स्पष्ट रूप से नाभिक में न्यूट्रॉनों की
+    उपस्थिति को दर्शाया। (ii) इसके परिणामों ने प्लम पुडिंग मॉडल को गलत सिद्ध कर दिया और परमाणु के
+    केंद्र में नाभिक होने की अवधारणा को जन्म दिया। (iii) कुछ अल्फा कणों का अधिक विक्षेपण यह दर्शाता
+    है कि परमाणु का अधिकांश द्रव्यमान और धन आवेश एक सूक्ष्म केंद्र में सुसंकुलित है। (iv) जिस प्रकार
+    अल्फा कण विक्षेपित हुए उससे यह ज्ञात हुआ कि इलेक्ट्रॉन नाभिक के चारों ओर गति करते हैं।
+  made:
+    - {words: L2.2, by: agent}
+    - {words: L2.3, by: agent}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.6, by: hindi-repair}
+    - {words: L2.9, by: hindi-repair}
+    - {words: L2.10, by: hindi-repair}
+    - {words: L2.12, by: hindi-repair}
+    - {words: L3.2, by: hindi-repair}
+    - {words: L4.5, by: hindi-repair}
+    - {words: L4.9, by: hindi-repair}
+    - {words: L4.10, by: hindi-repair}
+    - {words: L4.12, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.5, by: agent}
+    - {words: L5.16-17, by: agent}
+    - {words: L5.18, by: hindi-repair}
+    - {words: L6.1, by: hindi-repair}
+    - {words: L6.2, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.4, by: hindi-repair}
+    - {words: L6.6, by: hindi-repair}
+    - {words: L7.3, by: agent}
+    - {words: L7.4, by: hindi-repair}
+    - {words: L7.9, by: hindi-repair}
+    - {words: L7.15, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L8.5-6, by: agent}
+    - {words: L8.7, by: hindi-repair}
+    - {words: L8.8-L9.3, by: agent}
+    - {words: L10.4, by: agent}
+    - {words: L10.6, by: agent}
+    - {words: L10.8, by: agent}
+    - {words: L10.16, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+- id: "9.2.8.2"
+  kind: question
+  page: 19
+  number: "2."
+  text: 2. बोर के परमाणु मॉडल के अनुसार निम्नलिखित में से कौन-से कथन सही अथवा गलत हैं? प्रत्येक कथन के
+    लिए एक कारण दीजिए। (i) इलेक्ट्रॉन निश्चित कक्षाओं में गति करते हुए अपनी ऊर्जा का ह्रास करते हैं
+    और धीरे-धीरे नाभिक में गिर जाते हैं। (ii) इलेक्ट्रॉन नाभिक के चारों ओर कहीं भी विद्यमान हो सकते
+    हैं और उनकी ऊर्जा निश्चित नहीं होती। (iii) इलेक्ट्रॉन नाभिक के चारों ओर निश्चित ऊर्जा की कक्षाओं
+    में ऊर्जा ह्रास किए बिना चक्कर लगाते हैं। (iv) नाभिक के चारों ओर गति करते हुए इलेक्ट्रॉन ऊर्जा
+    स्तरों के मध्य भी पाए जा सकते हैं।
+  made:
+    - {words: L12.8, by: hindi-repair}
+    - {words: L12.9, by: hindi-repair}
+    - {words: L12.16, by: hindi-repair}
+    - {words: L12.17, by: hindi-repair}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.4-5, by: agent}
+    - {words: L14.6, by: hindi-repair}
+    - {words: L14.11, by: hindi-repair}
+    - {words: L14.15, by: hindi-repair}
+    - {words: L14.17-18, by: agent}
+    - {words: L15.1, by: hindi-repair}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.4, by: hindi-repair}
+    - {words: L15.5, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.12, by: hindi-repair}
+    - {words: L16.15, by: hindi-repair}
+    - {words: L16.16, by: hindi-repair}
+    - {words: L16.17, by: hindi-repair}
+    - {words: L18.5, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.8, by: hindi-repair}
+    - {words: L18.10-11, by: agent}
+    - {words: L18.12, by: hindi-repair}
+    - {words: L18.13, by: hindi-repair}
+    - {words: L18.17, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.10, by: hindi-repair}
+    - {words: L20.11, by: hindi-repair}
+    - {words: L20.13, by: hindi-repair}
+    - {words: L20.18, by: hindi-repair}
+- id: "9.2.8.3"
+  kind: question
+  page: 19
+  number: "3."
+  text: 3. तीन परमाणु कणों X, Y और Z के नाभिकों का संघटन नीचे दिया गया है— निम्नलिखित के मध्य संबंध
+    स्पष्ट कीजिए। (i) Y एवं Z (ii) Z एवं X
+  made:
+    - {words: L21.4, by: hindi-repair}
+    - {words: L21.10, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.5, by: hindi-repair}
+- id: "9.2.8.4"
+  kind: table
+  page: 19
+  text: X Y Z प्रोटॉनों की संख्या 18 17 17 न्यूट्रॉनों की संख्या 19 18 20
+  rows:
+    - ["", X, Y, Z]
+    - [प्रोटॉनों की संख्या, "18", "17", "17"]
+    - [न्यूट्रॉनों की संख्या, "19", "18", "20"]
+  crop: [176.5, 492.6, 546.5, 570.9]
+  made:
+    - {words: L23.1, by: hindi-repair}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L23.3-L24.2, by: hindi-repair}
+    - {words: L25.1, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.3, by: hindi-repair}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "9.2.8.5"
+  kind: question
+  page: 19
+  number: "4."
+  text: "4. रदरफोर्ड ने स्वर्ण पर्णिका प्रयोग में ऐसे कुछ अल्फा कण जो पुन: लौट आए थे अथवा बड़े कोणों
+    पर विक्षेपित हो गए थे, के आधार पर परमाणु के धनावेशित भाग की अवस्थिति और अभिलक्षणों के विषय में
+    क्या निष्कर्ष निकाला?"
+  made:
+    - {words: L29.2, by: agent}
+    - {words: L29.4, by: hindi-repair}
+    - {words: L29.5, by: hindi-repair}
+    - {words: L29.7, by: hindi-repair}
+    - {words: L29.10, by: agent}
+    - {words: L29.18, by: hindi-repair}
+    - {words: L29.19, by: hindi-repair}
+    - {words: L30.1, by: agent}
+    - {words: L30.10, by: agent}
+    - {words: L30.13, by: hindi-repair}
+    - {words: L30.15, by: hindi-repair}
+    - {words: L31.2, by: hindi-repair}
+    - {words: L31.3, by: hindi-repair}
+    - {words: L31.4, by: hindi-repair}
+- id: "9.2.8.6"
+  kind: question
+  page: 20
+  number: "5."
+  text: 5. निम्नलिखित कथनों की व्याख्या कीजिए और इन्हें सही कालक्रम में व्यवस्थित कीजिए जिससे यह ज्ञात
+    हो सके कि समय के साथ परमाणु मॉडल कैसे विकसित हुए हैं। (i) बोर के मॉडल ने प्रस्तावित किया कि
+    इलेक्ट्रॉन नाभिक के चारों ओर निश्चित कक्षाओं में परिभ्रमण करते हैं और प्रत्येक कक्षा की एक
+    निश्चित ऊर्जा होती है। (ii) टॉमसन के मॉडल ने परमाणु को एक ‘प्लम पुडिंग’ के रूप में दर्शाया है
+    जिसमें इलेक्ट्रॉन धनावेश के एक गोले में धँसे होते हैं। (iii) रदरफोर्ड के मॉडल ने प्रस्तावित किया
+    कि परमाणुओं में एक सघन केंद्रीय नाभिक होता है। (iv) डाल्टन के मॉडल ने परमाणुओं को अविभाज्य कणों
+    के रूप में वर्णित किया।
+  made:
+    - {words: L2.2, by: hindi-repair}
+    - {words: L2.3, by: hindi-repair}
+    - {words: L2.5, by: hindi-repair}
+    - {words: L2.8, by: hindi-repair}
+    - {words: L2.11, by: hindi-repair}
+    - {words: L2.12, by: hindi-repair}
+    - {words: L2.14, by: agent}
+    - {words: L3.10-11, by: agent}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L4.6, by: hindi-repair}
+    - {words: L4.12, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L4.15-16, by: agent}
+    - {words: L4.17, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L5.9, by: hindi-repair}
+    - {words: L5.10, by: hindi-repair}
+    - {words: L6.9, by: agent}
+    - {words: L6.13, by: hindi-repair}
+    - {words: L6.14, by: hindi-repair}
+    - {words: L6.16, by: hindi-repair}
+    - {words: L7.5, by: hindi-repair}
+    - {words: L7.8, by: hindi-repair}
+    - {words: L8.2, by: agent}
+    - {words: L8.6, by: hindi-repair}
+    - {words: L8.9-10, by: agent}
+    - {words: L8.11, by: hindi-repair}
+    - {words: L8.14-15, by: agent}
+    - {words: L9.2, by: agent}
+    - {words: L9.6-7, by: agent}
+    - {words: L9.9, by: hindi-repair}
+    - {words: L9.10, by: hindi-repair}
+    - {words: L9.13, by: hindi-repair}
+    - {words: L9.14, by: hindi-repair}
+- id: "9.2.8.7"
+  kind: question
+  page: 20
+  number: "6."
+  text: 6. इलेक्ट्रॉन नाभिक के चारों ओर कक्षाओं में गति करते हैं। वे परमाणु से बाहर क्यों नहीं निकल
+    जाते? कौन-सा बल उन्हें नाभिक की ओर आकर्षित रखता है, व्याख्या कीजिए?
+  made:
+    - {words: L10.5, by: hindi-repair}
+    - {words: L10.7-8, by: agent}
+    - {words: L10.9, by: hindi-repair}
+    - {words: L10.12, by: hindi-repair}
+    - {words: L10.17, by: hindi-repair}
+    - {words: L10.18, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.7, by: hindi-repair}
+    - {words: L11.10, by: hindi-repair}
+- id: "9.2.8.8"
+  kind: question
+  page: 20
+  number: "7."
+  text: 7. नीचे दिए गए अभिकथन एवं कारण को पढिए और उनके संबंध में आगे दिए गए विकल्पों में से सही विकल्प
+    का चयन कीजिए। अभिकथन— अवपरमाणुक कणों की खोज ने परमाणु संरचना को समझने में सहायता की। कारण— किसी
+    परमाणु में इलेक्ट्रॉनों की संख्या प्रोटॉनों की संख्या के समान होती है। (i) अभिकथन और कारण दोनों
+    सत्य हैं और कारण अभिकथन की सही व्याख्या करता है। (ii) अभिकथन और कारण दोनों सत्य हैं परंतु कारण
+    अभिकथन की सही व्याख्या नहीं करता है। (iii) अभिकथन सत्य है परंतु कारण असत्य है। (iv) अभिकथन असत्य
+    है परंतु कारण सत्य है।
+  made:
+    - {words: L12.9, by: hindi-repair}
+    - {words: L12.13, by: hindi-repair}
+    - {words: L12.17, by: hindi-repair}
+    - {words: L12.18, by: hindi-repair}
+    - {words: L12.21, by: hindi-repair}
+    - {words: L14.2, by: agent}
+    - {words: L14.3, by: hindi-repair}
+    - {words: L14.8-L15.2, by: hindi-repair}
+    - {words: L15.5, by: hindi-repair}
+    - {words: L16.4, by: hindi-repair}
+    - {words: L16.5, by: hindi-repair}
+    - {words: L16.7, by: hindi-repair}
+    - {words: L16.8, by: hindi-repair}
+    - {words: L16.10, by: hindi-repair}
+    - {words: L17.5, by: hindi-repair}
+    - {words: L17.6, by: hindi-repair}
+    - {words: L17.7, by: hindi-repair}
+    - {words: L17.13, by: hindi-repair}
+    - {words: L18.5, by: hindi-repair}
+    - {words: L18.6, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.13, by: hindi-repair}
+    - {words: L18.14, by: hindi-repair}
+    - {words: L19.3, by: hindi-repair}
+    - {words: L19.7, by: hindi-repair}
+    - {words: L20.3, by: hindi-repair}
+    - {words: L20.7, by: hindi-repair}
+- id: "9.2.8.9"
+  kind: question
+  page: 20
+  number: "8."
+  text: 8. मैग्नीशियम अनेक जैविक प्रक्रियाओं के लिए आवश्यक है जिसमें मांसपेशियों का संकुचन भी सम्मिलित
+    है। मैग्नीशियम के परमाणु की द्रव्यमान संख्या 24 और परमाणु क्रमांक 12 है तो उसमें (i) प्रोटॉनों
+    की संख्या (ii) न्यूट्रॉनों की संख्या (iii) इलेक्ट्रॉनों की संख्या ज्ञात कीजिए। मैग्नीशियम परमाणु
+    में इलेक्ट्रॉनों की व्यवस्था को भी चित्रात्मक रूप से दर्शाइए।
+  made:
+    - {words: L21.2, by: hindi-repair}
+    - {words: L21.5-6, by: agent}
+    - {words: L21.9, by: hindi-repair}
+    - {words: L21.11, by: hindi-repair}
+    - {words: L21.12, by: hindi-repair}
+    - {words: L22.1, by: hindi-repair}
+    - {words: L22.3, by: hindi-repair}
+    - {words: L22.7, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.16, by: hindi-repair}
+    - {words: L23.2, by: hindi-repair}
+    - {words: L23.4, by: hindi-repair}
+    - {words: L23.6, by: hindi-repair}
+    - {words: L23.8, by: hindi-repair}
+    - {words: L23.10, by: hindi-repair}
+    - {words: L23.12, by: hindi-repair}
+    - {words: L23.15, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.3, by: hindi-repair}
+    - {words: L24.5, by: hindi-repair}
+    - {words: L24.8, by: hindi-repair}
+    - {words: L24.11, by: hindi-repair}
+- id: "9.2.8.10"
+  kind: question
+  page: 20
+  number: "9."
+  text: 9. चित्र 8.17 में दर्शाए गए तत्वों के लिए निम्नलिखित जानकारी ज्ञात कीजिए। (i) तत्व का नाम (ii)
+    प्रतीक (iii) इलेक्ट्रॉनों की कुल संख्या (iv) संयोजकता इलेक्ट्रॉनों की संख्या (v) तत्व की
+    संयोजकता (vi) प्रोटॉनों की संख्या (vii) परमाणु क्रमांक
+  made:
+    - {words: L25.4, by: hindi-repair}
+    - {words: L25.5, by: hindi-repair}
+    - {words: L25.7, by: agent}
+    - {words: L25.10, by: hindi-repair}
+    - {words: L26.2, by: agent}
+    - {words: L28.2, by: hindi-repair}
+    - {words: L28.5, by: hindi-repair}
+    - {words: L29.3, by: hindi-repair}
+    - {words: L29.5, by: hindi-repair}
+    - {words: L30.2, by: agent}
+    - {words: L30.4-L31.2, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.4-L33.2, by: hindi-repair}
+- id: "9.2.8.11"
+  kind: figure
+  page: 20
+  number: चित्र 8.17
+  text: (क) (ख) (ग) (घ) चित्र 8.17
+  crop: [118.5, 609.8, 448.8, 707.1]
+  made:
+    - {words: L36.1, by: hindi-repair}
+    - {box: true, by: figure-snap}
+- id: "9.2.8.12"
+  kind: question
+  page: 21
+  number: "10."
+  text: 10. रदरफोर्ड और बोर दोनों के प्रतिरूपों में इलेक्ट्रॉन नाभिक की परिक्रमा करते हैं परंतु
+    रदरफोर्ड का मॉडल, परमाणु के स्थायित्व को समझाने में असफल क्यों रहा जबकि बोर का मॉडल सफल रहा?
+  made:
+    - {words: L1.2, by: agent}
+    - {words: L1.5, by: hindi-repair}
+    - {words: L1.7, by: hindi-repair}
+    - {words: L1.8, by: hindi-repair}
+    - {words: L1.14, by: hindi-repair}
+    - {words: L1.16, by: agent}
+    - {words: L2.4, by: hindi-repair}
+    - {words: L2.7, by: hindi-repair}
+    - {words: L2.9, by: hindi-repair}
+- id: "9.2.8.13"
+  kind: question
+  page: 21
+  number: "11."
+  text: 11. एक परमाणु ⁷⁰X में 31 इलेक्ट्रॉन हैं। बताइए कि इसके नाभिक में कितने न्यूट्रॉन हैं?
+  made:
+    - {words: L3.4-5, by: agent}
+    - {words: L3.6, by: hindi-repair}
+    - {words: L3.9, by: hindi-repair}
+    - {words: L3.14, by: hindi-repair}
+    - {words: L3.16, by: hindi-repair}
+    - {words: L3.17, by: hindi-repair}
+- id: "9.2.8.14"
+  kind: question
+  page: 21
+  number: "12."
+  text: 12. एक परमाणु में 79 प्रोटॉन हैं और उसकी द्रव्यमान संख्या 197 है। इसमें (i) न्यूट्रॉनों की
+    संख्या और (ii) इलेक्ट्रॉनों की संख्या की गणना कीजिए।
+  made:
+    - {words: L4.4, by: hindi-repair}
+    - {words: L4.7, by: hindi-repair}
+    - {words: L4.10, by: hindi-repair}
+    - {words: L4.11, by: hindi-repair}
+    - {words: L4.14, by: hindi-repair}
+    - {words: L4.16, by: hindi-repair}
+    - {words: L4.18, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.4, by: hindi-repair}
+    - {words: L5.5, by: hindi-repair}
+    - {words: L5.6, by: hindi-repair}
+    - {words: L5.7, by: hindi-repair}
+    - {words: L5.8, by: hindi-repair}
+- id: "9.2.8.15"
+  kind: question
+  page: 21
+  number: "13."
+  text: 13. तालिका 8.5 को पूर्ण कीजिए।
+  made:
+    - {words: L6.5, by: hindi-repair}
+- id: "9.2.8.16"
+  kind: table
+  page: 21
+  number: तालिका 8.5
+  text: तालिका 8.5 न्यूट्रॉनों की प्रोटॉनों की संख्या संख्या परमाणु क्रमांक द्रव्यमान संख्या
+    इलेक्ट्रॉनों की संख्या तत्वों के नाम 5 – 6 – – – – 14 – – 7 नाइट्रोजन – 24 – 12 – – 15 – 16 – –
+    – – 1 0 – – –
+  rows:
+    - [
+        परमाणु क्रमांक,
+        द्रव्यमान संख्या,
+        न्यूट्रॉनों की संख्या,
+        प्रोटॉनों की संख्या,
+        इलेक्ट्रॉनों की संख्या,
+        तत्वों के नाम
+      ]
+    - ["5", –, "6", –, –, –]
+    - [–, "14", –, –, "7", नाइट्रोजन]
+    - [–, "24", –, "12", –, –]
+    - ["15", –, "16", –, –, –]
+    - [–, "1", "0", –, –, –]
+  crop: [157.5, 198.5, 546.5, 335.2]
+  made:
+    - {words: L7.1, by: hindi-repair}
+    - {words: L8.1, by: hindi-repair}
+    - {words: L8.2, by: hindi-repair}
+    - {words: L8.3, by: hindi-repair}
+    - {words: L8.4, by: hindi-repair}
+    - {words: L9.1, by: hindi-repair}
+    - {words: L9.2, by: hindi-repair}
+    - {words: L10.1, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L12.1, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L14.2, by: hindi-repair}
+    - {words: L15.1, by: hindi-repair}
+    - {words: L16.1, by: agent}
+    - {words: L16.2, by: hindi-repair}
+    - {words: L17.1, by: hindi-repair}
+    - {words: L22.2-3, by: agent}
+    - {box: true, by: figure-snap}
+    - {cells: true, by: table-cells}
+- id: "9.2.8.17"
+  kind: question
+  page: 21
+  number: "14."
+  text: 14. अमन अपने सहपाठियों के साथ परमाणु की संरचना पर चर्चा कर रहा था। चर्चा के समय उसे ज्ञात हुआ
+    कि किसी तत्व X की द्रव्यमान संख्या 35 है और उसमें 18 न्यूट्रॉन हैं। इस जानकारी के आधार पर
+    निम्नलिखित प्रश्नों के उत्तर दीजिए— (i) तत्व X में कितने इलेक्ट्रॉन और प्रोटॉन हैं? (ii) इसका
+    परमाणु क्रमांक क्या है? (iii) तत्व X की पहचान कीजिए। (iv) इसका इलेक्ट्रॉनिक विन्यास लिखिए। (v)
+    इसमें कितने संयोजकता इलेक्ट्रॉन हैं? (vi) यदि इसके नाभिक में दो न्यूट्रॉन और जोड़ दिए जाएँ तो
+    इसकी द्रव्यमान संख्या क्या होगी? (vii) X का नए परमाणु के साथ क्या संबंध होगा?
+  made:
+    - {words: L31.4, by: agent}
+    - {words: L31.11, by: hindi-repair}
+    - {words: L31.15, by: hindi-repair}
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.3, by: hindi-repair}
+    - {words: L32.4, by: agent}
+    - {words: L32.6, by: hindi-repair}
+    - {words: L32.7, by: hindi-repair}
+    - {words: L32.8, by: hindi-repair}
+    - {words: L32.10, by: hindi-repair}
+    - {words: L32.12, by: hindi-repair}
+    - {words: L32.14, by: hindi-repair}
+    - {words: L32.15, by: hindi-repair}
+    - {words: L32.17, by: hindi-repair}
+    - {words: L32.18, by: hindi-repair}
+    - {words: L32.19, by: hindi-repair}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.6, by: hindi-repair}
+    - {words: L34.2, by: agent}
+    - {words: L34.4, by: hindi-repair}
+    - {words: L34.9, by: hindi-repair}
+    - {words: L35.5, by: hindi-repair}
+    - {words: L36.2, by: agent}
+    - {words: L37.4, by: hindi-repair}
+    - {words: L38.2, by: hindi-repair}
+    - {words: L38.6, by: hindi-repair}
+    - {words: L39.5, by: hindi-repair}
+    - {words: L39.7, by: hindi-repair}
+    - {words: L39.14, by: hindi-repair}
+    - {words: L39.15, by: hindi-repair}
+    - {words: L39.16, by: hindi-repair}
+    - {words: L40.8, by: hindi-repair}
+- id: "9.2.8.18"
+  kind: question
+  page: 21
+  number: "15."
+  text: 15. किसी परमाणु के नाभिक में 12 प्रोटॉन और 12 न्यूट्रॉन हैं। अब कल्पना कीजिए कि सभी
+    इलेक्ट्रॉनों को किन्हीं काल्पनिक कणों से प्रतिस्थापित कर दिया जाता है जिनका आवेश इलेक्ट्रॉनों के
+    समान ही है परंतु वे 500 गुना अधिक भारी हैं। इस प्रतिस्थापन का परमाणु के निम्नलिखित गुणों पर क्या
+    प्रभाव पड़ेगा? (i) परमाणु क्रमांक (ii) परमाणु द्रव्यमान (iii) द्रव्यमान संख्या (iv) समग्र आवेश
+  made:
+    - {words: L41.6, by: hindi-repair}
+    - {words: L41.11, by: hindi-repair}
+    - {words: L41.12, by: hindi-repair}
+    - {words: L41.14, by: hindi-repair}
+    - {words: L41.18, by: hindi-repair}
+    - {words: L42.2, by: hindi-repair}
+    - {words: L42.3, by: hindi-repair}
+    - {words: L42.4, by: hindi-repair}
+    - {words: L42.6, by: hindi-repair}
+    - {words: L42.13, by: hindi-repair}
+    - {words: L43.6-9, by: hindi-repair}
+    - {words: L43.12, by: hindi-repair}
+    - {words: L43.14, by: hindi-repair}
+    - {words: L43.18, by: hindi-repair}
+    - {words: L43.19-22, by: hindi-repair}
+    - {words: L43.24, by: hindi-repair}
+    - {words: L44.2, by: hindi-repair}
+    - {words: L46.3, by: hindi-repair}
+    - {words: L47.2, by: hindi-repair}
+    - {words: L47.3-L48.2, by: hindi-repair}
+- id: "9.2.8.19"
+  kind: box
+  page: 22
+  title: परियोजना कार्य
+  text: परियोजना कार्य परमाणु क्रमांक, द्रव्यमान संख्या, इलेक्ट्रॉनों की संख्या, प्रोटॉनों की संख्या,
+    न्यूट्रॉनों की संख्या और संयोजकता के आधार पर एक ‘परमाणु पूर्वानुमान बोर्ड’ गेम बनाइए। विद्यार्थी
+    इन परमाणु संकेतों का उपयोग करके तत्वों का पूर्वानुमान लगा सकते हैं। एक रिपोर्ट तैयार कीजिए
+    जिसमें बताया गया हो कि परमाणुओं के गुणधर्म हमारे दैनिक जीवन के विभिन्न क्षेत्रों, जैसे—
+    स्वास्थ्य सेवा, ऊर्जा, कृषि और प्रौद्योगिकी पर कैसे प्रभाव डालते हैं। ‘एक यात्रा— परमाणु के
+    भीतर’ तथा परमाणु संरचना की खोज करने वाले और उसकी पहचान में योगदान देने वाले वैज्ञानिकों पर किसी
+    भूमिका-निर्वाह, मंचीय नाटक अथवा कहानी की रचना कीजिए। उपयुक्त सॉफ्टवेयर अथवा डिजिटल उपकरणों का
+    उपयोग करते हुए विभिन्न परमाणु प्रतिरूपों का सजीव चित्रण (animation) अथवा प्रतिरूपण (simulation)
+    बनाने का प्रयास कीजिए और उन्हें कक्षा में साझा कीजिए। परमाणु की संरचना के संदर्भ में कोई फिल्म
+    अथवा डॉक्यूमेंट्री (वृत्तचित्र) देखिए और निम्नलिखित प्रश्नों के उत्तर देते हुए एक रिपोर्ट लिखिए।
+    आपने कौन-सी फिल्म अथवा डॉक्यूमेंट्री देखी और उसका मुख्य विचार अथवा विषय क्या था? परमाणु की
+    संरचना और परमाणु मॉडल/मॉडलों के विषय में फिल्म या डॉक्यूमेंट्री ने आपको क्या सिखाया? फिल्म अथवा
+    डॉक्यूमेंट्री में किन वैज्ञानिकों का उल्लेख किया गया था और उनका क्या योगदान था? फिल्म अथवा
+    डॉक्यूमेंट्री का कौन-सा भाग आपको सबसे रोचक लगा और आपके मन में अभी भी कौन-सा प्रश्न है? किन्हीं
+    तीन तत्वों के प्रत्येक ऊर्जा स्तर में इलेक्ट्रॉनों की संख्या दर्शाते हुए एक स्तंभ ग्राफ बनाइए।
+    परमाणुओं के विषय में और अधिक जानने के लिए आप नीचे दिए गए लिंक देख सकते हैं।
+    https://phet.colorado.edu/en/simulations/rutherford-scattering
+    https://phet.colorado.edu/en/simulations/isotopes-and-atomic-mass
+  made:
+    - {words: L2.1, by: hindi-repair}
+    - {words: L2.2, by: hindi-repair}
+    - {words: L3.4, by: hindi-repair}
+    - {words: L3.5-L4.2, by: hindi-repair}
+    - {words: L4.3, by: hindi-repair}
+    - {words: L4.5-L5.2, by: hindi-repair}
+    - {words: L5.3, by: hindi-repair}
+    - {words: L5.5-L6.2, by: hindi-repair}
+    - {words: L6.3, by: hindi-repair}
+    - {words: L6.5-L7.2, by: hindi-repair}
+    - {words: L8.7, by: hindi-repair}
+    - {words: L8.8, by: hindi-repair}
+    - {words: L8.14, by: hindi-repair}
+    - {words: L9.3, by: agent}
+    - {words: L9.5, by: hindi-repair}
+    - {words: L9.8, by: hindi-repair}
+    - {words: L10.3, by: hindi-repair}
+    - {words: L10.6, by: hindi-repair}
+    - {words: L10.11-12, by: agent}
+    - {words: L10.14, by: hindi-repair}
+    - {words: L11.1, by: hindi-repair}
+    - {words: L11.2, by: hindi-repair}
+    - {words: L11.3, by: hindi-repair}
+    - {words: L11.4, by: hindi-repair}
+    - {words: L11.5, by: hindi-repair}
+    - {words: L11.6, by: hindi-repair}
+    - {words: L11.7, by: hindi-repair}
+    - {words: L11.9, by: hindi-repair}
+    - {words: L11.11-12, by: agent}
+    - {words: L11.13, by: hindi-repair}
+    - {words: L11.14, by: hindi-repair}
+    - {words: L11.15, by: hindi-repair}
+    - {words: L13.1, by: hindi-repair}
+    - {words: L13.2, by: hindi-repair}
+    - {words: L13.3, by: hindi-repair}
+    - {words: L13.4, by: hindi-repair}
+    - {words: L13.5, by: hindi-repair}
+    - {words: L13.7, by: hindi-repair}
+    - {words: L13.8, by: hindi-repair}
+    - {words: L13.9-12, by: hindi-repair}
+    - {words: L13.13, by: hindi-repair}
+    - {words: L13.14, by: hindi-repair}
+    - {words: L13.15, by: hindi-repair}
+    - {words: L13.16, by: hindi-repair}
+    - {words: L13.17, by: hindi-repair}
+    - {words: L14.1, by: hindi-repair}
+    - {words: L15.2, by: hindi-repair}
+    - {words: L15.3, by: hindi-repair}
+    - {words: L15.6, by: hindi-repair}
+    - {words: L15.11, by: hindi-repair}
+    - {words: L15.13, by: hindi-repair}
+    - {words: L16.12, by: hindi-repair}
+    - {words: L17.2, by: hindi-repair}
+    - {words: L18.6, by: hindi-repair}
+    - {words: L18.7, by: hindi-repair}
+    - {words: L18.9, by: hindi-repair}
+    - {words: L18.11, by: hindi-repair}
+    - {words: L18.15, by: hindi-repair}
+    - {words: L19.1, by: hindi-repair}
+    - {words: L19.2, by: hindi-repair}
+    - {words: L19.4, by: hindi-repair}
+    - {words: L19.5, by: hindi-repair}
+    - {words: L19.7, by: hindi-repair}
+    - {words: L19.8, by: hindi-repair}
+    - {words: L20.4, by: hindi-repair}
+    - {words: L20.6, by: hindi-repair}
+    - {words: L20.10, by: hindi-repair}
+    - {words: L20.14, by: hindi-repair}
+    - {words: L21.4-L22.2, by: hindi-repair}
+    - {words: L22.5, by: hindi-repair}
+    - {words: L22.8, by: hindi-repair}
+    - {words: L22.9, by: hindi-repair}
+    - {words: L22.11, by: hindi-repair}
+    - {words: L22.14, by: hindi-repair}
+    - {words: L24.2, by: hindi-repair}
+    - {words: L24.4, by: hindi-repair}
+    - {words: L24.5, by: hindi-repair}
+    - {words: L24.7, by: hindi-repair}
+    - {words: L24.9, by: hindi-repair}
+    - {words: L24.15, by: hindi-repair}
+    - {words: L25.2, by: hindi-repair}
+    - {words: L25.4, by: hindi-repair}
+    - {words: L25.15, by: hindi-repair}
+    - {words: L26.1, by: hindi-repair}
+    - {words: L26.2, by: hindi-repair}
+    - {words: L26.3, by: hindi-repair}
+    - {words: L26.4, by: hindi-repair}
+    - {words: L27.2, by: hindi-repair}
+    - {words: L27.4, by: agent}
+    - {words: L27.6, by: hindi-repair}
+    - {words: L27.7, by: hindi-repair}
+    - {words: L27.8, by: hindi-repair}
+    - {words: L27.9, by: hindi-repair}
+    - {words: L27.10, by: hindi-repair}
+    - {words: L27.12-L28.2, by: hindi-repair}
+    - {words: L28.3, by: hindi-repair}
+    - {words: L28.6, by: hindi-repair}
+    - {words: L29.2-3, by: agent}
+    - {words: L29.6, by: hindi-repair}
+    - {words: L29.9, by: agent}
+    - {words: L29.19, by: hindi-repair}
+- id: "9.2.8.20"
+  kind: box
+  page: 22
+  title: खोज जारी है...
+  text: खोज जारी है... क्या परमाणु के भीतर होने वाली प्रत्येक प्रक्रिया को पूर्ण रूप से समझना संभव है?
+  made:
+    - {words: L32.1, by: hindi-repair}
+    - {words: L32.2, by: hindi-repair}
+    - {words: L32.3-4, by: agent}
+    - {words: L33.1, by: hindi-repair}
+    - {words: L33.2, by: hindi-repair}
+    - {words: L33.3, by: hindi-repair}
+    - {words: L33.4, by: hindi-repair}
+    - {words: L33.5, by: hindi-repair}
+    - {words: L33.6, by: hindi-repair}
+    - {words: L33.7, by: hindi-repair}
+    - {words: L33.8, by: hindi-repair}
+    - {words: L33.9, by: hindi-repair}
+    - {words: L33.10, by: hindi-repair}
+    - {words: L33.12, by: hindi-repair}
+    - {words: L33.13, by: hindi-repair}
+    - {words: L33.14, by: hindi-repair}
+    - {words: L33.15, by: hindi-repair}

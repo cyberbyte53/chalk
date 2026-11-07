@@ -1,0 +1,83 @@
+page: 11
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves; superscripts and subscripts the PDF flattens"
+furniture: L33-L34, L70-L71
+terms:
+  - L43.8-9
+  - L44.10
+answers:
+  "word लीथियम": "a real word, as printed on the page; the list lacks it"
+  "word न्यूक्लिऑन": "a real word, as printed on the page; the list lacks it"
+  "read L22.1-4": "the PDF sets न्यूट्रॉनों's letters out of order (न््य ट् यू रॉनोों); the image shows न्यूट्रॉनों"
+blocks:
+  - kind: text
+    words: L1.3-5, L2, L3.3-15, L35-L36
+  - kind: text
+    words: L37-L38
+    read:
+      L37.13: तत्व
+      L38.10: तत्व
+  - kind: text
+    words: L39-L40
+    read:
+      L39.6: लीथियम
+  - kind: section
+    words: L6
+    number: L6.1
+    title: L6.2-3
+  - kind: text
+    words: L41-L44
+    read:
+      L44.10: न्यूक्लिऑन
+  - kind: equation
+    words: L45
+  - kind: text
+    words: L46-L49
+  - kind: table
+    words: L50, L14-L17, L51-L54
+    number: L50.1-2
+    box: [150, 398, 550, 502]
+    read:
+      L50.4: तत्वों
+      L51.2-4: (p⁺)
+      L51.6-8: (n⁰)
+      L14.1: तत्व
+      L17.1: लीथियम
+  - kind: text
+    words: L55-L56
+  - kind: text
+    words: L57-L58
+    read:
+      L57.9: तत्व
+  - kind: figure
+    words: L59-L61
+    box: [295, 585, 492, 637]
+    read:
+      L60.1: तत्व
+  - kind: text
+    words: L62-L63
+  - kind: equation
+    words: L64-L66
+    read:
+      L64.1-L66.1: ¹²₆C
+  - kind: text
+    words: L67-L69
+  - kind: figure
+    words: L1.1-2, L3.1-2, L4-L5, L7-L13
+    number: L13.1-2
+    box: [45, 85, 223, 371]
+    read:
+      L1.1: लीथियम
+      L4.1: लीथियम
+      L7.1: लीथियम
+      L10.1-2: इलेक्ट्रॉन
+      L11.1-2: न्यूट्रॉन
+      L13.6-7: न्यूट्रॉन
+  - kind: box
+    words: L18-L32
+    title: L18
+    read:
+      L20.4: न्यूक्लिऑन
+      L22.1-4: न्यूट्रॉनों

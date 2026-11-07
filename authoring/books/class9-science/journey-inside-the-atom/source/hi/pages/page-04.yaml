@@ -1,0 +1,54 @@
+page: 4
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves"
+furniture: L1, L29
+answers:
+  "word मार्सडेन": "a real word, as printed on the page; the list lacks it"
+  "word अल्फा": "a real word, as printed on the page; the list lacks it"
+  "word त्रुटिवश": "a real word, as printed on the page; the list lacks it"
+  "word विक्षेपित": "a real word, as printed on the page; the list lacks it"
+  "word विवरणानुसार": "a real word, as printed on the page; the list lacks it"
+  "read L17.12-15": "the PDF sets न्यूट्रॉन's letters out of order (न््य ट् यू रॉन); the image shows न्यूट्रॉन"
+terms:
+  - L22.2
+  - L22.11-14
+blocks:
+  - kind: box
+    words: L2-L10
+    title: L2
+    read:
+      L3.8: विवरणानुसार
+      L6.2: त्रुटिवश
+      L7.2-3: करेगा?
+      L10.11-12: परमाणुओं
+  - kind: section
+    words: L11
+    number: L11.1
+    title: L11.2-8
+  - kind: text
+    words: L12-L23
+    read:
+      L12.6: मार्सडेन
+      L12.8: अर्न्स्ट
+      L12.9: रदरफोर्ड
+      L14.1: अल्फा
+      L15.5: अल्फा
+      L15.10: धनावेशित
+      L16.3-4: रेडियोधर्मी
+      L16.5: तत्वों
+      L16.17: अल्फा
+      L17.12-15: न्यूट्रॉन
+      L19.1: अल्फा
+      L19.12: विक्षेपित
+      L20.7: विक्षेपित
+      L21.3: विक्षेपित
+  - kind: figure
+    words: L24-L26
+    number: L26.1-2
+    box: [85, 479, 475, 686]
+  - kind: text
+    words: L27-L28
+    read:
+      L28.16: विक्षेपित

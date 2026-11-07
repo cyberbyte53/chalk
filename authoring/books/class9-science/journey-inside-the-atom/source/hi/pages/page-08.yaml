@@ -1,0 +1,103 @@
+page: 8
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves; a sign the PDF flattens; letters the PDF lacks"
+furniture: L1, L53-L54, L94
+terms:
+  - L14.14
+answers:
+  "word चैडविक": "a real word, as printed on the page; the list lacks it"
+  "word धनावेशी": "a real word, as printed on the page; the list lacks it"
+  "word प्रतिकर्षण": "a real word, as printed on the page; the list lacks it"
+  "read L60.1-4": "the PDF sets न्यूट्रॉन's letters out of order (न््य ट् यू रॉन); the image shows न्यूट्रॉन"
+  "read L62.1-4": "the PDF sets न्यूट्रॉन's letters out of order (न््य ट् यू रॉन); the image shows न्यूट्रॉन"
+  "read L77.1-2": "the PDF lacks the ै of कै (के वेंडिश); the image shows कैवेंडिश"
+  "read L67.2": "the PDF lacks त्त् (महवपूर्ण); the image shows महत्त्वपूर्ण"
+  "read L93.1-2": "the PDF lacks the श (ंृखला); the image shows शृंखला"
+  "read L40.7": "the PDF writes ऑ as आ and a separate ॅ; the image shows ऑक्सीजन"
+blocks:
+  - kind: section
+    words: L2
+    number: L2.1
+    title: L2.2-10
+  - kind: text
+    words: L3-L5
+    read:
+      L3.1: रदरफोर्ड
+      L3.14-15: केंद्रित
+  - kind: text
+    words: L6-L10
+    read:
+      L10.15-16: वृद्धि करता
+  - kind: section
+    words: L11
+    number: L11.1
+    title: L11.2-4
+  - kind: text
+    words: L12-L19
+    read:
+      L12.9: चैडविक
+      L12.13: अरनेस्ट
+      L12.14: रदरफोर्ड
+      L13.5-7: अवपरमाणुक
+      L15.12-13: परमाणुओं
+      L18.5: इससे
+  - kind: text
+    words: L20
+    read:
+      L20.3: अवपरमाणुक
+  - kind: table
+    number: L21.1-2
+    words: L21-L37
+    box: [88, 415, 425, 520]
+    read:
+      L21.3: अवपरमाणुक
+      L26.1: अवपरमाणुक
+      L27.1-2: इलेक्ट्रॉन
+      L31.1-2: e⁻
+      L32.1-2: p⁺
+      L33.1-2: n⁰
+      L35.1: −1
+  - kind: box
+    words: L38-L52
+    title: L38
+    read:
+      L39.2-3: परमाणुओं
+      L40.7: ऑक्सीजन
+      L43.6-7: यूरेनियम
+      L47.11-12: धकेलते?
+      L49.4: धनावेशी
+      L50.1: प्रतिकर्षण
+      L51.13-14: परमाणुओं
+      L52.5: जिससे
+  - kind: box
+    words: L55-L58
+    title: L55
+    read:
+      L57.1: इससे
+      L57.3-4: वस्तुओं
+  - kind: box
+    words: L59-L71
+    title: L59
+    read:
+      L60.1-4: न्यूट्रॉन
+      L62.1-4: न्यूट्रॉन
+      L65.1-2: कृत्रिम
+      L65.4: तत्व
+      L65.5: बनाना
+      L66.4-7: परमाणुओं
+      L67.2: महत्त्वपूर्ण
+  - kind: box
+    words: L72-L93
+    title: L72
+    read:
+      L73.2: चैडविक
+      L74.2-3: कैम्ब्रिज
+      L75.1: विश्वविद्यालय
+      L77.1-2: कैवेंडिश
+      L79.2: रदरफोर्ड
+      L81.7: महत्त्वपूर्ण
+      L85.1: चैडविक
+      L88.4: जिससे
+      L93.1-2: शृंखला

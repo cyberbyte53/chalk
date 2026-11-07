@@ -1,0 +1,101 @@
+page: 3
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves; a superscript and minus the PDF flattens"
+furniture: L71-L74
+terms:
+  - L6.5
+  - L14.14
+answers:
+  "word वोल्टता": "a real word, as printed on the page; the list lacks it"
+  "word धनावेशित": "a real word, as printed on the page; the list lacks it"
+  "word प्लम्स": "a real word, as printed on the page; the list lacks it"
+  "word कैवेंडिश": "a real word, as printed on the page; the list lacks it"
+  "word अर्न्स्ट": "a real word, as printed on the page; the list lacks it"
+  "word रदरफोर्ड": "a real word, as printed on the page; the list lacks it"
+  "word भले": "a real word, as printed on the page; the list lacks it"
+  "word प्लम": "a real word, as printed on the page; the list lacks it"
+  "word धाराएँ": "a real word, as printed on the page; the list lacks it"
+  "word परिघटना": "a real word, as printed on the page; the list lacks it"
+  "word ऋणावेशित": "a real word, as printed on the page; the list lacks it"
+  "word अवपरमाणुक": "a real word, as printed on the page; the list lacks it"
+blocks:
+  - kind: text
+    words: L6-L7
+    continued: true
+    read:
+      L6.3: परिघटना
+      L6.8: इससे
+      L6.10-11: ज्ञात
+      L6.15: निश्चित
+  - kind: text
+    words: L8-L15
+    read:
+      L9.12: वोल्टता
+      L10.5-6: कैथोड
+      L10.7: (ऋणावेशित
+      L10.11: (धनावेशित
+      L11.6-7: कैथोड
+      L12.5-6: कैथोड
+      L13.13: ऋणावेशित
+      L14.7: धाराएँ
+      L14.17-18: परमाणुओं
+      L15.12: अवपरमाणुक
+  - kind: figure
+    words: L16, L41-L49
+    number: L49.1-2
+    box: [266, 240, 522, 429]
+    read:
+      L42.2: वोल्टता
+      L44.1-2: कैथोड
+      L49.4-5: कैथोड
+      L49.9-10: रेखाचित्र
+  - kind: text
+    words: L50-L53
+    read:
+      L50.5-6: कैथोड
+      L50.10-11: कैथोड
+      L50.15-16: कैथोड
+      L51.8: इससे
+      L51.15-16: परमाणुओं
+      L52.8: तत्व
+      L52.16: (−1.602
+      L52.18-19: 10⁻¹⁹
+      L53.9: −1
+  - kind: section
+    words: L54
+    number: L54.1
+    title: L54.2-5
+  - kind: text
+    words: L55-L69
+    read:
+      L61.6: प्लम्स
+      L61.7-L62.2: (सूखा
+      L63.6: ‘प्लम
+      L67.3: भले
+  - kind: figure
+    words: L36-L40
+    number: L39.1-2
+    box: [57, 591, 207, 736]
+    read:
+      L36.1-2: इलेक्ट्रॉन
+  - kind: figure
+    words: L70
+    number: L70.1-2
+    box: [436, 644, 565, 750]
+  - kind: box
+    title: L1
+    words: L1-L5
+    read:
+      L2.1-4: परमाणुओं
+  - kind: box
+    title: L17
+    words: L17-L35
+    read:
+      L23.1: अवपरमाणुक
+      L25.3-4: परमाणुओं
+      L31.2-3: कैम्ब्रिज
+      L31.6-7: कैवेंडिश
+      L33.2: अर्न्स्ट
+      L33.3: रदरफोर्ड

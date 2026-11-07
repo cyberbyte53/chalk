@@ -1,0 +1,43 @@
+page: 17
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets an isotope's mass and atomic numbers on lines of their own, apart from its symbol"
+furniture: L39-L40, L91, L92.1, L93, L96-L97
+answers:
+  "read L43.1-L50.1": "the image prints 7.5 lakh ³⁵₁₇Cl and 2.5 lakh ³⁷₁₇Cl; the PDF stores each isotope's numbers on small lines of their own between the text lines"
+  "read L61.1-L66.1": "the image prints ⁷⁹₃₅Br (49.7%) and ⁸¹₃₅Br; the PDF stores both mass numbers on one small line above and each atomic number on a line of its own"
+terms:
+  - L81.3
+blocks:
+  - kind: text
+    words: L41-L51
+    read:
+      "L43.1-L50.1": { text: "1 million chlorine atoms, they will contain 7.5 lakh ³⁵₁₇Cl and 2.5 lakh ³⁷₁₇Cl" }
+  - kind: text
+    words: L52-L54
+  - kind: box
+    words: L55-L67
+    title: L55
+    read:
+      "L61.1-L66.1": { text: "isotopes, ⁷⁹₃₅Br (49.7%) and ⁸¹₃₅Br" }
+  - kind: text
+    words: L68-L72
+  - kind: section
+    words: L73
+    number: L73.1
+    title: L73.2
+  - kind: text
+    words: L74-L81
+  - kind: text
+    words: L82-L90, L92.2-10, L94-L95
+  - kind: box
+    words: L1-L22
+    title: L1
+  - kind: box
+    words: L23-L36
+    title: L23
+  - kind: figure
+    words: L37-L38
+    number: L37.1-2
+    box: [68, 553, 206, 676]

@@ -1,0 +1,44 @@
+page: 8
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets a symbol's superscript charge as a separate word beside it"
+furniture: L1, L24, L68, L93
+terms:
+  - L17.8
+blocks:
+  - kind: section
+    words: L2-L3
+    number: L2.1
+    title: L2.2-L3.4
+  - kind: text
+    words: L4-L6
+  - kind: text
+    words: L7-L12
+  - kind: section
+    words: L13
+    number: L13.1
+    title: L13.2-5
+  - kind: text
+    words: L14-L23
+  - kind: table
+    words: L47-L51
+    number: L47.1-2
+    title: L47.3-9
+    box: [86, 406, 428, 509]
+    read:
+      "L49.3-4": { text: "e⁻" }
+      "L50.3-4": { text: "p⁺" }
+      "L51.3-4": { text: "n⁰" }
+  - kind: box
+    words: L52-L67
+    title: L52
+  - kind: box
+    words: L25-L29
+    title: L25
+  - kind: box
+    words: L30-L46
+    title: L30
+  - kind: box
+    words: L69-L92
+    title: L69

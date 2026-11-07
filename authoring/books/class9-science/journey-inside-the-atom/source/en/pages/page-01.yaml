@@ -1,0 +1,22 @@
+page: 1
+proofread: true
+furniture: L1, L4, L20.1, L21-L22, L34, L43-L45, L52
+terms:
+  - L37.1
+  - L38.3
+blocks:
+  - kind: heading
+    words: L2-L3
+    title: L2-L3
+  - kind: figure
+    words: L6, L5, L7, L9, L8, L11, L13, L14, L15, L12, L10, L16, L17, L18, L35
+    box: [80, 160, 548, 518]
+  - kind: text
+    words: L36-L42
+  - kind: text
+    words: L46-L47
+  - kind: text
+    words: L48-L51
+  - kind: box
+    words: L19, L20.2-4, L23-L33
+    title: L19

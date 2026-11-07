@@ -1,0 +1,33 @@
+page: 2
+proofread: true
+furniture: L1, L35.1, L36.1, L37.1, L49
+terms:
+  - L48.9
+blocks:
+  - kind: section
+    words: L2
+    number: L2.1
+    title: L2.2-7
+  - kind: text
+    words: L3-L8
+  - kind: text
+    words: L9-L18
+  - kind: text
+    words: L19-L21
+  - kind: text
+    words: L22-L23
+  - kind: text
+    words: L24-L30
+  - kind: text
+    words: L31-L32
+  - kind: text
+    words: L33-L34, L35.2-8, L36.2-11, L37.2-13, L38
+  - kind: section
+    words: L39
+    number: L39.1
+    title: L39.2-8
+  - kind: text
+    words: L40-L45
+  - kind: text
+    words: L46-L48
+    continues: true

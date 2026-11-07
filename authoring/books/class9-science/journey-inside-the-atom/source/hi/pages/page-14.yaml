@@ -1,0 +1,72 @@
+page: 14
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves; subscripts the PDF sets apart"
+furniture: L1, L54, L61, L55-L57, L58-L60
+terms:
+  - L8.5-6
+  - L22.10-14
+  - L23.6-10
+  - L24.13
+  - L30.2
+answers:
+  "word जोड़िए": "a real word, as printed on the page; the list lacks it"
+  "word अभिक्रियाशील": "a real word, as printed on the page; the list lacks it"
+  "read L49.11-14": "the PDF sets न्यूट्रॉनों's letters out of order (न््य ट् यू रॉनोों); the image shows न्यूट्रॉनों"
+blocks:
+  - kind: section
+    words: L2
+    number: L2.1
+    title: L2.2-13
+  - kind: text
+    words: L3-L19
+    read:
+      L3.8: तत्वों
+      L4.2-5: परमाणुओं
+      L5.5: तत्व
+      L8.13-L10.1: H₂O
+      L11.5-6: परमाणुओं
+      L12.2-L13.1: NH₃
+      L14.3-L15.1: MgCl₂
+      L17.12: तत्वों
+      L18.6-9: परमाणुओं
+  - kind: text
+    words: L20-L21
+  - kind: text
+    words: L22-L23
+  - kind: text
+    words: L24-L28
+    read:
+      L25.6: तत्वों
+      L26.9: अभिक्रियाशील
+      L27.7: अभिक्रियाशील
+      L27.11: तत्व
+  - kind: text
+    words: L29-L40
+    read:
+      L29.19: तत्व
+      L30.8: तत्व
+      L38.9-10: परमाणुओं
+      L40.11-12: कक्षाओं
+  - kind: text
+    words: L41-L44
+    read:
+      L41.9-10: परमाणुओं
+      L42.11: तत्वों
+      L42.13-14: परमाणुओं
+      L42.18-19: केवल
+      L43.6-7: केवल
+  - kind: text
+    words: L45-L46
+    read:
+      L45.10: जोड़िए
+      L45.13: तत्व
+  - kind: text
+    words: L47-L53
+    read:
+      L47.6: तत्व
+      L47.9-12: परमाणुओं
+      L49.11-14: न्यूट्रॉनों
+      L52.8: तत्व
+      L52.10-11: परमाणुओं

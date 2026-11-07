@@ -1,0 +1,42 @@
+page: 1
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves; the PDF lacks the ई and ं of ईंट"
+furniture: L1, L4, L31, L48, L45-L47, L21.1, L23.1, L28.1
+answers:
+  "read L18.1": "the PDF lacks ई's sign and ं (इट); the image shows ईंट"
+terms:
+  - L34.6
+  - L35.7
+blocks:
+  - kind: heading
+    words: L2-L3
+    title: L2-L3
+  - kind: figure
+    words: L5-L19, L32
+    box: [85, 165, 550, 520]
+    read:
+      L10.1: कक्ष
+      L18.1: ईंट
+  - kind: text
+    words: L33-L38
+    read:
+      L37.8: "अंतत:"
+      L37.9-10: परमाणुओं
+  - kind: text
+    words: L39-L40
+  - kind: text
+    words: L41-L44
+    read:
+      L41.1-2: वैज्ञानिक
+      L41.6: जानने
+      L42.15: व्यवस्थित
+      L43.8-9: कैसे
+      L43.17-18: कैसे
+  - kind: box
+    title: L20
+    words: L20, L21.2-L22, L23.2-L27, L28.2-L30
+    read:
+      L24.3: उपस्थित
+      L25.2-3: द्वारा

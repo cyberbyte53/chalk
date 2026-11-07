@@ -1,0 +1,43 @@
+page: 5
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets an exponent as a plain number beside its base, and spaces α from -particles"
+furniture: L5.1, L7.1, L9.1, L42-L45
+terms:
+  - L4.6
+  - L10.10-11
+blocks:
+  - kind: heading
+    words: L1
+    title: L1
+  - kind: text
+    words: L2-L4, L5.2-14, L6, L7.2-14, L8, L9.2-10, L10, L11.5-8
+  - kind: text
+    words: L13-L18
+    read:
+      "L13.11-12": { text: "10⁵" }
+      "L15.4-5": { text: "10⁻¹⁰" }
+      "L15.15-16": { text: "10⁻¹⁵" }
+  - kind: figure
+    words: L11.1-4, L12
+    number: L11.1-2
+    box: [45, 112, 155, 256]
+  - kind: box
+    words: L19-L28
+    title: L19
+    read:
+      "L22.9-10": { text: "10⁻¹⁰" }
+      "L22.18-19": { text: "(10⁻⁴" }
+      "L23.5-6": { text: "(10⁻⁴" }
+      "L23.9-10": { text: "(10⁻¹⁰" }
+      "L23.13-15": { text: "10⁶." }
+  - kind: box
+    words: L29-L34
+    title: L29
+  - kind: box
+    words: L35-L41
+    title: L35
+    read:
+      "L36.9-10": { text: "α-particles" }
+      "L38.7-8": { text: "α-particles" }

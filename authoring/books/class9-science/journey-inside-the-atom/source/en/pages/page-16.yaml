@@ -1,0 +1,48 @@
+page: 16
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets an isotope's mass and atomic numbers apart from its symbol, and builds fractions and brackets from separate pieces and private glyphs"
+furniture: L1, L5-L8, L60
+answers:
+  "read L9.1-L10.1": "the image prints ²³⁵₉₂U at the start of the line; the PDF stores its atomic number 92 on a line of its own after it"
+  "read L13.1-L14.1": "the image prints ⁶⁰₂₇Co at the start of the line; the PDF stores its atomic number 27 on a line of its own after it"
+  "read L16.1-L18.1": "the image prints ¹³¹₅₃I, at the start of the line; the PDF stores its atomic number 53 on a line of its own"
+  "read L20.1-L21.2": "the image prints ¹⁴₆C, at the start of the line; the PDF stores its atomic number 6 on the next line's start"
+  "read L34.1-L37.3": "the image prints the fraction (35 + 37) over 2 after 'Average atomic mass ='; the PDF stores numerator, label and denominator as separate lines, with private glyphs for the brackets"
+  "read L46.1-L59.3": "the image prints this working as four lines of fractions; the PDF stores each numerator, denominator and bracket as separate pieces, with private glyphs for the brackets"
+terms:
+  - L29.13-14
+  - L42.6-9
+blocks:
+  - kind: heading
+    words: L24
+    title: L24
+  - kind: text
+    words: L25-L28
+  - kind: text
+    words: L29-L33
+  - kind: equation
+    words: L34-L37
+    read:
+      "L34.1-L37.3": { text: "Average atomic mass = (35 + 37)/2 = 36 u" }
+  - kind: text
+    words: L38-L44
+  - kind: text
+    words: L45
+  - kind: equation
+    words: L46-L59
+    read:
+      "L46.1-L59.3": { text: "= (35 × 75/100 + 37 × 25/100) = (105/4 + 37/4) u = 142/4 u = 35.5 u" }
+  - kind: box
+    words: L2-L4, L9-L21, L23
+    title: L2
+    read:
+      "L9.1-L10.1": { text: "²³⁵₉₂U, an isotope of uranium, is used as a fuel in a" }
+      "L13.1-L14.1": { text: "⁶⁰₂₇Co, a radioactive isotope of cobalt, is used in radiation" }
+      "L16.1-L18.1": { text: "¹³¹₅₃I," }
+      "L20.1-L21.2": { text: "¹⁴₆C," }
+  - kind: figure
+    words: L22
+    number: L22.1-2
+    box: [390, 100, 580, 260]

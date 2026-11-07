@@ -1,0 +1,24 @@
+page: 12
+proofread: true
+furniture: L1, L5.1, L9.1, L12.1, L32
+terms:
+  - L25.6-7
+blocks:
+  - kind: section
+    words: L2-L3
+    number: L2.1
+    title: L2.2-L3.2
+  - kind: text
+    words: L4, L5.2-14, L6-L8, L9.2-12, L10-L11, L12.2-13, L13-L15
+  - kind: text
+    words: L16-L20
+  - kind: section
+    words: L21
+    number: L21.1
+    title: L21.2-4
+  - kind: text
+    words: L22-L28
+  - kind: figure
+    words: L29-L31
+    number: L30.1-2
+    box: [85, 482, 555, 740]

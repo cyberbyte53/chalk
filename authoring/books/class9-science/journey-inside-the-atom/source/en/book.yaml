@@ -1,0 +1,12 @@
+title: Journey Inside the Atom
+reader: text
+edition: none
+address: https://ncert.nic.in/textbook/pdf/iesc108.pdf
+sha256: b400e01b4d4f045c97c2bfee4508cc1dd1d1f43fa455dc0758e6f21b42d10124
+pages: 22
+tools:
+  reader: 1
+  hindi-repair: 2
+  figure-snap: 1
+  table-cells: 1
+  structure-draft: 2

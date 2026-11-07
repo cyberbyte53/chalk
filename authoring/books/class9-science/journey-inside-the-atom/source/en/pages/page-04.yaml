@@ -1,0 +1,29 @@
+page: 4
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets the drop-in capital T apart from the rest of its word, and puts a control character before the heading's first word"
+furniture: L1, L33
+terms:
+  - L25.4
+  - L26.1-3
+blocks:
+  - kind: section
+    words: L12
+    number: L12.1
+    title: L12.2-8
+    read:
+      "L12.2": { text: "Testing" }
+  - kind: text
+    words: L13-L26
+  - kind: figure
+    words: L27, L28, L29
+    number: L29.1-2
+    box: [75, 473, 475, 684]
+  - kind: text
+    words: L30-L32
+    read:
+      "L30.1-2": { text: "Thomson’s" }
+  - kind: box
+    words: L2-L11
+    title: L2

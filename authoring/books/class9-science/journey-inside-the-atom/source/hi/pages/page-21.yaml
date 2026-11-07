@@ -1,0 +1,44 @@
+page: 21
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves; a superscript the PDF sets on the line"
+furniture: L50-L53
+answers:
+  "word सहपाठियों": "a real word, as printed on the page; the list lacks it"
+blocks:
+  - kind: question
+    words: L1-L2
+    number: L1.1
+    read:
+      L1.2: रदरफोर्ड
+      L1.16: रदरफोर्ड
+  - kind: question
+    words: L3
+    number: L3.1
+    read:
+      L3.4-5: ⁷⁰X
+  - kind: question
+    words: L4-L5
+    number: L4.1
+  - kind: question
+    words: L6
+    number: L6.1
+  - kind: table
+    words: L7-L30
+    number: L7.1-2
+    box: [155, 195, 550, 340]
+    read:
+      L16.1: तत्वों
+      L22.2-3: नाइट्रोजन
+  - kind: question
+    words: L31-L40
+    number: L31.1
+    read:
+      L31.4: सहपाठियों
+      L32.4: तत्व
+      L34.2: तत्व
+      L36.2: तत्व
+  - kind: question
+    words: L41-L49
+    number: L41.1

@@ -1,0 +1,23 @@
+page: 13
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets an atom's mass number and atomic number as separate words around its symbol"
+furniture: L77-L80
+answers:
+  "read L66.2-L67.1": "the image prints the mass number 12 above and the atomic number 6 below, both before C; the PDF stores the 6 after the C"
+  "read L68.2-L69.1": "the image prints the mass number 19 above and the atomic number 9 below, both before F; the PDF stores the 9 after the F"
+  "read L70.2-L71.1": "the image prints the mass number 28 above and the atomic number 14 below, both before Si; the PDF stores the 14 after the Si"
+blocks:
+  - kind: table
+    words: L1-L63
+    number: L1.1-2
+    title: L1.3-L2.12
+    box: [92, 120, 545, 543]
+  - kind: box
+    words: L64-L65, L66, L67, L68, L69, L70, L71, L72-L76
+    title: L64
+    read:
+      "L66.2-L67.1": { text: "¹²₆C" }
+      "L68.2-L69.1": { text: "¹⁹₉F" }
+      "L70.2-L71.1": { text: "²⁸₁₄Si" }

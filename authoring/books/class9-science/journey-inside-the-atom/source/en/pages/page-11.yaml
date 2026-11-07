@@ -1,0 +1,56 @@
+page: 11
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets a superscript or subscript (a charge, a mass number, an atomic number) as a separate word beside its symbol"
+furniture: L57-L58, L77-L78
+terms:
+  - L23.3-4
+  - L24.9
+blocks:
+  - kind: text
+    words: L6-L10
+  - kind: text
+    words: L11-L15
+  - kind: figure
+    words: L1-L5, L17-L18, L33, L22, L26, L27.1-2, L29, L31
+    number: L29.1-2
+    box: [40, 85, 216, 388]
+  - kind: section
+    words: L16
+    number: L16.1
+    title: L16.2-3
+  - kind: text
+    words: L19-L21, L23-L24
+  - kind: equation
+    words: L25
+  - kind: text
+    words: L27.3-14, L28, L30, L32
+  - kind: table
+    words: L34-L38
+    number: L34.1-2
+    title: L34.3-7
+    box: [155, 397, 550, 505]
+    read:
+      "L35.3-5": { text: "(p⁺)" }
+      "L35.7-9": { text: "(n⁰)" }
+  - kind: text
+    words: L59-L60
+  - kind: text
+    words: L61-L63
+  - kind: figure
+    words: L64, L66, L65
+    box: [280, 580, 495, 622]
+  - kind: text
+    words: L67-L69
+  - kind: equation
+    words: L70-L72
+    read:
+      "L70.1-L72.1": { text: "¹²₆C" }
+  - kind: text
+    words: L73-L76
+  - kind: box
+    words: L39-L56
+    title: L39
+    read:
+      "L54.4-5": { text: "²³A" }

@@ -1,0 +1,27 @@
+page: 13
+proofread: true
+cause: other
+notes:
+  other: "superscripts and subscripts the PDF flattens"
+furniture: L153-L156
+blocks:
+  - kind: table
+    words: L1-L139
+    number: L1.1-2
+    box: [92, 84, 550, 545]
+    read:
+      L1.6: तत्वों
+      L1.8-9: परमाणुओं
+      L3.1: तत्व
+      L14.1: लीथियम
+      L21.1: निऑन
+  - kind: box
+    words: L140-L143, L145, L144, L146-L152
+    title: L140
+    read:
+      L141.2: तत्वों
+      L142.2-3: ¹²₆C
+      L143.2-3: ¹⁹₉F
+      L144.1: ²⁸
+      L146.1-L147.1: ₁₄Si
+      L148.3: तत्वों

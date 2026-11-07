@@ -1,0 +1,10 @@
+page: 22
+proofread: true
+furniture: L1, L3.1, L6.1, L9.1, L12.1, L14.1, L16.1, L18.1, L20.1, L22.1, L24.1, L26.1, L27.1, L28.1, L32
+blocks:
+  - kind: box
+    words: L2, L3.2-11, L4-L5, L6.2-13, L7-L8, L9.2-14, L10-L11, L12.2-13, L13, L14.2-14, L15, L16.2-13, L17, L18.2-13, L19, L20.2-11, L21, L22.2-13, L23, L24.2-14, L25, L26.2-13, L27.2, L28.2
+    title: L2
+  - kind: box
+    words: L29-L31
+    title: L29

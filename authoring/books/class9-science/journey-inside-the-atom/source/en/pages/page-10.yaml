@@ -1,0 +1,25 @@
+page: 10
+proofread: true
+furniture: L1, L2.1, L6.1, L78
+terms:
+  - L75.8-9
+blocks:
+  - kind: text
+    words: L2.2-12, L3-L5, L6.2-12, L7
+    continued: true
+  - kind: table
+    words: L8-L61
+    number: L8.1-2
+    title: L8.3-10
+    box: [86, 174, 485, 469]
+  - kind: text
+    words: L62-L64
+  - kind: box
+    words: L65-L70
+    title: L65
+  - kind: section
+    words: L71
+    number: L71.1
+    title: L71.2-3
+  - kind: text
+    words: L72-L77

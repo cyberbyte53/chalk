@@ -1,0 +1,76 @@
+page: 15
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves; superscripts and subscripts the PDF sets apart"
+furniture: L53-L56
+answers:
+  "word संख्याएँ": "a real word, as printed on the page; the list lacks it"
+  "word ट्राइटियम": "a real word, as printed on the page; the list lacks it"
+  "read L6.11-L8.2": "the PDF sets the superscripts + and 0 on the line; the image shows (A = p⁺ + n⁰)"
+  "read L35.4-5": "the PDF sets गुणधर्म's ु apart on a line of its own (L36); the image shows गुणधर्म"
+  "read L36.1": "this ु is गुणधर्म's, read whole at L35.4-5"
+  "read L41.1": "the PDF sets ¹²₆C's parts on three lines (12, 6, C); the image shows ¹²₆C, read whole here"
+  "read L43.1-L44.2": "the 6 and C of ¹²₆C, read whole at L41.1"
+  "read L41.2": "the PDF sets ¹³₆C's parts on three lines (13, 6, C); the image shows ¹³₆C, read whole here"
+  "read L45.1-L46.1": "the 6 and C of ¹³₆C, read whole at L41.2"
+terms:
+  - L9.8
+blocks:
+  - kind: section
+    words: L1
+    number: L1.1
+    title: L1.2-9
+  - kind: section
+    words: L2
+    number: L2.1
+    title: L2.2
+  - kind: text
+    words: L3-L9
+    read:
+      L3.1: डाल्टन
+      L3.7: तत्व
+      L4.16: तत्व
+      L6.11-L8.2: p⁺ + n⁰)।
+      L9.4: संख्याएँ
+  - kind: text
+    words: L10-L14
+    read:
+      L11.2-3: ¹₁H
+      L11.6-7: ²₁H
+      L11.14-15: ³₁H
+      L11.16: (ट्राइटियम,
+      L13.5: ट्राइटियम
+  - kind: figure
+    words: L15, L33-L34
+    number: L34.1-2
+    box: [180, 300, 532, 425]
+    read:
+      L33.5: ट्राइटियम
+  - kind: box
+    words: L16-L32
+    title: L16
+    read:
+      L18.2-3: वस्तुओं
+      L23.4-5: परमाणुओं
+      L26.1-2: ‘एकीकृत
+  - kind: text
+    words: L35, L36, L37-L40
+    read:
+      L35.4-5: गुणधर्म
+      L36.1: ""
+  - kind: text
+    words: L42, L41.1, L43-L44, L41.2, L45-L49
+    read:
+      L41.1: ¹²₆C,
+      L43.1-L44.2: ""
+      L41.2: ¹³₆C,
+      L45.1-L46.1: ""
+      L46.3-4: ¹⁴₆C
+      L47.14-15: ¹²₆C
+  - kind: figure
+    words: L50-L51
+    number: L51.1-2
+    box: [224, 575, 552, 712]
+  - kind: text
+    words: L52

@@ -1,0 +1,30 @@
+page: 9
+proofread: true
+furniture: L34.1, L36.1, L40.1, L43-L46
+terms:
+  - L23.3-4
+blocks:
+  - kind: box
+    words: L1-L11, L13-L14
+    title: L1
+  - kind: figure
+    words: L12
+    number: L12.1-2
+    box: [346, 93, 550, 242]
+  - kind: text
+    words: L15-L17
+  - kind: text
+    words: L18-L19
+  - kind: section
+    words: L20
+    number: L20.1
+    title: L20.2-4
+  - kind: text
+    words: L21-L24
+  - kind: figure
+    words: L25-L28
+    number: L28.1-2
+    box: [160, 428, 540, 544]
+  - kind: text
+    words: L29-L33, L34.2-16, L35, L36.2-14, L37-L39, L40.2-14, L41-L42
+    continues: true

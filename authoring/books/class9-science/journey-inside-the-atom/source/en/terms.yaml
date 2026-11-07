@@ -1,0 +1,59 @@
+# Built by pnpm source from pages/ and book.pdf (platform/docs/plans/sources.md): don't edit, edit the page files.
+- term: matter
+  item: "0.3"
+- term: atoms
+  item: "0.3"
+- term: radiation
+  item: "2.2"
+- term: radioactivity
+  item: "2.2"
+- term: electrons
+  item: "2.3"
+- term: scattering
+  item: "2.7.1"
+- term: α-ray scattering experiment
+  item: "2.7.1"
+- term: nucleus
+  item: "2.7.6"
+- term: planetary model
+  item: "2.7.6"
+- term: protons
+  item: "2.7.18"
+- term: stationary states
+  item: "2.8.1"
+- term: orbits
+  item: "2.8.1"
+- term: shells
+  item: "2.8.1"
+- term: energy levels
+  item: "2.8.1"
+- term: neutron
+  item: "3.3.1"
+- term: pictorial symbols
+  item: "4.1"
+- term: atomic number
+  item: "5.1"
+- term: mass number
+  item: "6.1"
+- term: nucleons
+  item: "6.1"
+- term: electronic configuration
+  item: "7.3.1"
+- term: combining capacity
+  item: "8.1"
+- term: valence shell
+  item: "8.3"
+- term: valence electrons
+  item: "8.3"
+- term: octet
+  item: "8.4"
+- term: valency
+  item: "8.5"
+- term: isotopes
+  item: "9.1.1"
+- term: average mass
+  item: "9.1.11"
+- term: weighted average atomic mass
+  item: "9.1.13"
+- term: isobars
+  item: "9.2.1"

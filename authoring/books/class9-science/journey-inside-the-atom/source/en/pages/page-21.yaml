@@ -1,0 +1,31 @@
+page: 21
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets the mass number as a plain word before the symbol"
+furniture: L55-L58
+blocks:
+  - kind: question
+    words: L1-L3
+    number: L1.1
+  - kind: question
+    words: L4-L5
+    number: L4.1
+    read:
+      "L4.4-5": { text: "⁷⁰X" }
+  - kind: question
+    words: L6-L7
+    number: L6.1
+  - kind: question
+    words: L8
+    number: L8.1
+  - kind: table
+    words: L9-L34
+    number: L9.1-2
+    box: [160, 205, 550, 350]
+  - kind: question
+    words: L35-L46
+    number: L35.1
+  - kind: question
+    words: L47-L54
+    number: L47.1

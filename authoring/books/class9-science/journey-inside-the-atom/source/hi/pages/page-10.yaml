@@ -1,0 +1,60 @@
+page: 10
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves"
+furniture: L1, L56, L2.1, L6.1
+terms:
+  - L54.13-14
+answers:
+  "word निऑन": "a real word, as printed on the page; the list lacks it"
+  "word फेरम": "a real word, as printed on the page; the list lacks it"
+  "word कॉर्बन": "a real word, as printed on the page; the list lacks it"
+  "word वोल्फ्रॉम": "a real word, as printed on the page; the list lacks it"
+  "word हाइड्रेगेईरोस": "a real word, as printed on the page; the list lacks it"
+blocks:
+  - kind: text
+    words: L2.2-L5, L6.2-17
+    continued: true
+    read:
+      L2.3: तत्वों
+      L3.8-9: फेरम
+      L4.1: हाइड्रेगेईरोस
+      L4.9: वोल्फ्रॉम
+      L6.7: तत्वों
+  - kind: table
+    words: L7-L41
+    number: L7.1-2
+    box: [90, 175, 480, 470]
+    read:
+      L7.5: तत्वों
+      L8.1: तत्व
+      L8.5: तत्व
+      L8.9: तत्व
+      L10.1-2: नाइट्रोजन
+      L15.1-2: कैल्सियम
+      L24.1: कॉर्बन
+      L30.1: निऑन
+  - kind: text
+    words: L42-L44
+    read:
+      L42.2-5: पूरे
+  - kind: box
+    words: L45-L50
+    title: L45
+    read:
+      L46.13: तत्व
+      L49.5: तत्व
+  - kind: section
+    words: L51
+    number: L51.1
+    title: L51.2-3
+  - kind: text
+    words: L52-L55
+    read:
+      L52.7: तत्व
+      L52.21: तत्वों
+      L52.23-26: परमाणुओं
+      L53.18: तत्व
+      L54.11: तत्व
+      L55.7: तत्व

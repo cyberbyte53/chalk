@@ -1,0 +1,79 @@
+page: 9
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves"
+furniture: L25-L26, L40-L41, L33.1, L35.1, L38.1
+terms:
+  - L20.1-2
+answers:
+  "word बर्जेलियस": "a real word, as printed on the page; the list lacks it"
+  "word प्लेटिना": "a real word, as printed on the page; the list lacks it"
+  "word अतिचालकों": "a real word, as printed on the page; the list lacks it"
+  "read L5.2-5": "the PDF sets न्यूट्रॉन's letters out of order (न््य ट् यू रॉन); the image shows न्यूट्रॉन"
+  "read L4.3-6": "the PDF sets ध्रुव's letters out of order (ध् व रु); the image shows ‘ध्रुव’"
+blocks:
+  - kind: box
+    words: L1-L2, L3, L4-L10.14, L11-L12
+    title: L1
+    read:
+      L2.1-5: मुंबई
+      L2.7: भाभा
+      L3.3-4: केंद्र
+      L4.3-6: ‘ध्रुव’
+      L5.2-5: न्यूट्रॉन
+      L7.1: अतिचालकों,
+      L8.2-5: अणुओं
+      L8.9: महत्त्वपूर्ण
+      L9.3: इससे
+      L10.7-10: धातुओं
+  - kind: figure
+    words: L10.15-22
+    number: L10.15-16
+    box: [345, 100, 540, 240]
+    read:
+      L10.18: भाभा
+      L10.21-22: केंद्र
+  - kind: text
+    words: L13-L15
+    read:
+      L13.6: तत्वों
+      L13.17-18: प्राकृतिक
+      L14.11: तत्वों
+      L14.20: तत्व
+      L15.1-2: कृत्रिम
+      L15.10: तत्वों
+  - kind: text
+    words: L16
+    read:
+      L16.9: तत्वों
+  - kind: section
+    words: L17
+    number: L17.1
+    title: L17.2-4
+    read:
+      L17.2: तत्वों
+  - kind: text
+    words: L18-L20
+    read:
+      L18.2: डाल्टन
+      L18.15: तत्वों
+      L19.11: तत्वों
+  - kind: figure
+    words: L21-L24
+    number: L24.1-2
+    box: [160, 435, 510, 550]
+    read:
+      L23.4: प्लेटिना
+      L24.3: डाल्टन
+      L24.4-5: द्वारा
+      L24.9: तत्वों
+  - kind: text
+    words: L27-L32, L33.2-L34, L35.2-L37, L38.2-L39
+    continues: true
+    read:
+      L27.1: बर्जेलियस
+      L27.10: तत्वों
+      L31.5: तत्वों
+      L33.3: तत्वों
+      L38.3: तत्वों

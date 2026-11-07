@@ -1,0 +1,22 @@
+page: 22
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves"
+furniture: L1, L34, L3.1, L10.1, L12.1, L15.1, L18.1, L20.1, L21.1, L24.1, L25.1, L27.1, L29.1, L30.1, L31.1
+blocks:
+  - kind: box
+    title: L2
+    words: L2, L3.2-L9, L10.2-L11, L12.2-L14, L15.2-L17, L18.2-L19, L20.2-15, L21.2-L23, L24.2-17, L25.2-L26, L27.2-L28, L29.2-19, L30.2, L31.2
+    read:
+      L9.3: तत्वों
+      L10.11-12: परमाणुओं
+      L11.11-12: कैसे
+      L27.4: तत्वों
+      L29.2-3: परमाणुओं
+      L29.9: जानने
+  - kind: box
+    title: L32
+    words: L32-L33
+    read:
+      L32.3-4: है...

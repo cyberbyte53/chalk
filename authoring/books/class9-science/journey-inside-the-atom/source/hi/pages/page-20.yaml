@@ -1,0 +1,46 @@
+page: 20
+proofread: true
+cause: other
+notes:
+  other: "a word the PDF splits with a space, repaired as two halves"
+furniture: L1, L37
+blocks:
+  - kind: question
+    words: L2-L9
+    number: L2.1
+    read:
+      L2.14: जिससे
+      L3.10-11: कैसे
+      L4.15-16: कक्षाओं
+      L6.9: ‘प्लम
+      L8.2: रदरफोर्ड
+      L8.9-10: परमाणुओं
+      L8.14-15: केंद्रीय
+      L9.2: डाल्टन
+      L9.6-7: परमाणुओं
+  - kind: question
+    words: L10-L11
+    number: L10.1
+    read:
+      L10.7-8: कक्षाओं
+  - kind: question
+    words: L12-L20
+    number: L12.1
+    read:
+      L14.2: अवपरमाणुक
+  - kind: question
+    words: L21-L24
+    number: L21.1
+    read:
+      L21.5-6: प्रक्रियाओं
+  - kind: question
+    words: L25-L34
+    number: L25.1
+    read:
+      L25.7: तत्वों
+      L26.2: तत्व
+      L30.2: तत्व
+  - kind: figure
+    words: L35-L36
+    number: L36.1-2
+    box: [110, 585, 555, 710]

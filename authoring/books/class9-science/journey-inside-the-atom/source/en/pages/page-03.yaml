@@ -1,0 +1,43 @@
+page: 3
+proofread: true
+cause: other
+notes:
+  other: "the PDF sets a power of ten's exponent as a plain number beside it"
+furniture: L49-L50, L83-L84
+terms:
+  - L9.5
+  - L18.11
+blocks:
+  - kind: text
+    words: L9-L11
+    continued: true
+  - kind: text
+    words: L12-L20
+  - kind: figure
+    words: L21, L51-L59
+    number: L59.1-2
+    box: [266, 249, 522, 437]
+  - kind: text
+    words: L60-L65
+    read:
+      "L64.8-9": { text: "10⁻¹⁹" }
+  - kind: section
+    words: L66
+    number: L66.1
+    title: L66.2-6
+  - kind: text
+    words: L67-L80, L82
+  - kind: figure
+    words: L44-L48
+    number: L47.1-2
+    box: [52, 591, 207, 734]
+  - kind: figure
+    words: L81
+    number: L81.1-2
+    box: [436, 644, 565, 748]
+  - kind: box
+    words: L1-L8
+    title: L1
+  - kind: box
+    words: L22-L43
+    title: L22
