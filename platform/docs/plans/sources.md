@@ -121,9 +121,11 @@ check fails when a cited id would change.
    gaps, indents, font size and bold, numbering; kinds only where numbering or font says so: section,
    question, exercise, caption; box, activity and equation are the agent's call). A suggestion is
    never final. The structure draft is written as a pre-filled page file.
-2. **The agent decides**, on one side-by-side sheet per page (below): it accepts, corrects, or adds
-   what the tools missed, by short edits applied to the page file (`merge 4 5`, `split 7 at L12.3`, `kind
-   9 box "Think It Over"`, `read L17.4 वस्तु`, `add figure around L30-L33`; a clean page is `accept`).
+2. **The agent decides**, on one side-by-side sheet per page (below): it accepts, or corrects, or adds
+   what the tools missed. **A correction is a replacement**: at this place, instead of what was
+   suggested, this goes there: a word (`L17.4: वस्तु`), a box, a kind, or blocks (blocks 4 and 5 replaced
+   by one; block 7 replaced by two, split at L12.3). Corrections are short edits applied to the page
+   file; a page with nothing to correct is `accept`.
    The page file holds the decided structure whole: a later change to the structure tool can't move a
    block the agent accepted.
 3. **Every override is feedback.** The build works out each edit (merge, split, move words, change
@@ -139,16 +141,17 @@ check fails when a cited id would change.
 **The side-by-side sheet.** One image per page, everything the agent needs: on the left the PDF page as
 printed, each block outlined and numbered and each figure's and table's box drawn; on the right our
 version of the page, rebuilt from the suggestions or decisions, block by block with the same numbers,
-its kind, its text, figures as their crops, tables as their grids; what a tool changed highlighted, what
-is open in red. Before deciding it shows the suggestions; after the build, the decisions coloured by
+its kind, its text, figures as their crops, tables as their grids; where a tool made no suggestion, an
+empty place marked as such. Before deciding it shows the suggestions; after the build, the decisions coloured by
 who made them. Drawn as HTML and photographed by headless Chrome (ImageMagick can't shape Hindi); as
 HTML it is also the person's view, a block lit on both sides when hovered.
 
-**So the agent works on the tenth that needs it.** Each suggestion carries whether the tool is sure (one
-clean answer, no issue: a word with exactly one real reading, a figure snapped with nothing cut, a block
-whose draft matches the geometry cleanly) or not; sure ones are drawn faint, the rest listed first. A
-page with nothing flagged is a glance and `accept`; a page with flags gets a careful read. A page whose
-PDF and tools haven't changed keeps its decisions; after a tool change only what changed comes back.
+**Every suggestion is shown the same.** A tool can't know where it went wrong, so it never marks a
+suggestion as sure or doubtful: that would only steer the agent away from where it should look. The
+agent proofreads all of it. The one thing set apart is a fact, not a judgment: where a tool made no
+suggestion at all (a broken word it couldn't repair, a caption with no drawing found), since there is
+nothing there to proofread. A page whose PDF and tools haven't changed keeps its decisions; after a tool
+change only what changed comes back.
 
 **From first principles.** What we keep is only as good as what we can trace. For every word, block,
 box and cell, three questions must have one answer, readable by the agent, the person and the machine:
