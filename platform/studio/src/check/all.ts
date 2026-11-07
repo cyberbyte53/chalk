@@ -49,6 +49,8 @@ const steps: [string, () => Promise<boolean>][] = [
     "suppressions",
     () => run("suppressions", tsx, [...tsconfig, "src/suppressions-cli.ts"], studio),
   ],
+  // Not stamped: what it checks is git's state, which a stamp doesn't see.
+  ["lfs", () => run("lfs", tsx, [...tsconfig, "src/lfs-cli.ts"], studio)],
   ["catalogue", stamped("catalogue", ["src/catalogue-cli.ts", "--check"])],
   [
     "content",
