@@ -1,7 +1,7 @@
 # A chapter's sources: the book, as data
 
 Status: plan, rewritten 7 Nov 2026 after looking at how document parsing is done and testing rules on
-NCERT maths and science; reviewed (its tests on the science book folded in); to be trialled, then built. Earlier versions of this file are in
+NCERT maths and science; reviewed; trialled (below); being built. Earlier versions of this file are in
 git; the decisions that held are kept.
 
 **In short.** `pnpm source` turns a chapter's PDF into numbered words, in lines, and page images. An agent per
@@ -42,7 +42,11 @@ taken from the PDF wherever its text is sound.
   own letters (below), so nothing can be invented.
 - **Nothing is tied to one book.** No layout rules, no numbering words in code; a new layout needs
   nothing new. The kinds are one closed list.
-- **The machine checks everything an agent says.**
+- **Checks raise issues; the agent decides.** Every check names its place and words and asks: a
+  mistake, or meant? The agent rechecks against the image and either fixes it or answers it with a
+  reason, kept beside the item ("the PDF lacks ई and ं; the image shows ईंधन"). An answered issue passes
+  and stays listed; the orchestrator reads every answer. Only what can't be meant can't be answered: a
+  file that doesn't parse, a range not on the page.
 - **Each language alone, then matched by numbers** (never assumed one to one; what one book has and the
   other doesn't is listed with why).
 - **Record exactly which book:** the edition its pages print, the address, the sha256.
@@ -65,19 +69,21 @@ taken from the PDF wherever its text is sound.
    are the figure's; a reference ("Fig. 7.2", "(7.1)" in a sentence) is text, not a figure or an
    equation. A book too long for one agent is split into page ranges, one agent each, and the seams
    checked.
-3. **Build and check** (`pnpm source` again, the machine): `items.yaml` built from the words (a
-   block that continues joined with the next page's continued block; maths written as the
-   lessons do: `−`, `2/3`), ids positional; figures cropped; terms listed; then the checks. A page that
-   fails goes back to its agent with the failure. The agent then looks at every crop.
+3. **Build and check** (`pnpm source` again, the machine): `items.yaml` built from the words and
+   readings (a block that continues joined with the next page's continued block, taking its number
+   from where it starts), ids positional; figures cropped; terms listed; then the checks. A page with
+   issues goes back to its agent with them, each to fix or answer. The agent then looks at every crop.
 4. **Match** (once both languages hold): the machine pairs them by their numbers.
 
 **Who does what.** The orchestrator (the session running the `extract-chapter` skill) runs the machine
 steps, starts the two language agents in parallel (neither sees the other's book), sends failures back,
 looks at the whole chapter (sections in order, every number once, pages joined) and runs the match.
 
-`items.yaml` is built once; after its checks hold it is the record (a later run checks it, never
-rebuilds it). Ids are positions (`2.4`: section 2's fourth block) until anything cites them; then they
-never change (a later split keeps the id on its first part and gives the rest `2.4b`).
+**The record** is the agents' page files (`pages/page-NN.yaml`, in git): what was decided, from which
+PDF words, with every reading and every answer. `items.yaml` is built from them and the PDF, so
+`pnpm check` builds it again and checks the two agree, and lists every answered issue. Ids are positions
+(`2.4`: section 2's fourth block) until anything cites them; then they never change (a later split keeps
+the id on its first part and gives the rest `2.4b`): the check fails when a cited id would change.
 
 ## Checks
 
@@ -91,10 +97,14 @@ never change (a later split keeps the id on its first part and gives the rest `2
   itself has a doubled sign fails. (Tested on 26 broken words of the science book: all true readings
   pass.) Where a mark sits within the word is the agent's call from the image; the machine can't
   check it.
-- **Numbers:** each kind's numbers are in order, none twice; each number is printed on its page.
+- **Numbers:** each kind's numbers are in order, none twice; each number is in its block's words.
 - **Figures** each have a box inside the page, their caption beside it, and a crop.
 - **Terms** are in the words of their block.
-- **Languages match** by kind and number, or the difference is in `unmatched` with why.
+- **Languages match** by kind and the number's digits (a question by its number and which exercise it is
+  in, counted in order, since an exercise may be unnumbered), or the difference is answered in
+  `book.yaml`'s `unmatched` with why.
+
+Every check raises issues the agent fixes or answers (above); none silently passes.
 
 The checks on the plan (every block cited or skipped, cites exist, `plan.md` has no ids) are the
 pipeline's, run by plan-chapter; the check that lessons use the book's terms is self-review's.
@@ -106,10 +116,12 @@ authoring/books/<book>/<chapter>/source/<lang>/
   book.yaml       title, reader, edition as printed, address, sha256, pages, the book's page numbers;
                   unmatched (not English); answers (the answers pages' PDF, when the book has one)
   book.pdf        the chapter, as downloaded
-  items.yaml      every block: { id, kind, page, number?, title?, text, crop?, answer? }
+  pages/page-NN.yaml   the agent's reading of each page (the record, above)
+  items.yaml      built: every block { id, kind, page, number?, title?, text, crop?, answer? }
   figures/<id>.png
-  terms.yaml      { term, item }
-.chalk-source-pages/<book>/<chapter>/<lang>/    not in git: page images, lines, the agents' structure files
+  terms.yaml      built: { term, item }
+.chalk-source-pages/<book>/<chapter>/<lang>/    not in git: page images and numbered words (made again
+                                                from the PDF whenever needed)
 ```
 
 Kinds (closed): section, text, box (with its printed `title`: "Pause and Ponder", "Think It Over"),
@@ -131,16 +143,20 @@ back with its exact words.
 Goes from today's code: the agent typing items, matching typed words against the page, the box guesses
 (`boxes.ts`), the head and foot bands, the fraction heuristics.
 
-## Trial, before building
+## Trial (7 Nov 2026)
 
-Pages chosen for what is hard: the science side column (ch7 p3), an exercise page, a figure with labels
-inside, a page break inside a block; three pages each of maths English, maths Hindi (Chanakya),
-science English and science Hindi (Kokila). The answers are made by hand first. The words by a scratch
-script; an agent per book does stage 2 from the written instructions alone, twice (to see how much agents
-vary). Scored per book: blocks whose words, kind and number are exactly right; furniture; figure boxes
-(overlap 0.9 or more); every word used once on the first try; Hindi words right over all words; how
-many true readings the letters check rejects and wrong ones it accepts; fixes needed after the first try.
-Go only if blocks are right on at least 95% and Hindi words on at least 99%.
+Three pages each of maths English, maths Hindi (Chanakya), science English and science Hindi (Kokila,
+broken text), chosen for what is hard (the side column, an exercise across a page break, labelled
+figures); answers made by hand first; an agent per book, from written instructions only, 13 runs.
+- **Letters:** 100% in every book once issues are answered (the Hindi science PDF alone: 90.5%); no
+  misreading in any run. The one place the PDF lacks letters the page prints (इधन for ईंधन) was raised and
+  answered with its reason.
+- **Figure boxes:** 32 of 34 within overlap 0.9, the rest at 0.88–0.90.
+- **Blocks:** science 94–97% strict; every remaining difference was an unclear instruction (how a list
+  groups) or the key's own mistake, now settled in the skill: a line that introduces a list and its items
+  are one block; a continued block takes its number from where it starts; a heading without a number is a
+  `title`; a frame without a heading is still a box.
+- **Agents agree** with each other run to run; about 1–3 minutes and 50–80k tokens per 3 pages.
 
 ## Proof, after building
 
@@ -153,7 +169,7 @@ figures' text).
 ## Order
 
 1. Done: chapter 1 English and Hindi extracted and checked; Hindi matched (36 of 36 numbers).
-2. The trial.
+2. Done: the trial.
 3. Build: prepare, the skill, build and check; today's code removed as it is replaced.
 4. The proof on science chapter 2.
 5. The terms check on the lessons; chapter 1's threads filed.
