@@ -11,8 +11,6 @@ blocks:
   - kind: box
     title: L1, L2, L3.1
     words: L1, L2, L3-L8
-    read:
-      L8.10-11: रँगकर
   - kind: text
     words: L9-L13
     read:

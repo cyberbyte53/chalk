@@ -32,7 +32,6 @@ blocks:
     box: [ 345, 100, 540, 240 ]
     read:
       L10.18: भाभा
-      L10.21-22: केंद्र
   - kind: text
     words: L13-L15
     read:

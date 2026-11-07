@@ -41,8 +41,6 @@ blocks:
       L19.2-3: अभिक्रियाओं
   - kind: text
     words: L20
-    read:
-      L20.2-3: प्राकृतिक
   - kind: equation
     number: L29.5
     words: L21-L29
@@ -57,7 +55,6 @@ blocks:
     words: L31-L36
     read:
       L34.9-10: कोशिकाओं
-      L36.4-5: करेंगे।
   - kind: equation
     words: L37-L49
     read:
@@ -77,8 +74,6 @@ blocks:
     read:
       L63.1-2: फ़ेरस
       L63.3-4: सल्फ़ेट
-      L71.1-2: फ़ेरस
-      L71.3-4: सल्फ़ेट
   - kind: text
     words: L55-L57
   - kind: section
@@ -90,8 +85,3 @@ blocks:
   - kind: activity
     number: L66.2
     words: L66, L75-L80
-    read:
-      L75.7-8: फ़ेरस
-      L75.9-10: सल्फ़ेट
-      L77.1-2: फ़ेरस
-      L77.3-4: सल्फ़ेट

@@ -115,11 +115,11 @@
     - {words: L43.5, by: hindi-repair}
     - {words: L43.6, by: hindi-repair}
     - {words: L43.7, by: hindi-repair}
-    - {words: L43.8-9, by: agent}
+    - {words: L43.8-9, by: hindi-repair}
     - {words: L43.11, by: hindi-repair}
     - {words: L43.15, by: hindi-repair}
     - {words: L43.16, by: hindi-repair}
-    - {words: L43.17-18, by: agent}
+    - {words: L43.17-18, by: hindi-repair}
     - {words: L44.1, by: hindi-repair}
     - {words: L44.2, by: hindi-repair}
 - id: "0.6"
@@ -216,10 +216,10 @@
     - {words: L8.10, by: hindi-repair}
     - {words: L8.12, by: hindi-repair}
     - {words: L8.16, by: hindi-repair}
-    - {words: L9.2-3, by: agent}
+    - {words: L9.2-3, by: hindi-repair}
     - {words: L9.4, by: hindi-repair}
     - {words: L9.6, by: hindi-repair}
-    - {words: L9.12-13, by: agent}
+    - {words: L9.12-13, by: hindi-repair}
     - {words: L9.17, by: hindi-repair}
     - {words: L9.18, by: hindi-repair}
     - {words: L10.1, by: hindi-repair}
@@ -355,7 +355,7 @@
     - {words: L28.4, by: hindi-repair}
     - {words: L28.6, by: hindi-repair}
     - {words: L29.4-5, by: agent}
-    - {words: L29.11-12, by: agent}
+    - {words: L29.11-12, by: hindi-repair}
     - {words: L30.3, by: agent}
     - {words: L30.7, by: hindi-repair}
     - {words: L30.8, by: agent}
@@ -385,7 +385,7 @@
     - {words: L32.5, by: hindi-repair}
     - {words: L32.13, by: hindi-repair}
     - {words: L32.18, by: hindi-repair}
-    - {words: L33.8-9, by: agent}
+    - {words: L33.8-9, by: hindi-repair}
     - {words: L33.12, by: hindi-repair}
     - {words: L34.2, by: hindi-repair}
     - {words: L34.5, by: hindi-repair}
@@ -544,8 +544,8 @@
     - {words: L46.1, by: hindi-repair}
     - {words: L48.1, by: hindi-repair}
     - {words: L48.2, by: hindi-repair}
-    - {words: L49.4-5, by: agent}
-    - {words: L49.9-10, by: agent}
+    - {words: L49.4-5, by: hindi-repair}
+    - {words: L49.9-10, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "2.5"
   kind: text
@@ -705,8 +705,8 @@
     - {words: L28.5, by: hindi-repair}
     - {words: L29.1, by: hindi-repair}
     - {words: L30.1, by: hindi-repair}
-    - {words: L31.2-3, by: agent}
-    - {words: L31.6-7, by: agent}
+    - {words: L31.2-3, by: hindi-repair}
+    - {words: L31.6-7, by: hindi-repair}
     - {words: L32.6, by: hindi-repair}
     - {words: L33.1, by: hindi-repair}
     - {words: L33.2, by: hindi-repair}
@@ -815,7 +815,7 @@
     - {words: L15.5, by: hindi-repair}
     - {words: L15.11, by: hindi-repair}
     - {words: L15.14, by: hindi-repair}
-    - {words: L16.3-4, by: agent}
+    - {words: L16.3-4, by: hindi-repair}
     - {words: L16.5, by: agent}
     - {words: L16.7, by: hindi-repair}
     - {words: L16.9, by: hindi-repair}
@@ -1010,7 +1010,7 @@
     - {words: L14.2, by: hindi-repair}
     - {words: L14.3, by: hindi-repair}
     - {words: L14.4, by: hindi-repair}
-    - {words: L14.5-6, by: agent}
+    - {words: L14.5-6, by: hindi-repair}
     - {words: L14.7, by: hindi-repair}
     - {words: L14.8, by: hindi-repair}
     - {words: L14.9, by: hindi-repair}
@@ -1030,7 +1030,7 @@
     - {words: L10.1, by: hindi-repair}
     - {words: L10.2-3, by: agent}
     - {words: L10.4, by: hindi-repair}
-    - {words: L10.5-6, by: agent}
+    - {words: L10.5-6, by: hindi-repair}
     - {words: L11.1, by: hindi-repair}
     - {words: L11.2, by: hindi-repair}
     - {words: L11.3, by: hindi-repair}
@@ -1130,7 +1130,7 @@
     - {words: L29.10, by: hindi-repair}
     - {words: L29.14, by: hindi-repair}
     - {words: L30.2-3, by: agent}
-    - {words: L30.5-6, by: agent}
+    - {words: L30.5-6, by: hindi-repair}
     - {words: L30.8-9, by: agent}
 - id: "2.7.11"
   kind: box
@@ -1161,7 +1161,7 @@
     - {words: L34.20, by: hindi-repair}
     - {words: L35.6, by: hindi-repair}
     - {words: L35.9, by: hindi-repair}
-    - {words: L35.12-13, by: agent}
+    - {words: L35.12-13, by: hindi-repair}
     - {words: L36.1, by: hindi-repair}
     - {words: L36.3, by: hindi-repair}
     - {words: L36.6, by: hindi-repair}
@@ -1197,7 +1197,7 @@
   text: यद्यपि केंद्रीय नाभिक का विचार एक बड़ा अग्र चरण था परंतु रदरफोर्ड मॉडल परमाणु के स्थायित्व की
     व्याख्या नहीं कर सका।
   made:
-    - {words: L25.2-3, by: agent}
+    - {words: L25.2-3, by: hindi-repair}
     - {words: L25.8, by: hindi-repair}
     - {words: L25.13, by: hindi-repair}
     - {words: L26.1, by: hindi-repair}
@@ -1349,10 +1349,10 @@
     - {words: L56.2, by: hindi-repair}
     - {words: L56.4, by: hindi-repair}
     - {words: L56.10, by: hindi-repair}
-    - {words: L56.12-13, by: agent}
+    - {words: L56.12-13, by: hindi-repair}
     - {words: L56.14, by: hindi-repair}
     - {words: L56.19, by: hindi-repair}
-    - {words: L57.1-2, by: agent}
+    - {words: L57.1-2, by: hindi-repair}
     - {words: L57.8, by: hindi-repair}
     - {words: L58.14, by: hindi-repair}
     - {words: L58.18, by: hindi-repair}
@@ -1389,8 +1389,8 @@
     - {words: L15.3, by: hindi-repair}
     - {words: L15.5, by: hindi-repair}
     - {words: L17.3, by: agent}
-    - {words: L17.4-5, by: agent}
-    - {words: L17.8-9, by: agent}
+    - {words: L17.4-5, by: hindi-repair}
+    - {words: L17.8-9, by: hindi-repair}
     - {words: L18.1-4, by: hindi-repair}
     - {words: L18.7, by: hindi-repair}
     - {words: L19.1, by: hindi-repair}
@@ -1587,7 +1587,7 @@
     - {words: L30.1, by: hindi-repair}
     - {words: L33.1, by: hindi-repair}
     - {words: L35.1, by: hindi-repair}
-    - {words: L35.2-3, by: agent}
+    - {words: L35.2-3, by: hindi-repair}
     - {words: L37.1, by: hindi-repair}
     - {words: L39.1, by: hindi-repair}
     - {words: L40.4, by: hindi-repair}
@@ -1620,11 +1620,11 @@
     - {words: L52.20, by: hindi-repair}
     - {words: L53.2, by: hindi-repair}
     - {words: L53.3, by: hindi-repair}
-    - {words: L53.4-5, by: agent}
+    - {words: L53.4-5, by: hindi-repair}
     - {words: L53.9, by: hindi-repair}
     - {words: L53.15, by: hindi-repair}
     - {words: L53.16, by: hindi-repair}
-    - {words: L54.4-5, by: agent}
+    - {words: L54.4-5, by: hindi-repair}
     - {words: L54.10, by: hindi-repair}
     - {words: L54.16, by: hindi-repair}
     - {words: L55.2-4, by: hindi-repair}
@@ -1673,7 +1673,7 @@
     - {words: L3.4, by: hindi-repair}
     - {words: L3.10, by: hindi-repair}
     - {words: L3.13, by: hindi-repair}
-    - {words: L3.14-15, by: agent}
+    - {words: L3.14-15, by: hindi-repair}
     - {words: L4.5, by: hindi-repair}
     - {words: L4.12, by: hindi-repair}
     - {words: L4.14, by: hindi-repair}
@@ -1889,7 +1889,7 @@
     - {words: L42.10, by: hindi-repair}
     - {words: L42.15, by: hindi-repair}
     - {words: L43.2, by: hindi-repair}
-    - {words: L43.6-7, by: agent}
+    - {words: L43.6-7, by: hindi-repair}
     - {words: L43.10, by: hindi-repair}
     - {words: L43.14, by: hindi-repair}
     - {words: L44.1, by: hindi-repair}
@@ -1976,7 +1976,7 @@
     - {words: L62.1-4, by: agent}
     - {words: L63.1, by: hindi-repair}
     - {words: L64.5, by: hindi-repair}
-    - {words: L65.1-2, by: agent}
+    - {words: L65.1-2, by: hindi-repair}
     - {words: L65.4, by: agent}
     - {words: L65.5, by: agent}
     - {words: L66.1-2, by: hindi-repair}
@@ -2091,7 +2091,7 @@
   crop: [350.4, 98.3, 547, 267.2]
   made:
     - {words: L10.18, by: agent}
-    - {words: L10.21-22, by: agent}
+    - {words: L10.21-22, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "3.3.10"
   kind: text
@@ -2778,7 +2778,7 @@
     - {words: L12.6, by: hindi-repair}
     - {words: L12.7, by: hindi-repair}
     - {words: L12.14, by: hindi-repair}
-    - {words: L12.17-18, by: agent}
+    - {words: L12.17-18, by: hindi-repair}
     - {words: L12.21, by: hindi-repair}
 - id: "7.2"
   kind: text
@@ -3199,9 +3199,9 @@
     - {words: L42.11, by: agent}
     - {words: L42.13-14, by: agent}
     - {words: L42.17, by: hindi-repair}
-    - {words: L42.18-19, by: agent}
+    - {words: L42.18-19, by: hindi-repair}
     - {words: L43.5, by: hindi-repair}
-    - {words: L43.6-7, by: agent}
+    - {words: L43.6-7, by: hindi-repair}
     - {words: L43.12, by: hindi-repair}
     - {words: L43.13, by: hindi-repair}
     - {words: L43.18, by: hindi-repair}
@@ -3516,15 +3516,15 @@
     - {words: L8.7, by: agent}
     - {words: L8.10, by: hindi-repair}
     - {words: L9.2, by: hindi-repair}
-    - {words: L9.5-6, by: agent}
+    - {words: L9.5-6, by: hindi-repair}
     - {words: L9.7, by: hindi-repair}
     - {words: L9.8-9, by: agent}
-    - {words: L9.12-13, by: agent}
+    - {words: L9.12-13, by: hindi-repair}
     - {words: L10.1-2, by: agent}
     - {words: L11.5, by: hindi-repair}
     - {words: L11.6-7, by: agent}
     - {words: L11.10, by: hindi-repair}
-    - {words: L13.1-2, by: agent}
+    - {words: L13.1-2, by: hindi-repair}
     - {words: L14.2, by: hindi-repair}
     - {words: L14.5, by: hindi-repair}
     - {words: L14.6-7, by: agent}
@@ -3532,7 +3532,7 @@
     - {words: L14.15-18, by: hindi-repair}
     - {words: L14.19, by: hindi-repair}
     - {words: L14.21, by: hindi-repair}
-    - {words: L14.23-24, by: agent}
+    - {words: L14.23-24, by: hindi-repair}
 - id: "9.1.10"
   kind: figure
   page: 16
@@ -3556,7 +3556,7 @@
     दूसरे का द्रव्यमान 37 u होता है। ये 3:1 के अनुपात में पाए जाते हैं। यहाँ एक रोचक प्रश्न उठता है
     कि हम क्लोरीन परमाणु का द्रव्यमान 35 u लें अथवा 37 u?
   made:
-    - {words: L17.1-2, by: agent}
+    - {words: L17.1-2, by: hindi-repair}
     - {words: L17.3, by: hindi-repair}
     - {words: L17.4, by: hindi-repair}
     - {words: L17.6, by: hindi-repair}
@@ -3581,10 +3581,10 @@
     साधारण अंकगणितीय माध्य होगा, जिसकी गणना प्रत्येक समस्थानिक की सापेक्ष मात्रा को ध्यान में रखे
     बिना की जाती है। क्लोरीन जिसके समस्थानिक ³⁵Cl और ³⁷Cl हैं, का साधारण औसत परमाणु द्रव्यमान होगा—
   made:
-    - {words: L20.3-4, by: agent}
+    - {words: L20.3-4, by: hindi-repair}
     - {words: L20.5, by: agent}
     - {words: L20.8, by: hindi-repair}
-    - {words: L20.12-13, by: agent}
+    - {words: L20.12-13, by: hindi-repair}
     - {words: L21.1, by: hindi-repair}
     - {words: L21.4, by: hindi-repair}
     - {words: L21.7, by: hindi-repair}
@@ -3617,7 +3617,7 @@
     समस्थानिक के द्रव्यमान को उसकी प्रतिशत सापेक्ष प्रचुरता से गुणा करके तथा दोनों मानों को जोड़कर
     की जा सकती है, जैसा कि नीचे समझाया गया है।
   made:
-    - {words: L29.4-5, by: agent}
+    - {words: L29.4-5, by: hindi-repair}
     - {words: L29.9, by: hindi-repair}
     - {words: L29.10, by: hindi-repair}
     - {words: L29.11, by: hindi-repair}
@@ -3633,7 +3633,7 @@
     - {words: L31.2-3, by: agent}
     - {words: L31.8, by: hindi-repair}
     - {words: L31.11, by: hindi-repair}
-    - {words: L31.15-16, by: agent}
+    - {words: L31.15-16, by: hindi-repair}
     - {words: L32.1-4, by: hindi-repair}
     - {words: L32.6, by: hindi-repair}
     - {words: L32.7, by: hindi-repair}
@@ -3915,7 +3915,7 @@
     - {words: L15.2, by: hindi-repair}
     - {words: L15.3, by: hindi-repair}
     - {words: L16.1, by: agent}
-    - {words: L16.4-5, by: agent}
+    - {words: L16.4-5, by: hindi-repair}
     - {words: L17.3, by: hindi-repair}
     - {words: L17.5, by: hindi-repair}
 - id: "9.2.4"
@@ -4055,7 +4055,7 @@
     - {words: L31.11, by: hindi-repair}
     - {words: L31.14, by: hindi-repair}
     - {words: L31.15, by: hindi-repair}
-    - {words: L32.3-4, by: agent}
+    - {words: L32.3-4, by: hindi-repair}
     - {words: L32.5, by: hindi-repair}
     - {words: L32.15, by: hindi-repair}
     - {words: L33.3, by: hindi-repair}
@@ -4170,7 +4170,7 @@
     - {words: L7.9, by: hindi-repair}
     - {words: L7.15, by: hindi-repair}
     - {words: L8.4, by: hindi-repair}
-    - {words: L8.5-6, by: agent}
+    - {words: L8.5-6, by: hindi-repair}
     - {words: L8.7, by: hindi-repair}
     - {words: L8.8-L9.3, by: hindi-repair}
     - {words: L10.4, by: hindi-repair}
@@ -4293,7 +4293,7 @@
     - {words: L2.11, by: hindi-repair}
     - {words: L2.12, by: hindi-repair}
     - {words: L2.14, by: agent}
-    - {words: L3.10-11, by: agent}
+    - {words: L3.10-11, by: hindi-repair}
     - {words: L3.14, by: hindi-repair}
     - {words: L4.6, by: hindi-repair}
     - {words: L4.12, by: hindi-repair}
@@ -4314,7 +4314,7 @@
     - {words: L8.6, by: hindi-repair}
     - {words: L8.9-10, by: agent}
     - {words: L8.11, by: hindi-repair}
-    - {words: L8.14-15, by: agent}
+    - {words: L8.14-15, by: hindi-repair}
     - {words: L9.2, by: hindi-repair}
     - {words: L9.6-7, by: agent}
     - {words: L9.9, by: hindi-repair}
@@ -4659,7 +4659,7 @@
     - {words: L11.6, by: hindi-repair}
     - {words: L11.7, by: hindi-repair}
     - {words: L11.9, by: hindi-repair}
-    - {words: L11.11-12, by: agent}
+    - {words: L11.11-12, by: hindi-repair}
     - {words: L11.13, by: hindi-repair}
     - {words: L11.14, by: hindi-repair}
     - {words: L11.15, by: hindi-repair}

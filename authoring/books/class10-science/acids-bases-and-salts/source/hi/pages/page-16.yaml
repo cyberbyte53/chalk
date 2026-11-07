@@ -36,7 +36,6 @@ blocks:
   - kind: text
     words: L21-L24
     read:
-      L21.14-15: फैक्ट्री
       L23.1: "(ii) कई"
       L24.6-9: जीवाणुओं
   - kind: heading

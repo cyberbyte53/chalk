@@ -1,8 +1,6 @@
 page: 7
 proofread: true
 cause: other
-notes:
-  other: "a word the PDF splits with a space, repaired as two halves; the PDF lacks the श of शृंखला"
 furniture: L61-L62, L65-L66, L58-L60, L9.1, L15.1, L18.1, L21.1, L22.1, L25.1, L29.1
 terms:
   - L10.11-L11.2
@@ -40,13 +38,10 @@ blocks:
     words: L19, L26, L28, L30, L32-L33, L35, L37, L39.1-5, L40.1-4, L42.1-5, L43-L50
     read:
       L28.2: विश्वविद्यालय
-      L35.2-3: कैसे
   - kind: box
     words: L51-L57
     title: L51
     read:
-      L53.4-5: बर्कला
-      L54.4-5: रेखा
       L55.6: शृंखला
       L57.1: शृंखला
   - kind: text

@@ -2,8 +2,6 @@ page: 18
 proofread: true
 furniture: L56-L59, L26-L28, L41-L43
 cause: other
-notes:
-  other: "a word the PDF splits with a space (विकृ त, के वल, आयनीकृ त), or a sign it doubles (यौगिकोें)"
 answers:
   "read L21.7": "the PDF doubles the े sign (यौगिकोें); the image prints यौगिकों"
   "word मोलेसस": "a real word (molasses), as printed on the page"
@@ -21,12 +19,9 @@ blocks:
     read:
       L5.20: जिससे
       L7.12: जिससे
-      L8.15-16: "विकृत"
   - kind: box
     title: L1-L4
     words: L1-L4, L9-L13
-    read:
-      L13.2-3: "केवल"
   - kind: section
     number: L14.1
     title: L14.2-5
@@ -36,7 +31,6 @@ blocks:
     read:
       L18.9: एथनॉइक
       L21.7: "यौगिकों"
-      L24.6-7: "आयनीकृत"
   - kind: activity
     number: L25.2
     words: L25, L29-L34

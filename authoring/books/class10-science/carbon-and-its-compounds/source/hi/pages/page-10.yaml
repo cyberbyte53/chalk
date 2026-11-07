@@ -29,8 +29,6 @@ blocks:
       L1.7: "हैं,"
       L2.2: शृंखला
       L2.4: लँबाई
-      L2.6-7: { text: "प्रकृति", cause: other }
-      L4.2-3: { text: "रेखा", cause: other }
       L7.4-5: अणुओं
       L8.1: शृंखला
   - kind: table

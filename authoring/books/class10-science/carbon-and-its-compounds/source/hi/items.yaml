@@ -31,7 +31,7 @@
     - {words: L13.5-6, by: agent}
     - {words: L14.3-4, by: agent}
     - {words: L16.2-3, by: agent}
-    - {words: L16.11-12, by: agent}
+    - {words: L16.11-12, by: hindi-repair}
     - {words: L17.7-8, by: agent}
     - {words: L17.12, by: hindi-repair}
 - id: "0.4"
@@ -73,7 +73,7 @@
     - {words: L27.9, by: hindi-repair}
     - {words: L29.11-12, by: agent}
     - {words: L30.9, by: hindi-repair}
-    - {words: L30.12-13, by: agent}
+    - {words: L30.12-13, by: hindi-repair}
     - {words: L31.12, by: agent}
     - {words: L32.8-9, by: agent}
 - id: "1"
@@ -89,7 +89,7 @@
     गलनांक एवं क्वथनांक उच्च होते हैं तथा ये विलयन में अथवा गलित अवस्था में विद्युत चालन करते हैं।
     हमने देखा कि आयनिक यौगिकों में आबंधन की प्रकृति इन गुणधर्मों की व्याख्या करती है।
   made:
-    - {words: L1.13-14, page: 2, by: agent}
+    - {words: L1.13-14, page: 2, by: hindi-repair}
 - id: "1.2"
   kind: text
   page: 2
@@ -139,8 +139,8 @@
     होगा? कार्बन में कितने संयोजकता इलेक्ट्रॉन होंगे?
   made:
     - {words: L32.6, by: agent}
-    - {words: L34.2-3, by: agent}
-    - {words: L35.1-2, by: agent}
+    - {words: L34.2-3, by: hindi-repair}
+    - {words: L35.1-2, by: hindi-repair}
     - {words: L35.7-L36.2, by: hindi-repair}
 - id: "1.5"
   kind: text
@@ -171,7 +171,7 @@
     - {words: L44.8, by: hindi-repair}
     - {words: L46.1, by: agent}
     - {words: L46.6-7, by: agent}
-    - {words: L47.5-6, by: agent}
+    - {words: L47.5-6, by: hindi-repair}
 - id: "1.6"
   kind: text
   page: 2
@@ -185,7 +185,7 @@
     - {words: L49.4-5, by: agent}
     - {words: L49.8, by: agent}
     - {words: L49.10-11, by: agent}
-    - {words: L50.11-12, by: agent}
+    - {words: L50.11-12, by: hindi-repair}
     - {words: L51.3, by: agent}
     - {words: L51.11-12, by: agent}
     - {words: L52.10-11, by: agent}
@@ -204,9 +204,9 @@
     उपयोग कर सकते हैं।
   made:
     - {words: L1.5-6, by: agent}
-    - {words: L30.3-5, by: agent}
+    - {words: L30.3-5, by: hindi-repair}
     - {words: L31.10-L32.1, by: agent}
-    - {words: L34.9-10, by: agent}
+    - {words: L34.9-10, by: hindi-repair}
     - {words: L35.6, by: hindi-repair}
     - {words: L36.10-L37.2, by: agent}
 - id: "1.8"
@@ -218,7 +218,7 @@
   made:
     - {words: L39.8-9, by: agent}
     - {words: L40.9-10, by: agent}
-    - {words: L40.14-15, by: agent}
+    - {words: L40.14-15, by: hindi-repair}
     - {words: L41.2, by: hindi-repair}
 - id: "1.9"
   kind: text
@@ -230,7 +230,7 @@
     - {words: L43.4-6, by: hindi-repair}
     - {words: L43.7-9, by: hindi-repair}
     - {words: L43.10-L44.1, by: agent}
-    - {words: L46.10-11, by: agent}
+    - {words: L46.10-11, by: hindi-repair}
 - id: "1.10"
   kind: text
   page: 3
@@ -252,7 +252,7 @@
     - {words: L50.8-9, by: hindi-repair}
     - {words: L50.14-15, by: hindi-repair}
     - {words: L51.1-2, by: hindi-repair}
-    - {words: L51.8-10, by: agent}
+    - {words: L51.8-10, by: hindi-repair}
     - {words: L52.1, by: hindi-repair}
     - {words: L52.5, by: hindi-repair}
     - {words: L53.1-2, by: hindi-repair}
@@ -282,7 +282,7 @@
     प्राप्त होते हैं। इसे दो परमाणुओं के बीच त्रिआबंध का बनना कहा जाता है। N₂ की इलेक्ट्रॉन बिंदु
     संरचना तथा इसके त्रिआबंध को चित्र 4.4 के अनुसार दर्शाया जा सकता है।
   made:
-    - {words: L60.6-7, by: agent}
+    - {words: L60.6-7, by: hindi-repair}
     - {words: L62.2, by: hindi-repair}
     - {words: L62.3, by: hindi-repair}
     - {words: L63.7, by: agent}
@@ -339,9 +339,9 @@
     हुई? इन अणुओं में एक, द्वि अथवा त्रि कौन सा आबंध होगा?
   made:
     - {words: L5.6-L6.1, by: agent}
-    - {words: L8.11-12, by: agent}
+    - {words: L8.11-12, by: hindi-repair}
     - {words: L8.15-18, by: agent}
-    - {words: L8.20-21, by: agent}
+    - {words: L8.20-21, by: hindi-repair}
     - {words: L9.5, by: hindi-repair}
     - {words: L9.8-9, by: agent}
 - id: "1.18"
@@ -439,7 +439,7 @@
     - {words: L39.6-9, by: hindi-repair}
     - {words: L1.15, page: 5, by: hindi-repair}
     - {words: L2.3, page: 5, by: hindi-repair}
-    - {words: L2.13-14, page: 5, by: agent}
+    - {words: L2.13-14, page: 5, by: hindi-repair}
     - {words: L3.3, page: 5, by: agent}
     - {words: L4.7-L5.1, page: 5, by: hindi-repair}
     - {words: L5.5, page: 5, by: agent}
@@ -533,7 +533,7 @@
     - {words: L23.11-14, by: hindi-repair}
     - {words: L23.15-16, by: agent}
     - {words: L24.1, by: agent}
-    - {words: L24.7-8, by: agent}
+    - {words: L24.7-8, by: hindi-repair}
     - {words: L24.13, by: hindi-repair}
     - {words: L26.8-9, by: agent}
     - {words: L27.2, by: agent}
@@ -556,9 +556,9 @@
     - {words: L5.12, page: 6, by: hindi-repair}
     - {words: L6.1, page: 6, by: hindi-repair}
     - {words: L7.2-5, page: 6, by: hindi-repair}
-    - {words: L7.7-8, page: 6, by: agent}
-    - {words: L7.10-12, page: 6, by: agent}
-    - {words: L7.18-19, page: 6, by: agent}
+    - {words: L7.7-8, page: 6, by: hindi-repair}
+    - {words: L7.10-12, page: 6, by: hindi-repair}
+    - {words: L7.18-19, page: 6, by: hindi-repair}
     - {words: L8.1-2, page: 6, by: agent}
     - {words: L8.8, page: 6, by: agent}
     - {words: L8.10-11, page: 6, by: agent}
@@ -603,12 +603,12 @@
     - {words: L20.13, by: hindi-repair}
     - {words: L21.14-15, by: agent}
     - {words: L21.17, by: hindi-repair}
-    - {words: L22.7-8, by: agent}
+    - {words: L22.7-8, by: hindi-repair}
     - {words: L22.11, by: hindi-repair}
-    - {words: L23.4-5, by: agent}
+    - {words: L23.4-5, by: hindi-repair}
     - {words: L23.19, by: hindi-repair}
     - {words: L24.4, by: hindi-repair}
-    - {words: L24.9-10, by: agent}
+    - {words: L24.9-10, by: hindi-repair}
     - {words: L24.11, by: agent}
     - {words: L25.15, by: hindi-repair}
 - id: "2.4"
@@ -698,7 +698,7 @@
     कैसे चित्रित कर सकते हैं? हम पहले जैसी चरणबद्ध विधि अपनाएँगे।
   made:
     - {words: L19.11-L22.1, by: agent}
-    - {words: L24.3-4, by: agent}
+    - {words: L24.3-4, by: hindi-repair}
 - id: "2.4.8"
   kind: figure
   page: 7
@@ -932,8 +932,8 @@
     - {words: L1.10, page: 10, by: hindi-repair}
     - {words: L2.2, page: 10, by: agent}
     - {words: L2.4, page: 10, by: agent}
-    - {words: L2.6-7, page: 10, by: agent}
-    - {words: L4.2-3, page: 10, by: agent}
+    - {words: L2.6-7, page: 10, by: hindi-repair}
+    - {words: L4.2-3, page: 10, by: hindi-repair}
     - {words: L4.6-8, page: 10, by: hindi-repair}
     - {words: L4.10-12, page: 10, by: hindi-repair}
     - {words: L4.13-L5.2, page: 10, by: hindi-repair}
@@ -1051,7 +1051,7 @@
     - {words: L31.6, by: hindi-repair}
     - {words: L31.9-11, by: hindi-repair}
     - {words: L31.12-L34.1, by: agent}
-    - {words: L36.9-10, by: agent}
+    - {words: L36.9-10, by: hindi-repair}
     - {words: L36.12, by: hindi-repair}
 - id: "2.7.7"
   kind: text
@@ -1101,7 +1101,7 @@
     मेथेनॉल, एथेनॉल, प्रोपेनॉल तथा ब्यूटेनॉल।
   made:
     - {words: L74.15-16, by: agent}
-    - {words: L75.9-10, by: agent}
+    - {words: L75.9-10, by: hindi-repair}
     - {words: L76.5-8, by: hindi-repair}
 - id: "2.8.2"
   kind: text
@@ -1199,7 +1199,7 @@
   text: 5. निम्नलिखित यौगिकों का नामकरण कैसे करेंगे? (i) CH₃ —CH₂ —Br		 (ii)
   made:
     - {words: L12.1, by: hindi-repair}
-    - {words: L12.5-6, by: agent}
+    - {words: L12.5-6, by: hindi-repair}
     - {words: L12.7-8, by: agent}
     - {words: L13.2-L14.1, by: agent}
     - {words: L15.1-L16.1, by: agent}
@@ -1223,7 +1223,7 @@
     उपयोग में लाए जाने वाले अधिकांश ईंधन कार्बन अथवा उसके यौगिक होते हैं, अतः सर्वप्रथम हम दहन के
     विषय में पढ़ेंगे।
   made:
-    - {words: L21.13-14, by: agent}
+    - {words: L21.13-14, by: hindi-repair}
     - {words: L21.15-L22.1, by: hindi-repair}
     - {words: L23.7-9, by: hindi-repair}
     - {words: L24.6, by: hindi-repair}
@@ -1293,7 +1293,7 @@
     इनमें से किसी भी यौगिक के कारण क्या तश्तरी पर कोई निक्षेपण हुआ?
   made:
     - {words: L58.12-13, by: agent}
-    - {words: L3.3-4, page: 14, by: agent}
+    - {words: L3.3-4, page: 14, by: hindi-repair}
 - id: "3.2.7"
   kind: activity
   page: 14
@@ -1320,7 +1320,7 @@
     - {words: L18.1, by: hindi-repair}
     - {words: L18.9, by: hindi-repair}
     - {words: L21.5, by: hindi-repair}
-    - {words: L22.6-7, by: agent}
+    - {words: L22.6-7, by: hindi-repair}
     - {words: L22.18, by: hindi-repair}
     - {words: L23.2, by: hindi-repair}
 - id: "3.2.9"
@@ -1360,10 +1360,10 @@
     - {words: L32.10, by: agent}
     - {words: L32.17, by: hindi-repair}
     - {words: L32.20, by: hindi-repair}
-    - {words: L33.5-6, by: agent}
+    - {words: L33.5-6, by: hindi-repair}
     - {words: L33.17, by: hindi-repair}
     - {words: L34.3, by: hindi-repair}
-    - {words: L34.5-6, by: agent}
+    - {words: L34.5-6, by: hindi-repair}
     - {words: L35.4-5, by: agent}
     - {words: L35.11, by: hindi-repair}
     - {words: L35.17, by: agent}
@@ -1385,7 +1385,7 @@
   made:
     - {words: L6.15-16, by: agent}
     - {words: L7.8, by: hindi-repair}
-    - {words: L12.10-11, by: agent}
+    - {words: L12.10-11, by: hindi-repair}
     - {words: L13.3-5, by: hindi-repair}
 - id: "3.3"
   kind: section
@@ -1456,9 +1456,9 @@
     करते हैं अर्थात ये आरंभिक पदार्थ में ऑक्सीजन जोड़ते हैं। अतएव इनको ऑक्सीकारक कहते हैं।
   made:
     - {words: L43.2-3, by: hindi-repair}
-    - {words: L43.6-7, by: agent}
+    - {words: L43.6-7, by: hindi-repair}
     - {words: L43.8-9, by: hindi-repair}
-    - {words: L44.3-4, by: agent}
+    - {words: L44.3-4, by: hindi-repair}
     - {words: L44.12, by: hindi-repair}
     - {words: L44.13, by: hindi-repair}
     - {words: L45.1, by: hindi-repair}
@@ -1516,7 +1516,7 @@
     - {words: L8.4, by: agent}
     - {words: L10.11-12, by: agent}
     - {words: L11.14-15, by: agent}
-    - {words: L12.11-12, by: agent}
+    - {words: L12.11-12, by: hindi-repair}
 - id: "3.5.2"
   kind: equation
   page: 16
@@ -1562,7 +1562,7 @@
   text: अनेक कार्बन यौगिक हमारे लिए अनमोल होते हैं, किंतु यहाँ हम व्यावसायिक रूप से महत्वपूर्ण दो
     यौगिकों— एथनॉल तथा एथेनॉइक अम्लों के गुणधर्मों का अध्ययन करेंगे।
   made:
-    - {words: L24.11-12, by: agent}
+    - {words: L24.11-12, by: hindi-repair}
 - id: "4.2"
   kind: section
   page: 16
@@ -1601,7 +1601,7 @@
   made:
     - {words: L8.14, by: hindi-repair}
     - {words: L8.17-19, by: hindi-repair}
-    - {words: L11.6-7, by: agent}
+    - {words: L11.6-7, by: hindi-repair}
     - {words: L11.9-10, by: agent}
 - id: "4.2.3"
   kind: heading
@@ -1683,7 +1683,7 @@
   made:
     - {words: L47.8, by: hindi-repair}
     - {words: L48.12, by: agent}
-    - {words: L48.20-21, by: agent}
+    - {words: L48.20-21, by: hindi-repair}
     - {words: L49.1-L50.2, by: hindi-repair}
     - {words: L50.3-L51.1, by: hindi-repair}
     - {words: L51.2, by: hindi-repair}
@@ -1692,9 +1692,9 @@
     - {words: L52.10, by: hindi-repair}
     - {words: L53.9-12, by: hindi-repair}
     - {words: L53.22, by: hindi-repair}
-    - {words: L54.10-11, by: agent}
-    - {words: L54.14-15, by: agent}
-    - {words: L54.22-23, by: agent}
+    - {words: L54.10-11, by: hindi-repair}
+    - {words: L54.14-15, by: hindi-repair}
+    - {words: L54.22-23, by: hindi-repair}
     - {words: L55.1-2, by: agent}
     - {words: L55.12, by: agent}
     - {words: L5.5-8, page: 18, by: hindi-repair}
@@ -1703,7 +1703,7 @@
     - {words: L5.22-25, page: 18, by: hindi-repair}
     - {words: L7.6, page: 18, by: hindi-repair}
     - {words: L7.12, page: 18, by: agent}
-    - {words: L8.15-16, page: 18, by: agent}
+    - {words: L8.15-16, page: 18, by: hindi-repair}
 - id: "4.2.11"
   kind: box
   page: 18
@@ -1719,7 +1719,7 @@
     - {words: L12.16-17, by: hindi-repair}
     - {words: L12.18, by: hindi-repair}
     - {words: L12.19, by: hindi-repair}
-    - {words: L13.2-3, by: agent}
+    - {words: L13.2-3, by: hindi-repair}
     - {words: L13.5, by: hindi-repair}
 - id: "4.3"
   kind: section
@@ -1744,7 +1744,7 @@
     - {words: L20.9, by: hindi-repair}
     - {words: L21.7, by: agent}
     - {words: L23.5-7, by: hindi-repair}
-    - {words: L24.6-7, by: agent}
+    - {words: L24.6-7, by: hindi-repair}
 - id: "4.3.2"
   kind: activity
   page: 18
@@ -1895,7 +1895,7 @@
   number: "1."
   text: 1. प्रयोग द्वारा आप एल्कोहल एवं कार्बोक्सिलिक अम्ल में कैसे अंतर कर सकते हैं?
   made:
-    - {words: L4.7-8, by: agent}
+    - {words: L4.7-8, by: hindi-repair}
     - {words: L4.9-12, by: hindi-repair}
 - id: "4.3.17.2"
   kind: question
@@ -2037,7 +2037,7 @@
     - {words: L36.5, by: hindi-repair}
     - {words: L36.8, by: agent}
     - {words: L37.4, by: agent}
-    - {words: L38.3-4, by: agent}
+    - {words: L38.3-4, by: hindi-repair}
     - {words: L40.1, by: hindi-repair}
 - id: "5.10"
   kind: exercise
@@ -2154,7 +2154,7 @@
   text: 4. CH₃Cl में आबंध निर्माण का उपयोग कर सहसंयोजक आबंध की प्रकृति समझाइए।
   made:
     - {words: L1.2-L3.1, by: agent}
-    - {words: L3.11-12, by: agent}
+    - {words: L3.11-12, by: hindi-repair}
 - id: "5.11.5"
   kind: question
   page: 24
@@ -2176,7 +2176,7 @@
   text: 7. भौतिक एवं रासायनिक गुणधर्मों के आधार पर एथनॉल एवं एथेनॉइक अम्ल में आप कैसे अंतर करेंगे?
   made:
     - {words: L13.5-8, by: hindi-repair}
-    - {words: L13.18-19, by: agent}
+    - {words: L13.18-19, by: hindi-repair}
     - {words: L13.20-23, by: hindi-repair}
     - {words: L13.24-25, by: agent}
 - id: "5.11.8"

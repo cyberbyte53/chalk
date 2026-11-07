@@ -17,8 +17,6 @@ blocks:
     words: L1
   - kind: text
     words: L2-L4
-    read:
-      L4.4-5: कैसे
   - kind: heading
     title: L5
     words: L5
@@ -34,9 +32,6 @@ blocks:
       L13.3-L15.1: "H₂(g)"
   - kind: text
     words: L16-L17
-    read:
-      L16.8-9: कैथोड
-      L16.14-15: कैथोड
   - kind: text
     words: L18
   - kind: figure
@@ -49,4 +44,3 @@ blocks:
       L23.2-3: कैथोड
       L24.4: "मार्गरीन,"
       L32.1-2: "(धातुओं"
-      L35.4-5: कृत्रिम

@@ -15,17 +15,13 @@ blocks:
   - kind: text
     words: L14-L16
     read:
-      L14.8-9: प्रकृति
       L15.12-13: कक्षाओं
   - kind: text
     words: L17-L19
-    read:
-      L17.15-16: { text: "कैसे", cause: other }
   - kind: activity
     number: L20.2
     words: L20, L24-L34
     read:
-      L27.8-9: रेगमाल
       L30.4: इससे
       L31.1: { text: "इकट्ठा", cause: other }
   - kind: figure

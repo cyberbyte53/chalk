@@ -37,8 +37,6 @@ blocks:
       L29.3: लवाइजिए
   - kind: text
     words: L41-L42
-    read:
-      L41.10-11: सल्फेट
   - kind: activity
     number: L45.1-2
     title: L45.4-11

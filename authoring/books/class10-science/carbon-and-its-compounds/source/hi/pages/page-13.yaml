@@ -36,7 +36,6 @@ blocks:
     number: L12.1
     words: L12-L17
     read:
-      L12.5-6: "कैसे"
       L12.7-8: "करेंगे?"
       L13.2-L14.1: "CH₃"
       L15.1-L16.1: "—CH₂"
@@ -49,8 +48,6 @@ blocks:
     words: L20
   - kind: text
     words: L21-L24
-    read:
-      L21.13-14: "करेंगे।"
   - kind: section
     number: L25.1
     title: L25.2

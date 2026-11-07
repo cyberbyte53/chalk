@@ -20,7 +20,6 @@ blocks:
       L3.2: तत्व
       L4.13-16: परमाणुओं
       L5.13-14: परमाणुओं
-      L6.13-14: करेंगे।
   - kind: section
     number: L7.1
     title: L7.2-3
@@ -29,19 +28,16 @@ blocks:
     number: L8.2
     words: L8, L14-L19
     read:
-      L14.5-6: कैल्सियम
       L16.2-3: धीरे-धीरे
   - kind: figure
     number: L32.2
     words: L13, L20-L22, L32-L35
-    box: [322, 240, 570, 412]
+    box: [ 322, 240, 570, 412 ]
     read:
       L21.1-2: कैल्सियम
-      L33.4-5: कैल्सियम
   - kind: text
     words: L23-L24
     read:
-      L23.1-2: कैल्सियम
       L23.20-21: (कैल्सियम
   - kind: equation
     number: L30.1
@@ -51,18 +47,11 @@ blocks:
       L27.3-L29.1: "Ca(OH)₂(aq)"
   - kind: text
     words: L41-L43
-    read:
-      L41.4-5: कैल्सियम
-      L41.12-13: कैल्सियम
   - kind: box
     title: L37-L40
     words: L37-L40, L44-L50
     read:
-      L44.21-22: सफ़ेदी
       L45.2-3: कैल्सियम
-      L46.2-3: कैल्सियम
-      L46.12-13: सफ़ेदी
-      L46.19-20: कैल्सियम
       L47.5: इससे
       L48.1-L49.1: "CaCO₃"
   - kind: equation

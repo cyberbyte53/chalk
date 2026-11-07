@@ -43,11 +43,8 @@ blocks:
     title: L33
     words: L33-L42
     read:
-      L34.12-13: प्रकृति
       L36.3-4: गुफाओं
-      L39.9-10: प्राकृतिक
       L39.11-12: संरचनाओं
-      L40.10-11: प्रकृति
       L41.4-L42.1: सुंदर
   - kind: figure
     number: L44.1-2
@@ -71,7 +68,6 @@ blocks:
       L43.3-4:
         text: (ख)
         cause: other
-      L44.4-5: प्रकृति
       L44.12-13:
         text: (क)
         cause: other

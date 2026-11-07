@@ -37,7 +37,6 @@ blocks:
     words: L19-L24
     read:
       L19.11-L22.1: { text: "C₂H₄", cause: other }
-      L24.3-4: { text: "कैसे", cause: other }
   - kind: figure
     words: L25-L26
     box: [ 180, 355, 430, 410 ]

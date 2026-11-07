@@ -56,7 +56,6 @@ blocks:
     read:
       L54.2: "5:"
       L54.11: तत्व
-      L55.6-7: केवल
       L55.11: तत्व
   - kind: table
     words: L56-L67

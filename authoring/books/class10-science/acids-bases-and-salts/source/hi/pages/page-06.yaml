@@ -25,10 +25,6 @@ blocks:
     words: L8
   - kind: text
     words: L9-L14
-    read:
-      L9.8-9: कैल्सियम
-      L10.6-7: कैल्सियम
-      L14.3-4: प्रकृति
   - kind: exercise
     title: L15
     words: L15
@@ -39,14 +35,12 @@ blocks:
     number: L17.1
     words: L17-L18
     read:
-      L18.10-11: कैसे
       L18.12-13: करेंगे?
   - kind: question
     number: L19.1
     words: L19-L21
     read:
       L20.4: इससे
-      L21.1-2: कैल्सियम
   - kind: section
     number: L23.1
     title: L23.2-9

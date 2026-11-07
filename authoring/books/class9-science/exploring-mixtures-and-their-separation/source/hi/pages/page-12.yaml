@@ -19,8 +19,6 @@ blocks:
     words: L3
   - kind: text
     words: L4-L7
-    read:
-      L6.5-6: रेत
   - kind: text
     words: L8
   - kind: text

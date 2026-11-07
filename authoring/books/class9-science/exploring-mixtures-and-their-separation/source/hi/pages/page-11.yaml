@@ -24,15 +24,11 @@ blocks:
     words: L16-L20
     read:
       L17.4-L18.1: बूँद
-      L18.13-14: फैल
-      L19.11-12: फैल
   - kind: activity
     number: L21.1-2
     title: L21.4-6
     words: L21-L27, L29, L31-L33, L35-L37, L40, L42, L45, L47
     read:
-      L23.8-9: रेखा
-      L25.4-5: रेखा
       L45.11: इससे
   - kind: text
     words: L48-L53

@@ -1,8 +1,6 @@
 page: 12
 proofread: true
 cause: other
-notes:
-  other: "a word the PDF splits with a space, repaired as two halves"
 furniture: L1, L28, L5.1, L9.1, L11.1
 terms:
   - L22.4-5
@@ -13,8 +11,6 @@ blocks:
     title: L2.2-11
   - kind: text
     words: L3-L4, L5.2-L8, L9.2-L10, L11.2-L13
-    read:
-      L12.17-18: भरेगा
   - kind: text
     words: L14-L17
     read:
@@ -34,7 +30,7 @@ blocks:
   - kind: figure
     words: L25-L27
     number: L26.1-2
-    box: [85, 465, 556, 730]
+    box: [ 85, 465, 556, 730 ]
     read:
       L26.10-11: इलेक्ट्रॉन
       L27.1: तत्वों

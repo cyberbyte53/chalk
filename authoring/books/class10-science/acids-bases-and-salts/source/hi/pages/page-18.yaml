@@ -14,16 +14,12 @@ answers:
 blocks:
   - kind: text
     words: L1-L2
-    read:
-      L1.5-6: सल्फ़ेट
   - kind: text
     words: L3
   - kind: text
     words: L4-L17
     read:
       L4.12-13: अणुओं
-      L5.6-7: सल्फ़ेट
-      L6.3-4: सल्फ़ेट
       L6.10-L10.1: "CuSO₄.5H₂O"
       L11.1-L17.1: "Na₂CO₃.10H₂O"
   - kind: text
@@ -37,14 +33,10 @@ blocks:
     words: L26-L30
     read:
       L26.12-13: अणुओं
-      L26.17-18: कैल्सियम
-      L26.19-20: सल्फ़ेट
       L27.3: हेमिहाइड्रेट
       "L27.4-6, L28.1, L29.1-3, L30.1-3": "(CaSO₄.½H₂O)"
   - kind: text
     words: L31-L33
-    read:
-      L32.5-6: सफ़ेद
   - kind: equation
     words: L34-L38
     read:
@@ -52,8 +44,6 @@ blocks:
   - kind: text
     words: L39-L45
     read:
-      L39.6-7: केवल
-      L40.5-6: कैसे
       L40.10-L41.1: "CaSO₄"
       L44.12-13: कैल्सियम
       L44.14-15: सल्फ़ेट

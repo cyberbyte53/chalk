@@ -77,8 +77,6 @@ blocks:
     words: L52-L53
   - kind: text
     words: L54-L56
-    read:
-      L54.11-12: केवल
   - kind: text
     words: L57-L59
     read:

@@ -22,7 +22,6 @@ blocks:
     number: L8.1
     words: L8-L18
     read:
-      L10.6-7: सल्फेट
       L12.9-10: सल्फेट
   - kind: question
     number: L19.1
@@ -42,7 +41,6 @@ blocks:
       L24.6-7: परमाणुओं
       L27.13-14: { text: "संभावित", cause: wrong-reading }
       L26.1-2: ""
-      L29.8-9: फैले
       L33.2-3: अणुओं
       L34.2-L35.1: { text: "https://phet.colorado.edu/sims/html/build-a-molecule/latest/build-a-molecule_all.html", cause: broken-across-lines }
   - kind: box

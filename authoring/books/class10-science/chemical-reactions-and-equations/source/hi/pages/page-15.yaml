@@ -20,12 +20,9 @@ blocks:
     words: L7
   - kind: text
     words: L8-L10
-    read:
-      L10.2-3: कैसी
   - kind: text
     words: L11-L15
     read:
-      L11.7-8: विकृतगंधी
       L15.16-17: सके।
   - kind: exercise
     title: L16
@@ -33,8 +30,6 @@ blocks:
   - kind: question
     number: L17.1
     words: L17-L18
-    read:
-      L17.7-8: सल्फ़ेट
   - kind: question
     number: L19.1
     words: L19

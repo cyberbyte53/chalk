@@ -20,9 +20,7 @@ blocks:
     words: L5-L9
     read:
       L5.6-L6.1: { text: "NH₃", cause: other }
-      L8.11-12: { text: "कैसे", cause: other }
       L8.15-18: परमाणुओं
-      L8.20-21: उत्कृष्ट
       L9.8-9: अणुओं
   - kind: text
     words: L10-L17

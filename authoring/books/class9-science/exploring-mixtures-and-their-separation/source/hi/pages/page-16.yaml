@@ -30,20 +30,14 @@ blocks:
       - 147
       - 558
       - 362
-    read:
-      L28.7-8: अपकेंद्रण
-      L29.3-4: अपकेंद्रण
   - kind: text
     words: L30
   - kind: text
     words: L31-L35, L38-L39, L41
     read:
-      L38.5-6: अपेक्षाकृत
       L39.13-14: के)
   - kind: text
     words: L42-L43
-    read:
-      L43.5-6: फैले
   - kind: figure
     number: L40.1-2
     words: L36-L37, L40

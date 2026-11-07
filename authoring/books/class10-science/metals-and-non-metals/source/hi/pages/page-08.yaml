@@ -41,9 +41,6 @@ blocks:
       L25.3-L27.1: "H₂(g)"
   - kind: text
     words: L28-L29
-    read:
-      L28.10-11: कैल्सियम
-      L29.6-7: कैल्सियम
   - kind: text
     words: L30-L33
   - kind: text
@@ -80,4 +77,3 @@ blocks:
     continues: true
     read:
       L62.10-11: धातुओं
-      L63.4-5: रेगमाल

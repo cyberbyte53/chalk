@@ -34,7 +34,6 @@ blocks:
   - kind: text
     words: L25-L27
     read:
-      L25.8-9: कैल्सियम
       L26.2: विविध
   - kind: text
     words: L28

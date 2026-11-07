@@ -12,9 +12,6 @@ answers:
 blocks:
   - kind: text
     words: L34-L36
-    read:
-      L34.3-4: सल्फेट
-      L35.6-7: सल्फेट
   - kind: equation
     words: L37
   - kind: text
@@ -22,19 +19,11 @@ blocks:
   - kind: box
     title: L40
     words: L40-L47
-    read:
-      L46.1-2: रूपरेखा
   - kind: example
     number: L48.1-2
     words: L48-L51
-    read:
-      L49.1-2: कैल्सियम
-      L50.13-14: कैल्सियम
   - kind: text
     words: L52-L61
-    read:
-      L52.3-4: कैल्सियम
-      L57.1-2: कैल्सियम
   - kind: example
     number: L62.1-2
     words: L62-L66

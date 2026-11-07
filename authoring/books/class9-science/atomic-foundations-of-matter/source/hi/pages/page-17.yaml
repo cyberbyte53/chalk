@@ -23,8 +23,6 @@ blocks:
     words: L42
   - kind: text
     words: L43-L46
-    read:
-      L43.11-12: सल्फेट
   - kind: text
     words: L47-L53
     read:

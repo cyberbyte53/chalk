@@ -23,7 +23,7 @@
     भौतिक तथा रासायनिक परिवर्तनों के बारे में हम पिछली कक्षाओं में पढ़ चुके हैं। जब कोई रासायनिक
     परिवर्तन होता है तो हम कह सकते हैं कि एक रासायनिक अभिक्रिया हुई है।
   made:
-    - {words: L14.8-9, by: agent}
+    - {words: L14.8-9, by: hindi-repair}
     - {words: L15.12-13, by: agent}
     - {words: L15.15, by: hindi-repair}
 - id: "0.4"
@@ -32,7 +32,7 @@
   text: आप शायद सोच रहे होंगे कि रासायनिक अभिक्रिया का वास्तविक अर्थ क्या है। हम कैसे जान सकते हैं कि
     कोई रासायनिक अभिक्रिया हुई है? इन प्रश्नों के उत्तर पाने के लिए आइए, हम कुछ क्रियाकलाप करते हैं।
   made:
-    - {words: L17.15-16, by: agent}
+    - {words: L17.15-16, by: hindi-repair}
     - {words: L18.11, by: hindi-repair}
 - id: "0.5"
   kind: activity
@@ -44,7 +44,7 @@
     ग्लास में इकट्ठा कर लीजिए जैसा कि चित्र 1.1 में दिखाया गया है। मैग्नीशियम रिबन का दहन करते समय
     इसे अपनी आँखों से यथासंभव दूर रखिए। आपने क्या प्रेक्षण किया?
   made:
-    - {words: L27.8-9, by: agent}
+    - {words: L27.8-9, by: hindi-repair}
     - {words: L28.1, by: hindi-repair}
     - {words: L29.4, by: hindi-repair}
     - {words: L30.4, by: agent}
@@ -252,7 +252,7 @@
   made:
     - {words: L34.3, by: hindi-repair}
     - {words: L34.4, by: hindi-repair}
-    - {words: L34.7-8, by: agent}
+    - {words: L34.7-8, by: hindi-repair}
 - id: "1.7.5"
   kind: text
   page: 3
@@ -489,7 +489,7 @@
     - {words: L54.2, by: agent}
     - {words: L54.11, by: agent}
     - {words: L54.12-14, by: hindi-repair}
-    - {words: L55.6-7, by: agent}
+    - {words: L55.6-7, by: hindi-repair}
     - {words: L55.11, by: agent}
 - id: "1.7.27"
   kind: table
@@ -656,8 +656,8 @@
     - {words: L56.1, by: hindi-repair}
     - {words: L56.3-4, by: agent}
     - {words: L58.5-8, by: hindi-repair}
-    - {words: L58.9-10, by: agent}
-    - {words: L58.13-14, by: agent}
+    - {words: L58.9-10, by: hindi-repair}
+    - {words: L58.13-14, by: hindi-repair}
     - {words: L58.16-19, by: hindi-repair}
 - id: "1.7.43.3"
   kind: question
@@ -673,8 +673,8 @@
     - {words: L60.2-3, by: agent}
     - {words: L60.9-L62.2, by: agent}
     - {words: L64.1, by: hindi-repair}
-    - {words: L64.7-8, by: agent}
-    - {words: L65.6-7, by: agent}
+    - {words: L64.7-8, by: hindi-repair}
+    - {words: L65.6-7, by: hindi-repair}
 - id: "2"
   kind: section
   page: 7
@@ -698,7 +698,7 @@
     - {words: L4.13-16, by: agent}
     - {words: L5.5, by: hindi-repair}
     - {words: L5.13-14, by: agent}
-    - {words: L6.13-14, by: agent}
+    - {words: L6.13-14, by: hindi-repair}
 - id: "2.2"
   kind: section
   page: 7
@@ -714,7 +714,7 @@
     हुआ?
   made:
     - {words: L14.4, by: hindi-repair}
-    - {words: L14.5-6, by: agent}
+    - {words: L14.5-6, by: hindi-repair}
     - {words: L14.7, by: hindi-repair}
     - {words: L16.2-3, by: agent}
 - id: "2.2.2"
@@ -727,7 +727,7 @@
   made:
     - {words: L21.1-2, by: agent}
     - {words: L22.1, by: hindi-repair}
-    - {words: L33.4-5, by: agent}
+    - {words: L33.4-5, by: hindi-repair}
     - {words: L34.1, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "2.2.3"
@@ -736,7 +736,7 @@
   text: कैल्सियम ऑक्साइड जल के साथ तीव्रता से अभिक्रिया करके बुझे हुए चूने (कैल्सियम हाइड्रोक्साइड) का
     निर्माण करके अधिक मात्रा में ऊष्मा उत्पन्न करता है।
   made:
-    - {words: L23.1-2, by: agent}
+    - {words: L23.1-2, by: hindi-repair}
     - {words: L23.3, by: hindi-repair}
     - {words: L23.11-14, by: hindi-repair}
     - {words: L23.16-19, by: hindi-repair}
@@ -757,9 +757,9 @@
     ऐसी अभिक्रिया जिसमें दो या दो से अधिक अभिकारक मिलकर एकल उत्पाद का निर्माण करते हैं उसे संयोजन
     अभिक्रिया कहते हैं।
   made:
-    - {words: L41.4-5, by: agent}
+    - {words: L41.4-5, by: hindi-repair}
     - {words: L41.6, by: hindi-repair}
-    - {words: L41.12-13, by: agent}
+    - {words: L41.12-13, by: hindi-repair}
     - {words: L42.4, by: hindi-repair}
 - id: "2.2.6"
   kind: box
@@ -774,12 +774,12 @@
     - {words: L37.1, by: hindi-repair}
     - {words: L44.6-9, by: hindi-repair}
     - {words: L44.11-14, by: hindi-repair}
-    - {words: L44.21-22, by: agent}
+    - {words: L44.21-22, by: hindi-repair}
     - {words: L45.2-3, by: agent}
     - {words: L45.9, by: hindi-repair}
-    - {words: L46.2-3, by: agent}
-    - {words: L46.12-13, by: agent}
-    - {words: L46.19-20, by: agent}
+    - {words: L46.2-3, by: hindi-repair}
+    - {words: L46.12-13, by: hindi-repair}
+    - {words: L46.19-20, by: hindi-repair}
     - {words: L47.5, by: agent}
     - {words: L48.1-L49.1, by: agent}
 - id: "2.2.7"
@@ -858,7 +858,7 @@
   page: 8
   text: (i) प्राकृतिक गैस का दहन—
   made:
-    - {words: L20.2-3, by: agent}
+    - {words: L20.2-3, by: hindi-repair}
 - id: "2.2.17"
   kind: equation
   page: 8
@@ -893,7 +893,7 @@
     - {words: L34.9-10, by: agent}
     - {words: L34.13, by: hindi-repair}
     - {words: L35.11, by: hindi-repair}
-    - {words: L36.4-5, by: agent}
+    - {words: L36.4-5, by: hindi-repair}
 - id: "2.2.20"
   kind: equation
   page: 8
@@ -924,8 +924,8 @@
     - {words: L60.4, by: hindi-repair}
     - {words: L63.1-2, by: agent}
     - {words: L63.3-4, by: agent}
-    - {words: L71.1-2, by: agent}
-    - {words: L71.3-4, by: agent}
+    - {words: L71.1-2, by: hindi-repair}
+    - {words: L71.3-4, by: hindi-repair}
     - {words: L71.12-L72.1, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "2.2.23"
@@ -949,10 +949,10 @@
     क्रिस्टल के रंग पर ध्यान दीजिए। क्वथन नली को बर्नर या स्पिरिट लैंप की ज्वाला पर गर्म कीजिए, जैसा
     चित्र 1.4 में दिखाया गया है। गर्म करने के पश्चात क्रिस्टल के रंग को देखिए।
   made:
-    - {words: L75.7-8, by: agent}
-    - {words: L75.9-10, by: agent}
-    - {words: L77.1-2, by: agent}
-    - {words: L77.3-4, by: agent}
+    - {words: L75.7-8, by: hindi-repair}
+    - {words: L75.9-10, by: hindi-repair}
+    - {words: L77.1-2, by: hindi-repair}
+    - {words: L77.3-4, by: hindi-repair}
     - {words: L80.4, by: hindi-repair}
 - id: "2.3.2"
   kind: text
@@ -960,8 +960,8 @@
   text: क्या आपने ध्यान दिया कि फ़ेरस सल्फ़ेट क्रिस्टल के हरे रंग में परिवर्तन हुआ है? सल्फ़र के दहन
     से उत्पन्न उस अभिलाक्षणिक (विशिष्ट) गंध को भी आप सूँघ सकते हैं।
   made:
-    - {words: L1.6-7, by: agent}
-    - {words: L1.8-9, by: agent}
+    - {words: L1.6-7, by: hindi-repair}
+    - {words: L1.8-9, by: hindi-repair}
     - {words: L1.18, by: hindi-repair}
     - {words: L2.6, by: hindi-repair}
     - {words: L2.11-L3.1, by: hindi-repair}
@@ -989,8 +989,8 @@
     तथा सल्फ़र ट्राइऑक्साइड (SO₃ ) में वियोजित हो जाता है। फ़ेरिक ऑक्साइड ठोस है, जबकि SO₂ तथा SO₃
     गैसें हैं।
   made:
-    - {words: L19.11-12, by: agent}
-    - {words: L19.13-14, by: agent}
+    - {words: L19.11-12, by: hindi-repair}
+    - {words: L19.13-14, by: hindi-repair}
     - {words: L19.15-L23.1, by: agent}
     - {words: L24.16-17, by: agent}
     - {words: L24.18, by: hindi-repair}
@@ -1001,7 +1001,7 @@
     - {words: L31.3, by: hindi-repair}
     - {words: L31.4, by: hindi-repair}
     - {words: L31.5-L32.1, by: agent}
-    - {words: L34.2-3, by: agent}
+    - {words: L34.2-3, by: hindi-repair}
     - {words: L34.4, by: hindi-repair}
     - {words: L34.8-L35.1, by: agent}
     - {words: L36.2-L37.1, by: agent}
@@ -1013,11 +1013,11 @@
     या बिना बुझा हुआ चूना कहते हैं। इसके अनेक उपयोगों में से एक उपयोग सीमेंट के निर्माण में होता है।
     ऊष्मा के द्वारा की गई वियोजन अभिक्रिया को ऊष्मीय वियोजन कहते हैं।
   made:
-    - {words: L39.4-5, by: agent}
-    - {words: L39.8-9, by: agent}
+    - {words: L39.4-5, by: hindi-repair}
+    - {words: L39.8-9, by: hindi-repair}
     - {words: L39.10, by: hindi-repair}
     - {words: L39.13, by: hindi-repair}
-    - {words: L41.1-2, by: agent}
+    - {words: L41.1-2, by: hindi-repair}
     - {words: L41.3, by: hindi-repair}
 - id: "2.3.6"
   kind: equation
@@ -1051,7 +1051,7 @@
   crop: [369.7, 438, 569.4, 668.6]
   made:
     - {words: L81.2, by: hindi-repair}
-    - {words: L87.2-3, by: agent}
+    - {words: L87.2-3, by: hindi-repair}
     - {words: L88.2, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "2.3.10"
@@ -1117,7 +1117,7 @@
     - {words: L13.1, by: hindi-repair}
     - {words: L22.1, by: hindi-repair}
     - {words: L24.1, by: hindi-repair}
-    - {words: L27.4-5, by: agent}
+    - {words: L27.4-5, by: hindi-repair}
     - {words: L28.1, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "2.3.15"
@@ -1197,7 +1197,7 @@
     कैसा महसूस करते हैं? क्या यह अभिक्रिया ऊष्माक्षेपी अथवा ऊष्माशोषी है?
   made:
     - {words: L5.18, by: hindi-repair}
-    - {words: L6.12-13, by: agent}
+    - {words: L6.12-13, by: hindi-repair}
 - id: "2.3.24"
   kind: exercise
   page: 11
@@ -1213,7 +1213,7 @@
     इसका सूत्र लिखिए। (ii) ऊपर (i) में लिखे पदार्थ ‘X’ की जल के साथ अभिक्रिया लिखिए।
   made:
     - {words: L9.1, by: hindi-repair}
-    - {words: L9.8-9, by: agent}
+    - {words: L9.8-9, by: hindi-repair}
     - {words: L10.8-10, by: hindi-repair}
 - id: "2.3.24.2"
   kind: question
@@ -1245,13 +1245,13 @@
     रंग की तीव्रता की तुलना (चित्र 1.8 b) कीजिए। कॉपर सल्फ़ेट के विलयन में डूबी कीलों के रंग की
     तुलना बाहर रखी कील (चित्र 1.8 b) से कीजिए।
   made:
-    - {words: L23.8-9, by: agent}
+    - {words: L23.8-9, by: hindi-repair}
     - {words: L23.11, by: hindi-repair}
     - {words: L24.1, by: hindi-repair}
     - {words: L26.7-8, by: agent}
-    - {words: L28.3-4, by: agent}
+    - {words: L28.3-4, by: hindi-repair}
     - {words: L31.3, by: hindi-repair}
-    - {words: L31.8-9, by: agent}
+    - {words: L31.8-9, by: hindi-repair}
     - {words: L33.7-8, by: agent}
     - {words: L35.2-3, by: agent}
 - id: "2.4.2"
@@ -1263,7 +1263,7 @@
   crop: [358.1, 452, 564, 724.5]
   made:
     - {words: L40.2-3, by: agent}
-    - {words: L45.2-3, by: agent}
+    - {words: L45.2-3, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "2.4.3"
   kind: figure
@@ -1276,7 +1276,7 @@
   made:
     - {words: L1.2-3, by: agent}
     - {words: L3.2-3, by: agent}
-    - {words: L15.15-16, by: agent}
+    - {words: L15.15-16, by: hindi-repair}
     - {words: L15.20-23, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "2.4.4"
@@ -1284,7 +1284,7 @@
   page: 12
   text: लोहे की कील का रंग भूरा क्यों हो गया तथा कॉपर सल्फ़ेट के विलयन का नीला रंग मलीन क्यों पड़ गया?
   made:
-    - {words: L16.12-13, by: agent}
+    - {words: L16.12-13, by: hindi-repair}
     - {words: L17.2, by: hindi-repair}
 - id: "2.4.5"
   kind: text
@@ -1348,7 +1348,7 @@
     - {words: L49.2-3, by: agent}
     - {words: L50.2, by: hindi-repair}
     - {words: L52.2, by: hindi-repair}
-    - {words: L59.2-3, by: agent}
+    - {words: L59.2-3, by: hindi-repair}
     - {box: true, by: figure-snap}
 - id: "2.5"
   kind: section
@@ -1365,7 +1365,7 @@
   text: क्रियाकलाप 1.10 एक परखनली में 3 mL सोडियम सल्फ़ेट का विलयन लीजिए। एक अन्य परखनली में 3 mL
     बेरियम क्लोराइड लीजिए। दोनों विलयनों को (चित्र 1.9) मिला लीजिए। आपने क्या देखा?
   made:
-    - {words: L61.7-8, by: agent}
+    - {words: L61.7-8, by: hindi-repair}
 - id: "2.5.2"
   kind: text
   page: 13
@@ -1501,7 +1501,7 @@
   page: 14
   text: रेडॉक्स अभिक्रिया के कुछ अन्य उदाहरण है—
   made:
-    - {words: L6.1-2, by: agent}
+    - {words: L6.1-2, by: hindi-repair}
 - id: "2.6.12"
   kind: equation
   page: 14
@@ -1610,7 +1610,7 @@
   made:
     - {words: L8.1, by: hindi-repair}
     - {words: L9.1-L10.1, by: hindi-repair}
-    - {words: L10.2-3, by: agent}
+    - {words: L10.2-3, by: hindi-repair}
 - id: "3.2.2"
   kind: text
   page: 15
@@ -1620,7 +1620,7 @@
     कि चिप्स बनाने वाले चिप्स की थैली में से ऑक्सीजन हटाकर उसमें नाइट्रोजन जैसी कम सक्रिय गैस से
     युक्त कर देते हैं ताकि चिप्स का उपचयन न हो सके।
   made:
-    - {words: L11.7-8, by: agent}
+    - {words: L11.7-8, by: hindi-repair}
     - {words: L12.5-7, by: hindi-repair}
     - {words: L12.16, by: hindi-repair}
     - {words: L14.13, by: hindi-repair}
@@ -1640,7 +1640,7 @@
   text: 1. जब लोहे की कील को कॉपर सल्फ़ेट के विलयन में डुबोया जाता है तो विलयन का रंग क्यों बदल जाता है?
   made:
     - {words: L17.1, by: hindi-repair}
-    - {words: L17.7-8, by: agent}
+    - {words: L17.7-8, by: hindi-repair}
 - id: "3.2.3.2"
   kind: question
   page: 15
@@ -1753,9 +1753,9 @@
     - {words: L15.9, by: hindi-repair}
     - {words: L15.10, by: hindi-repair}
     - {words: L16.2, by: hindi-repair}
-    - {words: L16.3-4, by: agent}
+    - {words: L16.3-4, by: hindi-repair}
     - {words: L16.11, by: hindi-repair}
-    - {words: L17.2-3, by: agent}
+    - {words: L17.2-3, by: hindi-repair}
 - id: "3.2.4.6"
   kind: question
   page: 17
@@ -1785,15 +1785,15 @@
     → बेरियम सल्फ़ेट + पोटैशियम क्लोराइड
   made:
     - {words: L56.1-2, by: agent}
-    - {words: L57.2-3, by: agent}
+    - {words: L57.2-3, by: hindi-repair}
     - {words: L57.6, by: hindi-repair}
-    - {words: L57.8-9, by: agent}
+    - {words: L57.8-9, by: hindi-repair}
     - {words: L58.4-5, by: hindi-repair}
     - {words: L58.6, by: hindi-repair}
     - {words: L59.2, by: hindi-repair}
     - {words: L59.7, by: hindi-repair}
-    - {words: L60.6-7, by: agent}
-    - {words: L60.10-11, by: agent}
+    - {words: L60.6-7, by: hindi-repair}
+    - {words: L60.10-11, by: hindi-repair}
 - id: "3.2.4.8"
   kind: question
   page: 17
@@ -1910,6 +1910,6 @@
     इनमें कौन सी अभिक्रियाएँ ऊष्माक्षेपी हैं तथा कौन सी ऊष्माशोषी हैं?
   made:
     - {words: L13.1, by: hindi-repair}
-    - {words: L15.16-17, by: agent}
+    - {words: L15.16-17, by: hindi-repair}
     - {words: L17.4-5, by: agent}
     - {words: L17.10-11, by: agent}

@@ -32,7 +32,6 @@ blocks:
     words: L1-L13
     read:
       L6.15-16: प्रक्रियाओं
-      L12.10-11: "फँस"
   - kind: section
     number: L14.1
     title: L14.2
@@ -70,9 +69,6 @@ blocks:
     words: L41-L42
   - kind: text
     words: L43-L45
-    read:
-      L43.6-7: "अम्लीकृत"
-      L44.3-4: "आक्सीकृत"
   - kind: section
     number: L46.1
     title: L46.2-3

@@ -25,14 +25,10 @@ blocks:
       L6.6-L7.1: ²³⁵₉₂U
       L8.1-3: विद्युत
       L8.7: ईंधन
-      L9.5-6: रेडियोधर्मी
       L9.8-9: ⁶⁰₂₇Co
-      L9.12-13: कैंसर
       L10.1-2: (रेडियोथेरेपी)
       L11.6-7: ¹³¹₅₃I
-      L13.1-2: कैंसर
       L14.6-7: ¹⁴₆C
-      L14.23-24: कलाकृतियों
   - kind: figure
     words: L12
     number: L12.1-2
@@ -42,14 +38,10 @@ blocks:
     title: L16
   - kind: text
     words: L17-L19
-    read:
-      L17.1-2: प्रकृति
   - kind: text
     words: L20-L23
     read:
-      L20.3-4: प्राकृतिक
       L20.5: तत्व
-      L20.12-13: प्राकृतिक
       L23.7-8: ³⁵Cl
       L23.10-11: ³⁷Cl
   - kind: equation
@@ -59,10 +51,8 @@ blocks:
   - kind: text
     words: L29-L34
     read:
-      L29.4-5: प्रकृति
       L30.10-11: ³⁵Cl
       L31.2-3: ³⁷Cl
-      L31.15-16: प्राकृतिक
   - kind: text
     words: L35
   - kind: equation

@@ -31,9 +31,6 @@ blocks:
       L12.2-L15.1: "2Al₂O₃"
   - kind: text
     words: L17-L22
-    read:
-      L17.12-13: कैसे
-      L18.10-11: प्रकृति
   - kind: equation
     words: L23-L31
     read:

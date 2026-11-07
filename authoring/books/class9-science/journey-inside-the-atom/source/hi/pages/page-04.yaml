@@ -28,7 +28,6 @@ blocks:
   - kind: text
     words: L12-L23
     read:
-      L16.3-4: रेडियोधर्मी
       L16.5: तत्वों
       L17.12-15: न्यूट्रॉन
   - kind: figure

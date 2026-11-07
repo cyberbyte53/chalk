@@ -12,7 +12,6 @@ blocks:
     words: L1-L3
     read:
       L1.2-L3.1: "CH₃Cl"
-      L3.11-12: "प्रकृति"
   - kind: question
     number: L4.1
     words: L4-L11
@@ -26,7 +25,6 @@ blocks:
     number: L13.1
     words: L13
     read:
-      L13.18-19: "कैसे"
       L13.24-25: "करेंगे?"
   - kind: question
     number: L14.1

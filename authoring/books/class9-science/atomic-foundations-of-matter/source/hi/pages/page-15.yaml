@@ -18,10 +18,7 @@ blocks:
     title: L10
     words: L10, L11, L12, L15, L13, L14, L16, L19, L17-L18, L20-L24, L25, L26, L30, L27, L29, L33, L28, L35-L38, L31, L32, L34, L39, L40-L47
     read:
-      L11.1-2: कैल्सियम
       L17-L18: "CaCl₂"
-      L20.2-3: कैल्सियम
-      L20.9-10: कैल्सियम
       L20.12-14: "(Ca²⁺)"
       L20.20-22: "(Cl⁻)"
       L35-L38: "Al₂O₃"
@@ -29,8 +26,6 @@ blocks:
       L42-L45: "Mg₂O₂"
   - kind: text
     words: L48-L49
-    read:
-      L48.14-15: कैल्सियम
   - kind: text
     words: L50-L52
     read:

@@ -12,27 +12,22 @@ blocks:
     words: L1, L2.2-14, L29-L38
     read:
       L1.5-6: अणुओं
-      L30.3-5: { text: "इलेक्ट्रॉन", cause: other }
       L31.10-L32.1: { text: "H₂,", cause: other }
-      L34.9-10: उत्कृष्ट
       L36.10-L37.2: बिंदुओं
   - kind: text
     words: L39-L41
     read:
       L39.8-9: परमाणुओं
       L40.9-10: परमाणुओं
-      L40.14-15: { text: "रेखा", cause: other }
   - kind: text
     words: L42-L47
     read:
       L43.10-L44.1: { text: "Cl₂", cause: other }
-      L46.10-11: { text: "केवल", cause: other }
   - kind: text
     words: L48-L56
     read:
       L48.4-5: परमाणुओं
       L48.10: बनना
-      L51.8-10: { text: "इलेक्ट्रॉनों", cause: other }
       L53.7: जिससे
       L55.16-17: परमाणुओं
       L56.5: बनना
@@ -43,7 +38,6 @@ blocks:
   - kind: text
     words: L60-L68
     read:
-      L60.6-7: { text: "कैसा", cause: other }
       L63.7: जिससे
       L64.6-7: परमाणुओं
       L64.12: बनना

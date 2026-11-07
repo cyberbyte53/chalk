@@ -9,18 +9,12 @@ blocks:
   - kind: question
     number: L2.1
     words: L2-L8
-    read:
-      L3.1-2: वर्गीकृत
   - kind: question
     number: L9.1
     words: L9-L15
-    read:
-      L12.2-3: सल्फेट
   - kind: question
     number: L16.1
     words: L16-L18
-    read:
-      L16.12-13: वर्गीकृत
   - kind: box
     title: L19
     words: L19-L23

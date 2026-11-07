@@ -17,9 +17,6 @@ terms:
 blocks:
   - kind: text
     words: L1-L3
-    read:
-      L1.6-7: फ़ेरस
-      L1.8-9: सल्फ़ेट
   - kind: equation
     number: L16.2
     words: L4-L6, L8-L16, L7, L17
@@ -34,22 +31,15 @@ blocks:
   - kind: text
     words: L18-L38
     read:
-      L19.11-12: फ़ेरस
-      L19.13-14: सल्फ़ेट
       L19.15-L23.1: "(FeSO₄. 7H₂O)"
       L24.16-17: फ़ेरिक
       L25.1-L28.1: "(Fe₂O₃"
       L29.4-L30.1: "(SO₂"
       L31.5-L32.1: "(SO₃"
-      L34.2-3: फ़ेरिक
       L34.8-L35.1: "SO₂"
       L36.2-L37.1: "SO₃"
   - kind: text
     words: L39-L43
-    read:
-      L39.4-5: कैल्सियम
-      L39.8-9: कैल्सियम
-      L41.1-2: कैल्सियम
   - kind: equation
     number: L51.1
     words: L44-L46, L48-L51, L47, L52
@@ -67,8 +57,6 @@ blocks:
     number: L86.2
     words: L81-L84, L86-L89
     box: [ 368, 436, 570, 670 ]
-    read:
-      L87.2-3: नाइट्रेट
   - kind: text
     words: L64-L68
     read:

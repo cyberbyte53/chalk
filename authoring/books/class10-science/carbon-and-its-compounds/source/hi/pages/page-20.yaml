@@ -1,8 +1,6 @@
 page: 20
 proofread: true
 furniture: L31-L34, L8-L13
-notes:
-  other: "a word the PDF splits with a space (कै से)"
 answers:
   "read L29.3": "the PDF loses श (�ृं); the image prints शृंखला"
   "word परखनलियों": "a real word (test tubes), as printed on the page"
@@ -15,8 +13,6 @@ blocks:
   - kind: question
     number: L2.1
     words: L2, L4
-    read:
-      L4.7-8: { text: "कैसे", cause: other }
   - kind: question
     number: L3.1
     words: L3, L5

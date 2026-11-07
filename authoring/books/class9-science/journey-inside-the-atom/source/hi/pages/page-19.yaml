@@ -15,7 +15,6 @@ blocks:
     number: L2.1
     read:
       L5.16-17: केंद्र
-      L8.5-6: केंद्र
       L10.8: उससे
   - kind: question
     words: L12-L20

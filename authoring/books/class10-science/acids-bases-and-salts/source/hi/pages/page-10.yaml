@@ -17,15 +17,12 @@ blocks:
   - kind: text
     words: L3-L6
     read:
-      L3.13-14: स्केल
       L5.3-4: "OH⁻"
   - kind: figure
     number: L11.2
     words: L8.1-5, L7, L8.6-10, L10, L9, L11
     box: [ 90, 195, 530, 305 ]
     read:
-      L8.4-5: प्रकृति
-      L8.9-10: प्रकृति
       L9.1-2: "H⁺"
       L10.1-2: "H⁺"
       L11.3-4: "H⁺"
@@ -33,8 +30,6 @@ blocks:
   - kind: activity
     number: L13.2
     words: L13-L18
-    read:
-      L18.3-4: प्रकृति
   - kind: table
     number: L12.2
     words: L12, L23-L35, L40-L41
@@ -56,5 +51,3 @@ blocks:
     number: L44.2
     words: L19-L22, L36-L39, L42-L44
     box: [ 92, 596, 545, 722 ]
-    read:
-      L44.16-17: केवल

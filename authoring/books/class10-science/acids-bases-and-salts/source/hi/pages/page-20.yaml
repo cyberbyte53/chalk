@@ -24,8 +24,6 @@ blocks:
   - kind: question
     number: L13.1
     words: L13-L17
-    read:
-      L17.6-7: रेतन
   - kind: question
     number: L18.1
     words: L18-L19

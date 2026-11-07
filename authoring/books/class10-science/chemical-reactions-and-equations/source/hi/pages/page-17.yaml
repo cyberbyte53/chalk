@@ -14,9 +14,6 @@ blocks:
   - kind: question
     number: L2.1
     words: L2, L13-L19
-    read:
-      L16.3-4: सल्फ़ेट
-      L17.2-3: सल्फ़ेट
   - kind: question
     number: L3.1
     words: L3, L20-L55
@@ -38,10 +35,6 @@ blocks:
     words: L4, L56-L60
     read:
       L56.1-2: निम्न अभिक्रियाओं
-      L57.2-3: कैल्शियम
-      L57.8-9: कैल्शियम
-      L60.6-7: सल्फ़ेट
-      L60.10-11: सल्फ़ेट
   - kind: question
     number: L5.1
     words: L5, L61-L67

@@ -23,8 +23,6 @@ blocks:
     box: [ 198, 160, 540, 226 ]
   - kind: text
     words: L6
-    read:
-      L6.1-2: रेडॉक्स
   - kind: equation
     number: L7.8
     words: L7

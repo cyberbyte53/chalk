@@ -24,7 +24,6 @@ blocks:
     words: L1-L7
     continued: true
     read:
-      L2.13-14: { text: "प्राकृतिक", cause: other }
       L3.3: { text: "अपररूप", cause: wrong-reading }
       L5.5: बकमिंसटर
       L5.6: फ़ुलर
@@ -55,7 +54,6 @@ blocks:
       L22.8: तत्वों
       L23.15-16: { text: "केवल", cause: other }
       L24.1: तत्व
-      L24.7-8: प्रकृति
       L26.8-9: परमाणुओं
       L27.2: जिससे
       L27.12: शृंखलन

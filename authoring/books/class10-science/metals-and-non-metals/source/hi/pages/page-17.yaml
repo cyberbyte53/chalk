@@ -20,7 +20,6 @@ blocks:
   - kind: text
     words: L2-L9
     read:
-      L3.4-5: प्रकृति
       L5.13: { text: "परिवर्तित", cause: wrong-reading }
       L8.9: { text: "परिवर्तित", cause: wrong-reading }
   - kind: equation
@@ -57,7 +56,6 @@ blocks:
     words: L42-L50
     read:
       L44.3-L48.1: "(Fe₂O₃)"
-      L48.9-10: रेल
   - kind: equation
     words: L51-L59
     read:
@@ -67,5 +65,3 @@ blocks:
     number: L60.2
     words: L60-L62
     box: [ 436, 530, 572, 704 ]
-    read:
-      L61.1-2: रेल

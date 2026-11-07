@@ -17,11 +17,8 @@ blocks:
     read:
       L1.2-3: सल्फेट
       L3.2-3: सल्फ़ेट
-      L15.15-16: सल्फ़ेट
   - kind: text
     words: L16-L17
-    read:
-      L16.12-13: सल्फ़ेट
   - kind: text
     words: L18
   - kind: equation
@@ -63,7 +60,6 @@ blocks:
     box: [ 65, 532, 250, 724 ]
     read:
       L49.2-3: सल्फ़ेट
-      L59.2-3: सल्फ़ेट
   - kind: section
     number: L53.1
     title: L53.1-2
@@ -71,5 +67,3 @@ blocks:
   - kind: activity
     number: L54.2
     words: L54, L61-L65
-    read:
-      L61.7-8: सल्फ़ेट

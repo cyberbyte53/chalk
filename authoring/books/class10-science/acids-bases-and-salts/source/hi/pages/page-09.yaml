@@ -43,13 +43,11 @@ blocks:
     read:
       L27.12: हाइड्रोनियम
       L27.14-L29.3: "(H₃O⁺)"
-      L29.6-7: कैसे
   - kind: question
     number: L18.1
     words: L18, L31-L32
     read:
       L31.13-15: "(OH⁻)"
-      L32.3-4: कैसे
   - kind: section
     number: L34.1
     title: L34.2-10
@@ -67,6 +65,4 @@ blocks:
     words: L42-L46
     continues: true
     read:
-      L42.14-15: स्केल
       L43.15: "‘पुसांस’"
-      L44.13-14: स्केल

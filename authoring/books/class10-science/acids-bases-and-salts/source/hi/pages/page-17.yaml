@@ -10,7 +10,6 @@ blocks:
   - kind: text
     words: L1-L2
     read:
-      L1.11-12: केक
       L2.5: इससे
   - kind: text
     words: L3-L5
@@ -43,8 +42,6 @@ blocks:
     words: L41
   - kind: text
     words: L42-L45
-    read:
-      L43.4-5: बोरेक्स
   - kind: section
     number: L46.1
     title: L46.2-9
@@ -53,7 +50,6 @@ blocks:
     number: L47.2
     words: L47-L57
     read:
-      L48.4-5: सल्फ़ेट
       L50.8-9: सल्फ़ेट
       L53.9-10: सल्फ़ेट
       L56.10-11: सल्फ़ेट
@@ -61,5 +57,3 @@ blocks:
     number: L64.2
     words: L58-L64
     box: [ 330, 498, 582, 724 ]
-    read:
-      L62.2-3: सल्फ़ेट

@@ -18,8 +18,6 @@ blocks:
     title: L5
   - kind: text
     words: L25-L26
-    read:
-      L25.2-3: केंद्रीय
   - kind: text
     words: L27-L38
     read:
@@ -48,13 +46,9 @@ blocks:
     title: L52
     read:
       L53.12-L54.2: संबंध
-      L56.12-13: केंद्र
-      L57.1-2: केंद्रित
   - kind: box
     words: L7-L24
     title: L7
     read:
       L10.2-3: कैम्ब्रिज
       L17.3: तत्व
-      L17.4-5: प्राकृतिक
-      L17.8-9: कैसे

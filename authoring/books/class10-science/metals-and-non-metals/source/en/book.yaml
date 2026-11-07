@@ -6,7 +6,7 @@ reader: text
 edition: 2026-27
 tools:
   reader: 1
-  hindi-repair: 3
+  hindi-repair: 4
   figure-snap: 1
   table-cells: 1
   structure-draft: 2

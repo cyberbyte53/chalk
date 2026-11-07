@@ -1,8 +1,6 @@
 page: 20
 proofread: true
 cause: other
-notes:
-  other: "a word the PDF splits with a space, repaired as two halves"
 furniture: L1, L37
 blocks:
   - kind: question
@@ -10,10 +8,8 @@ blocks:
     number: L2.1
     read:
       L2.14: जिससे
-      L3.10-11: कैसे
       L4.15-16: कक्षाओं
       L8.9-10: परमाणुओं
-      L8.14-15: केंद्रीय
       L9.6-7: परमाणुओं
   - kind: question
     words: L10-L11

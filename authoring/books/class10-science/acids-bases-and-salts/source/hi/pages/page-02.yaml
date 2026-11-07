@@ -22,8 +22,6 @@ blocks:
     words: L2-L4
     number: L2.1
     read:
-      L3.10-11: केवल
-      L4.10-11: कैसे
       L4.12-14: करेंगे?
   - kind: section
     words: L5
@@ -45,7 +43,6 @@ blocks:
       L22.2-L24.1: "([Mg(OH)₂])"
       L24.5-L26.1: "(NH₄OH)"
       L30.7-8: फेनॉलप्थेलियन
-      L30.11-12: ऑरेंज
   - kind: table
     number: L33.2
     words: L33-L43

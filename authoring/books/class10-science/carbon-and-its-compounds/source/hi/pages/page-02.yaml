@@ -12,8 +12,6 @@ blocks:
   - kind: text
     words: L1-L2
     continued: true
-    read:
-      L1.13-14: प्रकृति
   - kind: text
     words: L4-L5, L8, L10, L15.1-13, L19.1-10, L24, L28-L31
     read:
@@ -34,8 +32,6 @@ blocks:
     words: L32-L36
     read:
       L32.6: तत्वों
-      L34.2-3: { text: "करेंगे।", cause: other }
-      L35.1-2: { text: "कैसे", cause: other }
   - kind: text
     words: L37-L48
     read:
@@ -44,14 +40,12 @@ blocks:
       L43.6-7: { text: "C⁴⁻", cause: other }
       L46.1: "(ii) ये"
       L46.6-7: { text: "C⁴⁺", cause: other }
-      L47.5-6: { text: "केवल", cause: other }
   - kind: text
     words: L49-L55
     read:
       L49.4-5: परमाणुओं
       L49.8: तत्वों
       L49.10-11: परमाणुओं
-      L50.11-12: { text: "केवल", cause: other }
       L51.3: तत्व
       L51.11-12: अणुओं
       L52.10-11: परमाणुओं

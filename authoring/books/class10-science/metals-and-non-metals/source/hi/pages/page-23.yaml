@@ -18,8 +18,6 @@ blocks:
   - kind: question
     number: L3.1
     words: L3, L15
-    read:
-      L15.11-12: कैथोड
   - kind: question
     number: L4.1
     words: L4, L16, L18.1-10, L19-L20, L22, L23.1-5, L25, L27
@@ -34,8 +32,6 @@ blocks:
   - kind: question
     number: L6.1
     words: L6, L29-L30
-    read:
-      L29.7-8: कैसा
   - kind: question
     number: L7.1
     words: L7, L32-L37
@@ -55,7 +51,6 @@ blocks:
     words: L10, L41-L45
     read:
       L44.9-10: तर्क-वितर्क
-      L45.7-8: प्रकृति
   - kind: question
     number: L11.1
     words: L11, L46-L47

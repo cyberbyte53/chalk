@@ -1,8 +1,6 @@
 page: 20
 proofread: true
 cause: other
-notes:
-  other: "a word the PDF splits with a space (निकै ल, शीतलीकृ त, कै रट, उपय क्‍त, विद् त यु), or sets with its ु twice, once on the line before (श द्ध ु … ु)"
 answers:
   "word यशदलेपित": "a real word (galvanised), as printed on the page; the list lacks it"
   "word मिश्रात्वन": "a real word (alloying), as printed on the page; the list lacks it"
@@ -28,15 +26,12 @@ blocks:
       L13.8-9: निकैल
       L18.5-6: धातुओं
       L19.18: तत्वों
-      L20.13-14: शीतलीकृत
   - kind: box
     title: L1, L2, L3
     words: L1, L2, L3, L21.1-3, L22, L21.4, L23-L25
     read:
       "L21.1-3, L22.1": "शुद्ध"
-      L22.5-6: कैरट
       L22.24-25: उपयुक्त
-      L24.3-4: कैरट
   - kind: text
     words: L29-L34
     read:

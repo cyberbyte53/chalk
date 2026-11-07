@@ -1,8 +1,6 @@
 page: 3
 proofread: true
 cause: other
-notes:
-  other: "a word the PDF splits with a space (मर्क री, सर्कि ट, स्कू ल)"
 answers:
   "word सिरा": "a real word (end), as printed on the page; the list lacks it"
   "word जलता": "a real word (lights up), as printed on the page; the list lacks it"
@@ -26,15 +24,12 @@ blocks:
     crop: { box: [ 305, 88, 572, 292 ], cause: wrong-box }
   - kind: text
     words: L23-L25
-    read:
-      L25.2-3: मर्करी
   - kind: text
     words: L26
   - kind: activity
     number: L28.2
     words: L28, L32-L35
     read:
-      L32.7-8: सर्किट
       L35.5: इससे
   - kind: figure
     number: L49.2
@@ -48,7 +43,6 @@ blocks:
     words: L43-L45
     read:
       L44.16: (सोनोरस)
-      L45.10-11: स्कूल
   - kind: section
     number: L52.1
     title: L52.2

@@ -23,8 +23,6 @@ blocks:
     number: L33.2
     words: L13-L15, L17, L19, L21-L22, L24, L27.4-5, L28, L30-L31, L33
     box: [ 316, 88, 520, 263 ]
-    read:
-      L27.4-5: कैथोड
   - kind: figure
     number: L52.2
     words: L45-L46, L50-L55

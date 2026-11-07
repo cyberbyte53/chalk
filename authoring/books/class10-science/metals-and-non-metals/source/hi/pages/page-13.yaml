@@ -41,8 +41,6 @@ blocks:
   - kind: activity
     number: L24.2
     words: L24, L32-L44
-    read:
-      L44.4-5: प्रकृति
   - kind: figure
     number: L22.2
     words: L10-L12, L18, L22-L23

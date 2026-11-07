@@ -52,7 +52,6 @@ blocks:
       L46.2-3: सभ्यताओं
       L46.10-11: मर्करी
       L46.22: सिनेबार
-      L47.7-8: प्रकृति
   - kind: figure
     number: L48.1-2
     words: L48-L49
@@ -69,7 +68,6 @@ blocks:
     words: L54-L61
     read:
       L56.13: जिससे
-      L59.5-6: केवल
   - kind: box
     title: L21
     words: L21-L40

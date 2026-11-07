@@ -1,8 +1,6 @@
 page: 15
 proofread: true
 cause: other
-notes:
-  other: "a word the PDF splits with a space (प्राकृ तिक, कै से, रे त)"
 answers:
   "word समृद्धीकरण": "a real word (enrichment), as printed on the page; the list lacks it"
 furniture: L49-L52
@@ -17,7 +15,6 @@ blocks:
     words: L2-L6
     read:
       L2.4-5: धातुओं
-      L3.14-15: प्राकृतिक
       L4.6: तत्वों
   - kind: section
     number: L7.1
@@ -29,7 +26,6 @@ blocks:
     words: L8-L19
     read:
       L8.1-2: धातुओं
-      L9.8-9: कैसे
       L15.8: तत्व
       L17.15-16: धातुओं
   - kind: text
@@ -44,7 +40,6 @@ blocks:
     words: L20, L22, L24, L26.15, L27.6, L29, L31, L33, L40-L48
     box: [ 425, 440, 560, 728 ]
     read:
-      L45.1-2: प्राकृतिक
       L47.4-L48.2: संबंधित
   - kind: section
     number: L34.1
@@ -53,6 +48,5 @@ blocks:
   - kind: text
     words: L35-L39
     read:
-      L35.7-8: रेत
       L36.5-8: धातुओं
       L37.13-14: प्रक्रियाओं

@@ -37,7 +37,6 @@ blocks:
     read:
       L19.12-13: धातुओं
       L19.15-16: अधातुओं
-      L20.15-16: { text: "केवल", cause: other }
       L21.7: तत्वों
       L23.2-3: { text: "मर्करी", cause: other }
       L24.6-7: धातुओं
@@ -45,7 +44,6 @@ blocks:
       L25.13-14: धातुओं
       L28.16: { text: "अपररूप", cause: wrong-reading }
       L29.7: { text: "अपररूप", cause: wrong-reading }
-      L29.12-13: { text: "प्राकृतिक", cause: other }
       L30.13: { text: "अपररूप", cause: wrong-reading }
   - kind: text
     words: L34-L35
@@ -53,7 +51,6 @@ blocks:
       L34.1: तत्वों
       L34.12-13: धातुओं
       L34.15-16: अधातुओं
-      L35.2-3: { text: "वर्गीकृत", cause: other }
   - kind: activity
     number: L36.2
     words: L36, L42-L47

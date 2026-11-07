@@ -17,7 +17,6 @@ blocks:
       L2.8-10: "(Mg²⁺)"
       L3.2-4: "(⁻OH)"
       L5.16-18: "(⁻OH)"
-      L6.7-8: केवल
   - kind: box
     title: L8
     words: L8, L9, L11, L10, L12, L13-L20, L21, L23, L22, L26-L27, L24, L28, L25, L29-L34
@@ -25,7 +24,6 @@ blocks:
       L13.2-L14.1: "Al(OH)₃"
       L16.4-L17.1: "Al(OH)₃"
       L18.4-L19.1: "AlOH₃"
-      L21.2-3: सल्फेट
       L26-L27: "SO₄"
       L29-L34: "Al₂(SO₄)₃"
   - kind: box

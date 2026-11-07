@@ -1,8 +1,6 @@
 page: 2
 proofread: true
 cause: other
-notes:
-  other: "a word the PDF splits with a space, repaired as two halves"
 furniture: L1, L39, L28.1, L29.1, L30.1
 terms:
   - L38.15
@@ -27,8 +25,6 @@ blocks:
   - kind: text
     words: L7-L14
     read:
-      L9.2-3: सकेगा।
-      L9.12-13: संस्कृत
       L11.4-5: परमाणुओं
       L11.11-12: परमाणुओं
       L13.16-17: परमाणुओं
@@ -48,7 +44,6 @@ blocks:
       L27.12: जानने
       L28.3: किससे
       L29.4-5: परमाणुओं
-      L29.11-12: कैसे
       L30.3: तत्व
       L30.8: तत्व
       L30.10-11: परमाणुओं
@@ -58,8 +53,6 @@ blocks:
     title: L31.2-8
   - kind: text
     words: L32-L36
-    read:
-      L33.8-9: कैसे
   - kind: text
     words: L37-L38
     continues: true

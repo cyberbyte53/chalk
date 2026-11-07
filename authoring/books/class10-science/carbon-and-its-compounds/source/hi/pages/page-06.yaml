@@ -19,9 +19,6 @@ blocks:
     continued: true
     read:
       L5.6-7: परमाणुओं
-      L7.7-8: { text: "कार्बन", cause: other }
-      L7.10-12: संयोजकता
-      L7.18-19: { text: "कार्बन", cause: other }
       L8.1-2: परमाणुओं
       L8.8: तत्वों
       L8.10-11: परमाणुओं
@@ -39,9 +36,6 @@ blocks:
     read:
       L20.11: शृंखलन
       L21.14-15: शृंखलाओं
-      L22.7-8: { text: "प्राकृतिक", cause: other }
-      L23.4-5: { text: "केवल", cause: other }
-      L24.9-10: फ्रेडरिक
       L24.11: वोहलर
   - kind: section
     number: L27.1

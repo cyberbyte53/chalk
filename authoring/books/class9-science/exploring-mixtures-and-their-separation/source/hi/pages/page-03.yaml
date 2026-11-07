@@ -40,9 +40,6 @@ blocks:
       L18.11-12: मात्राओं
   - kind: text
     words: L25-L28, L30
-    read:
-      L25.8-9: कृषक
-      L28.6-7: सकेगी
   - kind: text
     words: L32
   - kind: text

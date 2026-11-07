@@ -14,9 +14,6 @@ blocks:
     number: L18.1-2
     title: L18.3-6
     words: L18-L24
-    read:
-      L20.2-3: अपकेंद्रित्र
-      L23.8-9: अपकेंद्रित्र
   - kind: heading
     title: L27.10-11
     words: L27.10-11
@@ -43,8 +40,6 @@ blocks:
     title: L1
     words: L1-L3, L5, L7, L9-L10, L13, L15-L17
     read:
-      L3.1-2: अपकेंद्रण
-      L13.11-12: अपकेंद्रित्र
       L17.12-13: सेवाओं
   - kind: figure
     number: L14.1-2

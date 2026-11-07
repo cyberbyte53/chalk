@@ -33,7 +33,6 @@ blocks:
       L29.10-11: परमाणुओं
       L30.1-L31.2: संबंध
       L31.12-L34.1: { text: "CₙH₂ₙ", cause: other }
-      L36.9-10: ऐल्केनों
   - kind: text
     words: L37-L41
   - kind: activity
@@ -55,7 +54,6 @@ blocks:
     words: L74-L77
     read:
       L74.15-16: शृंखलाओं
-      L75.9-10: { text: "प्रकृति", cause: other }
   - kind: text
     words: L78-L83
     continues: true

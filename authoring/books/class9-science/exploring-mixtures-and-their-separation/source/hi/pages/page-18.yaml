@@ -16,12 +16,8 @@ blocks:
     words: L2-L4
   - kind: text
     words: L5-L10
-    read:
-      L5.6-7: प्रकृति
   - kind: text
     words: L11-L15
-    read:
-      L11.6-7: छँटाई
   - kind: text
     words: L16-L17
     read:
@@ -30,6 +26,4 @@ blocks:
     title: L18
     words: L18, L19.2-15, L20, L21.2-14, L22.2-16, L23.2-18, L24-L25, L26.2-17, L27, L28.2-17, L29, L30.2-18, L31-L32, L33.2-19, L34, L35.2-18, L36, L37.2-15, L38
     read:
-      L20.2-3: वर्गीकृत
-      L33.2-3: अपकेंद्रण
       L35.15: जिससे

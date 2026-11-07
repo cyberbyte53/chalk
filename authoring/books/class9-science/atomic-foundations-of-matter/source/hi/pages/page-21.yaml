@@ -27,7 +27,6 @@ blocks:
     read:
       L6.4-L10.1: "(NH₄NO₃)"
       L12.4-L16.1: "(H₃PO₄)"
-      L16.4-5: फॉस्फेट
       L18.4-L20.1: "(NaHCO₃)"
   - kind: question
     number: L22.1
