@@ -18,7 +18,7 @@ import {
 import { showsOn } from "./crop";
 import { type Extract, PAGE_PREFIX, extractPaths, readYaml, sha256 } from "./files";
 import { isCandidate } from "./hindi/candidates";
-import { inHindiList } from "./hindi/list";
+import { isKnownWord } from "./hindi/list";
 import { PAGE_SCALE, numberedPages, renderPages } from "./read";
 import {
   type Book,
@@ -154,7 +154,7 @@ const isAfter = (a: readonly number[], b: readonly number[]): boolean => {
   return false;
 };
 
-/** Each word of the agent's Hindi readings that the list lacks, once for the whole book. */
+/** Each word of the agent's Hindi readings not known (the list, or answered as real in any book), once for the whole book. */
 function unknownWords(built: Built): Issue[] {
   const seen = new Set<string>();
   const issues: Issue[] = [];
@@ -163,7 +163,7 @@ function unknownWords(built: Built): Issue[] {
       for (const r of b.readings) {
         if (r.by !== Maker.Agent) continue;
         for (const word of r.text.match(HINDI_WORD) ?? []) {
-          if (seen.has(word) || inHindiList(word)) continue;
+          if (seen.has(word) || isKnownWord(word)) continue;
           seen.add(word);
           issues.push({
             id: `word ${word}`,
@@ -364,6 +364,9 @@ export function buildExtract(x: Extract): ExtractBuild {
   return { book: book.value, built, issues, problems, notes };
 }
 
+/** A word issue's id: `word अपररूप`. */
+const WORD = "word ";
+
 /** Each issue given its answer from its page file, if any. An answer to no issue can't be meant: a problem. */
 export function answer(
   issues: Issue[],
@@ -375,9 +378,15 @@ export function answer(
     if (given !== undefined && canBeAnswered) issue.answer = given;
   }
   const problems: string[] = [];
+  // A word answered as real is knowledge (the repair learns it, hindi/list.ts), kept when its
+  // issue is gone because the repair now reads the word itself.
   for (const [n, answers] of pages)
     for (const id of Object.keys(answers))
-      if (!id.startsWith(CHANGED) && !issues.some((i) => i.page === n && i.id === id))
+      if (
+        !id.startsWith(CHANGED) &&
+        !id.startsWith(WORD) &&
+        !issues.some((i) => i.page === n && i.id === id)
+      )
         problems.push(
           `${SourceFile.Pages}/${pageFileName(n)}: an answer to "${id}", which isn't an issue`,
         );

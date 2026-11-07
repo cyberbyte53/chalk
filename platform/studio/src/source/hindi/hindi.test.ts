@@ -212,8 +212,13 @@ describe("a page's spans, found from where its pieces sit", () => {
     const below = [[w("पर", 50, 60)], [{ ...w("बल", 20, 30), y0: 116, y1: 128 }]];
     expect(read({ ...page, lines: below })).toEqual(["पर", "बल"]);
   });
-  it("leaves a word written twice over for the reader, never collapsed to half (प्लेटलेट)", () => {
-    expect("left" in (pageSpans(line(["प्लेटलेट", 50, 80]))[0]?.repair ?? {})).toBe(true);
+  it("never collapses a word written twice over to half (प्लेटलेट, अपररूप)", () => {
+    const reading = (w: string) => {
+      const r = pageSpans(line([w, 50, 80]))[0]?.repair;
+      return r !== undefined && "reading" in r ? r.reading : undefined;
+    };
+    expect(reading("प्लेटलेट")).not.toBe("प्लेट");
+    expect(reading("अपररूप")).not.toBe("अपरूप");
   });
   it("keeps a run without Hindi as the PDF gives it", () => {
     expect(pageSpans(line(["(10X,", 50, 70]))).toEqual([

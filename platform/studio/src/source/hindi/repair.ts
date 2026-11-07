@@ -1,5 +1,5 @@
 import { spanForms } from "./candidates";
-import { inHindiList } from "./list";
+import { isKnownWord } from "./list";
 
 /**
  * Repairing a Hindi span (platform/docs/plans/sources.md, "Hindi repaired"): when exactly one of its
@@ -45,12 +45,12 @@ const unknownIn = (form: string, isWord: (w: string) => boolean) =>
  * Repairs a span (the PDF's words, as its text layer gives them), read as one word: its pieces all
  * joined. A space between two of its pieces may be the PDF's stray one or the book's own, and the
  * list can't tell which (it lacks names and compounds: कै मिलो for कैमिलो would be two real words), so
- * a reading that keeps one is the agent's. `isWord` is the word list, the Hindi list by default (a
- * book's own words added by the caller).
+ * a reading that keeps one is the agent's. `isWord` is the word list: by default the Hindi list and the words
+ * agents answered as real in any book.
  */
 export function repair(
   span: readonly string[],
-  isWord: (w: string) => boolean = inHindiList,
+  isWord: (w: string) => boolean = isKnownWord,
 ): Repair {
   const s = spanForms(span);
   const forms = s.forms(0, s.pieces.length);

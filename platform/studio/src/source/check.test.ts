@@ -319,3 +319,12 @@ describe("an extract not read by the new pipeline", () => {
     expect(report.notes[0]).toMatch(/to be read again/);
   });
 });
+
+describe("answers with no issue", () => {
+  it("are a problem, except a word answered as real, which the repair has learned", () => {
+    const pages = new Map([[1, { "word अपररूप": "a real word, as printed", "read L3.1": "why" }]]);
+    expect(answer([], pages)).toEqual([
+      `pages/page-01.yaml: an answer to "read L3.1", which isn't an issue`,
+    ]);
+  });
+});

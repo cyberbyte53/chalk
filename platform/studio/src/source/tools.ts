@@ -7,7 +7,7 @@ import { Tool } from "./schema";
  */
 export const TOOL_VERSIONS: Readonly<Record<Tool, number>> = {
   [Tool.Reader]: 1,
-  [Tool.HindiRepair]: 2,
+  [Tool.HindiRepair]: 3,
   [Tool.FigureSnap]: 1,
   [Tool.TableCells]: 1,
   [Tool.StructureDraft]: 2,
