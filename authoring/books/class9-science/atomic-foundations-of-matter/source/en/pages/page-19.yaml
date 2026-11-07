@@ -1,21 +1,14 @@
 page: 19
 proofread: true
 cause: other
-notes:
-  other: "a subscript set on its own line by the PDF"
 furniture: L24.1, L26.1, L29.1, L32.1, L35.1, L37.1, L40.1, L42.1, L44.1, L46.1, L49-L52
 blocks:
   - kind: example
     number: L1
     words: L1-L12
-    read:
-      "L2.7-L5": { text: "Ca(NO₃)₂" }
-      "L7.5-L10": { text: "Ca(NO₃)₂" }
   - kind: box
     title: L13
     words: L13-L19
-    read:
-      "L16.10-L18": { text: "Mg(OH)₂." }
   - kind: text
     words: L20-L22
   - kind: box

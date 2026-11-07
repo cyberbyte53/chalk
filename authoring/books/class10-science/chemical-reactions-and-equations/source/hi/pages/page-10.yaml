@@ -2,8 +2,6 @@ page: 10
 proofread: true
 furniture: L76-L79, L2-L12, L47-L49, L56
 cause: other
-notes:
-  other: "a subscript the PDF sets as a plain digit (Cl 2, Br 2), printed Cl₂, Br₂"
 answers:
   "word वोल्ट": "a real word (volt), as printed on the page; the list lacks it"
   "word डालिए": "a real word (put in), as printed on the page; the list lacks it"
@@ -35,14 +33,10 @@ blocks:
   - kind: equation
     number: L67.2
     words: L63-L67
-    read:
-      L65.3-L67.1: "Cl₂(g)"
   - kind: text
     words: L68
   - kind: equation
     number: L73.2
     words: L69-L73
-    read:
-      L71.3-L73.1: "Br₂(g)"
   - kind: text
     words: L74-L75

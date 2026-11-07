@@ -1,12 +1,13 @@
-address: https://ncert.nic.in/textbook/pdf/jesc103.pdf
-sha256: cda8ac2d0dfd62366bc8949b901df3f28128137b7e0971968f7568dccb715117
-pages: 21
 title: Metals and Non-metals
 reader: text
 edition: 2026-27
+address: https://ncert.nic.in/textbook/pdf/jesc103.pdf
+sha256: cda8ac2d0dfd62366bc8949b901df3f28128137b7e0971968f7568dccb715117
+pages: 21
 tools:
   reader: 1
   hindi-repair: 4
+  scripts: 1
   figure-snap: 1
   table-cells: 1
   structure-draft: 2

@@ -15,7 +15,6 @@ blocks:
     number: L5.2
     read:
       "L3.2-3": { text: "" }
-      "L3.7-L5.1": { text: "Br₂(g)" }
   - kind: text
     words: L6-L7
   - kind: text
@@ -42,7 +41,7 @@ blocks:
   - kind: figure
     words: L34-L35
     number: L34.1-2
-    box: [62, 447, 295, 686]
+    box: [ 62, 447, 295, 686 ]
   - kind: activity
     words: L27, L36-L53
     number: L27.1-2

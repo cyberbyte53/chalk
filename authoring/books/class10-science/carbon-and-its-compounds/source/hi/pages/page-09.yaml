@@ -38,7 +38,6 @@ blocks:
     read:
       L17.3-4: शाखाओं
       L17.7-8: शृंखलाओं
-      L18.14-L21.1: { text: "C₆H₁₂", cause: other }
   - kind: figure
     number: L24.2
     words: L24
@@ -48,13 +47,10 @@ blocks:
     read:
       L25.14: शृंखला,
       L26.2: शृंखला
-      L27.3-L31.1: { text: "(C₆H₆)", cause: other }
   - kind: figure
     number: L36.2
     words: L32-L36
     box: [ 215, 415, 420, 530 ]
-    read:
-      L32.3-L35.1: { text: "C₆H₆", cause: other }
   - kind: text
     words: L37-L39
     read:

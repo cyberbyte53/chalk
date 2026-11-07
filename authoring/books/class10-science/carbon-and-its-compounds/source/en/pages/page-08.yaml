@@ -13,40 +13,32 @@ blocks:
     words: L4-L5
     number: L5.1-3
     title: L5.4-6
-    box: [94, 128, 357, 170]
+    box: [ 94, 128, 357, 170 ]
   - kind: text
     words: L6
   - kind: figure
     words: L7-L10
     number: L7.1-3
     title: L7.4-L10
-    box: [96, 190, 412, 270]
-    read:
-      "L7.11-L10": { text: "C₄H₁₀" }
+    box: [ 96, 190, 412, 270 ]
   - kind: text
     words: L11-L17
     read:
       "L11.11-L15.1": { text: "C₄H₁₀." }
   - kind: text
     words: L18-L24
-    read:
-      "L20.4-L23": { text: "C₆H₁₂" }
   - kind: figure
     words: L25-L26
     number: L26.1-2
     title: L26.3-11
-    box: [80, 350, 432, 453]
+    box: [ 80, 350, 432, 453 ]
   - kind: text
     words: L27-L33
-    read:
-      "L29.6-L33.1": { text: "C₆H₆," }
   - kind: figure
     words: L34-L38
     number: L38.1-2
     title: L38.3-5
-    box: [110, 497, 332, 597]
-    read:
-      "L34.3-L37": { text: "C₆H₆" }
+    box: [ 110, 497, 332, 597 ]
   - kind: text
     words: L39-L43
   - kind: section

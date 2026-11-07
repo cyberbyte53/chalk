@@ -91,7 +91,7 @@
     - {words: L22.4-L24, by: agent}
     - {words: L25.3-L27.1, by: agent}
     - {words: L28.2-L30.1, by: agent}
-    - {words: L31.2-L33.1, by: agent}
+    - {words: L31.2-L33.1, by: scripts}
     - {words: L33.5-L35, by: agent}
 - id: "1.1.2"
   kind: table
@@ -159,8 +159,8 @@
     candle near a gas filled bubble. What do you observe? Repeat this Activity with some more acids
     like HCl, HNO₃ and CH₃COOH. Are the observations in all the cases the same or different?"
   made:
-    - {words: L31.11-L32, by: agent}
-    - {words: L34-L36, by: agent}
+    - {words: L31.11-L32.1, by: scripts}
+    - {words: L34.1-L36.1, by: scripts}
 - id: "1.2.2"
   kind: figure
   page: 3
@@ -200,8 +200,8 @@
   page: 4
   text: 2NaOH(aq) + Zn(s) → Na₂ZnO₂(s) + H₂(g) (Sodium zincate)
   made:
-    - {words: L15.5-L19.1, by: agent}
-    - {words: L19.3-L21, by: agent}
+    - {words: L15.5-L19.1, by: scripts}
+    - {words: L19.3-L21.1, by: scripts}
 - id: "1.2.9"
   kind: text
   page: 4
@@ -223,7 +223,7 @@
     each case through lime water (calcium hydroxide solution) as shown in Fig. 2.2 and record your
     observations.
   made:
-    - {words: L40-L44.1, by: agent}
+    - {words: L40.1-L44.1, by: scripts}
     - {words: L46-L48.1, by: agent}
 - id: "1.3.2"
   kind: figure
@@ -242,19 +242,19 @@
   page: 4
   text: "Test tube A: Na₂CO₃(s) + 2 HCl(aq) → 2NaCl(aq) + H₂O(l) + CO₂(g)"
   made:
-    - {words: L57.4-8, by: agent}
+    - {words: L57.4-8, by: scripts}
     - {words: L57.13-15, by: agent}
-    - {words: L57.17-19, by: agent}
-    - {words: L57.21-23, by: agent}
+    - {words: L57.17-19, by: scripts}
+    - {words: L57.21-23, by: scripts}
 - id: "1.3.5"
   kind: equation
   page: 4
   text: "Test tube B: NaHCO₃(s) + HCl(aq) → NaCl(aq) + H₂O(l) + CO₂(g)"
   made:
-    - {words: L58.4-6, by: agent}
+    - {words: L58.4-6, by: scripts}
     - {words: L58.10-11, by: agent}
-    - {words: L58.13-15, by: agent}
-    - {words: L58.17-19, by: agent}
+    - {words: L58.13-15, by: scripts}
+    - {words: L58.17-19, by: scripts}
 - id: "1.3.6"
   kind: text
   page: 4
@@ -264,10 +264,10 @@
   page: 4
   text: Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l) (Lime water) (White precipitate)
   made:
-    - {words: L60.1-3, by: agent}
-    - {words: L60.5-7, by: agent}
-    - {words: L60.9-13, by: agent}
-    - {words: L60.15-18, by: agent}
+    - {words: L60.1-3, by: scripts}
+    - {words: L60.5-7, by: scripts}
+    - {words: L60.9-13, by: scripts}
+    - {words: L60.15-18, by: scripts}
 - id: "1.3.8"
   kind: text
   page: 5
@@ -277,10 +277,10 @@
   page: 5
   text: CaCO₃(s) + H₂O(l)+ CO₂(g) → Ca(HCO₃)₂(aq) (Soluble in water)
   made:
-    - {words: L2.1-5, by: agent}
-    - {words: L2.7-9, by: agent}
-    - {words: L2.10-12, by: agent}
-    - {words: L2.14-20, by: agent}
+    - {words: L2.1-5, by: scripts}
+    - {words: L2.7-9, by: scripts}
+    - {words: L2.10-12, by: scripts}
+    - {words: L2.14-20, by: scripts}
 - id: "1.3.10"
   kind: text
   page: 5
@@ -320,7 +320,7 @@
   page: 5
   text: NaOH(aq) + HCl(aq) → NaCl(aq) + H₂O(l)
   made:
-    - {words: L31.7-L33, by: agent}
+    - {words: L31.7-L33.1, by: scripts}
 - id: "1.4.4"
   kind: text
   page: 5
@@ -446,13 +446,13 @@
     hydrogen ions, H⁺(aq), in solution, which are responsible for their acidic properties.
   made:
     - {words: L6.3-4, by: agent}
-    - {words: L6.12-13, by: agent}
-    - {words: L6.16-17, by: agent}
-    - {words: L7-L9.1, by: agent}
+    - {words: L6.12-13, by: scripts}
+    - {words: L6.16-17, by: scripts}
+    - {words: L7.1-L9.1, by: scripts}
     - {words: L9.2-3, by: agent}
     - {words: L9.5-L13.1, by: agent}
     - {words: L13.2-L15.2, by: agent}
-    - {words: L15.4-L17.1, by: agent}
+    - {words: L15.4-L17.1, by: scripts}
     - {words: L20.3-4, by: agent}
     - {words: L20.12-14, by: agent}
     - {words: L18, by: agent}
@@ -508,9 +508,9 @@
   page: 7
   text: HCl + H₂O → H₃O⁺ + Cl⁻
   made:
-    - {words: L49.3-L51.1, by: agent}
-    - {words: L51.3-L53.2, by: agent}
-    - {words: L53.4-5, by: agent}
+    - {words: L49.3-L51.1, by: scripts}
+    - {words: L51.3-L53.2, by: scripts}
+    - {words: L53.4-5, by: scripts}
 - id: "2.7.7"
   kind: text
   page: 7
@@ -524,9 +524,9 @@
   page: 7
   text: H⁺ + H₂O → H₃O⁺
   made:
-    - {words: L59.1-2, by: agent}
-    - {words: L59.4-L61.1, by: agent}
-    - {words: L61.3-L63.2, by: agent}
+    - {words: L59.1-2, by: scripts}
+    - {words: L59.4-L61.1, by: scripts}
+    - {words: L61.3-L63.2, by: scripts}
 - id: "2.7.9"
   kind: text
   page: 7
@@ -534,7 +534,7 @@
     is dissolved in water.
   made:
     - {words: L64.7-L66.2, by: agent}
-    - {words: L66.4-6, by: agent}
+    - {words: L66.4-6, by: scripts}
 - id: "2.7.10"
   kind: equation
   page: 7
@@ -542,9 +542,8 @@
   made:
     - {words: L69, by: agent}
     - {words: L70.2-4, by: agent}
-    - {words: L70.5-6, by: agent}
-    - {words: L70.8-9, by: agent}
-    - {words: L68, by: agent}
+    - {words: L70.5-6, by: scripts}
+    - {words: L70.8-9, by: scripts}
 - id: "2.7.11"
   kind: equation
   page: 8
@@ -552,25 +551,24 @@
   made:
     - {words: L1-L2, by: agent}
     - {words: L3.2-4, by: agent}
-    - {words: L3.5-7, by: agent}
+    - {words: L3.5-7, by: scripts}
     - {words: L3.9-11, by: agent}
 - id: "2.7.12"
   kind: equation
   page: 8
   text: Mg(OH)₂(s) H₂O → Mg²⁺(aq)+2OH⁻(aq)
   made:
-    - {words: L6-L8.1, by: agent}
+    - {words: L6.1-L8.1, by: scripts}
     - {words: L5, by: agent}
     - {words: L8.2-4, by: agent}
-    - {words: L8.5-7, by: agent}
-    - {words: L4, by: agent}
+    - {words: L8.5-7, by: scripts}
 - id: "2.7.13"
   kind: text
   page: 8
   text: Bases generate hydroxide (OH⁻) ions in water. Bases which are soluble in water are called
     alkalis.
   made:
-    - {words: L12.4-6, by: agent}
+    - {words: L12.4-6, by: scripts}
 - id: "2.7.14"
   kind: box
   page: 8
@@ -584,9 +582,8 @@
   text: Now as we have identified that all acids generate H⁺(aq) and all bases generate OH⁻(aq), we
     can view the neutralisation reaction as follows –
   made:
-    - {words: L17.10-12, by: agent}
-    - {words: L19.3-4, by: agent}
-    - {words: L18, by: agent}
+    - {words: L17.10-12, by: scripts}
+    - {words: L19.3-4, by: scripts}
 - id: "2.7.16"
   kind: equation
   page: 8
@@ -598,12 +595,11 @@
 - id: "2.7.18"
   kind: equation
   page: 8
-  text: H⁺(aq) + OH⁻(aq) → H₂O(l)
+  text: H⁺(aq) + OH⁻(aq) → H₂O(l) –
   made:
-    - {words: L24.1-3, by: agent}
+    - {words: L24.1-3, by: scripts}
     - {words: L24.5-6, by: agent}
-    - {words: L24.8-L26, by: agent}
-    - {words: L23, by: agent}
+    - {words: L24.8-L26.1, by: scripts}
 - id: "2.7.19"
   kind: text
   page: 8
@@ -617,7 +613,7 @@
     an exothermic or endothermic process? Repeat the above Activity with sodium hydroxide pellets
     and record your observations.
   made:
-    - {words: L41.7-L44, by: agent}
+    - {words: L41.7-L44.1, by: scripts}
 - id: "2.7.21"
   kind: figure
   page: 8
@@ -681,7 +677,7 @@
   text: 5. How is the concentration of hydronium ions (H₃O⁺) affected when a solution of an acid is
     diluted?
   made:
-    - {words: L11.9-L13.3, by: agent}
+    - {words: L11.9-L13.3, by: scripts}
 - id: "2.7.24.6"
   kind: question
   page: 9
@@ -689,7 +685,7 @@
   text: 6. How is the concentration of hydroxide ions (OH⁻) affected when excess base is dissolved in
     a solution of sodium hydroxide?
   made:
-    - {words: L15.9-11, by: agent}
+    - {words: L15.9-11, by: scripts}
 - id: "3"
   kind: section
   page: 9
@@ -704,8 +700,8 @@
     OH⁻ ions in solutions. Can we quantitatively find the amount of these ions present in a
     solution? Can we judge how strong a given acid or base is?
   made:
-    - {words: L21.7-8, by: agent}
-    - {words: L21.10-11, by: agent}
+    - {words: L21.7-8, by: scripts}
+    - {words: L21.10-11, by: scripts}
 - id: "3.2"
   kind: text
   page: 9
@@ -728,7 +724,7 @@
     concentration in the solution, that is, increase in the strength of alkali (Fig. 2.6). Generally
     paper impregnated with the universal indicator is used for measuring pH.
   made:
-    - {words: L35.5-6, by: agent}
+    - {words: L35.5-6, by: scripts}
 - id: "3.5"
   kind: figure
   page: 9
@@ -736,8 +732,8 @@
   text: Figure 2.6 Variation of pH with the change in concentration of H⁺(aq) and OH⁻(aq) ions
   crop: [99.1, 606.6, 526.2, 708.2]
   made:
-    - {words: L38.12-14, by: agent}
-    - {words: L38.16-18, by: agent}
+    - {words: L38.12-14, by: scripts}
+    - {words: L38.16-18, by: scripts}
     - {box: true, by: figure-snap}
 - id: "3.6"
   kind: activity
@@ -787,10 +783,10 @@
     ions are said to be strong acids, and acids that give less H⁺ ions are said to be weak acids.
     Can you now say what weak and strong bases are?
   made:
-    - {words: L30.12-13, by: agent}
-    - {words: L31.2-3, by: agent}
-    - {words: L33.12-13, by: agent}
-    - {words: L34.12-13, by: agent}
+    - {words: L30.12-13, by: scripts}
+    - {words: L31.2-3, by: scripts}
+    - {words: L33.12-13, by: scripts}
+    - {words: L34.12-13, by: scripts}
 - id: "3.10"
   kind: section
   page: 10
@@ -926,14 +922,14 @@
   number: "2."
   text: 2. What effect does the concentration of H⁺(aq) ions have on the nature of the solution?
   made:
-    - {words: L23.8-10, by: agent}
+    - {words: L23.8-10, by: scripts}
 - id: "3.10.15.3"
   kind: question
   page: 12
   number: "3."
   text: 3. Do basic solutions also have H⁺(aq) ions? If yes, then why are these basic?
   made:
-    - {words: L25.7-9, by: agent}
+    - {words: L25.7-9, by: scripts}
 - id: "3.10.15.4"
   kind: question
   page: 12
@@ -1057,10 +1053,10 @@
   page: 14
   text: 2NaCl(aq) + 2H₂O(l) → 2NaOH(aq) + Cl₂(g) + H₂(g)
   made:
-    - {words: L11.3-L13.1, by: agent}
+    - {words: L11.3-L13.1, by: scripts}
     - {words: L13.2, by: agent}
-    - {words: L13.5-L15.1, by: agent}
-    - {words: L15.3-L17, by: agent}
+    - {words: L13.5-L15.1, by: scripts}
+    - {words: L15.3-L17.1, by: scripts}
 - id: "4.4.9"
   kind: text
   page: 14
@@ -1089,18 +1085,18 @@
     powder is represented as Ca(ClO)₂, though the actual composition is quite complex.
   made:
     - {words: L27.10-L29.1, by: agent}
-    - {words: L30.4-L32.1, by: agent}
+    - {words: L30.4-L32.1, by: scripts}
 - id: "4.4.13"
   kind: equation
   page: 14
   text: 2Ca(OH)₂ + 2Cl₂ → Ca(ClO)₂ + CaCl₂ + 2H₂O
   made:
-    - {words: L34-L35, by: agent}
-    - {words: L36.2-L37, by: agent}
+    - {words: L34.1-L35.1, by: scripts}
+    - {words: L36.2-L37.1, by: scripts}
     - {words: L38.1, by: agent}
-    - {words: L38.2-L39, by: agent}
-    - {words: L40.2-L41, by: agent}
-    - {words: L42.2-L44, by: agent}
+    - {words: L38.2-L39.1, by: scripts}
+    - {words: L40.2-L41.1, by: scripts}
+    - {words: L42.2-L44.1, by: scripts}
 - id: "4.4.14"
   kind: text
   page: 15
@@ -1119,17 +1115,17 @@
     Sometimes it is added for faster cooking. The chemical name of the compound is sodium
     hydrogencarbonate (NaHCO₃). It is produced using sodium chloride as one of the raw materials.
   made:
-    - {words: L10.8-L12.1, by: agent}
+    - {words: L10.8-L12.1, by: scripts}
 - id: "4.4.17"
   kind: equation
   page: 15
   text: NaCl + H₂O + CO₂ + NH₃ → NH₄Cl + NaHCO₃ (Ammonium chloride) (Sodium hydrogencarbonate)
   made:
-    - {words: L14.3-5, by: agent}
-    - {words: L14.7-8, by: agent}
-    - {words: L14.10-11, by: agent}
-    - {words: L15.2-4, by: agent}
-    - {words: L15.6-7, by: agent}
+    - {words: L14.3-5, by: scripts}
+    - {words: L14.7-8, by: scripts}
+    - {words: L14.10-11, by: scripts}
+    - {words: L15.2-4, by: scripts}
+    - {words: L15.6-7, by: scripts}
 - id: "4.4.18"
   kind: text
   page: 15
@@ -1141,11 +1137,11 @@
   page: 15
   text: 2NaHCO₃ Heat → Na₂CO₃ + H₂O + CO₂ (Sodium hydrogencarbonate) (Sodium carbonate)
   made:
-    - {words: L23, by: agent}
+    - {words: L23.1-2, by: scripts}
     - {words: L24.1-3, by: agent}
-    - {words: L24.4-7, by: agent}
-    - {words: L24.9-11, by: agent}
-    - {words: L24.13-14, by: agent}
+    - {words: L24.4-7, by: scripts}
+    - {words: L24.9-11, by: scripts}
+    - {words: L24.13-14, by: scripts}
 - id: "4.4.20"
   kind: text
   page: 15
@@ -1166,11 +1162,11 @@
   page: 15
   text: NaHCO₃ + H⁺ → CO₂ + H₂O + Sodium salt of acid (From any acid)
   made:
-    - {words: L35-L36, by: agent}
-    - {words: L37.2-3, by: agent}
+    - {words: L35.1-L36.1, by: scripts}
+    - {words: L37.2-3, by: scripts}
     - {words: L37.4, by: agent}
-    - {words: L37.5-L38, by: agent}
-    - {words: L39.2-L41.1, by: agent}
+    - {words: L37.5-L38.1, by: scripts}
+    - {words: L39.2-L41.1, by: scripts}
 - id: "4.4.24"
   kind: text
   page: 15
@@ -1204,7 +1200,7 @@
   text: Na₂CO₃ + 10 H₂O → Na₂CO₃.10H₂O (Sodium carbonate)
   made:
     - {words: L60, by: agent}
-    - {words: L61.3-5, by: agent}
+    - {words: L61.3-5, by: scripts}
     - {words: L61.7-15, by: agent}
     - {words: L62, by: agent}
     - {words: L63, by: agent}
@@ -1214,8 +1210,8 @@
   text: What does 10H₂O signify? Does it make Na₂CO₃ wet? We will address this question in the next
     section.
   made:
-    - {words: L1.3-L3.1, by: agent}
-    - {words: L3.6-L6, by: agent}
+    - {words: L1.3-L3.1, by: scripts}
+    - {words: L3.6-L6.1, by: scripts}
 - id: "4.4.31"
   kind: text
   page: 16
@@ -1282,7 +1278,7 @@
     as water of cyrstallisation. It has the chemical formula CaSO₄.2H₂O. Let us look into the use of
     this salt.
   made:
-    - {words: L62.2-L66.1, by: agent}
+    - {words: L62.2-L66.1, by: scripts}
 - id: "4.5.7"
   kind: heading
   page: 16
@@ -1313,7 +1309,7 @@
     and for making surfaces smooth. Try to find out why is calcium sulphate hemihydrate called
     ‘Plaster of Paris’ ?
   made:
-    - {words: L12.8-L13, by: agent}
+    - {words: L12.8-L13.1, by: scripts}
 - id: "4.5.11"
   kind: exercise
   page: 17
@@ -1327,7 +1323,7 @@
   number: "1."
   text: 1. What is the common name of the compound Ca(ClO)₂?
   made:
-    - {words: L19.10-L21, by: agent}
+    - {words: L19.10-L21.1, by: scripts}
 - id: "4.5.11.2"
   kind: question
   page: 17
@@ -1370,7 +1366,7 @@
     salts and water. Water of crystallisation is the fixed number of water molecules present in one
     formula unit of a salt. Salts have various uses in everyday life and in industries.
   made:
-    - {words: L39.12-14, by: agent}
+    - {words: L39.12-14, by: scripts}
     - {words: L40.3-5, by: agent}
 - id: "4.5.12"
   kind: exercise
@@ -1493,7 +1489,7 @@
     notice discharge coming out of the nozzle. Direct this discharge on a burning candle. What
     happens?
   made:
-    - {words: L4.8-L6.1, page: 20, by: agent}
+    - {words: L4.8-L6.1, page: 20, by: scripts}
 - id: "4.5.12.17"
   kind: figure
   page: 20

@@ -31,12 +31,8 @@ blocks:
     words: L17-L26
     read:
       L19.3-4: "Al³⁺"
-      L19.7-8: "Cl⁻"
-      L20.3-4: "Mg²⁺"
       L20.7-L22.1: "PO₄³⁻"
-      L23.3-4: "Fe³⁺"
       L23.7-8: "O²⁻"
-      L24.3-4: "Ca²⁺"
       L24.7-L26.1: "SO₄²⁻"
   - kind: question
     number: L27.1
@@ -59,11 +55,7 @@ blocks:
     number: L38.1
     words: L38-L48
     read:
-      L39.2-3: "Ca²⁺"
       L39.5-6: "Br⁻"
-      L40.2-3: "Al³⁺"
       L40.5-L42.1: "CO₃²⁻"
-      L43.2-3: "K⁺"
       L43.5-L45.1: "SO₄²⁻"
       L46.2-L48.1: "NH₄⁺"
-      L48.3-4: "Cl⁻"

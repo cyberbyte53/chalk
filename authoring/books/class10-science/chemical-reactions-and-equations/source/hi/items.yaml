@@ -93,7 +93,7 @@
     दानेदार जस्ते पर तनु सल्फ़्यूरिक अम्ल की अभिक्रिया से हाइड्रोजन गैस का निर्माण
   crop: [67.1, 309.5, 221.5, 524.6]
   made:
-    - {words: L17.1-2, by: agent}
+    - {words: L17.1-2, by: scripts}
     - {words: L18.1, by: hindi-repair}
     - {words: L19.1, by: hindi-repair}
     - {words: L20.2, by: hindi-repair}
@@ -192,9 +192,9 @@
   kind: equation
   page: 3
   number: (1.2)
-  text: Mg + O₂ → MgO		 (1.2)
+  text: Mg + O₂ → MgO  (1.2)
   made:
-    - {words: L13.3-L14.1, by: agent}
+    - {words: L13.3-L14.1, by: scripts}
 - id: "1.6.3"
   kind: text
   page: 3
@@ -266,9 +266,9 @@
   number: (1.3)
   text: Zn + H₂SO₄ → ZnSO₄ + H₂ (1.3)
   made:
-    - {words: L36.3-L39.1, by: agent}
-    - {words: L40.2-L41.1, by: agent}
-    - {words: L42.2-L43.1, by: agent}
+    - {words: L36.3-L39.1, by: scripts}
+    - {words: L40.2-L41.1, by: scripts}
+    - {words: L42.2-L43.1, by: scripts}
 - id: "1.7.7"
   kind: text
   page: 3
@@ -320,9 +320,9 @@
   number: (1.4)
   text: Fe + H₂O → Fe₃O₄ + H₂ (1.4)
   made:
-    - {words: L23.3-L25.1, by: agent}
-    - {words: L25.3-L28.1, by: agent}
-    - {words: L29.2-L30.1, by: agent}
+    - {words: L23.3-L25.1, by: scripts}
+    - {words: L25.3-L28.1, by: scripts}
+    - {words: L29.2-L30.1, by: scripts}
 - id: "1.7.12"
   kind: text
   page: 4
@@ -338,9 +338,9 @@
   number: (1.5)
   text: Fe + H₂O → Fe₃O₄ + H₂ (1.5)
   made:
-    - {words: L36.3-L38.1, by: agent}
-    - {words: L38.3-L41.1, by: agent}
-    - {words: L42.2-L43.1, by: agent}
+    - {words: L36.3-L38.1, by: scripts}
+    - {words: L38.3-L41.1, by: scripts}
+    - {words: L42.2-L43.1, by: scripts}
 - id: "1.7.14"
   kind: text
   page: 4
@@ -418,18 +418,18 @@
     - {words: L83.7-8, by: agent}
     - {words: L84.3, by: agent}
     - {words: L84.7-9, by: hindi-repair}
-    - {words: L1.10-L3.1, page: 5, by: agent}
-    - {words: L3.6-L6.1, page: 5, by: agent}
-    - {words: L7.2-L10.1, page: 5, by: agent}
+    - {words: L1.10-L3.1, page: 5, by: scripts}
+    - {words: L3.6-L6.1, page: 5, by: scripts}
+    - {words: L7.2-L10.1, page: 5, by: scripts}
 - id: "1.7.20"
   kind: equation
   page: 5
   number: (1.6)
   text: Fe + 4 H₂O → Fe₃O₄ + H₂ (1.6) (आंशिक रूप से संतुलित समीकरण)
   made:
-    - {words: L12.4-L14.1, by: agent}
-    - {words: L14.2-L17.1, by: agent}
-    - {words: L18.2-L19.1, by: agent}
+    - {words: L12.4-L14.1, by: scripts}
+    - {words: L14.2-L17.1, by: scripts}
+    - {words: L18.2-L19.1, by: scripts}
 - id: "1.7.21"
   kind: text
   page: 5
@@ -461,7 +461,7 @@
   made:
     - {words: L28.3, by: hindi-repair}
     - {words: L30.2-L31.4, by: hindi-repair}
-    - {words: L32.2-L34.1, by: agent}
+    - {words: L32.2-L34.1, by: scripts}
     - {words: L36.2-L37.1, by: agent}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
@@ -475,9 +475,9 @@
   number: (1.7)
   text: Fe + 4 H₂O → Fe₃O₄ + 4 H₂ (1.7) (आंशिक रूप से संतुलित समीकरण)
   made:
-    - {words: L41.4-L43.1, by: agent}
-    - {words: L44.1-L47.1, by: agent}
-    - {words: L48.3-L49.1, by: agent}
+    - {words: L41.4-L43.1, by: scripts}
+    - {words: L44.1-L47.1, by: scripts}
+    - {words: L48.3-L49.1, by: scripts}
     - {words: L52.1-4, by: agent}
     - {words: L52.7-L53.4, by: hindi-repair}
 - id: "1.7.26"
@@ -503,7 +503,7 @@
   crop: [98.9, 427.6, 453.6, 497.6]
   made:
     - {words: L59.3, by: hindi-repair}
-    - {words: L62.2-L65.1, by: agent}
+    - {words: L62.2-L65.1, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "1.7.28"
@@ -518,9 +518,9 @@
   number: (1.8)
   text: 3 Fe + 4 H₂O → Fe₃O₄ + 4 H₂ (1.8)
   made:
-    - {words: L69.5-L71.1, by: agent}
-    - {words: L71.3-L74.1, by: agent}
-    - {words: L75.3-L76.1, by: agent}
+    - {words: L69.5-L71.1, by: scripts}
+    - {words: L71.3-L74.1, by: scripts}
+    - {words: L75.3-L76.1, by: scripts}
 - id: "1.7.30"
   kind: text
   page: 5
@@ -537,9 +537,9 @@
   number: (1.9)
   text: 3 Fe + 4 H₂O → Fe₃O₄ + 4 H₂ (1.9) (संतुलित समीकरण)
   made:
-    - {words: L81.5-L83.1, by: agent}
-    - {words: L83.3-L86.1, by: agent}
-    - {words: L87.3-L88.1, by: agent}
+    - {words: L81.5-L83.1, by: scripts}
+    - {words: L83.3-L86.1, by: scripts}
+    - {words: L87.3-L88.1, by: scripts}
     - {words: L90.1-L91.4, by: hindi-repair}
 - id: "1.7.32"
   kind: text
@@ -581,9 +581,9 @@
   number: (1.10)
   text: 3Fe(s) + 4H₂O(g) → Fe₃O₄(s) + 4H₂(g) (1.10)
   made:
-    - {words: L10.3-L12.1, by: agent}
-    - {words: L12.3-L16.1, by: agent}
-    - {words: L16.3-L18.1, by: agent}
+    - {words: L10.3-L12.1, by: scripts}
+    - {words: L12.3-L16.1, by: scripts}
+    - {words: L16.3-L18.1, by: scripts}
 - id: "1.7.37"
   kind: text
   page: 6
@@ -606,9 +606,9 @@
   page: 6
   text: CO(g) + 2H₂(g) 340atm → CH₃OH(1)
   made:
-    - {words: L27.3-L29.1, by: agent}
+    - {words: L27.3-L29.1, by: scripts}
     - {words: L29.2-4, by: agent}
-    - {words: L29.6-L31.1, by: agent}
+    - {words: L29.6-L31.1, by: scripts}
 - id: "1.7.41"
   kind: equation
   page: 6
@@ -616,12 +616,12 @@
   text: 6CO₂ (aq) + 12H₂O(1) सूर्य–प्रकाश क्लोरोफिल C₆H₁₂O₆ (aq)+6O₂ (aq) + 6H₂O(1) (1.12) (ग्लूकोज)
   made:
     - {words: L33.1-L34.1, by: agent}
-    - {words: L35.3-L37.1, by: agent}
+    - {words: L35.3-L37.1, by: scripts}
     - {words: L32.1-2, by: agent}
     - {words: L50.1, by: hindi-repair}
     - {words: L39.1-L44.1, by: agent}
     - {words: L45.1-L46.1, by: agent}
-    - {words: L47.3-L49.1, by: agent}
+    - {words: L47.3-L49.1, by: scripts}
     - {words: L51.1, by: hindi-repair}
 - id: "1.7.42"
   kind: text
@@ -648,7 +648,7 @@
 - id: "1.7.43.2"
   kind: question
   page: 6
-  number: 2. निम्नलिखित
+  number: "2."
   text: 2. निम्नलिखित रासायनिक अभिक्रियाओं के लिए संतुलित समीकरण लिखिए— (i) हाइड्रोजन + क्लोरीन →
     हाइड्रोजन क्लोराइड (ii) बेरियम क्लोराइड + ऐलुमीनियम सल्फ़ेट → बेरियम सल्फ़ेट + ऐलुमीनियम
     क्लोराइड (ii) सोडियम + जल → सोडियम हाइड्रॉक्साइड + हाइड्रोजन
@@ -662,7 +662,7 @@
 - id: "1.7.43.3"
   kind: question
   page: 6
-  number: 3. निम्नलिखित
+  number: "3."
   text: 3. निम्नलिखित अभिक्रियाओं के लिए उनकी अवस्था के संकेतों के साथ संतुलित रासायनिक समीकरण लिखिए—
     (i) जल में बेरियम क्लोराइड तथा सोडियम सल्फ़ेट के विलयन अभिक्रिया करके सोडियम क्लोराइड का विलयन
     तथा अघुलनशील बेरियम सल्फ़ेट का अवक्षेप बनाते हैं। (ii) सोडियम हाइड्रोक्साइड का विलयन (जल में)
@@ -747,8 +747,8 @@
   number: (1.13)
   text: CaO(s) + H₂O(1) → Ca(OH)₂(aq) + ऊष्मा  (1.13) (बिना बुझा हुआ चूना) (बुझा हुआ चूना)
   made:
-    - {words: L25.3-L27.1, by: agent}
-    - {words: L27.3-L29.1, by: agent}
+    - {words: L25.3-L27.1, by: scripts}
+    - {words: L27.3-L29.1, by: scripts}
     - {words: L29.3, by: hindi-repair}
 - id: "2.2.5"
   kind: text
@@ -809,10 +809,10 @@
   kind: equation
   page: 7
   number: (1.15)
-  text: C(s) + O₂(g) → CO₂(g) (1.15)
+  text: C(s) + O₂(g) → CO₂(g)  (1.15)
   made:
-    - {words: L58.3-L60.1, by: agent}
-    - {words: L60.3-L62.1, by: agent}
+    - {words: L58.3-L60.1, by: scripts}
+    - {words: L60.3-L62.1, by: scripts}
 - id: "2.2.11"
   kind: text
   page: 8
@@ -826,9 +826,9 @@
   number: (1.16)
   text: 2H₂(g) + O₂(g) → 2H₂O(l) (1.16)
   made:
-    - {words: L6.1-L8.1, by: agent}
-    - {words: L8.3-L10.1, by: agent}
-    - {words: L10.3-L12.1, by: agent}
+    - {words: L6.1-L8.1, by: scripts}
+    - {words: L8.3-L10.1, by: scripts}
+    - {words: L10.3-L12.1, by: scripts}
 - id: "2.2.13"
   kind: text
   page: 8
@@ -865,10 +865,10 @@
   number: (1.17)
   text: CH₄(g) + 2O₂ (g) → CO₂ (g) + 2H₂O (g) + ऊर्जा  (1.17)
   made:
-    - {words: L21.1-L23.1, by: agent}
-    - {words: L23.3-L24.1, by: agent}
-    - {words: L25.3-L26.1, by: agent}
-    - {words: L27.3-L29.1, by: agent}
+    - {words: L21.1-L23.1, by: scripts}
+    - {words: L23.3-L24.1, by: scripts}
+    - {words: L25.3-L26.1, by: scripts}
+    - {words: L27.3-L29.1, by: scripts}
     - {words: L29.4, by: hindi-repair}
 - id: "2.2.18"
   kind: text
@@ -902,7 +902,7 @@
     - {words: L37.1-L42.1, by: agent}
     - {words: L43.3-L44.1, by: agent}
     - {words: L45.3-L46.1, by: agent}
-    - {words: L47.3-L49.1, by: agent}
+    - {words: L47.3-L49.1, by: scripts}
 - id: "2.2.21"
   kind: text
   page: 8
@@ -936,8 +936,8 @@
 - id: "2.3"
   kind: section
   page: 8
-  number: 1.2.2 वियोजन
-  title: 1.2.2 वियोजन (अपघटन) अभिक्रिया
+  number: 1.2.2
+  title: वियोजन (अपघटन) अभिक्रिया
   text: 1.2.2 वियोजन (अपघटन) अभिक्रिया
   made:
     - {words: L58.1, by: agent}
@@ -1159,7 +1159,7 @@
   text: 2AgCl(s) सूर्य का प्रकाश 2Ag(s) + Cl₂(g) (1.22)
   made:
     - {words: L64.1-4, by: hindi-repair}
-    - {words: L65.3-L67.1, by: agent}
+    - {words: L65.3-L67.1, by: scripts}
 - id: "2.3.19"
   kind: text
   page: 10
@@ -1170,7 +1170,7 @@
   number: (1.23)
   text: 2AgBr(s) सूर्य का प्रकाश 2Ag(s) + Br₂(g) (1.23)
   made:
-    - {words: L71.3-L73.1, by: agent}
+    - {words: L71.3-L73.1, by: scripts}
 - id: "2.3.21"
   kind: text
   page: 10
@@ -1208,7 +1208,7 @@
 - id: "2.3.24.1"
   kind: question
   page: 11
-  number: 1. किसी
+  number: "1."
   text: 1. किसी पदार्थ ‘X’ के विलयन का उपयोग सफ़ेदी करने के लिए होता है। (i) पदार्थ ‘X’ का नाम तथा
     इसका सूत्र लिखिए। (ii) ऊपर (i) में लिखे पदार्थ ‘X’ की जल के साथ अभिक्रिया लिखिए।
   made:
@@ -1228,8 +1228,8 @@
 - id: "2.4"
   kind: section
   page: 11
-  number: 1.2.3 विस्थापन
-  title: 1.2.3 विस्थापन अभिक्रिया
+  number: 1.2.3
+  title: विस्थापन अभिक्रिया
   text: 1.2.3 विस्थापन अभिक्रिया
   made:
     - {words: L15.1, by: hindi-repair}
@@ -1353,8 +1353,8 @@
 - id: "2.5"
   kind: section
   page: 12
-  number: 1.2.4 द्विविस्थापन
-  title: 1.2.4 द्विविस्थापन अभिक्रिया
+  number: 1.2.4
+  title: द्विविस्थापन अभिक्रिया
   text: 1.2.4 द्विविस्थापन अभिक्रिया
   made:
     - {words: L53.1, by: hindi-repair}
@@ -1378,7 +1378,7 @@
   kind: equation
   page: 13
   number: (1.27)
-  text: Na₂SO₄ (aq) + BaCl₂ (aq) → BaSO₄ (s) + 2NaCl(aq)		 (1.27) (सोडियम  सल्फ़ेट) (बेरियम  क्लोराइड)
+  text: Na₂SO₄ (aq) + BaCl₂ (aq) → BaSO₄ (s) + 2NaCl(aq)  (1.27) (सोडियम  सल्फ़ेट) (बेरियम  क्लोराइड)
     (बेरियम  सल्फ़ेट) (सोडियम क्लोराइड)
   made:
     - {words: L4.1-L7.1, by: agent}
@@ -1397,7 +1397,7 @@
     अभिकारकों के बीच आयनों का आदान-प्रदान होता है, उन्हें द्विविस्थापन अभिक्रियाएँ कहते हैं।
   made:
     - {words: L21.1, by: hindi-repair}
-    - {words: L21.5-6, by: agent}
+    - {words: L21.5-6, by: scripts}
     - {words: L21.8-L22.2, by: agent}
     - {words: L22.5-L23.1, by: agent}
     - {words: L25.6, by: agent}
@@ -1451,7 +1451,7 @@
   number: (1.28)
   text: 2Cu + O₂ तापन 2CuO (1.28)
   made:
-    - {words: L46.3-L47.1, by: agent}
+    - {words: L46.3-L47.1, by: scripts}
 - id: "2.6.6"
   kind: text
   page: 13
@@ -1463,10 +1463,10 @@
   kind: equation
   page: 13
   number: (1.29)
-  text: CuO + H₂ तापन Cu + H₂O (1.29)
+  text: CuO + H₂ तापन Cu + H₂O  (1.29)
   made:
-    - {words: L52.3-L53.1, by: agent}
-    - {words: L54.4-L56.1, by: agent}
+    - {words: L52.3-L53.1, by: scripts}
+    - {words: L54.4-L56.1, by: scripts}
 - id: "2.6.8"
   kind: text
   page: 13
@@ -1513,7 +1513,7 @@
   number: (1.32)
   text: MnO₂ + 4HCl → MnCl₂ + 2H₂O + Cl₂ (1.32)
   made:
-    - {words: L8.1-L9.1, by: agent}
+    - {words: L8.1-L9.1, by: scripts}
     - {words: L10.4-L11.1, by: agent}
     - {words: L12.2-L14.1, by: agent}
     - {words: L14.3-L15.1, by: agent}
@@ -1561,8 +1561,8 @@
 - id: "3.1"
   kind: section
   page: 14
-  number: 1.3.1 संक्षारण
-  title: 1.3.1 संक्षारण
+  number: 1.3.1
+  title: संक्षारण
   text: 1.3.1 संक्षारण
   made:
     - {words: L36.1, by: hindi-repair}
@@ -1597,8 +1597,8 @@
 - id: "3.2"
   kind: section
   page: 15
-  number: 1.3.2 विकृतगंधिता
-  title: 1.3.2 विकृतगंधिता
+  number: 1.3.2
+  title: विकृतगंधिता
   text: 1.3.2 विकृतगंधिता
   made:
     - {words: L7.1, by: hindi-repair}
@@ -1636,7 +1636,7 @@
 - id: "3.2.3.1"
   kind: question
   page: 15
-  number: 1. जब
+  number: "1."
   text: 1. जब लोहे की कील को कॉपर सल्फ़ेट के विलयन में डुबोया जाता है तो विलयन का रंग क्यों बदल जाता है?
   made:
     - {words: L17.1, by: hindi-repair}
@@ -1649,17 +1649,17 @@
 - id: "3.2.3.3"
   kind: question
   page: 15
-  number: 3. निम्न
-  text: "3. निम्न अभिक्रियाओं में उपचयित तथा अपचयित पदार्थों की पहचान कीजिए: \t\t(i) 4Na(s) + O₂(g) →
-    2Na₂O(s) \t\t(ii) CuO(s) + H₂(g) → Cu(s) + H₂O(l)"
+  number: "3."
+  text: "3. निम्न अभिक्रियाओं में उपचयित तथा अपचयित पदार्थों की पहचान कीजिए:  (i) 4Na(s) + O₂(g) →
+    2Na₂O(s)  (ii) CuO(s) + H₂(g) → Cu(s) + H₂O(l)"
   made:
     - {words: L20.1, by: hindi-repair}
     - {words: L20.2-3, by: agent}
     - {words: L20.11, by: agent}
-    - {words: L21.4-L23.1, by: agent}
+    - {words: L21.4-L23.1, by: scripts}
     - {words: L23.3-L25.1, by: agent}
-    - {words: L26.4-L28.1, by: agent}
-    - {words: L28.5-L30.1, by: agent}
+    - {words: L26.4-L28.1, by: scripts}
+    - {words: L28.5-L30.1, by: scripts}
 - id: "3.2.3.4"
   kind: box
   page: 15
@@ -1709,7 +1709,7 @@
   made:
     - {words: L14.6-L15.2, by: agent}
     - {words: L15.7, by: hindi-repair}
-    - {words: L16.7-L18.1, by: agent}
+    - {words: L16.7-L18.1, by: scripts}
     - {words: L20.3, by: hindi-repair}
     - {words: L22.3, by: hindi-repair}
 - id: "3.2.4.2"
@@ -1761,7 +1761,7 @@
   page: 17
   number: "6."
   text: 6. निम्न रासायनिक समीकरणों को संतुलित कीजिए— (a) HNO₃ + Ca(OH)₂ → Ca(NO₃)₂ + H₂O (b) NaOH +
-    H₂SO₄ → Na₂SO₄ + H₂O (c) NaCl		 + AgNO₃ → AgCl		 + NaNO₃ (d) BaCl₂ + H₂SO₄ → BaSO₄ + HCl
+    H₂SO₄ → Na₂SO₄ + H₂O (c) NaCl  + AgNO₃ → AgCl  + NaNO₃ (d) BaCl₂ + H₂SO₄ → BaSO₄ + HCl
   made:
     - {words: L21.2-L22.1, by: agent}
     - {words: L23.2-L24.1, by: agent}
@@ -1891,7 +1891,7 @@
 - id: "3.2.4.20"
   kind: question
   page: 18
-  number: 20. निम्नलिखित
+  number: "20."
   text: 20. निम्नलिखित पदों का वर्णन कीजिए तथा प्रत्येक का एक-एक उदाहरण दीजिए— (a) संक्षारण  (b)
     विकृतगंधिता
   made:

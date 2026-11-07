@@ -15,8 +15,6 @@ blocks:
   - kind: question
     number: L1.1
     words: L1-L2
-    read:
-      L1.9-10: "Cl⁻"
   - kind: figure
     number: L4.1-2
     words: L3-L4
@@ -27,7 +25,6 @@ blocks:
     read:
       L6.4-L10.1: "(NH₄NO₃)"
       L12.4-L16.1: "(H₃PO₄)"
-      L18.4-L20.1: "(NaHCO₃)"
   - kind: question
     number: L22.1
     words: L22-L26
@@ -36,7 +33,6 @@ blocks:
     words: L27-L30
     read:
       L27.2: { text: "बाईं", cause: wrong-reading }
-      L28.6-L29.1: "LiNO₃"
   - kind: table
     number: L31.1-2
     words: L31, L32-L34, L41-L42, L43-L44, L35-L37, L38, L45-L46, L39, L40
@@ -47,9 +43,6 @@ blocks:
       L43-L44: "PO₄³⁻"
       L35-L37: "NH₄⁺"
       L38: "Li⁺"
-      L45-L46: "LiNO₃"
-      L39: "Al³⁺"
-      L40: "Cu²⁺"
   - kind: question
     number: L47.1
     words: L47-L50

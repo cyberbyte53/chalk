@@ -11,9 +11,8 @@ blocks:
     number: L2.1-3
     title: L2.4-7
     words: L2-L14, L23, L16, L15, L17, L24, L19, L18, L22, L25.1-2, L21, L20, L25.3
-    box: [88, 85, 480, 240]
+    box: [ 88, 85, 480, 240 ]
     read:
-      "L5-L6.1": { text: "OH⁻" }
       "L8-L10.1": { text: "NO₃⁻" }
       "L12-L14.1": { text: "HCO₃⁻" }
       "L23.2, L16, L15": { text: "CO₃²⁻" }
@@ -34,9 +33,6 @@ blocks:
   - kind: box
     title: L36
     words: L36, L37.1-6, L38.1-5, L39.1-3, L40-L43, L37.7-12, L38.6-10, L39.4-6, L44-L47, L48-L53
-    read:
-      "L45.3-L47": { text: "H₂S." }
-      "L51.8-L53": { text: "CCl₄." }
   - kind: section
     number: L54.1
     title: L54.2-7

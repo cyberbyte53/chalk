@@ -9,6 +9,9 @@ answers:
   "word नाक": "a real word (nose), as printed on the page; the list lacks it"
   "word फ़ेरस": "a real word (ferrous), as printed on the page; the list lacks it"
   "word ऊष्माक्षेपी": "a real word (exothermic), as printed on the page; the list lacks it"
+  partial L37.1-L42.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L43.3-L44.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L45.3-L46.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 terms:
   - L14.13-14
   - L18.4-6
@@ -21,10 +24,6 @@ blocks:
   - kind: equation
     number: L12.2
     words: L6-L12
-    read:
-      L6.1-L8.1: "2H₂(g)"
-      L8.3-L10.1: "O₂(g)"
-      L10.3-L12.1: "2H₂O(l)"
   - kind: text
     words: L13-L15
     read:
@@ -44,11 +43,6 @@ blocks:
   - kind: equation
     number: L29.5
     words: L21-L29
-    read:
-      L21.1-L23.1: "CH₄(g)"
-      L23.3-L24.1: "2O₂"
-      L25.3-L26.1: "CO₂"
-      L27.3-L29.1: "2H₂O"
   - kind: text
     words: L30
   - kind: text
@@ -61,7 +55,6 @@ blocks:
       L37.1-L42.1: "C₆H₁₂O₆"
       L43.3-L44.1: "6O₂"
       L45.3-L46.1: "6CO₂"
-      L47.3-L49.1: "6H₂O(1)"
   - kind: text
     words: L53-L54
     read:

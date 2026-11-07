@@ -14,26 +14,14 @@ blocks:
     words: L7
   - kind: text
     words: L8-L13
-    read:
-      "L10.8-L12.1": { text: "(NaHCO₃)." }
   - kind: equation
     words: L14-L15, L16.1, L17.1, L16.2, L17.2
-    read:
-      "L14.3-5": { text: "H₂O" }
-      "L14.7-8": { text: "CO₂" }
-      "L14.10-11": { text: "NH₃" }
-      "L15.2-4": { text: "NH₄Cl" }
-      "L15.6-7": { text: "NaHCO₃" }
   - kind: text
     words: L18-L21
   - kind: equation
     words: L23, L22, L24-L28
     read:
-      "L23": { text: "2NaHCO₃" }
       "L24.1-3": { text: "→" }
-      "L24.4-7": { text: "Na₂CO₃" }
-      "L24.9-11": { text: "H₂O" }
-      "L24.13-14": { text: "CO₂" }
   - kind: text
     words: L29
   - kind: heading
@@ -44,11 +32,7 @@ blocks:
   - kind: equation
     words: L35-L42
     read:
-      "L35-L36": { text: "NaHCO₃" }
-      "L37.2-3": { text: "H⁺" }
       "L37.4": { text: "→", cause: wrong-reading }
-      "L37.5-L38": { text: "CO₂" }
-      "L39.2-L41.1": { text: "H₂O" }
   - kind: text
     words: L43-L44
   - kind: text
@@ -66,7 +50,6 @@ blocks:
     words: L60-L63
     read:
       "L60": { text: "Na₂CO₃" }
-      "L61.3-5": { text: "H₂O" }
       "L61.7-15": { text: "Na₂CO₃.10H₂O" }
       "L62": { text: "(Sodium" }
       "L63": { text: "carbonate)" }

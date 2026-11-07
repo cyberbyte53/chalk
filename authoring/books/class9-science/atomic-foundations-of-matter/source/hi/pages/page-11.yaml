@@ -45,12 +45,8 @@ blocks:
   - kind: text
     words: L8.2-L9, L10.2-L12, L13.2-L15, L16.2-L18, L19.2-L21, L22.2-L26, L27.2-L31
     read:
-      L10.2-L11.1: "CO₂"
       L12.10: मोनोकार्बन
-      L13.2-L14.1: "CS₂"
-      L16.2-L17.1: "PCl₃"
       L19.2-L20.1: "SF₆"
-      L22.2-L25.1: "N₂O₄"
       L26.10: टेट्राऑक्साइड)।
       L27.2-L30.1: "N₂O₅"
   - kind: text
@@ -58,12 +54,10 @@ blocks:
     read:
       L32.5: तत्व
       L33.1-4: परमाणुओं
-      L34.9-L36.1: "H₂S"
   - kind: text
     words: L38-L44
     read:
       L38.16-L40.1: "H₂O"
-      L41.17-L42.1: "NH₃"
   - kind: section
     number: L45.1
     title: L45.2-8
@@ -87,4 +81,3 @@ blocks:
     box: [ 220, 660, 496, 770 ]
     read:
       L66.2-3: "e⁻"
-      L67.4-6: "(Na⁺)"

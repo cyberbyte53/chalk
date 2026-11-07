@@ -25,11 +25,9 @@ blocks:
     words: L47-L51
     number: L47.1-2
     title: L47.3-9
-    box: [86, 406, 428, 509]
+    box: [ 86, 406, 428, 509 ]
     read:
       "L49.3-4": { text: "e⁻" }
-      "L50.3-4": { text: "p⁺" }
-      "L51.3-4": { text: "n⁰" }
   - kind: box
     words: L52-L67
     title: L52

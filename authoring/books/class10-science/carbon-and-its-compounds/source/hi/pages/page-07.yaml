@@ -31,7 +31,6 @@ blocks:
   - kind: text
     words: L10-L18
     read:
-      L10.15-L13.1: { text: "C₃H₈", cause: other }
       L14.7-8: परमाणुओं
   - kind: text
     words: L19-L24

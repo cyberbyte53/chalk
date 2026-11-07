@@ -11,9 +11,6 @@ blocks:
     number: L1.2
     words: L1-L19
     box: [ 183, 112, 537, 238 ]
-    read:
-      L5.1-L6.1: "CaCl₂"
-      L8.1-L9.1: "MgCl₂"
     cells: { rows: [ [ "L2.1", "L2.2-3", "L2.4-5" ], [ "L3", "L10", "L15" ], [ "L4", "L11", "L16" ], [ "L5-L6", "L12", "L17" ], [ "L7", "L13", "L18" ], [ "L8-L9", "L14", "L19" ] ] }
   - kind: text
     words: L20-L37

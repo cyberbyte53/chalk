@@ -10,6 +10,8 @@ answers:
   "read L32.1-2": "the PDF sets the ू of सूर्य apart (L38, above the arrow, in furniture); the image prints सूर्य–प्रकाश"
   "read L60.9-L62.2": "the PDF lays संकेतों के साथ संतुलित as a separate line (L61-L62) over L60 and leaves letters of it in L60; the reading puts those same letters in the image's order"
   "word ऐलुमीनियम": "a real word (aluminium), as printed on the page; the list lacks it"
+  partial L33.1-L34.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L45.1-L46.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: text
     words: L1-L4
@@ -26,10 +28,6 @@ blocks:
   - kind: equation
     number: L18.2
     words: L10-L18
-    read:
-      L10.3-L12.1: "4H₂O(g)"
-      L12.3-L16.1: "Fe₃O₄(s)"
-      L16.3-L18.1: "4H₂(g)"
   - kind: text
     words: L19-L22
     read:
@@ -42,19 +40,15 @@ blocks:
   - kind: equation
     words: L27-L31
     read:
-      L27.3-L29.1: "2H₂(g)"
       L29.2-4: "340atm"
-      L29.6-L31.1: "CH₃OH(1)"
   - kind: equation
     number: L49.2
     words: L33-L37, L32, L50, L39-L49, L51
     read:
       L32.1-2: "सूर्य–प्रकाश"
       L33.1-L34.1: "6CO₂"
-      L35.3-L37.1: "12H₂O(1)"
       L39.1-L44.1: "C₆H₁₂O₆"
       L45.1-L46.1: "(aq)+6O₂"
-      L47.3-L49.1: "6H₂O(1)"
   - kind: text
     words: L52-L53
   - kind: exercise

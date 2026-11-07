@@ -143,7 +143,7 @@
   number: (1.2)
   text: Mg + O₂ → MgO (1.2)
   made:
-    - {words: L7.3-L8.1, by: agent}
+    - {words: L7.3-L8.1, by: scripts}
 - id: "1.6.3"
   kind: text
   page: 3
@@ -189,9 +189,9 @@
   number: (1.3)
   text: Zn + H₂SO₄ → ZnSO₄ + H₂ (1.3)
   made:
-    - {words: L30.3-L33.1, by: agent}
-    - {words: L34.2-L35.1, by: agent}
-    - {words: L36.2-L37.1, by: agent}
+    - {words: L30.3-L33.1, by: scripts}
+    - {words: L34.2-L35.1, by: scripts}
+    - {words: L36.2-L37.1, by: scripts}
 - id: "1.7.7"
   kind: text
   page: 3
@@ -226,9 +226,9 @@
   number: (1.4)
   text: Fe + H₂O → Fe₃O₄ + H₂ (1.4)
   made:
-    - {words: L60.3-L62.1, by: agent}
-    - {words: L62.3-L65.1, by: agent}
-    - {words: L66.2-L67.1, by: agent}
+    - {words: L60.3-L62.1, by: scripts}
+    - {words: L62.3-L65.1, by: scripts}
+    - {words: L66.2-L67.1, by: scripts}
 - id: "1.7.12"
   kind: text
   page: 4
@@ -240,9 +240,9 @@
   number: (1.5)
   text: Fe + H₂O → Fe₃O₄ + H₂ (1.5)
   made:
-    - {words: L4.3-L6.1, by: agent}
-    - {words: L6.3-L9.1, by: agent}
-    - {words: L10.2-L11.1, by: agent}
+    - {words: L4.3-L6.1, by: scripts}
+    - {words: L6.3-L9.1, by: scripts}
+    - {words: L10.2-L11.1, by: scripts}
 - id: "1.7.14"
   kind: text
   page: 4
@@ -285,8 +285,8 @@
     - [(ii) To balance, 1×4, "4"]
   crop: [180, 363.4, 535, 431.2]
   made:
-    - {words: L44.3-L46.1, by: agent}
-    - {words: L48.3-L52.1, by: agent}
+    - {words: L44.3-L46.1, by: scripts}
+    - {words: L48.3-L52.1, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "1.7.19"
@@ -296,18 +296,18 @@
     the compounds or elements involved in the reactions. For example, to balance oxygen atoms we can
     put coefficient ‘4’ as 4 H₂O and not H₂O₄ or (H₂O)₄. Now the partly balanced equation becomes –
   made:
-    - {words: L57.4-L59.1, by: agent}
-    - {words: L59.4-L62.1, by: agent}
-    - {words: L63.2-L67.1, by: agent}
+    - {words: L57.4-L59.1, by: scripts}
+    - {words: L59.4-L62.1, by: scripts}
+    - {words: L63.2-L67.1, by: scripts}
 - id: "1.7.20"
   kind: equation
   page: 4
   number: (1.6)
   text: Fe + 4 H₂O → Fe₃O₄ + H₂ (partly balanced equation) (1.6)
   made:
-    - {words: L70.4-L72.1, by: agent}
-    - {words: L72.3-L75.1, by: agent}
-    - {words: L76.2-L77.1, by: agent}
+    - {words: L70.4-L72.1, by: scripts}
+    - {words: L72.3-L75.1, by: scripts}
+    - {words: L76.2-L77.1, by: scripts}
 - id: "1.7.21"
   kind: text
   page: 4
@@ -328,8 +328,8 @@
     - [(ii) To balance, "8", 2 × 4]
   crop: [180.7, 595.3, 534.9, 665.6]
   made:
-    - {words: L88.4-L90.1, by: agent}
-    - {words: L92.3-L94.1, by: agent}
+    - {words: L88.4-L90.1, by: scripts}
+    - {words: L92.3-L94.1, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "1.7.24"
@@ -342,9 +342,9 @@
   number: (1.7)
   text: Fe + 4 H₂O → Fe₃O₄ + 4 H₂ (partly balanced equation) (1.7)
   made:
-    - {words: L97.4-L99.1, by: agent}
-    - {words: L99.3-L102.1, by: agent}
-    - {words: L103.3-L104.1, by: agent}
+    - {words: L97.4-L99.1, by: scripts}
+    - {words: L99.3-L102.1, by: scripts}
+    - {words: L103.3-L104.1, by: scripts}
 - id: "1.7.26"
   kind: text
   page: 5
@@ -360,7 +360,7 @@
     - [(ii) To balance, 1×3, "3"]
   crop: [78.4, 129.8, 432.1, 196.9]
   made:
-    - {words: L11.3-L15.1, by: agent}
+    - {words: L11.3-L15.1, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "1.7.28"
@@ -373,9 +373,9 @@
   number: (1.8)
   text: 3 Fe + 4 H₂O → Fe₃O₄ + 4 H₂ (1.8)
   made:
-    - {words: L18.5-L20.1, by: agent}
-    - {words: L20.3-L23.1, by: agent}
-    - {words: L24.3-L25.1, by: agent}
+    - {words: L18.5-L20.1, by: scripts}
+    - {words: L20.3-L23.1, by: scripts}
+    - {words: L24.3-L25.1, by: scripts}
 - id: "1.7.30"
   kind: text
   page: 5
@@ -387,9 +387,9 @@
   number: (1.9)
   text: 3Fe + 4H₂O → Fe₃O₄ + 4H₂ (balanced equation) (1.9)
   made:
-    - {words: L30.3-L32.1, by: agent}
-    - {words: L32.3-L35.1, by: agent}
-    - {words: L36.2-L37.1, by: agent}
+    - {words: L30.3-L32.1, by: scripts}
+    - {words: L32.3-L35.1, by: scripts}
+    - {words: L36.2-L37.1, by: scripts}
 - id: "1.7.32"
   kind: text
   page: 5
@@ -420,16 +420,16 @@
   number: (1.10)
   text: 3Fe(s) + 4H₂O(g) → Fe₃O₄(s) + 4H₂(g) (1.10)
   made:
-    - {words: L53.3-L55.1, by: agent}
-    - {words: L55.3-L59.1, by: agent}
-    - {words: L59.3-L61.1, by: agent}
+    - {words: L53.3-L55.1, by: scripts}
+    - {words: L55.3-L59.1, by: scripts}
+    - {words: L59.3-L61.1, by: scripts}
 - id: "1.7.37"
   kind: text
   page: 5
   text: Note that the symbol (g) is used with H₂O to indicate that in this reaction water is used in
     the form of steam.
   made:
-    - {words: L62.9-L64.1, by: agent}
+    - {words: L62.9-L64.1, by: scripts}
 - id: "1.7.38"
   kind: text
   page: 5
@@ -446,7 +446,7 @@
   number: (1.11)
   text: CO(g) + 2H₂(g) 340 atm → CH₃OH(l) (1.11)
   made:
-    - {words: L72.3-5, by: agent}
+    - {words: L72.3-5, by: scripts}
     - {words: L72.6-8, by: agent}
     - {words: L72.9-11, by: agent}
 - id: "1.7.41"
@@ -455,12 +455,12 @@
   number: (1.12)
   text: 6CO₂(aq) + 12H₂O(l) Sunlight Chlorophyll → C₆H₁₂O₆(aq) + 6O₂(aq) + 6H₂O(l) (1.12) (Glucose)
   made:
-    - {words: L74.1-3, by: agent}
+    - {words: L74.1-3, by: scripts}
     - {words: L74.5-7, by: agent}
     - {words: L74.8-9, by: agent}
-    - {words: L76.2-8, by: agent}
+    - {words: L76.2-8, by: scripts}
     - {words: L76.10-12, by: agent}
-    - {words: L76.14-16, by: agent}
+    - {words: L76.14-16, by: scripts}
 - id: "1.7.42"
   kind: text
   page: 5
@@ -539,8 +539,8 @@
   number: (1.13)
   text: CaO(s) + H₂O(l) → Ca(OH)₂(aq) + Heat (1.13) (Quick lime) (Slaked lime)
   made:
-    - {words: L44.2-L46.1, by: agent}
-    - {words: L46.3-L48.1, by: agent}
+    - {words: L44.2-L46.1, by: scripts}
+    - {words: L46.3-L48.1, by: scripts}
 - id: "2.2.5"
   kind: text
   page: 6
@@ -557,17 +557,17 @@
     whitewashing and gives a shiny finish to the walls. It is interesting to note that the chemical
     formula for marble is also CaCO₃.
   made:
-    - {words: L7.9-L9.1, by: agent}
+    - {words: L7.9-L9.1, by: scripts}
 - id: "2.2.7"
   kind: equation
   page: 7
   number: (1.14)
   text: Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l) (1.14) (Calcium hydroxide) (Calcium carbonate)
   made:
-    - {words: L10.1-L12.1, by: agent}
-    - {words: L12.3-L14.1, by: agent}
+    - {words: L10.1-L12.1, by: scripts}
+    - {words: L12.3-L14.1, by: scripts}
     - {words: L17.2-L19.1, by: agent}
-    - {words: L19.3-L21.1, by: agent}
+    - {words: L19.3-L21.1, by: scripts}
 - id: "2.2.8"
   kind: text
   page: 7
@@ -582,24 +582,24 @@
   number: (1.15)
   text: C(s) + O₂(g) → CO₂(g) (1.15)
   made:
-    - {words: L26.3-L28.1, by: agent}
-    - {words: L28.3-L30.1, by: agent}
+    - {words: L26.3-L28.1, by: scripts}
+    - {words: L28.3-L30.1, by: scripts}
 - id: "2.2.11"
   kind: text
   page: 7
   text: (ii) Formation of water from H₂(g) and O₂(g)
   made:
-    - {words: L33.5-L35.1, by: agent}
-    - {words: L35.3-L37.1, by: agent}
+    - {words: L33.5-L35.1, by: scripts}
+    - {words: L35.3-L37.1, by: scripts}
 - id: "2.2.12"
   kind: equation
   page: 7
   number: (1.16)
   text: 2H₂(g) + O₂(g) → 2H₂O(l) (1.16)
   made:
-    - {words: L38.1-L40.1, by: agent}
-    - {words: L40.3-L42.1, by: agent}
-    - {words: L42.3-L44.1, by: agent}
+    - {words: L38.1-L40.1, by: scripts}
+    - {words: L40.3-L42.1, by: scripts}
+    - {words: L42.3-L44.1, by: scripts}
 - id: "2.2.13"
   kind: text
   page: 7
@@ -625,10 +625,10 @@
   number: (1.17)
   text: CH₄(g) + 2O₂ (g) → CO₂ (g) + 2H₂O (g) (1.17)
   made:
-    - {words: L54.1-L56.1, by: agent}
-    - {words: L56.3-L57.1, by: agent}
-    - {words: L58.3-L59.1, by: agent}
-    - {words: L60.3-L62.1, by: agent}
+    - {words: L54.1-L56.1, by: scripts}
+    - {words: L56.3-L57.1, by: scripts}
+    - {words: L58.3-L59.1, by: scripts}
+    - {words: L60.3-L62.1, by: scripts}
 - id: "2.2.18"
   kind: text
   page: 7
@@ -648,9 +648,9 @@
   text: C₆H₁₂O₆(aq) + 6O₂(aq) → 6CO₂(aq) + 6H₂O(l) + energy (1.18) (Glucose)
   made:
     - {words: L73.1-L79.1, by: agent}
-    - {words: L79.3-L81.1, by: agent}
-    - {words: L81.3-L83.1, by: agent}
-    - {words: L83.3-L85.1, by: agent}
+    - {words: L79.3-L81.1, by: scripts}
+    - {words: L81.3-L83.1, by: scripts}
+    - {words: L83.3-L85.1, by: scripts}
 - id: "2.2.21"
   kind: text
   page: 7
@@ -694,11 +694,11 @@
   number: (1.19)
   text: 2FeSO₄(s) Heat → Fe₂O₃(s) + SO₂(g) + SO₃(g) (1.19) (Ferrous sulphate) (Ferric oxide)
   made:
-    - {words: L27.1-L29.1, by: agent}
+    - {words: L27.1-L29.1, by: scripts}
     - {words: L29.2-3, by: agent}
-    - {words: L29.5-L33.1, by: agent}
-    - {words: L33.3-L35.1, by: agent}
-    - {words: L35.3-L37.1, by: agent}
+    - {words: L29.5-L33.1, by: scripts}
+    - {words: L33.3-L35.1, by: scripts}
+    - {words: L35.3-L37.1, by: scripts}
 - id: "2.3.5"
   kind: text
   page: 8
@@ -710,7 +710,7 @@
     - {words: L43.3-L47.1, by: agent}
     - {words: L48.11-L52.1, by: agent}
     - {words: L53.3-L55.1, by: agent}
-    - {words: L55.5-L57.1, by: agent}
+    - {words: L55.5-L57.1, by: scripts}
     - {words: L58.2-L59.1, by: agent}
     - {words: L60.2-L61.1, by: agent}
 - id: "2.3.6"
@@ -726,9 +726,9 @@
   number: (1.20)
   text: CaCO₃(s) Heat → CaO(s) + CO₂(g) (1.20) (Limestone) (Quick lime)
   made:
-    - {words: L69.1-L71.1, by: agent}
+    - {words: L69.1-L71.1, by: scripts}
     - {words: L71.2-3, by: agent}
-    - {words: L73.2-L75.1, by: agent}
+    - {words: L73.2-L75.1, by: scripts}
 - id: "2.3.8"
   kind: text
   page: 8
@@ -754,7 +754,7 @@
   text: You will observe the emission of brown fumes. These fumes are of nitrogen dioxide (NO₂). The
     reaction that takes place is –
   made:
-    - {words: L93.7-L95.1, by: agent}
+    - {words: L93.7-L95.1, by: scripts}
 - id: "2.3.12"
   kind: equation
   page: 9
@@ -820,7 +820,7 @@
   text: 2AgCl(s) Sunlight → 2Ag(s) + Cl₂(g) (1.22)
   made:
     - {words: L74.2-3, by: agent}
-    - {words: L74.7-L76.1, by: agent}
+    - {words: L74.7-L76.1, by: scripts}
 - id: "2.3.20"
   kind: text
   page: 10
@@ -832,7 +832,7 @@
   text: 2AgBr(s) Sunlight → 2Ag(s) + Br₂(g) (1.23)
   made:
     - {words: L3.2-3, by: agent}
-    - {words: L3.7-L5.1, by: agent}
+    - {words: L3.7-L5.1, by: scripts}
 - id: "2.3.22"
   kind: text
   page: 10
@@ -937,7 +937,7 @@
   number: (1.25)
   text: Zn(s) + CuSO₄(aq) → ZnSO₄(aq) + Cu(s) (1.25) (Copper sulphate) (Zinc sulphate)
   made:
-    - {words: L17.3-L19.1, by: agent}
+    - {words: L17.3-L19.1, by: scripts}
     - {words: L19.3-L21.1, by: agent}
 - id: "2.4.10"
   kind: equation
@@ -946,7 +946,7 @@
   text: Pb(s) + CuCl₂(aq) → PbCl₂(aq) + Cu(s) (1.26) (Copper chloride) (Lead chloride)
   made:
     - {words: L23.3-L25.1, by: agent}
-    - {words: L28.1-L30.1, by: agent}
+    - {words: L28.1-L30.1, by: scripts}
 - id: "2.4.11"
   kind: text
   page: 11
@@ -998,8 +998,7 @@
   made:
     - {words: L1.8-L2.1, by: agent}
     - {words: L5.3-L6.1, by: agent}
-    - {words: L4.1, by: agent}
-    - {words: L7.2-3, by: agent}
+    - {words: L7.2-3, by: scripts}
 - id: "2.5.6"
   kind: box
   page: 12
@@ -1043,7 +1042,7 @@
   number: (1.28)
   text: 2Cu + O₂ Heat → 2CuO (1.28)
   made:
-    - {words: L33.3-L34.1, by: agent}
+    - {words: L33.3-L34.1, by: scripts}
     - {words: L34.2-3, by: agent}
 - id: "2.6.5"
   kind: text
@@ -1058,7 +1057,7 @@
   made:
     - {words: L39.2-4, by: agent}
     - {words: L41.1-2, by: agent}
-    - {words: L41.5-7, by: agent}
+    - {words: L41.5-7, by: scripts}
 - id: "2.6.7"
   kind: text
   page: 12
@@ -1094,17 +1093,17 @@
   number: (1.32)
   text: MnO₂ + 4 HCl → MnCl₂ + 2H₂O + Cl₂ (1.32)
   made:
-    - {words: L52.1-L53.1, by: agent}
-    - {words: L54.5-L55.1, by: agent}
-    - {words: L56.2-L58.1, by: agent}
-    - {words: L58.3-L59.1, by: agent}
+    - {words: L52.1-L53.1, by: scripts}
+    - {words: L54.5-L55.1, by: scripts}
+    - {words: L56.2-L58.1, by: scripts}
+    - {words: L58.3-L59.1, by: scripts}
 - id: "2.6.13"
   kind: text
   page: 13
   text: In reaction (1.31) carbon is oxidised to CO and ZnO is reduced to Zn. In reaction (1.32) HCl
     is oxidised to Cl₂ whereas MnO₂ is reduced to MnCl₂.
   made:
-    - {words: L2.8-L3.1, by: agent}
+    - {words: L2.8-L3.1, by: scripts}
     - {words: L4.2-L5.1, by: agent}
     - {words: L6.4-L8.1, by: agent}
 - id: "2.6.14"
@@ -1197,10 +1196,10 @@
   text: 3. Identify the substances that are oxidised and the substances that are reduced in the
     following reactions. (i) 4Na(s) + O₂(g) → 2Na₂O(s) (ii) CuO(s) + H₂(g) → Cu(s) + H₂O(l)
   made:
-    - {words: L47.4-L49.1, by: agent}
-    - {words: L49.3-L51.1, by: agent}
-    - {words: L52.4-L54.1, by: agent}
-    - {words: L54.5-L56.1, by: agent}
+    - {words: L47.4-L49.1, by: scripts}
+    - {words: L49.3-L51.1, by: scripts}
+    - {words: L52.4-L54.1, by: scripts}
+    - {words: L54.5-L56.1, by: scripts}
 - id: "3.2.3.4"
   kind: box
   page: 14
@@ -1234,7 +1233,7 @@
     getting oxidised. (d) Lead oxide is getting reduced. (i) (a) and (b) (ii) (a) and (c) (iii) (a),
     (b) and (c) (iv) all
   made:
-    - {words: L34.7-L36.1, by: agent}
+    - {words: L34.7-L36.1, by: scripts}
 - id: "3.2.4.2"
   kind: question
   page: 14
@@ -1242,8 +1241,8 @@
   text: 2. Fe₂O₃ + 2Al → Al₂O₃ + 2Fe The above reaction is an example of a (a) combination reaction.
     (b) double displacement reaction. (c) decomposition reaction. (d) displacement reaction.
   made:
-    - {words: L45.2-L48.1, by: agent}
-    - {words: L49.4-L52.1, by: agent}
+    - {words: L45.2-L48.1, by: scripts}
+    - {words: L49.4-L52.1, by: scripts}
 - id: "3.2.4.3"
   kind: question
   page: 15
@@ -1272,18 +1271,18 @@
   text: 6. Balance the following chemical equations. (a) HNO₃ + Ca(OH)₂ → Ca(NO₃)₂ + H₂O (b) NaOH +
     H₂SO₄ → Na₂SO₄ + H₂O (c) NaCl + AgNO₃ → AgCl + NaNO₃ (d) BaCl₂ + H₂SO₄ → BaSO₄ + HCl
   made:
-    - {words: L19.2-L20.1, by: agent}
-    - {words: L21.2-L22.1, by: agent}
-    - {words: L23.2-L26.1, by: agent}
-    - {words: L27.2-L29.1, by: agent}
-    - {words: L30.4-L33.1, by: agent}
-    - {words: L34.2-L37.1, by: agent}
-    - {words: L38.2-L40.1, by: agent}
-    - {words: L41.4-L42.1, by: agent}
-    - {words: L43.4-L44.1, by: agent}
-    - {words: L45.2-L46.1, by: agent}
-    - {words: L47.2-L50.1, by: agent}
-    - {words: L51.2-L52.1, by: agent}
+    - {words: L19.2-L20.1, by: scripts}
+    - {words: L21.2-L22.1, by: scripts}
+    - {words: L23.2-L26.1, by: scripts}
+    - {words: L27.2-L29.1, by: scripts}
+    - {words: L30.4-L33.1, by: scripts}
+    - {words: L34.2-L37.1, by: scripts}
+    - {words: L38.2-L40.1, by: scripts}
+    - {words: L41.4-L42.1, by: scripts}
+    - {words: L43.4-L44.1, by: scripts}
+    - {words: L45.2-L46.1, by: scripts}
+    - {words: L47.2-L50.1, by: scripts}
+    - {words: L51.2-L52.1, by: scripts}
 - id: "3.2.4.7"
   kind: question
   page: 15

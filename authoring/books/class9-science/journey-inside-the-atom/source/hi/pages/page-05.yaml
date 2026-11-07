@@ -6,6 +6,7 @@ notes:
 furniture: L37-L40, L4.1, L6.1, L8.1
 answers:
   "read L11.12-13": "the PDF flattens the superscript −10 onto the line; the image shows लगभग10⁻¹⁰"
+  partial L18.7-8: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 terms:
   - L3.12
   - L9.1-4
@@ -20,9 +21,7 @@ blocks:
   - kind: text
     words: L10.7-24, L11.5-22, L13-L14
     read:
-      L10.17-18: 10⁵
       L11.12-13: लगभग10⁻¹⁰
-      L11.20-21: 10⁻¹⁵
   - kind: figure
     words: L10.1-6, L11.1-4, L12
     number: L10.1-3
@@ -35,10 +34,8 @@ blocks:
     read:
       L17.1-2: परमाणुओं
       L18.7-8: 10⁻¹⁰
-      L18.17-18: (10⁻⁴
       L19.1-2: परमाणुओं
       L19.6-7: (10⁻⁴
-      L19.10-11: (10⁻¹⁰
       L19.14-15: 10⁶
       L20.6-9: परमाणुओं
       L23.1-4: परमाणुओं

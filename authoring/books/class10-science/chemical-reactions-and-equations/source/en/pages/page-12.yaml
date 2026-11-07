@@ -5,8 +5,8 @@ notes:
   other: "a subscript or charge set on its own line by the PDF, an arrow drawn from private glyphs, or a heading's letters spaced out"
 answers:
   "read L5.3-L6.1": "the sulphate ion as printed, SO₄²⁻: the PDF has its charge (2–) before its subscript (4); the letters are the same, in the printed order"
-  "read L4.1": "the charge 2+ of Ba²⁺, which the PDF sets on a line of its own above the text; it is read with Ba"
-  "read L7.2-3": "Ba²⁺: the PDF holds its charge apart (2+, read here from the line above)"
+  partial L1.8-L2.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L39.2-4: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 furniture: L19-L20, L61-L63
 blocks:
   - kind: text
@@ -14,8 +14,6 @@ blocks:
     read:
       "L1.8-L2.1": { text: "BaSO₄" }
       "L5.3-L6.1": { text: "SO₄²⁻" }
-      "L4.1": { text: "" }
-      "L7.2-3": { text: "Ba²⁺." }
   - kind: box
     words: L11-L16
     title: L11.1-17
@@ -30,8 +28,8 @@ blocks:
   - kind: figure
     words: L21-L23
     number: L21.1-2
-    box: [65, 277, 285, 410]
-    crop: { box: [65, 277, 285, 415], cause: wrong-box }
+    box: [ 65, 277, 285, 410 ]
+    crop: { box: [ 65, 277, 285, 415 ], cause: wrong-box }
   - kind: activity
     words: L18, L24-L26
     number: L18.1-2
@@ -41,7 +39,6 @@ blocks:
     words: L33-L34.3, L32.1, L34.4-5, L32.2
     number: L32.2
     read:
-      "L33.3-L34.1": { text: "O₂" }
       "L34.2-3": { text: "" }
   - kind: text
     words: L35-L37
@@ -51,7 +48,6 @@ blocks:
     read:
       "L39.2-4": { text: "+H₂" }
       "L41.1-2": { text: "→" }
-      "L41.5-7": { text: "H₂O" }
   - kind: text
     words: L42-L43
   - kind: text
@@ -59,7 +55,7 @@ blocks:
   - kind: figure
     words: L49
     number: L49.1
-    box: [195, 597, 335, 658]
+    box: [ 195, 597, 335, 658 ]
   - kind: text
     words: L50
   - kind: equation
@@ -68,8 +64,3 @@ blocks:
   - kind: equation
     words: L52-L60
     number: L60.1
-    read:
-      "L52.1-L53.1": { text: "MnO₂" }
-      "L54.5-L55.1": { text: "MnCl₂" }
-      "L56.2-L58.1": { text: "2H₂O" }
-      "L58.3-L59.1": { text: "Cl₂" }

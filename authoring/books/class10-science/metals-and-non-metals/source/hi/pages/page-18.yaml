@@ -1,8 +1,6 @@
 page: 18
 proofread: true
 cause: other
-notes:
-  other: "a word the PDF splits with a space (कै ल्सियम, कै थोड, विद् त यु, निकै ल, अम्लीकृ त, सल्फ़े ट, कॅ ापर); charges and a subscript the PDF sets as plain characters (Na +, e –, Cl 2), printed Na⁺, e⁻, Cl₂"
 answers:
   "read L14.6-8": "the PDF sets the ु of विद्युत after त (विद् त यु); the image prints विद्युत"
   "read L33.1-3": "the PDF sets the ु of विद्युत after त (विद् त यु); the image prints विद्युत"
@@ -31,15 +29,8 @@ blocks:
       L8.7-8: कैथोड
   - kind: equation
     words: L10
-    read:
-      L10.4-5: "Na⁺"
-      L10.7-8: "e⁻"
   - kind: equation
     words: L11-L13
-    read:
-      L11.3-4: "2Cl⁻"
-      L11.6-L12.1: "Cl₂"
-      L13.2-3: "2e⁻"
   - kind: text
     words: L14-L15
     read:

@@ -28,8 +28,6 @@ blocks:
     words: L44-L47
   - kind: text
     words: L48-L51
-    read:
-      L49.2-L51.1: "(O₂)"
   - kind: figure
     number: L54.1-2
     words: L52-L54
@@ -58,7 +56,6 @@ blocks:
     read:
       L5-L7.1: "(N₂)"
       L8.3-4: आरेखित
-      L10.3-L12.1: "(F₂)"
   - kind: box
     title: L22
     words: L22-L33

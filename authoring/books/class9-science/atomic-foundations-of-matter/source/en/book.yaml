@@ -1,12 +1,13 @@
-address: https://ncert.nic.in/textbook/pdf/iesc109.pdf
-sha256: d588c71178ea87439e9bce3234dadde876c9b54b71587cf4b1b367860c289d57
-pages: 22
 title: Atomic Foundations of Matter
 reader: text
 edition: none
+address: https://ncert.nic.in/textbook/pdf/iesc109.pdf
+sha256: d588c71178ea87439e9bce3234dadde876c9b54b71587cf4b1b367860c289d57
+pages: 22
 tools:
   reader: 1
   hindi-repair: 4
+  scripts: 1
   figure-snap: 1
   table-cells: 1
   structure-draft: 2

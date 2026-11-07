@@ -10,12 +10,10 @@ terms:
 blocks:
   - kind: text
     words: L2-L6
-    read:
-      L5.17-18: "Cl⁻"
   - kind: figure
     number: L12.1-2
     words: L7-L12
-    box: [142, 170, 442, 286]
+    box: [ 142, 170, 442, 286 ]
     read:
       L8.2-3: "e⁻"
       L11.8-10: "(Cl⁻)"
@@ -24,9 +22,8 @@ blocks:
   - kind: figure
     number: L20.1-2
     words: L17-L20
-    box: [174, 357, 412, 397]
+    box: [ 174, 357, 412, 397 ]
     read:
-      L17.4-5: "Na⁺"
       L17.7-L18.1: "Cl⁻"
   - kind: box
     title: L21
@@ -41,14 +38,8 @@ blocks:
   - kind: figure
     number: L33.1-2
     words: L27, L29, L28, L30-L34
-    box: [127, 510, 488, 633]
-    read:
-      L27: "Na⁺"
-      L28-L29: "Cl⁻"
-      L30.1-2: "Cl⁻"
-      L30.3-4: "Na⁺"
+    box: [ 127, 510, 488, 633 ]
   - kind: text
     words: L42-L44
     read:
       L42.2: तत्व
-      L44.12-13: "S²⁻"

@@ -16,21 +16,13 @@ blocks:
   - kind: text
     words: L10.2-9, L11.2, L12-L13, L14.2, L15-L16, L17.2, L18-L19, L20.2, L21-L22, L23.2, L24-L27, L28.2, L29-L32
     read:
-      "L11.2-L12": { text: "CO₂" }
-      "L14.2-L15": { text: "CS₂" }
-      "L17.2-L18": { text: "PCl₃" }
-      "L20.2-L21": { text: "SF₆" }
-      "L23.2-L26": { text: "N₂O₄" }
       "L28.2-L31": { text: "N₂O₅" }
   - kind: text
     words: L33-L37
-    read:
-      "L34.12-L36": { text: "H₂S" }
   - kind: text
     words: L38-L45
     read:
       "L39.3-L41.1": { text: "H₂O," }
-      "L42.7-L44.1": { text: "NH₃," }
   - kind: section
     number: L46.1
     title: L46.2-8
@@ -43,12 +35,9 @@ blocks:
     words: L55-L58
   - kind: text
     words: L59-L61
-    read:
-      "L60.11-12": { text: "Na⁺" }
   - kind: figure
     number: L68.1-2
     words: L62-L68
-    box: [194, 630, 515, 758]
+    box: [ 194, 630, 515, 758 ]
     read:
       "L66": { text: "+ e⁻" }
-      "L67.4-6": { text: "(Na⁺)" }

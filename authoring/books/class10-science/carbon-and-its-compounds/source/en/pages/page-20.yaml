@@ -16,8 +16,6 @@ blocks:
   - kind: question
     number: L33.1
     words: L33-L41
-    read:
-      "L33.7-L36": { text: "C₂H₆" }
   - kind: question
     number: L42.1
     words: L42-L46

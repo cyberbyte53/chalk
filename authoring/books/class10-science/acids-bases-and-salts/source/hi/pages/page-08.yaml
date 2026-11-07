@@ -10,6 +10,15 @@ answers:
   "word हाइड्रोनियम": "a name (hydronium), as printed on the page; the list lacks it"
   "word उष्माक्षेपी": "a real word (exothermic), as printed on the page (with उ); the list lacks it"
   "word ऊष्माशोषी": "a real word (endothermic), as printed on the page; the list lacks it"
+  partial L25.4-5: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L30.2-3: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L30.6-7: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L34.2-3: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L34.6-7: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L38.1-2: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L38.5-6: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L47.10-11: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L51.1-2: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: text
     words: L5-L7
@@ -19,10 +28,6 @@ blocks:
       L7.5-6: "H⁺"
   - kind: equation
     words: L8-L12
-    read:
-      L8.3-L10.1: "H₂O"
-      L10.3-L12.2: "H₃O⁺"
-      L12.4-5: "Cl⁻"
   - kind: text
     words: L13-L17
     read:
@@ -32,10 +37,6 @@ blocks:
       L14.15-L16.3: "(H₃O⁺)"
   - kind: equation
     words: L18-L22
-    read:
-      L18.1-2: "H⁺"
-      L18.4-L20.1: "H₂O"
-      L20.3-L22.2: "H₃O⁺"
   - kind: text
     words: L23-L26
     read:
@@ -56,14 +57,11 @@ blocks:
   - kind: equation
     words: L39-L41, L35-L37, L38
     read:
-      L39.1-L41.1: "Mg(OH)₂(s)"
       L35.1-L37.1: "—H₂O→"
       L38.1-2: "Mg²⁺"
       L38.5-6: "2OH⁻"
   - kind: text
     words: L42-L43
-    read:
-      L42.5-7: "(OH⁻)"
   - kind: box
     title: L1-L4
     words: L1-L4, L44-L46
@@ -71,7 +69,6 @@ blocks:
     words: L47-L48
     read:
       L47.10-11: "H⁺"
-      L47.16-17: "OH⁻"
   - kind: equation
     words: L49
   - kind: equation
@@ -80,15 +77,12 @@ blocks:
     words: L51-L53
     read:
       L51.1-2: "H⁺"
-      L51.5-6: "OH⁻"
-      L51.9-L53.1: "H₂O(l)"
   - kind: text
     words: L54
   - kind: activity
     number: L55.2
     words: L55, L59-L69
     read:
-      L61.5-L65.1: "(H₂SO₄)"
       L65.5-6: धीरे-धीरे
   - kind: figure
     number: L56.2

@@ -12,7 +12,7 @@ blocks:
   - kind: figure
     words: L7-L13
     number: L7.1-2
-    box: [60, 90, 300, 258]
+    box: [ 60, 90, 300, 258 ]
   - kind: activity
     words: L2, L14-L22
     number: L2.1-2
@@ -22,18 +22,13 @@ blocks:
     words: L27-L29.3, L26, L29.4-L37, L39, L38, L40
     number: L39.1
     read:
-      "L27.1-L29.1": { text: "2FeSO₄(s)" }
       "L29.2-3": { text: "" }
-      "L29.5-L33.1": { text: "Fe₂O₃(s)" }
-      "L33.3-L35.1": { text: "SO₂(g)" }
-      "L35.3-L37.1": { text: "SO₃(g)" }
   - kind: text
     words: L41-L62
     read:
       "L43.3-L47.1": { text: "(FeSO₄. 7H₂O)" }
       "L48.11-L52.1": { text: "(Fe₂O₃)," }
       "L53.3-L55.1": { text: "(SO₂)" }
-      "L55.5-L57.1": { text: "(SO₃)." }
       "L58.2-L59.1": { text: "SO₂" }
       "L60.2-L61.1": { text: "SO₃" }
   - kind: text
@@ -42,19 +37,15 @@ blocks:
     words: L69-L71.3, L68, L71.4-5, L73-L75, L72, L76
     number: L75.2
     read:
-      "L69.1-L71.1": { text: "CaCO₃(s)" }
       "L71.2-3": { text: "" }
-      "L73.2-L75.1": { text: "CO₂(g)" }
   - kind: text
     words: L77-L78
   - kind: figure
     words: L83-L85
     number: L83.1-2
-    box: [62, 505, 228, 672]
+    box: [ 62, 505, 228, 672 ]
   - kind: activity
     words: L79, L86-L91
     number: L79.1-2
   - kind: text
     words: L92-L96
-    read:
-      "L93.7-L95.1": { text: "(NO₂)." }

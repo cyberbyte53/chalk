@@ -21,15 +21,15 @@ blocks:
   - kind: figure
     words: L55-L56
     number: L55.1-2
-    box: [332, 180, 555, 335]
-    crop: { box: [334, 183, 553, 340], cause: wrong-box }
+    box: [ 332, 180, 555, 335 ]
+    crop: { box: [ 334, 183, 553, 340 ], cause: wrong-box }
   - kind: activity
     words: L57, L62-L67
     number: L57.1-2
   - kind: figure
     words: L68, L69.14-17, L70.13-L71
     number: L68.1-2
-    box: [375, 500, 550, 628]
+    box: [ 375, 500, 550, 628 ]
   - kind: text
     words: L69.1-13, L70.1-12, L72
   - kind: equation
@@ -37,4 +37,3 @@ blocks:
     number: L78.1
     read:
       "L74.2-3": { text: "" }
-      "L74.7-L76.1": { text: "Cl₂(g)" }

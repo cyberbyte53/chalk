@@ -13,9 +13,6 @@ blocks:
   - kind: box
     title: L9
     words: L9-L20
-    read:
-      "L13.4-6": { text: "Mg²⁺." }
-      "L18.6-L20.1": { text: "(Na₂S)" }
   - kind: heading
     title: L21
     words: L21
@@ -25,24 +22,7 @@ blocks:
     number: L30.1-3
     title: L30.4-7
     words: L30-L34, L36.1, L35, L36.2, L37, L39.1, L38, L39.2, L40-L46, L48.1, L47, L48.2, L49-L59, L65, L60, L61, L66, L62, L68, L67, L69-L74
-    box: [155, 375, 548, 750]
+    box: [ 155, 375, 548, 750 ]
     read:
-      "L32.2-3": { text: "Na⁺" }
-      "L33.2-3": { text: "Li⁺" }
-      "L36.1, L35": { text: "K⁺" }
-      "L39.1, L38": { text: "Ag⁺" }
-      "L41.1-2": { text: "Ca²⁺" }
-      "L43.1-2": { text: "Ba²⁺" }
-      "L45.1-2": { text: "Fe²⁺" }
-      "L48.1, L47": { text: "Fe³⁺" }
-      "L50.1-2": { text: "Cu⁺" }
-      "L52.1-2": { text: "Cu²⁺" }
-      "L54.1-2": { text: "Mg²⁺" }
-      "L56.1-2": { text: "Zn²⁺" }
-      "L58.1-2": { text: "Al³⁺" }
-      "L65, L60.1": { text: "F⁻" }
-      "L66.1-2": { text: "Cl⁻" }
       "L68, L67.1": { text: "Br⁻" }
       "L70.1-2": { text: "I⁻" }
-      "L72.1-2": { text: "O²⁻" }
-      "L74.1-2": { text: "S²⁻" }

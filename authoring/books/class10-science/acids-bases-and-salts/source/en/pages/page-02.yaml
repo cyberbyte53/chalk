@@ -39,13 +39,12 @@ blocks:
       "L22.4-L24": { text: "(HNO₃)," }
       "L25.3-L27.1": { text: "(CH₃COOH)," }
       "L28.2-L30.1": { text: "[Ca(OH)₂]," }
-      "L31.2-L33.1": { text: "[Mg(OH)₂]," }
       "L33.5-L35": { text: "(NH₄OH)." }
   - kind: table
     number: L42
     words: L42-L56
-    box: [180, 422, 535, 524]
-    cells: { rows: [["L43-L44", "L45-L47", "L48-L50", "L51-L53", "L54-L56"], ["", "", "", "", ""]] }
+    box: [ 180, 422, 535, 524 ]
+    cells: { rows: [ [ "L43-L44", "L45-L47", "L48-L50", "L51-L53", "L54-L56" ], [ "", "", "", "", "" ] ] }
     read:
       "L51-L52": { text: "Phenolphthalein", cause: broken-across-lines }
   - kind: text

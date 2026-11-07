@@ -24,14 +24,8 @@ blocks:
       L8.9: { text: "परिवर्तित", cause: wrong-reading }
   - kind: equation
     words: L10-L15
-    read:
-      L11.3-L13.1: "3O₂(g)"
-      L13.5-L15.1: "2SO₂(g)"
   - kind: equation
     words: L16-L21
-    read:
-      L17.1-L19.1: "ZnCO₃(s)"
-      L19.5-L21.1: "CO₂(g)"
   - kind: text
     words: L22-L24
   - kind: equation
@@ -47,9 +41,6 @@ blocks:
       L31.6-9: धातुओं
   - kind: equation
     words: L34-L40
-    read:
-      L34.1-L36.1: "3MnO₂(s)"
-      L36.7-L40.1: "2Al₂O₃(s)"
   - kind: text
     words: L41
   - kind: text
@@ -58,9 +49,6 @@ blocks:
       L44.3-L48.1: "(Fe₂O₃)"
   - kind: equation
     words: L51-L59
-    read:
-      L51.1-L55.1: "Fe₂O₃(s)"
-      L55.7-L59.1: "Al₂O₃(s)"
   - kind: figure
     number: L60.2
     words: L60-L62

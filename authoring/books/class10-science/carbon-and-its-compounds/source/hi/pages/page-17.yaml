@@ -13,12 +13,9 @@ answers:
   "read L38.1": "the label is set in the Chanakya font, whose code the text layer holds (xeZ); the image prints गर्म"
   "read L31.1": "the label is set in the Chanakya font, whose code the text layer holds (lkan with z on L33); the image prints सांद्र"
   "read L33.1": "the last code (z, the र sign) of सांद्र, read into L31.1"
-  "read L39.2": "a subscript 2 the PDF sets on a line of its own (L39), read into CH₂ (L34.1)"
-  "read L39.3": "a subscript 2 the PDF sets on a line of its own (L39), read into CH₂ (L34.3)"
-  "read L39.4": "a subscript 2 the PDF sets on a line of its own (L39), read into H₂ (L34.5)"
-  "read L34.1": "the PDF sets the subscript 2 on its own line (L39); the image prints CH₂"
-  "read L34.3": "the PDF sets the subscript 2 on its own line (L39); the image prints CH₂"
   "read L34.5": "the PDF sets the subscript 2 on its own line (L39); the image prints H₂"
+  partial L37.2-3: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L34.5: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: text
     words: L1-L5
@@ -36,7 +33,6 @@ blocks:
   - kind: equation
     words: L14-L24
     read:
-      L14.3-L18.1: "2CH₃CH₂OH"
       L18.3-L22.4: "2CH₃CH₂O⁻Na⁺"
       L22.6-L23.1: "H₂"
   - kind: text
@@ -48,7 +44,6 @@ blocks:
   - kind: equation
     words: L35-L38, L31, L33, L40, L39.1, L32, L34.1, L39.2, L34.2-3, L39.3, L34.4-5, L39.4, L34.6
     read:
-      L35.1-L36.1: "CH₃"
       L37.2-3: "CH₂"
       L37.5: ""
       L38.1: "गर्म"
@@ -56,12 +51,7 @@ blocks:
       L33.1: ""
       L40.1-4: "H₂SO₄"
       L39.1: ""
-      L34.1: "CH₂"
-      L39.2: ""
-      L34.3: "CH₂"
-      L39.3: ""
       L34.5: "H₂"
-      L39.4: ""
   - kind: text
     words: L45-L46
   - kind: box

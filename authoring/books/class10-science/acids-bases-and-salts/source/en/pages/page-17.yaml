@@ -16,8 +16,6 @@ blocks:
       "L5-L8": { text: "CaSO₄.½H₂O + 1½H₂O → CaSO₄.2H₂O" }
   - kind: text
     words: L10-L17
-    read:
-      "L12.8-L13": { text: "CaSO₄" }
   - kind: exercise
     title: L18
     words: L18
@@ -26,8 +24,6 @@ blocks:
   - kind: question
     number: L19.1
     words: L19-L21
-    read:
-      "L19.10-L21": { text: "Ca(ClO)₂?" }
   - kind: question
     number: L22.1
     words: L22-L23
@@ -45,5 +41,4 @@ blocks:
     words: L30, L37-L49
     continues: true
     read:
-      "L39.12-14": { text: "H⁺(aq)" }
       "L40.3-5": { text: "OH⁻(aq)" }

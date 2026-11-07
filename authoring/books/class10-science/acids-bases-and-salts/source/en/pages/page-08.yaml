@@ -5,8 +5,7 @@ notes:
   other: "subscripts and charges the PDF sets as plain characters, apart or on their own lines (Mg 2+, OH –), printed Mg²⁺, OH⁻; the H₂O over an arrow, which the PDF sets on a line of its own"
 answers:
   "read L1-L2": "the PDF splits the H₂O printed over the arrow into H O on one line and its 2 on the next; the image prints H₂O"
-  "read L8.5-7": "the charges 2+ and − are set apart on L4; the image prints Mg²⁺(aq)+2OH⁻(aq)"
-  "read L4": "the charges 2+ of Mg²⁺ and − of OH⁻, set by the PDF on a line of their own; read with them on L8.5-7, their place left empty at the block's end"
+  partial L24.5-6: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 furniture: L29-L34, L65-L67
 terms:
   - L13.5
@@ -17,29 +16,19 @@ blocks:
     read:
       "L1-L2": { text: "H₂O" }
       "L3.2-4": { text: "→" }
-      "L3.5-7": { text: "K⁺(aq)" }
       "L3.9-11": { text: "OH⁻(aq)" }
   - kind: equation
     words: L6-L7, L8.1, L5, L8.2-7, L4
     read:
-      "L6-L8.1": { text: "Mg(OH)₂(s)" }
       "L5": { text: "H₂O" }
       "L8.2-4": { text: "→" }
-      "L8.5-7": { text: "Mg²⁺(aq)+2OH⁻(aq)" }
-      "L4": { text: "" }
   - kind: text
     words: L12-L13
-    read:
-      "L12.4-6": { text: "(OH⁻)" }
   - kind: box
     title: L9-L11
     words: L9-L11, L14-L16
   - kind: text
     words: L17, L19-L20, L18
-    read:
-      "L17.10-12": { text: "H⁺(aq)" }
-      "L19.3-4": { text: "OH⁻(aq)," }
-      "L18": { text: "" }
   - kind: equation
     words: L21
   - kind: equation
@@ -47,21 +36,16 @@ blocks:
   - kind: equation
     words: L24-L26, L23
     read:
-      "L24.1-3": { text: "H⁺(aq)" }
       "L24.5-6": { text: "OH⁻(aq)" }
-      "L24.8-L26": { text: "H₂O(l)" }
-      "L23": { text: "" }
   - kind: text
     words: L27
   - kind: activity
     number: L28
     words: L28, L40-L51
-    read:
-      "L41.7-L44": { text: "H₂SO₄" }
   - kind: figure
     number: L35
     words: L35-L39
-    box: [64, 408, 212, 580]
+    box: [ 64, 408, 212, 580 ]
   - kind: text
     words: L52-L59
   - kind: text

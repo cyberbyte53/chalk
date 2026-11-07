@@ -32,7 +32,6 @@ blocks:
     words: L23-L29, L31-L39.1, L30, L39.2-L42
     read:
       L23.4-5: "H⁺"
-      L23.11-13: "Cl⁻,"
       L23.14-L25.2: "HNO₃⁻,"
       L25.4-L27.2: "NO₃⁻,"
       L27.3-L29.1: "CH₃COOH"
@@ -41,7 +40,6 @@ blocks:
       "L37.2-L39.1, L30": "SO₄²⁻"
       L40.6-7: "H⁺"
       L40.9: इससे
-      L41.8-9: "H⁺"
   - kind: text
     words: L43-L44
   - kind: section

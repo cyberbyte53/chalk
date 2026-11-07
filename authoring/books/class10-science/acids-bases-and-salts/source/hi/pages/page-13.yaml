@@ -6,6 +6,8 @@ notes:
 furniture: L19, L37-L40
 answers:
   "word ऑक्सैलिक": "a name (oxalic), as printed on the page; the list lacks it"
+  partial L15.1-2: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L16.5-6: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: table
     number: L1.2

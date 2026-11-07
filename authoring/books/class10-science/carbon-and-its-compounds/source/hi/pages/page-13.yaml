@@ -16,6 +16,8 @@ answers:
   "word स्पैचुला": "a real word (spatula), as printed on the page"
   "word नैफ्थलीन": "a real word (naphthalene), as printed on the page"
   "word कैम्फर": "a real word (camphor), as printed on the page"
+  partial L13.2-L14.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L15.1-L16.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: exercise
     title: L1
@@ -57,25 +59,12 @@ blocks:
   - kind: equation
     number: L30.1
     words: L30-L34
-    read:
-      L30.4-L31.1: "O₂"
-      L32.2-L33.1: "CO₂"
   - kind: equation
     number: L35.1
     words: L35-L43
-    read:
-      L35.2-L36.1: "CH₄"
-      L37.2-L38.1: "O₂"
-      L39.2-L40.1: "CO₂"
-      L41.2-L43.1: "H₂O"
   - kind: equation
     number: L44.1
     words: L44-L54
-    read:
-      L44.2-L48.1: "CH₃CH₂OH"
-      L48.3-L49.1: "O₂"
-      L50.2-L51.1: "CO₂"
-      L52.2-L54.1: "H₂O"
   - kind: text
     words: L55
     read:

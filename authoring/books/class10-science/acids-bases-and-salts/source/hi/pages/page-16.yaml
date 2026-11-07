@@ -22,12 +22,6 @@ blocks:
       L7.4-L8.1: "Ca(ClO)₂"
   - kind: equation
     words: L10-L19
-    read:
-      L10.1-L11.1: "2Ca(OH)₂"
-      L12.2-L13.1: "2Cl₂"
-      L14.2-L15.1: "Ca(ClO)₂"
-      L16.2-L18.1: "2H₂O"
-      L18.3-L19.1: "CaCl₂"
   - kind: heading
     title: L20
     words: L20
@@ -43,14 +37,9 @@ blocks:
     words: L25
   - kind: text
     words: L26-L31
-    read:
-      L28.8-L30.1: "(NaHCO₃)"
   - kind: equation
     words: L32-L45
     read:
-      L32.3-L34.1: "H₂O"
-      L34.3-L35.1: "CO₂"
-      L36.2-L37.1: "NH₃"
       L38.2-L40.1: "NH₄Cl"
       L40.3-L41.1: "NaHCO₃"
   - kind: text
@@ -61,8 +50,6 @@ blocks:
       L52.1-L53.1: "2NaHCO₃"
       L51.1: "—ऊष्मा→"
       L54.1-L57.1: "Na₂CO₃"
-      L58.2-L60.1: "H₂O"
-      L60.3-L61.1: "CO₂"
       L62.1-L63.1: "(सोडियम हाइड्रोजनकार्बोनेट) (सोडियम कार्बोनेट)"
   - kind: text
     words: L64
@@ -74,7 +61,4 @@ blocks:
   - kind: equation
     words: L69-L78
     read:
-      L69.1-L70.1: "NaHCO₃"
       L71.2-L72.1: "H₈⁺"
-      L73.2-L74.1: "CO₂"
-      L75.2-L77.1: "H₂O"

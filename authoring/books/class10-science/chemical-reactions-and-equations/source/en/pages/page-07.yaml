@@ -8,16 +8,11 @@ blocks:
   - kind: box
     words: L1, L2, L3-L9
     title: L1, L2, L3.1
-    read:
-      "L7.9-L9.1": { text: "CaCO₃." }
   - kind: equation
     words: L10-L14, L17-L21, L15-L16, L22-L23
     number: L21.2
     read:
-      "L10.1-L12.1": { text: "Ca(OH)₂(aq)" }
-      "L12.3-L14.1": { text: "CO₂(g)" }
       "L17.2-L19.1": { text: "CaCO₃(s)" }
-      "L19.3-L21.1": { text: "H₂O(l)" }
   - kind: text
     words: L24
   - kind: text
@@ -25,21 +20,11 @@ blocks:
   - kind: equation
     words: L26-L30, L32
     number: L32.1
-    read:
-      "L26.3-L28.1": { text: "O₂(g)" }
-      "L28.3-L30.1": { text: "CO₂(g)" }
   - kind: text
     words: L31, L33-L37
-    read:
-      "L33.5-L35.1": { text: "H₂(g)" }
-      "L35.3-L37.1": { text: "O₂(g)" }
   - kind: equation
     words: L38-L44
     number: L44.2
-    read:
-      "L38.1-L40.1": { text: "2H₂(g)" }
-      "L40.3-L42.1": { text: "O₂(g)" }
-      "L42.3-L44.1": { text: "2H₂O(l)" }
   - kind: text
     words: L45-L47
   - kind: text
@@ -51,11 +36,6 @@ blocks:
   - kind: equation
     words: L54-L62, L64
     number: L64.1
-    read:
-      "L54.1-L56.1": { text: "CH₄(g)" }
-      "L56.3-L57.1": { text: "2O₂" }
-      "L58.3-L59.1": { text: "CO₂" }
-      "L60.3-L62.1": { text: "2H₂O" }
   - kind: text
     words: L63, L65
   - kind: text
@@ -65,9 +45,6 @@ blocks:
     number: L85.4
     read:
       "L73.1-L79.1": { text: "C₆H₁₂O₆(aq)" }
-      "L79.3-L81.1": { text: "6O₂(aq)" }
-      "L81.3-L83.1": { text: "6CO₂(aq)" }
-      "L83.3-L85.1": { text: "6H₂O(l)" }
   - kind: text
     words: L87-L88
   - kind: text

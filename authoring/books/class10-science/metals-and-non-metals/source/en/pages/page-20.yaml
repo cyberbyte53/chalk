@@ -16,10 +16,6 @@ blocks:
   - kind: question
     words: L10-L11, L14, L12, L15-L17, L13, L18-L23
     number: L10.1
-    read:
-      "L15.1-L16.1": { text: "MgCl₂" }
-      "L18.1-L19.1": { text: "FeSO₄" }
-      "L21.2-L22.1": { text: "AgNO₃" }
   - kind: question
     words: L24-L26, L28, L27, L29-L31
     number: L24.1

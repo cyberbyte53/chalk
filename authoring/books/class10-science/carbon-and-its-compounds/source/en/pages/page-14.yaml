@@ -7,7 +7,7 @@ furniture: L36, L42-L44
 blocks:
   - kind: figure
     words: ""
-    box: [94, 86, 348, 116]
+    box: [ 94, 86, 348, 116 ]
   - kind: text
     words: L1-L2
   - kind: text
@@ -20,7 +20,7 @@ blocks:
     words: L7-L13
   - kind: figure
     words: ""
-    box: [94, 310, 292, 356]
+    box: [ 94, 310, 292, 356 ]
   - kind: text
     words: L14-L17
   - kind: section
@@ -31,10 +31,6 @@ blocks:
     words: L19-L24
   - kind: equation
     words: L25-L31
-    read:
-      "L25-L26": { text: "CH₄" }
-      "L27.2-L28": { text: "Cl₂" }
-      "L29.2-L31.1": { text: "CH₃Cl" }
   - kind: exercise
     words: L32
     title: L32

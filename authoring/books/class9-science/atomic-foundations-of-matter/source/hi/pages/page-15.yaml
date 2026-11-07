@@ -19,9 +19,6 @@ blocks:
     words: L10, L11, L12, L15, L13, L14, L16, L19, L17-L18, L20-L24, L25, L26, L30, L27, L29, L33, L28, L35-L38, L31, L32, L34, L39, L40-L47
     read:
       L17-L18: "CaCl₂"
-      L20.12-14: "(Ca²⁺)"
-      L20.20-22: "(Cl⁻)"
-      L35-L38: "Al₂O₃"
       L40.3: तत्वों
       L42-L45: "Mg₂O₂"
   - kind: text
@@ -29,7 +26,6 @@ blocks:
   - kind: text
     words: L50-L52
     read:
-      L50.8-10: "(Mg²⁺)"
       L51.2-4: "(⁻OH)"
       L51.12-13: (केवल
   - kind: box
@@ -37,11 +33,8 @@ blocks:
     words: L53, L54, L55-L56, L58, L57, L59-L70, L73, L75.1, L74, L75.2, L76, L78, L77, L79-L80
     read:
       L54.1-2: कैल्सियम
-      L55.3-L56.1: "CO₃"
       L59.2-L60.1: "CaCO₃"
       L61.9-L66.1: "Ca₂(CO₃)₂"
-      L67.4-L68.1: "CaCO₃"
-      L79-L80: "Mg(OH)₂"
   - kind: box
     title: L1
     words: L1-L4

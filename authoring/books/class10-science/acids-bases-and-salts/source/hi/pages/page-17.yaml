@@ -26,13 +26,10 @@ blocks:
     words: L17-L30
     read:
       L17.1-L20.1: "Na₂CO₃"
-      L21.2-L23.1: "10H₂O"
-      L23.3-L29.1: "Na₂CO₃.10H₂O"
   - kind: text
     words: L31-L38
     read:
       L31.1-L33.1: "10H₂O"
-      L33.7-L36.1: "Na₂CO₃"
   - kind: text
     words: L39-L40
     read:

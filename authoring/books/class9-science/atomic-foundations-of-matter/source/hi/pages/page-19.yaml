@@ -12,8 +12,6 @@ answers:
 blocks:
   - kind: text
     words: L1-L3
-    read:
-      L1.3-L3.1: "(Na₂O)"
   - kind: example
     number: L4.1-2
     words: L4-L10
@@ -22,13 +20,9 @@ blocks:
       L5.5-L8.1: "Ca(NO₃)₂"
   - kind: text
     words: L11-L16
-    read:
-      L11-L14: "Ca(NO₃)₂"
   - kind: box
     title: L17
     words: L17-L23
-    read:
-      L20.3-L21.1: "Mg(OH)₂"
   - kind: text
     words: L24-L27
     read:

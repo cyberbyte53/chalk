@@ -18,17 +18,13 @@ blocks:
   - kind: equation
     words: L2-L11
     read:
-      L2.1-L4.1: "Ca(OH)₂(aq)"
       L4.3-L6.1: "CO₂(g) →"
       L6.2-L8.1: "CaCO₃(s)"
-      L8.3-L10.3: "H₂O(l)"
   - kind: text
     words: L12
   - kind: equation
     words: L13-L24
     read:
-      L13.1-L15.1: "CaCO₃(s)"
-      L15.3-L17.1: "H₂O(l)"
       L17.3-L19.1: "CO₂(g) →"
       L19.2-L23.1: "Ca(HCO₃)₂(aq)"
   - kind: text
@@ -61,7 +57,6 @@ blocks:
     words: L44-L46
     read:
       L44.3: "HCl(aq) →"
-      L44.6-L46.1: "H₂O(l)"
   - kind: text
     words: L47-L49
   - kind: equation

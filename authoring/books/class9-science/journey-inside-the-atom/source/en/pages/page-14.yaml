@@ -18,9 +18,7 @@ blocks:
   - kind: text
     words: L3-L18
     read:
-      "L8.3-L10.1": { text: "H₂O" }
       "L11.9-L12.1": { text: "NH₃" }
-      "L13.3-L14.1": { text: "MgCl₂" }
   - kind: text
     words: L19-L20
   - kind: text

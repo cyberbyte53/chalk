@@ -360,7 +360,7 @@
   page: 5
   number: "1."
   text: 1. ऐसी धातु का उदाहरण दीजिए जो— (i) कमरे के ताप पर द्रव होती है।  (ii) चाकू से आसानी से काटा
-    जा सकता है। 		(iii) ऊष्मा की सबसे अच्छी चालक होती है। (iv) ऊष्मा की कुचालक होती है।
+    जा सकता है।  (iii) ऊष्मा की सबसे अच्छी चालक होती है। (iv) ऊष्मा की कुचालक होती है।
   made:
     - {words: L13.2, by: hindi-repair}
     - {words: L14.8, by: hindi-repair}
@@ -450,7 +450,7 @@
   page: 6
   text: 2Cu + O₂ → 2CuO (कॉपर) [कॉपर(II) ऑक्साइड]
   made:
-    - {words: L5.3-L6.1, by: agent}
+    - {words: L5.3-L6.1, by: scripts}
     - {words: L8.2, by: agent}
     - {words: L8.3, by: hindi-repair}
 - id: "2.2.7"
@@ -464,9 +464,9 @@
 - id: "2.2.8"
   kind: equation
   page: 6
-  text: 4Al		 + 3O₂ → 2Al₂O₃ (एल्युमिनियम) (एल्युमिनियम ऑक्साइड)
+  text: 4Al  + 3O₂ → 2Al₂O₃ (एल्युमिनियम) (एल्युमिनियम ऑक्साइड)
   made:
-    - {words: L10.3-L11.1, by: agent}
+    - {words: L10.3-L11.1, by: scripts}
     - {words: L12.2-L15.1, by: agent}
     - {words: L16.1, by: hindi-repair}
     - {words: L16.2, by: hindi-repair}
@@ -498,17 +498,17 @@
   page: 6
   text: Al₂O₃ + 6HCl → 2AlCl₃ + 3H₂O
   made:
-    - {words: L23.1-L26.1, by: agent}
-    - {words: L27.4-L28.1, by: agent}
-    - {words: L29.2-L31.1, by: agent}
+    - {words: L23.1-L26.1, by: scripts}
+    - {words: L27.4-L28.1, by: scripts}
+    - {words: L29.2-L31.1, by: scripts}
 - id: "2.2.11"
   kind: equation
   page: 6
   text: Al₂O₃ + 2NaOH → 2NaAlO₂ + H₂O (सोडियम ऐलुमिनेट)
   made:
-    - {words: L32.1-L35.1, by: agent}
+    - {words: L32.1-L35.1, by: scripts}
     - {words: L36.4-L37.1, by: agent}
-    - {words: L38.2-L40.1, by: agent}
+    - {words: L38.2-L40.1, by: scripts}
     - {words: L41.2-5, by: agent}
 - id: "2.2.12"
   kind: text
@@ -526,14 +526,14 @@
   text: Na₂O(s) + H₂O(l) → 2NaOH(aq)
   made:
     - {words: L45.1-L47.1, by: agent}
-    - {words: L47.3-L49.1, by: agent}
+    - {words: L47.3-L49.1, by: scripts}
 - id: "2.2.14"
   kind: equation
   page: 6
   text: K₂O(s) + H₂O(l) → 2KOH(aq)
   made:
-    - {words: L50.1-L52.1, by: agent}
-    - {words: L52.3-L54.1, by: agent}
+    - {words: L50.1-L52.1, by: scripts}
+    - {words: L52.3-L54.1, by: scripts}
 - id: "2.2.15"
   kind: text
   page: 6
@@ -681,8 +681,8 @@
   page: 8
   text: 2K(s) + 2H₂O(l) → 2KOH(aq) + H₂(g) + ऊष्मीय ऊर्जा
   made:
-    - {words: L9.3-L11.1, by: agent}
-    - {words: L11.5-L13.1, by: agent}
+    - {words: L9.3-L11.1, by: scripts}
+    - {words: L11.5-L13.1, by: scripts}
 - id: "2.3.8"
   kind: equation
   page: 8
@@ -705,9 +705,9 @@
   page: 8
   text: Ca(s) + 2H₂O(l) → Ca(OH)₂(aq) + H₂(g)
   made:
-    - {words: L21.3-L23.1, by: agent}
-    - {words: L23.3-L25.1, by: agent}
-    - {words: L25.3-L27.1, by: agent}
+    - {words: L21.3-L23.1, by: scripts}
+    - {words: L23.3-L25.1, by: scripts}
+    - {words: L25.3-L27.1, by: scripts}
 - id: "2.3.11"
   kind: text
   page: 8
@@ -738,9 +738,9 @@
   page: 8
   text: 2Al(s) + 3H₂O(g) → Al₂O₃(s) + 3H₂(g)
   made:
-    - {words: L37.3-L39.1, by: agent}
-    - {words: L39.3-L43.1, by: agent}
-    - {words: L43.3-L45.1, by: agent}
+    - {words: L37.3-L39.1, by: scripts}
+    - {words: L39.3-L43.1, by: scripts}
+    - {words: L43.3-L45.1, by: scripts}
 - id: "2.3.15"
   kind: equation
   page: 8
@@ -748,7 +748,7 @@
   made:
     - {words: L46.3-L48.1, by: agent}
     - {words: L48.3-L52.1, by: agent}
-    - {words: L52.3-L54.1, by: agent}
+    - {words: L52.3-L54.1, by: scripts}
 - id: "2.3.16"
   kind: text
   page: 8
@@ -816,12 +816,12 @@
   made:
     - {words: L20.4-L21.1, by: agent}
     - {words: L22.3, by: hindi-repair}
-    - {words: L22.8-L23.1, by: agent}
+    - {words: L22.8-L23.1, by: scripts}
     - {words: L24.2-3, by: agent}
     - {words: L25.12, by: hindi-repair}
-    - {words: L25.14-L27.1, by: agent}
+    - {words: L25.14-L27.1, by: scripts}
     - {words: L27.3-L28.1, by: agent}
-    - {words: L30.13-L31.1, by: agent}
+    - {words: L30.13-L31.1, by: scripts}
     - {words: L33.3-L34.1, by: agent}
 - id: "2.4.7"
   kind: text
@@ -982,7 +982,7 @@
   kind: question
   page: 11
   number: "2."
-  text: 2. इन अभिक्रियाओं के लिए समीकरण लिखिए— 		(i) भाप के साथ आयरन। 		(ii) जल के साथ कैल्सियम तथा
+  text: 2. इन अभिक्रियाओं के लिए समीकरण लिखिए—  (i) भाप के साथ आयरन।  (ii) जल के साथ कैल्सियम तथा
     पोटैशियम।
   made:
     - {words: L3.3-4, by: agent}
@@ -994,8 +994,8 @@
   text: "3. A, B, C एवं D चार धातुओं के नमूनों को लेकर एक-एक करके निम्नलिखित विलयन में डाला गया। इससे
     प्राप्त परिणाम को निम्नलिखित प्रकार से सारणीबद्ध किया गया है: इस सारणी का उपयोग कर धातु A, B, C
     एवं D के संबंध में निम्नलिखित प्रश्नों के उत्तर दीजिए— (i) सबसे अधिक अभिक्रियाशील धातु कौन सी
-    है? (ii) धातु B को कॉपर(II) सल्फ़ेट के विलयन में डाला जाए तो क्या होगा? \t\t(iii) धातु A, B, C
-    एवं D को अभिक्रियाशीलता के घटते हुए क्रम में व्यवस्थित कीजिए।"
+    है? (ii) धातु B को कॉपर(II) सल्फ़ेट के विलयन में डाला जाए तो क्या होगा?  (iii) धातु A, B, C एवं
+    D को अभिक्रियाशीलता के घटते हुए क्रम में व्यवस्थित कीजिए।"
   made:
     - {words: L6.8-9, by: agent}
     - {words: L7.1, by: agent}
@@ -1037,7 +1037,7 @@
 - id: "2.6.3.6"
   kind: question
   page: 11
-  number: 5. जिंक
+  number: "5."
   text: 5. जिंक को आयरन (II) सल्फ़ेट के विलयन में डालने से क्या होता है? इसकी रासायनिक अभिक्रिया लिखिए।
   made:
     - {words: L36.1, by: hindi-repair}
@@ -1092,7 +1092,7 @@
     - {words: L2.4-6, page: 12, by: hindi-repair}
     - {words: L2.10, page: 12, by: hindi-repair}
     - {words: L3.18, page: 12, by: agent}
-    - {words: L4.2-3, page: 12, by: agent}
+    - {words: L4.2-3, page: 12, by: scripts}
     - {words: L4.4, page: 12, by: hindi-repair}
     - {words: L4.10, page: 12, by: agent}
 - id: "3.4"
@@ -1146,17 +1146,17 @@
 - id: "3.6"
   kind: equation
   page: 12
-  text: Na → Na⁺ + e⁻ 2,8,1 2,8			 (सोडियम धनआयन)
+  text: Na → Na⁺ + e⁻ 2,8,1 2,8  (सोडियम धनआयन)
   made:
-    - {words: L88.3-4, by: agent}
+    - {words: L88.3-4, by: scripts}
     - {words: L88.6-7, by: agent}
 - id: "3.7"
   kind: equation
   page: 12
   text: Cl + e⁻ → Cl⁻ 2,8,7 2,8,8 (क्लोराइड ऋणआयन)
   made:
-    - {words: L87.3-4, by: agent}
-    - {words: L87.6-7, by: agent}
+    - {words: L87.3-4, by: scripts}
+    - {words: L87.6-7, by: scripts}
     - {words: L90.3, by: hindi-repair}
     - {words: L90.4, by: hindi-repair}
 - id: "3.8"
@@ -1176,15 +1176,15 @@
   page: 13
   text: Mg → Mg²⁺ + 2e⁻ 2,8,2 2,8 (मैग्नीशियम धनायन)
   made:
-    - {words: L3.5-6, by: agent}
-    - {words: L3.8-10, by: agent}
+    - {words: L3.5-6, by: scripts}
+    - {words: L3.8-10, by: scripts}
 - id: "3.11"
   kind: equation
   page: 13
   text: Cl + e⁻ → Cl⁻ 2,8,7 2,8,8 (क्लोराइड ऋणायन)
   made:
     - {words: L6.3-4, by: agent}
-    - {words: L6.8-9, by: agent}
+    - {words: L6.8-9, by: scripts}
 - id: "3.12"
   kind: figure
   page: 13
@@ -1199,7 +1199,7 @@
   text: धातु से अधातु में इलेक्ट्रॉन के स्थानांतरण से बने यौगिकों को आयनिक यौगिक या वैद्युत संयोजक
     यौगिक कहा जाता है। क्या आप MgCl₂ में उपस्थित धनायन एवं ऋणायन का नाम बता सकते हैं?
   made:
-    - {words: L14.11-L15.1, by: agent}
+    - {words: L14.11-L15.1, by: scripts}
 - id: "3.14"
   kind: section
   page: 13
@@ -1265,8 +1265,8 @@
     - [MgCl₂, "981", "1685"]
   crop: [183, 110.9, 537, 240.6]
   made:
-    - {words: L5.1-L6.1, by: agent}
-    - {words: L8.1-L9.1, by: agent}
+    - {words: L5.1-L6.1, by: scripts}
+    - {words: L8.1-L9.1, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "3.14.6"
@@ -1472,14 +1472,14 @@
   page: 16
   text: 2HgS(s) + 3O₂(g) तापन 2HgO(s) + 2SO₂(g)
   made:
-    - {words: L25.3-L27.1, by: agent}
-    - {words: L29.4-L31.1, by: agent}
+    - {words: L25.3-L27.1, by: scripts}
+    - {words: L29.4-L31.1, by: scripts}
 - id: "4.4.3"
   kind: equation
   page: 16
   text: 2HgO(s) तापन 2Hg(1) + O₂(g)
   made:
-    - {words: L32.3-L34.1, by: agent}
+    - {words: L32.3-L34.1, by: scripts}
 - id: "4.4.4"
   kind: text
   page: 16
@@ -1494,18 +1494,18 @@
   page: 16
   text: 2Cu₂S + 3O₂(g) तापन 2Cu₂O(s) + 2SO₂(g)
   made:
-    - {words: L39.1-L41.1, by: agent}
-    - {words: L41.3-L43.1, by: agent}
-    - {words: L43.3-L45.1, by: agent}
-    - {words: L45.3-L47.1, by: agent}
+    - {words: L39.1-L41.1, by: scripts}
+    - {words: L41.3-L43.1, by: scripts}
+    - {words: L43.3-L45.1, by: scripts}
+    - {words: L45.3-L47.1, by: scripts}
 - id: "4.4.6"
   kind: equation
   page: 16
   text: 2Cu₂O + Cu₂S तापन 6Cu(s) + So₂(g)
   made:
-    - {words: L48.1-L50.1, by: agent}
-    - {words: L50.3-L52.1, by: agent}
-    - {words: L52.5-L54.1, by: agent}
+    - {words: L48.1-L50.1, by: scripts}
+    - {words: L50.3-L52.1, by: scripts}
+    - {words: L52.5-L54.1, by: scripts}
 - id: "4.5"
   kind: section
   page: 17
@@ -1543,15 +1543,15 @@
   page: 17
   text: भर्जन 2ZnS(s) + 3O₂(g) तापन 2ZnO(s) + 2SO₂(g)
   made:
-    - {words: L11.3-L13.1, by: agent}
-    - {words: L13.5-L15.1, by: agent}
+    - {words: L11.3-L13.1, by: scripts}
+    - {words: L13.5-L15.1, by: scripts}
 - id: "4.5.3"
   kind: equation
   page: 17
   text: निस्तापन ZnCO₃(s) तापन ZnO(s) + CO₂(g)
   made:
-    - {words: L17.1-L19.1, by: agent}
-    - {words: L19.5-L21.1, by: agent}
+    - {words: L17.1-L19.1, by: scripts}
+    - {words: L19.5-L21.1, by: scripts}
 - id: "4.5.4"
   kind: text
   page: 17
@@ -1598,8 +1598,8 @@
   page: 17
   text: 3MnO₂(s) + 4Al(s) → 3Mn(1) + 2Al₂O₃(s) + ऊष्मा
   made:
-    - {words: L34.1-L36.1, by: agent}
-    - {words: L36.7-L40.1, by: agent}
+    - {words: L34.1-L36.1, by: scripts}
+    - {words: L36.7-L40.1, by: scripts}
 - id: "4.5.9"
   kind: text
   page: 17
@@ -1625,8 +1625,8 @@
   page: 17
   text: Fe₂O₃(s) + 2Al(s) → 2Fe(l) + Al₂O₃(s) + ऊष्मा
   made:
-    - {words: L51.1-L55.1, by: agent}
-    - {words: L55.7-L59.1, by: agent}
+    - {words: L51.1-L55.1, by: scripts}
+    - {words: L55.7-L59.1, by: scripts}
 - id: "4.5.12"
   kind: figure
   page: 17
@@ -1677,17 +1677,17 @@
   text: कैथोड पर Na⁺ + e⁻ → Na
   made:
     - {words: L10.1-2, by: hindi-repair}
-    - {words: L10.4-5, by: agent}
-    - {words: L10.7-8, by: agent}
+    - {words: L10.4-5, by: scripts}
+    - {words: L10.7-8, by: scripts}
 - id: "4.6.3"
   kind: equation
   page: 18
   text: ऐनोड पर 2Cl⁻ → Cl₂ + 2e⁻
   made:
     - {words: L11.1, by: hindi-repair}
-    - {words: L11.3-4, by: agent}
-    - {words: L11.6-L12.1, by: agent}
-    - {words: L13.2-3, by: agent}
+    - {words: L11.3-4, by: scripts}
+    - {words: L11.6-L12.1, by: scripts}
+    - {words: L13.2-3, by: scripts}
 - id: "4.6.4"
   kind: text
   page: 18
@@ -1803,7 +1803,7 @@
 - id: "5.2.1"
   kind: question
   page: 19
-  number: 1. निम्न
+  number: "1."
   text: 1. निम्न पदों की परिभाषा दीजिए— (i) खनिज (ii) अयस्क  (iii) गैंग
   made:
     - {words: L3.1, by: hindi-repair}
@@ -1987,7 +1987,7 @@
 - id: "5.3.8.1"
   kind: question
   page: 21
-  number: 1. जिंक,
+  number: "1."
   text: 1. जिंक, मैग्नीशियम एवं कॉपर के धात्विक ऑक्साइडों को निम्नलिखित धातुओं के साथ गर्म किया गया—
     किस स्थिति में विस्थापन अभिक्रिया घटित होगी?
   made:
@@ -2021,7 +2021,7 @@
 - id: "5.3.8.4"
   kind: question
   page: 21
-  number: 3. मिश्रातु
+  number: "3."
   text: 3. मिश्रातु क्या होते हैं?
   made:
     - {words: L11.1, by: hindi-repair}
@@ -2102,13 +2102,13 @@
 - id: "5.3.9.1"
   kind: question
   page: 22
-  number: 1. निम्नलिखित
+  number: "1."
   text: 1. निम्नलिखित में कौन सा युगल विस्थापन अभिक्रिया प्रदर्शित करता है— (a) NaCl विलयन एवं कॉपर
     धातु (b) MgCl₂ विलयन एवं एल्युमिनियम धातु (c) FeSO₄ विलयन एवं सिल्वर धातु (d) AgNO₃ विलयन एवं
     कॉपर धातु
   made:
     - {words: L8.1, by: hindi-repair}
-    - {words: L10.2-L11.1, by: agent}
+    - {words: L10.2-L11.1, by: scripts}
     - {words: L12.3, by: hindi-repair}
     - {words: L13.2-L14.1, by: agent}
     - {words: L16.2-L17.1, by: agent}
@@ -2252,16 +2252,16 @@
 - id: "5.3.9.15"
   kind: question
   page: 23
-  number: "14.\t\t"
-  text: 14.		 रासायनिक गुणधर्मों के आधार पर धातुओं एवं अधातुओं में विभेद कीजिए।
+  number: "14."
+  text: 14.  रासायनिक गुणधर्मों के आधार पर धातुओं एवं अधातुओं में विभेद कीजिए।
   made:
     - {words: L40.6-7, by: agent}
     - {words: L40.9-10, by: agent}
 - id: "5.3.9.16"
   kind: question
   page: 23
-  number: "15.\t\t"
-  text: 15.		 एक व्यक्ति प्रत्येक घर में सुनार बनकर जाता है। उसने पुराने एवं मलीन सोने के आभूषणों में
+  number: "15."
+  text: 15.  एक व्यक्ति प्रत्येक घर में सुनार बनकर जाता है। उसने पुराने एवं मलीन सोने के आभूषणों में
     पहले जैसी चमक पैदा करने का ढोंग रचाया। कोई संदेह किए बिना ही एक महिला अपने सोने के कंगन उसे देती
     है, जिसे वह एक विशेष विलयन में डाल देता है। कंगन नए की तरह चमकने लगते हैं, लेकिन उनका वजन अत्यंत
     कम हो जाता है। वह महिला बहुत दुखी होती है तथा तर्क-वितर्क के पश्चात उस व्यक्ति को झुकना पड़ता

@@ -6,6 +6,8 @@ notes:
   other: "subscripts the PDF sets as plain digits (CH 3 Cl, C 2 H 6), or a word it splits with a space (प्रकृ ति, कै से, करें गे, कै स्टर)"
 answers:
   "word विलायकों": "a real word (solvents), as printed on the page"
+  partial L20.4-L23.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L28.2-L31.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: question
     number: L1.1
@@ -17,7 +19,6 @@ blocks:
     words: L4-L11
     read:
       L6.2-L8.1: "H₂S"
-      L10.2-L11.1: "F₂"
   - kind: question
     number: L12.1
     words: L12
@@ -51,7 +52,6 @@ blocks:
       L24.2-L27.1: "C₃H₈"
       L28.2-L31.1: "C₃H₆"
       L32.2-L35.1: "C₂H₂"
-      L36.2-L37.1: "CH₄"
   - kind: question
     number: L40.1
     words: L40

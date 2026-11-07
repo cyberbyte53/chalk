@@ -62,9 +62,5 @@ blocks:
   - kind: text
     words: L44-L67
     read:
-      L46.1-L47.1: { text: "CH₄", cause: other }
-      L48.2-L51.1: { text: "C₂H₆", cause: other }
       L53.3-L55.1: { text: "–CH₂-", cause: other }
-      L56.1-L59.1: { text: "C₂H₆", cause: other }
-      L60.2-L63.1: { text: "C₃H₈", cause: other }
       L65.3-L67.1: { text: "–CH₂-", cause: other }

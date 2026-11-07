@@ -15,7 +15,7 @@ blocks:
   - kind: figure
     words: L1-L5, L17-L18, L33, L22, L26, L27.1-2, L29, L31
     number: L29.1-2
-    box: [40, 85, 216, 388]
+    box: [ 40, 85, 216, 388 ]
   - kind: section
     words: L16
     number: L16.1
@@ -30,17 +30,14 @@ blocks:
     words: L34-L38
     number: L34.1-2
     title: L34.3-7
-    box: [155, 397, 550, 505]
-    read:
-      "L35.3-5": { text: "(p⁺)" }
-      "L35.7-9": { text: "(n⁰)" }
+    box: [ 155, 397, 550, 505 ]
   - kind: text
     words: L59-L60
   - kind: text
     words: L61-L63
   - kind: figure
     words: L64, L66, L65
-    box: [280, 580, 495, 622]
+    box: [ 280, 580, 495, 622 ]
   - kind: text
     words: L67-L69
   - kind: equation

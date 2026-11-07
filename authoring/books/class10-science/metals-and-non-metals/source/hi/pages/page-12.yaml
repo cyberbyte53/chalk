@@ -14,7 +14,6 @@ blocks:
     words: L1-L5
     read:
       L3.18: इससे
-      L4.2-3: "Cl⁻"
       L4.10: तत्वों
   - kind: table
     number: L6.2
@@ -32,13 +31,9 @@ blocks:
   - kind: equation
     words: L88, L89.1-2, L90.1-2
     read:
-      L88.3-4: "Na⁺"
       L88.6-7: "e⁻"
   - kind: equation
     words: L87, L89.3-4, L90.3-4
-    read:
-      L87.3-4: "e⁻"
-      L87.6-7: "Cl⁻"
   - kind: figure
     number: L91.2
     words: L91

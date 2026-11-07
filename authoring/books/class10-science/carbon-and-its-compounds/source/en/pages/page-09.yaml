@@ -12,8 +12,8 @@ blocks:
     words: L7, L10, L12-L13, L16-L17, L19-L20, L22, L25-L26, L30, L34, L38
     number: L7.1-2
     title: L7.3-8
-    box: [64, 148, 406, 398]
-    cells: { rows: [["L10.1, L12.1", "L10.2-3, L12.2", "L10.4-5, L13"], ["L16.1", "L16.2-3, L19", "L17, L20, L22"], ["L25.1", "L25.2-3", "L26"], ["", "L30", ""], ["", "L34", ""], ["", "L38", ""]], cause: wrong-cells }
+    box: [ 64, 148, 406, 398 ]
+    cells: { rows: [ [ "L10.1, L12.1", "L10.2-3, L12.2", "L10.4-5, L13" ], [ "L16.1", "L16.2-3, L19", "L17, L20, L22" ], [ "L25.1", "L25.2-3", "L26" ], [ "", "L30", "" ], [ "", "L34", "" ], [ "", "L38", "" ] ], cause: wrong-cells }
   - kind: section
     words: L40
     number: L40.1
@@ -25,11 +25,7 @@ blocks:
   - kind: text
     words: L65-L72, L81, L83-L85, L73-L80, L82, L86-L93
     read:
-      "L67-L68": { text: "CH₄" }
-      "L69.2-L72": { text: "C₂H₆" }
       "L83.5-L85.1": { text: "–CH₂-" }
-      "L73-L76": { text: "C₂H₆" }
-      "L77.2-L80": { text: "C₃H₈" }
       "L86.5-L88.1": { text: "–CH₂-" }
       "L89.13-L93": { text: "(C₄H₁₀)?" }
   - kind: text
@@ -38,7 +34,4 @@ blocks:
     words: L97-L114
     continues: true
     read:
-      "L100.4-L104.1": { text: "C₃H₆," }
-      "L104.2-L107": { text: "C₄H₈" }
-      "L108.2-L112.1": { text: "C₅H₁₀." }
       "L112.8-L114": { text: "–CH₂–" }

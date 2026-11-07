@@ -10,16 +10,12 @@ blocks:
   - kind: equation
     words: L4-L12
     number: L12.1
-    read:
-      "L4.3-L6.1": { text: "H₂O" }
-      "L6.3-L9.1": { text: "Fe₃O₄" }
-      "L10.2-L11.1": { text: "H₂" }
   - kind: text
     words: L13-L14
   - kind: table
     words: L15-L27
-    box: [180, 193, 535, 262]
-    cells: { rows: [["L15.1", "L15.2-L16.3", "L17-L18"], ["L19", "L22", "L25"], ["L20", "L23", "L26"], ["L21", "L24", "L27"]] }
+    box: [ 180, 193, 535, 262 ]
+    cells: { rows: [ [ "L15.1", "L15.2-L16.3", "L17-L18" ], [ "L19", "L22", "L25" ], [ "L20", "L23", "L26" ], [ "L21", "L24", "L27" ] ] }
   - kind: text
     words: L28-L37
     read:
@@ -28,41 +24,23 @@ blocks:
     words: L38
   - kind: table
     words: L39-L53
-    box: [180, 363, 535, 431]
-    cells: { rows: [["L39-L40", "L41.1-2", "L41.3-4"], ["L42", "L44-L46", "L48-L52"], ["L43", "L47", "L53"]] }
-    read:
-      "L44.3-L46.1": { text: "H₂O)" }
-      "L48.3-L52.1": { text: "Fe₃O₄)" }
+    box: [ 180, 363, 535, 431 ]
+    cells: { rows: [ [ "L39-L40", "L41.1-2", "L41.3-4" ], [ "L42", "L44-L46", "L48-L52" ], [ "L43", "L47", "L53" ] ] }
   - kind: text
     words: L54-L68
-    read:
-      "L57.4-L59.1": { text: "H₂O" }
-      "L59.4-L62.1": { text: "H₂O₄" }
-      "L63.2-L67.1": { text: "(H₂O)₄." }
   - kind: equation
     words: L70-L77, L69
     number: L69.1
-    read:
-      "L70.4-L72.1": { text: "H₂O" }
-      "L72.3-L75.1": { text: "Fe₃O₄" }
-      "L76.2-L77.1": { text: "H₂" }
   - kind: text
     words: L78-L80
   - kind: text
     words: L81-L82
   - kind: table
     words: L83-L95
-    box: [180, 595, 535, 665]
-    cells: { rows: [["L83-L84", "L85.1-2", "L85.3-4"], ["L86", "L88-L90", "L92-L94"], ["L87", "L91", "L95"]] }
-    read:
-      "L88.4-L90.1": { text: "H₂O)" }
-      "L92.3-L94.1": { text: "H₂)" }
+    box: [ 180, 595, 535, 665 ]
+    cells: { rows: [ [ "L83-L84", "L85.1-2", "L85.3-4" ], [ "L86", "L88-L90", "L92-L94" ], [ "L87", "L91", "L95" ] ] }
   - kind: text
     words: L96
   - kind: equation
     words: L97-L104, L106, L105
     number: L105.1
-    read:
-      "L97.4-L99.1": { text: "H₂O" }
-      "L99.3-L102.1": { text: "Fe₃O₄" }
-      "L103.3-L104.1": { text: "H₂" }

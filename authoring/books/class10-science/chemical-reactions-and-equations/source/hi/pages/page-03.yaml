@@ -31,8 +31,6 @@ blocks:
   - kind: equation
     number: L15.3
     words: L13-L15
-    read:
-      L13.3-L14.1: "O₂"
   - kind: text
     words: L16-L20
     read:
@@ -66,10 +64,6 @@ blocks:
   - kind: equation
     number: L44.1
     words: L36-L44
-    read:
-      L36.3-L39.1: "H₂SO₄"
-      L40.2-L41.1: "ZnSO₄"
-      L42.2-L43.1: "H₂"
   - kind: text
     words: L45-L46
     read:

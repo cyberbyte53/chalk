@@ -4,8 +4,6 @@ furniture: L56-L59
 notes:
   other: "a word the PDF splits with a space (करें गे, कै से, के वल), or a sub/superscript it sets as a plain digit (CH 3, C 4-)"
 answers:
-  "read L25.2-3": "the PDF sets the subscript 4 of CH₄ on its own line (L27, after the next cell's numbers); the reading takes it in"
-  "read L27.1": "the subscript 4 of CH₄, read into L25.2-3 where the page prints it"
   "word एथेनॉल": "a real word (ethanol), as printed in the table"
   "word अभिक्रियाशीलता": "a real word (reactivity), as printed on the page"
 blocks:
@@ -24,10 +22,7 @@ blocks:
     cells: { rows: [ [ "L6.1", "L7.1-2", "L7.3-4" ], [ "L11-L13", "L9.1", "L9.2" ], [ "L15.14-L17", "L14.1", "L14.2" ], [ "L19.11-L23", "L18.1", "L18.2" ], [ "L25, L27", "L26.1", "L26.2" ] ] }
     read:
       L11.3-L13.1: { text: "(CH₃COOH)", cause: other }
-      L15.15-L17.1: { text: "(CHCl₃)", cause: other }
       L19.12-L23.1: { text: "(CH₃CH₂OH)", cause: other }
-      L25.2-3: { text: "(CH₄)", cause: other }
-      L27.1: { text: "", cause: other }
   - kind: text
     words: L32-L36
     read:
@@ -37,9 +32,7 @@ blocks:
     read:
       L38.7: तत्वों
       L39.3: तत्व
-      L43.6-7: { text: "C⁴⁻", cause: other }
       L46.1: "(ii) ये"
-      L46.6-7: { text: "C⁴⁺", cause: other }
   - kind: text
     words: L49-L55
     read:

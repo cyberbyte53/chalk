@@ -24,7 +24,6 @@ blocks:
     words: L11, L14-L26
     read:
       L14.6-L15.2: संबंध
-      L16.7-L18.1: "CO₂(g)"
   - kind: question
     number: L12.1
     words: L12, L27-L41

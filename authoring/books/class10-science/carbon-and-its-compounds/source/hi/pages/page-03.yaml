@@ -21,8 +21,6 @@ blocks:
       L40.9-10: परमाणुओं
   - kind: text
     words: L42-L47
-    read:
-      L43.10-L44.1: { text: "Cl₂", cause: other }
   - kind: text
     words: L48-L56
     read:
@@ -46,8 +44,6 @@ blocks:
     number: L9.2
     words: L2.1, L3-L10
     box: [ 60, 80, 245, 216 ]
-    read:
-      L4.1-L5.1: { text: "H₂", cause: other }
   - kind: figure
     number: L11.2
     words: L11-L13
@@ -59,12 +55,10 @@ blocks:
     words: L14-L18, L19-L21
     box: [ 60, 340, 215, 531 ]
     read:
-      L15.1-L16.1: { text: "O₂", cause: other }
       L20.4-5: परमाणुओं
   - kind: figure
     number: L26.2
     words: L22-L28
     box: [ 60, 520, 215, 713 ]
     read:
-      L23.1-L24.1: { text: "N₂", cause: other }
       L27.4-7: परमाणुओं

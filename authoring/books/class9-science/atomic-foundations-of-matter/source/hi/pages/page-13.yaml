@@ -22,17 +22,30 @@ answers:
   word क्यूप्रस: a real word (cuprous), as printed on the page; the list lacks it
   word क्यूप्रिक: a real word (cupric), as printed on the page; the list lacks it
   word फ्लुओराइड: a real word (fluoride), as printed on the page; the list lacks it
+  partial L31: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L33: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L35: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L47: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L39: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L41: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L43: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L51: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L53: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L45: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L55: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L57: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L59: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L67: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L69: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: box
     title: L1
     words: L1, L3-L13
     read:
-      L5.6-7: "Mg²⁺"
       L5.8: बनने
       L7.2: ___________आयन
       L9.5-6: कैल्सियम
       L9.8-9: परमाणुओं
-      L11.6-L13.1: "(Na₂S)"
   - kind: heading
     title: L21
     words: L21
@@ -95,8 +108,6 @@ blocks:
       L65: "⁻"
       L67: "²⁻"
       L69: "²⁻"
-      L37.2-3: "Ag⁺"
-      L49.3-4: "Cu²⁺"
       L62-L63: "Br⁻"
   - kind: box
     title: L2

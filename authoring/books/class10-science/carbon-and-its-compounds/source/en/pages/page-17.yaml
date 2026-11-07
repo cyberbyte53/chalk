@@ -8,17 +8,11 @@ blocks:
   - kind: equation
     words: L2.1-6, L1, L2.7-13
     read:
-      "L2.1-6": { text: "CH₃COOC₂H₅" }
       "L1": { text: "NaOH →" }
-      "L2.7-13": { text: "C₂H₅OH+CH₃COONa" }
   - kind: text
     words: L3-L5
   - kind: equation
     words: L6-L12
-    read:
-      "L6.3-L8.1": { text: "CH₃COOH" }
-      "L8.3-L10.1": { text: "CH₃COONa" }
-      "L10.3-L12": { text: "H₂O" }
   - kind: text
     words: L13-L15
   - kind: activity
@@ -28,20 +22,8 @@ blocks:
     words: L31-L34
   - kind: equation
     words: L35-L46
-    read:
-      "L35-L37.1": { text: "2CH₃COOH" }
-      "L37.3-L40": { text: "Na₂CO₃" }
-      "L41.2-L43.1": { text: "2CH₃COONa" }
-      "L43.3-L45.1": { text: "H₂O" }
-      "L45.3-L46": { text: "CO₂" }
   - kind: equation
     words: L47-L56
-    read:
-      "L47-L49.1": { text: "CH₃COOH" }
-      "L49.3-L50": { text: "NaHCO₃" }
-      "L51.2-L53.1": { text: "CH₃COONa" }
-      "L53.3-L55.1": { text: "H₂O" }
-      "L55.3-L56": { text: "CO₂" }
   - kind: exercise
     title: L57
     words: L57
@@ -64,4 +46,4 @@ blocks:
     words: L70-L71
     number: L70.1-2
     title: L71
-    box: [62, 525, 265, 712]
+    box: [ 62, 525, 265, 712 ]

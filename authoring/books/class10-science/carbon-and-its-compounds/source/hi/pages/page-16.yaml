@@ -35,12 +35,9 @@ blocks:
   - kind: equation
     words: L15, L16.1-3, L14, L16.4-9
     read:
-      L15.1-2: "CH₄"
-      L15.4-5: "Cl₂"
       L16.1: ""
       L16.2: ""
       L14.1-6: "(सूर्य के प्रकाश की उपस्थिति में)"
-      L16.4-7: "CH₃Cl"
   - kind: exercise
     title: L17
     words: L17

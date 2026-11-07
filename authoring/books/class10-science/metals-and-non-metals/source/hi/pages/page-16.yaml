@@ -30,13 +30,8 @@ blocks:
       L21.17: सिनाबार
   - kind: equation
     words: L25-L27, L29-L31
-    read:
-      L25.3-L27.1: "3O₂(g)"
-      L29.4-L31.1: "2SO₂(g)"
   - kind: equation
     words: L28, L32-L34
-    read:
-      L32.3-L34.1: "O₂(g)"
   - kind: text
     words: L35-L38
     read:
@@ -45,14 +40,5 @@ blocks:
       L37.9-10: केवल
   - kind: equation
     words: L39-L47
-    read:
-      L39.1-L41.1: "2Cu₂S"
-      L41.3-L43.1: "3O₂(g)"
-      L43.3-L45.1: "2Cu₂O(s)"
-      L45.3-L47.1: "2SO₂(g)"
   - kind: equation
     words: L48-L54
-    read:
-      L48.1-L50.1: "2Cu₂O"
-      L50.3-L52.1: "Cu₂S"
-      L52.5-L54.1: "So₂(g)"

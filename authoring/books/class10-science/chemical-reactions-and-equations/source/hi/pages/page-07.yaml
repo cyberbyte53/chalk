@@ -42,9 +42,6 @@ blocks:
   - kind: equation
     number: L30.1
     words: L25-L31, L36
-    read:
-      L25.3-L27.1: "H₂O(1)"
-      L27.3-L29.1: "Ca(OH)₂(aq)"
   - kind: text
     words: L41-L43
   - kind: box
@@ -73,6 +70,3 @@ blocks:
   - kind: equation
     number: L65.1
     words: L58-L62, L65
-    read:
-      L58.3-L60.1: "O₂(g)"
-      L60.3-L62.1: "CO₂(g)"

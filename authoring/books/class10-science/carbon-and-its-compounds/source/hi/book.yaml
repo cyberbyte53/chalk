@@ -7,6 +7,7 @@ pages: 24
 tools:
   reader: 1
   hindi-repair: 4
+  scripts: 1
   figure-snap: 1
   table-cells: 1
   structure-draft: 2

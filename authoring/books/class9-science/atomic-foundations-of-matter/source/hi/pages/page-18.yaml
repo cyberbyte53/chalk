@@ -35,8 +35,6 @@ blocks:
   - kind: example
     number: L23.1-2
     words: L23-L27
-    read:
-      L24.3-L26.1: "(CO₂)"
   - kind: text
     words: L28-L30
     read:
@@ -47,7 +45,6 @@ blocks:
     title: L33
     words: L33, L40-L47
     read:
-      L40.4-L42.1: "(HNO₃)"
       L44.3-L46.1: "(CH₄)"
   - kind: section
     number: L48.1

@@ -21,7 +21,6 @@ blocks:
     number: L25.1
     read:
       "L28.4-5": { text: "electron-dot" }
-      "L30.6-L32.1": { text: "Na₂O" }
   - kind: question
     words: L26, L34
     number: L26.1

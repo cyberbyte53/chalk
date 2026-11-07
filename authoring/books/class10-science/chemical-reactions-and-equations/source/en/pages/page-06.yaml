@@ -35,7 +35,7 @@ blocks:
   - kind: figure
     words: L30-L34
     number: L30.1-2
-    box: [62, 480, 303, 636]
+    box: [ 62, 480, 303, 636 ]
   - kind: activity
     words: L25, L35-L39
     number: L25.1-2
@@ -44,8 +44,5 @@ blocks:
   - kind: equation
     words: L42, L44-L48, L43, L49
     number: L48.4
-    read:
-      "L44.2-L46.1": { text: "H₂O(l)" }
-      "L46.3-L48.1": { text: "Ca(OH)₂(aq)" }
   - kind: text
     words: L50-L52

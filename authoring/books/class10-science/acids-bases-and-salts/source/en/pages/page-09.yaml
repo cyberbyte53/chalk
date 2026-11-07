@@ -30,34 +30,22 @@ blocks:
   - kind: question
     number: L11.1
     words: L11-L14
-    read:
-      "L11.9-L13.3": { text: "(H₃O⁺)" }
   - kind: question
     number: L15.1
     words: L15-L16
-    read:
-      "L15.9-11": { text: "(OH⁻)" }
   - kind: section
     number: L18.1
     title: L18.2-8
     words: L18
   - kind: text
     words: L19-L23
-    read:
-      "L21.7-8": { text: "H⁺" }
-      "L21.10-11": { text: "OH⁻" }
   - kind: text
     words: L24-L26
   - kind: text
     words: L27-L32
   - kind: text
     words: L33-L37
-    read:
-      "L35.5-6": { text: "OH⁻" }
   - kind: figure
     number: L38.1-2
     words: L38
-    box: [96, 600, 530, 711]
-    read:
-      "L38.12-14": { text: "H⁺(aq)" }
-      "L38.16-18": { text: "OH⁻(aq)" }
+    box: [ 96, 600, 530, 711 ]

@@ -39,12 +39,8 @@ blocks:
     number: L42.2
     words: L42-L66, L67.3-9, L68.3-19, L69, L70.3-18, L71
     read:
-      L43.11-L45.1: { text: "CH₃OH", cause: other }
-      L45.3-L49.1: { text: "C₂H₅OH", cause: other }
       L50.2-L54.1: { text: "C₂H₅OH", cause: other }
       L54.3-L58.1: { text: "C₃H₇OH", cause: other }
-      L58.4-L62.1: { text: "C₃H₇OH", cause: other }
-      L62.3-L66.1: { text: "C₄H₉OH", cause: other }
       L68.13-14: परमाणुओं
   - kind: section
     number: L73.1

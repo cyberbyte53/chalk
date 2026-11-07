@@ -14,24 +14,18 @@ blocks:
     words: L6, L7.7-9, L9, L11, L13-L16, L19-L22, L24-L30, L33-L35
     number: L6.1-2
     title: L6.3-9, L7.7-9
-    box: [291, 137, 549, 284]
-    cells: { rows: [["L9.1", "L9.2, L11.1-2", "L9.3, L11.3-4"], ["L13-L15", "L16.1", "L16.2"], ["L19-L21", "L22.1", "L22.2"], ["L25-L29", "L30", "L24"], ["L33-L35.1", "L35.2", "L35.3"]], cause: wrong-cells }
-    read:
-      "L13.3-L15": { text: "(CH₃COOH)" }
-      "L19.2-L21": { text: "(CHCl₃)" }
-      "L25.2-L29": { text: "(CH₃CH₂OH)" }
-      "L33.2-L35.1": { text: "(CH₄)" }
+    box: [ 291, 137, 549, 284 ]
+    cells: { rows: [ [ "L9.1", "L9.2, L11.1-2", "L9.3, L11.3-4" ], [ "L13-L15", "L16.1", "L16.2" ], [ "L19-L21", "L22.1", "L22.2" ], [ "L25-L29", "L30", "L24" ], [ "L33-L35.1", "L35.2", "L35.3" ] ], cause: wrong-cells }
   - kind: text
     words: L37-L42
   - kind: text
     words: L43-L56
     read:
       "L50.8-9": { text: "C⁴⁻" }
-      "L53.8-9": { text: "C⁴⁺" }
   - kind: text
     words: L57-L63
   - kind: text
     words: L64-L70
     continues: true
-    read:
-      "L68.4-L70.1": { text: "H₂." }
+answers:
+  partial L50.8-9: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands

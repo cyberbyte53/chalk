@@ -20,7 +20,6 @@ blocks:
     number: L8.1
     words: L8-L18
     read:
-      L10.2-L11.1: "MgCl₂"
       L13.2-L14.1: "FeSO₄"
       L16.2-L17.1: "AgNO₃"
   - kind: question

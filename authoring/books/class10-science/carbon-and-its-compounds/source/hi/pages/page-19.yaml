@@ -6,14 +6,13 @@ notes:
   other: "subscripts the PDF sets as plain digits or on a line of their own (CH 3, L25), or a word it splits with a space (कै से)"
 answers:
   "read L9.3": "the PDF loses श (�ृं); the image prints दीर्घ शृंखला"
-  "read L12.1-3": "the PDF sets the subscripts on a line of their own (L25); the image prints CH₃COOC₂H₅"
-  "read L12.4-6": "the PDF sets the subscripts on a line of their own (L25); the image prints C₂H₅OH"
   "read L12.8": "the PDF sets the subscripts on a line of their own (L25); the image prints CH₃COONa"
   "word एस्टरीकरण": "a real word (esterification), as printed on the page"
   "word हाइड्रोक्सॉइड": "as printed: the page spells it हाइड्रोक्सॉइड"
   "word एथेनोएट": "a real word (ethanoate), as printed on the page"
   "word कार्बोंनेट": "as printed: the heading prints कार्बोंनेट (with ं)"
   "read L25.1-6": "the subscripts 3 2 5 2 5 3 the PDF sets on a line of their own, read into the formulas on L12"
+  partial L25.1-6: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: heading
     title: L1
@@ -28,8 +27,6 @@ blocks:
   - kind: equation
     words: L12.1-3, L11, L12.4-8, L25
     read:
-      L12.1-3: "CH₃COOC₂H₅"
-      L12.4-6: "C₂H₅OH"
       L12.8: "CH₃COONa"
       L25.1-6: ""
   - kind: text
@@ -38,10 +35,6 @@ blocks:
       L14.1: हाइड्रोक्सॉइड
   - kind: equation
     words: L16-L22
-    read:
-      L16.3-L18.1: "CH₃COOH"
-      L18.3-L20.1: "CH₃COONa"
-      L20.3-L22.1: "H₂O"
   - kind: heading
     title: L23
     words: L23
@@ -59,17 +52,5 @@ blocks:
     words: L39-L41
   - kind: equation
     words: L42-L53
-    read:
-      L42.1-L44.1: "2CH₃COOH"
-      L44.3-L47.1: "Na₂CO₃"
-      L48.2-L50.1: "2CH₃COONa"
-      L50.3-L52.1: "H₂O"
-      L52.3-L53.1: "CO₂"
   - kind: equation
     words: L54-L63
-    read:
-      L54.1-L56.1: "CH₃COOH"
-      L56.3-L57.1: "NaHCO₃"
-      L58.2-L60.1: "CH₃COONa"
-      L60.3-L62.1: "H₂O"
-      L62.3-L63.1: "CO₂"

@@ -20,29 +20,21 @@ blocks:
   - kind: equation
     words: L5-L8
     read:
-      L5.3-L6.1: "O₂"
       L8.2: "[कॉपर(II)"
   - kind: text
     words: L9
   - kind: equation
     words: L10-L16
     read:
-      L10.3-L11.1: "3O₂"
       L12.2-L15.1: "2Al₂O₃"
   - kind: text
     words: L17-L22
   - kind: equation
     words: L23-L31
-    read:
-      L23.1-L26.1: "Al₂O₃"
-      L27.4-L28.1: "2AlCl₃"
-      L29.2-L31.1: "3H₂O"
   - kind: equation
     words: L32-L41
     read:
-      L32.1-L35.1: "Al₂O₃"
       L36.4-L37.1: "2NaAlO₂"
-      L38.2-L40.1: "H₂O"
       L41.2-5: "ऐलुमिनेट)"
   - kind: text
     words: L42-L44
@@ -50,12 +42,8 @@ blocks:
     words: L45-L49
     read:
       L45.1-L47.1: "Na₂O(s)"
-      L47.3-L49.1: "H₂O(l)"
   - kind: equation
     words: L50-L54
-    read:
-      L50.1-L52.1: "K₂O(s)"
-      L52.3-L54.1: "H₂O(l)"
   - kind: text
     words: L55-L64
     read:

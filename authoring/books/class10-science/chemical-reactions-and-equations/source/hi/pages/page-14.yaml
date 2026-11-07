@@ -30,7 +30,6 @@ blocks:
     number: L16.1
     words: L8-L16
     read:
-      L8.1-L9.1: "MnO₂"
       L10.4-L11.1: "MnCl₂"
       L12.2-L14.1: "2H₂O"
       L14.3-L15.1: "Cl₂"

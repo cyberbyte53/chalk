@@ -139,7 +139,7 @@
     of all atoms, present in every element. The charge of an electron (–1.602 × 10⁻¹⁹ C) is taken as
     –1 as a matter of convention and convenience.
   made:
-    - {words: L64.8-9, by: agent}
+    - {words: L64.8-9, by: scripts}
 - id: "2.6"
   kind: section
   page: 3
@@ -260,9 +260,9 @@
     (about 100 m across), the nucleus would be just a tiny black pepper grain (a few mm) at the
     centre!
   made:
-    - {words: L13.11-12, by: agent}
-    - {words: L15.4-5, by: agent}
-    - {words: L15.15-16, by: agent}
+    - {words: L13.11-12, by: scripts}
+    - {words: L15.4-5, by: scripts}
+    - {words: L15.15-16, by: scripts}
 - id: "2.7.8"
   kind: figure
   page: 5
@@ -283,11 +283,11 @@
     of tiny building blocks, all neatly arranged. It’s amazing how the unseen atomic world shapes
     everything we see and use every day!
   made:
-    - {words: L22.9-10, by: agent}
-    - {words: L22.18-19, by: agent}
-    - {words: L23.5-6, by: agent}
-    - {words: L23.9-10, by: agent}
-    - {words: L23.13-15, by: agent}
+    - {words: L22.9-10, by: scripts}
+    - {words: L22.18-19, by: scripts}
+    - {words: L23.5-6, by: scripts}
+    - {words: L23.9-10, by: scripts}
+    - {words: L23.13-15, by: scripts}
 - id: "2.7.10"
   kind: box
   page: 5
@@ -495,8 +495,8 @@
   crop: [89.5, 409.8, 421.6, 504.9]
   made:
     - {words: L49.3-4, by: agent}
-    - {words: L50.3-4, by: agent}
-    - {words: L51.3-4, by: agent}
+    - {words: L50.3-4, by: scripts}
+    - {words: L51.3-4, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: table-cells}
 - id: "3.3.3"
@@ -707,8 +707,8 @@
     - [Lithium, "3", "4", "7"]
   crop: [157.5, 399.9, 546.5, 499.9]
   made:
-    - {words: L35.3-5, by: agent}
-    - {words: L35.7-9, by: agent}
+    - {words: L35.3-5, by: scripts}
+    - {words: L35.7-9, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: table-cells}
 - id: "6.5"
@@ -860,10 +860,10 @@
   page: 13
   title: Pause and Ponder
   text: "Pause and Ponder 14. Identify the number of electrons in the outermost shell of the following
-    elements: \t\t(i) ¹²₆C \t\t(ii) ¹⁹₉F \t\t(iii) ²⁸₁₄Si 15. Write the electronic configuration of
-    the elements having atomic numbers 12, 16 and 18. 16. Solve this riddle: I am an atom with a
-    mass number of 23 and 11 protons. I am a soft metal and react vigorously with water. Who am I
-    and how many neutrons do I have? You can also create one such riddle."
+    elements:  (i) ¹²₆C  (ii) ¹⁹₉F  (iii) ²⁸₁₄Si 15. Write the electronic configuration of the
+    elements having atomic numbers 12, 16 and 18. 16. Solve this riddle: I am an atom with a mass
+    number of 23 and 11 protons. I am a soft metal and react vigorously with water. Who am I and how
+    many neutrons do I have? You can also create one such riddle."
   made:
     - {words: L66.2-L67.1, by: agent}
     - {words: L68.2-L69.1, by: agent}
@@ -886,9 +886,9 @@
     respectively? These examples show how the combining capacity of elements is determined by the
     number of hydrogen or chlorine atoms they combine with.
   made:
-    - {words: L8.3-L10.1, by: agent}
+    - {words: L8.3-L10.1, by: scripts}
     - {words: L11.9-L12.1, by: agent}
-    - {words: L13.3-L14.1, by: agent}
+    - {words: L13.3-L14.1, by: scripts}
 - id: "8.2"
   kind: text
   page: 14
@@ -959,8 +959,8 @@
     different mass numbers (A = p⁺ + n⁰). These ʻtwin atomsʼ with the same atomic number but
     different mass numbers are called isotopes.
   made:
-    - {words: L7.6-7, by: agent}
-    - {words: L7.9-11, by: agent}
+    - {words: L7.6-7, by: scripts}
+    - {words: L7.9-11, by: scripts}
 - id: "9.1.2"
   kind: text
   page: 15

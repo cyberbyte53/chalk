@@ -21,9 +21,6 @@ blocks:
     title: L2.2
   - kind: text
     words: L3-L8
-    read:
-      "L7.6-7": { text: "p⁺" }
-      "L7.9-11": { text: "n⁰)." }
   - kind: text
     words: L9-L17
     read:
@@ -33,7 +30,7 @@ blocks:
   - kind: figure
     words: L18-L19
     number: L19.1-2
-    box: [180, 300, 525, 415]
+    box: [ 180, 300, 525, 415 ]
   - kind: text
     words: L37-L43
   - kind: text
@@ -44,7 +41,7 @@ blocks:
   - kind: figure
     words: L57-L58
     number: L58.1-2
-    box: [220, 590, 545, 712]
+    box: [ 220, 590, 545, 712 ]
   - kind: text
     words: L59
   - kind: box

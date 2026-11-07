@@ -9,8 +9,6 @@ blocks:
     words: L1-L3
     read:
       "L1.2-4": { text: "→" }
-      "L1.5-6": { text: "Mg²⁺" }
-      "L1.7-10": { text: "+ 2e⁻" }
       "L2.1-5": { text: "2,8,2" }
       "L2.6-8": { text: "2,8" }
   - kind: equation
@@ -18,15 +16,12 @@ blocks:
     read:
       "L4.2-3": { text: "+ e⁻" }
       "L4.4-6": { text: "→" }
-      "L4.7-8": { text: "Cl⁻" }
   - kind: figure
     words: L7
     number: L7.1-2
-    box: [255, 166, 460, 236]
+    box: [ 255, 166, 460, 236 ]
   - kind: text
     words: L8-L13
-    read:
-      "L11.2-L13.1": { text: "MgCl₂?" }
   - kind: section
     words: L14
     number: L14.1
@@ -39,18 +34,16 @@ blocks:
   - kind: figure
     words: L23-L25
     number: L23.1-2
-    box: [58, 352, 214, 526]
+    box: [ 58, 352, 214, 526 ]
   - kind: figure
     words: L43-L45
     number: L43.1-2
-    box: [58, 528, 222, 712]
+    box: [ 58, 528, 222, 712 ]
   - kind: table
     words: L42, L46-L63
     number: L42.1-2
     title: L42.3-10
-    box: [232, 584, 535, 710]
-    cells: { rows: [["L46-L47", "L48-L49", "L50-L51"], ["L52", "L53.1", "L53.2"], ["L54", "L55.1", "L55.2"], ["L56-L57", "L58.1", "L58.2"], ["L59", "L60.1", "L60.2"], ["L61-L62", "L63.1", "L63.2"]], cause: wrong-cells }
+    box: [ 232, 584, 535, 710 ]
+    cells: { rows: [ [ "L46-L47", "L48-L49", "L50-L51" ], [ "L52", "L53.1", "L53.2" ], [ "L54", "L55.1", "L55.2" ], [ "L56-L57", "L58.1", "L58.2" ], [ "L59", "L60.1", "L60.2" ], [ "L61-L62", "L63.1", "L63.2" ] ], cause: wrong-cells }
     read:
       "L46.1-2": { text: "Ionic" }
-      "L56.1-L57.1": { text: "CaCl₂" }
-      "L61.1-L62.1": { text: "MgCl₂" }

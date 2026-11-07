@@ -352,8 +352,8 @@
   kind: text
   page: 5
   text: "Solution: Given that 12 g of carbon reacts with 32 g of oxygen to give 44 g of carbon
-    dioxide. So, 1 g of carbon will give\t\t = 44 / 12 g of carbon dioxide Thus, 2.4 g of carbon
-    will give\t\t = 44 / 12 × 2.4 g = 8.8 g of carbon dioxide Hence, 8.8 g of carbon dioxide will be
+    dioxide. So, 1 g of carbon will give  = 44 / 12 g of carbon dioxide Thus, 2.4 g of carbon will
+    give  = 44 / 12 × 2.4 g = 8.8 g of carbon dioxide Hence, 8.8 g of carbon dioxide will be
     produced."
   made:
     - {words: L79, by: agent}
@@ -593,8 +593,8 @@
     molecule (N₂). 9. The atomic number of fluorine is 9. Explain the formation of the fluorine
     molecule (F₂).
   made:
-    - {words: L5.3-L7.1, by: agent}
-    - {words: L11.3-L13.1, by: agent}
+    - {words: L5.3-L7.1, by: scripts}
+    - {words: L11.3-L13.1, by: scripts}
 - id: "4.4.9"
   kind: box
   page: 9
@@ -623,7 +623,7 @@
   text: Since, the two atoms that share one electron pair are said to be bonded by a single covalent
     bond, the chlorine (Cl₂) molecule can be represented as Cl—Cl.
   made:
-    - {words: L40.10-L42.1, by: agent}
+    - {words: L40.10-L42.1, by: scripts}
     - {words: L43.5-6, by: agent}
 - id: "4.4.13"
   kind: text
@@ -641,7 +641,7 @@
   text: So, two oxygen atoms share two electrons each, forming an oxygen molecule (O₂), as shown in
     Fig. 9.8.
   made:
-    - {words: L50.3-L52.1, by: agent}
+    - {words: L50.3-L52.1, by: scripts}
 - id: "4.4.16"
   kind: figure
   page: 9
@@ -732,7 +732,7 @@
     - {words: L39-L41, by: agent}
     - {words: L42.1, by: agent}
     - {words: L43-L45, by: agent}
-    - {words: L46.3-L48, by: agent}
+    - {words: L46.3-L48.1, by: scripts}
 - id: "4.4.28"
   kind: box
   page: 10
@@ -775,11 +775,11 @@
     showing six fluorine atoms. N₂O₄ is named as dinitrogen tetroxide (not tetraoxide). N₂O₅ is
     named as dinitrogen pentoxide.
   made:
-    - {words: L11.2-L12, by: agent}
-    - {words: L14.2-L15, by: agent}
-    - {words: L17.2-L18, by: agent}
-    - {words: L20.2-L21, by: agent}
-    - {words: L23.2-L26, by: agent}
+    - {words: L11.2-L12.1, by: scripts}
+    - {words: L14.2-L15.1, by: scripts}
+    - {words: L17.2-L18.1, by: scripts}
+    - {words: L20.2-L21.1, by: scripts}
+    - {words: L23.2-L26.1, by: scripts}
     - {words: L28.2-L31, by: agent}
 - id: "4.4.33"
   kind: text
@@ -788,7 +788,7 @@
     irrespective of the number of its atoms. For example, H₂S is named hydrogen sulfide, not
     dihydrogen sulfide.
   made:
-    - {words: L34.12-L36, by: agent}
+    - {words: L34.12-L36.1, by: scripts}
 - id: "4.4.34"
   kind: text
   page: 11
@@ -797,7 +797,7 @@
     actually nitrogen trihydride, is known as ammonia.
   made:
     - {words: L39.3-L41.1, by: agent}
-    - {words: L42.7-L44.1, by: agent}
+    - {words: L42.7-L44.1, by: scripts}
 - id: "4.5"
   kind: section
   page: 11
@@ -830,7 +830,7 @@
     species, called a sodium cation, represented as Na⁺ (Fig. 9.11b). It is so because it would have
     11 protons and 10 electrons.
   made:
-    - {words: L60.11-12, by: agent}
+    - {words: L60.11-12, by: scripts}
 - id: "4.5.5"
   kind: figure
   page: 11
@@ -840,7 +840,7 @@
   crop: [194, 633.2, 510.8, 758.1]
   made:
     - {words: L66, by: agent}
-    - {words: L67.4-6, by: agent}
+    - {words: L67.4-6, by: scripts}
     - {box: true, by: figure-snap}
 - id: "4.5.6"
   kind: text
@@ -891,8 +891,8 @@
     (Fig. 9.14c). It helps to visualise the arrangement of ions in the crystal. You will learn more
     about the crystal structure in higher grades.
   made:
-    - {words: L27.10-12, by: agent}
-    - {words: "L29.3, L28, L29.4", by: agent}
+    - {words: L27.10-12, by: scripts}
+    - {words: L29.3-4, by: scripts}
 - id: "4.5.11"
   kind: figure
   page: 12
@@ -901,10 +901,10 @@
     and (c) crystal lattice"
   crop: [127.8, 503, 486.9, 622.2]
   made:
-    - {words: L32, by: agent}
-    - {words: L33-L34, by: agent}
-    - {words: L38, by: agent}
-    - {words: L35, by: agent}
+    - {words: L32.1-2, by: scripts}
+    - {words: L34.1-L33.1, by: scripts}
+    - {words: L38.1-L35.1, by: scripts}
+    - {words: L35.2-3, by: scripts}
     - {box: true, by: figure-snap}
 - id: "4.5.12"
   kind: text
@@ -913,7 +913,7 @@
     electrons to complete their octet. When a sulfur atom gains two electrons, it acquires two units
     of negative charge and is represented as S²⁻.
   made:
-    - {words: L48.13-15, by: agent}
+    - {words: L48.13-15, by: scripts}
 - id: "4.5.13"
   kind: box
   page: 13
@@ -931,8 +931,8 @@
     cations of potassium (K) and calcium (Ca) atoms, and the formation of their corresponding
     chlorides using diagrams. 15. Illustrate how sodium sulfide (Na₂S) is formed.
   made:
-    - {words: L13.4-6, by: agent}
-    - {words: L18.6-L20.1, by: agent}
+    - {words: L13.4-6, by: scripts}
+    - {words: L18.6-L20.1, by: scripts}
 - id: "4.5.15"
   kind: heading
   page: 13
@@ -981,25 +981,25 @@
     - [Sulfide, S²⁻, "2"]
   crop: [157.5, 377.6, 546.1, 745.2]
   made:
-    - {words: L32.2-3, by: agent}
-    - {words: L33.2-3, by: agent}
-    - {words: "L36.1, L35", by: agent}
-    - {words: "L39.1, L38", by: agent}
-    - {words: L41.1-2, by: agent}
-    - {words: L43.1-2, by: agent}
-    - {words: L45.1-2, by: agent}
-    - {words: "L48.1, L47", by: agent}
-    - {words: L50.1-2, by: agent}
-    - {words: L52.1-2, by: agent}
-    - {words: L54.1-2, by: agent}
-    - {words: L56.1-2, by: agent}
-    - {words: L58.1-2, by: agent}
-    - {words: "L65, L60.1", by: agent}
-    - {words: L66.1-2, by: agent}
+    - {words: L32.2-3, by: scripts}
+    - {words: L33.2-3, by: scripts}
+    - {words: L36.1-L35.1, by: scripts}
+    - {words: L39.1-L38.1, by: scripts}
+    - {words: L41.1-2, by: scripts}
+    - {words: L43.1-2, by: scripts}
+    - {words: L45.1-2, by: scripts}
+    - {words: L48.1-L47.1, by: scripts}
+    - {words: L50.1-2, by: scripts}
+    - {words: L52.1-2, by: scripts}
+    - {words: L54.1-2, by: scripts}
+    - {words: L56.1-2, by: scripts}
+    - {words: L58.1-2, by: scripts}
+    - {words: L65.1-L60.1, by: scripts}
+    - {words: L66.1-2, by: scripts}
     - {words: "L68, L67.1", by: agent}
     - {words: L70.1-2, by: agent}
-    - {words: L72.1-2, by: agent}
-    - {words: L74.1-2, by: agent}
+    - {words: L72.1-2, by: scripts}
+    - {words: L74.1-2, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: table-cells}
 - id: "4.5.18"
@@ -1019,7 +1019,7 @@
     - [Ammonium, NH₄⁺, "1"]
   crop: [89.5, 89, 478.1, 237.7]
   made:
-    - {words: L5-L6.1, by: agent}
+    - {words: L6.1-L5.1, by: scripts}
     - {words: L8-L10.1, by: agent}
     - {words: L12-L14.1, by: agent}
     - {words: "L23.2, L16, L15", by: agent}
@@ -1062,8 +1062,8 @@
     would be H₂S. The formula of carbon tetrachloride — Symbol of element C Cl Valency 4 1 The
     formula of the compound would be CCl₄.
   made:
-    - {words: L45.3-L47, by: agent}
-    - {words: L51.8-L53, by: agent}
+    - {words: L45.3-L47.1, by: scripts}
+    - {words: L51.8-L53.1, by: scripts}
 - id: "5.3"
   kind: section
   page: 14
@@ -1096,11 +1096,11 @@
     oxide — Symbol Mg O Charge 2+ 2– Here, the valencies of the two elements are the same. We arrive
     at the formula Mg₂O₂ but it is simply written as MgO.
   made:
-    - {words: L20.2-L21, by: agent}
-    - {words: "L23.10, L22, L23.11", by: agent}
-    - {words: L24.3-5, by: agent}
-    - {words: L31-L34, by: agent}
-    - {words: L39.3-L42, by: agent}
+    - {words: L20.2-L21.1, by: scripts}
+    - {words: L23.10-11, by: scripts}
+    - {words: L24.3-5, by: scripts}
+    - {words: L31.1-L34.1, by: scripts}
+    - {words: L39.3-L42.1, by: scripts}
 - id: "5.3.4"
   kind: text
   page: 15
@@ -1113,7 +1113,7 @@
     symbol of the anion (OH⁻). Then, their charges (only the numbers) are criss-crossed to get the
     formula.
   made:
-    - {words: L47.11-13, by: agent}
+    - {words: L47.11-13, by: scripts}
     - {words: L48.9-11, by: agent}
 - id: "5.3.6"
   kind: box
@@ -1123,11 +1123,11 @@
     the valencies of the two ions are the same. The formula Ca₂(CO₃)₂ is simply written as CaCO₃, as
     explained above. The formula of magnesium hydroxide — Symbol Mg OH Charge 2+ 1– Formula Mg(OH)₂
   made:
-    - {words: L52-L53, by: agent}
-    - {words: L58-L59, by: agent}
+    - {words: L52.1-L53.1, by: scripts}
+    - {words: L58.1-L59.1, by: scripts}
     - {words: L61.5-L66, by: agent}
-    - {words: L68.3-L70.1, by: agent}
-    - {words: L79-L80, by: agent}
+    - {words: L68.3-L70.1, by: scripts}
+    - {words: L79.1-L80.1, by: scripts}
 - id: "5.3.7"
   kind: text
   page: 16
@@ -1137,8 +1137,8 @@
     subscript 3 indicates that there are three hydroxide (OH⁻) ions bound to one aluminium ion.
     Brackets are not required when only one polyatomic anion is present.
   made:
-    - {words: L2.10-12, by: agent}
-    - {words: L3.4-6, by: agent}
+    - {words: L2.10-12, by: scripts}
+    - {words: L3.4-6, by: scripts}
     - {words: L6.6-8, by: agent}
 - id: "5.3.8"
   kind: box
@@ -1148,11 +1148,11 @@
     Formula of aluminium hydroxide is Al(OH)₃, not AlOH₃. The formula of aluminium sulfate — Symbol
     Al SO₄ Charge 3+ 2– Formula Al₂(SO₄)₃"
   made:
-    - {words: L20.2-L21, by: agent}
-    - {words: L23.3-L25.1, by: agent}
-    - {words: L25.3-L27, by: agent}
-    - {words: L15.2-L16, by: agent}
-    - {words: L30-L35, by: agent}
+    - {words: L20.2-L21.1, by: scripts}
+    - {words: L23.3-L25.1, by: scripts}
+    - {words: L25.3-L27.1, by: scripts}
+    - {words: L15.2-L16.1, by: scripts}
+    - {words: L30.1-L35.1, by: scripts}
 - id: "5.3.9"
   kind: box
   page: 16
@@ -1165,14 +1165,14 @@
     ___________________________________ 18. Write the formulae for the compounds formed from the
     following pairs of ions: (i) Fe³⁺ and OH⁻ (ii) K⁺ and CO₃²⁻"
   made:
-    - {words: L38.2-L39, by: agent}
-    - {words: L41.2-L42, by: agent}
-    - {words: L44.2-L45, by: agent}
-    - {words: L47.2-L48, by: agent}
-    - {words: L57.2-3, by: agent}
+    - {words: L38.2-L39.1, by: scripts}
+    - {words: L41.2-L42.1, by: scripts}
+    - {words: L44.2-L45.1, by: scripts}
+    - {words: L47.2-L48.1, by: scripts}
+    - {words: L57.2-3, by: scripts}
     - {words: L57.5-6, by: agent}
-    - {words: L57.8-9, by: agent}
-    - {words: L57.11-12, by: agent}
+    - {words: L57.8-9, by: scripts}
+    - {words: L57.11-12, by: scripts}
 - id: "6"
   kind: section
   page: 16
@@ -1294,8 +1294,8 @@
   text: Example 9.4 Molecular mass of water (H₂O) Atomic mass — H = 1 u; O = 16 u Molecular mass of
     H₂O = (1 u × 2) + (16 u × 1) = 18 u
   made:
-    - {words: L18.5-L20, by: agent}
-    - {words: L22.4-L24.1, by: agent}
+    - {words: L18.5-L20.1, by: scripts}
+    - {words: L22.4-L24.1, by: scripts}
 - id: "7.3"
   kind: example
   page: 18
@@ -1303,8 +1303,8 @@
   text: Example 9.5 Molecular mass of carbon dioxide (CO₂) Atomic mass — C = 12 u; O = 16 u Molecular
     Mass of CO₂ = (12 u × 1) + (16 u × 2) = 44 u
   made:
-    - {words: L27.6-L29, by: agent}
-    - {words: L31.4-L32, by: agent}
+    - {words: L27.6-L29.1, by: scripts}
+    - {words: L31.4-L32.1, by: scripts}
 - id: "7.4"
   kind: text
   page: 18
@@ -1325,8 +1325,8 @@
   text: Pause and Ponder 21. Find the molecular mass of nitric acid (HNO₃). Atomic mass — H = 1 u; N =
     14 u; O = 16 u. 22. Find the molecular mass of methane (CH₄). Atomic mass — C = 12 u; H = 1 u.
   made:
-    - {words: L40.9-L42, by: agent}
-    - {words: L44.8-L46, by: agent}
+    - {words: L40.9-L42.1, by: scripts}
+    - {words: L44.8-L46.1, by: scripts}
 - id: "8"
   kind: section
   page: 18
@@ -1345,8 +1345,8 @@
   text: Example 9.6 Formula unit mass of sodium oxide (Na₂O) Atomic mass — Na = 23 u; O = 16 u Formula
     unit mass of Na₂O = (23 u × 2) + (16 u × 1) = 62 u
   made:
-    - {words: L53.7-L55, by: agent}
-    - {words: L57.5-L59.1, by: agent}
+    - {words: L53.7-L55.1, by: scripts}
+    - {words: L57.5-L59.1, by: scripts}
 - id: "8.3"
   kind: example
   page: 19
@@ -1354,8 +1354,8 @@
   text: Example 9.7 Formula unit mass of calcium nitrate, Ca(NO₃)₂ Atomic mass — Ca = 40 u; N = 14 u;
     O = 16 u Formula unit mass of Ca(NO₃)₂ = (40 u × 1) + {(14 u × 1) + (16 u × 3)} × 2 = 164 u
   made:
-    - {words: L2.7-L5, by: agent}
-    - {words: L7.5-L10, by: agent}
+    - {words: L2.7-L5.1, by: scripts}
+    - {words: L7.5-L10.1, by: scripts}
 - id: "8.4"
   kind: box
   page: 19
@@ -1364,7 +1364,7 @@
     39 u; Cl = 35.5 u. 24. Find the formula unit mass of magnesium hydroxide, Mg(OH)₂. Atomic mass —
     Mg = 24 u; O = 16 u; H = 1 u.
   made:
-    - {words: L16.10-L18, by: agent}
+    - {words: L16.10-L18.1, by: scripts}
 - id: "8.5"
   kind: text
   page: 19
@@ -1421,14 +1421,14 @@
     ions? (i) 2 Al³⁺ and 3 Cl⁻ (ii) 3 Mg²⁺ and 1 PO₄³⁻ (iii) 2 Fe³⁺ and 3 O²⁻ (iv) 3 Ca²⁺ and 2
     SO₄²⁻
   made:
-    - {words: L22.3-4, by: agent}
-    - {words: "L22.7, L21", by: agent}
-    - {words: "L24.3, L23", by: agent}
-    - {words: L24.6-7, by: agent}
-    - {words: L25.3-4, by: agent}
-    - {words: L25.7-8, by: agent}
-    - {words: L26.3-4, by: agent}
-    - {words: L26.7-8, by: agent}
+    - {words: L22.3-4, by: scripts}
+    - {words: L22.7-L21.1, by: scripts}
+    - {words: L24.3-L23.1, by: scripts}
+    - {words: L24.6-7, by: scripts}
+    - {words: L25.3-4, by: scripts}
+    - {words: L25.7-8, by: scripts}
+    - {words: L26.3-4, by: scripts}
+    - {words: L26.7-8, by: scripts}
 - id: "8.7.4"
   kind: question
   page: 20
@@ -1451,13 +1451,13 @@
   text: 6. Write the formulae of the compounds formed from the following pairs of ions. (i) Ca²⁺ and
     Br⁻ (ii) Al³⁺ and CO₃²⁻ (iii) K⁺ and SO₄²⁻ (iv) NH₄⁺ and Cl⁻
   made:
-    - {words: L42.2-3, by: agent}
+    - {words: L42.2-3, by: scripts}
     - {words: "L42.5, L41", by: agent}
-    - {words: "L44.2, L43", by: agent}
-    - {words: L44.4-5, by: agent}
-    - {words: L45.2-3, by: agent}
+    - {words: L44.2-L43.1, by: scripts}
+    - {words: L44.4-5, by: scripts}
+    - {words: L45.2-3, by: scripts}
     - {words: L45.5-6, by: agent}
-    - {words: L47.2-3, by: agent}
+    - {words: L47.2-3, by: scripts}
     - {words: "L47.5, L46", by: agent}
 - id: "8.7.7"
   kind: question
@@ -1466,7 +1466,7 @@
   text: 7. Which of the following, in Fig. 9.18, correctly represents Cl⁻ ion (Atomic number of
     chlorine = 17).
   made:
-    - {words: "L2.11, L1", by: agent}
+    - {words: L2.11-L1.1, by: scripts}
 - id: "8.7.8"
   kind: figure
   page: 21
@@ -1485,8 +1485,8 @@
     (NaHCO₃), used to relieve acidity and helps in digestion.
   made:
     - {words: L7.4-L11.1, by: agent}
-    - {words: L13.4-L17.1, by: agent}
-    - {words: L19.4-L21.1, by: agent}
+    - {words: L13.4-L17.1, by: scripts}
+    - {words: L19.4-L21.1, by: scripts}
 - id: "8.7.10"
   kind: question
   page: 21
@@ -1500,7 +1500,7 @@
   text: 10. Complete the Table 9.3 by writing the formulae of the compounds formed by the cations on
     the left and the anions at the top. LiNO₃ is given as an example.
   made:
-    - {words: L29.14-L30, by: agent}
+    - {words: L29.14-L30.1, by: scripts}
 - id: "8.7.12"
   kind: table
   page: 21
@@ -1514,14 +1514,14 @@
     - [Cu²⁺, "", "", ""]
   crop: [159.8, 470.7, 546.5, 570.3]
   made:
-    - {words: L34.1-2, by: agent}
-    - {words: L34.3-4, by: agent}
-    - {words: L34.5-6, by: agent}
+    - {words: L34.1-2, by: scripts}
+    - {words: L34.3-4, by: scripts}
+    - {words: L34.5-6, by: scripts}
     - {words: L35-L37, by: agent}
-    - {words: L38.1-2, by: agent}
-    - {words: L38.3-L39, by: agent}
-    - {words: L40.1-2, by: agent}
-    - {words: L41.1-2, by: agent}
+    - {words: L38.1-2, by: scripts}
+    - {words: L38.3-L39.1, by: scripts}
+    - {words: L40.1-2, by: scripts}
+    - {words: L41.1-2, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: table-cells}
 - id: "8.7.13"
@@ -1542,7 +1542,7 @@
   kind: question
   page: 22
   number: "13."
-  text: "13. Two elements, A and B, have the following configurations — A: 2, 8, 5\t\t B: 2, 8, 7 (i)
+  text: "13. Two elements, A and B, have the following configurations — A: 2, 8, 5  B: 2, 8, 7 (i)
     Which element is more reactive? (ii) Will A and B form ionic or covalent bonds when they
     combine? Explain using electron transfer or sharing. (iii) Predict the formula of the compound
     they would form."

@@ -22,8 +22,6 @@ blocks:
     number: L22.2
     words: L14-L25
     box: [ 65, 305, 225, 527 ]
-    read:
-      L17.1-2: { text: "H₂", cause: other }
   - kind: text
     words: L36-L38, L39.3-5, L40.3-5, L41.3-7, L42.3-5
   - kind: text

@@ -89,10 +89,10 @@
     - [Methane (CH₄), "90", "111"]
   crop: [290.2, 139.4, 547.4, 278.6]
   made:
-    - {words: L13.3-L15, by: agent}
-    - {words: L19.2-L21, by: agent}
-    - {words: L25.2-L29, by: agent}
-    - {words: L33.2-L35.1, by: agent}
+    - {words: L13.3-L15.1, by: scripts}
+    - {words: L19.2-L21.1, by: scripts}
+    - {words: L25.2-L29.1, by: scripts}
+    - {words: L33.2-L35.1, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "1.4"
@@ -116,7 +116,7 @@
     behind a carbon cation with six protons in its nucleus holding on to just two electrons.
   made:
     - {words: L50.8-9, by: agent}
-    - {words: L53.8-9, by: agent}
+    - {words: L53.8-9, by: scripts}
 - id: "1.6"
   kind: text
   page: 2
@@ -135,7 +135,7 @@
     configuration of the nearest noble gas, helium, which has two electrons in its K shell. We can
     depict this using dots or crosses to represent valence electrons (Fig. 4.1).
   made:
-    - {words: L68.4-L70.1, by: agent}
+    - {words: L68.4-L70.1, by: scripts}
 - id: "1.8"
   kind: figure
   page: 3
@@ -200,7 +200,7 @@
     rise to three shared pairs of electrons. This is said to constitute a triple bond between the
     two atoms. The electron dot structure of N₂ and its triple bond can be depicted as in Fig. 4.4.
   made:
-    - {words: L43.10-L44, by: agent}
+    - {words: L43.10-L44.1, by: scripts}
 - id: "1.16"
   kind: figure
   page: 3
@@ -384,7 +384,7 @@
     and then use the hydrogen atoms to satisfy the remaining valencies of carbon (Fig. 4.6b). For
     example, the structure of ethane is arrived in the following steps –
   made:
-    - {words: L16.12-L20, by: agent}
+    - {words: L16.12-L20.1, by: scripts}
 - id: "2.6.2"
   kind: figure
   page: 6
@@ -503,12 +503,12 @@
     - ["6", Hexane, C₆H₁₄, ""]
   crop: [64.3, 296.8, 534.7, 710.4]
   made:
-    - {words: L24.3-L25, by: agent}
-    - {words: L26.3-L29, by: agent}
-    - {words: L30.3-L33, by: agent}
-    - {words: L34.3-L37, by: agent}
-    - {words: L38.3-L41, by: agent}
-    - {words: L42.3-L45, by: agent}
+    - {words: L24.3-L25.1, by: scripts}
+    - {words: L26.3-L29.1, by: scripts}
+    - {words: L30.3-L33.1, by: scripts}
+    - {words: L34.3-L37.1, by: scripts}
+    - {words: L38.3-L41.1, by: scripts}
+    - {words: L42.3-L45.1, by: scripts}
     - {box: true, by: figure-snap}
     - {cells: true, by: agent}
 - id: "2.7.3"
@@ -537,7 +537,7 @@
   text: Figure 4.8 (b) Complete molecules for two structures with formula C₄H₁₀
   crop: [97.3, 192.1, 409, 269.6]
   made:
-    - {words: L7.11-L10, by: agent}
+    - {words: L7.11-L10.1, by: scripts}
     - {box: true, by: figure-snap}
 - id: "2.7.7"
   kind: text
@@ -553,7 +553,7 @@
     in the form of a ring. For example, cyclohexane has the formula C₆H₁₂ and the following
     structure –
   made:
-    - {words: L20.4-L23, by: agent}
+    - {words: L20.4-L23.1, by: scripts}
 - id: "2.7.9"
   kind: figure
   page: 8
@@ -570,7 +570,7 @@
     cyclic carbon compounds, all may be saturated or unsaturated. For example, benzene, C₆H₆, has
     the following structure –
   made:
-    - {words: L29.6-L33.1, by: agent}
+    - {words: L29.6-L33.1, by: scripts}
 - id: "2.7.11"
   kind: figure
   page: 8
@@ -579,7 +579,7 @@
   text: Benzene — C₆H₆ Figure 4.10 Structure of benzene
   crop: [114.6, 501.9, 326.9, 594.9]
   made:
-    - {words: L34.3-L37, by: agent}
+    - {words: L34.3-L37.1, by: scripts}
     - {box: true, by: figure-snap}
 - id: "2.7.12"
   kind: text
@@ -653,11 +653,11 @@
     C₃H₈ — these differ by a –CH₂- unit What is the difference between the next pair – propane and
     butane (C₄H₁₀)?
   made:
-    - {words: L67-L68, by: agent}
-    - {words: L69.2-L72, by: agent}
+    - {words: L67.1-L68.1, by: scripts}
+    - {words: L69.2-L72.1, by: scripts}
     - {words: L83.5-L85.1, by: agent}
-    - {words: L73-L76, by: agent}
-    - {words: L77.2-L80, by: agent}
+    - {words: L73.1-L76.1, by: scripts}
+    - {words: L77.2-L80.1, by: scripts}
     - {words: L86.5-L88.1, by: agent}
     - {words: L89.13-L93, by: agent}
 - id: "2.9.3"
@@ -675,9 +675,9 @@
     general formula for alkenes can be written as CₙH₂ₙ, where n = 2, 3, 4. Can you similarly
     generate the general formula for alkanes and alkynes?
   made:
-    - {words: L100.4-L104.1, by: agent}
-    - {words: L104.2-L107, by: agent}
-    - {words: L108.2-L112.1, by: agent}
+    - {words: L100.4-L104.1, by: scripts}
+    - {words: L104.2-L107.1, by: scripts}
+    - {words: L108.2-L112.1, by: scripts}
     - {words: L112.8-L114, by: agent}
     - {words: L3.5-L7.1, page: 10, by: agent}
 - id: "2.9.5"
@@ -699,10 +699,10 @@
     carbons for the other functional groups given in Table 4.3.
   made:
     - {words: L21.3-L23.1, by: agent}
-    - {words: L23.3-L27.1, by: agent}
-    - {words: L27.3-L31.1, by: agent}
-    - {words: L31.3-L35.1, by: agent}
-    - {words: L35.4-L39, by: agent}
+    - {words: L23.3-L27.1, by: scripts}
+    - {words: L27.3-L31.1, by: scripts}
+    - {words: L31.3-L35.1, by: scripts}
+    - {words: L35.4-L39.1, by: scripts}
     - {words: L40.2-L44, by: agent}
 - id: "2.10"
   kind: section
@@ -789,7 +789,7 @@
   number: "5."
   text: 5. How would you name the following compounds? (i) CH₃—CH₂—Br (ii) (iii)
   made:
-    - {words: L6.2-L10.1, by: agent}
+    - {words: L6.2-L10.1, by: scripts}
 - id: "2.10.4.6"
   kind: figure
   page: 12
@@ -833,26 +833,26 @@
   page: 12
   text: (i) C + O₂ → CO₂ + heat and light
   made:
-    - {words: L22.4-L23, by: agent}
+    - {words: L22.4-L23.1, by: scripts}
     - {words: L24.2-L25, by: agent}
 - id: "3.2.3"
   kind: equation
   page: 12
   text: (ii) CH₄ + O₂ → CO₂ + H₂O + heat and light
   made:
-    - {words: L27.2-L28, by: agent}
-    - {words: L29.2-L30, by: agent}
-    - {words: L31.2-L32, by: agent}
+    - {words: L27.2-L28.1, by: scripts}
+    - {words: L29.2-L30.1, by: scripts}
+    - {words: L31.2-L32.1, by: scripts}
     - {words: L33.2-L35.1, by: agent}
 - id: "3.2.4"
   kind: equation
   page: 12
   text: (iii) CH₃CH₂OH + O₂ → CO₂ + H₂O + heat and light
   made:
-    - {words: L36.2-L40.1, by: agent}
-    - {words: L40.3-L41, by: agent}
-    - {words: L42.2-L43, by: agent}
-    - {words: L44.2-L46.1, by: agent}
+    - {words: L36.2-L40.1, by: scripts}
+    - {words: L40.3-L41.1, by: scripts}
+    - {words: L42.2-L43.1, by: scripts}
+    - {words: L44.2-L46.1, by: scripts}
 - id: "3.2.5"
   kind: text
   page: 12
@@ -999,9 +999,9 @@
   page: 14
   text: CH₄ + Cl₂ → CH₃Cl + HCl (in the presence of sunlight)
   made:
-    - {words: L25-L26, by: agent}
-    - {words: L27.2-L28, by: agent}
-    - {words: L29.2-L31.1, by: agent}
+    - {words: L25.1-L26.1, by: scripts}
+    - {words: L27.2-L28.1, by: scripts}
+    - {words: L29.2-L31.1, by: scripts}
 - id: "3.5.3"
   kind: exercise
   page: 14
@@ -1069,9 +1069,9 @@
   page: 15
   text: 2Na + 2CH₃CH₂OH → 2CH₃CH₂O⁻Na⁺ + H₂ (Sodium ethoxide)
   made:
-    - {words: L15.3-L19.1, by: agent}
+    - {words: L15.3-L19.1, by: scripts}
     - {words: L19.3-L23.4, by: agent}
-    - {words: L23.6-L24, by: agent}
+    - {words: L23.6-L24.1, by: scripts}
 - id: "4.2.6"
   kind: text
   page: 15
@@ -1088,12 +1088,12 @@
   page: 15
   text: CH₃ − CH₂OH Hot Conc. H₂SO₄ → CH₂ = CH₂ + H₂O
   made:
-    - {words: L42-L43, by: agent}
-    - {words: L44.2-L46.1, by: agent}
+    - {words: L42.1-L43.1, by: scripts}
+    - {words: L44.2-L46.1, by: scripts}
     - {words: L53-L54, by: agent}
-    - {words: L46.5-L47, by: agent}
-    - {words: L48.2-L49, by: agent}
-    - {words: L50.2-L52, by: agent}
+    - {words: L46.5-L47.1, by: scripts}
+    - {words: L48.2-L49.1, by: scripts}
+    - {words: L50.2-L52.1, by: scripts}
 - id: "4.2.9"
   kind: text
   page: 15
@@ -1203,9 +1203,9 @@
   page: 17
   text: CH₃COOC₂H₅ NaOH → C₂H₅OH+CH₃COONa
   made:
-    - {words: L2.1-6, by: agent}
+    - {words: L2.1-6, by: scripts}
     - {words: L1, by: agent}
-    - {words: L2.7-13, by: agent}
+    - {words: L2.7-13, by: scripts}
 - id: "4.3.11"
   kind: text
   page: 17
@@ -1216,9 +1216,9 @@
   page: 17
   text: NaOH + CH₃COOH → CH₃COONa + H₂O
   made:
-    - {words: L6.3-L8.1, by: agent}
-    - {words: L8.3-L10.1, by: agent}
-    - {words: L10.3-L12, by: agent}
+    - {words: L6.3-L8.1, by: scripts}
+    - {words: L8.3-L10.1, by: scripts}
+    - {words: L10.3-L12.1, by: scripts}
 - id: "4.3.13"
   kind: text
   page: 17
@@ -1244,21 +1244,21 @@
   page: 17
   text: 2CH₃COOH + Na₂CO₃ → 2CH₃COONa + H₂O + CO₂
   made:
-    - {words: L35-L37.1, by: agent}
-    - {words: L37.3-L40, by: agent}
-    - {words: L41.2-L43.1, by: agent}
-    - {words: L43.3-L45.1, by: agent}
-    - {words: L45.3-L46, by: agent}
+    - {words: L35.1-L37.1, by: scripts}
+    - {words: L37.3-L40.1, by: scripts}
+    - {words: L41.2-L43.1, by: scripts}
+    - {words: L43.3-L45.1, by: scripts}
+    - {words: L45.3-L46.1, by: scripts}
 - id: "4.3.17"
   kind: equation
   page: 17
   text: CH₃COOH + NaHCO₃ → CH₃COONa + H₂O + CO₂
   made:
-    - {words: L47-L49.1, by: agent}
-    - {words: L49.3-L50, by: agent}
-    - {words: L51.2-L53.1, by: agent}
-    - {words: L53.3-L55.1, by: agent}
-    - {words: L55.3-L56, by: agent}
+    - {words: L47.1-L49.1, by: scripts}
+    - {words: L49.3-L50.1, by: scripts}
+    - {words: L51.2-L53.1, by: scripts}
+    - {words: L53.3-L55.1, by: scripts}
+    - {words: L55.3-L56.1, by: scripts}
 - id: "4.3.18"
   kind: exercise
   page: 17
@@ -1426,7 +1426,7 @@
   text: 1. Ethane, with the molecular formula C₂H₆ has (a) 6 covalent bonds. (b) 7 covalent bonds. (c)
     8 covalent bonds. (d) 9 covalent bonds.
   made:
-    - {words: L33.7-L36, by: agent}
+    - {words: L33.7-L36.1, by: scripts}
 - id: "5.11.2"
   kind: question
   page: 20
@@ -1446,15 +1446,15 @@
   number: "4."
   text: 4. Explain the nature of the covalent bond using the bond formation in CH₃Cl.
   made:
-    - {words: L1.14-L3, by: agent}
+    - {words: L1.14-L3.1, by: scripts}
 - id: "5.11.5"
   kind: question
   page: 21
   number: "5."
   text: 5. Draw the electron dot structures for (a) ethanoic acid. (b) H₂S. (c) propanone. (d) F₂.
   made:
-    - {words: L6.2-L8, by: agent}
-    - {words: L10.2-L12, by: agent}
+    - {words: L6.2-L8.1, by: scripts}
+    - {words: L10.2-L12.1, by: scripts}
 - id: "5.11.6"
   kind: question
   page: 21
@@ -1499,11 +1499,11 @@
   text: "13. Which of the following hydrocarbons undergo addition reactions: C₂H₆, C₃H₈, C₃H₆, C₂H₂
     and CH₄."
   made:
-    - {words: L23-L27.1, by: agent}
-    - {words: L27.2-L31.1, by: agent}
-    - {words: L31.2-L35.1, by: agent}
-    - {words: L35.2-L38, by: agent}
-    - {words: L39.2-L41, by: agent}
+    - {words: L23.1-L27.1, by: scripts}
+    - {words: L27.2-L31.1, by: scripts}
+    - {words: L31.2-L35.1, by: scripts}
+    - {words: L35.2-L38.1, by: scripts}
+    - {words: L39.2-L41.1, by: scripts}
 - id: "5.11.14"
   kind: question
   page: 21

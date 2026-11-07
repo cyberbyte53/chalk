@@ -24,9 +24,7 @@ blocks:
   - kind: equation
     words: L15-L24, L32
     read:
-      "L15.3-L19.1": { text: "2CH₃CH₂OH" }
       "L19.3-L23.4": { text: "2CH₃CH₂O⁻Na⁺" }
-      "L23.6-L24": { text: "H₂" }
   - kind: text
     words: L33-L37
   - kind: text
@@ -34,12 +32,7 @@ blocks:
   - kind: equation
     words: L42-L45, L46.1, L41, L53-L54, L46.4-5, L47-L52
     read:
-      "L42-L43": { text: "CH₃" }
-      "L44.2-L46.1": { text: "CH₂OH" }
       "L53-L54": { text: "H₂SO₄" }
-      "L46.5-L47": { text: "CH₂" }
-      "L48.2-L49": { text: "CH₂" }
-      "L50.2-L52": { text: "H₂O" }
   - kind: text
     words: L58-L59
   - kind: box

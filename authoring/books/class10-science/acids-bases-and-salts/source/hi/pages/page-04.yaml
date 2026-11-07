@@ -42,7 +42,6 @@ blocks:
     read:
       L11.3: "Zn(s) →"
       L11.4-L15.1: "Na₂ZnO₂(s)"
-      L15.3-L17.1: "H₂(g)"
       L18.2: "जिंकेट)"
   - kind: text
     words: L19-L20
@@ -77,15 +76,9 @@ blocks:
     words: L60-L68
     read:
       L60.3: ":"
-      L60.4-L64.1: "Na₂Co₃(s)"
       L64.3: "2HCl(aq) →"
-      L64.6-L66.1: "H₂O(l)"
-      L66.3-L68.1: "CO₂(g)"
   - kind: equation
     words: L69-L75
     read:
       L69.3: ":"
-      L69.4-L71.1: "NaHCO₃(s)"
       L71.3: "HCl(aq) →"
-      L71.6-L73.1: "H₂O(l)"
-      L73.3-L75.1: "CO₂(g)"

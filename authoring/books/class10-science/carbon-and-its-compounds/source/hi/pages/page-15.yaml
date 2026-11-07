@@ -8,7 +8,6 @@ terms:
   - "L42.2"
 answers:
   "read L33.2": "the PDF sets the subscript on its own line, away from its symbol (L38); the image prints CH₂"
-  "read L38.1": "the PDF sets the subscript on its own line, away from its symbol: the 2 of CH₂, read into L33.2"
   "read L29.1": "the label is set in the Chanakya font, whose code the text layer holds ({kkjh;); the image prints क्षारीय"
   "read L29.2": "the PDF sets the subscript on its own line, away from its symbol (L37); the image prints KMnO₄"
   "read L37.1": "the PDF sets the subscript on its own line, away from its symbol: the 4 of KMnO₄, read into L29.2"
@@ -17,7 +16,6 @@ answers:
   "read L36.1": "the label is set in the Chanakya font, whose code the text layer holds (vEyhÑr); the image prints अम्लीकृत"
   "read L36.2": "the label is set in the Chanakya font, whose code the text layer holds (Å\"ek); the image prints ऊष्मा"
   "read L30.3": "the PDF sets the subscript on its own line, away from its symbol (L40); the image prints CH₃"
-  "read L40.1": "the PDF sets the subscript on its own line, away from its symbol: the 3 of CH₃, read into L30.3"
   "word जैवमात्रा": "a real word (biomass), as printed on the page"
   "word ऊष्मक": "a real word (heater), as printed in जल ऊष्मक (water bath)"
   "word डालिए": "a real word (add), as printed on the page"
@@ -26,6 +24,8 @@ answers:
   "word पैलेडियम": "a real word (palladium), as printed on the page"
   "word निकैल": "a real word (nickel), as printed on the page"
   "word उत्प्रेरकों": "a real word (catalysts), as printed on the page"
+  partial L33.2: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L30.3: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: box
     title: L1-L4
@@ -49,9 +49,7 @@ blocks:
   - kind: equation
     words: L31-L33, L38, L29, L37, L34, L36.1, L39, L36.2, L35, L30, L40
     read:
-      L31.1-L32.1: "CH₃"
       L33.2: "CH₂"
-      L38.1: ""
       L33.4: ""
       L29.1: "क्षारीय"
       L29.2: "KMnO₄"
@@ -59,12 +57,10 @@ blocks:
       L29.4: "ऊष्मा"
       L34.1: "या"
       L36.1: "अम्लीकृत"
-      L39.1-6: "K₂Cr₂O₇"
       L36.2: "ऊष्मा"
       L35.1: ""
       L30.1: ""
       L30.3: "CH₃"
-      L40.1: ""
   - kind: text
     words: L41-L42
   - kind: text

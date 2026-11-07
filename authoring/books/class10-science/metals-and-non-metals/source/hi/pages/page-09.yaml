@@ -9,6 +9,7 @@ answers:
   "word एक्वा": "a name (aqua, of aqua regia), as printed on the page; the list lacks it"
   "read L40.12": "the PDF sets the ratio's colon as the visarga ः; the image prints 3:1"
   "word अभिकर्मकों": "a real word (reagents), as printed on the page; the list lacks it"
+  partial L27.3-L28.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 furniture: L65-L68, L1-L6, L46-L53
 blocks:
   - kind: activity
@@ -25,11 +26,8 @@ blocks:
     words: L19-L35
     read:
       L20.4-L21.1: "HNO₃"
-      L22.8-L23.1: "H₂"
       L24.2-3: ऑक्सीकृत
-      L25.14-L27.1: "N₂O,"
       L27.3-L28.1: "NO₂"
-      L30.13-L31.1: "HNO₃"
       L33.3-L34.1: "H₂"
   - kind: text
     words: L36-L39

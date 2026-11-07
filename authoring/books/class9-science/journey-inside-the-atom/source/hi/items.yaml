@@ -975,7 +975,7 @@
     - {words: L10.13, by: hindi-repair}
     - {words: L10.14, by: hindi-repair}
     - {words: L10.15, by: hindi-repair}
-    - {words: L10.17-18, by: agent}
+    - {words: L10.17-18, by: scripts}
     - {words: L10.20, by: hindi-repair}
     - {words: L10.21, by: hindi-repair}
     - {words: L10.22, by: hindi-repair}
@@ -992,7 +992,7 @@
     - {words: L11.16, by: hindi-repair}
     - {words: L11.17, by: hindi-repair}
     - {words: L11.18, by: hindi-repair}
-    - {words: L11.20-21, by: agent}
+    - {words: L11.20-21, by: scripts}
     - {words: L13.1, by: hindi-repair}
     - {words: L13.2, by: hindi-repair}
     - {words: L13.4, by: hindi-repair}
@@ -1063,7 +1063,7 @@
     - {words: L18.10, by: hindi-repair}
     - {words: L18.12, by: hindi-repair}
     - {words: L18.13, by: hindi-repair}
-    - {words: L18.17-18, by: agent}
+    - {words: L18.17-18, by: scripts}
     - {words: L18.20, by: hindi-repair}
     - {words: L18.21, by: hindi-repair}
     - {words: L18.22, by: hindi-repair}
@@ -1072,7 +1072,7 @@
     - {words: L19.3, by: hindi-repair}
     - {words: L19.4, by: hindi-repair}
     - {words: L19.6-7, by: agent}
-    - {words: L19.10-11, by: agent}
+    - {words: L19.10-11, by: scripts}
     - {words: L19.14-15, by: agent}
     - {words: L19.16, by: hindi-repair}
     - {words: L20.1, by: hindi-repair}
@@ -1844,8 +1844,8 @@
     - {words: L29.1, by: hindi-repair}
     - {words: L30.1, by: hindi-repair}
     - {words: L31.1-2, by: agent}
-    - {words: L32.1-2, by: agent}
-    - {words: L33.1-2, by: agent}
+    - {words: L32.1-2, by: scripts}
+    - {words: L33.1-2, by: scripts}
     - {words: L34.1, by: hindi-repair}
     - {words: L34.2, by: hindi-repair}
     - {words: L35.1, by: agent}
@@ -2583,9 +2583,9 @@
     - {words: L50.7-10, by: hindi-repair}
     - {words: L14.1, by: agent}
     - {words: L51.1, by: hindi-repair}
-    - {words: L51.2-4, by: agent}
+    - {words: L51.2-4, by: scripts}
     - {words: L51.5, by: hindi-repair}
-    - {words: L51.6-8, by: agent}
+    - {words: L51.6-8, by: scripts}
     - {words: L51.9, by: hindi-repair}
     - {words: L51.10-13, by: hindi-repair}
     - {box: true, by: figure-snap}
@@ -3043,7 +3043,7 @@
     - {words: L10.4, by: hindi-repair}
     - {words: L11.5-6, by: agent}
     - {words: L11.13, by: hindi-repair}
-    - {words: L12.2-L13.1, by: agent}
+    - {words: L12.2-L13.1, by: scripts}
     - {words: L14.3-L15.1, by: agent}
     - {words: L16.1, by: hindi-repair}
     - {words: L16.2, by: hindi-repair}

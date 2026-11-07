@@ -1,12 +1,13 @@
-address: https://ncert.nic.in/textbook/pdf/jesc101.pdf
-sha256: 9d58fa614b2d1064f4ef13423eaf85155b0efc5e74bdf3e8c5e6f15f1b742d36
-pages: 16
 title: Chemical Reactions and Equations
 reader: text
 edition: 2026-27
+address: https://ncert.nic.in/textbook/pdf/jesc101.pdf
+sha256: 9d58fa614b2d1064f4ef13423eaf85155b0efc5e74bdf3e8c5e6f15f1b742d36
+pages: 16
 tools:
   reader: 1
   hindi-repair: 4
+  scripts: 1
   figure-snap: 1
   table-cells: 1
   structure-draft: 2

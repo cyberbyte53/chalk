@@ -11,6 +11,15 @@ answers:
   "read L62.8": "the PDF doubles the vowel sign (ै then े); the image prints है"
   "word अभिकर्मक": "a real word (reagent), as printed on the page; the list lacks it"
   "word ट्राइऑक्साइड": "a real word (trioxide), as printed on the page; the list lacks it"
+  partial L8.1-L11.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L12.3-L13.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L14.3-L15.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L31.5-L32.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L48.3-L49.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L65.3-L66.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L69.1-L72.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L73.5-L74.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L75.3-L76.1: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 terms:
   - L19.5
   - L42.17-L43.1

@@ -8,6 +8,8 @@ answers:
   "word क्षारकीयता": "a real word (basicity), as printed on the page; the list lacks it"
   "word अंतर्भारित": "a real word (impregnated), as printed on the page; the list lacks it"
   "word रंगरहित": "a real word (colourless), as printed on the page; the list lacks it"
+  partial L11.3-4: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
+  partial L11.7-8: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
 blocks:
   - kind: text
     continued: true
@@ -16,15 +18,11 @@ blocks:
       L1.5: हाइड्रोनियम
   - kind: text
     words: L3-L6
-    read:
-      L5.3-4: "OH⁻"
   - kind: figure
     number: L11.2
     words: L8.1-5, L7, L8.6-10, L10, L9, L11
     box: [ 90, 195, 530, 305 ]
     read:
-      L9.1-2: "H⁺"
-      L10.1-2: "H⁺"
       L11.3-4: "H⁺"
       L11.7-8: "OH⁻"
   - kind: activity

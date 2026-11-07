@@ -1,8 +1,6 @@
 page: 21
 proofread: true
 cause: other
-notes:
-  other: "a subscript the PDF sets as a plain digit on its own line (NaHCO 3), printed NaHCO₃"
 furniture: L35-L38
 answers:
   "read L15.12": "the PDF doubles the े sign (सोेडा); the image prints सोडा"
@@ -36,7 +34,6 @@ blocks:
       L19.11: पेटुनिया
       L19.13: हाइड्रेंजिया
       L19.16: जेरानियम
-      L25.9-L27.1: "(NaHCO₃)"
       L29.6-L30.1: मुँह
       L31.13: जिससे
       L33.7-L34.1: "(तुंड)"

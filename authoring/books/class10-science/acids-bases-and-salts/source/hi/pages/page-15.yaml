@@ -1,8 +1,6 @@
 page: 15
 proofread: true
 cause: other
-notes:
-  other: "a subscript the PDF sets as a plain digit on its own line (Cl 2), printed Cl₂; a word the PDF splits with a space (कै से, कै थोड, कृ त्रिम)"
 furniture: L38-L41
 terms:
   - L7.10
@@ -26,10 +24,6 @@ blocks:
       L8.2: इससे
   - kind: equation
     words: L9-L15
-    read:
-      L9.3-L11.1: "2H₂O(l)"
-      L11.5-L13.1: "Cl₂(g)"
-      L13.3-L15.1: "H₂(g)"
   - kind: text
     words: L16-L17
   - kind: text

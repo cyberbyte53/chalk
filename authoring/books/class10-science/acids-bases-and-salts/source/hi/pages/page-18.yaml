@@ -20,12 +20,9 @@ blocks:
     words: L4-L17
     read:
       L4.12-13: अणुओं
-      L6.10-L10.1: "CuSO₄.5H₂O"
       L11.1-L17.1: "Na₂CO₃.10H₂O"
   - kind: text
     words: L18-L24
-    read:
-      L19.8-L23.1: "CaSO₄.2H₂O"
   - kind: heading
     title: L25
     words: L25
@@ -44,7 +41,6 @@ blocks:
   - kind: text
     words: L39-L45
     read:
-      L40.10-L41.1: "CaSO₄"
       L44.12-13: कैल्सियम
       L44.14-15: सल्फ़ेट
   - kind: exercise
@@ -53,8 +49,6 @@ blocks:
   - kind: question
     number: L47.1
     words: L47-L49
-    read:
-      L47.2-L48.1: "Ca(ClO)₂"
   - kind: question
     number: L50.1
     words: L50

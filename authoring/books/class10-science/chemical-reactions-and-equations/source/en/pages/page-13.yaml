@@ -11,7 +11,6 @@ blocks:
   - kind: text
     words: L1-L8
     read:
-      "L2.8-L3.1": { text: "Cl₂" }
       "L4.2-L5.1": { text: "MnO₂" }
       "L6.4-L8.1": { text: "MnCl₂." }
   - kind: text
@@ -60,8 +59,3 @@ blocks:
   - kind: question
     words: L45-L56
     number: L45.1
-    read:
-      "L47.4-L49.1": { text: "O₂(g)" }
-      "L49.3-L51.1": { text: "2Na₂O(s)" }
-      "L52.4-L54.1": { text: "H₂(g)" }
-      "L54.5-L56.1": { text: "H₂O(l)" }

@@ -13,10 +13,7 @@ blocks:
   - kind: text
     words: L1-L8
     read:
-      L1.10-11: "H⁺"
-      L1.14-15: "OH⁻"
       L6.4-5: "H⁺"
-      L6.17-18: "H⁺"
   - kind: section
     number: L9.1
     title: L9.2-7

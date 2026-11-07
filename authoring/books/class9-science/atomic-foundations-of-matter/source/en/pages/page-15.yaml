@@ -14,25 +14,16 @@ blocks:
   - kind: box
     title: L15
     words: L15-L16, L18, L17, L19-L21, L23.1-10, L22, L23.11-13, L24-L25, L26.1-6, L29.1, L28, L27, L30, L35, L31-L34, L26.7-12, L29.2-4, L36-L44
-    read:
-      "L20.2-L21": { text: "CaCl₂" }
-      "L23.10, L22, L23.11": { text: "(Cl⁻)" }
-      "L24.3-5": { text: "(Ca²⁺)." }
-      "L31-L34": { text: "Al₂O₃" }
-      "L39.3-L42": { text: "Mg₂O₂" }
   - kind: text
     words: L45-L46
   - kind: text
     words: L47-L49
     read:
-      "L47.11-13": { text: "(Mg²⁺)" }
       "L48.9-11": { text: "(OH⁻)." }
   - kind: box
     title: L50
     words: L50-L51, L55, L54, L52-L53, L56-L70, L73-L76, L78, L77, L79-L80
     read:
-      "L52-L53": { text: "CO₃" }
-      "L58-L59": { text: "CaCO₃" }
       "L61.5-L66": { text: "Ca₂(CO₃)₂" }
-      "L68.3-L70.1": { text: "CaCO₃," }
-      "L79-L80": { text: "Mg(OH)₂" }
+answers:
+  partial L61.5-L66: read against the image before the scripts tool existed; this grouping of the formula is the agent's, and stands
