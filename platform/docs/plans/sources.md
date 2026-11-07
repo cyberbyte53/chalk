@@ -25,9 +25,27 @@ checked against that language's terms.
 - **One process for every language.** Extracting a book knows nothing of another language's book.
 - **Matching never assumes one-to-one.** Only what both books number is paired, by its number; anything
   numbered in one and not the other is flagged with a reason.
-- **The machine does what can be checked; a model does only the reading** (and the crop boxes).
+- **The machine does what can be checked; a model does only the structure** (and the crop boxes).
 - **Record exactly which book:** the edition the file says (this Hindi file's footer: 2021-22), the address
   it came from, its sha256. An address can start serving another book (NCERT's class 9 maths did).
+
+## The stages
+
+Extraction is four stages, each with one input and one output, so a part can be swapped without touching
+the rest:
+
+1. **Read:** the PDF → each page's image and its words, with where each word is and which are bold. One
+   *reader* per kind of book, named in `book.yaml` (`reader:`): `text` (a PDF with a Unicode text layer),
+   `chanakya` (an old Hindi font, its text layer converted by the font's table), and later `ocr` (a scan,
+   no text layer: the words recognised from the image). Everything after this stage sees only words.
+2. **Draft:** the words → `items.yaml`, once (below).
+3. **Structure:** the model fixes the draft's blocks, kinds, numbers and boxes, and writes the terms.
+4. **Check:** the items against the words (below), the figures cropped, the languages matched.
+
+**Trust depends on the reader.** `text` and `chanakya` words are what the publisher typeset, so items
+checked against them are the book. `ocr` words are a recognition, which can be wrong: an `ocr` book also
+needs the model to read each page image against its words and confirm them, and is built only when a
+scanned book comes.
 
 ## Files
 
