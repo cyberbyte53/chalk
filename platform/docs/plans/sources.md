@@ -113,6 +113,27 @@ and checks the two agree. Ids are positions (`2.4`: section 2's fourth block) un
 then they never change (a later split keeps the id on its first part and gives the rest `2.4b`): the
 check fails when a cited id would change.
 
+**The machine first, the agent for the rest.** On every page the machine proposes what it can, each
+proposal marked as the machine's: Hindi words repaired, figures (a caption and the drawing beside it),
+table cells from their rules, running heads. The agent sees each page already marked up (what is
+covered drawn on the image; what is missing listed beside it: words in no block, broken words left with
+their candidates, a caption without a figure, a table without rules), accepts the proposals without
+retyping them, fixes what is wrong and adds what is missing; each block, word and box records who made
+it (machine, machine corrected, agent). After the build the review sheet colours each block by who
+made it, and each chapter has a tally ("Hindi words: 2,163 by the machine, 179 by the agent; figures: 22
+by the machine, 3 corrected, 1 added"). What the agent keeps doing across chapters, and a tool could
+easily do, becomes a tool rule, proved like the others: development books, then an unseen book.
+
+## How a tool is proved
+
+Each tool's claim is a test kept in the repo: it is shaped on development books (science chapter 2,
+maths chapter 1), then run on a book none of it was shaped on, and only then used. Once a fix is made
+from a book, that book is no longer unseen: the next check takes a fresh one. Held-out so far (7 Nov
+2026): the Hindi repair on science chapter 7's Kokila pages, 0 wrong (16 → 100 of 118 lines right), with
+pieces grouped by where they sit (pieces that touch on the page are one word); the table cells on
+geography chapter 2 (a ruled grid exact, unruled tables raised for the reader, never guessed); the
+figure snapping failed there (a photo filling its box was taken for a panel) and is being fixed.
+
 ## Checks
 
 Every check raises issues the session fixes or answers; none silently passes.
