@@ -1,5 +1,10 @@
 import { Locale } from "@chalk/content";
 import { describe, expect, it } from "vitest";
+import { positionalIds } from "../ids";
+import type { PageText, Word } from "../read";
+import { withoutStackedFractions } from "../read/pages";
+import { pagesFromBbox } from "../read/text";
+import { type Item, ItemKind } from "../schema";
 import { place } from "./boxes";
 import {
   checkFigures,
@@ -9,11 +14,8 @@ import {
   checkReading,
   checkTerms,
 } from "./checks";
-import { positionalIds } from "./ids";
 import { lettersOnly } from "./letters";
 import { parseNumber, scanNumbers } from "./numbers";
-import { type Item, ItemKind } from "./schema";
-import { type PageText, type Word, pagesFromBbox, withoutStackedFractions } from "./text-layer";
 
 /** A page from lines of words: each line 12pt below the last, words 30pt apart. */
 function page(n: number, lines: readonly string[], at: { x?: number; y?: number } = {}): PageText {

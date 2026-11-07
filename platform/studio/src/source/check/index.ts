@@ -1,9 +1,17 @@
-import { createHash } from "node:crypto";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { join, relative } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { Locale } from "@chalk/content";
-import { parse as parseYaml } from "yaml";
-import type { z } from "zod";
+import { type Extract, readYaml, sha256 } from "../files";
+import { type PageText, pageText, readPages } from "../read";
+import {
+  type Book,
+  type Item,
+  SourceFile,
+  type Term,
+  bookSchema,
+  itemsSchema,
+  termsSchema,
+} from "../schema";
 import {
   checkFigures,
   checkIds,
@@ -13,65 +21,8 @@ import {
   checkTerms,
 } from "./checks";
 import { lettersOnly } from "./letters";
-import {
-  type Book,
-  type Item,
-  SourceFile,
-  type Term,
-  bookSchema,
-  itemsSchema,
-  termsSchema,
-} from "./schema";
-import { type PageText, TEXT_LAYER, pageText } from "./text-layer";
 
-/** One language's extract of a chapter's book: its folder and what it holds. */
-export type Extract = {
-  /** `authoring/books/<book>/<chapter>/source/<lang>`, from the repo's root. */
-  rel: string;
-  dir: string;
-  lang: Locale;
-};
-
-export const sha256 = (bytes: Buffer): string => createHash("sha256").update(bytes).digest("hex");
-
-/** Every extract in the repo: each `source/<lang>/` with a book.yaml. */
-export function extractsIn(root: string): Extract[] {
-  const books = join(root, "authoring", "books");
-  if (!existsSync(books)) return [];
-  const dirs = (d: string) =>
-    existsSync(d)
-      ? readdirSync(d, { withFileTypes: true })
-          .filter((x) => x.isDirectory())
-          .map((x) => x.name)
-      : [];
-  const langs: readonly string[] = Object.values(Locale);
-  return dirs(books).flatMap((book) =>
-    dirs(join(books, book)).flatMap((chapter) =>
-      dirs(join(books, book, chapter, "source"))
-        .filter((lang) => langs.includes(lang))
-        .map((lang) => join(books, book, chapter, "source", lang))
-        .filter((dir) => existsSync(join(dir, SourceFile.Book)))
-        .map((dir) => ({ dir, rel: relative(root, dir), lang: dir.split("/").at(-1) as Locale })),
-    ),
-  );
-}
-
-/** A YAML file read against its schema; the problem with it, if any. */
-export function readYaml<T>(file: string, schema: z.ZodType<T>): { value?: T; problem?: string } {
-  if (!existsSync(file)) return {};
-  let raw: unknown;
-  try {
-    raw = parseYaml(readFileSync(file, "utf8"));
-  } catch (error) {
-    return { problem: `${file}: ${error instanceof Error ? error.message : String(error)}` };
-  }
-  const parsed = schema.safeParse(raw);
-  return parsed.success
-    ? { value: parsed.data }
-    : {
-        problem: `${file}: ${parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ")}`,
-      };
-}
+/** Stage 4, checking (platform/docs/plans/sources.md): one language's extract against its book. */
 
 /** What a check of an extract found: its problems, and what it holds. */
 export type ExtractReport = {
@@ -107,7 +58,7 @@ export function checkExtract(x: Extract): ExtractReport {
     if (items.problem === undefined) problems.push(`no ${SourceFile.Items} yet`);
     return report;
   }
-  report.pages = TEXT_LAYER[x.lang](pdf);
+  report.pages = readPages(pdf, book.value.reader);
   if (report.pages.length !== book.value.pages)
     problems.push(`book.yaml says ${book.value.pages} pages; the PDF has ${report.pages.length}`);
   const first = report.pages[0];

@@ -26,8 +26,8 @@ import { type Item, ItemKind } from "./source/schema";
 // The extract's own checks read the book's PDF (source/checks.test.ts tests them): here they say
 // what each test needs.
 const extract = vi.hoisted(() => ({ problems: [] as string[] }));
-vi.mock("./source/extract", async (actual) => ({
-  ...(await actual<typeof import("./source/extract")>()),
+vi.mock("./source/check", async (actual) => ({
+  ...(await actual<typeof import("./source/check")>()),
   checkExtract: () => ({ problems: extract.problems, items: [], terms: [], pages: [] }),
 }));
 

@@ -1,9 +1,18 @@
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { PNG } from "pngjs";
-import type { Box } from "./schema";
-import { type Word, poppler } from "./text-layer";
+import { type PageText, type Word, poppler } from "../read";
+import { type Box, CROPPED, type Item } from "../schema";
+import { place } from "./boxes";
 
 /** A cropped figure's pixels per point (216 dpi). */
 export const CROP_SCALE = 3;
@@ -66,4 +75,42 @@ export function cropFigure(
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+}
+
+/**
+ * Crops each figure and table whose page image, box or picture changed into `figures/<id>.png`, and
+ * drops the pictures of items gone; the files it made, for the model to look at.
+ */
+export function cropFigures(
+  pdf: string,
+  items: readonly Item[],
+  pages: readonly PageText[],
+  figures: string,
+  cache: string,
+  changed: readonly number[],
+): string[] {
+  mkdirSync(figures, { recursive: true });
+  const stateFile = join(cache, "crops.json");
+  const before = existsSync(stateFile)
+    ? (JSON.parse(readFileSync(stateFile, "utf8")) as Record<string, string>)
+    : {};
+  const after: Record<string, string> = {};
+  const made: string[] = [];
+  for (const item of items) {
+    const page = pages[item.page - 1];
+    if (!CROPPED.includes(item.kind) || page === undefined) continue;
+    const placed = place(item, page, items);
+    if (placed === undefined) continue;
+    const { box, running: blank } = placed;
+    const out = join(figures, `${item.id}.png`);
+    const key = JSON.stringify({ page: item.page, box, blank: blank.length });
+    after[item.id] = key;
+    if (before[item.id] === key && existsSync(out) && !changed.includes(item.page)) continue;
+    cropFigure(pdf, item.page, box, blank, out);
+    made.push(out);
+  }
+  for (const f of readdirSync(figures))
+    if (!(f.replace(/\.png$/, "") in after)) rmSync(join(figures, f));
+  writeFileSync(stateFile, JSON.stringify(after, null, 2));
+  return made;
 }

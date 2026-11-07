@@ -1,5 +1,5 @@
 import { Locale } from "@chalk/content";
-import { ItemKind } from "./schema";
+import { ItemKind } from "../schema";
 
 /**
  * The book's own numbers: what each language prints before the number of a figure, a table, an

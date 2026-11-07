@@ -1,5 +1,7 @@
+import { type PageText, type Word, attr, decode, poppler, splitPage } from "./pages";
+
 /**
- * The Walkman-Chanakya font's text as Unicode. NCERT's Hindi books are set in it: each glyph has an
+ * The `chanakya` reader: a PDF set in the Walkman-Chanakya font's text as Unicode. NCERT's Hindi books are set in it: each glyph has an
  * ASCII code (`fcUnq` is बिन्दु), so its text layer is that code. Converted by its fixed table, then
  * the two marks the font writes out of order put back: ि is typed before its consonants, and the reph
  * (र् above) after them and their vowel signs.
@@ -160,3 +162,66 @@ export function fromChanakya(code: string): string {
 
 /** Whether a PDF font is Chanakya (its code needs converting). */
 export const isChanakya = (font: string): boolean => /chanakya/i.test(font);
+
+/** How far a Hindi line's marks (ि, ें, the reph) rise above its run, as a share of its height. */
+const MARKS_ABOVE = 0.3;
+/** And how far its commas and brackets fall below it. */
+const MARKS_BELOW = 0.15;
+
+/**
+ * `pdftohtml -xml -zoom 1`'s pages, each run of text read by its font (a legacy Hindi font's code
+ * converted): its words (placed across the run by their share of its letters) in reading order, the
+ * head and foot apart, and the runs set in a bold font.
+ */
+export function pagesFromXml(xml: string): PageText[] {
+  // A font is declared on the first page that uses it, and used by later pages by its id.
+  const fonts = new Map<string | undefined, string>();
+  return xml
+    .split(/<page /)
+    .slice(1)
+    .map((chunk, i) => {
+      for (const m of chunk.matchAll(/<fontspec id="(\d+)"[^>]*family="([^"]*)"/g))
+        fonts.set(m[1], m[2] ?? "");
+      const words: Word[] = [];
+      const bold: string[] = [];
+      let open = false;
+      for (const m of chunk.matchAll(/<text ([^>]*)>(.*?)<\/text>/g)) {
+        const tag = m[1] ?? "";
+        const font = fonts.get(/font="(\d+)"/.exec(tag)?.[1]) ?? "";
+        const raw = decode((m[2] ?? "").replace(/<[^>]+>/g, ""));
+        const text = isChanakya(font) ? fromChanakya(raw) : raw;
+        const [top, left, width, height] = ["top", "left", "width", "height"].map((a) =>
+          attr(tag, a),
+        ) as [number, number, number, number];
+        // Each word's place: the run's width shared by the code's letters (widths aren't known),
+        // from the space before it, and the marks above the line (ि, ें, the reph) taken in.
+        const share = (n: number) => left + (width * n) / Math.max(1, raw.length);
+        let at = 0;
+        let from = 0;
+        for (const part of raw.split(/(\s+)/)) {
+          at += part.length;
+          if (part.trim() === "") continue;
+          words.push({
+            text: isChanakya(font) ? fromChanakya(part) : part,
+            x0: share(from),
+            y0: top - height * MARKS_ABOVE,
+            x1: share(at),
+            y1: top + height * (1 + MARKS_BELOW),
+          });
+          from = at;
+        }
+        const isBold = /bold/i.test(font) || /<b>/.test(m[2] ?? "");
+        if (isBold && text.trim() !== "") {
+          if (open && bold.length > 0) bold[bold.length - 1] = `${bold.at(-1)} ${text.trim()}`;
+          else bold.push(text.trim());
+        }
+        open = isBold;
+      }
+      return { ...splitPage(i + 1, attr(chunk, "width"), attr(chunk, "height"), words), bold };
+    });
+}
+
+/** The `chanakya` reader: the text layer read run by run, Chanakya's runs converted. */
+export function readChanakya(pdf: string): PageText[] {
+  return pagesFromXml(poppler("pdftohtml", ["-xml", "-i", "-stdout", "-q", "-zoom", "1", pdf]));
+}

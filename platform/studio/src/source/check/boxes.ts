@@ -1,6 +1,6 @@
+import type { PageText, Word } from "../read";
+import { type Box, CROPPED, type Item } from "../schema";
 import { lettersOnly } from "./letters";
-import { type Box, CROPPED, type Item } from "./schema";
-import type { PageText, Word } from "./text-layer";
 
 /** Where figures and tables sit on their pages, and which of a page's words are theirs. */
 

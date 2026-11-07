@@ -47,6 +47,22 @@ checked against them are the book. `ocr` words are a recognition, which can be w
 needs the model to read each page image against its words and confirm them, and is built only when a
 scanned book comes.
 
+**The code is laid out as the stages** (`platform/studio/src/source/`), so each is found in one place:
+
+```
+pipeline.ts      the stages in order: what both commands call, and nothing else does
+read/            stage 1: a reader per kind of book (text.ts, chanakya.ts and its table; ocr.ts later),
+                 the page images, and what all readers share (head and foot, stacked fractions)
+draft.ts         stage 2: words → items.yaml
+files.ts         a source's files: book.yaml (fingerprint, edition), items, terms; ids and renumbering
+check/           stage 4: words (each used once, in order), numbers, figures and their crops, terms,
+                 languages matched
+```
+
+`platform/studio/src/source-cli.ts` (`pnpm source`) and `platform/studio/src/sources-cli.ts` (the check
+step) only read their arguments and call `pipeline.ts`. Stage 3 is the model's: the command says what to
+fix and where.
+
 ## Files
 
 ```
@@ -176,7 +192,8 @@ is added or removed.
 3. Hindi: the legacy-font conversion (`platform/studio/src/source/chanakya.ts`), extraction proved on the
    Hindi book; matching and its check. Done 7 Nov 2026: 86 items, 19 terms; all 36 numbered things
    match, none unmatched.
-4. The draft and the one check above. Chapter 1 is not re-extracted: the drafter is run into a scratch
+4. The code moved into the stages' layout first, nothing else changed (every check still holding);
+   then the draft and the one check above. Chapter 1 is not re-extracted: the drafter is run into a scratch
    file and compared with today's items (the words should agree letter for letter; each difference is a
    rule to fix); drawn labels leave the figures' `text`; the check holds on English and Hindi; the cites'
    rewrite is tested.

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Reader } from "./read";
 
 /**
  * A language's extract of a chapter's book (platform/docs/plans/sources.md), in
@@ -43,6 +44,8 @@ export const bookSchema = pdf
   .extend({
     /** The chapter's title, as printed. */
     title: z.string().min(1),
+    /** How its words are read (read/index.ts): its text layer as it is, or an old font's converted. */
+    reader: z.enum(Object.values(Reader) as [Reader, ...Reader[]]),
     /** The edition as the pages print it (NCERT's footer: "2020-21"). */
     edition: z.string().min(1),
     /** The book's answers pages for this chapter, when separate (`answers.pdf`). */

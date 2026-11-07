@@ -1,10 +1,10 @@
 import { Locale } from "@chalk/content";
+import { positionalIds } from "../ids";
+import { type PageText, pageText } from "../read";
+import { CROPPED, type Item, ItemKind, type Term } from "../schema";
 import { place, runningWords } from "./boxes";
-import { positionalIds } from "./ids";
 import { lettersOnly } from "./letters";
 import { numberKey, parseNumber, scanNumbers } from "./numbers";
-import { CROPPED, type Item, ItemKind, type Term } from "./schema";
-import { type PageText, pageText } from "./text-layer";
 
 /**
  * The checks one language's extract must pass (platform/docs/plans/sources.md, "Checks"): ids are

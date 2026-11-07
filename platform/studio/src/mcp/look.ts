@@ -11,7 +11,7 @@ import { FactsCache } from "../reach/facts";
 import { type Shown, keepShown } from "../reach/shown";
 import type { ChapterScript, ScriptEntry } from "../sound/voice/make";
 import type { Said } from "../sound/voice/said";
-import { readYaml } from "../source/extract";
+import { readYaml } from "../source/files";
 import { itemsSchema } from "../source/schema";
 import {
   type Drawn,
