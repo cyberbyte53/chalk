@@ -1,0 +1,490 @@
+# Written only through platform/studio/src/comments.ts (the dev server, the chalk MCP). Don't edit by hand.
+- id: cmw685m0gh88
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:20.656Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:145
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: must
+  quote: Exercise 1's four lists
+  text: "Exercise 1's answer, option (iv), counts milk and blood as heterogeneous. Lesson 1 only gives
+    the sip test (\"the first sip as sweet as the last\"), and a little milk in water passes it,
+    since it looks even and never settles (item 5.1: \"appeared homogeneous\"). A student who has
+    just finished lesson 1 picks (iii), Milk Hm, and is marked wrong for doing what the lesson
+    taught. Either move Exercise 1 to after colloids (lesson 9), or keep milk and blood out of the
+    lesson-1 questions."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:42.468Z
+      text: Move Exercise 1 to the colloids lesson's solution-colloid-suspension family; lesson 1's family
+        keeps colloids out.
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:54.784Z
+      text: "Was: \"stir and watch, then say homogeneous or heterogeneous; Exercise 1's four lists. (o1,
+        o2)\". Now: \"... homogeneous or heterogeneous, with no colloid among them yet. (o1, o2)\";
+        solution-colloid-suspension now has \"Exercise 1's four lists, milk and blood now
+        heterogeneous\" (o1 added). Lesson 1 leaves the milk glass as a question."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:48.238Z
+      text: Holds. Exercise 1 now comes after colloids, and lesson 1 leaves the milk glass open.
+      status: closed
+- id: cmw685m4tx0m
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:20.813Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:32
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: must
+  quote: Say that a colloid (milk, blood) looks even and never settles
+  text: "No objective says that a colloid is a heterogeneous mixture, even though it looks even. Table
+    5.1's first row (Nature, homogeneous or heterogeneous), Exercise 1 (milk Ht, blood Ht) and Table
+    5.2's words (\"Heterogeneous mixture\") all ask for it. Because o1 defines homogeneous as \"the
+    same throughout\" and o19 says a colloid \"looks even\", a student will put colloids with
+    solutions. o19 or o20 needs to say it outright: looks even, but it is heterogeneous, because its
+    particles are big enough to scatter light."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:42.547Z
+      text: o19 will say a colloid looks even yet is heterogeneous, its particles big enough to scatter
+        light.
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:54.893Z
+      text: 'Was: "looks even and never settles, and name its dispersed phase". Now: "looks even and never
+        settles, yet is a heterogeneous mixture, its particles big enough to scatter light; and name
+        its dispersed phase".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:48.332Z
+      text: Holds. o19 now says a colloid is heterogeneous.
+      status: closed
+- id: cmw685m938t6
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:20.967Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:60
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: must
+  quote: salt from the sea pans, and Riya's mishri, are crystals from a cooling solution
+  text: Sea-pan salt comes from evaporation, not cooling. Fig. 5.9 and Activity 5.4 go from sea water
+    to a saturated solution to crystals by evaporating the water, and Table 5.4 has sodium chloride
+    at 36 g at 10 °C and 37 g at 80 °C, so cooling brine gives almost no salt. A student who learns
+    this story will believe that cooling sea water makes salt, which is the opposite of what
+    saturate-it and crystals-on-cooling teach with the same table. Tell the salt pans as evaporation
+    (it also sets up o10's 'tell it from evaporating to dryness'), and keep cooling for the mishri
+    and compound B.
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:42.639Z
+      text: Sea-pan salt told as evaporation in the story and lesson 4; cooling kept for mishri and
+        compound B.
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.013Z
+      text: "Story was: \"salt from the sea pans, and Riya's mishri, are crystals from a cooling solution
+        (4)\". Now: \"Riya's mishri grows from that syrup as it cools, while the salt in the sea
+        pans comes as the water evaporates (4)\". Lesson 4's Does adds: \"where the water evaporates
+        and cooling plays no part\"."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:48.508Z
+      text: Holds. The sea-pan salt now comes from evaporation, in both the story and lesson 4.
+      status: closed
+- id: cmw685mdbbee
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:21.119Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:27
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: must
+  quote: the lighter one floats, the lower one is drained first
+  text: "\"Lighter\" does not say what decides the layers, which is density (At a Glance: \"based on
+    their different densities\"). In Activity 5.6 the 5 mL of oil is also lighter in total mass than
+    the 20 mL of water, so a student can't tell whether the amount or the kind of liquid sets the
+    order. Exercise 5 in funnel-and-camphor needs it: 1 L of oil is 910 g against water's 1000 g.
+    Pause and Ponder 7 asks why the layers form at all. Say it as less mass in the same volume (less
+    dense) floats."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:42.717Z
+      text: "o14 will say density: less mass in the same volume floats, whatever the amounts."
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.119Z
+      text: 'Was: "the lighter one floats, the lower one is drained first". Now: "the less dense liquid
+        (less mass in the same volume, whatever the amounts) floats on top, and the lower one is
+        drained first".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:48.610Z
+      text: Holds. o14 now says density, whatever the amounts.
+      status: closed
+- id: cmw685mhkss0
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:21.272Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:122
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: must
+  quote: "### colloids-and-light  (o19, o20, o21, o22)"
+  text: o22 (choose the method for any mixture, and order the methods for sand, salt and naphthalene)
+    is the synthesis of the whole chapter. Here it is tacked onto a lesson whose goal is about
+    colloids and light. That lesson's goal doesn't mention it, and it already brings four new terms.
+    A student reaches Table 5.3 and Fig. 5.25 at the tail of a lesson on something else. Give o22
+    its own lesson (the camp's last stop), with its own goal and card.
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:42.797Z
+      text: o22 gets its own last lesson, choosing-a-method, with goal, card and the camp's last-day beat.
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.216Z
+      text: 'colloids-and-light is now (o19, o20, o21). New last lesson: "### choosing-a-method (o22)",
+        Goal: a mixture is separated by the property its parts differ in; Does: sand, salt and
+        naphthalene in the order that works, a wrong order failing, then each camp mixture to its
+        method; Card: the three-part dish and its three methods. Story adds the last day (10).'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:48.714Z
+      text: Holds. choosing-a-method is now its own lesson, with its own goal and card.
+      status: closed
+- id: cmw685mlt5lx
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:21.425Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:35
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: consider
+  quote: put methods in order for a mixture of three (sand, salt and naphthalene)
+  text: Fig. 5.25 and Table 5.3 (chalk powder and common salt; common salt and water) need dissolving,
+    filtering and evaporating, methods the book takes as already known ("You have learnt"). No
+    objective or lesson brings them back, and the prop's verbs ("filters", "warms") don't include
+    evaporating to dryness. Name them as recalled from earlier classes in o22, and make sure the
+    mixture prop can evaporate, so the three-step order can be played rather than only described.
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:42.876Z
+      text: o22 names dissolving, filtering and evaporating as recalled; the prop gains evaporating.
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.322Z
+      text: "o22 now: \"..., with dissolving, filtering and evaporating from earlier classes among them,
+        ...\". The mixture prop's verbs now include \"evaporates\"."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:48.824Z
+      text: Holds. o22 names the methods from earlier classes, and the prop can evaporate.
+      status: closed
+- id: cmw685mq4n2f
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:21.580Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:17
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: consider
+  quote: adding solute and solvent to get the solution's mass
+  text: "Exercise 4(i), the cake's dry mix (75 g sugar, 420 g flour, 5 g baking soda), is in
+    find-the-percentage, but it is not a solution and has no solute or solvent. The book covers it
+    in item 2.3.11: % m/m is also used for heterogeneous mixtures (milk powder, spice mixes, food
+    labels). o4 never says this, so a student has no rule for 'express each component'. Add it to
+    o4: the mass of the whole mixture, any part's share of it."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:42.957Z
+      text: o4 adds a part's share of a mixture that isn't a solution (cake mix, food label).
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.455Z
+      text: "o4 adds: \"give any part's share of a mixture that is not a solution the same way (a cake's
+        dry mix, a food label)\"."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:48.918Z
+      text: Holds.
+      status: closed
+- id: cmw685mudfed
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:21.733Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:18
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: consider
+  quote: choose among the three by what is easier to measure
+  text: The book gives two different reasons. % m/v is for when volume is easier to measure than mass
+    (2.3.15). % v/v is for when two miscible liquids are mixed (2.3.22). "By what is easier to
+    measure" covers only the first, so a student choosing for vinegar or the pesticide has no reason
+    for v/v. Say both rules.
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:43.038Z
+      text: "o5 gives both rules: m/v where volume is easier to measure, v/v for two miscible liquids."
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.555Z
+      text: 'Was: "choose among the three by what is easier to measure". Now: "choose among the three:
+        mass by volume where a volume is easier to measure than a mass (a glucose drip), volume by
+        volume where two miscible liquids are mixed (vinegar, a pesticide spray)".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:49.005Z
+      text: Holds. o5 gives both rules.
+      status: closed
+- id: cmw685myn5sj
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:21.887Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:149
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: consider
+  quote: Activity 5.2's blanks and Exercise 13's comparison of four salts
+  text: read-the-curves is the only family on o7, and every question in it is about solids getting
+    more soluble. The gas half of o7 (less gas dissolves when warmer) is taught in the solubility
+    lesson by the warm soda, but no question tests it. Add one question, for example which soda
+    keeps its fizz, the cold one or the warm one.
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:43.117Z
+      text: read-the-curves adds the cold or warm soda question.
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.654Z
+      text: 'read-the-curves adds: "and which soda keeps its fizz, the cold or the warm".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:49.090Z
+      text: Holds. The soda question now tests the gas half of o7.
+      status: closed
+- id: cmw685n32ekr
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:22.046Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:109
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: consider
+  quote: "### oil-water-and-camphor  (o14, o15)"
+  text: "This lesson puts two unrelated ideas together: liquid layers by density, and a solid that
+    turns straight into vapour. The card shows only the funnel, and the story joins them only as two
+    spills. The guide asks for as many lessons as the chapter has ideas. Either split it, or give
+    the lesson a goal and card that make the pairing mean something (for example 'separate without
+    dissolving anything')."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:43.199Z
+      text: "Keep one lesson (cut over add: two short methods), but give it a goal that makes the pairing
+        mean something and a card with both."
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.752Z
+      text: 'Kept as one lesson. Goal was: "two more differences to separate by: ...". Now: "parts that
+        never dissolve in each other part by the one thing only one of them does: oil floats on
+        water, camphor turns straight into vapour and leaves the sand". Card adds: "beside a funnel
+        over a dish, camphor on its wall".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:49.176Z
+      text: "The reason holds: the new goal ties the two methods together, and the card now shows both."
+      status: closed
+- id: cmw685n7equh
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:22.202Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:19
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: consider
+  quote: the most that dissolves in 100 g of solvent
+  text: The book (2.4.1) says solubility is per a fixed quantity of solvent, "100 mL or 100 g", and
+    Exercise 13(i) asks about 50 g of water. If solubility is fixed to 100 g, a student will find 50
+    g puzzling. Say 'per 100 g (or 100 mL) of solvent', and that half the water takes half the
+    solute, since saturate-it asks exactly that.
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:43.278Z
+      text: o6 will say 100 g (or 100 mL), and half the solvent takes half as much.
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.856Z
+      text: 'Was: "in 100 g of solvent at a given temperature". Now: "in 100 g (or 100 mL) of solvent at a
+        given temperature, so that half the solvent takes half as much".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:49.267Z
+      text: Holds.
+      status: closed
+- id: cmw685nbv0eq
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:52:22.363Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:86
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: consider
+  quote: adds sugar until grains stay at the bottom
+  text: Sugar's solubility in water is about 200 g per 100 g, so a glass of lemonade would need a
+    mountain of sugar before any grains stayed at the bottom. Either the prop's truthful numbers
+    make the board absurd, or the numbers get faked. A student who has made lemonade won't believe
+    it. Salt (36 g per 100 g, Table 5.4) or potassium nitrate (its curve changes clearly with
+    temperature) saturates believably. Keep sugar only if the glass is a tiny amount of water.
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:43.358Z
+      text: "Sugar in a little water, a syrup, which lesson 4 then cools to mishri: true numbers, and it
+        joins the two lessons."
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:53:55.968Z
+      text: "Lesson 3's Does was: \"adds sugar until grains stay at the bottom\". Now: \"adds sugar to a
+        little water until grains stay at the bottom (a syrup)\". Story (3) is now the mishri syrup,
+        which lesson 4 cools."
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:54:49.349Z
+      text: Holds. A little water gives a believable syrup, and it leads straight into lesson 4's mishri.
+      status: closed
+- id: cmw687urob4m
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-11-07T09:54:05.316Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:145
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  turn: person
+  options:
+    - label: One mixture prop, apparatus as its parts
+      why: One model shows every method acting truthfully on its own property; later chapters reuse it.
+    - label: One prop per apparatus
+      why: Each is smaller and simpler (glass, still, funnel, strip, paperfuge), but each repeats the
+        mixture's properties.
+    - label: Glass as one prop, the rest separate
+      why: The glass carries lessons 1 to 4, 8 and 9; the rarer set-ups stay small.
+  quote: "a host: a mixture made of parts"
+  text: "Science's first prop: one mixture shown in any apparatus, or a separate prop per apparatus?"
+  messages: []
+- id: cmw687v8uug6
+  status: open
+  by: fixer
+  role: fixer
+  createdAt: 2026-11-07T09:54:05.934Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:54
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  turn: person
+  options:
+    - label: Riya and Aman, at the seaside camp
+      why: Same class 9 friends as maths; the camp gives every method a real need (water, ORS, salt, a
+        blood test).
+    - label: Riya and Aman, in the school lab
+      why: Closer to the book's activities, but the need comes from the syllabus, not the story.
+    - label: New science characters
+      why: Keeps subjects apart, at the cost of a second cast to learn.
+  quote: Riya and Aman (class 9 maths' friends, the same year) are at their school's camp by the sea
+  text: Who carries science, and on what mission?
+  messages: []
+- id: cmw688stammj
+  status: closed
+  by: reviewer
+  role: reviewer
+  createdAt: 2026-11-07T09:54:49.438Z
+  source: authoring/books/class9-science/exploring-mixtures-and-their-separation/plan.md:135
+  commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+  weight: consider
+  quote: and sees a wrong order fail
+  text: "Many wrong orders still work. Dissolve, filter, then sublime the sand and naphthalene left on
+    the filter, and the salt evaporates from the filtrate: all three still come apart. With a prop
+    where whatever is tried comes out true, a student who tries that order sees it succeed and won't
+    learn why the book's order matters. Name an order that truly fails, such as filtering before
+    dissolving (the salt stays with the sand) or evaporating first (nothing happens). Or make the
+    point that the order follows from which difference each step uses, not that only one order
+    exists."
+  changed: []
+  messages:
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:55:18.410Z
+      text: "Name an order that truly fails (filtering before dissolving), and say more than one order can
+        work: each step needs its difference present."
+      status: planned
+      commit: d7335aeec97f5a67aa844a4795efaff9858ccded
+    - by: fixer
+      role: fixer
+      at: 2026-11-07T09:55:32.153Z
+      text: 'Was: "and sees a wrong order fail;". Now: "and sees filtering before dissolving leave the
+        salt with the sand: each step needs the difference it uses to be there, and more than one
+        order can work;".'
+      status: ready
+    - by: reviewer
+      role: reviewer
+      at: 2026-11-07T09:55:54.121Z
+      text: "Holds: it names an order that truly fails and says more than one order can work."
+      status: closed
